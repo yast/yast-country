@@ -17,7 +17,7 @@
 # do we need to discard irritating but expected error-messages?
 #exec 2>/dev/null
 
-FVWMRC=/usr/X11R6/share/fvwm/fvwmrc
+FVWMRC=/usr/X11R6/share/fvwm/fvwmrc.yast2
 
 # we stay alive and keep reading commands from YaST
 while true ; do
