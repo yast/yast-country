@@ -2,6 +2,7 @@
 Tue Sep 10 19:48:29 CEST 2002 - fehr@suse.de
 
 - add languages Korean and traditional Chinese to languages
+- make keyboard follow language in update mode (#19370)
 - 2.6.27
 
 -------------------------------------------------------------------

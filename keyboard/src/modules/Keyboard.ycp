@@ -243,7 +243,7 @@
 
 	// If not in initial mode try to restore from sysconfig.
 	//
-	if ( ! Mode::initial )
+	if ( !(Mode::initial && Mode::update))
 	{
 	    success = Restore();
 
@@ -285,7 +285,7 @@
 
 	// In initial mode or if restoring failed do probe.
 	//
-	if ( Mode::initial || ! success )	// initial mode or no restore success
+	if( Mode::initial || Mode::update || !success )	// initial mode or no restore success
 	{
 	    // On module entry probe the hardware and set all those data
 	    // needed for public access.
