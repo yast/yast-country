@@ -65,7 +65,7 @@ are unset.<br>
 			    `VBox(
 				`HSpacing( 45 ),
 				// heading text
-				`Heading( _("Language Detail Dialog") ),
+				`Heading( _("Language Details") ),
 				`VSpacing(`opt(`vstretch), 2),
 				`Left(`ComboBox( 
 				    `id(`rootlang),
