@@ -29,6 +29,14 @@ define void SetTimezone( symbol hwclock, string timezone, boolean really )
     ``{
     y2milestone( "SetTimezone hw %1, tz %2 really %3", hwclock, timezone,
                  really );
+    if( !really && hwclock != hwclock_s_initial )
+	{
+	Timezone::diff = (hwclock==`hwclock_utc)?1:-1;
+	}
+    else
+	{
+	Timezone::diff = 0;
+	}
     Timezone::hwclock = (hwclock == `hwclock_utc) ? "-u" : "--localtime";
     Timezone::Set( timezone, really );
 
@@ -322,6 +330,7 @@ If you are unsure, use the default values already selected.
 
     symbol hwclock_s = (hwclock=="-u") ? `hwclock_utc : `hwclock_localtime;
     symbol hwclock_s_old = hwclock_s;
+    symbol hwclock_s_initial = hwclock_s;
 
     UI::ChangeWidget( `id(`region), `CurrentItem, sel );
     UI::ReplaceWidget( `id(`tzsel),

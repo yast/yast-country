@@ -50,6 +50,8 @@ global string default_timezone = "";
 global boolean user_decision = false;
 global boolean user_hwclock = false;
 
+global integer diff = 0;
+
 map push = $[];
 
 // ------------------------------------------------------------------
@@ -306,6 +308,8 @@ global define string MakeProposal( boolean force_reset,
 
     string date = GetDateTime(true);
 
+    y2milestone( "hwclock %1", hwclock );
+
     return( name + " - " + clock_setting + " " + date );
     }
 
@@ -445,12 +449,39 @@ global define string GetTimezoneForLanguage( string sys_language,
  */
 global define string GetDateTime( boolean real_time )
     ``{
-    string tzs = "";
+    string cmd = "";
+    string date_format = "+%H:%M:%S - %d-%m-%Y";
+    y2milestone( "hwclock %1", hwclock );
     if( !real_time )
 	{
-	tzs = sformat( "TZ=%1 ", (hwclock=="-u") ? "UTC" : timezone );
+	integer ds = 0;
+	string tzs = sformat( "TZ=%1 ", timezone );
+	if( diff!=0 )
+	    {
+	    integer t = 0;
+	    string tzd = 
+		lookup( SCR::Execute( .target.bash_output, 
+				      sformat( "TZ=%1 date \"+%%z\"", timezone )),
+			"stdout", "" );
+	    y2milestone( "tcd=%1", tzd );
+	    t = tointeger( Misc::RemoveLeadingZero( substring( tzd, 1, 2 )));
+	    ds = ds + t * 3600;
+	    t = tointeger( Misc::RemoveLeadingZero( substring( tzd, 3, 2 )));
+	    ds = ds + t * 60;
+	    if( substring( tzd, 0, 1 )=="-" )
+		{
+		ds = -ds;
+		}
+	    ds = ds;
+	    y2milestone( "ds %1 diff %2", ds, diff );
+	    }
+	cmd = sformat( "TZ=%1 /bin/date \"%2\" \"--date=now %3sec\"", timezone,
+	               date_format, ds*diff );
 	}
-    string cmd = sformat( "%1/bin/date \"%2\"", tzs, "+%H:%M:%S - %d-%m-%Y" );
+    else
+	{
+	cmd = sformat( "/bin/date \"%1\"", date_format );
+	}
     y2milestone( "cmd=%1", cmd );
     string local_date = lookup( SCR::Execute( .target.bash_output, cmd ),
 				"stdout", "" );
