@@ -15,8 +15,6 @@ Obsoletes:	yast2-config-timezone
 Provides:	yast2-db-country yast2-db-keyboard yast2-db-timezone
 Obsoletes:	yast2-db-country yast2-db-keyboard yast2-db-timezone
 
-BuildArchitectures:	noarch
-
 Summary:	Setting the keyboard
 
 %description

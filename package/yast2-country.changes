@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Aug 26 10:27:00 CEST 2002 - fehr@suse.de
+
+- add timezone for Israel (#17669)
+- remove testsuite again
+- remove noarch entry in spec file so that #ifnarch works
+- 2.6.20
+
+-------------------------------------------------------------------
 Thu Aug 22 17:55:18 CEST 2002 - msvec@suse.cz
 
 - again enabled the language testsuite

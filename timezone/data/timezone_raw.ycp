@@ -71,6 +71,7 @@ $[
 "Asia/Saigon" : _("Asia/Saigon"),
 "Asia/Samarkand" : _("Asia/Samarkand"),
 "Asia/Tashkent" : _("Asia/Tashkent"),
+"Asia/Tel_Aviv" : _("Asia/Tel_Aviv"),
 "Asia/Vladivostok" : _("Asia/Vladivostok"),
 "Asia/Yekaterinburg" : _("Asia/Yekaterinburg"),
 "Asia/Tokyo" : _("Asia/Tokyo"),
