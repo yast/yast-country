@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Mar 18 12:27:18 CET 2003 - kkaempf@suse.de
+
+- Use locale el_GR.ISO-8859-7, consolefont lat7a-14.psfu for
+  greek (#25567)
+- 2.7.14
+
+-------------------------------------------------------------------
 Mon Mar 17 13:37:36 CET 2003 - fehr@suse.de
 
 - add timezone entry for Uruguay (#25473)

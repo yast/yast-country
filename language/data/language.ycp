@@ -52,8 +52,8 @@ $[
 
   "el_GR"	: [ "Ελληνικά ",
 		  "Greek",
-		  "",
-		  "@ISO-8859-7" ],
+		  ".ISO-8859-7",
+		  "" ],
 
   "en_GB"	: [ "English (GB)",
 		  "English (GB)",

@@ -44,8 +44,8 @@
       "br_FR"		: [ "lat1-16.psfu",	"",	"none",		"(B" ],
       "br"		: [ "lat1-16.psfu",	"",	"none",		"(B" ],
 
-      "el_GR"		: [ "lat7-16.psfu",	"",	"trivial",	"(K" ],
-      "el"		: [ "lat7-16.psfu",	"",	"trivial",	"(K" ],
+      "el_GR"		: [ "lat7a-14.psfu",	"",	"trivial",	"(K" ],
+      "el"		: [ "lat7a-14.psfu",	"",	"trivial",	"(K" ],
 
       "pl_PL"		: [ "lat2-16.psfu",	"",	"trivial",	"(K" ],
       "pl"		: [ "lat2-16.psfu",	"",	"trivial",	"(K" ],
