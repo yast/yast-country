@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar 22 15:07:48 CET 2005 - jsuchome@suse.cz
+
+- fixed Taiwan name (#74193)
+- 2.11.21 
+
+-------------------------------------------------------------------
 Mon Mar 14 16:06:34 CET 2005 - jsuchome@suse.cz
 
 - sort list of secondary languages accoring to locale (#71767)

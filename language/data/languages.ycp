@@ -295,19 +295,20 @@ $[
 		  // language name
 		  _("Simplified Chinese") ],
 
-  "zh_TW"       : [ "繁體中文 (中國臺灣)",
-		  "Traditional Chinese (China Taiwan)",
-		  ".UTF-8",
-		  "",
-		  // language name
-		  _("Traditional Chinese") ],
-
+  "zh_TW"       : [
+		    "繁體中文 (台灣)",
+		    "Traditional Chinese (Taiwan)",
+		    ".UTF-8",
+		    "",
+		    // language name
+		    _("Traditional Chinese")
+		],
   "tr_TR"	: [ "Türkçe",
 		  "Turkce",
 		  ".UTF-8",
 		  "",
 		  // language name
-		  "Turkish" ]
+		  _("Turkish") ]
 
 /* -------------------------------------------- */
 /*          May be future expansion		*/
