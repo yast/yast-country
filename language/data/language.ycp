@@ -52,6 +52,11 @@ $[
 		  ".UTF-8",
 		  "" ],
 
+  "cy_GB"	: [ "Welsh",
+		  "Welsh",
+		  ".UTF-8",
+		  "" ],
+
   "da_DK"	: [ "Dansk",
 		  "Dansk",
 		  ".UTF-8",
@@ -132,13 +137,10 @@ $[
 		  "@euro" ],
 
 
-  /* Derzeit keine Uebersetzungen
-
-  "no_NO"	: [ "Norsk",
+  "nb_NO"	: [ "Norsk",
 		  "Norsk",
 		  ".UTF-8",
 		  "" ],
-  */
 
   "pt_BR"	: [ "Português brasileiro",
 		  "Portugues brasileiro",
@@ -153,12 +155,16 @@ $[
 		  "@euro" ],
   */
 
-  /* Incomplete, inactive translator.
+  "ro_RO"	 : [ "Romanian",
+		   "Romanian",
+		   ".UTF-8",
+		   "" ],
+
+  /* Incomplete, but active again. */
   "ru_RU"	 : [ "Русский ",
 		   "Russian",
 		   ".UTF-8",
 		   "" ],
-  End of comment */
 
   "sl_SI"	: [ "Slovenščina",
 		  "Slovenscina",
