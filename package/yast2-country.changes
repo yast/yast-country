@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Aug 14 10:23:03 CEST 2002 - kkaempf@suse.de
+
+- filter ^S0 line from inittab when switching to serial console
+- it's "Portuguese" (#17687)
+
+-------------------------------------------------------------------
 Tue Aug 13 09:54:43 CEST 2002 - fehr@suse.de
 
 - fix text in timezone proposal (#14101)
