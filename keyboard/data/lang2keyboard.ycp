@@ -79,5 +79,7 @@
 	"zh_CN"    	: "english-us",
 	"ko_KR"    	: "english-us",
 	"ar_eg"    	: "english-us",
-	"is_IS"         : "icelandic"
+	"is_IS"         : "icelandic",
+
+	"lt_LT"		: "lithuanian"
       ]

@@ -574,6 +574,39 @@ return ($[
 		      "pc104" : $[ "ncurses": "et.map.gz"]]
 	]
     ],
+  "lithuanian":
+    [
+	_("Lithuanian"),
+	$[
+	    "i386"	: $[
+		"pc104"		: $[ "ncurses": "lt.baltic.map.gz"]
+	    ],
+	    "ia64"	: $[
+		"pc104"		: $[ "ncurses": "lt.baltic.map.gz"]
+	    ],
+	    "x86_64"	: $[
+		"pc104"		: $[ "ncurses": "lt.baltic.map.gz"]
+	    ],
+	    "alpha"	: $[
+		"pc104"		: $[ "ncurses": "lt.baltic.map.gz"]
+	    ],
+	    "sparc"	: $[
+		"type4"		: $[ "ncurses": "sunkeymap.map.gz"],
+		"type5"		: $[ "ncurses": "sunkeymap.map.gz"],
+		"type5_euro"	: $[ "ncurses": "sunkeymap.map.gz"]
+	    ],
+	    "sparc64"	: $[
+		"type4"		: $[ "ncurses": "sunkeymap.map.gz"],
+		"type5"		: $[ "ncurses": "sunkeymap.map.gz"],
+		"type5_euro"	: $[ "ncurses": "sunkeymap.map.gz"],
+		"pc104"		: $[ "ncurses": "lt.baltic.map.gz"]
+	    ],
+	    "ppc"	: $[
+		"macintosh"	: $[ "ncurses": "mac-us.map.gz"],
+		"pc104"		: $[ "ncurses": "lt.baltic.map.gz"]
+	    ]
+	 ]
+    ],
   "turkish":
     [
 	_("Turkish"),
@@ -687,7 +720,7 @@ return ($[
 	   "ppc" : $[ "macintosh" : $[ "ncurses": "mac-dk-latin1.map.gz" ],
 		      "pc104" : $[ "ncurses": "is-latin1.map.gz"]]
 	 ]
-    ]
+    ],
 ]);
 
 }
