@@ -141,12 +141,10 @@ $[
 		  "@euro" ],
   */
 
-  /* Highly incomplete
   "ru_RU"	 : [ "Русский ",
 		   "Russian",
 		   ".KOI8-R",
 		   "" ],
-  End of comment */
 
   "sl_SI"	: [ "Slovenščina",
 		  "Slovenscina",

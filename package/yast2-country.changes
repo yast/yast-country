@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Mar  7 15:59:50 CET 2003  - fehr@suse.de
+
+- activate russian language 
+- version 2.7.10
+
+-------------------------------------------------------------------
 Thu Mar  6 10:31:41 CET 2003  - fehr@suse.de
 
 - fix bug that lead to broken timezone entries (#24711)
