@@ -160,9 +160,10 @@ global define integer Set( string zone )
 
     // Adjust system to the new timezone.
     //
-    SCR::Execute( .target.bash, "/usr/sbin/zic -l " + timezone );
+    if (!Mode::config)
+	SCR::Execute( .target.bash, "/usr/sbin/zic -l " + timezone );
 
-    if ( !Arch::s390 )
+    if ( !Arch::s390 && !Mode::config )
 	{
 	SCR::Execute(.target.bash, "/sbin/hwclock --hctosys " + hwclock);
 	}
