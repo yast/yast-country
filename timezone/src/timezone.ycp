@@ -30,6 +30,7 @@ import "Label";
     string hwclock_on_entry = Timezone::hwclock;
 
     // create the wizard dialog
+    Wizard::SetDesktopIcon("timezone");
     Wizard::CreateDialog();
 
     //------------------------------------------------------------

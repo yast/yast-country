@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar  8 17:46:18 CET 2004 - fehr@suse.de
+
+- add calls to Wizard::SetDesktopIcon(...);
+- 2.9.9
+
+-------------------------------------------------------------------
 Mon Mar  1 16:55:20 CET 2004 - kkaempf@suse.de
 
 - add more type information

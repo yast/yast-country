@@ -32,6 +32,7 @@
     y2milestone("language_on_entry: <%1>", language_on_entry );
 
     // create the wizard dialog
+    Wizard::SetDesktopIcon("language");
     Wizard::CreateDialog();
 
     any result = `again;
