@@ -197,12 +197,12 @@ Installation and System Administration Program
 
     map<string,list> languageselsort = mapmap (
 	string lang_code, list lang_info, Language::Selection(), {
-	    // translated value is the key
-	    string translated	= lang_info[2]:lang_info[1]:lang_code;
+	    string key	= lang_info [1]:lang_code;
 	    return $[
-		translated	: [
+		key		: [
 		    lang_info[use_ascii ? 1 : 0]:"",
-		    lang_code
+		    lang_code,
+		    lang_info[2]:key
 		]
 	    ];
 	}
@@ -267,7 +267,7 @@ Installation and System Administration Program
 	    maplist (any name, list codelist, languageselsort,
 		``(`item (
 		    `id(codelist[1]:""),
-		    name,
+		    codelist[2]:"",
 		    contains (languages, codelist[1]:""))
 		)
 	    )
@@ -477,7 +477,7 @@ Some texts may be displayed in English."));
 			    maplist (any name, list codes, languageselsort, ``(
 				`item (
 				    `id(codes[1]:""),
-				    codes[0]:"",
+				    codes[2]:"",
 				    contains (selected_languages, codes[1]:""))
 			    ))
 			));

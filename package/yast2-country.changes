@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb 24 15:03:24 CET 2005 - jsuchome@suse.cz
+
+- do not re-sort list of languages (#66287)
+
+-------------------------------------------------------------------
 Tue Feb 22 15:27:26 CET 2005 - jsuchome@suse.cz
 
 - added new language: Punjabi
