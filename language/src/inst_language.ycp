@@ -32,7 +32,7 @@
     import "Label";
     import "Popup";
 
-global define void LanguageExpertDialog()
+define void LanguageExpertDialog()
     ``{
     symbol ret = `none;
     // help text for keyboard expert screen
@@ -68,11 +68,11 @@ are unset.<br>
 				// heading text
 				`Heading( _("Language Details") ),
 				`VSpacing(`opt(`vstretch), 2),
-				`Left(`ComboBox( 
+				`Left(`ComboBox(
 				    `id(`rootlang),
 				    _("Locale Settings for User &root"),
 				    // do not translate "ctype"
-				    [ `item( `id("ctype"), _("ctype only")), 
+				    [ `item( `id("ctype"), _("ctype only")),
 				      `item( `id("yes"), _("Yes")),
 				      `item( `id("no"), _("No")) ] )),
 				`VSpacing(`opt(`vstretch), 1),
@@ -385,7 +385,7 @@ Adapt keyboard settings?
 		    Language::Save();
 		    Console::Save();
 		    }
-		y2milestone( "Language: '%1', system encoding '%2'", language, 
+		y2milestone( "Language: '%1', system encoding '%2'", language,
 		             WFM::GetEncoding() );
 		}
 	    }
