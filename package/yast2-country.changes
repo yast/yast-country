@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jan 15 13:20:53 CET 2003  - fehr@suse.de
+
+- add dialog with expert settings to keyboard dialog
+
+-------------------------------------------------------------------
 Wed Dec  4 14:49:44 CET 2002  - fehr@suse.de
 
 - add dialog to set time/date

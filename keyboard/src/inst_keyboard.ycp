@@ -33,6 +33,89 @@
 
     import "Wizard";
 
+global define KeyboardExpertDialog()
+    ``{
+    symbol ret = `none;
+    // help text for keyboard expert screen
+    string help_text = _("<p>
+Here you may fine tune various settings of the keyboard module.
+These settings are written into the file <b>/etc/sysconfig/keyboard</b>
+</p>");
+
+    // general help trailer
+    help_text = help_text + _("<p>
+If unsure, use the default values already selected.
+</p>");
+
+    UI::OpenDialog( `opt(`decorated  ),
+		    `HBox(
+			`HWeight(30, `RichText( help_text )),
+			`HStretch(),
+			`HSpacing(1),
+			`HWeight(70, 
+			    `VBox( 
+				`HSpacing( 60 ),
+				`Heading( _("Keyboard Expert Dialog") ),
+				`VSpacing(`opt(`vstretch), 1),
+				`Left(`TextEntry( `id(`rate), 
+				                  _("Repeat &Rate"))),
+				`Left(`TextEntry( `id(`delay), 
+				            _("De&lay before repetition starts")) ),
+				`VSpacing(`opt(`vstretch), 1),
+				`Left(`ComboBox( `id(`numlock), _("&Num Lock on"),
+				           [ "bios", "yes", "no", ""] )),
+				`VSpacing(`opt(`vstretch), 1),
+				`Left(`CheckBox( `id(`capslock), _("Ca&ps Lock on") )),
+				`Left(`CheckBox( `id(`scrlock), 
+				           _("&Scroll Lock on") )),
+				`VSpacing(`opt(`vstretch), 1),
+				`Left(`TextEntry( `id(`tty), 
+				            _("Devices on which the values for Num Lock, Caps Lock and
+Scroll Lock should be set") )),
+				`VSpacing(`opt(`vstretch), 1),
+				`Left(`CheckBox( `id(`discaps), 
+				           _("&Disable Caps Lock")) ),
+				`VSpacing(1),
+				`VStretch(),
+				`HBox(
+				     `PushButton(`id(`ok), `opt(`default), 
+						 OKButtonLabel() ),
+				     `PushButton(`id(`cancel), 
+				                 CancelButtonLabel() )
+				     )
+				))
+			 ));
+    map val = Keyboard::GetExpertValues();
+    y2milestone( "map %1", val );
+    UI::ChangeWidget( `id(`rate), `Value, val["rate"]:"" );
+    UI::ChangeWidget( `id(`rate), `ValidChars, "0123456789." );
+    UI::ChangeWidget( `id(`delay), `Value, val["delay"]:"" );
+    UI::ChangeWidget( `id(`delay), `ValidChars, "0123456789" );
+    UI::ChangeWidget( `id(`numlock), `Value, val["numlock"]:"" );
+    UI::ChangeWidget( `id(`capslock), `Value, val["capslock"]:false );
+    UI::ChangeWidget( `id(`scrlock), `Value, val["scrlock"]:false );
+    UI::ChangeWidget( `id(`tty), `Value, val["tty"]:"" );
+    UI::ChangeWidget( `id(`discaps), `Value, val["discaps"]:false );
+    repeat
+	{
+	ret = UI::UserInput();
+	if( ret == `ok )
+	    {
+	    val = $[];
+	    val["rate"] = UI::QueryWidget( `id(`rate), `Value );
+	    val["delay"] = UI::QueryWidget( `id(`delay), `Value );
+	    val["numlock"] = UI::QueryWidget( `id(`numlock), `Value );
+	    val["capslock"] = UI::QueryWidget( `id(`capslock), `Value );
+	    val["scrlock"] = UI::QueryWidget( `id(`scrlock), `Value );
+	    val["tty"] = UI::QueryWidget( `id(`tty), `Value );
+	    val["discaps"] = UI::QueryWidget( `id(`discaps), `Value );
+	    y2milestone( "map ok %1", val );
+	    Keyboard::SetExpertValues( val );
+	    }
+	} until ( ret == `cancel || ret == `ok );
+    UI::CloseDialog();
+    };
+
     /* ----------------------------------------------------------------------
      * Keyboard
      * ----------------------------------------------------------------------*/
@@ -70,7 +153,9 @@
 		keyboardsel,
 		// title for input field to test the keyboard setting
 		// (no more than about 25 characters!)
-		`TextEntry( _("Keyboard &test:") )
+		`TextEntry( _("Keyboard &test:") ),
+		`VSpacing( 0.8 ),
+		`PushButton( `id(`expert), _("E&xpert Settings") )
 	     );
 
     /* ----------------------------------------------------------------------
@@ -103,8 +188,7 @@ If unsure, use the default values already selected.
 
     // Screen title for keyboard screen
     Wizard::SetContents( _("Keyboard Configuration"), contents,
-			     help_text,
-			     WFM::Args(0), WFM::Args(1) );
+			 help_text, WFM::Args(0), WFM::Args(1) );
 
     // Initially set the current keyboard to establish a consistent state.
     //
@@ -114,18 +198,23 @@ If unsure, use the default values already selected.
     any ret = nil;
 
     repeat
-    {
+	{
 	ret = Wizard::UserInput();
 
-	if ( (ret == `abort)
-	     && WFM::CallFunction(`inst_confirm_abort(`painless) ) )
-	{
+	if( (ret == `abort) &&
+	    WFM::CallFunction(`inst_confirm_abort(`painless) ) )
+	    {
 	    Wizard::CloseDialog();
 	    return `abort;
-	}
+	    }
 
-	if ( ret == `next || ret == `keyboard )
-	{
+	if( ret==`expert )
+	    {
+	    KeyboardExpertDialog();
+	    }
+
+	if( ret == `next || ret == `keyboard )
+	    {
 	    // Get the selected keyboard.
 	    //
 	    keyboard = UI::QueryWidget( `id( `keyboard ), `CurrentItem );
@@ -135,15 +224,15 @@ If unsure, use the default values already selected.
 	    Keyboard::SetConsole( keyboard );
 	    Keyboard::SetX11( keyboard );
 
-	    if ( ret == `next )
-	    {
+	    if( ret == `next )
+		{
 		// User wants to keep his changes.
 		// Set user_decision flag in keyboard module.
 		//
 		Keyboard::user_decision = true;
 
 		if ( keyboard_on_entry != Keyboard::current_kbd )
-		{
+		    {
 		    // User has chosen a different keyboard from the database.
 		    // ==> clear unique_key in the keyboard module to achieve
 		    // configured = no and needed = no in Keyboard::Save() for
@@ -153,22 +242,22 @@ If unsure, use the default values already selected.
 				Keyboard::unique_key );
 
 		    Keyboard::unique_key = "";
+		    }
 		}
 	    }
-	}
-    } until ( ret == `next || ret == `back || ret == `cancel );
+	} until ( ret == `next || ret == `back || ret == `cancel );
 
-    if ( ret == `back || ret == `cancel )
-    {
+    if( ret == `back || ret == `cancel )
+	{
 	y2milestone("`back or `cancel restoring: <%1>", keyboard_on_entry );
 
 	// Reset keyboard to initial state.
 	//
 	Keyboard::SetConsole( keyboard_on_entry );
 	Keyboard::SetX11( keyboard_on_entry );
-    }
+	}
 
     Wizard::CloseDialog();
 
     return ret;
-}
+    }

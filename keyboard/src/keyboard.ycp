@@ -90,29 +90,21 @@ To change anything here, select a layout from the list.
     //
     result = WFM::CallFunction( `inst_keyboard( true, true ) );
 
-    if ( result == `next )
-    {
+    if( result == `next )
+	{
 	// User accepted the the setting.
-	// Only if the user has chosen a different layout change the configuration.
 	//
 	if ( keyboard_on_entry != Keyboard::current_kbd )
-	{
+	    {
 	    y2milestone("User selected new keyboard: <%1>", Keyboard::current_kbd );
-
-	    // Save changes...
-	    //
-	    Keyboard::Save( true );
-
+	    }
+	Keyboard::Save( keyboard_on_entry!=Keyboard::current_kbd );
+	SCR::Execute( .target.bash, "/usr/sbin/rckbd restart" );
 	}
-	else
-	{
-	    y2milestone( "Keyboard not changed --> doing nothing" );
-	}
-    }
     else	// `cancel or `back
-    {
+	{
 	y2milestone( "User cancelled --> no change" );
-    }
+	}
 
     return UI::CloseDialog();
 }

@@ -44,6 +44,13 @@
 	//
 	// sequence = DummyMod::AskUser( has_next );
 
+	if( !Keyboard::CalledRestore() )
+	    {
+	    SCR::Execute( .target.bash, 
+	                  "cp -a /var/adm/fillup-templates/sysconfig.keyboard /etc/sysconfig/keyboard" );
+	    Keyboard::Restore();
+	    }
+
 	symbol result = WFM::CallFunction (`inst_keyboard (true, has_next));
 
 	// Fill return map

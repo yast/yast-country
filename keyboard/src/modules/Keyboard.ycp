@@ -177,6 +177,8 @@
     //
     global string unique_key = "";
 
+    boolean restore_called = false;
+
     // ---------------------------------------------------------------------------------------
     // END: Globally defined data to be accessed via Keyboard::<variable>
     // ---------------------------------------------------------------------------------------
@@ -195,13 +197,14 @@
     //
     list kbd_descr = [];
 
-    string kbd_tty = "tty1 tty2 tty3 tty4 tty5 tty6 tty8 tty9 tty10 tty11 tty12 tty13 tty14 tty15 tty16 tty17 tty18 tty19 tty20 tty21 tty22";
+    string kbd_tty = "tty1 tty2 tty3 tty4 tty5 tty6 tty8 tty9 tty10 tty11 tty12 tty13 tty14 tty15 tty16 tty17 tty18 tty19 tty20";
 
     string kbd_rate = "";
     string kbd_delay = "";
     string kbd_numlock = "";
     string kbd_capslock = "";
     string kbd_scrlock = "";
+    string kbd_disable_capslock = "";
 
     list keyboardprobelist = [];	// List of all probed keyboards
 
@@ -365,103 +368,104 @@
      *		stored in default_kbd.
      */
 
-    global define string MakeProposal( boolean force_reset, boolean language_changed )
+global define string MakeProposal( boolean force_reset, 
+                                   boolean language_changed )
     ``{
-	y2milestone("force_reset: %1", force_reset);
-	y2milestone("language_changed: %1", language_changed);
+    y2milestone("force_reset: %1", force_reset);
+    y2milestone("language_changed: %1", language_changed);
 
-	if ( force_reset )
+    if( force_reset )
 	{
-	    // If user wants to reset do it if a default is available.
-	    //
-	    if ( default_kbd != "" )
+	// If user wants to reset do it if a default is available.
+	//
+	if( default_kbd != "" )
 	    {
-		SetConsole( default_kbd );	// reset
-		SetX11( default_kbd );		// reset
+	    SetConsole( default_kbd );	// reset
+	    SetX11( default_kbd );		// reset
 	    }
 
-	    // Reset user_decision flag.
-	    //
-	    user_decision = false;
+	// Reset user_decision flag.
+	//
+	user_decision = false;
+	restore_called = false;
 	}
-	else	// no reset
+    else	// no reset
 	{
-	    // Only follow the language if the user has never actively chosen
-	    // a keyboard. The indicator for this is user_decision which is
-	    // set from outside the module.
-	    //
-	    if( user_decision )
+	// Only follow the language if the user has never actively chosen
+	// a keyboard. The indicator for this is user_decision which is
+	// set from outside the module.
+	//
+	if( user_decision )
+	    {
+	    if( language_changed )
+		{
+		y2milestone("User has chosen a keyboard; not following language - only retranslation.");
+	    
+		SetConsole( current_kbd );
+		SetX11( current_kbd );
+		}
+	    }
+	else
+	    {
+	    string local_kbd = "";
+	    string kt = SCR::Read( .etc.install_inf.Keytable );
+	    if( kt != nil )
+		{
+		map trans = $[ "de-lat1-nd" : "de-latin1-nodeadkeys",
+			       "mac-fr_CH" : "mac-fr_CH-latin1",
+			       "mac-fi" : "mac-fi-latin1",
+			       "cz-us-qwertz" : "cz-lat2",
+			       "dk" : "dk-latin1",
+			       "fi" : "fi-latin1",
+			       "sk-qwertz" : "sk-qwerty" ];
+		map kbs = get_reduced_keyboard_db();
+		y2milestone( "install.inf contains keytable %1", kt );
+		y2milestone( "kbmodel %1", kb_model );
+		integer idx=0;
+		kt = trans[kt]:kt;
+		if( kt == "us" || kt == "sunkeymap" ) 
+		    local_kbd = "english-us";
+		if( find( kt, ".map.gz" )<0 )
+		    {
+		    kt = kt + ".map.gz";
+		    }
+		foreach( `key, `entry, get_reduced_keyboard_db(),
+		    ``{
+		    if( size(local_kbd)==0 )
+			{
+			if( entry[1,"ncurses"]:"" == kt )
+			    {
+			    local_kbd = key;
+			    }
+			}
+		    });
+		y2milestone( "keymap says local_kbd %1", local_kbd );
+		}
+	    if( size(local_kbd)==0 )
+		{
+		// User has not yet chosen a keyboard ==> follow language.
+		//
+		local_kbd = GetKeyboardForLanguage( Language::language, 
+						    "english-us" );
+		}
+	    if( local_kbd != "" )
+		{
+		SetConsole( local_kbd );
+		SetX11( local_kbd );
+		}
+	    else
 		{
 		if( language_changed )
 		    {
-		    y2milestone("User has chosen a keyboard; not following language - only retranslation.");
-		
+		    y2error("Can't follow language - only retranslation");
+	    
 		    SetConsole( current_kbd );
 		    SetX11( current_kbd );
 		    }
 		}
-	    else
-		{
-		string local_kbd = "";
-		string kt = SCR::Read( .etc.install_inf.Keytable );
-		if( kt != nil )
-		    {
-		    map trans = $[ "de-lat1-nd" : "de-latin1-nodeadkeys",
-				   "mac-fr_CH" : "mac-fr_CH-latin1",
-				   "mac-fi" : "mac-fi-latin1",
-				   "cz-us-qwertz" : "cz-lat2",
-				   "dk" : "dk-latin1",
-				   "fi" : "fi-latin1",
-				   "sk-qwertz" : "sk-qwerty" ];
-		    map kbs = get_reduced_keyboard_db();
-		    y2milestone( "install.inf contains keytable %1", kt );
-		    y2milestone( "kbmodel %1", kb_model );
-		    integer idx=0;
-		    kt = trans[kt]:kt;
-		    if( kt == "us" || kt == "sunkeymap" ) 
-			local_kbd = "english-us";
-		    if( find( kt, ".map.gz" )<0 )
-			{
-			kt = kt + ".map.gz";
-			}
-		    foreach( `key, `entry, get_reduced_keyboard_db(),
-			``{
-			if( size(local_kbd)==0 )
-			    {
-			    if( entry[1,"ncurses"]:"" == kt )
-				{
-				local_kbd = key;
-				}
-			    }
-			});
-		    y2milestone( "keymap says local_kbd %1", local_kbd );
-		    }
-		if( size(local_kbd)==0 )
-		    {
-		    // User has not yet chosen a keyboard ==> follow language.
-		    //
-		    local_kbd = GetKeyboardForLanguage( Language::language, 
-							"english-us" );
-		    }
-		if( local_kbd != "" )
-		    {
-		    SetConsole( local_kbd );
-		    SetX11( local_kbd );
-		    }
-		else
-		    {
-		    if( language_changed )
-			{
-			y2error("Can't follow language - only retranslation");
-		
-			SetConsole( current_kbd );
-			SetX11( current_kbd );
-			}
-		    }
-		}
+	    }
 	}
-	
-	return name;
+    return name;
     }	// MakeProposal()
 
 
@@ -571,17 +575,16 @@ global define void SetKeyboardForLang( string lang )
 	SCR::Write(.sysconfig.keyboard.KEYTABLE, keymap );
 	SCR::Write(.sysconfig.keyboard.COMPOSETABLE, compose_table );
 
-	if( !Mode::initial )
-	    {
-	    SCR::Write(.sysconfig.keyboard.KBD_TTY, kbd_tty );
-	    SCR::Write(.sysconfig.keyboard.KBD_RATE, kbd_rate );
-	    SCR::Write(.sysconfig.keyboard.KBD_DELAY, kbd_delay );
-	    SCR::Write(.sysconfig.keyboard.KBD_NUMLOCK, kbd_numlock );
-	    SCR::Write(.sysconfig.keyboard.KBD_CAPSLOCK, kbd_capslock );
-	    SCR::Write(.sysconfig.keyboard.KBD_SCRLOCK, kbd_capslock );
-	    }
+	SCR::Write(.sysconfig.keyboard.KBD_TTY, kbd_tty );
+	SCR::Write(.sysconfig.keyboard.KBD_RATE, kbd_rate );
+	SCR::Write(.sysconfig.keyboard.KBD_DELAY, kbd_delay );
+	SCR::Write(.sysconfig.keyboard.KBD_NUMLOCK, kbd_numlock );
+	SCR::Write(.sysconfig.keyboard.KBD_CAPSLOCK, kbd_capslock );
+	SCR::Write(.sysconfig.keyboard.KBD_SCRLOCK, kbd_capslock );
+	SCR::Write(.sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK, 
+		   kbd_disable_capslock );
 
-	SCR::Write (.sysconfig.keyboard, nil );	// flush
+	SCR::Write( .sysconfig.keyboard, nil );	// flush
 
 	// As a preliminary step mark all keyboards except the one to be configured
 	// as configured = no and needed = no. Afterwards this one keyboard will be
@@ -686,35 +689,51 @@ global define void SetKeyboardForLang( string lang )
 
 
 
-    /**
-     * Restore()
-     *
-     * Restore the the data from sysconfig.
-     *
-     * @param 	-
-     *
-     * @return  true	- Data could be restored
-     *		false	- Restore not successful
-     *
-     * @see	Save()
-     */
-    global define boolean Restore()
-	``{
-	boolean ret = false;
+/**
+ * Restore()
+ *
+ * Restore the the data from sysconfig.
+ *
+ * @param 	-
+ *
+ * @return  true	- Data could be restored
+ *		false	- Restore not successful
+ *
+ * @see	Save()
+ */
+global define boolean Restore()
+    ``{
+    boolean ret = false;
 
-	// Read the the variables not touched by the module to be able to
-	// store them again on Save().
-	//
-	kbd_tty = Misc::SysconfigRead(.sysconfig.keyboard.KBD_TTY, kbd_tty );
-	kbd_rate = Misc::SysconfigRead(.sysconfig.keyboard.KBD_RATE, kbd_rate );
-	kbd_delay = Misc::SysconfigRead (.sysconfig.keyboard.KBD_DELAY, kbd_delay );
-	kbd_numlock = Misc::SysconfigRead (.sysconfig.keyboard.KBD_NUMLOCK, kbd_numlock);
-	kbd_capslock = Misc::SysconfigRead(.sysconfig.keyboard.KBD_CAPSLOCK, kbd_capslock);
-	kbd_scrlock = Misc::SysconfigRead(.sysconfig.keyboard.KBD_SCRLOCK, kbd_scrlock);
-	
+    restore_called = true;
+
+    // Read the the variables not touched by the module to be able to
+    // store them again on Save().
+    //
+    kbd_tty = Misc::SysconfigRead( .sysconfig.keyboard.KBD_TTY, kbd_tty );
+    kbd_rate = Misc::SysconfigRead( .sysconfig.keyboard.KBD_RATE, kbd_rate );
+    kbd_delay = Misc::SysconfigRead( .sysconfig.keyboard.KBD_DELAY, kbd_delay );
+    kbd_numlock = Misc::SysconfigRead( .sysconfig.keyboard.KBD_NUMLOCK, 
+                                       kbd_numlock );
+    kbd_capslock = Misc::SysconfigRead( .sysconfig.keyboard.KBD_CAPSLOCK, 
+                                        kbd_capslock );
+    kbd_scrlock = Misc::SysconfigRead( .sysconfig.keyboard.KBD_SCRLOCK, 
+                                       kbd_scrlock );
+    kbd_disable_capslock = 
+	Misc::SysconfigRead( .sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK,
+	                     kbd_disable_capslock );
+
+    y2milestone( "rate:%1 delay:%2 numlock:%3 capslock:%4 scrlock:%5 disclock:%6",
+		 kbd_rate, kbd_delay, kbd_numlock, kbd_capslock, 
+		 kbd_scrlock, kbd_disable_capslock );
+    y2milestone( "tty:%1", kbd_tty );
+
+    if( !Mode::initial )
+	{
 	// Read YaST2 keyboard var.
 	//
-	current_kbd = Misc::SysconfigRead(.sysconfig.keyboard.YAST_KEYBOARD, "" );
+	current_kbd = Misc::SysconfigRead( .sysconfig.keyboard.YAST_KEYBOARD, 
+	                                   "" );
 	integer pos = find( current_kbd, "," );
 	if( pos>0 )
 	    {
@@ -723,24 +742,40 @@ global define void SetKeyboardForLang( string lang )
 	    }
 
 	y2milestone( "current_kbd %1 model %2", current_kbd, kb_model );
-
-	if ( current_kbd == "" )
-	{
+	if( current_kbd == "" )
+	    {
 	    y2milestone("Restoring data failed");
 	    ret = false;
-	}
+	    }
 	else
-	{
+	    {
 	    // Restore module data.
 	    //
 	    SetLanguage( current_kbd );
-	    y2milestone("Restored data (sysconfig) for keyboard: <%1>", current_kbd );
+	    y2milestone( "Restored data (sysconfig) for keyboard: <%1>", 
+			 current_kbd );
 	    ret = true;
+	    }
 	}
-
-	return ret;
+    else
+	{
+	ret = true;
+	}
+    return ret;
     }	// Restore()
 
+
+/**
+ * CalledRestore()
+ *
+ * Return if the kbd values have already been read from 
+ * /etc/sysconfig/keyboard
+ *
+ */
+global define boolean CalledRestore()
+    ``{
+    return( restore_called );
+    };
 
 
     /**
@@ -1204,15 +1239,15 @@ global define map Selection()
      * @see	get_xkblayout2keyboard()
      */
     
-    define map get_lang2keyboard()
-	``{
-	// The system_language --> keyboard_language conversion map.
-	//
-	map lang2keyboard = SCR::Read( .target.yast2, "lang2keyboard.ycp" );
-	    
-	if ( lang2keyboard == nil ) lang2keyboard = $[];
+define map get_lang2keyboard()
+    ``{
+    // The system_language --> keyboard_language conversion map.
+    //
+    map lang2keyboard = SCR::Read( .target.yast2, "lang2keyboard.ycp" );
+	
+    if ( lang2keyboard == nil ) lang2keyboard = $[];
 
-	return( lang2keyboard );
+    return( lang2keyboard );
     }	// get_lang2keyboard()
 
 
@@ -1239,6 +1274,72 @@ global define map Selection()
 
 	return( xkblayout2keyboard );
     }	// get_xkblayout2keyboard()
+
+/*
+ * GetExpertValues()
+ *
+ * Return the values for the various expert settings in a map 
+ *
+ * @param 	-
+ *
+ * @return  map with values filled in
+ *
+ */
+
+global define map GetExpertValues()
+    ``{
+    map ret = $[ "rate"     : kbd_rate,
+                 "delay"    : kbd_delay,
+                 "numlock"  : kbd_numlock,
+                 "capslock" : kbd_capslock=="yes" ? true : false,
+                 "scrlock"  : kbd_scrlock=="yes" ? true : false,
+                 "tty"      : kbd_tty,
+                 "discaps"  : kbd_disable_capslock=="yes" ? true : false ];
+    return( ret );
+    }
+
+/*
+ * SetExpertValues()
+ *
+ * Return the values for the various expert setting in a map 
+ *
+ * @param 	val     map with new values of expert settings
+ *
+ * @return  void
+ *
+ */
+
+global define void SetExpertValues( map val )
+    ``{
+    if( haskey(val,"rate") && size(val["rate"]:"")>0 )
+	{
+	kbd_rate = val["rate"]:"";
+	}
+    if( haskey(val,"delay") && size(val["delay"]:"")>0 )
+	{
+	kbd_delay = val["delay"]:"";
+	}
+    if( haskey(val,"numlock") )
+	{
+	kbd_numlock = val["numlock"]:"";
+	}
+    if( haskey(val,"capslock") )
+	{
+	kbd_capslock = (val["capslock"]:false) ? "yes" : "no";
+	}
+    if( haskey(val,"scrlock") )
+	{
+	kbd_scrlock = (val["scrlock"]:false) ? "yes" : "no";
+	}
+    if( haskey(val,"tty") && size(val["tty"]:"")>0 )
+	{
+	kbd_tty = val["tty"]:"";
+	}
+    if( haskey(val,"discaps") )
+	{
+	kbd_disable_capslock = (val["discaps"]:false) ? "yes" : "no";
+	}
+    }
 
     // ---------------------------------------------------------------------------------------
     // END: Locally defined functions
