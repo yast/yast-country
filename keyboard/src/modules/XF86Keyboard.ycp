@@ -18,7 +18,6 @@
  */
 {
     module "XF86Keyboard";
-    textdomain "x11";
     
     import "Keyboard";
 
