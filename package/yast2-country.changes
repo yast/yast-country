@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug  5 14:40:18 CEST 2003 - fehr@suse.de
+
+- add changes by Gabi for better UTF handling on ncurses
+- version 2.8.7
+
+-------------------------------------------------------------------
 Mon Aug  4 09:09:56 CEST 2003 - fehr@suse.de
 
 - fix wrong return code handling of Read(.target.size, ) in 
