@@ -373,33 +373,30 @@ global define string GetDateTime (boolean real_time, boolean locale_format) {
 	? "+%c" : "+%H:%M:%S - %d-%m-%Y";
 
     y2milestone( "GetDateTime hwclock %1 real:%2", hwclock, real_time );
-    if( !real_time )
-	{
+    if (!real_time)
+    {
 	integer ds = 0;
-	string tzs = sformat( "TZ=%1 ", timezone );
 	if (diff!=0)
 	{
 	    integer t = 0;
-	    map out	= (map) SCR::Execute (.target.bash_output,
-		sformat ("TZ=%1 date \"+%%z\"", timezone));
+	    map out	= (map) SCR::Execute (.target.bash_output, "date +%z");
 	    string tzd = out["stdout"]:"";
 	    y2milestone( "GetDateTime tcd=%1", tzd );
 	    t = tointeger( String::CutZeros( substring( tzd, 1, 2 )));
 	    ds = ds + t * 3600;
 	    t = tointeger( String::CutZeros( substring( tzd, 3, 2 )));
 	    ds = ds + t * 60;
-	    if( substring( tzd, 0, 1 )=="-" )
-		{
-		ds = -ds;
-		}
-	    ds = ds;
-	    y2milestone( "GetDateTime ds %1 diff %2", ds, diff );
-	    }
-	cmd = "";
-	if( hwclock != "--localtime" )
+	    if (substring (tzd, 0, 1) == "-")
 	    {
-	    cmd = sformat( "TZ=%1 ", timezone );
+		ds = -ds;
 	    }
+	    y2milestone( "GetDateTime ds %1 diff %2", ds, diff );
+	}
+	cmd = "";
+	if (hwclock != "--localtime")
+	{
+	    cmd = sformat( "TZ=%1 ", timezone );
+	}
 	cmd = cmd + sformat( "/bin/date \"%1\" \"--date=now %2sec\"",
 			     date_format, ds*diff );
     }
