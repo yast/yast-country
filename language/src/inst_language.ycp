@@ -27,8 +27,8 @@
     import "Language";
     import "Timezone";
     import "Keyboard";
-
     import "Wizard";
+    import "Popup";
 
 global define LanguageExpertDialog()
     ``{
@@ -48,7 +48,7 @@ If unsure, use the default values already selected.
     help_text = help_text + _("<p>
 <b>LANG Environment Settings for User root:</b>
 This determines how the locale variables (LC_*) are set for the root user.</p>
-<b>ctype:</b> Root user has same LC_CTYPE as normal user. Other values 
+<b>ctype:</b> Root user has same LC_CTYPE as normal user. Other values
 are unset.<br>
 <b>yes:</b> Root user has same locale settings as normal user.<br>
 <b>no:</b> Root user has all locale variables unset.
@@ -66,18 +66,18 @@ are unset.<br>
 				// heading text
 				`Heading( _("Language Detail Dialog") ),
 				`VSpacing(`opt(`vstretch), 2),
-				`Left(`ComboBox( `id(`rootlang), 
+				`Left(`ComboBox( `id(`rootlang),
 						 _("Locale Settings for User &root"),
 						 [ "ctype", "yes", "no" ] )),
 				`VSpacing(`opt(`vstretch), 1),
-				`Left(`CheckBox( `id(`use_utf8), 
-						 _("Use &UTF-8 encoding"), 
+				`Left(`CheckBox( `id(`use_utf8),
+						 _("Use &UTF-8 encoding"),
 						 false )),
 				`VSpacing(`opt(`vstretch), 7),
 				`HBox(
-				     `PushButton(`id(`ok), `opt(`default), 
+				     `PushButton(`id(`ok), `opt(`default),
 						 Label::OKButton() ),
-				     `PushButton(`id(`cancel), 
+				     `PushButton(`id(`cancel),
 				                 Label::CancelButton() )
 				     )
 				))
@@ -100,7 +100,7 @@ are unset.<br>
 	    if (val != val_on_entry)
 		Language::ExpertSettingsChanged = true;
 	    }
-	} until ( ret == `cancel || ret == `ok );    
+	} until ( ret == `cancel || ret == `ok );
     UI::CloseDialog();
     };
 
@@ -126,8 +126,8 @@ are unset.<br>
     // set up selection list with default item
 
     boolean use_utf8 = true;		// utf8 is default
-    boolean use_ascii = false;          // default is utf8 text 
-    boolean show_expert = true;         
+    boolean use_ascii = false;          // default is utf8 text
+    boolean show_expert = true;
 
     if ( ! lookup (UI::GetDisplayInfo(), "HasFullUtf8Support", true ) )
     {
@@ -138,7 +138,7 @@ are unset.<br>
     {
         use_ascii = true;               // fallback to ascii
     }
-    
+
     // sort language by ASCII with help of a map
     // $[ "ascii-name" : [ "user-readable-string", "code" ], ...]
     // the "user-readable-string" is either ascii or utf8, depending
@@ -272,17 +272,12 @@ Choose the new <b>language</b> for your SuSE Linux system.
 
     UI::SetFocus(`id(`language));
 
-    symbol abort_mode = `painless;
-    if (Mode::repair)
-        abort_mode = `repair;
-
     repeat
     {
 	ret = Wizard::UserInput();
 	y2warning( "UserInput() returned %1", ret );
 
-	if ( ret == `abort &&
-	     WFM::CallFunction(`inst_confirm_abort(abort_mode) ) )
+	if ( ret == `abort && Popup::ConfirmAbort(`painless) )
 	{
 	    Wizard::RestoreNextButton();
 	    return `abort;
@@ -323,7 +318,7 @@ Adapt keyboard settings?
 		    {
 		    kbd_adapt = true;
 		    }
-		else 
+		else
 		    {
 		    Timezone::user_decision = true;
 		    if( !Mode::normal )
@@ -362,7 +357,7 @@ Adapt keyboard settings?
 		    //
 		    if (UI::WidgetExists(`id(`next)) )		UI::SetFocus(`id(`next));
 		    if (UI::WidgetExists(`id(`accept)) )		UI::SetFocus(`id(`accept));
-			  
+
 		    return( `again );
 		}
 	    }

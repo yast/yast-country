@@ -27,7 +27,7 @@ import "Popup";
 
 define void SetTimezone( symbol hwclock, string timezone, boolean really )
     ``{
-    y2milestone( "SetTimezone hw %1, tz %2 really %3", hwclock, timezone, 
+    y2milestone( "SetTimezone hw %1, tz %2 really %3", hwclock, timezone,
                  really );
     Timezone::hwclock = (hwclock == `hwclock_utc) ? "-u" : "--localtime";
     Timezone::Set( timezone, really );
@@ -52,7 +52,7 @@ Apply button.
     map val = Timezone::GetDateTimeMap();
 
     UI::OpenDialog( `opt(`decorated),
-	`HBox( 
+	`HBox(
 	    `HWeight(30, `RichText( htext )),
 	    `HStretch(),
 	    `HSpacing(1),
@@ -63,15 +63,15 @@ Apply button.
 		    `Heading( _("Change System Date and Time") ),
 		    `VSpacing(3),
 		    `VStretch(),
-		    `HBox( `HSpacing(10), 
+		    `HBox( `HSpacing(10),
 			   // label text, do not change "HH:MM:SS"
 		           `Label( _("Current Time in HH:MM:SS Format")),
 			   `HStretch() ),
 		    `HBox( `HSpacing(10),
-		           `TextEntry( `id(`hour), `opt(`shrinkable), "", 
+		           `TextEntry( `id(`hour), `opt(`shrinkable), "",
 			               val["hour"]:"" ),
 			   `Label( ":" ),
-		           `TextEntry( `id(`minute), `opt(`shrinkable), "", 
+		           `TextEntry( `id(`minute), `opt(`shrinkable), "",
 			                val["minute"]:"" ),
 			   `Label( ":" ),
 		           `TextEntry( `id(`second), `opt(`shrinkable), "",
@@ -80,17 +80,17 @@ Apply button.
 			   `HStretch() ),
 		    `VSpacing(2),
 		    `VStretch(),
-		    `HBox( `HSpacing(10), 
+		    `HBox( `HSpacing(10),
 			   // label text, do not change "DD-MM-YYYY"
 			   `Label( _("Current Date in DD-MM-YYYY Format") ),
 			   `HStretch() ),
 		    `HBox( `HSpacing(10),
 			   `VBox( `HSpacing(2),
-			          `TextEntry( `id(`day), `opt(`shrinkable), "", 
+			          `TextEntry( `id(`day), `opt(`shrinkable), "",
 				              val["day"]:"" )),
 			   `Label( "-" ),
 			   `VBox( `HSpacing(2),
-				  `TextEntry( `id(`month), `opt(`shrinkable), 
+				  `TextEntry( `id(`month), `opt(`shrinkable),
 				               "", val["month"]:"" )),
 			   `Label( "-" ),
 			   `VBox( `HSpacing(4),
@@ -100,7 +100,7 @@ Apply button.
 			   `HStretch() ),
 		    `VSpacing(4),
 		    `VStretch(),
-		    `HBox( 
+		    `HBox(
 		        // button text
 			`PushButton(`id(`apply), `opt(`default), _("&Apply")),
 			`PushButton(`id(`cancel), Label::CancelButton() ))
@@ -114,7 +114,7 @@ Apply button.
     UI::ChangeWidget( `id(`month), `ValidChars, "0123456789" );
     UI::ChangeWidget( `id(`year), `ValidChars, "0123456789" );
     any ret = `cancel;
-    repeat 
+    repeat
 	{
 	ret = UI::UserInput();
 	y2milestone( "UserInput ret:%1", ret );
@@ -176,7 +176,7 @@ Enter the correct date.
     if (Mode::config)
     {
 	import "AutoinstGeneral";
-	timezone = AutoinstGeneral::Clock["timezone"]:"";	
+	timezone = AutoinstGeneral::Clock["timezone"]:"";
 	hwclock = ( AutoinstGeneral::Clock["hwclock"]:"" == "UTC" ) ? "-u"  : "--localtime";
     }
 
@@ -186,7 +186,7 @@ Enter the correct date.
 	Wizard::ReplaceAbortButton(`Empty());
     else
 	Wizard::OpenAcceptDialog();	// do this as early as possible for instant user feedback!
-    
+
     // build up timezone selection box
     //
     term timezonesel =
@@ -196,7 +196,7 @@ Enter the correct date.
 				      _("Time &Zone") ));
 
 		// label text
-    term region = `SelectionBox( `id(`region), `opt(`notify,`immediate), 
+    term region = `SelectionBox( `id(`region), `opt(`notify,`immediate),
                                  _("&Region"), Timezone::Region() );
 
     // does the hwclock run on UTC only ? -> skip asking
@@ -213,24 +213,24 @@ Enter the correct date.
     date = Timezone::GetDateTime(true);
 
     // Ask for UTC vs. Localtime
-    
+
     // label text
     string hw_label = _("&Hardware clock set to");
     term hw_clock = `Empty();
     if (!utc_only)
 	{
-	hw_clock = 
+	hw_clock =
 	    `VBox(
 	      `ComboBox(`id(`hwclock), `opt(`hstretch, `notify ),
 			// ComboBox for time reference: local time or UTC
 			hw_label,
 			[
 			 // ComboBox entry: hardware clock set to local time
-			 `item( `id(`hwclock_localtime), _("local time"), 
+			 `item( `id(`hwclock_localtime), _("local time"),
 			        (hwclock == "--localtime")),
 
 			 // ComboBox entry: hardware clock set UTC
-			 `item( `id(`hwclock_utc ), _("UTC"), 
+			 `item( `id(`hwclock_utc ), _("UTC"),
 			        (hwclock == "-u"))
 			]
 			),
@@ -240,7 +240,7 @@ Enter the correct date.
     else
 	{
 	hw_clock =
-	    `VBox(  `Label( `id(`hwcl), `opt(`hstretch), 
+	    `VBox(  `Label( `id(`hwcl), `opt(`hstretch),
 	                    deletechars( hw_label, "&" )),
 		    `Label( `id(`date), `opt(`hstretch), date ));
 	}
@@ -322,7 +322,7 @@ If you are unsure, use the default values already selected.
     symbol hwclock_s_old = hwclock_s;
 
     UI::ChangeWidget( `id(`region), `CurrentItem, sel );
-    UI::ReplaceWidget( `id(`tzsel), 
+    UI::ReplaceWidget( `id(`tzsel),
 		       `SelectionBox( `id(`timezone), `opt(`notify),
 		                      // label text
 				      _("Time &Zone"),
@@ -339,8 +339,7 @@ If you are unsure, use the default values already selected.
 
 	y2milestone( "ret %1", ret );
 
-	if( !Mode::config && ret == `abort && 
-	    WFM::CallFunction(`inst_confirm_abort(`painless)) )
+	if( !Mode::config && ret == `abort && Popup::ConfirmAbort(`painless) )
 	    {
 	    break;
 	    }
@@ -348,14 +347,14 @@ If you are unsure, use the default values already selected.
 	    {
 	    integer num = UI::QueryWidget( `id(`region), `CurrentItem );
 	    y2milestone( "new region %1", num );
-	    UI::ReplaceWidget( `id(`tzsel), 
+	    UI::ReplaceWidget( `id(`tzsel),
 	                       `SelectionBox( `id(`timezone), `opt(`notify),
 					      // label text
 					      _("Time &Zone"),
 					      Timezone::Selection(num) ));
 	    if( num==sel )
 		{
-		UI::ChangeWidget( `id(`timezone), `CurrentItem, 
+		UI::ChangeWidget( `id(`timezone), `CurrentItem,
 				  Timezone::timezone );
 		}
 	    }

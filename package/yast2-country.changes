@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Sep 01 10:04:35 CEST 2003 - arvin@suse.de
+
+- use Popup::ConfirmAbort
+
+-------------------------------------------------------------------
 Wed Aug 27 14:29:33 CEST 2003 - fehr@suse.de
 
 - make sorting of keyboard entries locale dependent (#21856)
@@ -47,7 +52,7 @@ Tue Aug  5 14:40:18 CEST 2003 - fehr@suse.de
 -------------------------------------------------------------------
 Mon Aug  4 09:09:56 CEST 2003 - fehr@suse.de
 
-- fix wrong return code handling of Read(.target.size, ) in 
+- fix wrong return code handling of Read(.target.size, ) in
   Language.ycp
 - version 2.8.6
 

@@ -19,6 +19,7 @@
 
     import "Arch";
     import "Mode";
+    import "Popup";
 
     // After import "Arch" and "Mode"
     //
@@ -36,7 +37,7 @@
 
 global define KeyboardExpertDialog()
     ``{
-    
+
     symbol ret = `none;
     // help text for keyboard expert screen
     string help_text = _("<p>
@@ -67,7 +68,7 @@ If unsure, use the default values already selected.
 				`Left(`TextEntry( `id(`rate),
 						  // label text
 				                  _("Repeat &Rate"))),
-				`Left(`TextEntry( `id(`delay), 
+				`Left(`TextEntry( `id(`delay),
 					    // label text
 				            _("De&lay before Repetition Starts")) ),
 				`VSpacing(`opt(`vstretch), 1),
@@ -75,34 +76,34 @@ If unsure, use the default values already selected.
 				    // label text
 				    _("Start-up States"),
 				    `VBox(
-					`Left(`ComboBox( `id(`numlock), 
+					`Left(`ComboBox( `id(`numlock),
 							 // label text
 							 _("&Num Lock On"),
-							 [ "bios", "yes", "no", 
+							 [ "bios", "yes", "no",
 							   num_lock_unt] )),
 					`VSpacing(`opt(`vstretch), 1),
-					`Left(`CheckBox( `id(`capslock), 
+					`Left(`CheckBox( `id(`capslock),
 							 // label text
 					                 _("Ca&ps Lock On") )),
-					`Left(`CheckBox( `id(`scrlock), 
+					`Left(`CheckBox( `id(`scrlock),
 							 // label text
 							 _("&Scroll Lock On") )))),
 				`VSpacing(`opt(`vstretch), 1),
-				`Left(`TextEntry( `id(`tty), 
+				`Left(`TextEntry( `id(`tty),
 					    // label text
 				            _("Devices on which the values for Num Lock, Caps Lock, and
 Scroll Lock should be set
 ") )),
 				`VSpacing(`opt(`vstretch), 1),
-				`Left(`CheckBox( `id(`discaps), 
+				`Left(`CheckBox( `id(`discaps),
 					   // label text
 				           _("&Disable Caps Lock")) ),
 				`VSpacing(1),
 				`VStretch(),
 				`HBox(
-				     `PushButton(`id(`ok), `opt(`default), 
+				     `PushButton(`id(`ok), `opt(`default),
 						 Label::OKButton() ),
-				     `PushButton(`id(`cancel), 
+				     `PushButton(`id(`cancel),
 				                 Label::CancelButton() )
 				     )
 				))
@@ -146,9 +147,9 @@ Scroll Lock should be set
 	    Keyboard::SetExpertValues( val );
 	    if (val != val_on_entry)
 		Keyboard::ExpertSettingsChanged = true;
-	    
+
 	    }
-	} until ( ret == `cancel || ret == `ok );    
+	} until ( ret == `cancel || ret == `ok );
     UI::CloseDialog();
     };
 
@@ -175,12 +176,12 @@ Scroll Lock should be set
 	}
     }
 
-    
+
     // Memorize the current keyboard language to be able to restore it.
-    //   
+    //
     string keyboard_on_entry = Keyboard::current_kbd;
 
-		     
+
     // default for keyboard is set to "english-us" in
     // inst_finish.ycp:    string keyboard_name = lookup (user_settings, "keyboard", "english-us");
     // -> ok for s390 ?
@@ -193,15 +194,15 @@ Scroll Lock should be set
     //
     list keyboardlist_by_translation =
 	maplist( string keyboard_code, string keyboard_name, Keyboard::Selection(),
-	    ``{	
+	    ``{
 	    return `item( `id(keyboard_code),
 			  keyboard_name,
 			  Keyboard::current_kbd==keyboard_code );
 	    });
 
-    keyboardlist_by_translation = 
+    keyboardlist_by_translation =
 	sort( `a, `b, keyboardlist_by_translation,
-	      ``(select( lsort( [select(a,1,""), select(b,1,"") ]), 0, "" ) == 
+	      ``(select( lsort( [select(a,1,""), select(b,1,"") ]), 0, "" ) ==
 	         select(a,1,"")));
 
     keyboardsel = `SelectionBox( `id( `keyboard ), `opt(`notify,`immediate),
@@ -214,7 +215,7 @@ Scroll Lock should be set
     term test = `TextEntry( _("Keyboard &test:") );
     if (Mode::config)
 	test = `Empty();
-    
+
     // Put test widget below selection list.
     //
     keyboardsel = `VBox(
@@ -233,7 +234,7 @@ Scroll Lock should be set
 	Wizard::ReplaceAbortButton(`Empty());
     else
 	Wizard::OpenAcceptDialog();
-    
+
 
     term contents =
 	    `VBox(
@@ -277,15 +278,14 @@ If unsure, use the default values already selected.
 	{
 	ret = Wizard::UserInput();
 
-	
 
-	if  ( (ret == `abort) &&
-	    WFM::CallFunction(`inst_confirm_abort(`painless) ) && !Mode::config)
+
+	if (ret == `abort && Popup::ConfirmAbort(`painless) && !Mode::config)
 	{
 	    Wizard::CloseDialog();
 	    return `abort;
 	}
-	
+
 	if( ret==`expert )
 	    {
 	    KeyboardExpertDialog();
@@ -309,7 +309,7 @@ If unsure, use the default values already selected.
 	    {
 		Keyboard::Set( keyboard );
 	    }
-	   
+
 
 	    if( ret == `next && !Mode::config)
 		{
