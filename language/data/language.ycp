@@ -261,7 +261,7 @@ $[
 		  _("Slovenian")
 		   ],
 
-  "sk_SK"	: [ "Slovenčina ",
+  "sk_SK"	: [ "Slovenčina",
 		  "Slovencina",
 		  ".UTF-8",
 		  "",
@@ -274,6 +274,13 @@ $[
 		  "",
 		  // language name
 		  _("Swedish") ],
+
+  "uk_UA"	 : [ "Українська",
+		   "Ukrainian",
+		   ".UTF-8",
+		   "",
+		   // language name
+		   _("Ukrainian") ],
 
   "zh_CN"       : [ "简体中文",
 		  "Simplified Chinese",

@@ -94,17 +94,17 @@ define any TimezoneSequence () {
 define boolean TimezoneSummaryHandler (map options) {
 
     // summary label
-    CommandLine::Print(sformat (_("Current timezone:\t%1"),Timezone::timezone));
+    CommandLine::Print(sformat (_("Current Time Zone:\t%1"),Timezone::timezone));
 
     if (!Timezone::utc_only())
     {
 	// summary label
-	CommandLine::Print (sformat (_("Hardware clock set to:\t%1"),
+	CommandLine::Print (sformat (_("Hardware Clock Set To:\t%1"),
 	    Timezone::hwclock == "-u" ? _("UTC") : _("local time")));
 
     }
     // summary label
-    CommandLine::Print (sformat (_("Current time and date:\t%1"),
+    CommandLine::Print (sformat (_("Current Time and Date:\t%1"),
 	Timezone::GetDateTime(true, true)));
     return false;
 }
@@ -151,7 +151,7 @@ define boolean TimezoneSetHandler (map options) {
 map cmdline = $[
     "id"		: "timezone",
     // translators: command line help text for Securoty module
-    "help"		: _("Timezone configuration."),
+    "help"		: _("Time zone configuration."),
     "guihandler"	: TimezoneSequence,
     "initialize"	: TimezoneRead,
     "finish"		: TimezoneWrite,
@@ -159,23 +159,23 @@ map cmdline = $[
 	"summary" :$[
 	    "handler"	: TimezoneSummaryHandler,
 	    // command line help text for 'summary' action
-	    "help"	: _("Timezone configuration summary."),
+	    "help"	: _("Time zone configuration summary."),
 	],
 	"set" :$[
 	    "handler"	: TimezoneSetHandler,
 	    // command line help text for 'set' action
-	    "help"	: _("Set new values for timezone configuration."),
+	    "help"	: _("Set new values for time zone configuration."),
 	],
 	"list": $[
 	    "handler"	: TimezoneListHandler,
 	    // command line help text for 'list' action
-	    "help"	: _("List all available timezones.")
+	    "help"	: _("List all available time zones.")
 	],
     ],
     "options"		: $[
 	"timezone"		: $[
 	    // command line help text for 'set timezone' option
-	    "help"	: _("New timezone"),
+	    "help"	: _("New time zone"),
 	    "type"	: "string"
 	],
 	"hwclock"		: $[

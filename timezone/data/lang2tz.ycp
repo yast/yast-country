@@ -61,6 +61,7 @@ $[
   "sl_SI"		: "Europe/Ljubljana",
   "sv_SE"		: "Europe/Stockholm",
   "tr_TR"		: "Europe/Istanbul",
+  "uk_UA"		: "Europe/Kiev",
   "zh_CN"		: "Asia/Shanghai",
   "zh_TW"		: "Asia/Taipei",
 ]

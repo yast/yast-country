@@ -91,7 +91,7 @@ define any KeyboardSequence () {
 define boolean KeyboardSummaryHandler (map options) {
 
     // summary label
-    CommandLine::Print (sformat (_("Current keyboard layout: %1"),
+    CommandLine::Print (sformat (_("Current Keyboard Layout: %1"),
 	Keyboard::current_kbd));
     return false;
 }
@@ -118,7 +118,7 @@ define boolean KeyboardSetHandler (map options) {
     if (keyboard == "" || !haskey (Keyboard::Selection(), keyboard))
     {
 	// error message (%1 is given layout); do not translate 'list'
-	CommandLine::Print (sformat (_("Not valid keyboard layout '%1'. Use a 'list' command to see possible values."), keyboard));
+	CommandLine::Print (sformat (_("Keyboard layout '%1' is invalid. Use a 'list' command to see possible values."), keyboard));
     }
     Keyboard::Set (keyboard);
 

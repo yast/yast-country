@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Feb  7 14:27:14 CET 2005 - jsuchome@suse.cz
+
+- added support for Ukrainian 
+- merged texts from proofreading
+- 2.11.12 
+
+-------------------------------------------------------------------
 Fri Feb  4 13:49:59 CET 2005 - jsuchome@suse.cz
 
 - language: drop "Install packages" checkbox (#50344)

@@ -75,5 +75,6 @@ $[
 
 	"lt"		: "lithuanian",
 
-	"hr"		: "croatian"
+	"hr"		: "croatian",
+	"ua"		: "ukrainian",
 ]
