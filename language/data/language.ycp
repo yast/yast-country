@@ -142,6 +142,11 @@ $[
 		  ".UTF-8",
 		  "" ],
 
+  "pl_PL"       : [ "Polski",
+                  "Polski",
+		  ".UTF-8",
+		  "" ],
+
   "pt_BR"	: [ "Português brasileiro",
 		  "Portugues brasileiro",
 		  ".UTF-8",

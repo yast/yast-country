@@ -1,7 +1,18 @@
 -------------------------------------------------------------------
+Thu Jul 15 10:36:34 CEST 2004 - fehr@suse.de
+
+- merged SuSE-Linux-9_1-Branch
+- 2.10.1
+
+-------------------------------------------------------------------
 Tue Jul 13 09:36:47 CEST 2004 - fehr@suse.de
 
 - call Booloader::UpdateGfxMenu() if languge is changed (#35835)
+
+-------------------------------------------------------------------
+Mon Jul 12 16:44:06 CEST 2004 - fehr@suse.de
+
+- fix handling of hvsi0 in inittab (#42801)
 
 -------------------------------------------------------------------
 Mon Jun  7 11:41:40 CEST 2004 - fehr@suse.de
@@ -9,10 +20,42 @@ Mon Jun  7 11:41:40 CEST 2004 - fehr@suse.de
 - removed duplicated entry Turkey from timezone_raw.ycp (#41609)
 
 -------------------------------------------------------------------
+Mon May 24 16:29:34 CEST 2004 - fehr@suse.de
+
+- add entry for polish language
+- fix bug with weird time setting when hwclock set to localtime (#41080)
+- 2.9.24
+
+-------------------------------------------------------------------
+Tue May 18 15:42:12 CEST 2004 - fehr@suse.de
+
+- fix problem when changing timezone and system time in one step
+  (#40502)
+- check for valid timezone in timezone selection (#40794)
+- 2.9.23
+
+-------------------------------------------------------------------
+Mon May  3 14:32:45 CEST 2004 - fehr@suse.de
+
+- added Japan to country.ycp (#39717)
+- 2.9.22
+
+-------------------------------------------------------------------
+Mon Apr 26 12:53:59 CEST 2004 - fehr@suse.de
+
+- change handling of /etc/inittab to fix #39381
+- 2.9.21
+
+-------------------------------------------------------------------
 Mon Apr 19 12:40:00 CEST 2004 - fehr@suse.de
 
 - patch proofreaded text back into ycp
-- 2.10.1
+
+-------------------------------------------------------------------
+Tue Apr 13 12:00:52 CEST 2004 - fehr@suse.de
+
+- call SuSEconfig also when expert settings changed (#38715)
+- 2.9.20
 
 -------------------------------------------------------------------
 Fri Apr 02 15:59:59 CEST 2004 - arvin@suse.de
@@ -110,9 +153,6 @@ Mon Mar  1 13:30:59 CET 2004 - fehr@suse.de
 - patch proofreaded texts back into ycp
 - make sorting of keyboard entries locale dependent again
 - 2.9.7
-
--------------------------------------------------------------------
-Thu Feb 26 11:59:47 CET 2004 - fehr@suse.de
 
 -------------------------------------------------------------------
 Thu Feb 26 20:29:54 CET 2004 - nashif@suse.de

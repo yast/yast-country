@@ -57,6 +57,7 @@ return $[
     "IS" : _("Iceland"),
     "IT" : _("Italy"),
     "JO" : _("Jordan"),
+    "JP" : _("Japan"),
     "KW" : _("Kuwait"),
     "LB" : _("Lebanon"),
     "LT" : _("Lithuania"),

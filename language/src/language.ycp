@@ -91,10 +91,6 @@
 	if( Language::language != language_on_entry || Language::ExpertSettingsChanged )
 	    {
 	    Language::Save();
-	    }
-
-	if( Language::language != language_on_entry )
-	    {
 	    y2milestone( "Language changed --> saving" );
 	    // According to ro@suse.de it doesn't make sense to run individual
 	    // SuSEcongig modules only because the set of modules and the variables

@@ -133,6 +133,11 @@
 	    string baud = splitserial[1]:"9600";
 	    string line = substring (tty, 0, 3) == "tty" ? substring (tty, 3) : tty;
 
+	    if( size(line)>4 )
+		{
+		line = substring( line, 0, 4 );
+		}
+
 	    if ((tty != "") && (baud != ""))
 	    {
 		string initline = sformat ("%1:1235:respawn:/sbin/agetty -L %2 %3", line, baud, tty);
@@ -140,8 +145,12 @@
 		{
 			initline = sformat ("%1:1235:respawn:/sbin/agetty -L %2 %3 vt320", line, baud, tty);
 		}
+		else if ( substring( tty, 0, 4 ) == "hvsi" )
+		{
+			initline = sformat ("%1:1235:respawn:/sbin/agetty -L %2 %3 vt102", line, baud, tty);
+		}
 		//SCR::Write (.etc.inittab.S0, initline);
-		SCR::Execute (.target.bash, sformat ("/bin/grep -v ^%1: /etc/inittab >/tmp/inittab", line));
+		SCR::Execute (.target.bash, sformat ("/bin/grep -v \" %1\"  /etc/inittab >/tmp/inittab", line));
 		SCR::Execute (.target.bash, "/bin/echo '" + initline + "' >>/tmp/inittab");
 		SCR::Execute (.target.bash, "/bin/mv /tmp/inittab /etc/inittab");
 		SCR::Execute (.target.bash, "/bin/echo " + tty + " >>/etc/securetty");

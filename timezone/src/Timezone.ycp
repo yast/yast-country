@@ -155,13 +155,13 @@ global define integer Set( string zone, boolean really )
     if( !Mode::config && really )
 	{
 	string cmd = "/usr/sbin/zic -l " + timezone;
-	y2milestone( "cmd %1", cmd );
-	y2milestone( "ret %1", SCR::Execute( .target.bash_output, cmd ));
+	y2milestone( "Set cmd %1", cmd );
+	y2milestone( "Set ret %1", SCR::Execute( .target.bash_output, cmd ));
 	if( !Arch::s390 )
 	    {
 	    cmd = "/sbin/hwclock --hctosys " + hwclock;
-	    y2milestone( "cmd %1", cmd );
-	    y2milestone( "ret %1", SCR::Execute(.target.bash_output, cmd ));
+	    y2milestone( "Set cmd %1", cmd );
+	    y2milestone( "Set ret %1", SCR::Execute(.target.bash_output, cmd ));
 	    }
 	}
     
@@ -205,7 +205,7 @@ global define void Timezone()
 	map<string, string> lang2tz = get_lang2tz();
 
 	string new_timezone = lang2tz[Language::language]:"";
-	y2milestone( "new_timezone %1", new_timezone );
+	y2milestone( "Timezone new_timezone %1", new_timezone );
 
 	if( new_timezone != "" )
 	    {
@@ -231,26 +231,35 @@ global define void SetTime( string year, string month, string day,
 	{
 	string date = sformat( " --date=\"%1/%2/%3 %4:%5:%6\" ", month, day, 
 	                       year, hour, minute, second );
-	SCR::Execute(.target.bash, "/sbin/hwclock --set " + hwclock + date);
-	SCR::Execute(.target.bash, "/sbin/hwclock --hctosys " + hwclock );
+	string cmd = "";
+	if( size(timezone)>0 && hwclock != "--localtime" )
+	    {
+	    cmd = "TZ=" + timezone + " ";
+	    }
+	cmd = cmd + "/sbin/hwclock --set " + hwclock + date;
+	y2milestone( "SetTime cmd %1", cmd );
+	SCR::Execute(.target.bash, cmd );
+	cmd = "/sbin/hwclock --hctosys " + hwclock;
+	y2milestone( "SetTime cmd %1", cmd );
+	SCR::Execute(.target.bash, cmd );
 	}
     };
 
 global define void PushVal()
     ``{
     push = $[ "hwclock" : hwclock, "timezone" : timezone ];
-    y2milestone( "map %1", push );
+    y2milestone( "PushVal map %1", push );
     }
 
 global define void PopVal()
     ``{
-    y2milestone( "timezone %1 hwclock %2", timezone, hwclock );
+    y2milestone( "PopVal timezone %1 hwclock %2", timezone, hwclock );
     if( haskey( push, "hwclock" ))
 	hwclock = push["hwclock"]:hwclock;
     if( haskey( push, "timezone" ))
 	timezone = push["timezone"]:timezone;
     push = $[];
-    y2milestone( "timezone %1 hwclock %2", timezone, hwclock );
+    y2milestone( "PopVal timezone %1 hwclock %2", timezone, hwclock );
     }
 
 /**
@@ -278,7 +287,8 @@ global define string GetTimezoneForLanguage( string sys_language,
 	{
 	ret = lang2timezone[default_language]:"US/Pacific";
 	}
-    y2milestone( "sys %1 def %2 ret %3", sys_language, default_language, ret );
+    y2milestone( "GetTimezoneForLanguage sys %1 def %2 ret %3", 
+                 sys_language, default_language, ret );
     return ret;
     }
 
@@ -300,7 +310,7 @@ global define string GetDateTime( boolean real_time )
     ``{
     string cmd = "";
     string date_format = "+%H:%M:%S - %d-%m-%Y";
-    y2milestone( "hwclock %1", hwclock );
+    y2milestone( "GetDateTime hwclock %1", hwclock );
     if( !real_time )
 	{
 	integer ds = 0;
@@ -312,7 +322,7 @@ global define string GetDateTime( boolean real_time )
 		lookup( (map)SCR::Execute( .target.bash_output, 
 				      sformat( "TZ=%1 date \"+%%z\"", timezone )),
 			"stdout", "" );
-	    y2milestone( "tcd=%1", tzd );
+	    y2milestone( "GetDateTime tcd=%1", tzd );
 	    t = tointeger( String::CutZeros( substring( tzd, 1, 2 )));
 	    ds = ds + t * 3600;
 	    t = tointeger( String::CutZeros( substring( tzd, 3, 2 )));
@@ -322,16 +332,21 @@ global define string GetDateTime( boolean real_time )
 		ds = -ds;
 		}
 	    ds = ds;
-	    y2milestone( "ds %1 diff %2", ds, diff );
+	    y2milestone( "GetDateTime ds %1 diff %2", ds, diff );
 	    }
-	cmd = sformat( "TZ=%1 /bin/date \"%2\" \"--date=now %3sec\"", timezone,
-	               date_format, ds*diff );
+	cmd = "";
+	if( hwclock != "--localtime" )
+	    {
+	    cmd = sformat( "TZ=%1 ", timezone );
+	    }
+	cmd = cmd + sformat( "/bin/date \"%1\" \"--date=now %2sec\"", 
+			     date_format, ds*diff );
 	}
     else
 	{
 	cmd = sformat( "/bin/date \"%1\"", date_format );
 	}
-    y2milestone( "cmd=%1", cmd );
+    y2milestone( "GetDateTime cmd=%1", cmd );
     string local_date = lookup( (map)SCR::Execute( .target.bash_output, cmd ),
 				"stdout", "" );
 	
@@ -363,8 +378,8 @@ global define void  ResetZonemap()
 global define string MakeProposal( boolean force_reset, 
                                    boolean language_changed )
     ``{
-    y2milestone( "force_reset: %1", force_reset );
-    y2milestone( "language_changed: %1 user_decision %2 user_hwclock %3", 
+    y2milestone( "MakeProposal force_reset: %1", force_reset );
+    y2milestone( "MakeProposal language_changed: %1 user_decision %2 user_hwclock %3", 
                  language_changed, user_decision, user_hwclock );
 
     if( language_changed ) 
@@ -450,7 +465,7 @@ global define string MakeProposal( boolean force_reset,
 
     string date = GetDateTime(true);
 
-    y2milestone( "hwclock %1", hwclock );
+    y2milestone( "MakeProposal hwclock %1", hwclock );
 
     return( name + " - " + clock_setting + " " + date );
     }
@@ -534,7 +549,7 @@ global define void Save()
 
     SCR::Write(.sysconfig.clock, nil);	// flush
 
-    y2milestone( "Saved data for timezone: <%1>", timezone );
+    y2milestone( "Save Saved data for timezone: <%1>", timezone );
 
     return;
     }
@@ -542,7 +557,7 @@ global define void Save()
 global define map GetDateTimeMap()
     ``{
     map ret = $[];
-    list dparts = filter( string v, splitstring( GetDateTime(true), " -:" ), 
+    list dparts = filter( string v, splitstring( GetDateTime(false), " -:" ), 
                           ``(size(v)>0));
     ret["hour"] = dparts[0]:"";
     ret["minute"] = dparts[1]:"";
@@ -550,7 +565,7 @@ global define map GetDateTimeMap()
     ret["day"] = dparts[3]:"";
     ret["month"] = dparts[4]:"";
     ret["year"] = dparts[5]:"";
-    y2milestone( "dparts %1 ret %2", dparts, ret );
+    y2milestone( "GetDateTimeMap dparts %1 ret %2", dparts, ret );
     return( ret );
     }
 
@@ -570,9 +585,8 @@ global define boolean CheckDate( string day, string month, string year )
     ``{
     list mdays = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
     boolean ret = true;
-    integer yea = tointeger(  String::CutZeros(year) );
-    y2milestone( "xxx %1 %2", month, String::CutZeros(month) );
-    integer mon = tointeger(  String::CutZeros(month) );
+    integer yea = tointeger( String::CutZeros(year) );
+    integer mon = tointeger( String::CutZeros(month) );
     ret = ret && mon>=1 && mon<=12;
     if( yea%4==0 && (yea%100!=0 || yea%400==0))
 	{

@@ -180,6 +180,7 @@ Enter the correct date.
 
     map dpy = UI::GetDisplayInfo();
     boolean ncurses = dpy["TextMode"]:false;
+    y2milestone( "timezone_old %1", timezone_old );
     y2milestone( "GetDisplayInfo %1 ncurses %2", dpy, ncurses );
 
     // Autoinstall
@@ -383,8 +384,8 @@ If you are unsure, use the default values already selected.
 	    {
 	    if( SetTimeDialog() )
 		{
-		y2milestone( "date %1", Timezone::GetDateTime(true) );
-		UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime(true) );
+		y2milestone( "date %1", Timezone::GetDateTime(false) );
+		UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime(false) );
 		}
 	    }
 	else if( ret == `next || ret == `timezone || ret == `hwclock )
@@ -403,11 +404,14 @@ If you are unsure, use the default values already selected.
 		}
 
 	    timezone = (string)UI::QueryWidget( `id(`timezone ), `CurrentItem );
-	    if( size(timezone) == 0 )
+	    if( timezone == nil || size(timezone) == 0 )
 		{
+	        // popup text
+		Popup::Error( _("Select valid timezone") );
+		ret = `again;
 		timezone = timezone_old;
 		}
-	    y2milestone( "timezone %1", timezone );
+	    y2milestone( "timezone %1 ret %2", timezone, ret );
 
 	    // Change only if s.th. has really changed.
 	    //
