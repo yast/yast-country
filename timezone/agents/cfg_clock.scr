@@ -12,5 +12,5 @@
 .sysconfig.clock
 
 `ag_ini(
-    SCR::SysConfigFile("/etc/sysconfig/clock")
+    SysConfigFile("/etc/sysconfig/clock")
 )

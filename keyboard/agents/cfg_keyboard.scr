@@ -13,5 +13,5 @@
 .sysconfig.keyboard
 
 `ag_ini(
-  SCR::SysConfigFile("/etc/sysconfig/keyboard")
+  SysConfigFile("/etc/sysconfig/keyboard")
 )

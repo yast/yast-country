@@ -13,5 +13,5 @@
 .sysconfig.console
 
 `ag_ini(
-  SCR::SysConfigFile("/etc/sysconfig/console")
+  SysConfigFile("/etc/sysconfig/console")
 )
