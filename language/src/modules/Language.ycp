@@ -496,7 +496,7 @@ global define boolean IncompleteTranslation (string lang) {
 	if (status != nil && status != "")
 	    translation_status[lang]	= tointeger (status);
 	else
-	    translation_status[lang]	= 0;
+	    translation_status[lang]	= 100;
     }
     integer treshold =
 	tointeger (ProductFeatures::incomplete_translation_treshold);
