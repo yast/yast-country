@@ -3,6 +3,7 @@ Wed Mar 17 19:12:48 CET 2004 - fehr@suse.de
 
 - inform Encoding module about Utf8 setting
 - reset correctly to initial keyboard setting (#35789)
+- 2.9.14
 
 -------------------------------------------------------------------
 Tue Mar 16 11:36:07 CET 2004 - fehr@suse.de
