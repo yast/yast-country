@@ -393,7 +393,7 @@ global define string MakeProposal( boolean force_reset,
 	// a keyboard. The indicator for this is user_decision which is
 	// set from outside the module.
 	//
-	if( user_decision )
+	if( user_decision || Mode::autoinst)
 	    {
 	    if( language_changed )
 		{
