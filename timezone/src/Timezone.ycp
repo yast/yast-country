@@ -482,12 +482,8 @@ global define list Selection( integer num )
     textdomain "country";
 
     list trl = maplist( string name, string key, tmap, ``{ return( [ name, key ] ); });
-    /* Fixme lsort function needed 
     trl = sort( list a, list b, trl, 
                 ``(select( lsort( [a[0]:"", b[0]:""] ), 0, "" ) == a[0]:"" ));
-    */
-    trl = sort( list a, list b, trl, 
-                ``(select( sort( [a[0]:"", b[0]:""] ), 0, "" ) == a[0]:"" ));
     y2milestone( "trl = %1", trl );
 
     list ret = maplist( list e, trl,
