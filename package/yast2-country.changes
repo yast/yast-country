@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep 23 15:14:05 CEST 2004 - mfabian@suse.de
+
+- fix entry for Hebrew
+- use correct strings for zh_TW and zh_HK
+- 2.10.13
+
+-------------------------------------------------------------------
 Wed Sep 22 13:41:15 CEST 2004 - fehr@suse.de
 
 - place calls to SetDesktopIcon where they work (#45714)
