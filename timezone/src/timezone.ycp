@@ -22,7 +22,6 @@ import "Timezone";
 import "Wizard";
 
 import "Popup";
-include "ui/common_functions.ycp";
 import "Label";
 
     // Memorize the current timezone.

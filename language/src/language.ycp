@@ -22,7 +22,6 @@
     import "Wizard";
 
     import "Popup";
-    include "ui/common_functions.ycp";
     import "Label";
 
     // Memozize the current language.
