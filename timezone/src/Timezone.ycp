@@ -48,6 +48,7 @@ global string default_timezone = "";
 // To be set from outside.
 //
 global boolean user_decision = false;
+global boolean user_hwclock = false;
 
 // ------------------------------------------------------------------
 // END: Globally defined data to be accessed via Timezone::<variable>
@@ -201,11 +202,11 @@ global define void SetTime( string year, string month, string day,
 global define string MakeProposal( boolean force_reset, 
                                    boolean language_changed )
     ``{
-    y2milestone("force_reset: %1", force_reset);
-    y2milestone("language_changed: %1 user_decision %2", language_changed,
-                user_decision );
+    y2milestone( "force_reset: %1", force_reset );
+    y2milestone( "language_changed: %1 user_decision %2 user_hwclock %3", 
+                 language_changed, user_decision, user_hwclock );
 
-    if( !user_decision || force_reset )
+    if( !user_hwclock || force_reset )
 	{
 	hwclock = "-u";
 	if( size(Storage::GetWinPrimPartitions(Storage::GetTargetMap())) > 0 ||

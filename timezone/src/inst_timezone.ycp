@@ -411,6 +411,7 @@ If you are unsure, use the default values already selected.
 		    // Set user_decision flag in timezone module.
 		    //
 		    Timezone::user_decision = true;
+		    Timezone::user_hwclock = true;
 		}
 	    }
 	    }

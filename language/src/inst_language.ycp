@@ -185,8 +185,8 @@ Choose the new <b>language</b> for your SuSE Linux system.
 	ret = Wizard::UserInput();
 
 
-	if ( ret == `abort
-	     && WFM::CallFunction(`inst_confirm_abort(abort_mode) ) )
+	if ( ret == `abort &&
+	     WFM::CallFunction(`inst_confirm_abort(abort_mode) ) )
 	{
 	    Wizard::RestoreNextButton();
 	    return `abort;
