@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug  3 18:19:13 CEST 2004 - fehr@suse.de
+
+- fix problem when changing timezone/time/hwclock settings (#41944)
+- 2.10.2
+
+-------------------------------------------------------------------
 Thu Jul 29 11:40:09 CEST 2004 - fehr@suse.de
 
 - refuse installation when time is in the past (#42458)

@@ -27,11 +27,12 @@ import "Popup";
 
 symbol hwclock_s_initial = `none;
 
-define void SetTimezone( symbol hwclock, string timezone, boolean really )
+define void SetTimezone( symbol hwclock, string timezone, boolean really,
+                         boolean changed_time )
     ``{
-    y2milestone( "SetTimezone hw %1, tz %2 really %3", hwclock, timezone,
-                 really );
-    if( !really && hwclock != hwclock_s_initial )
+    y2milestone( "SetTimezone hw %1, tz %2 really %3 tchanged %4", hwclock, 
+                 timezone, really, changed_time );
+    if( !really && hwclock != hwclock_s_initial && !changed_time )
 	{
 	Timezone::diff = (hwclock==`hwclock_utc)?1:-1;
 	}
@@ -158,6 +159,7 @@ Enter the correct date.
 		}
 	    else
 		{
+		Timezone::diff = 0;
 		Timezone::SetTime( year, month, day, hour, minute, second );
 		}
 	    }
@@ -175,6 +177,8 @@ Enter the correct date.
     //
     string timezone = Timezone::timezone;
     string timezone_old = timezone;
+
+    boolean changed_time = false;
 
     string hwclock = Timezone::hwclock;
 
@@ -386,6 +390,7 @@ If you are unsure, use the default values already selected.
 		{
 		y2milestone( "date %1", Timezone::GetDateTime(false) );
 		UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime(false) );
+		changed_time = true;
 		}
 	    }
 	else if( ret == `next || ret == `timezone || ret == `hwclock )
@@ -427,9 +432,14 @@ If you are unsure, use the default values already selected.
 		if( timezone != timezone_old || hwclock_s != hwclock_s_old ||
 		    ret==`next )
 		{
+		    if( timezone != timezone_old )
+			{
+			changed_time = true;
+			}
 		    timezone_old = timezone;
 		    hwclock_s_old = hwclock_s;
-		    SetTimezone( hwclock_s, timezone, ret==`next );
+		    SetTimezone( hwclock_s, timezone, ret==`next, 
+		                 changed_time );
 		}
 
 		if ( ret == `next )
