@@ -59,7 +59,9 @@ boolean use_utf8 = true;
 
 global boolean ExpertSettingsChanged = false;
 
-// level of translation completeness
+/**
+ * level of translation completeness
+ */
 map<string,integer> translation_status	= $[];
 
 /**
@@ -479,11 +481,28 @@ global define boolean IncompleteTranslation (string lang) {
 
     if (!haskey (translation_status,lang))
     {
-	translation_status[lang]	= 99;
-    }
-    integer necessary_status	= 95; // FIXME get it from ProductF...
+	string file	= "/usr/lib/YaST2/trans/" + lang + ".status";
+	string ll	= splitstring (lang, "_") [0]:"";
+	if (ll != "")
+	    file	= "/usr/lib/YaST2/trans/" + ll + ".status";
 
-    return translation_status[lang]:0 < necessary_status;
+	string status	= (string) SCR::Read (.target.string, file);
+
+	if ((status == nil || status == "") && ll != "")
+	{
+	    file	= "/usr/lib/YaST2/trans/" + lang + ".status";
+	    status	= (string) SCR::Read (.target.string, file);
+	}
+	if (status != nil && status != "")
+	    translation_status[lang]	= tointeger (status);
+	else
+	    translation_status[lang]	= 0;
+    }
+    integer treshold =
+	tointeger (ProductFeatures::incomplete_translation_treshold);
+    if (treshold == nil) treshold = 95;
+
+    return translation_status[lang]:0 < treshold;
 }
 
 /* EOF */
