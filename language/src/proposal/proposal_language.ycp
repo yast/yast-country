@@ -29,10 +29,15 @@
 
 	// Make proposal and fill return map
 
+	string prop = Language::MakeProposal( force_reset, language_changed );
+
+	y2milestone( "language_on_entry:%1 lang:%2", language_on_entry,
+	             Language::language );
+
 	ret =
 	    $[
-	      "raw_proposal"    : [ Language::MakeProposal( force_reset, language_changed ) ],
-	      "language_changed": (language_on_entry != Language::language)
+	      "raw_proposal"    : [ prop ],
+	      "language_changed": (language_on_entry != Language::language )
 	    ];
     }
     else if ( func == "AskUser" )
