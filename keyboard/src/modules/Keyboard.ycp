@@ -422,7 +422,7 @@ global define boolean SetLanguage (string keyboard) {
 
 	    XkbModel = x11data["XkbModel"]:"pc104";
 	    XkbLayout = x11data["XkbLayout"]:"";
-	    XkbVariant = x11data["XkbVariant"]:"";
+	    XkbVariant = x11data["XkbVariant"]:"basic";
 	    XkbRules = x11data["XkbRules"]:"";
 	    XkbOptions = x11data["XkbOptions"]:"";
 	    XkbKeyCodes = x11data["XkbKeyCodes"]:"";
