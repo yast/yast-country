@@ -316,6 +316,8 @@ If you are unsure, use the default values already selected.
 				      Timezone::Selection(sel) ));
     UI::ChangeWidget( `id(`timezone), `CurrentItem, Timezone::timezone );
 
+    UI::SetFocus( `id(`region ));
+
     any ret = nil;
 
     repeat
