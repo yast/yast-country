@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Mar  4 17:07:52 CET 2003  - fehr@suse.de
+
+- fix writing of keytable into yast.inf
+
+-------------------------------------------------------------------
 Mon Mar  3 15:53:25 CET 2003  - fehr@suse.de
 
 - patch proofreaded text back into ycp

@@ -953,11 +953,11 @@ global define void Set( string keyboard )
         list lines = AsciiFile::FindLineField( yinf, 0, "Keytable:" );
         if( size(lines)>0 )
             {
-            AsciiFile::ChangeLineField( yinf, lines[0]:-1, 1, keyboard );
+            AsciiFile::ChangeLineField( yinf, lines[0]:-1, 1, keymap );
             }
         else
             {
-            AsciiFile::AppendLine( yinf, ["Keytable:", keyboard] );
+            AsciiFile::AppendLine( yinf, ["Keytable:", keymap] );
             }
         AsciiFile::RewriteFile( yinf, "/etc/yast.inf" );
 	}
