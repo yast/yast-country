@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jul  7 12:01:01 CEST 2003 - fehr@suse.de
+
+- fix bug caused by leading zeros in time/date fields (#26171)
+
+-------------------------------------------------------------------
 Tue Jun 10 14:36:04 CEST 2003 - fehr@suse.de
 
 - Use new Modules Label and Popup wherever possible

@@ -448,11 +448,11 @@ global define map GetDateTimeMap()
 global define boolean CheckTime( string hour, string minute, string second )
     ``{
     boolean ret = true;
-    integer tmp = tointeger( hour );
+    integer tmp = tointeger( Misc::RemoveLeadingZero(hour) );
     ret = ret && tmp>=0 && tmp<24;
-    tmp = tointeger( minute );
+    tmp = tointeger( Misc::RemoveLeadingZero(minute) );
     ret = ret && tmp>=0 && tmp<60;
-    tmp = tointeger( second );
+    tmp = tointeger( Misc::RemoveLeadingZero(second) );
     ret = ret && tmp>=0 && tmp<60;
     return( ret );
     }
@@ -461,14 +461,15 @@ global define boolean CheckDate( string day, string month, string year )
     ``{
     list mdays = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
     boolean ret = true;
-    integer year = tointeger( year );
-    integer mon = tointeger( month );
+    integer year = tointeger(  Misc::RemoveLeadingZero(year) );
+    y2milestone( "xxx %1 %2", month, Misc::RemoveLeadingZero(month) );
+    integer mon = tointeger(  Misc::RemoveLeadingZero(month) );
     ret = ret && mon>=1 && mon<=12;
     if( year%4==0 && (year%100!=0 || year%400==0))
 	{
 	mdays[1] = 29;
 	}
-    integer day = tointeger( day );
+    integer day = tointeger(  Misc::RemoveLeadingZero(day) );
     ret = ret && day>=1 && day<=mdays[mon-1]:0;
     ret = ret && year>=1970 && year<2032;
     return( ret );
