@@ -1,6 +1,13 @@
 -------------------------------------------------------------------
 Tue Aug 13 09:54:43 CEST 2002 - fehr@suse.de
 
+- fix text in timezone proposal (#14101)
+- fix help text in language dialog (#14585)
+- version 2.6.14
+
+-------------------------------------------------------------------
+Tue Aug 13 09:54:43 CEST 2002 - fehr@suse.de
+
 - add scr files again that I removed inadvertently yesterday
 
 -------------------------------------------------------------------

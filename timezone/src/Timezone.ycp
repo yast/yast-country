@@ -251,6 +251,11 @@
 	//
 	if ( hwclock == "--localtime" ) clock_setting = _("local time");
 
+	// get rid of "&" in text, reuse existing text because of text freeze
+	string add_text = deletechars( _("&Hardware clock set to"), "&" );
+
+	clock_setting = add_text + " " + clock_setting;
+
 	string date = GetDateTime();
 
 	return( name + " - " + clock_setting + " : " + date );

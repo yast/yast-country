@@ -133,13 +133,15 @@ Click <b>Accept</b> to proceed to the next dialog.
 all your settings in the last installation dialog.
 </p>
 ");
-
-	// help text, continued
-	help_text = help_text + _("<p>
+	if ( UI::WidgetExists( `id(`abort ) ) )
+	    {
+	    // help text, continued
+	    help_text = help_text + _("<p>
 You can select <b>Abort Installation</b> at any time to abort the
 installation process.
 </p>
 ");
+	    }
     }
     else
     {
