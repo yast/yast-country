@@ -1,0 +1,56 @@
+/**
+ * tests for Timezone::GetDateTime
+ * Author: jsuchome@suse.cz
+ * $Id: Timezone.ycp 22461 2005-03-11 15:09:25Z jsuchome $
+ */
+{
+
+    // testedfiles: Timezone.ycp
+
+    include "testsuite.ycp";
+
+    map READ = $[
+	"sysconfig" : $[
+	    "clock" : $[
+		"TIMEZONE"	: "Europe/Prague",
+		"HWCLOCK"	: "-u",
+	    ],
+	],
+	"target" : $[
+	    "size"		: 1,
+	    "yast2"		: $[],
+	],
+    ];
+    map EXECUTE	= $[
+	"target" : $[
+	    "bash_output"	: $[],
+	],
+    ];
+
+    TESTSUITE_INIT([READ,$[],EXECUTE], nil);
+
+    import "Timezone";
+
+    map E	= $[
+	"target" : $[
+	    "bash_output"	: $[
+		"stdout"	: "00:00:00 - 01-01-0001"
+	    ],
+	],
+    ];
+
+    TEST (``(Timezone::GetDateTime (false, true)), [$[],$[],E], []);
+
+    TEST (``(Timezone::GetDateTime (false, false)), [$[],$[],E], []);
+
+    Timezone::hwclock	= "--localtime";
+
+    // without TZ=
+    TEST (``(Timezone::GetDateTime (false, false)), [$[],$[],E], []);
+
+    Timezone::hwclock	= "-u";
+    Timezone::diff	= 1;
+
+    TEST (``(Timezone::GetDateTime (false, false)), [$[],$[],E], []);
+
+}
