@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sat Aug 02 20:41:06 CEST 2003 - arvin@suse.de
+
+- added desktop files
+
+-------------------------------------------------------------------
 Fri Aug  1 16:08:24 CEST 2003 - fehr@suse.de
 
 - add expert dialog to language dialog (#27570)
@@ -87,7 +92,7 @@ Mon Mar 10 13:12:11 CET 2003 - kkaempf@suse.de
 -------------------------------------------------------------------
 Fri Mar  7 15:59:50 CET 2003  - fehr@suse.de
 
-- activate russian language 
+- activate russian language
 - version 2.7.10
 
 -------------------------------------------------------------------
@@ -104,7 +109,7 @@ Tue Mar  4 17:07:52 CET 2003  - fehr@suse.de
 Mon Mar  3 15:53:25 CET 2003  - fehr@suse.de
 
 - patch proofreaded text back into ycp
-- update languages data 
+- update languages data
 - version 2.7.9
 
 -------------------------------------------------------------------
@@ -117,7 +122,7 @@ Mon Feb 24 17:13:59 CET 2003  - fehr@suse.de
 Thu Feb 20 15:08:52 CET 2003  - fehr@suse.de
 
 - use sentence style capitalisation in y2cc files (#23848)
-- set focus to timezone list after selection of region in ncurses 
+- set focus to timezone list after selection of region in ncurses
   ui (#23941)
 
 -------------------------------------------------------------------
@@ -143,7 +148,7 @@ Wed Feb 12 12:40:20 CET 2003 - fehr@suse.de
 Tue Feb 11 10:50:47 CET 2003 - fehr@suse.de
 
 - removed language testsuite, second time in two weeks it caused
-  a failed build of the package due to completely unrelated changes 
+  a failed build of the package due to completely unrelated changes
   in Mode module
 - version 2.7.6
 
@@ -178,16 +183,16 @@ Wed Jan 29 12:23:25 CET 2003  - fehr@suse.de
 -------------------------------------------------------------------
 Tue Jan 28 11:00:40 CET 2003  - fehr@suse.de
 
-- change testsuite output to match again 
+- change testsuite output to match again
 - 2.7.3
 
 -------------------------------------------------------------------
 Wed Jan 15 13:20:53 CET 2003  - fehr@suse.de
 
 - add dialog with expert settings to keyboard dialog
-- do not automatically adapt keyboard settings when changing 
+- do not automatically adapt keyboard settings when changing
   language in installation system, add popup instead (#20807)
-- ask if keyboard setting should be adapted to changed language 
+- ask if keyboard setting should be adapted to changed language
   when changing language proposal during installation
 - sort keyboard selection after translated texts (#20488)
 - add french canadian keyboard to keyboard list (#21167)
@@ -203,7 +208,7 @@ Wed Dec  4 14:49:44 CET 2002  - fehr@suse.de
 -------------------------------------------------------------------
 Wed Nov 20 16:22:58 CET 2002  - fehr@suse.de
 
-- merged up to version 2.6.35 of 8.1 branch 
+- merged up to version 2.6.35 of 8.1 branch
 - 2.7.0
 
 -------------------------------------------------------------------
