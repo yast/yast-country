@@ -370,7 +370,8 @@ global define string GetDateTime (boolean real_time, boolean locale_format) {
 
     string cmd = "";
 
-    string date_format = locale_format ? "+%c" : "+%H:%M:%S - %d-%m-%Y";
+    string date_format = (locale_format && Mode::normal ())
+	? "+%c" : "+%H:%M:%S - %d-%m-%Y";
 
     y2milestone( "GetDateTime hwclock %1 real:%2", hwclock, real_time );
     if( !real_time )

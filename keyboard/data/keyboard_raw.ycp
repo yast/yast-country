@@ -631,22 +631,65 @@ return ($[
   "croatian":
     [
 	_("Croatian"),
-	$[ "i386" : $[ "pc104": $[	"ncurses": "croat.map.gz" ]],
-
-	   "ia64" : $[ "pc104": $[	"ncurses": "croat.map.gz" ]],
-	   "x86_64" : $[ "pc104": $[	"ncurses": "croat.map.gz" ]],
-
-	   "alpha" : $[ "pc104": $[	"ncurses": "croat.map.gz" ]],
-	   "sparc" : $[ "type4": $[ "ncurses": "sunkeymap.map.gz" ],									// please correct!
-			"type5": $[ "ncurses": "sunkeymap.map.gz" ],									// please correct!
-			"type5_euro": $[ "ncurses": "sunkeymap.map.gz" ]],								// please correct!
-	   "sparc64" : $[ "type4": $[ "ncurses": "sunkeymap.map.gz" ],									// please correct!
-			  "type5": $[ "ncurses": "sunkeymap.map.gz" ],									// please correct!
-			  "type5_euro": $[ "ncurses": "sunkeymap.map.gz" ],
-						        // please correct!
-			  "pc104": $[ "ncurses": "croat.map.gz" ]],									// please check!
-	   "ppc" : $[ "macintosh" : $[ "ncurses": "mac-us.map.gz" ], // please correct!
-		      "pc104" : $[ "ncurses": "croat.map.gz"]]
+	$[
+	    "i386"	: $[
+		"pc104"	: $[
+		    "ncurses"	: "croat.map.gz",
+		    "compose"	: "latin2"
+		]
+	    ],
+	   "ia64"	: $[
+		"pc104"	: $[
+		    "ncurses"	: "croat.map.gz",
+		    "compose"	: "latin2"
+		]
+	    ],
+	   "x86_64"	: $[
+		"pc104"	: $[
+		    "ncurses"	: "croat.map.gz",
+		    "compose"	: "latin2"
+		]
+	    ],
+	   "alpha"	: $[
+		"pc104"	: $[
+		    "ncurses"	: "croat.map.gz",
+		    "compose"	: "latin2"
+		]
+	    ],
+	   "sparc"	: $[
+		"type4"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+		],
+		"type5"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+		],
+		"type5_euro": $[
+		    "ncurses"	: "sunkeymap.map.gz"
+		]
+	    ],
+	    "sparc64"	: $[
+		"type4"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+		],
+		"type5"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+		],
+		"type5_euro": $[
+		    "ncurses"	: "sunkeymap.map.gz"
+		],
+		"pc104"	: $[
+		    "ncurses"	: "croat.map.gz",
+		    "compose"	: "latin2"
+		]
+	    ],
+	    "ppc"	: $[
+		"macintosh" : $[
+		    "ncurses"	: "mac-us.map.gz"
+		],
+		"pc104"	: $[
+		    "ncurses"	: "croat.map.gz"
+		]
+	    ]
 	 ]
     ],
   "japanese":

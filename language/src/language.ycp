@@ -111,12 +111,6 @@ define any LanguageSequence () {
 	    Language::ExpertSettingsChanged)
 	{
 	    LanguageWrite ();
-	    // popup text
-	    Popup::Message( _("Your language setting has been changed.
-
-If necessary, you may want to adapt your keyboard settings to the new
-language. This is possible either in the YaST2 Control Center or by 
-starting \"yast2 keyboard\" directly."));
 	}
 	else
 	{

@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Mon Jan 31 14:23:11 CET 2005 - jsuchome@suse.cz
+
+- fixed adapting timezone/keyboard to new langauge
+- remove unnecessary message
+- do not use locale format of date during installation
+- fixed support for croatian keyboard map
+- fixed call of .xf86config agent
+- 2.11.9
+
+-------------------------------------------------------------------
 Mon Jan 24 19:28:25 CET 2005 - nashif@suse.de
 
 - Adapted arguments to new installation workflow  interface 
