@@ -437,7 +437,7 @@ global define boolean SetLanguage( string keyboard )
 	    //
 	    compose_table = "clear ";
 
-	    if ( XkbModel == "pc104" )
+	    if ( XkbModel == "pc104" || XkbModel == "pc105" )
 	    {
 		compose_table = compose_table + "winkeys shiftctrl ";
 	    }
