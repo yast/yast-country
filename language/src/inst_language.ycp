@@ -141,6 +141,7 @@ are unset.<br>
     if (! contains (languages, language))
 	languages	= add (languages, language);
 
+
     Language::WfmSetLanguage ();
 
     // Build the contents of the dialog.
@@ -150,14 +151,8 @@ are unset.<br>
 
     // set up selection list with default item
 
-    boolean use_ascii	= false;          // default is utf8 text
+    boolean use_ascii	= Language::GetTextMode ();
     boolean show_expert = true;
-
-    map display_info	= UI::GetDisplayInfo ();
-    if (display_info["TextMode"]:false)
-    {
-        use_ascii = true;               // fallback to ascii
-    }
 
    /* ----------------------------------------------------------------------
     * Build dialog
@@ -206,6 +201,15 @@ are unset.<br>
 	    ];
 	}
     );
+
+    // mapping of language name (translated) to language code
+    map lang2code		= $[];
+    // list of language names (translated)
+    list<string> lang_list	= [];
+    foreach (any name, list codelist, languageselsort, {
+	lang2code [codelist[2]:""]	= codelist[1]:"";
+	lang_list	= add (lang_list, codelist[2]:"");
+    });
 
     term languagesel = `SelectionBox (`id(`language), `opt(`notify), "",
 	maplist (any name, list codelist, languageselsort,
@@ -263,13 +267,11 @@ are unset.<br>
 	term languages_term = `MultiSelectionBox (`id(`languages),
 	    // multiselection box label
 	    _("&Secondary Languages"),
-	    maplist (any name, list codelist, languageselsort,
-		``(`item (
-		    `id(codelist[1]:""),
-		    codelist[2]:"",
-		    contains (languages, codelist[1]:""))
-		)
-	    )
+	    maplist (string trans_lang, lsort (lang_list), {
+		string code	= lang2code [trans_lang]:"";
+		return
+		    `item (`id (code), trans_lang, contains (languages, code));
+	    })
 	);
 
 	term primary_term = `HBox (
@@ -479,12 +481,11 @@ Some texts may be displayed in English.
 			`MultiSelectionBox (`id(`languages),
 			    // multiselection box label
 			    _("Secondary Languages"),
-			    maplist (any name, list codes, languageselsort, ``(
-				`item (
-				    `id(codes[1]:""),
-				    codes[2]:"",
-				    contains (selected_languages, codes[1]:""))
-			    ))
+			    maplist (string trans_lang, lsort (lang_list), {
+				string code	= lang2code [trans_lang]:"";
+				return `item (`id (code), trans_lang,
+				    contains(selected_languages, code));
+			    })
 			));
 
 		    if (ret != `next)
