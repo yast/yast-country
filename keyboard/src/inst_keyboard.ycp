@@ -53,12 +53,12 @@ If unsure, use the default values already selected.
 			`HWeight(30, `RichText( help_text )),
 			`HStretch(),
 			`HSpacing(1),
-			`HWeight(70, 
-			    `VBox( 
+			`HWeight(70,
+			    `VBox(
 				`HSpacing( 60 ),
 				`Heading( _("Keyboard Expert Dialog") ),
 				`VSpacing(`opt(`vstretch), 1),
-				`Left(`TextEntry( `id(`rate), 
+				`Left(`TextEntry( `id(`rate),
 				                  _("Repeat &Rate"))),
 				`Left(`TextEntry( `id(`delay), 
 				            _("De&lay before Repetition Starts")) ),
@@ -122,10 +122,22 @@ Scroll Lock should be set
      * Keyboard
      * ----------------------------------------------------------------------*/
 
+
+    if (Mode::config)
+    {
+	import "AIgeneral";
+	if (AIgeneral::Keyboard["keymap"]:"" != "")
+	    Keyboard::current_kbd = AIgeneral::Keyboard["keymap"]:"";
+	else
+	    Keyboard::current_kbd =  Keyboard::GetKeyboardForLanguage( AIgeneral::Language, "english-us" );	
+    }
+
+    
     // Memorize the current keyboard language to be able to restore it.
-    //
+    //   
     string keyboard_on_entry = Keyboard::current_kbd;
 
+		     
     // default for keyboard is set to "english-us" in
     // inst_finish.ycp:    string keyboard_name = lookup (user_settings, "keyboard", "english-us");
     // -> ok for s390 ?
@@ -138,7 +150,7 @@ Scroll Lock should be set
     //
     list keyboardlist_by_translation =
 	maplist( string keyboard_code, string keyboard_name, Keyboard::Selection(),
-	    ``{
+	    ``{	
 	    return `item( `id(keyboard_code),
 			  keyboard_name,
 			  Keyboard::current_kbd==keyboard_code );
@@ -154,13 +166,17 @@ Scroll Lock should be set
 		_("&Keyboard layout"),
 		keyboardlist_by_translation);
 
+    // title for input field to test the keyboard setting
+    // (no more than about 25 characters!)
+    term test = `TextEntry( _("Keyboard &test:") );
+    if (Mode::config)
+	test = `Empty();
+    
     // Put test widget below selection list.
     //
     keyboardsel = `VBox(
 		keyboardsel,
-		// title for input field to test the keyboard setting
-		// (no more than about 25 characters!)
-		`TextEntry( _("Keyboard &test:") ),
+		test,
 		`VSpacing( 0.8 ),
 		`PushButton( `id(`expert), _("E&xpert Settings") )
 	     );
@@ -169,7 +185,11 @@ Scroll Lock should be set
      * Build dialog
      * ----------------------------------------------------------------------*/
 
-    Wizard::OpenAcceptDialog();
+    if (Mode::config)
+	Wizard::ReplaceAbortButton(`Empty());
+    else
+	Wizard::OpenAcceptDialog();
+    
 
     term contents =
 	    `VBox(
@@ -199,8 +219,12 @@ If unsure, use the default values already selected.
 
     // Initially set the current keyboard to establish a consistent state.
     //
-    Keyboard::SetConsole( Keyboard::current_kbd );
-    Keyboard::SetX11( Keyboard::current_kbd );
+
+    if (!Mode::config)
+    {
+	Keyboard::SetConsole( Keyboard::current_kbd );
+	Keyboard::SetX11( Keyboard::current_kbd );
+    }
 
     UI::SetFocus( `id(`keyboard ));
 
@@ -210,13 +234,15 @@ If unsure, use the default values already selected.
 	{
 	ret = Wizard::UserInput();
 
-	if( (ret == `abort) &&
-	    WFM::CallFunction(`inst_confirm_abort(`painless) ) )
-	    {
+	
+
+	if  ( (ret == `abort) &&
+	    WFM::CallFunction(`inst_confirm_abort(`painless) ) && !Mode::config)
+	{
 	    Wizard::CloseDialog();
 	    return `abort;
-	    }
-
+	}
+	
 	if( ret==`expert )
 	    {
 	    KeyboardExpertDialog();
@@ -230,17 +256,27 @@ If unsure, use the default values already selected.
 
 	    // Set it in Keyboard module.
 	    //
-	    Keyboard::SetConsole( keyboard );
-	    Keyboard::SetX11( keyboard );
+	    if ( Mode::config)
+	    {
+		import "AIgeneral";
+		y2milestone("Autoyast keyboard: %1", keyboard);
+		AIgeneral::Keyboard["keymap"]  = keyboard;
+	    }
+	    else
+	    {
+		Keyboard::SetConsole( keyboard );
+		Keyboard::SetX11( keyboard );
+	    }
+	   
 
-	    if( ret == `next )
+	    if( ret == `next && !Mode::config)
 		{
 		// User wants to keep his changes.
 		// Set user_decision flag in keyboard module.
 		//
 		Keyboard::user_decision = true;
 
-		if ( keyboard_on_entry != Keyboard::current_kbd )
+		if ( keyboard_on_entry != Keyboard::current_kbd && !Mode::config )
 		    {
 		    // User has chosen a different keyboard from the database.
 		    // ==> clear unique_key in the keyboard module to achieve
@@ -256,7 +292,7 @@ If unsure, use the default values already selected.
 	    }
 	} until ( ret == `next || ret == `back || ret == `cancel );
 
-    if( ret == `back || ret == `cancel )
+    if( ( ret == `back || ret == `cancel ) && !Mode::config )
 	{
 	y2milestone("`back or `cancel restoring: <%1>", keyboard_on_entry );
 
