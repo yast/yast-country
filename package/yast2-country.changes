@@ -4,6 +4,7 @@ Thu Feb 20 15:08:52 CET 2003  - fehr@suse.de
 - use sentence style capitalisation in y2cc files (#23848)
 - set focus to timezone list after selection of region in ncurses 
   ui (#23941)
+- version 2.7.8
 
 -------------------------------------------------------------------
 Wed Feb 19 17:10:02 CET 2003 - fehr@suse.de
