@@ -1,0 +1,35 @@
+{
+
+// testedfiles: Language.ycp
+
+include "testsuite.ycp";
+
+map READ = $[
+    "sysconfig" : $[
+	"language" : $[ "DEFAULT_LANGUAGE" : "" ],
+    ],
+    "target" : $[
+	"symlink" : nil,
+        "size" : -1,
+    ],
+    "probe" : $[
+	"display" : [],
+    ],
+];
+
+TESTSUITE_INIT([READ], nil);
+import "Pkg";
+import "Language";
+
+DUMP("GetLanguageCountry");
+Language::language = "de_AT@UTF-8";
+TEST(``(Language::GetLanguageCountry()), [], nil);
+Language::language = "de_AT";
+TEST(``(Language::GetLanguageCountry()), [], nil);
+Language::language = "de";
+TEST(``(Language::GetLanguageCountry()), [], nil);
+Language::language = "";
+Language::default_language = "";
+TEST(``(Language::GetLanguageCountry()), [], nil);
+
+}
