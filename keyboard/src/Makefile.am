@@ -10,4 +10,7 @@ client_DATA =				\
 config_DATA =				\
 	keyboard.y2cc
 
-EXTRA_DIST = $(client_DATA) $(config_DATA)
+desktop_DATA =				\
+	keyboard.desktop
+
+EXTRA_DIST = $(client_DATA) $(config_DATA) $(desktop_DATA)

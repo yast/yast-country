@@ -10,4 +10,7 @@ client_DATA =			\
 config_DATA =			\
 	language.y2cc
 
-EXTRA_DIST = $(client_DATA) $(config_DATA)
+desktop_DATA =			\
+	language.desktop
+
+EXTRA_DIST = $(client_DATA) $(config_DATA) $(desktop_DATA)
