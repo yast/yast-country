@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Mar  2 16:45:23 CET 2005 - jsuchome@suse.cz
+
+- added pt_PT (portugese) again
+
+-------------------------------------------------------------------
 Wed Mar  2 14:43:55 CET 2005 - jsuchome@suse.cz
 
 - show correct time when switching time zones (#66458, #56944)

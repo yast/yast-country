@@ -236,17 +236,14 @@ $[
 		  // language name (pt_BR)
 		  _("Portuguese (Brazilian)") ],
 
-  /* Derzeit keine Uebersetzungen
-
-  "pt_PT"	: [ "Português",
-		  "Portugues",
-		  ".UTF-8",
-		  "@euro",
-		  // language name (pt_PT)
-		  _("Portuguese")
-		   ],
-  */
-
+  "pt_PT"	: [
+		    "Português",
+		    "Portugues",
+		    ".UTF-8",
+		    "@euro",
+		    // language name (pt_PT)
+		    _("Portuguese")
+		],
   "ro_RO"	 : [
 		    "Română",
 		    "Romana",
