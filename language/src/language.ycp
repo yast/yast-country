@@ -21,9 +21,9 @@
     import "Language";
     import "Wizard";
 
-    include "ui/common_popups.ycp";
+    import "Popup";
     include "ui/common_functions.ycp";
-    include "ui/common_messages.ycp";
+    import "Label";
 
     // Memozize the current language.
     //
@@ -114,7 +114,7 @@
 
 	    WFM::CallFunction( `inst_suseconfig( false, false ) );
 	    // popup text
-	    UI::MessagePopup( _("Your language setting has been changed.
+	    Popup::Message( _("Your language setting has been changed.
 
 If necessary, you may want to adapt your keyboard settings to the new
 language. This is possible either in the YaST2 Control Center or by 

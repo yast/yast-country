@@ -227,7 +227,7 @@ Adapt keyboard settings?
 		    Timezone::user_decision = true;
 		    if( !Mode::normal )
 			{
-			kbd_adapt = UI::YesNoPopup( msg );
+			kbd_adapt = Popup::YesNo( msg );
 			}
 		    }
 

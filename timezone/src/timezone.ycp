@@ -21,9 +21,9 @@ textdomain "country";
 import "Timezone";
 import "Wizard";
 
-include "ui/common_popups.ycp";
+import "Popup";
 include "ui/common_functions.ycp";
-include "ui/common_messages.ycp";
+import "Label";
 
     // Memorize the current timezone.
     //

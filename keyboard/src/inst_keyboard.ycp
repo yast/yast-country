@@ -32,6 +32,7 @@
     import "Keyboard";
 
     import "Wizard";
+    import "Label";
 
 global define KeyboardExpertDialog()
     ``{
@@ -100,9 +101,9 @@ Scroll Lock should be set
 				`VStretch(),
 				`HBox(
 				     `PushButton(`id(`ok), `opt(`default), 
-						 OKButtonLabel() ),
+						 Label::OKButton() ),
 				     `PushButton(`id(`cancel), 
-				                 CancelButtonLabel() )
+				                 Label::CancelButton() )
 				     )
 				))
 			 ));

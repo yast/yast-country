@@ -22,7 +22,8 @@ import "Timezone";
 
 import "Wizard";
 
-include "ui/common_popups.ycp";
+import "Label";
+import "Popup";
 
 define void SetTimezone( symbol hwclock, string timezone )
     ``{
@@ -100,7 +101,7 @@ Apply button.
 		    `HBox( 
 		        // button text
 			`PushButton(`id(`apply), `opt(`default), _("&Apply")),
-			`PushButton(`id(`cancel), CancelButtonLabel() ))
+			`PushButton(`id(`cancel), Label::CancelButton() ))
 		    )
 		)
 	     ));
@@ -130,7 +131,7 @@ Apply button.
 		tmp = sformat( _("Invalid time (HH:MM:SS) %1
 Enter the correct time.
 "), tmp );
-		UI::ErrorPopup( tmp );
+		Popup::Error( tmp );
 		ret = `retry;
 		}
 	    else if( !Timezone::CheckDate( day, month, year ))
@@ -140,7 +141,7 @@ Enter the correct time.
 		tmp = sformat( _("Invalid date (DD-MM-YYYY) %1
 Enter the correct date.
 "), tmp );
-		UI::ErrorPopup( tmp );
+		Popup::Error( tmp );
 		ret = `retry;
 		}
 	    else
