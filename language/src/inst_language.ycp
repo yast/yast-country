@@ -455,7 +455,7 @@ Additional packages with support for the selected primary and secondary language
 		if (Language::IncompleteTranslation (language))
 		{
 		    // warning message
-		    Popup::Warning (_("The translation of this language is not complete."))
+		    Popup::Warning (_("The translation of this language is not complete."));
 		}
 
 		if (more_languages)
