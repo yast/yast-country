@@ -376,14 +376,14 @@ Check <b>Adapt Keyboard Layout</b> to adapt the keyboard layout to the primary l
 ") +
 
 	_("<p>
-Check the <b>Adapt Time Zone</b> option to change the current time zone according to the primary language.
+Check <b>Adapt Time Zone</b> to change the current time zone according to the primary language.
 </p>
 ");
 
 	// help text when "multiple languages" are suported 2/2
 	help_text	= help_text + _("<p>
 <b>Secondary Languages</b><br>
-In the selection box, specify additional languages you want to use on your system.
+In the selection box, specify additional languages to use on your system.
 </p>
 ");
 
@@ -452,8 +452,9 @@ Additional packages with support for the selected primary and secondary language
 	    if (ret == `next && Language::IncompleteTranslation (language))
 	    {
 		// continue/cancel message
-		if (!Popup::ContinueCancel (_("Translation of this language is not complete.
-Some texts may be displayed in English.")))
+		if (!Popup::ContinueCancel (_("Translation of the primary language is not complete.
+Some texts may be displayed in English.
+")))
 		{
 		    ret = `not_next;
 		    continue;
