@@ -69,7 +69,7 @@ define map<string, list> get_languages_map() {
     // The system_language DB
     //
     map<string, list> languages_map = (map<string, list>)
-	SCR::Read (.target.yast2, ["language.ycp", $[]]);
+	eval (SCR::Read (.target.yast2, ["language.ycp", $[]]));
 
     if ( languages_map == nil ) languages_map = $[];
 
@@ -350,7 +350,7 @@ global define void WfmSetLanguage () {
  *		If force_reset is true reset the module to the language
  *		stored in default_language.
  */
-global define string MakeProposal (boolean force_reset,boolean language_changed)
+global define list<string> MakeProposal (boolean force_reset,boolean language_changed)
 {
     y2milestone("force_reset: %1", force_reset);
     y2milestone("language_changed: %1", language_changed);
@@ -359,10 +359,39 @@ global define string MakeProposal (boolean force_reset,boolean language_changed)
     {
 	Set (default_language);	// reset
     }
-    return name;
+    list<string> ret =  [ name ];
+    if (languages != "" && languages != language)
+    {
+	list<string> langs	= [];
+	map<string, list> languages_map = get_languages_map();
+	foreach (string lang, splitstring (languages, ","), {
+	    if (lang != language)
+	    {
+		string l = languages_map[lang,4]:languages_map[lang,0]:"";
+		if (l != "")
+		    langs = add (langs, l);
+	    }
+	});
+	if (size (langs) > 0)
+	{
+	    ret = [
+		// summary label
+		sformat (_("Primary Language: %1"), name),
+		// summary label
+		sformat (_("Additional Languages: %1"), mergestring (langs,","))
+	    ];
+	}
+    }
+    return ret;
 }
 
+/**
+ * return user readable description of language
+ */
+global define string GetName () {
 
+    return name;
+}
 
 /**
  * Return a map of ids and names to build up a selection list
@@ -381,7 +410,7 @@ global define map<string, list> Selection() {
     map<string, list> languages_map = get_languages_map();
 
     return mapmap (string code, list data, languages_map,
-	``($[code: [data[0]:"", data[1]:""]]));
+	``($[code: [data[0]:"", data[1]:"", data[4]:data[0]:""]]));
 }
 
 

@@ -12,7 +12,8 @@
 // <LANG-Code> : [ <Language-to-display-UTF8-coded>,
 //		   <Language-to-display-ASCII-coded-if-needed>,
 //		   <LANG modifier used when UTF-8 enconding is selected>
-//		   <LANG modifier used when no UTF-8 enconding is selected> ]
+//		   <LANG modifier used when no UTF-8 enconding is selected>
+//		   <translated Language-to-display-UTF8-coded> ]
 //
 // The LANG-Code is used internally to reference the language
 // The mandatory-LANG-modifier is attached to LANG-Code and
@@ -23,8 +24,10 @@
 //     e.g. for key = "de_DE"
 //     LANG="de_DE" + use_utf8 ? l["de_DE",2] : l["de_DE",3]
 
-// map <string, list>
+{
+    textdomain "languages_db";
 
+    return
 $[
 
   /* Highly incomplete, no active translator.
@@ -45,57 +48,97 @@ $[
   "bg_BG"       : [ "Български",
                     "Bulgarian",
 		    ".UTF-8",
-		    "" ],
+		    "",
+		    // language name
+		    _("Bulgarian")
+		     ],
 
   "bn_BD"       : [ "বাংলা",
                     "Bengali",
 		    ".UTF-8",
-		    "" ],
+		    "",
+		    // language name
+		    _("Bengali"),
+		 ],
 
-  "cs_CZ"	: [ "Čeština ",
-		  "Cestina",
-		  ".UTF-8",
-		  "" ],
+  "cs_CZ"	: [
+		    "Čeština",
+		    "Cestina",
+		    ".UTF-8",
+		    "",
+		    // language name
+		    _("Czech")
+		],
 
-  "cy_GB"	: [ "Welsh",
-		  "Welsh",
-		  ".UTF-8",
-		  "" ],
+  "cy_GB"	: [
+		    "Welsh",
+		    "Welsh",
+		    ".UTF-8",
+		    "",
+		    // language name
+		    _("Welsh")
+		],
 
-  "da_DK"	: [ "Dansk",
-		  "Dansk",
-		  ".UTF-8",
-		  "" ],
+  "da_DK"	: [
+		    "Dansk",
+		    "Dansk",
+		    ".UTF-8",
+		    "",
+		    // language name
+		    _("Danish")
+		],
 
-  "de_DE"	: [ "Deutsch",
-		  "Deutsch",
-		  ".UTF-8",
-		  "@euro" ],
+  "de_DE"	: [
+		    "Deutsch",
+		    "Deutsch",
+		    ".UTF-8",
+		    "@euro",
+		    // language name
+		    _("German")
+		],
 
-  "el_GR"	: [ "Ελληνικά ",
-		  "Greek",
-		  ".UTF-8",
-		  ".ISO-8859-7" ],
+  "el_GR"	: [
+		    "Ελληνικά ",
+		    "Greek",
+		    ".UTF-8",
+		    ".ISO-8859-7",
+		    // language name
+		    _("Greek"),
+		],
 
-  "en_GB"	: [ "English (UK)",
-		  "English (UK)",
-		  ".UTF-8",
-		  "" ],
+  "en_GB"	: [
+		    "English (UK)",
+		    "English (UK)",
+		    ".UTF-8",
+		    "",
+		    // language name
+		    _("English (UK)"),
+		],
 
-  "en_US"	: [ "English (US)",
-		  "English (US)",
-		  ".UTF-8",
-		  "" ],
+  "en_US"	: [
+		    "English (US)",
+		    "English (US)",
+		    ".UTF-8",
+		    "",
+		    // language name
+		    _("English (US)"),
+		],
 
   "es_ES"	: [ "Español",
 		  "Espanol",
 		  ".UTF-8",
-		  "@euro" ],
+		  "@euro",
+		  // language name
+		  _("Spanish")
+		   ],
 
   "fr_FR"	: [ "Français",
 		  "Francais",
 		  ".UTF-8",
-		  "@euro" ],
+		  "@euro",
+		  // language name
+		  _("French"),
+		  ],
 
   /* Incomplete, inactive translator.
   "gl_ES"	: [ "Galego",
@@ -108,108 +151,150 @@ $[
   "hr_HR"	: [ "Hrvatski",
 		  "Croatian",
 		  ".UTF-8",
-		  "" ],
+		  "",
+		  // language name
+		  _("Croatian")
+		   ],
   End of comment */
 
   "hu_HU"	: [ "Magyar",
 		  "Magyar",
 		  ".UTF-8",
-		  "" ],
+		  "",
+		  // language name
+		  _("Hungarian") ],
 
   "he_IL"	: ["עברית",
                   "Ivrit",
 		  ".UTF-8",
-		  "" ],
+		  "",
+		  // language name
+		  _("Hebrew") ],
 
   "it_IT"	: [ "Italiano",
 		  "Italiano",
 		  ".UTF-8",
-		  "@euro" ],
+		  "@euro",
+		  // language name
+		  _("Italian") ],
 
   "ja_JP"	: [ "日本語",
 		  "Japanese",
 		  ".UTF-8",
-		  ".eucJP" ],
+		  ".eucJP",
+		  // language name
+		  _("Japanese") ],
 
   "ko_KR"       : [ "한글 ",
 		    "Korean",
 		    ".UTF-8",
-		    "" ],
+		    "",
+		    // language name
+		    _("Korean") ],
 
   "lt_LT"	: [ "Lietuvių",
 		  "Lithuanian",
 		  ".UTF-8",
-		  "" ],
+		  "",
+		  // language name
+		  _("Lithuanian") ],
 
   "nl_NL"	: [ "Nederlands",
 		  "Nederlands",
 		  ".UTF-8",
-		  "@euro" ],
+		  "@euro",
+		  // language name
+		  _("Dutch") ],
 
 
   "nb_NO"	: [ "Norsk",
 		  "Norsk",
 		  ".UTF-8",
-		  "" ],
+		  "",
+		  // language name
+		  _("Norwegian") ],
 
   "pl_PL"       : [ "Polski",
                   "Polski",
 		  ".UTF-8",
-		  "" ],
+		  "",
+		  // language name
+		  _("Polish") ],
 
   "pt_BR"	: [ "Português brasileiro",
 		  "Portugues brasileiro",
 		  ".UTF-8",
-		  "" ],
+		  "",
+		  // language name (pt_BR)
+		  _("Portuguese (Brazilian)") ],
 
   /* Derzeit keine Uebersetzungen
 
   "pt_PT"	: [ "Português",
 		  "Portugues",
 		  ".UTF-8",
-		  "@euro" ],
+		  "@euro",
+		  // language name (pt_PT)
+		  _("Portuguese")
+		   ],
   */
 
   "ro_RO"	 : [ "Romanian",
 		   "Romanian",
 		   ".UTF-8",
-		   "" ],
+		   "",
+		   // language name
+		   _("Romanian") ],
 
-  /* Incomplete, but active again. */
   "ru_RU"	 : [ "Русский ",
 		   "Russian",
 		   ".UTF-8",
-		   "" ],
+		   "",
+		   // language name
+		   _("Russian") ],
 
   "sl_SI"	: [ "Slovenščina",
 		  "Slovenscina",
 		  ".UTF-8",
-		  "" ],
+		  "",
+		  // language name
+		  _("Slovenian")
+		   ],
 
   "sk_SK"	: [ "Slovenčina ",
 		  "Slovencina",
 		  ".UTF-8",
-		  "" ],
+		  "",
+		  // language name
+		  _("Slovak") ],
 
   "sv_SE"	: [ "Svenska",
 		  "Svenska",
 		  ".UTF-8",
-		  "" ],
+		  "",
+		  // language name
+		  _("Swedish") ],
 
   "zh_CN"       : [ "简体中文",
 		  "Simplified Chinese",
 		  ".UTF-8",
-		  "" ],
+		  "",
+		  // language name
+		  _("Simplified Chinese") ],
 
   "zh_TW"       : [ "繁體中文 (中國臺灣)",
 		  "Traditional Chinese (China Taiwan)",
 		  ".UTF-8",
-		  "" ],
+		  "",
+		  // language name
+		  _("Traditional Chinese") ],
 
   "tr_TR"	: [ "Türkçe",
 		  "Turkce",
 		  ".UTF-8",
-		  "" ]
+		  "",
+		  // language name
+		  "Turkish" ]
 
 /* -------------------------------------------- */
 /*          May be future expansion		*/
@@ -229,4 +314,5 @@ $[
 /*      "ar_EG"    : [ "ﻲﺑﺮﻋ"	]	*/
 //	"sr_YU"
 
-]
+];
+}

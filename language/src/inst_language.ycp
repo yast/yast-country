@@ -195,10 +195,13 @@ Installation and System Administration Program
 
     map<string,list> languageselsort = mapmap (
 	string lang_code, list lang_info, Language::Selection(), {
-	    string s = lang_info[1]:"";
+	    // translated value is the key
+	    string translated	= lang_info[2]:lang_info[1]:lang_code;
 	    return $[
-		// ASCII value is the key
-		s	: [lang_info[use_ascii ? 1 : 0]:"", lang_code]
+		translated	: [
+		    lang_info[use_ascii ? 1 : 0]:"",
+		    lang_code
+		]
 	    ];
 	}
     );
@@ -262,7 +265,7 @@ Installation and System Administration Program
 	    maplist (any name, list codelist, languageselsort,
 		``(`item (
 		    `id(codelist[1]:""),
-		    codelist[0]:"",
+		    name,
 		    contains (languages, codelist[1]:""))
 		)
 	    )
@@ -308,11 +311,7 @@ Installation and System Administration Program
 		    primary_term,
 		    `VSpacing (),
 		    `ReplacePoint (`id(`rplangs), languages_term),
-		    `VSpacing (0.5),
-		    `Left (
-			// checkbox label
-			`CheckBox (`id (`packages), _("&Install Language Dependent Packages"), true)
-		    )
+		    `VSpacing (0.5)
 		),
 		`HSpacing (2)
 	    ),
@@ -385,7 +384,7 @@ In the selection box, you can specify more languages which you want to use on yo
 </p>");
 
 	help_text       = help_text + _("<p>
-With <b>Install language dependent packages</b> option, additional packages with a support for primary language and the list of secondary languages will be installed.
+Additional packages with support for the selected primary and secondary languages will be installed.
 </p>");
     }
 
@@ -560,22 +559,19 @@ With <b>Install language dependent packages</b> option, additional packages with
 		    Language::languages = mergestring (selected_languages, ",");
 
 		    // now adapt language seletions
-		    if ((boolean)UI::QueryWidget (`id(`packages), `Value))
+		    if (Stage::initial () || Mode::update ())
 		    {
-			if (Stage::initial () || Mode::update ())
-			{
-			    Pkg::SetAdditionalLocales (selected_languages);
-			}
-			else // install new packages right now
-			{
-			    PackageSystem::EnsureSourceInit ();
-			    PackageSystem::EnsureTargetInit ();
+			Pkg::SetAdditionalLocales (selected_languages);
+		    }
+		    else // install new packages right now
+		    {
+			PackageSystem::EnsureSourceInit ();
+			PackageSystem::EnsureTargetInit ();
 
-			    Pkg::SetAdditionalLocales (selected_languages);
+			Pkg::SetAdditionalLocales (selected_languages);
 
-			    Pkg::PkgSolve (true);
-			    Pkg::PkgCommit (0);
-			}
+			Pkg::PkgSolve (true);
+			Pkg::PkgCommit (0);
 		    }
 		}
 	    }
