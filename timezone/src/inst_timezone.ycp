@@ -170,6 +170,10 @@ Enter the correct date.
 
     string hwclock = Timezone::hwclock;
 
+    map dpy = UI::GetDisplayInfo();
+    boolean ncurses = dpy["TextMode"]:false;
+    y2milestone( "GetDisplayInfo %1 ncurses %2", dpy, ncurses );
+
     // Autoinstall
     if (Mode::config)
     {
@@ -350,6 +354,8 @@ If you are unsure, use the default values already selected.
 					      // label text
 					      _("Time &Zone"),
 					      Timezone::Selection(num) ));
+	    if( ncurses )
+		UI::SetFocus( `id(`timezone ));
 	    if( num==sel )
 		{
 		UI::ChangeWidget( `id(`timezone), `CurrentItem, 
