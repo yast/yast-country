@@ -319,7 +319,7 @@
     }
 
     /**
-     * X11SetLanguange()
+     * X11SetLanguage()
      *
      * Set sysconfig variable YAST_LANGUAGE according to the given X11 layout name
      * e.g. "de" --> "german". Save the settings without writing XF86config
@@ -328,14 +328,14 @@
      *
      */
 
-    global define void X11SetLanguange( string x11_layout ) ``{
+    global define void X11SetLanguage( string x11_layout ) ``{
 
 	string new_kbd = XkblayoutToKeyboard( x11_layout );
 	if( size(new_kbd)>0 )
 	    {
 	    current_kbd = new_kbd;
 	    Save( false );
-	    y2milestone( "X11SetLanguange current_kbd=%1", current_kbd );
+	    y2milestone( "X11SetLanguage current_kbd=%1", current_kbd );
 	    }
 
     }
