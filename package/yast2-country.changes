@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Dec 17 11:25:26 CET 2004 - jsuchome@suse.cz
+
+- fixed yast-language.desktop file
+- added help text for multiple languages
+- removed remaining lookup's and select's
+- 2.11.6
+
+-------------------------------------------------------------------
 Wed Dec 15 14:24:58 CET 2004 - jsuchome@suse.cz
 
 - command line support

@@ -329,8 +329,15 @@ Choose the new <b>language</b> for your system.
 
     if (more_languages)
     {
+	// help text when "multiple languages" are suported 1/2
+	help_text = _("<p>
+Choose the new <b>primary language</b> for your system.
+</p>\n");
+
+	// help text when "multiple languages" are suported 2/2
 	help_text	= help_text + _("<p>
-<b>more languages: FIXME</b>
+<b>Secondary languages</b><br>
+In the selection box, you can specify more languages which you want to use on your system. According to the selection, additional language specific packages will be installed.
 </p>");
     }
 

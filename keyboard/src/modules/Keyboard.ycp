@@ -385,15 +385,15 @@ define boolean x11_setup_needed () {
  *
  * Set language specific module data to reflect the given language.
  *
- * @param 	Keyboard language e.g.  "english-us"
+ * @param	Keyboard language e.g.  "english-us"
  *
  * @return  true	- Success. Language set in public data.
  *		false	- Error. Language not set.
  *
  */
 
-global define boolean SetLanguage( string keyboard )
-    ``{
+global define boolean SetLanguage (string keyboard) {
+
 	y2milestone ("Setting keyboard to: <%1>", keyboard );
 
 	// Get the reduced keyboard DB.
@@ -405,7 +405,7 @@ global define boolean SetLanguage( string keyboard )
 	//
 	kbd_descr = keyboards[keyboard]:[];
 
-	y2milestone ("Description for keyboard <%1>: <%2>", keyboard, kbd_descr );
+	y2milestone ("Description for keyboard <%1>: <%2>",keyboard, kbd_descr);
 
 	if ( kbd_descr != [] )	// language found
 	{
@@ -457,6 +457,7 @@ global define boolean SetLanguage( string keyboard )
 	// Console command...
 	//
 	ckb_cmd = "/bin/loadkeys " + keymap + " ; dumpkeys | loadkeys -u";
+	// FIXME should be "/bin/loadkeys -u " + keymap (see bug 44223)
 
 	// X11 command...
 	// do not try to run this with remote X display
@@ -468,7 +469,6 @@ global define boolean SetLanguage( string keyboard )
 	{
 	    xkb_cmd = "";
 	}
-
 
 	// Store keyboard just set.
 	//
@@ -482,7 +482,7 @@ global define boolean SetLanguage( string keyboard )
 	}
 
 	return true;	// OK
-    }	// SetLanguage()
+} // SetLanguage()
 
 
 /**
@@ -490,63 +490,56 @@ global define boolean SetLanguage( string keyboard )
  *
  * Restore the the data from sysconfig.
  *
- * @param 	-
- *
  * @return  true	- Data could be restored
  *		false	- Restore not successful
  *
  * @see	Save()
  */
-global define boolean Restore()
-    ``{
-    boolean ret = false;
+global define boolean Restore () {
 
-    restore_called = true;
-
+    boolean ret		= false;
+    restore_called	= true;
     GetKbdSysconfig();
 
-    if( !Stage::initial () )
-	{
+    if (!Stage::initial ())
+    {
 	// Read YaST2 keyboard var.
 	//
-	current_kbd = Misc::SysconfigRead( .sysconfig.keyboard.YAST_KEYBOARD,
-	                                   "" );
-	integer pos = find( current_kbd, "," );
-	if( pos>0 )
-	    {
-	    kb_model = substring( current_kbd, pos+1 );
-	    current_kbd = substring( current_kbd, 0, pos );
-	    }
+	current_kbd = Misc::SysconfigRead(.sysconfig.keyboard.YAST_KEYBOARD,"");
+	integer pos = find (current_kbd, ",");
+	if (pos>0)
+	{
+	    kb_model	= substring (current_kbd, pos + 1);
+	    current_kbd	= substring (current_kbd, 0, pos);
+	}
 
-	y2milestone( "current_kbd %1 model %2", current_kbd, kb_model );
-	if( current_kbd == "" )
-	    {
+	y2milestone ("current_kbd %1 model %2", current_kbd, kb_model);
+	if (current_kbd == "")
+	{
 	    y2milestone("Restoring data failed");
 	    ret = false;
-	    }
+	}
 	else
-	    {
+	{
 	    // Restore module data.
 	    //
 	    SetLanguage( current_kbd );
 	    y2milestone( "Restored data (sysconfig) for keyboard: <%1>",
 			 current_kbd );
 	    ret = true;
-	    }
 	}
+    }
     else
-	{
+    {
 	ret = true;
-	}
+    }
     return ret;
-    }	// Restore()
+} // Restore()
 
 /*
  * get_xkblayout2keyboard()
  *
  * Get the xkblayout --> keyboard_language conversion map.
- *
- * @param 	-
  *
  * @return  conversion map
  *
@@ -1067,37 +1060,37 @@ global define string Name()
  *
  * Set the console keyboard to the given keyboard language.
  *
- * @param 	Keyboard language e.g.  "english-us"
+ * @param	Keyboard language e.g.  "english-us"
  *
  * @return  The loadkeys command that has been executed to do it.
  *		(also stored in Keyboard::ckb_cmd)
  *
  * @see	SetX11()
  */
-global define string SetConsole( string keyboard )
-    ``{
-    SetLanguage( keyboard );	// in any case (retranslation)
+global define string SetConsole (string keyboard) {
+
+    SetLanguage (keyboard);	// in any case (retranslation)
 
     y2milestone("Setting console keyboard to: <%1>", current_kbd );
 
     y2milestone("loadkeys command: <%1>", ckb_cmd );
 
-    if ( Mode::test () )
-	{
+    if (Mode::test ())
+    {
 	y2milestone("Test mode - NOT setting keyboard" );
-	}
+    }
     else if (Arch::board_iseries ()) // workaround for bug #39025
     {
 	y2milestone ("not calling loadkeys on iseries");
     }
     else
-	{
-	SCR::Execute( .target.bash, ckb_cmd );
-	UI::SetKeyboard( );
-	}
+    {
+	SCR::Execute (.target.bash, ckb_cmd);
+	UI::SetKeyboard ();
+    }
 
     return ckb_cmd;
-    };	// SetConsole()
+};	// SetConsole()
 
 
 
@@ -1106,42 +1099,46 @@ global define string SetConsole( string keyboard )
  *
  * Set the X11 keyboard to the given keyboard language.
  *
- * @param 	Keyboard language e.g.  "english-us"
+ * @param	Keyboard language e.g.  "english-us"
  *
  * @return  The xkbset command that has been executed to do it.
  *		(also stored in Keyboard::xkb_cmd)
  *
  * @see	SetConsole()
  */
-global define string SetX11( string keyboard )
-    ``{
-    SetLanguage( keyboard );	// in any case (retranslation)
+global define string SetX11 (string keyboard) {
 
-    y2milestone("Setting X11 keyboard to: <%1>", current_kbd );
+    SetLanguage (keyboard);	// in any case (retranslation)
 
-    if( Mode::test () )
-	{
-	y2milestone ("Test mode - NOT setting X keyboard - would have called:\n %1", xkb_cmd );
-	}
+    y2milestone ("Setting X11 keyboard to: <%1>", current_kbd );
+
+    if (Mode::test ())
+    {
+	y2milestone ("Test mode - would have called:\n %1", xkb_cmd);
+    }
     else
-	{
+    {
 	// Actually do it only if we are in graphical mode.
 	//
-	if ( Linuxrc::text () )
-	    {
-	    y2milestone("Not setting X keyboard due to text mode");
-	    }
-	else
-	    {
-	    y2milestone ("Setting X keyboard:\n %1", xkb_cmd );
-
-	    if( size(xkb_cmd)>0 )
-		SCR::Execute( .target.bash, xkb_cmd );
-	    }
+	boolean textmode	= Linuxrc::text ();
+	if (!Stage::initial ())
+	{
+	    map display_info    = UI::GetDisplayInfo ();
+	    textmode		= display_info["TextMode"]:false;
 	}
+	if (textmode)
+	{
+	    y2milestone("Not setting X keyboard due to text mode");
+	}
+	else if (size (xkb_cmd)>0)
+	{
+	    y2milestone ("Setting X keyboard:\n %1", xkb_cmd );
+	    SCR::Execute (.target.bash, xkb_cmd);
+	}
+    }
 
     return xkb_cmd;
-    };	// SetX11()
+};	// SetX11()
 
 
 
@@ -1300,18 +1297,13 @@ global define map<string, string> Selection()
      *
      */
 
-    global define map<string, string> keymap2yast()
-    ``{
-    // Get the reduced keyboard DB.
-    //
-    map<string, list> keyboards = get_reduced_keyboard_db();
+    global define map<string, string> keymap2yast() {
 
-    return mapmap( string keyboard_code, list keyboard_value, keyboards,
-               ``{
-        map code_map = keyboard_value[1]:$[];
-        string code = select (splitstring (code_map["ncurses"]:"", "."), 0, "");
-        return  $[ code: keyboard_code ];
-    });
+	return mapmap (string code, list kbd_value, get_reduced_keyboard_db(), {
+	    map code_map	= kbd_value[1]:$[];
+	    list codel	= splitstring (code_map["ncurses"]:"", ".");
+	    return  $[ codel[0]:"": code ];
+	});
     }
 
 
