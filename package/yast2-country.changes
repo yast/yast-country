@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Sep 27 17:02:27 CEST 2004 - fehr@suse.de
+
+- fix wrong time displayed when switching local time -> UTC (#46130)
+- 2.10.14
+
+-------------------------------------------------------------------
 Thu Sep 23 15:14:05 CEST 2004 - mfabian@suse.de
 
 - fix entry for Hebrew
