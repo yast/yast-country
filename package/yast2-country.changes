@@ -1,8 +1,14 @@
 -------------------------------------------------------------------
+Thu Sep  5 13:39:37 CEST 2002 - fehr@suse.de
+
+- fix missing retranslation after langauge change (#18924)
+- version 2.6.23
+
+-------------------------------------------------------------------
 Mon Sep  2 16:28:38 CEST 2002 - fehr@suse.de
 
 - do not call xkbset when installing over ssh or serial console (#18578)
-- use option `opt(`immediate) to keyboadr selection box 
+- use option `opt(`immediate) to keyboard selection box 
 - version 2.6.22
 
 -------------------------------------------------------------------

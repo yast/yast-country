@@ -50,6 +50,10 @@
 
     Wizard::CloseDialog();
 
+    Wizard::ReplaceButtonBox( Wizard::HasAcceptButton() ?
+			      Wizard::AbortAcceptButtonBox() :
+			      Wizard::BackAbortNextButtonBox() );
+
     y2milestone ("result '%1'", result);
 
     if (  result == `cancel || result == `back )
