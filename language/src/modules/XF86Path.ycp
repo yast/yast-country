@@ -19,7 +19,7 @@
 {
     module "XF86Path";
     
-    textdomain "x11";
+    textdomain "language";
     
     import "Installation";
     import "Mode";

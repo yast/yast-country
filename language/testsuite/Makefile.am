@@ -1,5 +1,5 @@
 #
-# Makefile.am for country/language/testsuite
+# Makefile.am for .../testsuite
 #
 
 AUTOMAKE_OPTIONS = dejagnu
