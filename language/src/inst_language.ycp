@@ -159,11 +159,11 @@ are unset.<br>
     map<string,list> languageselsort = 
 	mapmap(string lang_code, list lang_info, Language::Selection(), 
 	    ``{
-	    string s = lang_info[1]:"";
-	    return $[ s :	// ASCII value is the key
-			    [lang_info[use_ascii?1:0]:"", lang_code]
-		    ];
-	    });
+				string s = lang_info[1]:"";
+				return $[ s :	// ASCII value is the key
+				    [lang_info[use_ascii?1:0]:"", lang_code]
+			       ];
+			   });
 
     term languagesel =
       `SelectionBox(`id(`language), `opt(`notify), "",
@@ -271,34 +271,24 @@ Choose the new <b>language</b> for your system.
 </p>\n");
 	}
 
-    boolean skip_dialog = set_default && Language::LinuxrcLangSet();
+    // Screen title for the first interactive dialog
 
-    y2milestone( "skip_dialog %1", skip_dialog );
+    Wizard::SetContents( heading_text, contents, help_text, (boolean)WFM::Args(0), (boolean)WFM::Args(1));
 
-    if( !skip_dialog )
-	{
-	// Screen title for the first interactive dialog
+    if ( Mode::initial )	// No .desktop files in inst-sys - use icon explicitly
+	Wizard::SetTitleIcon( "babelfish" );
 
-	Wizard::SetContents( heading_text, contents, help_text, 
-			     (boolean)WFM::Args(0), (boolean)WFM::Args(1));
-
-	if( Mode::initial ) // No .desktop files in inst-sys - use icon explicitly
-	    Wizard::SetTitleIcon( "babelfish" );
-	UI::SetFocus(`id(`language));
-	}
     
     // Get the user input.
     //
     any ret = nil;
 
+    UI::SetFocus(`id(`language));
 
     repeat
 	{
-	if( !skip_dialog )
-	    ret = Wizard::UserInput();
-	else
-	    ret = `next;
-	y2milestone( "UserInput() returned %1", ret );
+	ret = Wizard::UserInput();
+	y2warning( "UserInput() returned %1", ret );
 
 	if ( ret == `abort && Popup::ConfirmAbort(`painless) )
 	    {
@@ -320,12 +310,9 @@ Choose the new <b>language</b> for your system.
 	    {
 	    // Get the selected language.
 	    //
-	    if( skip_dialog )
-		language = Language::language;
-	    else
-		language = (string) UI::QueryWidget(`id(`language), `CurrentItem);
+	    language = (string) UI::QueryWidget(`id(`language), `CurrentItem);
 
-	    if( set_default || language != Language::language )
+	    if( language != Language::language )
 		{
 		y2milestone( "Language changed from %1 to %2", Language::language, language );
 
