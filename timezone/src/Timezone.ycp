@@ -1,31 +1,24 @@
 /**
- * File:
- *	Timezone.ycp
- *
- * Module:
- *	Timezone
- *
- * Summary:
- *	This module does all timezone related stuff.
- *
- * Depends:
- *	Language
- *
- * Authors:
- *	Klaus Kaempf <kkaempf@suse.de> now maintained by
- *	Thomas Roelz <tom@suse.de>
+ * File:	modules/Timezone.ycp
+ * Package:	Country settings
+ * Summary:	Timezone related stuff
+ * Authors:	Klaus Kaempf <kkaempf@suse.de>
+ *		Thomas Roelz <tom@suse.de>
  *
  * $Id$
  */
+
 {
+
 module "Timezone";
 textdomain "country";
 
 import "Arch";
+import "Language";
 import "Misc";
 import "Mode";
-import "Language";
 import "Storage";
+import "String";
 
 // --------------------------------------------------------------
 // START: Globally defined data to be accessed via Timezone::<variable>
@@ -317,9 +310,9 @@ global define string GetDateTime( boolean real_time )
 				      sformat( "TZ=%1 date \"+%%z\"", timezone )),
 			"stdout", "" );
 	    y2milestone( "tcd=%1", tzd );
-	    t = tointeger( Misc::RemoveLeadingZero( substring( tzd, 1, 2 )));
+	    t = tointeger( String::CutZeros( substring( tzd, 1, 2 )));
 	    ds = ds + t * 3600;
-	    t = tointeger( Misc::RemoveLeadingZero( substring( tzd, 3, 2 )));
+	    t = tointeger( String::CutZeros( substring( tzd, 3, 2 )));
 	    ds = ds + t * 60;
 	    if( substring( tzd, 0, 1 )=="-" )
 		{
@@ -557,11 +550,11 @@ global define map GetDateTimeMap()
 global define boolean CheckTime( string hour, string minute, string second )
     ``{
     boolean ret = true;
-    integer tmp = tointeger( Misc::RemoveLeadingZero(hour) );
+    integer tmp = tointeger( String::CutZeros(hour) );
     ret = ret && tmp>=0 && tmp<24;
-    tmp = tointeger( Misc::RemoveLeadingZero(minute) );
+    tmp = tointeger( String::CutZeros(minute) );
     ret = ret && tmp>=0 && tmp<60;
-    tmp = tointeger( Misc::RemoveLeadingZero(second) );
+    tmp = tointeger( String::CutZeros(second) );
     ret = ret && tmp>=0 && tmp<60;
     return( ret );
     }
@@ -570,15 +563,15 @@ global define boolean CheckDate( string day, string month, string year )
     ``{
     list mdays = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
     boolean ret = true;
-    integer yea = tointeger(  Misc::RemoveLeadingZero(year) );
-    y2milestone( "xxx %1 %2", month, Misc::RemoveLeadingZero(month) );
-    integer mon = tointeger(  Misc::RemoveLeadingZero(month) );
+    integer yea = tointeger(  String::CutZeros(year) );
+    y2milestone( "xxx %1 %2", month, String::CutZeros(month) );
+    integer mon = tointeger(  String::CutZeros(month) );
     ret = ret && mon>=1 && mon<=12;
     if( yea%4==0 && (yea%100!=0 || yea%400==0))
 	{
 	mdays[1] = 29;
 	}
-    integer da = tointeger(  Misc::RemoveLeadingZero(day) );
+    integer da = tointeger(  String::CutZeros(day) );
     ret = ret && da>=1 && da<=mdays[mon-1]:0;
     ret = ret && yea>=1970 && yea<2032;
     return( ret );
