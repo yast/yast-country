@@ -26,13 +26,13 @@ $[
 		  "@euro" ],
   End of comment */
 
-  /* disabled on request of ke #30351
+  /* Highly incomplete, no active translator. Cf. #30351
 
   "bs_BA"	: [ "Bosnia ",
 		  "Bosnia",
 		  ".UTF-8",
 		  "" ],
-  */
+  End of comment */
 
   "bg_BG"       : [ "Български",
                     "Bulgarian",
@@ -145,12 +145,12 @@ $[
 		  "@euro" ],
   */
 
-  /* disabled on request of ke #30351
+  /* Incomplete, inactive translator.
   "ru_RU"	 : [ "Русский ",
 		   "Russian",
 		   ".UTF-8",
 		   "" ],
-  */
+  End of comment */
 
   "sl_SI"	: [ "Slovenščina",
 		  "Slovenscina",
