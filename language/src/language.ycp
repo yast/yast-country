@@ -138,7 +138,6 @@ define boolean LanguageSummaryHandler (map options) {
     {
 	list<string> langs	= filter (string lang_code,
 	    splitstring (languages, ","), ``(lang_code != Language::language));
-	});
 	if (size (langs) > 0)
 	{
 	    CommandLine::Print (sformat (_("Additional languages: %1"),
