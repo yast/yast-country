@@ -33,7 +33,7 @@
     y2milestone("language_on_entry: <%1>", language_on_entry );
 
     // create the wizard dialog
-    Wizard::CreateDialog();	
+    Wizard::CreateDialog();
 
     any result = `again;
 
@@ -43,7 +43,7 @@
     {
 	Wizard::OpenAcceptDialog();	// This dialog will actually be used
 
-	// Params are:		 	      `back `next  set_default
+	// Params are:				`back `next  set_default
         result = WFM::CallFunction ("inst_language", [true, true, false]);
 
 	Wizard::CloseDialog();
@@ -54,11 +54,11 @@
 
     y2milestone ("result '%1'", result);
 
-    if( result == `cancel || result == `back )
-	{
+    if (result == `cancel || result == `back)
+    {
 	// Back to original values...
 	//
-	y2milestone( "`cancel or `back --> restoring: <%1>", language_on_entry );
+	y2milestone( "`cancel or `back --> restoring: <%1>", language_on_entry);
 
 	import "Console";
 	import "Installation";
@@ -82,9 +82,9 @@
 
 	// Set it in YaST2
 	Language::WfmSetLanguage();
-	}
+    }
     else
-	{
+    {
 	// User wants to keep his changes --> save to sysconfig.
 	//
 	if( Language::language != language_on_entry || Language::ExpertSettingsChanged )
@@ -123,7 +123,6 @@ starting \"yast2 keyboard\" directly."));
 	    {
 	    y2milestone( "Language not changed --> doing nothing" );
 	    }
-	}
-
+    }
     return UI::CloseDialog();
 }
