@@ -100,7 +100,7 @@ global define void Set( string lang )
 	language = lang;
 	Encoding::SetEncLang( language );
 	}
-    if( Mode::initial )
+    if( Mode::initial && !Mode::test)
 	{
 	map yinf = $[];
 	AsciiFile::SetDelimiter( yinf, " " );
