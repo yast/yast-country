@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Aug 31 09:50:42 CEST 2004 - arvin@suse.de
+
+- fixed path for fvwmrc (bug #44467)
+
+-------------------------------------------------------------------
 Tue Aug 24 12:08:51 CEST 2004 - fehr@suse.de
 
 - Add Hebrew to language and timezone
@@ -13,8 +18,8 @@ Thu Aug 19 15:12:23 CEST 2004 - fehr@suse.de
 -------------------------------------------------------------------
 Wed Aug 18 19:39:02 CEST 2004 - nashif@suse.de
 
-- Bug fixed: If you select change timezone, the accept button will start 
-  directly the installation.
+- Bug fixed: If you select change timezone, the accept button will
+  start directly the installation.
 - 2.10.6
 
 -------------------------------------------------------------------
@@ -116,24 +121,24 @@ Tue Mar 30 14:14:15 CEST 2004 - fehr@suse.de
 
 - use iso09.16 as turkish console font (#37247)
 - 2.9.18
-  
+
 -------------------------------------------------------------------
 Mon Mar 29 15:04:31 CEST 2004 - fehr@suse.de
 
 - add call to UI::SetLanguage
 - 2.9.17
-  
+
 -------------------------------------------------------------------
 Thu Mar 25 18:48:55 CET 2004 - fehr@suse.de
 
 - do not return silently if Mode::serial_console is true (#36932)
-  
+
 -------------------------------------------------------------------
 Mon Mar 22 17:37:30 CET 2004 - fehr@suse.de
 
 - add new languages from Karl Eichwalder
 - 2.9.16
-  
+
 -------------------------------------------------------------------
 Mon Mar 22 13:10:55 CET 2004 - fehr@suse.de
 
@@ -182,7 +187,7 @@ Wed Mar 10 10:58:37 CET 2004 - sh@suse.de
 Wed Mar 10 01:28:17 CET 2004 - sh@suse.de
 
 - 2.9.10
-- Migration to new wizard 
+- Migration to new wizard
 
 -------------------------------------------------------------------
 Mon Mar  8 17:46:18 CET 2004 - fehr@suse.de
@@ -247,13 +252,13 @@ Mon Feb  2 18:00:56 CET 2004  - fehr@suse.de
 -------------------------------------------------------------------
 Fri Jan 30 16:22:20 CET 2004  - fehr@suse.de
 
-- some additional changes for new interpreter 
+- some additional changes for new interpreter
 - version 2.9.1
 
 -------------------------------------------------------------------
 Fri Jan 23 10:38:27 CET 2004  - fehr@suse.de
 
-- first version suitable for new interpreter 
+- first version suitable for new interpreter
 - version 2.9.0
 
 -------------------------------------------------------------------
@@ -298,7 +303,7 @@ Fri Sep 19 14:06:25 CEST 2003 - fehr@suse.de
 -------------------------------------------------------------------
 Thu Sep 18 14:58:31 CEST 2003 - gs@suse.de
 
-- Console::Restore(): read RC_LANG (bug #31206) 
+- Console::Restore(): read RC_LANG (bug #31206)
 - fix wrong switch from UTC/local time (#31263)
 - 2.8.17
 
