@@ -377,9 +377,9 @@ global define list<string> MakeProposal (boolean force_reset,boolean language_ch
 	});
 	if (size (langs) > 0)
 	{
-	    ret = add (ret,
-		// summary label
-		sformat(_("Additional Languages: %1"),mergestring (langs,",")));
+	    // summary label
+	    ret = add (ret, sformat (_("Additional Languages: %1"),
+		mergestring (langs,", ")));
 	}
     }
     return ret;
