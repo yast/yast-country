@@ -29,14 +29,14 @@
     // Remember the current timezone settings to be able to restore them.
     //
     string timezone_on_entry = Timezone::timezone;
-    string utc_on_entry  = Timezone::utc;
+    string hwclock_on_entry  = Timezone::hwclock;
 
     // get current timezone and clock setting
     //
     string timezone     = Timezone::timezone;
     string timezone_old = timezone;
 
-    string utc = Timezone::utc;
+    string hwclock = Timezone::hwclock;
 
     string date = "";
 
@@ -82,10 +82,10 @@
 			_("&Hardware clock set to"),
 			[
 			 // ComboBox entry: hardware clock set to local time
-			 `item( `id(`hwclock_localtime), _("local time"), (utc == false)),
+			 `item( `id(`hwclock_localtime), _("local time"), (hwclock == "--localtime")),
 
 			 // ComboBox entry: hardware clock set UTC
-			 `item( `id(`hwclock_utc ), _("UTC"), (utc == true))
+			 `item( `id(`hwclock_utc ), _("UTC"), (hwclock == "-u"))
 			]
 			),
 	      `Label( `id(`date), date )
@@ -148,7 +148,7 @@ If you are unsure, use the default values already selected.
     //
     Timezone::Set( Timezone::timezone );
 
-    symbol hwclock_s      = (utc) ? `hwclock_utc : `hwclock_localtime;
+    symbol hwclock_s      = (hwclock=="-u") ? `hwclock_utc : `hwclock_localtime;
     symbol hwclock_s_old  = hwclock_s;
 
     any ret = nil;
@@ -189,7 +189,7 @@ If you are unsure, use the default values already selected.
 		timezone_old = timezone;
 		hwclock_s_old = hwclock_s;
 
-		Timezone::utc = (hwclock_s == `hwclock_utc) ? true : false;
+		Timezone::hwclock = (hwclock_s == `hwclock_utc) ? "-u" : "--localtime";
 		Timezone::Set( timezone );
 
 		// Redisplay date/time.
@@ -218,7 +218,7 @@ If you are unsure, use the default values already selected.
 
 	// Reset timezone to initial state.
 	//
-	Timezone::utc = utc_on_entry;
+	Timezone::hwclock = hwclock_on_entry;
 	Timezone::Set( timezone_on_entry );
     }
 
