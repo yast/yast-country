@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Jun  7 11:41:40 CEST 2004 - fehr@suse.de
+
+- removed duplicated entry Turkey from timezone_raw.ycp (#41609)
+
+-------------------------------------------------------------------
 Mon Apr 19 12:40:00 CEST 2004 - fehr@suse.de
 
 - patch proofreaded text back into ycp
