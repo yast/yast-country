@@ -30,6 +30,11 @@ $[
 		  "",
 		  "" ],
 
+  "bg_BG"       : [ "Bulgarian",
+                    "Bulgarian",
+		    "",
+		    "" ],
+
   "cs_CZ"	: [ "Čeština ",
 		  "Cestina",
 		  "",
@@ -113,21 +118,28 @@ $[
 		  "Nederlands",
 		  "",
 		  "@euro" ],
+ 
+
+  /* Derzeit keine Uebersetzungen 
 
   "no_NO"	: [ "Norsk",
 		  "Norsk",
 		  "",
 		  "" ],
+  */
 
   "pt_BR"	: [ "Português brasileiro",
 		  "Portugues brasileiro",
 		  "",
 		  "" ],
 
+  /* Derzeit keine Uebersetzungen 
+
   "pt_PT"	: [ "Português",
 		  "Portugues",
 		  "",
 		  "@euro" ],
+  */
 
   /* Highly incomplete
   "ru_RU"	 : [ "Русский ",
