@@ -126,7 +126,7 @@
 	{
 	    list splitserial = splitstring (serial, ",");
 	    string tty = splitserial[0]:"";
-	    string baud = splitserial[1]:"";
+	    string baud = splitserial[1]:"9600";
 	    if ((tty != "") && (baud != ""))
 	    {
 		string initline = sformat ("S0:1235:respawn:/sbin/agetty -L %1 %2", baud, tty);
@@ -174,7 +174,6 @@
 
     global define boolean Check ()
     ``{
-
 	return 0;
     }
 
