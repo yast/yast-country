@@ -46,8 +46,6 @@
 
 	if( !Keyboard::CalledRestore() )
 	    {
-	    SCR::Execute( .target.bash, 
-	                  "cp -a /var/adm/fillup-templates/sysconfig.keyboard /etc/sysconfig/keyboard" );
 	    Keyboard::Restore();
 	    }
 

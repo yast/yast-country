@@ -984,6 +984,11 @@ global define void Set( string keyboard )
 	else
 	{
 	    SCR::Execute( .target.bash, ckb_cmd );
+	    if( true )
+		{
+		SCR::Execute( .target.bash, 
+		              "/usr/bin/dumpkeys | /bin/loadkeys --unicode" );
+		}
 	}
 
         return ckb_cmd;

@@ -30,6 +30,73 @@
 
     import "Wizard";
 
+global define LanguageExpertDialog()
+    ``{
+    symbol ret = `none;
+    // help text for keyboard expert screen
+    string help_text = _("<p>
+Here, fine tune settings for the language handling.
+These settings are written into the file <b>/etc/sysconfig/language</b>.
+</p>
+");
+
+    // general help trailer
+    help_text = help_text + _("<p>
+If unsure, use the default values already selected.
+</p>");
+
+    help_text = help_text + _("<p>
+<b>LANG environment settings for user root:</b>
+This determines how the locale variable (LC_*) are set for the root user</p>
+<b>ctype:</b> Root user has same LC_CTYPE as normal User. Other Values 
+are unset.<br>
+<b>yes:</b> Root user has same locale settings as normal User.<br>
+<b>no:</b> Root user has all locale variables unset.
+</p>");
+
+    UI::OpenDialog( `opt(`decorated  ),
+		    `HBox(
+			`HWeight(40, `RichText( help_text )),
+			`HStretch(),
+			`HSpacing(1),
+			`HWeight(60,
+			    `VBox(
+				`HSpacing( 45 ),
+				// heading text
+				`Heading( _("Language Detail Dialog") ),
+				`VSpacing(`opt(`vstretch), 2),
+				`Left(`ComboBox( `id(`rootlang), 
+						 _("Locale settings for user &root"),
+						 [ "ctype", "yes", "no" ] )),
+				`VSpacing(`opt(`vstretch), 8),
+				`HBox(
+				     `PushButton(`id(`ok), `opt(`default), 
+						 Label::OKButton() ),
+				     `PushButton(`id(`cancel), 
+				                 Label::CancelButton() )
+				     )
+				))
+			 ));
+    map val = Language::GetExpertValues();
+    map val_on_entry = val;
+    y2milestone( "map %1", val );
+    UI::ChangeWidget( `id(`rootlang), `Value, val["rootlang"]:"ctype" );
+    repeat
+	{
+	ret = UI::UserInput();
+	if( ret == `ok )
+	    {
+	    val = $[];
+	    val["rootlang"] = UI::QueryWidget( `id(`rootlang), `Value );
+	    y2milestone( "map ok %1", val );
+	    Language::SetExpertValues( val );
+	    if (val != val_on_entry)
+		Language::ExpertSettingsChanged = true;
+	    }
+	} until ( ret == `cancel || ret == `ok );    
+    UI::CloseDialog();
+    };
+
     /* ----------------------------------------------------------------------
      * Language
      * ----------------------------------------------------------------------*/
@@ -52,6 +119,7 @@
     // set up selection list with default item
 
     boolean use_utf8 = true;		// utf8 is default
+    boolean show_expert = true;         
 
     if ( ! lookup (UI::GetDisplayInfo(), "HasFullUtf8Support", true ) )
     {
@@ -99,6 +167,20 @@ installation and system administration program.
 	heading = `Heading (_("Language selection"));
     }
 
+    if( Mode::initial && UI::WidgetExists( `id(`abort) ) )
+	{
+	show_expert = false;
+	}
+
+    term expert = `HStretch();
+    if( show_expert )
+	{
+	expert = `VBox( `VStretch(),
+		        `PushButton( `id(`expert), _("&Details") ),
+			`VSpacing(2)
+		      );
+	}
+
     term contents = `VBox(
 			heading,
 			`VSpacing(0.7),
@@ -111,7 +193,7 @@ installation and system administration program.
 					       languagesel
 					       )
 					),
-			      `HWeight( 25, `HStretch() )
+			      `HWeight( 25, expert )
 			      ),
 			`VSpacing(2)
 			);
@@ -191,6 +273,11 @@ Choose the new <b>language</b> for your SuSE Linux system.
 	    Wizard::RestoreNextButton();
 	    return `abort;
 	}
+
+	if( ret==`expert )
+	    {
+	    LanguageExpertDialog();
+	    }
 
 	if ( ret == `help )
 	{

@@ -40,6 +40,14 @@ string default_language = "en_US";
 
 
 /**
+ * Default settings for ROOT_USES_LANG in /etc/sysconfig/language 
+ */
+string rootlang = "ctype";
+
+global boolean ExpertSettingsChanged = false;
+
+
+/**
  * Constructor
  *
  * Initializes module either from /etc/install.inf
@@ -97,7 +105,50 @@ global define void Language()
 
 	SetDefault();		// also default
 	}
+    if( SCR::Read( .target.size, "/etc/sysconfig/language" ) )
+	{
+	rootlang = Misc::SysconfigRead( .sysconfig.language.ROOT_USES_LANG, 
+                                        rootlang );
+	}
     }
+
+/*
+ * GetExpertValues()
+ *
+ * Return the values for the various expert settings in a map
+ *
+ * @param       -
+ *
+ * @return  map with values filled in
+ *
+ */
+
+global define map GetExpertValues()
+    ``{
+    map ret = $[ "rootlang"  : rootlang ];
+    return( ret );
+    }
+
+/*
+ * SetExpertValues()
+ *
+ * Return the values for the various expert setting in a map
+ *
+ * @param       val     map with new values of expert settings
+ *
+ * @return  void
+ *
+ */
+
+global define void SetExpertValues( map val )
+    ``{
+    if( haskey(val,"rootlang") && size(val["rootlang"]:"")>0 )
+        {
+        rootlang = val["rootlang"]:"";
+        }
+    }
+
+
 
 
 /**
@@ -211,6 +262,8 @@ global define void Save() ``{
     SCR::Write(.sysconfig.language.RC_LANG, language
 		    + language_info[2]:""	// mandatory-LANG-modifier
 		    + language_info[3]:"" );// optional-LANG-modifier
+
+    SCR::Write(.sysconfig.language.ROOT_USES_LANG, rootlang );
 
     SCR::Write(.sysconfig.language, nil);
 

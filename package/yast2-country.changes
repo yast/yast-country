@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Aug  1 16:08:24 CEST 2003 - fehr@suse.de
+
+- add expert dialog to language dialog (#27570)
+- set console into unicode mode after loadiny the mayboadr map
+- version 2.8.5
+
+-------------------------------------------------------------------
 Mon Jul 28 13:29:27 CEST 2003 - fehr@suse.de
 
 - changed consolefonts back to previouly used fonts
