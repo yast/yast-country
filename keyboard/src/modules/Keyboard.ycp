@@ -809,8 +809,9 @@
 	ckb_cmd = "/bin/loadkeys " + keymap;
 
 	// X11 command...
-	//
-	if( size(Apply)>0 )
+	// do not try to run this with remote X display
+	if( size(Apply)>0 && Mode::x11_setup_needed )
+
 	    {
 	    xkb_cmd = "/usr/X11R6/bin/xkbset -l \"" + Apply + "\"";
 	    }

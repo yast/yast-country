@@ -59,7 +59,7 @@
 				  Keyboard::current_kbd == keyboard_code);
 		 } );
 
-    keyboardsel = `SelectionBox( `id( `keyboard ), `opt( `notify ),
+    keyboardsel = `SelectionBox( `id( `keyboard ), `opt(`notify,`immediate),
 		// title for selection box 'keyboard layout'
 		_("&Keyboard layout"),
 		keyboardlist_by_translation);
