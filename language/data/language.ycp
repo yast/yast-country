@@ -5,8 +5,8 @@
 // Format is
 // <LANG-Code> : [ <Language-to-display-UTF8-coded>,
 //		   <Language-to-display-ASCII-coded-if-needed>,
-//		   <mandatory-LANG-modifier>,
-//		   <optional-LANG-modifier> ]
+//		   <LANG modifier used when UTF-8 enconding is selected>
+//		   <LANG modifier used when no UTF-8 enconding is selected> ]
 //
 // The LANG-Code is used internally to reference the language
 // The mandatory-LANG-modifier is attached to LANG-Code and
@@ -14,7 +14,8 @@
 // The optional-LANG-modifier is attached to LANG-Code+mandatory-LANG-modifier
 //   and written to RC_LANG in rc.config.
 // ==> the running system uses
-//     LANG=LANG-Code+mandatory-LANG-modifier+optional-LANG-modifier
+//     e.g. for key = "de_DE"
+//     LANG="de_DE" + use_utf8 ? l["de_DE",2] : l["de_DE",3]
 
 $[
 
@@ -22,7 +23,7 @@ $[
   "ca_ES"	: [ "Català",
 		  "Catala",
 		  ".UTF-8",
-		  "" ],
+		  "@euro" ],
   End of comment */
 
   "bs_BA"	: [ "Bosnia ",
@@ -48,12 +49,12 @@ $[
   "de_DE"	: [ "Deutsch",
 		  "Deutsch",
 		  ".UTF-8",
-		  "" ],
+		  "@euro" ],
 
   "el_GR"	: [ "Ελληνικά ",
 		  "Greek",
 		  ".UTF-8",
-		  "" ],
+		  ".ISO-8859-7" ],
 
   "en_GB"	: [ "English (GB)",
 		  "English (GB)",
@@ -68,18 +69,18 @@ $[
   "es_ES"	: [ "Español",
 		  "Espanol",
 		  ".UTF-8",
-		  "" ],
+		  "@euro" ],
 
   "fr_FR"	: [ "Français",
 		  "Francais",
 		  ".UTF-8",
-		  "" ],
+		  "@euro" ],
 
   /* Incomplete, inactive translator.
   "gl_ES"	: [ "Galego",
 		  "Galego",
 		  ".UTF-8",
-		  "" ],
+		  "@euro" ],
   End of comment */
 
   /* Incomplete, inactive translator.
@@ -97,7 +98,7 @@ $[
   "it_IT"	: [ "Italiano",
 		  "Italiano",
 		  ".UTF-8",
-		  "" ],
+		  "@euro" ],
 
   "ja_JP"	: [ "日本語",
 		  "Japanese",
@@ -117,7 +118,7 @@ $[
   "nl_NL"	: [ "Nederlands",
 		  "Nederlands",
 		  ".UTF-8",
-		  "" ],
+		  "@euro" ],
  
 
   /* Derzeit keine Uebersetzungen 
@@ -138,7 +139,7 @@ $[
   "pt_PT"	: [ "Português",
 		  "Portugues",
 		  ".UTF-8",
-		  "" ],
+		  "@euro" ],
   */
 
   "ru_RU"	 : [ "Русский ",
@@ -183,7 +184,7 @@ $[
 /*  "en_IE"	: [ "Irish",			*/
 /*		  "Irish",			*/
 /*		  ".UTF-8",			*/
-/*		  "" ],			*/
+/*		  "@euro" ],			*/
 /*						*/
 /*  "zh_TW"       : [ "繁體中文",       */
 /*		  "Traditional Chinese",	*/

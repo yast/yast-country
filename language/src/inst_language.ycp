@@ -69,7 +69,11 @@ are unset.<br>
 				`Left(`ComboBox( `id(`rootlang), 
 						 _("Locale Settings for User &root"),
 						 [ "ctype", "yes", "no" ] )),
-				`VSpacing(`opt(`vstretch), 8),
+				`VSpacing(`opt(`vstretch), 1),
+				`Left(`CheckBox( `id(`use_utf8), 
+						 _("Use &UTF-8 encoding"), 
+						 false )),
+				`VSpacing(`opt(`vstretch), 7),
 				`HBox(
 				     `PushButton(`id(`ok), `opt(`default), 
 						 Label::OKButton() ),
@@ -82,6 +86,7 @@ are unset.<br>
     map val_on_entry = val;
     y2milestone( "map %1", val );
     UI::ChangeWidget( `id(`rootlang), `Value, val["rootlang"]:"ctype" );
+    UI::ChangeWidget( `id(`use_utf8), `Value, val["use_utf8"]:false );
     repeat
 	{
 	ret = UI::UserInput();
@@ -89,6 +94,7 @@ are unset.<br>
 	    {
 	    val = $[];
 	    val["rootlang"] = UI::QueryWidget( `id(`rootlang), `Value );
+	    val["use_utf8"] = UI::QueryWidget( `id(`use_utf8), `Value );
 	    y2milestone( "map ok %1", val );
 	    Language::SetExpertValues( val );
 	    if (val != val_on_entry)

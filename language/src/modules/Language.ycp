@@ -44,6 +44,11 @@ string default_language = "en_US";
  */
 string rootlang = "ctype";
 
+/**
+ * Default settings for ROOT_USES_LANG in /etc/sysconfig/language 
+ */
+boolean use_utf8 = true;
+
 global boolean ExpertSettingsChanged = false;
 
 
@@ -109,6 +114,9 @@ global define void Language()
 	{
 	rootlang = Misc::SysconfigRead( .sysconfig.language.ROOT_USES_LANG, 
                                         rootlang );
+	string val = toupper( Misc::SysconfigRead( .sysconfig.language.RC_LANG,
+						   "" ));
+	use_utf8 = find( val, ".UTF-8" )>0;
 	}
     }
 
@@ -125,7 +133,8 @@ global define void Language()
 
 global define map GetExpertValues()
     ``{
-    map ret = $[ "rootlang"  : rootlang ];
+    map ret = $[ "rootlang"  : rootlang,
+                 "use_utf8"  : use_utf8 ];
     return( ret );
     }
 
@@ -145,6 +154,10 @@ global define void SetExpertValues( map val )
     if( haskey(val,"rootlang") && size(val["rootlang"]:"")>0 )
         {
         rootlang = val["rootlang"]:"";
+        }
+    if( haskey(val,"use_utf8") )
+        {
+        use_utf8 = val["use_utf8"]:"";
         }
     }
 
@@ -259,10 +272,17 @@ global define void Save() ``{
     list language_info = languages_map[language]:[];
 
     // full language code
-    SCR::Write(.sysconfig.language.RC_LANG, language
-		    + language_info[2]:""	// mandatory-LANG-modifier
-		    + language_info[3]:"" );// optional-LANG-modifier
+    string val = language;
+    if( use_utf8 )
+	{
+	val = val + language_info[2]:"";
+	}
+    else
+	{
+	val = val + language_info[4]:"";
+	}
 
+    SCR::Write(.sysconfig.language.RC_LANG, val );
     SCR::Write(.sysconfig.language.ROOT_USES_LANG, rootlang );
 
     SCR::Write(.sysconfig.language, nil);

@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Aug 14 15:17:30 CEST 2003 - fehr@suse.de
+
+- add button for selection of UTF-8 encoding to language details
+
+-------------------------------------------------------------------
 Fri Aug  8 17:19:59 CEST 2003 - fehr@suse.de
 
 - patch proofread texts back into sources
