@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jul 23 11:10:29 CEST 2002 - fehr@suse.de
+
+- put the timzeone descriptions into separate timezone_db.pot
+
+-------------------------------------------------------------------
 Tue Jul 23 09:39:13 CEST 2002 - fehr@suse.de
 
 - regenerated potfile with new entries from {timezone,keyboard}_raw.ycp

@@ -11,7 +11,7 @@
  * System timezones can be found in /usr/share/zoneinfo/zone.tab
  * *****************************************************************
  *
-   textdomain "country"
+   textdomain "timezone_db"
  */
 
 $[
