@@ -2,6 +2,7 @@
 Mon Sep  8 13:05:03 CEST 2003 - fehr@suse.de
 
 - fix bug with default values for /etc/sysconfig/keyboard (#30030)
+- 2.8.13
 
 -------------------------------------------------------------------
 Thu Sep  4 15:30:22 CEST 2003 - fehr@suse.de
