@@ -60,5 +60,5 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 %ifnarch s390 s390x
 @desktopdir@/keyboard.desktop
 %endif
-@desktopdir@/language.desktop
+@desktopdir@/yast-language.desktop
 @desktopdir@/timezone.desktop

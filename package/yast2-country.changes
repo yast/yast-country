@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Sun Apr  4 22:49:11 CEST 2004 - adrian@suse.de
+
+- rename language.desktop to yast-language.desktop
+  (fixes a name clash with a KDE CC modul)
+
+-------------------------------------------------------------------
 Wed Mar 17 19:12:48 CET 2004 - fehr@suse.de
 
 - inform Encoding module about Utf8 setting

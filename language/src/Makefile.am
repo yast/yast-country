@@ -7,7 +7,7 @@ client_DATA =			\
 	inst_language.ycp
 
 desktop_DATA =			\
-	language.desktop
+	yast-language.desktop
 
 EXTRA_DIST = $(client_DATA) $(desktop_DATA)
 
