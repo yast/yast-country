@@ -563,6 +563,11 @@ Some texts may be displayed in English."));
 		{
 		    list<string> selected_languages = (list<string>)
 			UI::QueryWidget (`id(`languages),`SelectedItems);
+
+		    if (!contains (selected_languages, language))
+		    {
+			selected_languages = add (selected_languages, language);
+		    }
 		    y2milestone ("selected languages: %1", selected_languages);
 
 		    Language::languages = mergestring (selected_languages, ",");

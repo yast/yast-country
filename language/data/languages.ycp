@@ -214,6 +214,14 @@ $[
 		  // language name
 		  _("Norwegian") ],
 
+  "pa_IN"	: [
+		    "ਪੰਜਾਬੀ",
+		    "Punjabi",
+		    ".UTF-8",
+		    "",
+		    // language name
+		    _("Punjabi")
+		],
   "pl_PL"       : [ "Polski",
                   "Polski",
 		  ".UTF-8",

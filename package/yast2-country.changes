@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 22 15:27:26 CET 2005 - jsuchome@suse.cz
+
+- added new language: Punjabi
+- do not exclude primary language from package installation (#65959)
+- 2.11.15 
+
+-------------------------------------------------------------------
 Mon Feb 21 16:58:28 CET 2005 - jsuchome@suse.cz
 
 - use client with a data for languages (workaround for #50815)
