@@ -2,6 +2,7 @@
 Thu Sep 18 14:58:31 CEST 2003 - gs@suse.de
 
 - Console::Restore(): read RC_LANG (bug #31206) 
+- 2.8.17
 
 -------------------------------------------------------------------
 Wed Sep 17 13:07:30 CEST 2003 - fehr@suse.de
