@@ -1,6 +1,8 @@
 -------------------------------------------------------------------
-Wed Aug 21 11:10:54 CEST 2002 - msvec@suse.cz
+Thu Aug 22 17:55:18 CEST 2002 - msvec@suse.cz
 
+- again enabled the language testsuite
+- please teach Thomas Fehr what are testsuites good for
 - fixed Philippines spelling (#18097)
 - 2.6.19
 
