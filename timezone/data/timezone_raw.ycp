@@ -16,7 +16,7 @@
 {
 textdomain "timezone_db";
 
-
+// list < map < string, any> >
 return ([
 
 $[ "name" : _("Europe"),

@@ -59,8 +59,8 @@ map push = $[];
 
 string name = "";
 
-list zonemap = [];
-map lang2tz = $[];
+list < map < string, any> > zonemap = [];
+map<string, string> lang2tz = $[];
 
 // ------------------------------------------------------------------
 // END: Locally defined data
@@ -83,13 +83,13 @@ map lang2tz = $[];
  * @see	get_zonemap()
  */
 
-define map get_lang2tz()
+define map<string, string> get_lang2tz()
     ``{
     // language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
     //
     if( size(lang2tz)==0 )
 	{
-	lang2tz = (map)SCR::Read( .target.yast2, "lang2tz.ycp" );
+	lang2tz = (map<string, string>)SCR::Read( .target.yast2, "lang2tz.ycp" );
 	if( lang2tz == nil ) lang2tz = $[];
 	}
     return( lang2tz );
@@ -107,11 +107,11 @@ define map get_lang2tz()
  * @see	get_lang2tz()
  */
 
-define list get_zonemap()
+define list < map < string, any> > get_zonemap()
     ``{
     if( size(zonemap)==0 )
 	{
-	zonemap = (list)eval(SCR::Read( .target.yast2, "timezone_raw.ycp" ));
+	zonemap = (list < map < string, any> >)eval(SCR::Read( .target.yast2, "timezone_raw.ycp" ));
 	if( zonemap == nil ) zonemap = [];
 	}
     return( zonemap );
@@ -132,7 +132,7 @@ define list get_zonemap()
  */
 global define integer Set( string zone, boolean really )
     ``{
-    list zmap = get_zonemap();
+    list <map <string, any> > zmap = get_zonemap();
 
     // Set the new timezone internally
     timezone = zone;
@@ -199,7 +199,7 @@ global define void Timezone()
     if( Mode::initial )
 	{
 	// language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
-	map lang2tz = get_lang2tz();
+	map<string, string> lang2tz = get_lang2tz();
 
 	string new_timezone = lang2tz[Language::language]:"";
 	y2milestone( "new_timezone %1", new_timezone );
@@ -268,7 +268,7 @@ global define string GetTimezoneForLanguage( string sys_language,
     ``{
     // The system_language --> timezone conversion map.
     //
-    map lang2timezone = get_lang2tz();
+    map<string, string> lang2timezone = get_lang2tz();
 
     string ret = lang2timezone[sys_language]:"";
     if( size(ret)==0 )
@@ -464,17 +464,17 @@ global define list Selection( integer num )
     ``{
     string trans_str = "";
     locale translate = "";
-    list zmap = get_zonemap();
+    list <map <string, any> > zmap = get_zonemap();
 
     textdomain "timezone_db";
-    list trl = maplist( string key, locale name, zmap[num,"entries"]:$[],
+    list<list <string> > trl = maplist( string key, locale name, zmap[num,"entries"]:$[],
 		       ``{
 		       translate = name;
 		       return [ name, key ];
 		       });
     textdomain "country";
 
-    trl = sort( list a, list b, trl, 
+    trl = sort( list<string> a, list<string> b, trl, 
                 ``(select( lsort( [a[0]:"", b[0]:""] ), 0, "" ) == a[0]:"" && a[0]:""!=b[0]:"") );
     y2milestone( "trl = %1", trl );
 
@@ -487,7 +487,7 @@ global define list Selection( integer num )
 
 global define list Region()
     ``{
-    list zmap = get_zonemap();
+    list <map <string, any> > zmap = get_zonemap();
     string trans_str = "";
     locale translate = "";
 
