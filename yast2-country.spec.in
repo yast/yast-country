@@ -1,5 +1,5 @@
 @HEADER-COMMENT@
-# neededforbuild yast2-devel-packages yast2-installation yast2-x11
+# neededforbuild yast2-devel-packages yast2-installation yast2 yast2-devel yast2-storage
 
 @HEADER@
 Requires:	yast2
@@ -53,7 +53,7 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 %files
 %defattr(-,root,root)
 %doc @docdir@
-@moduledir@/*.ycp
+@moduledir@/*
 @clientdir@/*.ycp
 @ydatadir@/*.ycp
 @scrconfdir@/*.scr
