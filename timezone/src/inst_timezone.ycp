@@ -30,19 +30,12 @@ symbol hwclock_s_initial = `none;
 define void SetTimezone( symbol hwclock, string timezone, boolean really,
                          boolean changed_time )
     ``{
-    y2milestone( "SetTimezone hw %1, tz %2 really %3 tchanged %4", hwclock, 
-                 timezone, really, changed_time );
-    if( !really && hwclock != hwclock_s_initial && !changed_time )
-	{
-	Timezone::diff = (hwclock==`hwclock_utc)?1:-1;
-	}
-    else
-	{
-	Timezone::diff = 0;
-	}
+    y2milestone( "SetTimezone hw %1, tz %2 really %3 tchanged %4 initial:%5", 
+                 hwclock, timezone, really, changed_time, hwclock_s_initial );
     Timezone::hwclock = (hwclock == `hwclock_utc) ? "-u" : "--localtime";
     Timezone::Set( timezone, really );
 
+    y2milestone( "SetTimezone diff %1", Timezone::diff ); 
     // Redisplay date/time.
     //
     UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime(really) );
@@ -159,7 +152,6 @@ Enter the correct date.
 		}
 	    else
 		{
-		Timezone::diff = 0;
 		Timezone::SetTime( year, month, day, hour, minute, second );
 		}
 	    }

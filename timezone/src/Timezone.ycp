@@ -353,6 +353,7 @@ global define string GetDateTime( boolean real_time )
     // cut off LF
     //
     local_date = substring( local_date, 0 , size( local_date ) - 1 );
+    y2milestone( "GetDateTime local_date=%1", local_date );
 
     return( local_date );
     }
