@@ -70,7 +70,7 @@ Apply button.
 		           `Label( _("Current Time in HH:MM:SS Format")),
 			   `HStretch()
 		    ),
-		    `HBox( `HSpacing(10),
+		    `HBox (`HSpacing(10),
 		           `TextEntry( `id(`hour), `opt(`shrinkable), "",
 			               val["hour"]:"" ),
 			   `Label( ":" ),
@@ -79,8 +79,8 @@ Apply button.
 			   `Label( ":" ),
 		           `TextEntry( `id(`second), `opt(`shrinkable), "",
 			                val["second"]:"" ),
-			   `HSpacing(32),
-			   `HStretch() ),
+			   `HSpacing(32)
+		    ),
 		    `VSpacing(2),
 		    `VStretch(),
 		    `HBox( `HSpacing(10),
@@ -99,8 +99,8 @@ Apply button.
 			   `VBox( `HSpacing(4),
 				  `TextEntry( `id(`year), `opt(`shrinkable), "",
 				              val["year"]:"" )),
-			   `HSpacing(30),
-			   `HStretch() ),
+			   `HSpacing(30)
+		    ),
 		    `VSpacing(4),
 		    `VStretch(),
 		    `HBox(
