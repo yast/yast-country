@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb 24 15:26:39 CET 2004 - fehr@suse.de
+
+- fix wrong default for usage of UTF8
+- 2.9.6
+
+-------------------------------------------------------------------
 Mon Feb 23 15:40:00 CET 2004 - fehr@suse.de
 
 - remove some warnings by new interpreter
