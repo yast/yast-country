@@ -2,6 +2,8 @@
 Mon Sep 01 10:04:35 CEST 2003 - arvin@suse.de
 
 - use Popup::ConfirmAbort
+- use utf-8 as default for locale
+- 2.8.11
 
 -------------------------------------------------------------------
 Wed Aug 27 14:29:33 CEST 2003 - fehr@suse.de

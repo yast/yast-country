@@ -45,7 +45,7 @@ string default_language = "en_US";
 string rootlang = "ctype";
 
 /**
- * Default settings for ROOT_USES_LANG in /etc/sysconfig/language 
+ * Use utf8 in locale 
  */
 boolean use_utf8 = true;
 
@@ -114,9 +114,16 @@ global define void Language()
 	{
 	rootlang = Misc::SysconfigRead( .sysconfig.language.ROOT_USES_LANG, 
                                         rootlang );
-	string val = toupper( Misc::SysconfigRead( .sysconfig.language.RC_LANG,
-						   "" ));
-	use_utf8 = find( val, ".UTF-8" )>0;
+	if( !Mode::initial )
+	    {
+	    string val = toupper( Misc::SysconfigRead( .sysconfig.language.RC_LANG,
+						       "" ));
+	    use_utf8 = find( val, ".UTF-8" )>0;
+	    }
+	else
+	    {
+	    use_utf8 = true;
+	    }
 	}
     }
 
