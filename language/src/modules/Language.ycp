@@ -42,24 +42,31 @@ string default_language = "en_US";
 /**
  * Constructor
  *
- * Initializes module either from Mode (/etc/install.inf)
+ * Initializes module either from /etc/install.inf
  * or from /etc/sysconfig/language
  */
-global define void Language() ``{
-
-    if ( Mode::initial )
-    {
-    	y2milestone( "Mode::language %1 Installation::defaultLanguage %2",
-	             Mode::language, Installation::defaultLanguage );
-	if (Mode::language == "")
+global define void Language() 
+    ``{
+    if( Mode::initial )
 	{
-	    Mode::language = Installation::defaultLanguage;
-	}
-	Set( Mode::language );	// coming from /etc/install.inf
+	string lang = SCR::Read( .content.LANGUAGE );
+	if( SCR::Read( .target.size, "/etc/install.inf") > 0 )
+	    {
+	    lang = SCR::Read (.etc.install_inf.Locale);
+	    }
+	if( lang == nil) 
+	    lang = "";
+    	y2milestone( "lang %1 Installation::defaultLanguage %2", lang, 
+	             Installation::defaultLanguage );
+	if( lang == "" )
+	    {
+	    lang = Installation::defaultLanguage;
+	    }
+	Set( lang );		// coming from /etc/install.inf
 	SetDefault();		// also default
-    }
+	}
     else
-    {
+	{
 	string local_lang =
 	    Misc::SysconfigRead(.sysconfig.language.RC_LANG, "" );
 	y2milestone( "reading RC_LANG %1", local_lang );
@@ -89,8 +96,8 @@ global define void Language() ``{
 	Set( local_lang );
 
 	SetDefault();		// also default
+	}
     }
-}
 
 
 /**

@@ -1,8 +1,9 @@
 -------------------------------------------------------------------
-Tue Jul  8 16:01:50 CEST 2003 - fehr@suse.de
+Wed Jul  9 10:08:06 CEST 2003 - fehr@suse.de
 
 - fix bug caused by leading zeros in time/date fields (#26171)
 - make sorting of timezone entries locale dependent (#23850)
+- remove Mode::language, now handled in Laguage module (#27115)
 
 -------------------------------------------------------------------
 Tue Jun 10 14:36:04 CEST 2003 - fehr@suse.de
