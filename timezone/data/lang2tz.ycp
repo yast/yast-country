@@ -50,6 +50,7 @@ $[
   "nl_NL"		: "Europe/Amsterdam",
   "no_NO"		: "Europe/Oslo",
   "nb_NO"		: "Europe/Oslo",
+  "pa_IN"		: "Asia/Calcutta",
   "pl_PL"		: "Europe/Warsaw",
   "pt_BR"		: "Brazil/East",
   "pt_PT"		: "Europe/Lisbon",
