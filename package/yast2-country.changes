@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Feb  7 16:13:31 CET 2003 - jsuchome@suse.de
+
+- inst_language: added check for aborting when Mode::repair is true
+
+-------------------------------------------------------------------
 Fri Feb  7 13:04:47 CET 2003 - kkaempf@suse.de
 
 - drop fixed encoding in consolefonts table, glibc can tell

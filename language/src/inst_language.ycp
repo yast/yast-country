@@ -173,13 +173,17 @@ Choose the new <b>language</b> for your SuSE Linux system.
 
     UI::SetFocus(`id(`language));
 
+    symbol abort_mode = `painless;
+    if (Mode::repair)
+        abort_mode = `repair;
+
     repeat
     {
 	ret = Wizard::UserInput();
 
 
 	if ( ret == `abort
-	     && WFM::CallFunction(`inst_confirm_abort(`painless) ) )
+	     && WFM::CallFunction(`inst_confirm_abort(abort_mode) ) )
 	{
 	    Wizard::RestoreNextButton();
 	    return `abort;
