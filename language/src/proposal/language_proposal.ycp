@@ -38,26 +38,19 @@
 	             Language::language );
 
 	if( force_reset && language_on_entry != Language::language )
-	    {
+	{
 	    // Set it in YaST2
 	    Language::WfmSetLanguage();
-	    }
+	}
 
-	ret =
-	    $[
+	ret = $[
 	      "raw_proposal"    : [ prop ],
 	      "language_changed": (language_on_entry != Language::language )
-	    ];
+	];
     }
     else if ( func == "AskUser" )
     {
 	boolean has_next = param["has_next"]:false;
-
-	// call some function that displays a user dialog
-	// or a sequence of dialogs here:
-	//
-	// sequence = DummyMod::AskUser( has_next );
-
 
 	// Special case for language selection: Rebuild dialog completely upon
 	// language change (to get even the wizard widgets re-translated), thus
@@ -79,11 +72,12 @@
 	{
 	    Wizard::OpenAcceptDialog();	// This dialog will actually be used
 
-	    // Params are:		 	 `back `next      set_default
-	    result = (symbol)WFM::CallFunction("inst_language", [ true, has_next, false ]);
-
+	    result = (symbol)
+		// Params are:		`back `next set_default
+		WFM::CallFunction ("inst_language", [ true, has_next, false ]);
 	    Wizard::CloseDialog();
-	} while ( result == `again );
+
+	} while (result == `again);
 
 	Wizard::CloseDialog();		// Close superfluous extra dialog
 
@@ -129,6 +123,7 @@
 	    ];
 
 	y2debug( "Returning from proposal_language::AskUser() with: %1", ret );
+
     }
     else if ( func == "Description" )
     {

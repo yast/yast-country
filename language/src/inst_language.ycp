@@ -28,6 +28,7 @@
     import "Language";
     import "Misc";
     import "Mode";
+    import "PackageSystem";
     import "Popup";
     import "Stage";
     import "Timezone";
@@ -117,6 +118,8 @@ are unset.<br>
      * Language
      * ----------------------------------------------------------------------*/
 
+    boolean source_initialized	= false;
+
     // Check if the current call should be treated as the first run (3rd param).
     // In this case if the user exits with next the the current setting
     // will be made the default that is restored with "Reset to defaults".
@@ -125,7 +128,15 @@ are unset.<br>
 
     y2milestone("set_default: %1", set_default );
 
-    string language = Language::language;
+    // when the possibility for selecting more languages should be shown
+    // (this includes differet UI layout)
+    boolean more_languages	= true;
+
+    string language		= Language::language;
+
+    list<string>languages	= splitstring (Language::languages, ",");
+    if (! contains (languages, language))
+	languages	= add (languages, language);
 
     UI::SetLanguage(language);
 
@@ -151,27 +162,6 @@ are unset.<br>
         use_ascii = true;               // fallback to ascii
     }
 
-    // sort language by ASCII with help of a map
-    // $[ "ascii-name" : [ "user-readable-string", "code" ], ...]
-    // the "user-readable-string" is either ascii or utf8, depending
-    // on textmode probed above (workaround because there isn't any
-    // usable console font for all languages).
-
-    map<string,list> languageselsort = 
-	mapmap(string lang_code, list lang_info, Language::Selection(), 
-	    ``{
-				string s = lang_info[1]:"";
-				return $[ s :	// ASCII value is the key
-				    [lang_info[use_ascii?1:0]:"", lang_code]
-			       ];
-			   });
-
-    term languagesel =
-      `SelectionBox(`id(`language), `opt(`notify), "",
-	maplist (any name, list codelist, languageselsort,
-		 ``(`item(`id(codelist[1]:""), codelist[0]:"",
-			  (language == codelist[1]:"")))));
-
    /* ----------------------------------------------------------------------
     * Build dialog
     * ----------------------------------------------------------------------*/
@@ -195,41 +185,110 @@ Installation and System Administration Program
 
     if (Stage::initial () && set_default)
     {
-	show_expert = false;
+	show_expert	= false;
+	more_languages	= false;
     }
+
+    // sort language by ASCII with help of a map
+    // $[ "ascii-name" : [ "user-readable-string", "code" ], ...]
+    // the "user-readable-string" is either ascii or utf8, depending
+    // on textmode probed above (workaround because there isn't any
+    // usable console font for all languages).
+
+    map<string,list> languageselsort = mapmap (
+	string lang_code, list lang_info, Language::Selection(), {
+	    string s = lang_info[1]:"";
+	    return $[
+		// ASCII value is the key
+		s	: [lang_info[use_ascii ? 1 : 0]:"", lang_code]
+	    ];
+	}
+    );
+
+    term languagesel = `SelectionBox (`id(`language), `opt(`notify), "",
+	maplist (any name, list codelist, languageselsort,
+		``(`item(`id(codelist[1]:""), codelist[0]:"",
+			  (language == codelist[1]:""))))
+    );
+
 
     term expert = `HStretch();
+
     if (show_expert)
     {
-	expert = `VBox( `VStretch(),
-		        `PushButton( `id(`expert), _("&Details") ),
-			`VSpacing(2)
-		      );
+	expert = `VBox (
+	    `Label (""),
+	    // button label
+	    `PushButton (`id(`expert), _("&Details"))
+	);
     }
 
-    term contents = `VBox(
-			`VSpacing(0.3),
-			`HBox(
-			      `HWeight( 25, `HStretch() ),
-			      `HWeight( 50,
-					`VBox (
-						// label text
-					       `Left( `Label ( _("Select your language:") ) ),
-					       languagesel
-					       )
-					),
-			      `HWeight( 25, expert )
-			      ),
-			`VSpacing(2)
-			);
+    term contents = `VBox (
+	`VSpacing (0.3),
+	`HBox (
+	    `HWeight (25, `HStretch ()),
+	    `HWeight (50,
+		`VBox (
+		    // label text
+		    `Left (`Label (_("Select your language:"))),
+		    languagesel
+		)
+	    ),
+	    `HWeight (25, expert)
+	),
+	`VSpacing (2)
+    );
 
-    // Show a Wizardwindow with  that contents. Don't use the Id `next,
-    // `back, and `help
+    if (more_languages)
+    {
+
+	term primary_language_term =
+	    `ComboBox (`id(`language), `opt (`notify),
+	    // combo box label
+	    _("Select your primary &language"),
+	    maplist (any name, list codelist, languageselsort,
+		``(`item (
+		    `id(codelist[1]:""),
+		    codelist[0]:"",
+		    language == codelist[1]:"")
+		)
+	    )
+	);
+
+	term languages_term = `MultiSelectionBox (`id(`languages),
+	    // multiselection box label
+	    _("&Select secondary languages"),
+	    maplist (any name, list codelist, languageselsort,
+		``(`item (
+		    `id(codelist[1]:""),
+		    codelist[0]:"",
+		    contains (languages, codelist[1]:""))
+		)
+	    )
+	);
+
+	contents = `VBox (
+	    `VSpacing (),
+	    `HBox (
+		`HSpacing (5),
+		`VBox (
+		    `HBox (
+			`Left (primary_language_term),
+			`Right (expert)
+		    ),
+		    `VSpacing (),
+		    `ReplacePoint (`id(`rplangs), languages_term)
+		),
+		`HSpacing (5)
+	    ),
+	    `VSpacing()
+	);
+    }
 
     string help_text = "";
 
     if (Stage::initial ())
-	{
+    {
 	// help text for initial (first time) language screen
 	help_text = _("<p>
 Choose the <b>language</b> to use during installation and for
@@ -249,32 +308,41 @@ Click <b>Accept</b> to proceed to the next dialog.
 all your settings in the last installation dialog.
 </p>
 ");
-	if( set_default )
-	    {
+	if (set_default)
+	{
 	    // help text, continued
 	    help_text = help_text + _("<p>
 You can select <b>Abort Installation</b> at any time to abort the
 installation process.
 </p>
 ");
-	    }
 	}
+    }
     else
-	{
+    {
 	// different help text when called after installation
 	// in an installed system
 	help_text = _("<p>
 Choose the new <b>language</b> for your system.
 </p>\n");
-	}
+    }
+
+    if (more_languages)
+    {
+	help_text	= help_text + _("<p>
+<b>more languages: FIXME</b>
+</p>");
+    }
 
     // Screen title for the first interactive dialog
 
-    Wizard::SetContents( heading_text, contents, help_text, (boolean)WFM::Args(0), (boolean)WFM::Args(1));
+    Wizard::SetContents (heading_text, contents, help_text, (boolean)WFM::Args(0), (boolean)WFM::Args(1));
 
     Wizard::SetDesktopIcon("yast-language");
-    if ( Stage::initial () )	// No .desktop files in inst-sys - use icon explicitly
-	Wizard::SetTitleIcon( "babelfish" );
+
+    // No .desktop files in inst-sys - use icon explicitly
+    if (Stage::initial ())
+	Wizard::SetTitleIcon ("babelfish");
 
     // Get the user input.
     //
@@ -283,63 +351,95 @@ Choose the new <b>language</b> for your system.
     UI::SetFocus(`id(`language));
 
     repeat
-	{
+    {
 	ret = Wizard::UserInput();
-	y2warning( "UserInput() returned %1", ret );
+	y2debug ("UserInput() returned %1", ret);
 
-	if ( ret == `abort && Popup::ConfirmAbort(`painless) )
-	    {
+	if (ret == `abort && Popup::ConfirmAbort (`painless))
+	{
 	    Wizard::RestoreNextButton();
 	    return `abort;
-	    }
+	}
 
-	if( ret==`expert )
-	    {
+	if (ret==`expert)
+	{
 	    LanguageExpertDialog();
-	    }
+	}
 
-	if( ret == `help )
-	    {
+	if (ret == `help)
+	{
 	    Wizard::ShowHelp( help_text );
-	    }
+	}
 
-	if( ret == `next || ret == `language )
-	    {
+	if (ret == `next || ret == `language)
+	{
 	    // Get the selected language.
 	    //
-	    language = (string) UI::QueryWidget(`id(`language), `CurrentItem);
+	    language = more_languages ?
+		(string) UI::QueryWidget(`id(`language), `Value) :
+		(string) UI::QueryWidget(`id(`language), `CurrentItem);
 
-	    if( language != Language::language )
+	    if (language != Language::language)
+	    {
+		y2milestone ("Language changed from %1 to %2", Language::language, language);
+
+		if (more_languages)
 		{
-		y2milestone( "Language changed from %1 to %2", Language::language, language );
+		    list<string> selected_languages = (list<string>)
+			UI::QueryWidget (`id(`languages),`SelectedItems);
+		    if (!contains (selected_languages, language))
+		    {
+			selected_languages = add (selected_languages, language);
+		    }
+		    selected_languages	= filter (string l, selected_languages,
+			``(l != Language::language));
 
-		// popup text
+		    UI::ReplaceWidget (`id(`rplangs),
+			`MultiSelectionBox (`id(`languages),
+			    // multiselection box label
+			    _(" Select secondary languages "),
+			    maplist (any name, list codes, languageselsort, ``(
+				`item (
+				    `id(codes[1]:""),
+				    codes[0]:"",
+				    contains (selected_languages, codes[1]:""))
+			    ))
+			));
+
+		    if (ret != `next)
+		    {
+			Language::languages =
+			    mergestring (selected_languages, ",");
+		    }
+		}
+
 
 		boolean kbd_adapt = false;
 
-		if( Stage::initial () && set_default )
-		    {
+		if (Stage::initial () && set_default)
+		{
 		    kbd_adapt = true;
 		    Timezone::ResetZonemap();
-		    }
+		}
 		else
-		    {
+		{
 		    Timezone::user_decision = true;
-		    }
+		}
 
 		// Set it in the Language module.
 		//
-		Language::Set( language );
+		Language::Set (language);
 
 		// Set Console font
 		//
-		Console::SelectFont( language );
+		Console::SelectFont (language);
 
 		// Set it in YaST2
 		Language::WfmSetLanguage ();
 
-		if( !Mode::normal () && !set_default )
-		    {
+		if (!Mode::normal () && !set_default)
+		{
+		    // yes/no popup message
 		    string msg = _("The language will be changed.
 
 Current keyboard settings can be adapted according
@@ -347,55 +447,79 @@ to the new language or they can be kept as they are now.
 
 Adapt keyboard settings?
 ");
-		    kbd_adapt = Popup::YesNo( msg );
-		    }
+		    kbd_adapt = Popup::YesNo (msg);
+		}
 
-		if( kbd_adapt )
+		if (kbd_adapt)
+		{
+		    Keyboard::SetKeyboardForLang (language);
+		    if (Stage::initial () && set_default)
 		    {
-		    Keyboard::SetKeyboardForLang( language );
-		    if( Stage::initial () && set_default )
-			{
 			Keyboard::SetKeyboardDefault();
-			}
 		    }
+		}
 		else
-		    {
+		{
 		    Keyboard::user_decision = true;
-		    }
+		}
 
-		if( ret != `next )
-		    {
+
+		if (ret != `next)
+		{
 		    // Display newly translated dialog.
 		    //
 		    Wizard::SetFocusToNextButton();
-
-		    return( `again );
-		    }
+		    return (`again);
 		}
+	    }
 
-	    if( ret == `next )
-		{
+	    if (ret == `next)
+	    {
 		// Language has been set already.
 		// On first run store users decision as default.
 		//
-		if( set_default )
-		    {
+		if (set_default)
+		{
 		    y2milestone("Resetting to default language");
 		    Language::SetDefault();
-		    }
+		}
 
-		if( !Stage::initial () )
-		    {
+		if (!Stage::initial ())
+		{
 		    // save language and console settings
 		    Language::Save();
 		    Console::Save();
+		}
+		y2milestone ("Language: '%1', system encoding '%2'", language,
+		             WFM::GetEncoding());
+
+		if (more_languages)
+		{
+		    list<string> selected_languages = (list<string>)
+			UI::QueryWidget (`id(`languages),`SelectedItems);
+		    y2milestone ("selected languages: %1", selected_languages);
+
+		    Language::languages = mergestring (selected_languages, ",");
+
+		    if (Stage::initial ())
+		    {
+			Pkg::SetAdditionalLocales (selected_languages);
 		    }
-		y2milestone( "Language: '%1', system encoding '%2'", language,
-		             WFM::GetEncoding() );
+		    else // install new packages right now
+		    {
+			PackageSystem::EnsureSourceInit ();
+			PackageSystem::EnsureTargetInit ();
+
+			Pkg::SetAdditionalLocales (selected_languages);
+
+			Pkg::PkgSolve (true);
+			Pkg::PkgCommit (0);
+		    }
 		}
 	    }
 	}
-    until ( ret == `next || ret == `back );
+    }
+    until (ret == `next || ret == `back);
 
     // HEAVY UGLINESS  :-((((
     // Restoring in case of `back to be done outside the module because of

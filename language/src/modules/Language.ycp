@@ -46,6 +46,12 @@ string default_language = "en_US";
  */
 string rootlang = "ctype";
 
+
+/**
+ * Default settings for LANGUAGES in /etc/sysconfig/language
+ */
+global string languages	= "";
+
 /**
  * Use utf8 in locale
  */
@@ -261,6 +267,7 @@ global define void Language() {
 	{
 	    use_utf8 = true;
 	}
+	languages = Misc::SysconfigRead (.sysconfig.language.LANGUAGES, "");
     }
     Encoding::SetUtf8Lang (use_utf8);
 }
@@ -401,6 +408,7 @@ global define void Save() {
     }
 
     SCR::Write (.sysconfig.language.ROOT_USES_LANG, rootlang);
+    SCR::Write (.sysconfig.language.LANGUAGES, languages);
     SCR::Write (.sysconfig.language, nil);
 
     y2milestone("Saved data for language: <%1>", GetLocaleString(language) );
