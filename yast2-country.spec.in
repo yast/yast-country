@@ -2,7 +2,7 @@
 # neededforbuild yast2-devel-packages yast2 yast2-devel
 
 @HEADER@
-Requires:	yast2
+Requires:	yast2 yast2-trans-stats
 
 Provides:	yast2-config-environment
 Provides:	yast2-config-keyboard
