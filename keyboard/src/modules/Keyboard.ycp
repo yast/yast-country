@@ -882,7 +882,7 @@ global define boolean CalledRestore()
      *
      * Get the keyboard info for X11 for the given keymap
      *
-     * @param 	name of the keymap
+     * @param	name of the keymap
      *
      * @return  map containing the x11 config data
      *
@@ -891,9 +891,12 @@ global define boolean CalledRestore()
 	string cmd = "/usr/X11R6/bin/xkbctrl " + keymap;
 	string file = Misc::tmpdir + "/xkbctrl.out";
 
-	SCR::Execute (.target.bash, cmd + " > " + file ); 
-
-	map x11data = SCR::Read(.target.ycp, file );
+	map x11data = $[];
+	if (SCR::Read(.target.size, "/usr/X11R6/bin/xkbctrl") > 0 )
+    {
+	    SCR::Execute (.target.bash, cmd + " > " + file );
+	    x11data = SCR::Read(.target.ycp, file );
+	}
 	return( x11data );
     }
 
@@ -903,7 +906,7 @@ global define boolean CalledRestore()
      *
      * Get the keyboard language for the given system language.
      *
-     * @param 	System language code, e.g. "en_US".
+     * @param	System language code, e.g. "en_US".
      *		Default keyboard language to be returned if nothing found.
      *
      * @return  The keyboard language for this language, e.g. "english-us"
