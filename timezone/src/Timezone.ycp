@@ -92,24 +92,18 @@ global define void Timezone()
     ``{
     // Set default values.
     //
-    if( size(Storage::GetWinPrimPartitions(Storage::GetTargetMap())) > 0 ||
-	Arch::board_mac )
-	{
-	// Win partitions present ==> assume local time.
-	//
-	hwclock = "--localtime";
-	y2milestone("Assuming local time");
-	}
-    else
-	{
-	// No Win partitions ==> assume UTC.
-	//
-	hwclock = "-u";
-	y2milestone("Assuming UTC");
-	}    // "-u" at least for sparc, iSeries and pSeries
+    hwclock = "-u";
 
     if( Mode::initial )
 	{
+	if( size(Storage::GetWinPrimPartitions(Storage::GetTargetMap())) > 0 ||
+	    Arch::board_mac )
+	    {
+	    // Win partitions present ==> assume local time.
+	    //
+	    hwclock = "--localtime";
+	    y2milestone("Assuming local time");
+	    }
 	// language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
 	//
 	map lang2tz = get_lang2tz();
