@@ -139,15 +139,17 @@
 	    list splitserial = splitstring (serial, ",");
 	    string tty = splitserial[0]:"";
 	    string baud = splitserial[1]:"9600";
+	    string line = substring (tty, 0, 3) == "tty" ? substring (tty, 3) : tty;
+
 	    if ((tty != "") && (baud != ""))
 	    {
-		string initline = sformat ("S0:1235:respawn:/sbin/agetty -L %1 %2", baud, tty);
+		string initline = sformat ("%1:1235:respawn:/sbin/agetty -L %2 %3", line, baud, tty);
 		if ( tty == "hvc0" )
 		{
-			initline = sformat ("S0:1235:respawn:/sbin/agetty -L %1 %2 vt320", baud, tty);
+			initline = sformat ("%1:1235:respawn:/sbin/agetty -L %2 %3 vt320", line, baud, tty);
 		}
 		//SCR::Write (.etc.inittab.S0, initline);
-		SCR::Execute (.target.bash, "/bin/grep -v ^S0 /etc/inittab >/tmp/inittab");
+		SCR::Execute (.target.bash, sformat ("/bin/grep -v ^%1: /etc/inittab >/tmp/inittab", line));
 		SCR::Execute (.target.bash, "/bin/echo '" + initline + "' >>/tmp/inittab");
 		SCR::Execute (.target.bash, "/bin/mv /tmp/inittab /etc/inittab");
 		SCR::Execute (.target.bash, "/bin/echo " + tty + " >>/etc/securetty");
