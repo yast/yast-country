@@ -491,7 +491,7 @@ Adapt keyboard settings?
 		    Language::SetDefault();
 		}
 
-		if (!Stage::initial ())
+		if (!Stage::initial () && !Mode::update ())
 		{
 		    // save language and console settings
 		    Language::Save();
@@ -508,7 +508,7 @@ Adapt keyboard settings?
 
 		    Language::languages = mergestring (selected_languages, ",");
 
-		    if (Stage::initial ())
+		    if (Stage::initial () || Mode::update ())
 		    {
 			Pkg::SetAdditionalLocales (selected_languages);
 		    }

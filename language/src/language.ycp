@@ -169,7 +169,7 @@ define boolean LanguageSetHandler (map options) {
 /* -- the command line description map -------------------------------------- */
 map cmdline = $[
     "id"		: "language",
-    // translators: command line help text for Securoty module
+    // translators: command line help text for language module
     "help"		: _("Language configuration."),
     "guihandler"	: LanguageSequence,
     "initialize"	: LanguageRead,
