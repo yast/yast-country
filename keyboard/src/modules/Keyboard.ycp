@@ -83,6 +83,7 @@
     import "Language";
     import "Misc";
     import "Mode";
+    import "ProductFeatures";
 
     // ---------------------------------------------------------------------------------------
     // START: Globally defined data to be accessed via Keyboard::<variable>
@@ -1198,7 +1199,7 @@ global define string MakeProposal( boolean force_reset,
 	// a keyboard. The indicator for this is user_decision which is
 	// set from outside the module.
 	//
-	if( user_decision || (Mode::update && !Mode::initial) || Mode::autoinst)
+	if( user_decision || (Mode::update && !Mode::initial) || Mode::autoinst || ProductFeatures::keyboard!="")
 	    {
 	    if( language_changed )
 		{

@@ -20,6 +20,7 @@ import "Installation";
 import "AsciiFile";
 import "XF86Path";
 import "Encoding";
+import "ProductFeatures";
 
 
 /**
@@ -169,7 +170,7 @@ define map get_lang2iso() ``{
  * Initializes module either from /etc/install.inf
  * or from /etc/sysconfig/language
  */
-global define void Language() 
+global define void Language()
     ``{
     if( Mode::initial )
 	{
@@ -182,14 +183,19 @@ global define void Language()
 	    if( tmp_l!=nil && size(tmp_l)>0 )
 		lang = tmp_l;
 	    }
-	if( lang == nil) 
+	if( lang == nil)
 	    lang = "";
-    	y2milestone( "lang %1 Installation::defaultLanguage %2", lang, 
+	y2milestone( "lang %1 Installation::defaultLanguage %2", lang,
 	             Installation::defaultLanguage );
 	if( lang == "" )
 	    {
 	    lang = Installation::defaultLanguage;
 	    }
+        // Ignore any previous settings and take language from control file.
+        if (ProductFeatures::language!="")
+        {
+            lang = ProductFeatures::language;
+        }
 	Set( lang );		// coming from /etc/install.inf
 	SetDefault();		// also default
 	}
