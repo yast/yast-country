@@ -150,10 +150,12 @@ are unset.<br>
     // on textmode probed above (workaround because there isn't any
     // usable console font for all languages).
 
-    map languageselsort = mapmap(`lang_code, map lang_info, Language::Selection(),
-				``($[ (lang_info[1]:"") :	// ASCII value is the key
+    map languageselsort = mapmap(`lang_code, map lang_info, Language::Selection(), ``{
+				string s = lang_info[1]:"";
+				return $[ s :	// ASCII value is the key
 				    [lang_info[use_ascii?1:0]:"", lang_code]
-				   ]));
+			       ];
+			   });
 
     term languagesel =
       `SelectionBox(`id(`language), `opt(`notify), "",
