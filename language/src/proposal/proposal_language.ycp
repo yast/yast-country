@@ -13,6 +13,7 @@
     textdomain "country";
 
     import "Language";
+    import "Wizard";
 
     string func  = (string) WFM::Args(0);
     map    param = (map) WFM::Args(1);
@@ -77,7 +78,7 @@
 	    Wizard::OpenAcceptDialog();	// This dialog will actually be used
 
 	    // Params are:		 	 `back `next      set_default
-	    result = WFM::CallFunction(`inst_language( true, has_next, false ));
+	    result = (symbol)WFM::CallFunction("inst_language", [ true, has_next, false ]);
 
 	    Wizard::CloseDialog();
 	} while ( result == `again );

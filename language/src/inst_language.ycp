@@ -28,9 +28,10 @@
     import "Timezone";
     import "Keyboard";
     import "Wizard";
+    import "Label";
     import "Popup";
 
-global define LanguageExpertDialog()
+global define void LanguageExpertDialog()
     ``{
     symbol ret = `none;
     // help text for keyboard expert screen
@@ -48,7 +49,7 @@ If unsure, use the default values already selected.
     help_text = help_text + _("<p>
 <b>LANG Environment Settings for User root:</b>
 This determines how the locale variables (LC_*) are set for the root user.</p>
-<b>ctype:</b> root has the same LC_CTYPE as a normal user. Other values
+<p><b>ctype:</b> root has the same LC_CTYPE as a normal user. Other values
 are unset.<br>
 <b>yes:</b> root has the same locale settings as normal user.<br>
 <b>no:</b> root has all locale variables unset.
@@ -93,7 +94,7 @@ are unset.<br>
     UI::ChangeWidget( `id(`use_utf8), `Value, val["use_utf8"]:false );
     repeat
 	{
-	ret = UI::UserInput();
+	ret = (symbol)UI::UserInput();
 	if( ret == `ok )
 	    {
 	    val = $[];
@@ -116,7 +117,7 @@ are unset.<br>
     // In this case if the user exits with next the the current setting
     // will be made the default that is restored with "Reset to defaults".
     //
-    boolean set_default = WFM::Args( 2 );
+    boolean set_default = (boolean)WFM::Args( 2 );
 
     y2milestone("set_default: %1", set_default );
 
@@ -149,14 +150,14 @@ are unset.<br>
     // on textmode probed above (workaround because there isn't any
     // usable console font for all languages).
 
-    map languageselsort = mapmap(`lang_code, `lang_info, Language::Selection(),
-				``([lang_info[1]:"",	// ASCII value is the key
+    map languageselsort = mapmap(`lang_code, map lang_info, Language::Selection(),
+				``($[ (lang_info[1]:"") :	// ASCII value is the key
 				    [lang_info[use_ascii?1:0]:"", lang_code]
 				   ]));
 
     term languagesel =
       `SelectionBox(`id(`language), `opt(`notify), "",
-	maplist (`name, `codelist, languageselsort,
+	maplist (`name, list codelist, languageselsort,
 		 ``(`item(`id(codelist[1]:""), codelist[0]:"",
 			  (language == codelist[1]:"")))));
 
@@ -263,7 +264,7 @@ Choose the new <b>language</b> for your SuSE Linux system.
 
     // Screen title for the first interactive dialog
 
-    Wizard::SetContents( "", contents, help_text, WFM::Args(0), WFM::Args(1));
+    Wizard::SetContents( "", contents, help_text, (boolean)WFM::Args(0), (boolean)WFM::Args(1));
 
     if ( !Mode::initial )
     {
@@ -301,7 +302,7 @@ Choose the new <b>language</b> for your SuSE Linux system.
 	    {
 	    // Get the selected language.
 	    //
-	    language = UI::QueryWidget(`id(`language), `CurrentItem);
+	    language = (string) UI::QueryWidget(`id(`language), `CurrentItem);
 
 	    if( language != Language::language )
 		{
@@ -392,5 +393,5 @@ Adapt keyboard settings?
     // Restoring in case of `back to be done outside the module because of
     // the retranslation loop in proposal_language.ycp.
 
-    return ret;
+    return (symbol) ret;
 }

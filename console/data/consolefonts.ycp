@@ -1,4 +1,10 @@
- $[
+/*
+ * Maintainer:  Thomas Fehr <fehr@suse.de>
+ *
+ * $Id$
+ */
+
+$[
       // LANG		font		    unicode map	screen map,	console magic
       "en_GB@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K" ],
       "en_GB"		: [ "lat1-16.psfu",	"",	"none",		"(B" ],

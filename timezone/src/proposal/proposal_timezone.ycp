@@ -44,7 +44,7 @@
 	//
 	// sequence = DummyMod::AskUser( has_next );
 
-	symbol result = WFM::CallFunction (`inst_timezone (true, has_next));
+	symbol result = (symbol)WFM::CallFunction ("inst_timezone", [true, has_next]);
 
 	// Fill return map
 

@@ -26,5 +26,5 @@
 .sysconfig.language
 
 `ag_ini(
-  SysConfigFile("/etc/sysconfig/language")
+  `SysConfigFile("/etc/sysconfig/language")
 )

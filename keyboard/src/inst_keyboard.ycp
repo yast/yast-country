@@ -95,7 +95,7 @@ If unsure, use the default values already selected.
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`TextEntry( `id(`tty),
 					    // label text
-				            _("Devices on which the values for Num Lock, Caps Lock, and
+				            _("&Devices on which the values for Num Lock, Caps Lock, and
 Scroll Lock should be set
 ") )),
 				`VSpacing(`opt(`vstretch), 1),

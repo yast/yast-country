@@ -1,8 +1,15 @@
-// lang2iso.ycp
-// Since Rel. 8.0 we are using the ISO-codes for language identification.
-// In case of an update from an older system we have to translate the old
-// coding into the new one. The following map is used for this in the
-// Lamguage module.
+/*
+ * Summary:
+ *      Since Rel. 8.0 we are using the ISO-codes for language identification.
+ *      In case of an update from an older system we have to translate the old
+ *      coding into the new one. The following map is used for this in the
+ *      Language module.
+ *
+ * Maintainer:
+ *      Thomas Fehr <fehr@suse.de>
+ *
+ * $Id$
+ */
 
       $[
 	"english"	: "en_US",

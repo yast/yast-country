@@ -1,6 +1,6 @@
 /*
  *
- * Module:             choose_language.ycp
+ * Module:             language.ycp
  *
  * Author:             Klaus Kaempf (kkaempf@suse.de)
  *
@@ -42,7 +42,7 @@
 	Wizard::OpenAcceptDialog();	// This dialog will actually be used
 
 	// Params are:		 	      `back `next  set_default
-        result = WFM::CallFunction (`inst_language( true, true, false));
+        result = WFM::CallFunction ("inst_language", [true, true, false]);
 
 	Wizard::CloseDialog();
     }
@@ -111,7 +111,7 @@
 	    // propagate language to KDE2
 	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module kdm3");
 
-	    WFM::CallFunction( `inst_suseconfig( false, false ) );
+	    WFM::CallFunction( "inst_suseconfig", [ false, false ] );
 	    // popup text
 	    Popup::Message( _("Your language setting has been changed.
 
