@@ -57,12 +57,31 @@ global string languages	= "";
  */
 boolean use_utf8 = true;
 
+/**
+ * ncurses mode
+ */
+boolean text_mode	= nil;
+
 global boolean ExpertSettingsChanged = false;
 
 /**
  * level of translation completeness
  */
 map<string,integer> translation_status	= $[];
+
+
+/**
+ * return the value of text_mode (true for ncurses)
+ */
+global define boolean GetTextMode () {
+
+    if (text_mode== nil)
+    {
+	map display_info	= UI::GetDisplayInfo ();
+	text_mode		= display_info["TextMode"]:false;
+    }
+    return text_mode;
+}
 
 /**
  * Get the language DB
@@ -124,7 +143,10 @@ global define void Set (string lang) {
 	}
 	AsciiFile::RewriteFile (yinf, "/etc/yast.inf");
 
-	SCR::Write (.FvwmCommand.lang, language);
+	if (!GetTextMode ())
+	{
+	    SCR::Write (.FvwmCommand.lang, language);
+	}
     }
 }
 
