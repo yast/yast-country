@@ -21,154 +21,154 @@ $[
   /* Highly incomplete, no active translator.
   "ca_ES"	: [ "Català",
 		  "Catala",
-		  "",
-		  "@euro" ],
+		  ".UTF-8",
+		  "" ],
   End of comment */
 
   "bs_BA"	: [ "Bosnia ",
 		  "Bosnia",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   "bg_BG"       : [ "Български",
                     "Bulgarian",
-		    "",
+		    ".UTF-8",
 		    "" ],
 
   "cs_CZ"	: [ "Čeština ",
 		  "Cestina",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   "da_DK"	: [ "Dansk",
 		  "Dansk",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   "de_DE"	: [ "Deutsch",
 		  "Deutsch",
-		  "",
-		  "@euro" ],
+		  ".UTF-8",
+		  "" ],
 
   "el_GR"	: [ "Ελληνικά ",
 		  "Greek",
-		  ".ISO-8859-7",
+		  ".UTF-8",
 		  "" ],
 
   "en_GB"	: [ "English (GB)",
 		  "English (GB)",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   "en_US"	: [ "English (US)",
 		  "English (US)",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   "es_ES"	: [ "Español",
 		  "Espanol",
-		  "",
-		  "@euro" ],
+		  ".UTF-8",
+		  "" ],
 
   "fr_FR"	: [ "Français",
 		  "Francais",
-		  "",
-		  "@euro" ],
+		  ".UTF-8",
+		  "" ],
 
   /* Incomplete, inactive translator.
   "gl_ES"	: [ "Galego",
 		  "Galego",
-		  "",
-		  "@euro" ],
+		  ".UTF-8",
+		  "" ],
   End of comment */
 
   /* Incomplete, inactive translator.
   "hr_HR"	: [ "Hrvatski",
 		  "Croatian",
-		  "",
+		  ".UTF-8",
 		  "" ],
   End of comment */
 
   "hu_HU"	: [ "Magyar",
 		  "Magyar",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   "it_IT"	: [ "Italiano",
 		  "Italiano",
-		  "",
-		  "@euro" ],
+		  ".UTF-8",
+		  "" ],
 
   "ja_JP"	: [ "日本語",
 		  "Japanese",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   "ko_KR"       : [ "한글 ",
   		    "Korean",
-  		    "",	
+  		    ".UTF-8",	
   		    "" ],
 
   "lt_LT"	: [ "Lietuvių",
 		  "Lithuanian",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   "nl_NL"	: [ "Nederlands",
 		  "Nederlands",
-		  "",
-		  "@euro" ],
+		  ".UTF-8",
+		  "" ],
  
 
   /* Derzeit keine Uebersetzungen 
 
   "no_NO"	: [ "Norsk",
 		  "Norsk",
-		  "",
+		  ".UTF-8",
 		  "" ],
   */
 
   "pt_BR"	: [ "Português brasileiro",
 		  "Portugues brasileiro",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   /* Derzeit keine Uebersetzungen 
 
   "pt_PT"	: [ "Português",
 		  "Portugues",
-		  "",
-		  "@euro" ],
+		  ".UTF-8",
+		  "" ],
   */
 
   "ru_RU"	 : [ "Русский ",
 		   "Russian",
-		   ".KOI8-R",
+		   ".UTF-8",
 		   "" ],
 
   "sl_SI"	: [ "Slovenščina",
 		  "Slovenscina",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   "sk_SK"	: [ "Slovenčina ",
 		  "Slovencina",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   "sv_SE"	: [ "Svenska",
 		  "Svenska",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   "zh_CN"       : [ "中文 (Chinese)",
 		  "Simplified Chinese",
-		  "",
+		  ".UTF-8",
 		  "" ],
 
   "tr_TR"	: [ "Türkçe",
 		  "Turkce",
-		  "",
+		  ".UTF-8",
 		  "" ]
 
 /* -------------------------------------------- */
@@ -177,17 +177,17 @@ $[
 /*						*/
 /*  "en_IE"	: [ "Irish",			*/
 /*		  "Irish",			*/
-/*		  "",				*/
-/*		  "@euro" ],			*/
+/*		  ".UTF-8",			*/
+/*		  "" ],			*/
 /*						*/
 /*  "zh_TW"       : [ "粵語,廣東話 (traditional Chinese)",*/
 /*		  "Traditional Chinese",	*/
-/*		  "",				*/
+/*		  ".UTF-8",			*/
 /*		  "" ],				*/
 /*						*/
 /*      "ko_KR"    : [ "한글 ",		*/
 /*		     "Korean",			*/
-/*		     "",			*/
+/*		     ".UTF-8",			*/
 /*		     "" ],			*/
 /*      "id_ID"    : [ "Indonesia",		*/
 /*      "zh_CN"    : [ "中文 (Chinese)"	*/
