@@ -20,6 +20,12 @@ Provides:	yast2-trans-inst-language
 Obsoletes:	yast2-trans-inst-language
 Provides:	yast2-trans-inst-timezone
 Obsoletes:	yast2-trans-inst-timezone
+Provides:	y2d_inst-keyboard
+Obsoletes:	y2d_inst-keyboard
+Provides:	y2d_inst-timezone
+Obsoletes:	y2d_inst-timezone
+Provides:	y2t_inst-language
+Obsoletes:	y2t_inst-language
 
 Summary:	Setting the keyboard
 

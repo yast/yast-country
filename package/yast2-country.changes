@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Sep  6 16:38:01 CEST 2002 - fehr@suse.de
+
+- add some Provides/Obsoletes 
+- version 2.6.24
+
+-------------------------------------------------------------------
 Thu Sep  5 13:39:37 CEST 2002 - fehr@suse.de
 
 - fix missing retranslation after langauge change (#18924)
