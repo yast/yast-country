@@ -165,6 +165,22 @@
 	magic	   = SCR::Read (.sysconfig.console.CONSOLE_MAGIC);
 	encoding   = SCR::Read (.sysconfig.console.CONSOLE_ENCODING);
 	language   = SCR::Read (.sysconfig.language.RC_LANG);
+        list out = splitstring( lookup( SCR::Execute( .target.bash_output, 
+	                                              "locale -k charmap" ),
+					"stdout", "" ),
+				 "\n" );
+	y2milestone( "list %1", out );
+	out = filter( `e, out, ``(find(e, "charmap=")==0) );
+	y2milestone( "list %1", out );
+	if( size(out[0]:"")>0 )
+	    {
+	    string enc = substring( out[0]:"", 8 );
+	    y2milestone( "enc %1", enc );
+	    enc = deletechars( enc, "\" " );
+	    y2milestone( "enc %1", enc );
+	    if( size(enc)>0 )
+		encoding = enc;
+	    }
 	if (Mode::braille)
 	{
 	    SCR::Execute (.target.bash, "/usr/bin/setfont");
@@ -174,6 +190,7 @@
 	    //UI::SetConsoleFont (magic, font, screenMap, unicodeMap, encoding);
 	    UI::SetConsoleFont (magic, font, screenMap, unicodeMap, language); 
 	}
+	y2milestone( "encoding %1", encoding );
 	return encoding;
     }
 

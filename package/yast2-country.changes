@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Sep 19 14:06:25 CEST 2003 - fehr@suse.de
+
+- Initialize Console::encoding in the running system to the
+  output of "locale -k charmap" (#31351)
+
+-------------------------------------------------------------------
 Thu Sep 18 14:58:31 CEST 2003 - gs@suse.de
 
 - Console::Restore(): read RC_LANG (bug #31206) 
