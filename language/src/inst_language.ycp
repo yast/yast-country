@@ -53,7 +53,7 @@ If unsure, use the default values already selected.
     help_text = help_text + _("<p>
 <b>LANG Environment Settings for User root:</b>
 This determines how the locale variables (LC_*) are set for the root user.</p>
-<p><b>ctype:</b> root has the same LC_CTYPE as a normal user. Other values
+<p><b>ctype only:</b> root has the same LC_CTYPE as a normal user. Other values
 are unset.<br>
 <b>yes:</b> root has the same locale settings as normal user.<br>
 <b>no:</b> root has all locale variables unset.
