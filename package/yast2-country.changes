@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Sep 29 15:53:03 CEST 2003 - fehr@suse.de
+
+- translate some untranslated texts (#31237)
+
+-------------------------------------------------------------------
 Thu Sep 25 10:37:42 CEST 2003 - fehr@suse.de
 
 - use ja_JP.eucJP as default encoding for Japanese (#31737)

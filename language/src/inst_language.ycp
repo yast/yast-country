@@ -66,9 +66,13 @@ are unset.<br>
 				// heading text
 				`Heading( _("Language Detail Dialog") ),
 				`VSpacing(`opt(`vstretch), 2),
-				`Left(`ComboBox( `id(`rootlang),
-						 _("Locale Settings for User &root"),
-						 [ "ctype", "yes", "no" ] )),
+				`Left(`ComboBox( 
+				    `id(`rootlang),
+				    _("Locale Settings for User &root"),
+				    // do not translate "ctype"
+				    [ `item( `id("ctype"), _("ctype only")), 
+				      `item( `id("yes"), _("Yes")),
+				      `item( `id("no"), _("No")) ] )),
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`CheckBox( `id(`use_utf8),
 						 _("Use &UTF-8 Encoding"),

@@ -52,7 +52,6 @@ If unsure, use the default values already selected.
 </p>");
 
     // label text
-    string num_lock_unt = _("<Untouched>");
 
     UI::OpenDialog( `opt(`decorated  ),
 		    `HBox(
@@ -76,11 +75,16 @@ If unsure, use the default values already selected.
 				    // label text
 				    _("Start-up States"),
 				    `VBox(
-					`Left(`ComboBox( `id(`numlock),
-							 // label text
-							 _("&Num Lock On"),
-							 [ "bios", "yes", "no",
-							   num_lock_unt] )),
+					`Left(`ComboBox( 
+					    `id(`numlock),
+					     // label text
+					     _("&Num Lock On"),
+					     [ `item( `id("bios"), 
+					              _("BIOS settings")), 
+					       `item( `id("yes"), _("Yes")),
+					       `item( `id("no"), _("No")),
+					       `item( `id("untouched"), 
+						      _("<Untouched>")) ] )),
 					`VSpacing(`opt(`vstretch), 1),
 					`Left(`CheckBox( `id(`capslock),
 							 // label text
@@ -118,7 +122,7 @@ Scroll Lock should be set
     string tmp = val["numlock"]:"";
     if( tmp == "" )
 	{
-	tmp = num_lock_unt;
+	tmp = "untouched";
 	}
     UI::ChangeWidget( `id(`numlock), `Value, tmp );
     UI::ChangeWidget( `id(`capslock), `Value, val["capslock"]:false );
