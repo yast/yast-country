@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Mar 17 13:37:36 CET 2003 - fehr@suse.de
+
+- add timezone entry for Uruguay (#25473)
+
+-------------------------------------------------------------------
 Wed Mar 12 13:13:42 CET 2003 - fehr@suse.de
 
 - fix possible unwanted abort dialog after langauge change (#25147)

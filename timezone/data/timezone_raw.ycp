@@ -117,6 +117,7 @@ $[ "name" : _("Central and South America"),
 	"America/Martinique" : _("Martinique"),
 	"America/Panama" : _("Panama"),
 	"America/Puerto_Rico" : _("Puerto Rico"),
+	"America/Montevideo" : _("Uruguay"),
 	"America/Virgin" : _("Virgin"),
 	"Mexico/General" : _("Mexico General") ] ],
 
