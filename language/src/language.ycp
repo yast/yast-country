@@ -144,7 +144,7 @@ define boolean LanguageSummaryHandler (map options) {
 	    splitstring (languages, ","), ``(lang_code != Language::language));
 	if (size (langs) > 0)
 	{
-	    CommandLine::Print (sformat (_("Additional languages: %1"),
+	    CommandLine::Print (sformat (_("Additional Languages: %1"),
 		mergestring (langs,",")));
 	}
     }

@@ -67,9 +67,9 @@
 	ret =
 	    $[
 	      // summary item
-	      "rich_text_title"	:	_( "Keyboard Layout"  ),
+	      "rich_text_title"	:	_("Keyboard Layout"),
 	      // menue label text
-	      "menu_title"	:	_( "&Keyboard Layout" ),
+	      "menu_title"	:	_("&Keyboard Layout"),
 	      "id"		:	"keyboard_stuff"
 	    ];
     }
