@@ -80,7 +80,7 @@ If unsure, use the default values already selected.
 					     // label text
 					     _("&Num Lock On"),
 					     [ `item( `id("bios"), 
-					              _("BIOS settings")), 
+					              _("BIOS Settings")), 
 					       `item( `id("yes"), _("Yes")),
 					       `item( `id("no"), _("No")),
 					       `item( `id("untouched"), 

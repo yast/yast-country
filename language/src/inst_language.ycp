@@ -72,7 +72,7 @@ are unset.<br>
 				    `id(`rootlang),
 				    _("Locale Settings for User &root"),
 				    // do not translate "ctype"
-				    [ `item( `id("ctype"), _("ctype only")),
+				    [ `item( `id("ctype"), _("ctype Only")),
 				      `item( `id("yes"), _("Yes")),
 				      `item( `id("no"), _("No")) ] )),
 				`VSpacing(`opt(`vstretch), 1),
