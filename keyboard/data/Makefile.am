@@ -6,7 +6,6 @@
 ydata_DATA =			\
 	keyboard_raw.ycp	\
 	lang2keyboard.ycp 	\
-	xkblayout2keyboard.ycp 	\
-	keymap2mac.ycp
+	xkblayout2keyboard.ycp 
 
 EXTRA_DIST = $(ydata_DATA)
