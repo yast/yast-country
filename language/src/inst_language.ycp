@@ -259,8 +259,8 @@ Adapt keyboard settings?
 		{
 		    // Display newly translated dialog.
 		    //
-		    if (UI::WidgetExists(`id(`next) )		UI::SetFocus(`id(`next));
-		    if (UI::WidgetExists(`id(`accept) )		UI::SetFocus(`id(`accept));
+		    if (UI::WidgetExists(`id(`next)) )		UI::SetFocus(`id(`next));
+		    if (UI::WidgetExists(`id(`accept)) )		UI::SetFocus(`id(`accept));
 			  
 		    return( `again );
 		}
