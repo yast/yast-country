@@ -4,6 +4,7 @@ Wed Feb 12 12:40:20 CET 2003 - fehr@suse.de
 - allow language setting with two char locale (#19431)
 - write intermediary yast.inf with lang and keyboard settings (#16263)
 - make proposal suggest local time for machines with win (#23575)
+- version 2.7.7
 
 -------------------------------------------------------------------
 Tue Feb 11 10:50:47 CET 2003 - fehr@suse.de
