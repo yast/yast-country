@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug 10 09:54:58 CEST 2004 - fehr@suse.de
+
+- patch proofread texts back into ycp
+- 2.10.3
+
+-------------------------------------------------------------------
 Tue Aug  3 18:19:13 CEST 2004 - fehr@suse.de
 
 - fix problem when changing timezone/time/hwclock settings (#41944)

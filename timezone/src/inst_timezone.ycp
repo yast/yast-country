@@ -412,7 +412,7 @@ If you are unsure, use the default values already selected.
 	    if( timezone == nil || size(timezone) == 0 )
 		{
 	        // popup text
-		Popup::Error( _("Select valid timezone") );
+		Popup::Error( _("Select a valid time zone.") );
 		ret = `again;
 		timezone = timezone_old;
 		}
