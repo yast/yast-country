@@ -79,10 +79,10 @@ Set a correct time before starting installation."), m["stdout"]:"" );
 
 	ret =
 	    $[
-	      // label text
-	      "rich_text_title"	:	_("Time zone"),
+	      // summary item
+	      "rich_text_title"	:	_("Time Zone"),
 	      // menue label text
-	      "menu_title"	:	_("&Time zone"),
+	      "menu_title"	:	_("&Time Zone"),
 	      "id"		:	"timezone_stuff"
 	    ];
     }
