@@ -44,6 +44,7 @@ Summary:	Setting the keyboard
 
 %ifarch s390 s390x
 rm -f $RPM_BUILD_ROOT@configdir@/keyboard.y2cc
+rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 %endif
 
 @CLEAN@
@@ -58,6 +59,9 @@ rm -f $RPM_BUILD_ROOT@configdir@/keyboard.y2cc
 @scrconfdir@/*.scr
 %ifnarch s390 s390x
 @configdir@/keyboard.y2cc
+@desktopdir@/keyboard.desktop
 %endif
 @configdir@/language.y2cc
 @configdir@/timezone.y2cc
+@desktopdir@/language.desktop
+@desktopdir@/timezone.desktop
