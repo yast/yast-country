@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb 18 17:33:51 CET 2003 - fehr@suse.de
+
+- make the keyboard expert module better understandable (#23759)
+
+-------------------------------------------------------------------
 Wed Feb 12 12:40:20 CET 2003 - fehr@suse.de
 
 - allow language setting with two char locale (#19431)

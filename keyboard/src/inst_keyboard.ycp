@@ -48,6 +48,8 @@ These settings are written into the file <b>/etc/sysconfig/keyboard</b>.
 If unsure, use the default values already selected.
 </p>");
 
+    string num_lock_unt = _("<Untouched>");
+
     UI::OpenDialog( `opt(`decorated  ),
 		    `HBox(
 			`HWeight(30, `RichText( help_text )),
@@ -63,12 +65,18 @@ If unsure, use the default values already selected.
 				`Left(`TextEntry( `id(`delay), 
 				            _("De&lay before Repetition Starts")) ),
 				`VSpacing(`opt(`vstretch), 1),
-				`Left(`ComboBox( `id(`numlock), _("&Num Lock On"),
-				           [ "bios", "yes", "no", ""] )),
-				`VSpacing(`opt(`vstretch), 1),
-				`Left(`CheckBox( `id(`capslock), _("Ca&ps Lock On") )),
-				`Left(`CheckBox( `id(`scrlock), 
-				           _("&Scroll Lock On") )),
+				`Frame(
+				    _("Startup states"),
+				    `VBox(
+					`Left(`ComboBox( `id(`numlock), 
+							 _("&Num Lock On"),
+							 [ "bios", "yes", "no", 
+							   num_lock_unt] )),
+					`VSpacing(`opt(`vstretch), 1),
+					`Left(`CheckBox( `id(`capslock), 
+					                 _("Ca&ps Lock On") )),
+					`Left(`CheckBox( `id(`scrlock), 
+							 _("&Scroll Lock On") )))),
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`TextEntry( `id(`tty), 
 				            _("Devices on which the values for Num Lock, Caps Lock, and
@@ -93,7 +101,12 @@ Scroll Lock should be set
     UI::ChangeWidget( `id(`rate), `ValidChars, "0123456789." );
     UI::ChangeWidget( `id(`delay), `Value, val["delay"]:"" );
     UI::ChangeWidget( `id(`delay), `ValidChars, "0123456789" );
-    UI::ChangeWidget( `id(`numlock), `Value, val["numlock"]:"" );
+    string tmp = val["numlock"]:"";
+    if( tmp == "" )
+	{
+	tmp = num_lock_unt;
+	}
+    UI::ChangeWidget( `id(`numlock), `Value, tmp );
     UI::ChangeWidget( `id(`capslock), `Value, val["capslock"]:false );
     UI::ChangeWidget( `id(`scrlock), `Value, val["scrlock"]:false );
     UI::ChangeWidget( `id(`tty), `Value, val["tty"]:"" );
@@ -106,7 +119,12 @@ Scroll Lock should be set
 	    val = $[];
 	    val["rate"] = UI::QueryWidget( `id(`rate), `Value );
 	    val["delay"] = UI::QueryWidget( `id(`delay), `Value );
-	    val["numlock"] = UI::QueryWidget( `id(`numlock), `Value );
+	    val["numlock"] = "";
+	    tmp = UI::QueryWidget( `id(`numlock), `Value );
+	    if( contains( ["bios", "on", "off"], tmp ) )
+		{
+		val["numlock"] = tmp;
+		}
 	    val["capslock"] = UI::QueryWidget( `id(`capslock), `Value );
 	    val["scrlock"] = UI::QueryWidget( `id(`scrlock), `Value );
 	    val["tty"] = UI::QueryWidget( `id(`tty), `Value );
