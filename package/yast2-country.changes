@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Aug 18 19:39:02 CEST 2004 - nashif@suse.de
+
+- Bug fixed: If you select change timezone, the accept button will start 
+  directly the installation.
+- 2.10.6
+
+-------------------------------------------------------------------
 Wed Aug 18 11:21:22 CEST 2004 - fehr@suse.de
 
 - Add Bengali/Banladesh to language, country, timezone etc.
