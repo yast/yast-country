@@ -474,15 +474,13 @@ global define list Selection( integer num )
     list zmap = get_zonemap();
 
     textdomain "timezone_db";
-    map tmap = mapmap( string key, string name, zmap[num,"entries"]:$[],
+    list trl = maplist( string key, locale name, zmap[num,"entries"]:$[],
 		       ``{
 		       translate = name;
-			   string k = (string)eval(name);
-		       return ($[ k : key ]);
+		       return [ name, key ];
 		       });
     textdomain "country";
 
-    list trl = maplist( string name, string key, tmap, ``{ return( [ name, key ] ); });
     trl = sort( list a, list b, trl, 
                 ``(select( lsort( [a[0]:"", b[0]:""] ), 0, "" ) == a[0]:"" ));
     y2milestone( "trl = %1", trl );
