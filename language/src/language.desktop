@@ -1,0 +1,58 @@
+[Desktop Entry]
+Type=Application
+Categories=Qt;X-SuSE-YaST-System;
+
+X-KDE-ModuleType=Library
+X-KDE-RootOnly=true
+X-KDE-HasReadOnlyMode=true
+X-KDE-Library=yast2
+X-KDE-FactoryName=language
+
+X-SuSE-YaST-Group=System
+X-SuSE-YaST-Argument=
+X-SuSE-YaST-RootOnly=true
+X-SuSE-YaST-AutoInst=
+X-SuSE-YaST-Geometry=
+X-SuSE-YaST-SortKey=
+X-SuSE-YaST-AutoinstResource=
+
+Icon=babelfish
+Exec=/sbin/yast2 language 
+
+Name=Choose Language
+GenericName=Change the system's language here.
+Name[cs]=Výběr jazyka
+GenericName[cs]=Zde můžete změnit systémový jazyk.
+Name[de]=Sprache wählen
+GenericName[de]=Hier können Sie die Sprache des Systems umschalten.
+Name[es]=Seleccione el idioma
+GenericName[es]=Aquí puede cambiar el idioma del sistema.
+Name[hu]=Nyelv beállítása
+GenericName[hu]=A rendszerben használt nyelvet itt változtathatja meg.
+Name[it]=Scegliete la lingua
+GenericName[it]=Qui potete cambiare la lingua del sistema.
+Name[ko]=언어 선택
+GenericName[ko]=여기서 시스템 언어를 변경하시오
+Name[nl]=Kies een taal
+GenericName[nl]=Wijzig hier de taal van het systeem.
+Name[pt]=Escolha o Idioma
+GenericName[pt]=Modifique o Idioma do sistema aqui.
+Name[sk]=Výber jazyka
+GenericName[sk]=Zmeniť jazyk systému.
+Name[sv]=Välj språk
+GenericName[sv]=Här kan du ändra systemets språk
+Name[bg]=Избиране на език
+GenericName[bg]=Тук можете да промените езика за цялата система.
+GenericName[da]=Skift systemets sprog her.
+Name[el]=Επιλογή Γλώσσας
+GenericName[el]=Αλλάξτε την γλώσσα συστήματός σας εδώ.
+Name[fr]=Sélectionnez la langue
+GenericName[fr]=Changez ici la langue du système.
+Name[ja]=言語の選択
+GenericName[ja]=ここで、システムの言語の変更ができます。
+GenericName[lt]=Čia pakeiskite sistemos kalbą.
+GenericName[ru]=Здесь вы можете изменить язык системы.
+Name[sl]=Izberite jezik
+GenericName[sl]=Tu zamenjajte sistemski jezik.
+Name[tr]=Dil seçin
+GenericName[tr]=Sistem dilini buradan değiştirin.

@@ -1,0 +1,58 @@
+[Desktop Entry]
+Type=Application
+Categories=Qt;X-SuSE-YaST-System;
+
+X-KDE-ModuleType=Library
+X-KDE-RootOnly=true
+X-KDE-HasReadOnlyMode=true
+X-KDE-Library=yast2
+X-KDE-FactoryName=timezone
+
+X-SuSE-YaST-Group=System
+X-SuSE-YaST-Argument=
+X-SuSE-YaST-RootOnly=true
+X-SuSE-YaST-AutoInst=
+X-SuSE-YaST-Geometry=
+X-SuSE-YaST-SortKey=
+X-SuSE-YaST-AutoinstResource=
+
+Icon=timezone
+Exec=/sbin/yast2 timezone 
+
+Name=Select Time Zone
+GenericName=This module changes the time zone
+Name[cs]=Výběr časové zóny
+GenericName[cs]=Tento modul mění časovou zónu
+Name[de]=Zeitzone auswählen
+GenericName[de]=Mit diesem Modul ist es möglich, die Zeitzone auszuwählen.
+Name[es]=Seleccione la zona horaria
+GenericName[es]=Este módulo cambia la zona horaria.
+Name[hu]=Időzóna beállítása
+GenericName[hu]=Ebben a modulban a beállított időzónát változtathatja meg.
+Name[it]=Selezionate il fuso orario
+GenericName[it]=Questo modulo cambia il fuso orario
+Name[ko]=지역 시간대 선택
+GenericName[ko]=이 모듈은 지역 시간대를 변경합니다
+Name[nl]=Selecteer tijdzone
+GenericName[nl]=Deze module past de tijdzone aan
+Name[pt]=Selecione o Fuso Horário
+GenericName[pt]=Este módulo modifica o fuso horário
+Name[sk]=Výber časovej zóny
+GenericName[sk]=Tento modul mení časovú zónu
+Name[sv]=Välj tidszon
+GenericName[sv]=Den här modulen ändrar tidszon
+Name[bg]=Изберете времева зона
+GenericName[bg]=Този модул променя времевата зона
+GenericName[da]=Dette modul ændrer tidszone
+Name[el]=Επιλογή Ζώνης Ώρας
+GenericName[el]=Αυτό το  άρθρωμα (module) αλλάζει την ώρα ζώνης
+Name[fr]=Sélectionnez le fuseau horaire
+GenericName[fr]=Ce module permet de changer le fuseau horaire
+Name[ja]=時間帯の選択
+GenericName[ja]=このモジュールで、時間帯の変更ができます
+GenericName[lt]=Šis modulis pakeičia lai ko juostą
+GenericName[ru]=Этот модуль изменяет часовой пояс
+Name[sl]=Izberite časovni pas
+GenericName[sl]=Ta modul spremeni časovni pas
+Name[tr]=Zaman dilimi seçin
+GenericName[tr]=Bu modül zaman dilimini değiştirir
