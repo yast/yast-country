@@ -349,8 +349,7 @@ global define string GetTimezoneCountry (string zone) {
     {
 	sel = sel + 1;
     }
-
-    return zmap [sel,"entries",zone]:"";
+    return zmap [sel,"name"]:"" + " / " + zmap[sel,"entries",zone]:zone;
 }
 
 /**
