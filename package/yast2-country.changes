@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Aug  7 09:12:15 CEST 2003 - fehr@suse.de
+
+- Fix wrong function call in inst_timezone.ycp (#28551)
+
+-------------------------------------------------------------------
 Tue Aug  5 14:40:18 CEST 2003 - fehr@suse.de
 
 - add changes by Gabi for better UTF handling on ncurses

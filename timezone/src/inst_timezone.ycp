@@ -49,7 +49,7 @@ the input fields. Change them to the correct values and press the
 Apply button.
 ");
 
-    map val = Timezone::GetDateTimeMap(true);
+    map val = Timezone::GetDateTimeMap();
 
     UI::OpenDialog( `opt(`decorated),
 	`HBox( 
