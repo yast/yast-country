@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug 24 12:08:51 CEST 2004 - fehr@suse.de
+
+- Add Hebrew to language and timezone
+- 2.10.8
+
+-------------------------------------------------------------------
 Thu Aug 19 15:12:23 CEST 2004 - fehr@suse.de
 
 - fix keyboard handling for 64 bit Macs (#43955)
@@ -14,7 +20,7 @@ Wed Aug 18 19:39:02 CEST 2004 - nashif@suse.de
 -------------------------------------------------------------------
 Wed Aug 18 11:21:22 CEST 2004 - fehr@suse.de
 
-- Add Bengali/Banladesh to language, country, timezone etc.
+- Add Bengali/Bangladesh to language, country, timezone etc.
 - 2.10.5
 
 -------------------------------------------------------------------

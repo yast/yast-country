@@ -116,6 +116,11 @@ $[
 		  ".UTF-8",
 		  "" ],
 
+  "he_IL"	: [ "Ivrit",
+		  "עברית",
+		  ".UTF-8",
+		  "" ],
+
   "it_IT"	: [ "Italiano",
 		  "Italiano",
 		  ".UTF-8",
