@@ -115,9 +115,9 @@ $[
 		  ".eucJP" ],
 
   "ko_KR"       : [ "한글 ",
-  		    "Korean",
-  		    ".UTF-8",	
-  		    "" ],
+		    "Korean",
+		    ".UTF-8",
+		    "" ],
 
   "lt_LT"	: [ "Lietuvių",
 		  "Lithuanian",
@@ -128,9 +128,9 @@ $[
 		  "Nederlands",
 		  ".UTF-8",
 		  "@euro" ],
- 
 
-  /* Derzeit keine Uebersetzungen 
+
+  /* Derzeit keine Uebersetzungen
 
   "no_NO"	: [ "Norsk",
 		  "Norsk",
@@ -143,7 +143,7 @@ $[
 		  ".UTF-8",
 		  "" ],
 
-  /* Derzeit keine Uebersetzungen 
+  /* Derzeit keine Uebersetzungen
 
   "pt_PT"	: [ "Português",
 		  "Portugues",

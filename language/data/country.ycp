@@ -1,9 +1,13 @@
 /**
  * $Id$
  * Author: Michal Svec <msvec@suse.cz>
-   textdomain "country"
  */
-$[
+
+{
+
+textdomain "country";
+
+return $[
     "AE" : _("United Arab Emirates"),
     "AL" : _("Albania"),
     "AR" : _("Argentina"),
@@ -102,4 +106,7 @@ $[
     "YU" : _("Yugoslavia"),
     "ZA" : _("South Africa"),
     "ZW" : _("Zimbabwe"),
-]
+];
+
+/* EOF */
+}
