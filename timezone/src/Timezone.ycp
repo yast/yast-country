@@ -111,7 +111,7 @@ define list get_zonemap()
     ``{
     if( size(zonemap)==0 )
 	{
-	zonemap = (list)SCR::Read( .target.yast2, "timezone_raw.ycp" );
+	zonemap = (list)eval(SCR::Read( .target.yast2, "timezone_raw.ycp" ));
 	if( zonemap == nil ) zonemap = [];
 	}
     return( zonemap );

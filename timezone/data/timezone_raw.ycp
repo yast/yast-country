@@ -11,10 +11,13 @@
  * System timezones can be found in /usr/share/zoneinfo/zone.tab
  * *****************************************************************
  *
-   textdomain "timezone_db"
  */
 
-[
+{
+textdomain "timezone_db";
+
+
+return ([
 
 $[ "name" : _("Europe"),
    "entries" : $[
@@ -277,6 +280,10 @@ $[ "name" : _("Etc"),
 	"Etc/Universal" : _("Universal"),
 	"Etc/Zulu" : _("Zulu") ] ],
 
-]
+] );
+
+
 
 /* EOF */
+
+}
