@@ -16,7 +16,6 @@ textdomain "country";
 
 import "AsciiFile";
 import "Encoding";
-import "Installation";
 import "Misc";
 import "Mode";
 import "ProductFeatures";
@@ -201,16 +200,17 @@ global define void Language() {
 	}
 	if (lang == nil)
 	    lang = "";
-	y2milestone( "lang %1, Installation::defaultLanguage %2", lang,
-	             Installation::defaultLanguage );
+	y2milestone( "lang from /etc/install.inf: %1", lang );
 	if (lang == "")
 	{
-	    lang = Installation::defaultLanguage;
+	    lang = Pkg::GetLocale();
+	    y2milestone ("setting lang to default language: %1", lang);
 	}
         // Ignore any previous settings and take language from control file.
         if (ProductFeatures::language != "")
         {
             lang = ProductFeatures::language;
+	    y2milestone ("setting lang to ProductFeatures::language: %1", lang);
         }
 	Set (lang);		// coming from /etc/install.inf
 	SetDefault ();		// also default
@@ -309,7 +309,7 @@ global define void SetExpertValues (map val) {
 
 
 /**
- * WfmSetLanguage()
+ * WfmSetLanguag()
  *
  * Set the current language in WFM and UI
  *
@@ -317,12 +317,13 @@ global define void SetExpertValues (map val) {
  *
  * @return      -
  */
-global define void WfmSetLanguage() {
+global define void WfmSetLanguage () {
 
-    y2milestone( "language %1 enc %2 utf8:%3",
-	language, Installation::encoding, use_utf8 );
+    string encoding	= (use_utf8) ? "UTF-8" : Encoding::console;
 
-    UI::SetLanguage (language, Installation::encoding);
+    y2milestone( "language %1 enc %2 utf8:%3", language, encoding, use_utf8 );
+
+    UI::SetLanguage (language, encoding);
 
     if (use_utf8)
     {

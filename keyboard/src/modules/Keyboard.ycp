@@ -80,7 +80,6 @@
     import "Arch";
     import "AsciiFile";
     import "Directory";
-    import "Installation";
     import "Language";
     import "Linuxrc";
     import "Misc";
@@ -372,6 +371,15 @@ global define map GetX11KeyData( string keymap )
     return( x11data );
     }
 
+
+/**
+ * run X11 configuration after inital boot
+ */
+define boolean x11_setup_needed () {
+
+    return ! (Linuxrc::serial_console() || Linuxrc::vnc() || Linuxrc::usessh());
+}
+
 /**
  * SetLanguage()
  *
@@ -452,15 +460,14 @@ global define boolean SetLanguage( string keyboard )
 
 	// X11 command...
 	// do not try to run this with remote X display
-	if( size(Apply)>0 && Installation::x11_setup_needed () )
-
-	    {
+	if (size (Apply) >0 && x11_setup_needed ())
+	{
 	    xkb_cmd = "/usr/X11R6/bin/setxkbmap " + Apply;
-	    }
+	}
 	else
-	    {
+	{
 	    xkb_cmd = "";
-	    }
+	}
 
 
 	// Store keyboard just set.

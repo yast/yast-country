@@ -1,5 +1,5 @@
 /**
- * Module:		proposal_language.ycp
+ * File:		language_proposal.ycp
  *
  * $Id$
  *
@@ -112,11 +112,11 @@
 	    //
 	    Console::SelectFont( language_on_entry );
 
-	    Installation::encoding = (use_utf8) ? "UTF-8" : Encoding::console;
+	    string enc = (use_utf8) ? "UTF-8" : Encoding::console;
 
 	    // Set it in YaST2
 	    //
-	    UI::SetLanguage (language_on_entry, Installation::encoding);
+	    UI::SetLanguage (language_on_entry, enc);
 	    WFM::SetLanguage(language_on_entry, "UTF-8");
 	}
 

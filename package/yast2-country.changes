@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov  3 13:39:28 CET 2004 - jsuchome@suse.cz
+
+- removed yast2-installation and yast2-storage from needforbuild
+- 2.11.4
+
+-------------------------------------------------------------------
 Wed Nov  3 09:07:41 CET 2004 - jsuchome@suse.cz
 
 - do not show duplicate australian timezones (#47472)
