@@ -128,9 +128,23 @@ define any LanguageSequence () {
  */
 define boolean LanguageSummaryHandler (map options) {
 
+    map<string,list> selection	= Language::Selection();
     // summary label
-    CommandLine::Print (sformat (_("Current language: %1 (%2)"),
-	Language::language, Language::Selection()[Language::language,1]:""));
+    CommandLine::Print (sformat (_("Current Language: %1 (%2)"),
+	Language::language, selection[Language::language,1]:""));
+
+    string languages	= Language::languages;
+    if (languages != "")
+    {
+	list<string> langs	= filter (string lang_code,
+	    splitstring (languages, ","), ``(lang_code != Language::language));
+	});
+	if (size (langs) > 0)
+	{
+	    CommandLine::Print (sformat (_("Additional languages: %1"),
+		mergestring (langs,",")));
+	}
+    }
     return false;
 }
 
@@ -156,7 +170,7 @@ define boolean LanguageSetHandler (map options) {
     if (language == "" || !haskey (Language::Selection(), language))
     {
 	// error message (%1 is given layout); do not translate 'list'
-	CommandLine::Print (sformat (_("Not valid language '%1'. Use a 'list' command to see possible values."), language));
+	CommandLine::Print (sformat (_("'%1' is not a valid language. Use a 'list' command to see possible values."), language));
     }
     Language::Set (language);
     Console::SelectFont (language);
