@@ -1,0 +1,196 @@
+/**
+ * File:
+ *	Console.ycp
+ *
+ * Module:
+ *	Console
+ *
+ * Depends:
+ *	Language
+ *
+ * Summary:
+ *	provide console specific stuff (esp. font and encoding)
+ *<BR>
+ * sysconfig /etc/sysconfig/console:<BR>
+ *<UL>
+ *<LI>	CONSOLE_FONT		string	console font</LI>
+ *<LI>	CONSOLE_SCREENMAP	string	console screenmap</LI>
+ *<LI>	CONSOLE_UNICODEMAP	string	console unicode map</LI>
+ *<LI>	CONSOLE_MAGIC		string	console magic control sequence</LI>
+ *<LI>	CONSOLE_ENCODING	string	console encoding</LI>
+ *</UL>
+ *
+ * $Id$
+ *
+ * Author:
+ *	Klaus Kaempf <kkaempf@suse.de>
+ *
+ */
+
+{
+    module "Console";
+
+    import "Mode";
+
+    /**
+     * @return encoding string defining current (ISO) encoding
+     */
+    global string encoding      = "ISO-8859-1";
+
+    // current base language, used in Check
+    string language	= "en_US";
+
+    string font		= "lat1-16.psfu";
+    string unicodeMap	= "";
+    string screenMap	= "none";
+    string magic	= "(B";
+
+    // non-empty if serial console (written /etc/inittab)
+    // -> S0:123:respawn:/sbin/agetty -L 9600<n8> ttyS0
+    // something like "ttyS0,9600" from /etc/install.inf
+    string serial	= "";
+
+    /**
+     * activate a language specific console font
+     *
+     * @param	string	language	ISO code of language
+     * @return	string	encoding	encoding for console i/o
+     */
+
+    global define string SelectFont (string lang)
+    ``{
+
+	list consolefont = [];
+
+	map consolefonts = WFM::Read (.local.yast2, "consolefonts.ycp");
+	map languages_map = WFM::Read (.local.yast2, "language.ycp");
+	
+	list language_info = languages_map[lang]:nil;
+	if (language_info != nil)
+	{
+	    string fqlanguage = lang 
+	        + language_info[2]:""	// mandatory-LANG-modifier
+	        + language_info[3]:"";  // optional-LANG-modifier
+	    consolefont = consolefonts[fqlanguage]:[];
+        }
+	else
+	{
+	    consolefont = consolefonts[lang]:[];
+	}
+
+	if ((size (consolefont) == 0)
+	    && (size (lang) > 2))
+	{
+	    consolefont = consolefonts[substring(lang, 0, 2)]:[];
+	}
+
+	if (size (consolefont) > 0)
+	{
+	    language	= lang;
+
+	    font	= consolefont[0]:"";
+	    unicodeMap  = consolefont[1]:"";
+	    screenMap	= consolefont[2]:"";
+	    magic	= consolefont[3]:"";
+	    encoding    = consolefont[4]:"";
+
+	    if (Mode::braille)
+	    {
+		SCR::Execute (.target.bash, "/usr/bin/setfont");
+	    }
+	    else
+	    {
+		UI::SetConsoleFont (magic, font, screenMap, unicodeMap, encoding);
+	    }
+	}
+
+	return encoding;
+    };
+
+    /**
+     * save data to system (rc.config agent)
+     */
+
+    global define void Save ()
+    ``{
+	SCR::Write (.sysconfig.console.CONSOLE_FONT,	   font);
+	SCR::Write (.sysconfig.console.CONSOLE_SCREENMAP,  screenMap);
+	SCR::Write (.sysconfig.console.CONSOLE_UNICODEMAP, unicodeMap);
+	SCR::Write (.sysconfig.console.CONSOLE_MAGIC,	   magic);
+
+	SCR::Write (.sysconfig.console.CONSOLE_ENCODING.comment, "\n# Encoding used for output of non-ascii characters.\n#\n");
+	SCR::Write (.sysconfig.console.CONSOLE_ENCODING,   encoding);
+	SCR::Write (.sysconfig.console, nil);
+
+	if (serial != "")
+	{
+	    list splitserial = splitstring (serial, ",");
+	    string tty = splitserial[0]:"";
+	    string baud = splitserial[1]:"";
+	    if ((tty != "") && (baud != ""))
+	    {
+		string initline = sformat ("S0:123:respawn:/sbin/agetty -L %1 %2", baud, tty);
+		//SCR::Write (.etc.inittab.S0, initline);
+		SCR::Execute (.target.bash, "/bin/grep -v S0 /etc/inittab >/tmp/inittab");
+		SCR::Execute (.target.bash, "/bin/echo '" + initline + "' >>/tmp/inittab");
+		SCR::Execute (.target.bash, "/bin/mv /tmp/inittab /etc/inittab");
+		SCR::Execute (.target.bash, "/bin/echo " + tty + " >>/etc/securetty");
+	    }
+	}
+    }
+
+    /**
+     * restore data to system (rc.config agent)
+     * returns encoding
+     */
+
+    global define string Restore ()
+    ``{
+	font	   = SCR::Read (.sysconfig.console.CONSOLE_FONT);
+	screenMap  = SCR::Read (.sysconfig.console.CONSOLE_SCREENMAP);
+	unicodeMap = SCR::Read (.sysconfig.console.CONSOLE_UNICODEMAP);
+	magic	   = SCR::Read (.sysconfig.console.CONSOLE_MAGIC);
+	encoding   = SCR::Read (.sysconfig.console.CONSOLE_ENCODING);
+	if (Mode::braille)
+	{
+	    SCR::Execute (.target.bash, "/usr/bin/setfont");
+	}
+	else
+	{
+	    UI::SetConsoleFont (magic, font, screenMap, unicodeMap, encoding);
+	}
+	return encoding;
+    }
+
+    /**
+     * Check current configuration
+     * This function should be called to check consistency with
+     * other modules (mentioned as Depends in the header)
+     * @return	0	if no change
+     * 		1	change due to dependency with other module
+     *		2	inconsistency detected
+     *
+     */
+
+    global define boolean Check ()
+    ``{
+	
+	return 0;
+    }
+
+    /**
+     * constructor
+     * does nothing in initial mode
+     * restores console configuration from /etc/sysconfig
+     * in normal mode
+     */
+
+    global define void Console ()
+    ``{
+	if (Mode::initial)
+	    string serial = Mode::installMap["console"]:"";
+	else
+	    Restore();
+	return;
+    }
+}

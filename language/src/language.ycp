@@ -1,0 +1,124 @@
+/*
+ *
+ * Module:             choose_language.ycp
+ *
+ * Author:             Klaus Kaempf (kkaempf@suse.de)
+ *
+ * Submodules:
+ *
+ *
+ * Purpose:	configure language in running system
+ *
+ * Modify:
+ *
+ *
+ * $Id$
+ */
+
+{
+    textdomain "language";
+
+    import "Language";
+    import "Wizard";
+
+    include "ui/common_popups.ycp";
+    include "ui/common_functions.ycp";
+    include "ui/common_messages.ycp";
+
+    // Memozize the current language.
+    //
+    string language_on_entry = Language::language;
+
+    y2milestone("language_on_entry: <%1>", language_on_entry );
+
+    // create the wizard dialog
+    Wizard::CreateDialog();
+
+    any result = `again;
+
+    Wizard::OpenAcceptDialog();		// Reduce flicker (yes, it's a kludge)
+    
+    while (result == `again)
+    {
+	Wizard::OpenAcceptDialog();	// This dialog will actually be used
+
+	// Params are:		 	      `back `next  set_default
+        result = CallFunction (`inst_language( true, true, false));
+
+	Wizard::CloseDialog();
+    }
+    
+    Wizard::CloseDialog();
+
+    y2milestone ("result '%1'", result);
+
+    if (  result == `cancel || result == `back )
+    {
+	// Back to original values...
+	//
+	y2milestone( "`cancel or `back --> restoring: <%1>", language_on_entry );
+	
+	import "Console";
+	import "Installation";
+
+	boolean use_utf8 = true;		// utf8 is default
+
+	if ( ! lookup (UI::GetDisplayInfo(), "HasFullUtf8Support", true ) )
+	{
+	    use_utf8 = false;		// fallback to ascii
+	}
+	
+	// Set it in the Language module.
+	//
+	Language::Set( language_on_entry );
+
+	// Set Console font
+	//
+	Console::SelectFont( language_on_entry );
+
+	Installation::encoding = (use_utf8) ? "UTF-8" : Console::encoding;
+
+	// Set it in YaST2
+	//
+	UI::SetLanguage (language_on_entry, Installation::encoding);
+	WFM::SetLanguage(language_on_entry, "UTF-8");
+    }
+    else
+    {
+	// User wants to keep his changes --> save to sysconfig.
+	//
+	if ( Language::language != language_on_entry )
+	{
+	    y2milestone( "Language changed --> saving" );
+	    
+	    Language::Save();
+
+	    // Run SuSEconfig...
+	    //
+	    textdomain "general";
+
+	    // According to ro@suse.de it doesn't make sense to run individual
+	    // SuSEcongig modules only because the set of modules and the variables
+	    // they contain may change any time.
+	    // ==> full SuSEconfig run
+	    //
+	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --quick --nonewpackage");
+	    // propagate language to Shell
+	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module profiles");
+	    // propagate language to ispell
+	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module ispell");
+	    // propagate language to susewm
+	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module susewm");
+	    // propagate language to KDE2
+	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module kdm3");
+
+	    CallFunction( `inst_suseconfig( false, false ) );
+	}
+	else
+	{
+	    y2milestone( "Language not changed --> doing nothing" );
+	}
+    }
+
+    return UI::CloseDialog();
+}

@@ -1,0 +1,56 @@
+/**
+ * File:
+ *   timezone_raw.ycp
+ *
+ * Authors:
+ *   Thomas Roelz <tom@suse.de>
+ *   (original authors unknown; now maintained by tom)
+ *
+ *
+ * Summary:  map language code to default timezone
+ *
+ * $Id$
+ *
+ * *****************************************************************
+ * In case of changes please keep the following files in sync:
+ * lang2tz.ycp, timezone_raw.ycp
+ * *****************************************************************
+ */
+
+$[
+  "ar_eg"     		: "Africa/Cairo",
+  "br_FR"    		: "Europe/Paris",
+  "cs_CZ"    		: "Europe/Prague",
+  "da_DK"		: "Europe/Copenhagen",
+  "de" 	 		: "Europe/Berlin",
+  "de_AT"    		: "Europe/Vienna",
+  "de_CH"    		: "Europe/Zurich",
+  "de_DE"    		: "Europe/Berlin",
+  "el_GR"    		: "Europe/Athens",
+  "en"	 		: "US/Pacific",
+  "en_GB"    		: "Greenwich",
+  "en_IE"		: "Europe/Belfast",
+  "en_US"    		: "US/Pacific",
+  "es_ES"    		: "Europe/Madrid",
+  "fr"	 		: "Europe/Paris",
+  "fr_CH"    		: "Europe/Zurich",
+  "fr_FR"    		: "Europe/Paris",
+  "hu_HU"    		: "Europe/Budapest",
+  "it_IT"    		: "Europe/Rome",
+  "ja_JP"     		: "Asia/Tokyo",
+  "ko_KR"     		: "Asia/Seoul",
+  "lt_LT"		: "Europe/Vilnius",
+  "nl_NL"    		: "Europe/Amsterdam",
+  "no_NO"		: "Europe/Oslo",
+  "pl_PL"    		: "Europe/Warsaw",
+  "pt_BR"    		: "America/Buenos_Aires",
+  "pt_PT"    		: "Europe/Lisbon",
+  "ru"	 		: "Europe/Moscow",
+  "ru_RU"	 	: "Europe/Moscow",
+  "ru_RU.KOI8-R"	: "Europe/Moscow",
+  "sk_SK"		: "Europe/Bratislava",
+  "sl_SI" 		: "Europe/Ljubljana",
+  "sv_SE"		: "Europe/Stockholm",
+  "tr_TR"		: "Europe/Istanbul",
+  "zh_CN"     		: "Asia/Shanghai"
+]

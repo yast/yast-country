@@ -1,0 +1,118 @@
+/*
+ *
+ * Module:             keyboard.ycp
+ *
+ * Author:             Thomas Roelz (tom@suse.de)
+ *
+ * Submodules:
+ *
+ *
+ * Purpose:	configure keyboard in running system
+ *
+ * Modify:
+ *
+ *
+ * $Id$
+ */
+
+{
+    textdomain "keyboard";
+
+    import "X11Version";
+    import "Keyboard";
+    import "Misc";
+    import "Mode";
+
+    import "Wizard";
+    include "ui/common_popups.ycp";
+    include "ui/common_functions.ycp";
+    include "ui/common_messages.ycp";
+    
+    // Memorize the current keyboard.
+    //
+    string keyboard_on_entry = Keyboard::current_kbd;
+
+    // Check if this is a reconfiguration run.
+    //
+    if ( Mode::reprobe )
+    {
+	// Reprobe keyboard module to achieve same behaviour as during installation.
+	//
+	Keyboard::Probe();
+	Keyboard::SetConsole( Keyboard::current_kbd );
+	Keyboard::SetX11( Keyboard::current_kbd );
+
+	y2milestone("Reprobed keyboard");
+    }
+
+    // create the wizard dialog
+    //
+    Wizard::CreateDialog();
+
+    any result = nil;
+
+    // A new layout can be set for X11 only if the version is XFree 4x.
+    // ==> determine the XFree version used.
+    //
+    string xfree_version = X11Version::version;
+    
+    if ( xfree_version == "3" )
+    {
+	// Advise the user that configuring the keyboard layout
+	// for X11 is possible only with XFree 4.
+	//
+	UI::MessagePopup(_("
+The X11 keyboard layout can only be changed within the running system 
+with XFree86 version 4 or later.
+Your graphics card requires XFree86 version 3.
+Therefore, only the console keyboard layout can be changed here.
+
+Use SaX to change your X11 keyboard layout.
+") );
+    }
+    else if ( xfree_version == "" )
+    {
+	// If X11 is not used we may not be able to detect and and preselect
+	// the current keyboard layout in the following dialog.
+	// Advise the user to select one.
+	//
+	UI::MessagePopup(_("
+The current keyboard layout could not be determined.
+
+To change anything here, select a layout from the list.
+") );
+    }
+
+    // The keyboard module should be initialized to the current keyboard from
+    // sysconfig, XF86Config or probing. Either way this Keyboard will be
+    // selected in the list in inst_keyboard.ycp. Now let the user choose a new
+    // keyboard layout.
+    //
+    result =  CallFunction( `inst_keyboard( true, true ) );
+
+    if ( result == `next )
+    {
+	// User accepted the the setting.
+	// Only if the user has chosen a different layout change the configuration.
+	//
+	if ( keyboard_on_entry != Keyboard::current_kbd )
+	{
+	    y2milestone("User selected new keyboard: <%1>", Keyboard::current_kbd );
+
+	    // Save changes...
+	    //
+	    Keyboard::Save( true );
+	    
+	}
+	else
+	{
+	    y2milestone( "Keyboard not changed --> doing nothing" );
+	}
+    }
+    else	// `cancel or `back
+    {
+	y2milestone( "User cancelled --> no change" );
+    }
+    
+    return UI::CloseDialog();
+}

@@ -1,0 +1,82 @@
+/**
+ * File:
+ *   keyboard_raw.ycp
+ *
+ * Authors:
+ *   Thomas Roelz <tom@suse.de>
+ *   (original authors unknown; now maintained by tom)
+ *
+ * Summary:
+ * Maps language codes (locales) to YaST2-keyboard-codes.
+ *
+ * The YaST2-keyboard-codes are used for looking up a keyboard description in
+ * the YaST2-keyboard-database (see keyboard_db.ycp and keyboard_raw.ycp).
+ *
+ * Do NOT use this map for looking up YaST2-keyboard-codes from xkblayout-codes.
+ * The xkblayout-codes may or may not resemble a locale code, therefore
+ * an extra conversion map is necessary (see xkblayout2keyboard.ycp).
+ *
+ * $Id$
+ *
+ * *****************************************************************
+ * In case of changes please keep the following three files in sync:
+ * lang2keyboard.ycp, xkblayout2keyboard.ycp, keyboard_raw.ycp
+ * *****************************************************************
+ */
+
+      $[
+	"en"	 	: "english-us",
+	"en_US"    	: "english-us",
+	"en_GB"    	: "english-uk",
+	
+	"de" 	 	: "german",
+	"de_DE"    	: "german",
+	"de_CH"    	: "german-ch",
+	
+	"fr_FR"    	: "french",
+	"br_FR"    	: "french",
+	"fr_CH"    	: "french-ch",
+
+	"it_IT"    	: "italian",
+	
+	"es_ES"    	: "spanish",
+
+	"pt_PT"    	: "portugese",
+	"pt_BR"    	: "portugese-br",
+
+	"el_GR"    	: "greek",
+	
+	"nl_NL"    	: "dutch",
+
+	"da_DK"		: "danish",
+
+	"cs_CZ"    	: "czech",
+	"sl_SI"		: "slovene",
+	"sk_SK"    	: "slovak",
+	
+	"hu_HU"    	: "hungarian",
+
+	"pl_PL"    	: "polish",
+
+	"ru"	 	: "russian",
+	"ru_RU"	 	: "russian",
+	"ru_RU.KOI8-R"	: "russian",
+
+	"no_NO"		: "norwegian",
+	"nn_NO"		: "norwegian",
+	"nb_NO"		: "norwegian",
+	
+	"sv_SE"		: "swedish",
+
+	"fi_FI"		: "finnish",
+	
+	"tr_TR"		: "turkish",
+	
+	"ja_JP"    	: "japanese",
+
+	"be_BY"		: "belgian",
+	
+	"zh_CN"    	: "english-us",
+	"ko_KR"    	: "english-us",
+	"ar_eg"    	: "english-us"
+      ]

@@ -1,0 +1,174 @@
+/**
+ * File:
+ *	inst_keyboard.ycp
+ *
+ * Authors:
+ *	Klaus   Kämpf <kkaempf@suse.de>
+ *	Michael Hager <mike@suse.de>
+ *	Stefan  Hundhammer <sh@suse.de>
+ *
+ * Summary:
+ *	Let the user choose keyboard
+ *
+ * $Id$
+ */
+{
+    textdomain "keyboard";
+
+    // dont ask for keyboard on S/390 or serial console
+
+    import "Arch";
+    import "Mode";
+
+    // After import "Arch" and "Mode"
+    //
+    if ( Arch::s390 || Mode::serial_console )
+    {
+	return `next;
+    }
+
+    import "Language";
+    import "Misc";
+    import "Keyboard";
+
+    import "Wizard";
+
+    /* ----------------------------------------------------------------------
+     * Keyboard
+     * ----------------------------------------------------------------------*/
+
+    // Memorize the current keyboard language to be able to restore it.
+    //
+    string keyboard_on_entry = Keyboard::current_kbd;
+    
+    // default for keyboard is set to "english-us" in
+    // inst_finish.ycp:    string keyboard_name = lookup (user_settings, "keyboard", "english-us");
+    // -> ok for s390 ?
+
+    term keyboardsel = `dummy();
+    string keyboard = "";
+    
+    // Create keyboard selection box with the default selection.
+    // First build a map sorted by translations.
+    //
+    list keyboardlist_by_translation =
+	maplist( string keyboard_code, string keyboard_name, Keyboard::Selection(),
+		 ``{
+		     return `item(`id( keyboard_code ),
+				  keyboard_name,
+				  Keyboard::current_kbd == keyboard_code);
+		 } );
+
+    keyboardsel = `SelectionBox( `id( `keyboard ), `opt( `notify ),
+		// title for selection box 'keyboard layout'
+		_("&Keyboard layout"),
+		keyboardlist_by_translation);
+
+    // Put test widget below selection list.
+    //
+    keyboardsel = `VBox(
+		keyboardsel,
+		// title for input field to test the keyboard setting
+		// (no more than about 25 characters!)
+		`TextEntry( _("Keyboard &test:") )
+	     );
+
+    /* ----------------------------------------------------------------------
+     * Build dialog
+     * ----------------------------------------------------------------------*/
+
+    Wizard::OpenAcceptDialog();
+    
+    term contents = 
+	    `VBox(
+		`HBox(
+		    `HWeight ( 20, `HStretch() ),
+		    `HWeight ( 50, keyboardsel ),
+		    `HWeight ( 20, `HStretch() )
+		),
+		`VSpacing()
+	    );
+
+    // help text for keyboard screen
+    string help_text = _("<p>
+Choose the <b>keyboard layout</b> to use for
+installation and in the installed system.
+</p>
+");
+
+    // general help trailer
+    help_text = help_text + _("<p>
+If unsure, use the default values already selected.
+</p>");
+
+    // Screen title for keyboard screen
+    Wizard::SetContents( _("Keyboard Configuration"), contents,
+			     help_text,
+			     Args(0), Args(1) );
+
+    // Initially set the current keyboard to establish a consistent state.
+    //
+    Keyboard::SetConsole( Keyboard::current_kbd );
+    Keyboard::SetX11( Keyboard::current_kbd );
+
+    any ret = nil;
+
+    repeat
+    {
+	ret = Wizard::UserInput();
+
+	if ( (ret == `abort)
+	     && CallFunction(`inst_confirm_abort(`painless) ) )
+	{
+	    Wizard::CloseDialog();
+	    return `abort;
+	}
+
+	if ( ret == `next || ret == `keyboard )
+	{
+	    // Get the selected keyboard.
+	    //
+	    keyboard = UI::QueryWidget( `id( `keyboard ), `CurrentItem );
+
+	    // Set it in Keyboard module.
+	    //
+	    Keyboard::SetConsole( keyboard );
+	    Keyboard::SetX11( keyboard );
+
+	    if ( ret == `next )
+	    {
+		// User wants to keep his changes.
+		// Set user_decision flag in keyboard module.
+		//
+		Keyboard::user_decision = true;
+		
+		if ( keyboard_on_entry != Keyboard::current_kbd )
+		{
+		    // User has chosen a different keyboard from the database.
+		    // ==> clear unique_key in the keyboard module to achieve
+		    // configured = no and needed = no in Keyboard::Save() for
+		    // _ALL_ keyboards.
+		    //
+		    y2milestone("Clearing unique key <%1> due to manual selection",
+				Keyboard::unique_key );
+
+		    Keyboard::unique_key = "";
+		}
+	    }
+	}
+    } until ( ret == `next || ret == `back || ret == `cancel );
+
+    if ( ret == `back || ret == `cancel )
+    {
+	y2milestone("`back or `cancel restoring: <%1>", keyboard_on_entry );
+	
+	// Reset keyboard to initial state.
+	//
+	Keyboard::SetConsole( keyboard_on_entry );
+	Keyboard::SetX11( keyboard_on_entry );
+    }
+
+    Wizard::CloseDialog();
+    
+    return ret;
+} 

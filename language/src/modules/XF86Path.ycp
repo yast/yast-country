@@ -1,0 +1,110 @@
+/**
+ * Module: 		XF86Path.ycp
+ *
+ * Authors: 		Thomas Roelz <tom@suse.de>
+ *
+ * Purpose:		Provides several functions to write/alter the path settings 
+ *			in the X11 configuration.
+ *
+ *
+ * $Id$
+ *
+ * This module provides the following functions for public access via XF86Path::<func-name>(...)
+ *
+ * 	create_info_map()	- Create the map suitable for being passed to the isax-agent.
+ *
+ *	update()		- Update the XF86Config file.
+ *
+ */
+{
+    module "XF86Path";
+    
+    textdomain "x11";
+    
+    import "Installation";
+    import "Mode";
+
+    // The XFree version has to be determined in different ways depending on mode.
+    //
+
+    /**
+     * XF86Path()
+     *
+     * The module constructor.
+     *
+     * @param 	-
+     *
+     * @return  -
+     *
+     * @see	-
+     */
+    global define void XF86Path()
+	``{
+	// Nothing to be done here.
+	//
+	return;
+    }
+
+    
+    /**
+     * create_info_map()
+     *
+     * Creates a YCP map containing all the data necessary for writing the path section
+     * of the rc.sax file via the isax agent.
+     *
+     * @param	-
+     *
+     * @return  The YCP map containing the path information to be passed to the isax agent.
+     *
+     * @see	update()
+     */
+
+    global define map create_info_map()
+	``{
+	// Create the map for the isax-agent.
+	// Since we don't use "manual" font pathes any more this map is reduced to
+	// an empty dummy map. OTOH we can't skip updating the path section on
+	// language change because isax must write it anew to honour any language
+	// changes that it detects from the LANG environment variable.
+	//
+	// So this behaviour is left in to be consistent with keyboard and mouse
+	// and to have room for future expansion that may be necessary some day.
+	//
+	map info = $[];
+
+	return( info );
+    }
+
+
+
+
+    /**
+     * update()
+     *
+     * Updates the path settings in the XF86Config file.
+     *
+     * !!! only XFree 4 !!!
+     *
+     * @param	-
+     *
+     * @return  true	- success
+     *		false	- failure
+     *
+     * @see	create_info_map()
+     */
+
+    global define boolean update()
+	``{
+	// Create the map for the isax agent.
+	//
+	map info = create_info_map();
+
+	y2milestone( "path_info: <%1>", info );
+
+	// Call the isax agent to update the path settings in the XF86Config file.
+	//
+	any ret = SCR::Write( .xf86config.path, info );
+
+	return( ret );
+    }
+}

@@ -1,0 +1,1156 @@
+/**
+ * File:
+ *   Keyboard.ycp
+ *
+ * Module:
+ *   Keyboard
+ *
+ * Summary:
+ *   Provide information regarding the keyboard.
+ *
+ * Authors:
+ *   Thomas Roelz <tom@suse.de>
+ *
+ * $Id$
+ *
+ * Usage:
+ * ------
+ * This module provides the following data for public access via Keyboard::<var-name>.
+ *
+ *      !!! These are to be used READ_ONLY !!!
+ *
+ * Set in the constructor after the first import (only after probing):
+ *
+ *	kb_model
+ *	XkbLayout
+ *	unique_key
+ *
+ * Set after having called SetLanguage( keyboard ).
+ *
+ *	XkbRules
+ *	XkbModel
+ *	Protocol
+ *	XkbKeyCodes
+ *	XkbVariant
+ *	XkbOptions
+ *	MapName
+ *	LeftAlt
+ *	RightAlt
+ *	ScrollLock
+ *	RightCtl
+ *	Apply
+ *	keymap
+ *	compose_table
+ *	current_kbd
+ *	ckb_cmd
+ *	xkb_cmd
+ *
+ *
+ * This module provides the following functions for public access via Keyboard::<func-name>(...)
+ *
+ *	Keyboard()			- Module constructor.
+ *			  		  If saved module data exists in continue mode, these are read in.
+ *			 		  Otherwise Hardware is probed.
+ *
+ *	MakeProposal()			- return user-readable description of keyboard
+ *
+ *	Probe()				- Force new hardware probing and set public data accordingly.
+ *
+ *	Save()				- Save module data to /var/lib/YaST2/Keyboard_data.ycp
+ *
+ *	Restore()			- Load module data from /var/lib/YaST2/Keyboard_data.ycp
+ *
+ *	SetLanguage()			- Set public data to values corresponding to the given language.
+ *
+ *	GetKeyboardForLanguage()	- Get the keyboard language for a given language code.
+ *
+ * 	SetConsole()			- Set the console keyboard to the given keyboard language.
+ *
+ * 	SetX11()			- Set the X11 keyboard to the given keyboard language.
+ *
+ *	Selection()			- Get map of translated keyboards to be displayed in the GUI.
+ *
+ */
+
+{
+    module "Keyboard";
+    textdomain "keyboard";
+
+    import "Arch";
+    import "Mode";
+    import "Language";
+    import "Misc";
+    import "X11Version";
+    import "XF86Keyboard";
+    
+    // ---------------------------------------------------------------------------------------
+    // START: Globally defined data to be accessed via Keyboard::<variable>
+    // ---------------------------------------------------------------------------------------
+
+    // kb_model string
+    //
+    global string kb_model = "pc104";
+
+    // XkbModel string
+    //
+    global string XkbModel = "";
+
+    // XkbLayout string
+    // Only some keyboards do report this information (e.g. sparc).
+    //
+    global string XkbLayout = "";
+
+    // XkbVariant string
+    //
+    global string XkbVariant = "";
+
+    // XkbRules string
+    //
+    global string XkbRules = "";
+
+    // X11 Protocol string
+    //
+    global string Protocol = "";
+
+    // keymap string for ncurses
+    //
+    global string keymap = "us.map.gz";
+
+    // compose_table entry
+    //
+    global string compose_table = "clear winkeys shiftctrl latin1.add";
+
+    // X11 keycodes string
+    //
+    global string XkbKeyCodes = "";
+
+    // X11 Options string
+    //
+    global string XkbOptions = "";
+
+    // X11 MapName 
+    //
+    global string MapName = "";
+
+    // X11 LeftAlt 
+    //
+    global string LeftAlt = "";
+
+    // X11 RightAlt 
+    //
+    global string RightAlt = "";
+
+    // X11 RightCtl 
+    //
+    global string RightCtl = "";
+
+    // X11 ScrollLock 
+    //
+    global string ScrollLock = "";
+
+    // Apply string fuer xbcmd
+    //
+    global string Apply = "";
+
+    // The console keyboard command
+    //
+    global string ckb_cmd = "";
+
+    // The X11 keyboard command
+    //
+    global string xkb_cmd = "";
+
+    // The keyboard currently set.
+    //
+    global string current_kbd = "";
+
+    // The default keyboard if set.
+    //
+    global string default_kbd = "";
+
+    // Flag indicating if the user has chosen a keyboard.
+    // To be set from outside.
+    //
+    global boolean user_decision = false;
+
+    // unique key
+    //
+    global string unique_key = "";
+
+    // ---------------------------------------------------------------------------------------
+    // END: Globally defined data to be accessed via Keyboard::<variable>
+    // ---------------------------------------------------------------------------------------
+
+
+
+    // ---------------------------------------------------------------------------------------
+    // START: Locally defined data
+    // ---------------------------------------------------------------------------------------
+
+    // User readable description, access via Keyboard::MakeProposal()
+    //
+    string name = "";
+
+    // Keyboard description from DB
+    //
+    list kbd_descr = [];
+
+    string kbd_tty = "tty1 tty2 tty3 tty4 tty5 tty6 tty8 tty9 tty10 tty11 tty12 tty13 tty14 tty15 tty16 tty17 tty18 tty19 tty20 tty21 tty22";
+
+    string kbd_rate = "";
+    string kbd_delay = "";
+    string kbd_numlock = "";
+    string kbd_capslock = "";
+    string kbd_scrlock = "";
+
+    list keyboardprobelist = [];	// List of all probed keyboards
+
+    // ---------------------------------------------------------------------------------------
+    // END: Locally defined data
+    // ---------------------------------------------------------------------------------------
+
+
+
+    // ---------------------------------------------------------------------------------------
+    // START: Globally defined functions
+    // ---------------------------------------------------------------------------------------
+
+    /**
+     * Keyboard()
+     *
+     * The module constructor.
+     * Sets the proprietary module data defined globally for public access.
+     * This is done only once (and automatically) when the module is loaded for the first time.
+     *
+     * @param 	-
+     *
+     * @return  -
+     *
+     * @see	Probe()
+     */
+    global define void Keyboard()
+    ``{
+	if ( Mode::config )
+	    return;
+	
+	// We have three possible sources of information:
+	//
+	// Newly probed data:	- installation initial mode --> probing
+	// sysconfig:		- installation continue mode or normal mode
+	// XF86Config:		- restoring from sysconfig failed and running system
+	//
+	boolean success = false;
+
+	// If not in initial mode try to restore from sysconfig.
+	//
+	if ( ! Mode::initial )
+	{
+	    success = Restore();
+
+	    // If this failed and we are in a running system try to restore from XF86Config.
+	    //
+	    if ( ! success && Mode::normal )
+	    {
+		// Only possible with XFree 4x
+		//
+		import "X11Version";
+		string xfree_version = X11Version::version;
+		
+		if ( xfree_version == "4" )  // running system and XFree 4
+		{
+		    // The XkbLayout --> keyboard_language conversion map.
+		    //
+	    
+		    // Get the current layout from XF86Config and set keyboard module accordingly.
+		    //
+		    map keyboard_section = SCR::Read( .xf86config.keyboard );
+		    keyboard_section = keyboard_section[0]:$[];
+		    keyboard_section = keyboard_section["Keyboard"]:$[];
+
+		    string current_layout = XkblayoutToKeyboard( keyboard_section["XkbLayout"]:"" );
+
+		    y2milestone("keyboard layout YaST2: %1", current_layout );
+
+		    // Set the keyboard variables to this value if possible.
+		    //
+		    if ( current_layout != "" )
+		    {
+			SetLanguage( current_layout );
+			y2milestone("Restored data (XF86Config) for keyboard: <%1>", current_kbd );
+			success = true;
+		    }
+		}
+	    }
+	}
+
+	// In initial mode or if restoring failed do probe.
+	//
+	if ( Mode::initial || ! success )	// initial mode or no restore success
+	{
+	    // On module entry probe the hardware and set all those data
+	    // needed for public access.
+	    //
+	    Probe();
+	}
+
+	return;
+    }	// Keyboard()
+
+    /**
+     * XkblayoutToKeyboard()
+     *
+     * Convert X11 keyboard layout name to yast2 name for keyboard description.
+     * e.g. "de" --> "german"
+     *
+     * @param	string x11_layout
+     *
+     * @return 	string	yast2 name for keyboard description
+     */
+
+    define string XkblayoutToKeyboard( string x11_layout ) ``{
+	map xkblayout2keyboard = get_xkblayout2keyboard();
+	y2milestone("keyboard layout XF86Config: %1", current_layout );
+
+	// Now get the YaST2 internal representation of this keyboard layout.
+	//
+	string ret = xkblayout2keyboard[x11_layout]:"";
+	y2milestone(" XkblayoutToKeyboard x11:%1 ret:%2", x11_layout, ret );
+	return( ret );
+    }
+
+    /**
+     * X11SetLaguange()
+     *
+     * Set sysconfig variable YAST_LANGUAGE according to the given X11 layout name
+     * e.g. "de" --> "german". Save the settings without writing XF86config
+     *
+     * @param	string x11_layout
+     *
+     */
+
+    global define void X11SetLaguange( string x11_layout ) ``{
+
+	string new_kbd = XkblayoutToKeyboard( x11_layout );
+	if( size(new_kbd)>0 )
+	    {
+	    current_kbd = new_kbd;
+	    Save( false );
+	    y2milestone( "X11SetLaguange current_kbd=%1", current_kbd );
+	    }
+
+    }
+
+
+    /**
+     * Name()
+     * Just return the keyboard name, without setting anything.
+     * @return string user readable description.
+     */
+
+    global define string Name() ``{
+	return name;
+    }
+    
+    /**
+     * MakeProposal()
+     *
+     * Return proposal string and set system keyboard.
+     *
+     * @param	boolean force_reset
+     *		boolean language_changed
+     *
+     * @return 	string	user readable description.
+     *		If force_reset is true reset the module to the keyboard
+     *		stored in default_kbd.
+     */
+
+    global define string MakeProposal( boolean force_reset, boolean language_changed )
+    ``{
+	y2milestone("force_reset: %1", force_reset);
+	y2milestone("language_changed: %1", language_changed);
+
+	if ( force_reset )
+	{
+	    // If user wants to reset do it if a default is available.
+	    //
+	    if ( default_kbd != "" )
+	    {
+		SetConsole( default_kbd );	// reset
+		SetX11( default_kbd );		// reset
+	    }
+
+	    // Reset user_decision flag.
+	    //
+	    user_decision = false;
+	}
+	else	// no reset
+	{
+	    // Only follow the language if the user has never actively chosen
+	    // a keyboard. The indicator for this is user_decision which is
+	    // set from outside the module.
+	    //
+	    if ( user_decision )
+	    {
+		if ( language_changed )
+		{
+		    y2milestone("User has chosen a keyboard; not following language - only retranslation.");
+		
+		    SetConsole( current_kbd );
+		    SetX11( current_kbd );
+		}
+	    }
+	    else
+	    {
+		// User has not yet chosen a keyboard ==> follow language.
+		//
+		string local_kbd = GetKeyboardForLanguage( Language::language, "english-us" );
+
+		if ( local_kbd != "" )
+		{
+		    SetConsole( local_kbd );
+		    SetX11( local_kbd );
+		}
+		else
+		{
+		    if ( language_changed )
+		    {
+			y2error("Can't follow language - only retranslation");
+		
+			SetConsole( current_kbd );
+			SetX11( current_kbd );
+		    }
+		}
+	    }
+	}
+	
+	return name;
+    }	// MakeProposal()
+
+
+    
+    /**
+     * Probe()
+     *
+     * Allow for intentional probing by applications.
+     *
+     * @param 	-
+     *
+     * @return  -
+     *
+     * @see	Keyboard()
+     */
+    global define void Probe()
+	``{
+	// Probe the keyboard....
+	//
+	probe_settings();
+
+	// Set the module to the current system language to achieve a consistent
+	// state. This may be superfluous because a client may do it also but
+	// just in case...
+	//
+	string default_keyboard = "";
+
+	// Some keyboards (i.e. sparc) report their layout, try to use this information here.
+	//
+	if ( XkbLayout != "" )	// we do have hardware info
+	{
+	    default_keyboard = GetKeyboardForLanguage( XkbLayout, default_keyboard );
+	}
+	else	// no hardware info ==> select default keyboard dependent on system language
+	{
+	    default_keyboard = GetKeyboardForLanguage( Language::language, "english-us" );
+	}
+
+	// Set the module state.
+	//
+	SetLanguage( default_keyboard );
+
+	return;
+    }	// Probe()
+
+
+
+    /**
+     * Save()
+     *
+     * Save the current data into a file to be read after a reboot.
+     *
+     * @param 	boolean update_x11         
+     *			true if XF86config should be updated
+     *
+     * @return  -
+     *
+     * @see	Restore()
+     */
+    global define void Save( boolean update_x11 )
+	``{
+	
+	if ( Mode::update )
+	{
+	    string kbd = Misc::SysconfigRead(.sysconfig.keyboard.YAST_KEYBOARD, "" );
+	    if( size(kbd)==0 )
+		{
+		string kmap = Misc::SysconfigRead(.sysconfig.keyboard.KEYTABLE, "" );
+		if( size(kmap)>0 )
+		    {
+		    map data = GetX11KeyData( kmap );
+		    if( size(data["XkbLayout"]:"")>0 )
+			{
+			kbd = XkblayoutToKeyboard( data["XkbLayout"]:"" );
+			SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD, kbd );
+			SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD.comment,
+			       "\n# The YaST-internal identifier of the attached keyboard.\n#\n");
+			SCR::Write (.sysconfig.keyboard, nil );	// flush
+			}
+		    }
+		}
+	    // do nothing
+	    return;
+	}
+	
+	// Write some sysconfig variables.
+	// Set keytable, compose_table and tty list.
+	//
+	SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD, current_kbd );
+	SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD.comment,
+		   "\n# The YaST-internal identifier of the attached keyboard.\n#\n");
+	
+	SCR::Write(.sysconfig.keyboard.KEYTABLE, keymap );
+	SCR::Write(.sysconfig.keyboard.COMPOSETABLE, compose_table );
+
+	if( !Mode::initial )
+	    {
+	    SCR::Write(.sysconfig.keyboard.KBD_TTY, kbd_tty );
+	    SCR::Write(.sysconfig.keyboard.KBD_RATE, kbd_rate );
+	    SCR::Write(.sysconfig.keyboard.KBD_DELAY, kbd_delay );
+	    SCR::Write(.sysconfig.keyboard.KBD_NUMLOCK, kbd_numlock );
+	    SCR::Write(.sysconfig.keyboard.KBD_CAPSLOCK, kbd_capslock );
+	    SCR::Write(.sysconfig.keyboard.KBD_SCRLOCK, kbd_capslock );
+	    }
+
+	SCR::Write (.sysconfig.keyboard, nil );	// flush
+
+	// As a preliminary step mark all keyboards except the one to be configured
+	// as configured = no and needed = no. Afterwards this one keyboard will be
+	// marked as configured = yes and needed = yes. This has to be done  to
+	// prevent any problems that may occur if the user plugs in and out different
+	// keyboards or if a keyboard is selected from the database despite the fact
+	// that a keyboard has been probed. Otherwise the config popup may nag the user
+	// again and again.
+	//
+	// In order to get a list of *ALL* keyboards that have ever been conected to
+	// the system we must do a *manual* probing (accessing the libhd database).
+	// Doing only a "normal" probing would deliver only the *currently* attached
+	// keyboards which in turn would not allow to "unmark" all keyboards that may
+	// have been removed.
+	//
+	// Do *NOT* use probe_settings() here because this would newly assign the global
+	// "unique_key" which is not what we want here. It may have been cleared
+	// intentionally due to the users selection of a keyboard from the YaST database.
+	// Furthermore this would assign a unique_key even if there is no keyboard attached
+	// (if there _was_ a keyboard attached).
+	//
+	keyboardprobelist = SCR::Read(.probe.keyboard.manual); 	// Manual probing
+	
+	integer list_size = size( keyboardprobelist );
+	
+	if ( list_size > 0 )
+	{
+	    integer i = 0;
+
+	    while ( i < list_size )	// Loop over all keyboards
+	    {
+		map    current_keyboard = keyboardprobelist[i]:$[];
+		string current_key   = current_keyboard["unique_key"]:"";
+
+		if ( current_key != "" )
+		{
+		    // OK, there is a key to mark...
+		    //
+		    if ( current_key != unique_key )
+		    {
+			// OK, this key is _not_ the key of the keyboard to be configured.
+			// If the user selected a keyboard from the database Keyboard::unique_key
+			// has been set to "" there which also applies here.
+			// ==> Mark with "no".
+			//
+			SCR::Write( .probe.status.configured, current_key, `no );
+			y2milestone("Marked keyboard <%1> as configured = no", current_key );
+			
+			SCR::Write( .probe.status.needed, current_key, `no );
+			y2milestone("Marked keyboard <%1> as needed = no", current_key );
+		    }
+		    else
+		    {
+			y2milestone("Skipping active key <%1> --> to be configured", current_key );
+		    }
+		}
+
+		i = i + 1;	// next keyboard
+	    }
+	}
+	else
+	{
+	    y2milestone("No probed keyboards. Not unconfiguring any keyboards");
+	}
+	
+	// Only if the keyboard has been probed in this run the unique_key
+	// is not empty. Only in this case mark the device as "configured".
+	// In any other case the device should already be configured and
+	// the marking can't be done because the unique_key is missing.
+	// ==> Only mark after probing!
+	//
+	if ( unique_key != "" )
+	{
+	    SCR::Write( .probe.status.configured, unique_key, `yes );
+	    y2milestone("Marked keyboard <%1> as configured", unique_key );
+
+	    if ( ! Mode::serial_console )
+	    {
+		SCR::Write( .probe.status.needed, unique_key, `yes );
+		y2milestone("Marked keyboard <%1> as needed", unique_key );
+	    }
+	}
+	else
+	{
+	    y2milestone("NOT marking keyboard as configured (no unique_key)");
+	}
+
+	// Change the respective XF86Config content to match the current settings.
+	// Do this only in the running system _and_ if XFree4 is installed.
+	//
+	if ( update_x11 && ( Mode::normal || Mode::reprobe ) && 
+	     X11Version::version == "4" )
+	{
+	    y2milestone( "Storing current settings into XF86Config file (XFree4)." );
+	    XF86Keyboard::update();
+	}
+	
+	y2milestone("Saved data for keyboard: <%1>", current_kbd );
+
+	return;
+    }	// Save()
+
+
+
+    /**
+     * Restore()
+     *
+     * Restore the the data from sysconfig.
+     *
+     * @param 	-
+     *
+     * @return  true	- Data could be restored
+     *		false	- Restore not successful
+     *
+     * @see	Save()
+     */
+    global define boolean Restore()
+	``{
+	boolean ret = false;
+
+	// Read the the variables not touched by the module to be able to
+	// store them again on Save().
+	//
+	kbd_tty = Misc::SysconfigRead(.sysconfig.keyboard.KBD_TTY, kbd_tty );
+	kbd_rate = Misc::SysconfigRead(.sysconfig.keyboard.KBD_RATE, kbd_rate );
+	kbd_delay = Misc::SysconfigRead (.sysconfig.keyboard.KBD_DELAY, kbd_delay );
+	kbd_numlock = Misc::SysconfigRead (.sysconfig.keyboard.KBD_NUMLOCK, kbd_numlock);
+	kbd_capslock = Misc::SysconfigRead(.sysconfig.keyboard.KBD_CAPSLOCK, kbd_capslock);
+	kbd_scrlock = Misc::SysconfigRead(.sysconfig.keyboard.KBD_SCRLOCK, kbd_scrlock);
+	
+	// Read YaST2 keyboard var.
+	//
+	current_kbd = Misc::SysconfigRead(.sysconfig.keyboard.YAST_KEYBOARD, "" );
+
+	if ( current_kbd == "" )
+	{
+	    y2milestone("Restoring data failed");
+	    ret = false;
+	}
+	else
+	{
+	    // Restore module data.
+	    //
+	    SetLanguage( current_kbd );
+	    y2milestone("Restored data (sysconfig) for keyboard: <%1>", current_kbd );
+	    ret = true;
+	}
+
+	return ret;
+    }	// Restore()
+
+
+
+    /**
+     * SetLanguage()
+     *
+     * Set language specific module data to reflect the given language.
+     *
+     * @param 	Keyboard language e.g.  "english-us"
+     *
+     * @return  true	- Success. Language set in public data.
+     *		false	- Error. Language not set.
+     *
+     */
+
+    global define boolean SetLanguage( string keyboard )
+    ``{
+	y2milestone ("Setting keyboard to: <%1>", keyboard );
+
+	// Get the reduced keyboard DB.
+	//
+	map keyboards = get_reduced_keyboard_db();
+	
+	// Get the entry from the reduced local map for the given language.
+	//
+	kbd_descr = keyboards[keyboard]:[];
+
+	y2milestone ("Description for keyboard <%1>: <%2>", keyboard, kbd_descr );
+
+	if ( kbd_descr != [] )	// language found
+	{
+	    y2milestone("Retranslating for: %1", Language::language);
+
+	    // Get keymap for ncurses
+	    //
+	    keymap = kbd_descr[1, "ncurses"]:"us.map.gz";
+	    name = Misc::translate( kbd_descr[0]:$[], Language::language );
+
+	    map x11data = GetX11KeyData( keymap );
+	    y2milestone( "x11data=%1", x11data );
+
+	    XkbModel = x11data["XkbModel"]:"pc104";
+	    XkbLayout = x11data["XkbLayout"]:"";
+	    XkbVariant = x11data["XkbVariant"]:"";
+	    XkbRules = x11data["XkbRules"]:"";
+	    XkbOptions = x11data["XkbOptions"]:"";
+	    XkbKeyCodes = x11data["XkbKeyCodes"]:"";
+	    Protocol = x11data["Protocol"]:"Standard";
+	    MapName = x11data["MapName"]:"";
+	    LeftAlt = x11data["LeftAlt"]:"";
+	    RightAlt = x11data["RightAlt"]:"";
+	    ScrollLock = x11data["ScrollLock"]:"";
+	    RightCtl = x11data["RightCtl"]:"";
+	    Apply = x11data["Apply"]:"";
+
+	    // Build the compose table entry.
+	    //
+	    compose_table = "clear ";
+
+	    if ( XkbModel == "pc104" )
+	    {
+		compose_table = compose_table + "winkeys shiftctrl ";
+	    }
+
+	    // Check for "compose" entry in keytable, might define
+	    // a different encoding (i.e. "latin2").
+	    //
+	    string compose = kbd_descr[1,"compose"]:"latin1.add";
+
+	    compose_table = compose_table + compose;
+	}
+	else	// Language not found.
+	{
+	    return false;	// Error
+	}
+
+	// Console command...
+	//
+	ckb_cmd = "/bin/loadkeys " + keymap;
+
+	// X11 command...
+	//
+	if( size(Apply)>0 )
+	    {
+	    xkb_cmd = "/usr/X11R6/bin/xkbset -l \"" + Apply + "\"";
+	    }
+	else
+	    {
+	    xkb_cmd = "";
+	    }
+
+
+	// Store keyboard just set.
+	//
+	current_kbd = keyboard;
+
+	// On first assignment store default keyboard.
+	//
+	if ( default_kbd == "" )	// not yet assigned
+	{
+	    default_kbd = current_kbd;
+	}
+
+	return true;	// OK
+    }	// SetLanguage()
+
+    /**
+     * GetX11KeyData()
+     *
+     * Get the keyboard info for X11 for the given keymap
+     *
+     * @param 	name of the keymap
+     *
+     * @return  map containing the x11 config data
+     *
+     */
+    global define map GetX11KeyData( string keymap ) ``{
+	string cmd = "/usr/X11R6/bin/xkbctrl " + keymap;
+	string file = Misc::tmpdir + "/xkbctrl.out";
+
+	SCR::Execute (.target.bash, cmd + " > " + file ); 
+
+	map x11data = SCR::Read(.target.ycp, file );
+	return( x11data );
+    }
+
+
+    /**
+     * GetKeyboardForLanguage()
+     *
+     * Get the keyboard language for the given system language.
+     *
+     * @param 	System language code, e.g. "en_US".
+     *		Default keyboard language to be returned if nothing found.
+     *
+     * @return  The keyboard language for this language, e.g. "english-us"
+     *		or the default value if nothing found.
+     *
+     */
+    global define string GetKeyboardForLanguage( string sys_language, string default_language )
+    ``{
+	// The system_language --> keyboard_language conversion map.
+	//
+	map lang2keyboard = get_lang2keyboard();
+	
+	return lang2keyboard[sys_language]:default_language;
+    }
+
+
+
+    /**
+     * SetConsole()
+     *
+     * Set the console keyboard to the given keyboard language.
+     *
+     * @param 	Keyboard language e.g.  "english-us"
+     *
+     * @return  The loadkeys command that has been executed to do it.
+     *		(also stored in Keyboard::ckb_cmd)
+     *
+     * @see	SetX11()
+     */
+    global define string SetConsole( string keyboard )
+    ``{
+	SetLanguage( keyboard );	// in any case (retranslation)
+
+	y2milestone("Setting console keyboard to: <%1>", current_kbd );
+
+	y2milestone("loadkeys command: <%1>", ckb_cmd );
+
+	if ( Mode::test )
+	{
+	    y2milestone("Test mode - NOT setting keyboard" );
+	}
+	else
+	{
+	    SCR::Execute( .target.bash, ckb_cmd );
+	}
+
+        return ckb_cmd;
+    };	// SetConsole()
+
+
+
+    /**
+     * SetX11()
+     *
+     * Set the X11 keyboard to the given keyboard language.
+     *
+     * @param 	Keyboard language e.g.  "english-us"
+     *
+     * @return  The xkbset command that has been executed to do it.
+     *		(also stored in Keyboard::xkb_cmd)
+     *
+     * @see	SetConsole()
+     */
+    global define string SetX11( string keyboard )
+	``{
+	SetLanguage( keyboard );	// in any case (retranslation)
+
+	y2milestone("Setting X11 keyboard to: <%1>", current_kbd );
+
+        if ( Mode::test )
+	{
+	    y2milestone ("Test mode - NOT setting X keyboard - would have called:\n %1", xkb_cmd );
+	}
+	else
+	{
+	    // Actually do it only if we are in graphical mode.
+	    //
+	    if ( Mode::text )
+	    {
+		y2milestone("Not setting X keyboard due to text mode");
+	    }
+	    else 
+	    {
+		y2milestone ("Setting X keyboard:\n %1", xkb_cmd );
+
+		if( size(xkb_cmd)>0 )
+		    SCR::Execute( .target.bash, xkb_cmd );
+	    }
+	}
+
+	return xkb_cmd;
+    };	// SetX11()
+
+
+
+    /**
+     * Selection()
+     *
+     * Get the map of translated keyboard names.
+     *
+     * @param 	-
+     *
+     * @return	map of $[ keyboard_code : keyboard_name, ...] for all known
+     *		keyboards. 'keyboard_code' is used internally in Set and Get
+     *		functions. 'keyboard_name' is a user-readable string.
+     *		Uses Language::language for translation.
+     *
+     * @see	-
+     */
+
+    global define map Selection()
+	``{
+	// Get the reduced keyboard DB.
+	//
+	map keyboards = get_reduced_keyboard_db();
+
+	return mapmap( string keyboard_code, list keyboard_value, keyboards,
+		       ``{
+	    map keyboard_name_map = keyboard_value[0]:$[];
+	    string keyboard_name = Misc::translate( keyboard_name_map, Language::language );
+	    return  [ keyboard_code, keyboard_name ];
+	});
+    }
+
+    // ---------------------------------------------------------------------------------------
+    // END: Globally defined functions
+    // ---------------------------------------------------------------------------------------
+
+
+
+    // ---------------------------------------------------------------------------------------
+    // START: Locally defined functions
+    // ---------------------------------------------------------------------------------------
+
+    /*
+     * probe_settings()
+     *
+     * Probe keyboard and set local module data.
+     *
+     * @param 	-
+     *
+     * @return  -
+     *
+     * @see
+     */
+
+    define void probe_settings()
+	``{
+	/*
+	 * First assign the kb_model. This is e.g. "pc104".
+	 * Aside from being used directly for writing the XF86Config file this is later on
+	 * used to search the YaST2 keyboards database (it's a key in a map).
+	 */
+
+	// Probe the keyboard.
+	//
+	if (!Mode::config)
+	{
+	    keyboardprobelist = SCR::Read( .probe.keyboard );
+
+	    y2milestone("Probed keyboard: <%1>", keyboardprobelist );
+
+	    // Get the first keyboard from the list (it should exist).
+	    //
+	    map keyboardmap1 = keyboardprobelist[0]:$[];
+
+	    // Get the unique_key
+	    //
+	    unique_key = keyboardmap1["unique_key"]:"";
+
+	    // Get the keyboard data for this first keyboard.
+	    //
+	    map keyboardmap2 = keyboardmap1["keyboard", 0]:$[];
+
+	    // Assign the XkbModel.
+	    //
+	    kb_model = keyboardmap2["xkbmodel"]:"pc104";
+
+	    y2milestone("kb_model: <%1>", kb_model );
+
+	    // Assign the XkbLayout.
+	    // Only some keyboards do report this information (e.g. sparc).
+	    //
+	    XkbLayout = keyboardmap2["xkblayout"]:"";
+
+	    y2milestone("Xkblayout: <%1>", XkbLayout );
+	}
+	else
+	{
+	    kb_model = "pc104";
+	}
+
+	return;
+    };	// probe_settings()
+
+
+    
+    /*
+     * get_reduced_keyboard_db()
+     *
+     * Read the Keyboard DB and select entries for current XkbModel and architecture.
+     *
+     * @param 	-
+     *
+     * @return  Reduced keyboard DB (map)
+     *
+     * @see
+     */
+    
+    define map get_reduced_keyboard_db()
+	``{
+	/*
+	 * Search the YaST2 keyboard DB for the corresponding kb_model entry and architecture.
+	 * The keyboard DB is a very big map containing entries for all known keyboard
+	 * languages. Each of these entries contains a map of the different known
+	 * architectures and each of these architectures contains a map for the different
+	 * kb_models possible on the given architecture. This innermost map finally contains
+	 * data relevant for ncurses.
+	 *
+	 * $[
+	 *    "english-us":
+	 *     [
+	 *	  ...language stuff...
+	 *	  $[   "i386" :
+	 *	       $[ "pc104":
+	 *	          $[   "ncurses": "us.map.gz" ]],
+	 *
+	 * What now follows is code that cuts out from this map the unnecessary architectures
+	 * and XkbModels. The different languages are kept.
+	 *
+	 * Load the keyboard DB. Try translated keyboard_db.ycp first, if this doesnt exist
+	 * use the raw (untranslated) version.
+	 * Do not hold this database in a permanent module variable (it's very large).
+	 */
+	
+	map all_keyboards = Misc::ReadAlternateFile ("keyboard_db.ycp", "keyboard_raw.ycp");
+
+	if ( all_keyboards == nil ) all_keyboards = $[];
+
+	// The new reduced map of keyboard data.
+	//
+	map keyboards = $[];
+
+	foreach ( `kb_lang, `description, all_keyboards, ``{	// loop over all languages
+	    
+	    if ( size( description ) == 2 )
+	    {
+		// Skip langage specific naming of keyboard languages.
+		// Select the keyboard data.
+		//
+		map keyboards_archi = description[1]:$[];		// all architectures
+
+		// Select current architecture.
+		//
+		map keyboard_archi = keyboards_archi[Arch::architecture]:$[];
+
+		// Get the data for the current kb_model in the current architecture.
+		//
+		map keyboard_model = keyboard_archi[kb_model]:$[];
+
+		if ( size( keyboard_model ) > 0 )	// found an entry
+		{
+		    // Add the data found (as list) to the new map under the current
+		    // language key.
+		    //
+		    list keyboard_selected = [];	// temporary list
+
+		    // Add the language stuff.
+		    //
+		    keyboard_selected = add( keyboard_selected, description[0]:$[] );
+
+		    // Add the Qt- and ncurses-data.
+		    //
+		    keyboard_selected = add( keyboard_selected, keyboard_model );
+
+		    // Add this list to the reduced keyboard map under the current language key.
+		    //
+		    keyboards[kb_lang] = keyboard_selected;
+		}
+	    }
+	});
+
+	return( keyboards );
+    };	// get_reduced_keyboard_db() 
+
+
+    
+    /*
+     * get_lang2keyboard()
+     *
+     * Get the system_language --> keyboard_language conversion map.
+     *
+     * @param 	-
+     *
+     * @return  conversion map
+     *
+     * @see	get_xkblayout2keyboard()
+     */
+    
+    define map get_lang2keyboard()
+	``{
+	// The system_language --> keyboard_language conversion map.
+	//
+	map lang2keyboard = SCR::Read( .target.yast2, "lang2keyboard.ycp" );
+	    
+	if ( lang2keyboard == nil ) lang2keyboard = $[];
+
+	return( lang2keyboard );
+    }	// get_lang2keyboard()
+
+
+    
+    /*
+     * get_xkblayout2keyboard()
+     *
+     * Get the xkblayout --> keyboard_language conversion map.
+     *
+     * @param 	-
+     *
+     * @return  conversion map
+     *
+     * @see	get_lang2keyboard()
+     */
+    
+    define map get_xkblayout2keyboard()
+	``{
+	// The xkblayout --> keyboard_language conversion map.
+	//
+	map xkblayout2keyboard = SCR::Read( .target.yast2, "xkblayout2keyboard.ycp");
+	    
+	if ( xkblayout2keyboard == nil ) xkblayout2keyboard = $[];
+
+	return( xkblayout2keyboard );
+    }	// get_xkblayout2keyboard()
+
+    // ---------------------------------------------------------------------------------------
+    // END: Locally defined functions
+    // ---------------------------------------------------------------------------------------
+}
+
+// - EOF -

@@ -1,0 +1,228 @@
+/**
+ * File:
+ *	inst_timezone.ycp
+ *
+ * Authors:
+ *	Klaus   Kämpf <kkaempf@suse.de>
+ *	Michael Hager <mike@suse.de>
+ *	Stefan  Hundhammer <sh@suse.de>
+ *
+ * Summary:
+ *	Let the user choose the timezone.
+ *
+ * $Id$
+ */
+{
+    textdomain "timezone";
+
+    import "Arch";
+    import "Mode";
+    import "Misc";
+    import "Timezone";
+
+    import "Wizard";
+
+    /* ----------------------------------------------------------------------
+     * Timezone
+     * ----------------------------------------------------------------------*/
+
+    // Remember the current timezone settings to be able to restore them.
+    //
+    string timezone_on_entry = Timezone::timezone;
+    string hwclock_on_entry  = Timezone::hwclock;
+
+    // get current timezone and clock setting
+    //
+    string timezone     = Timezone::timezone;
+    string timezone_old = timezone;
+    
+    string hwclock = Timezone::hwclock;
+
+    string date = "";
+
+    Wizard::OpenAcceptDialog();	// do this as early as possible for instant user feedback!
+    // build up timezone selection box
+    //
+    map zonemap = Timezone::Selection();
+
+    term timezonesel =
+	`SelectionBox( `id( `timezone ), `opt( `notify ),
+			// title for selection box 'timezone'
+			_("Time &Zone"),
+			maplist( `name, `key, zonemap,
+			``{
+			    return `item( `id( key ), name, key == timezone );
+			})
+		   );
+
+    // does the hwclock run on UTC only ? -> skip asking
+
+    boolean hwclock_utc_only = (Arch::sparc ||
+				Arch::board_iseries ||
+				Arch::board_chrp ||
+				Arch::board_prep);
+
+    /* ----------------------------------------------------------------------
+     * Build dialog
+     * ----------------------------------------------------------------------*/
+
+    // Assign system date and time.
+    //
+    date = Timezone::GetDateTime();
+    
+    // Ask for UTC vs. Localtime
+    //
+    if (!hwclock_utc_only)
+    {
+	timezonesel =
+	`VBox(
+	      timezonesel,
+	      `ComboBox(`id(`hwclock), `opt(`hstretch, `notify ),
+			// ComboBox for time reference: local time or UTC
+			_("&Hardware clock set to"),
+			[
+			 // ComboBox entry: hardware clock set to local time
+			 `item( `id(`hwclock_localtime), _("local time"), (hwclock == "--localtime")),
+
+			 // ComboBox entry: hardware clock set UTC
+			 `item( `id(`hwclock_utc ), _("UTC"), (hwclock == "-u"))
+			]
+			),
+	      `Label( `id(`date), date )
+	      );
+    }
+
+    term contents =
+	    `VBox(
+		`HBox(
+		    `HWeight ( 20, `HStretch() ),
+		    `HWeight ( 50, timezonesel ),
+		    `HWeight ( 20, `HStretch() )
+		),
+		`VSpacing()
+	    );
+
+    // help for timezone screen
+
+    string help_text = _("<p>
+Select the appropriate <b>time zone</b>:
+Choose the country or region where you are located.
+</p>
+");
+
+    if (!hwclock_utc_only)
+    {
+	// help for time calculation basis:
+	// hardware clock references local time or UTC?
+	help_text = help_text + _("<p>
+Specify whether the <b>hardware clock</b> of your machine is set to local time or UTC.
+</p>");
+	// additional help for hardware clock
+	help_text = help_text + _("<p>
+Most PCs that also have other operating systems installed (such as Microsoft
+Windows) use local time.
+</p>");
+
+	// additional help for hardware clock
+	help_text = help_text + _("<p>
+Machines that have only Linux installed should be
+set to Universal Time Coordinated (UTC).
+</p>
+");
+
+    }
+
+
+    // general help trailer
+    help_text = help_text + _("<p>
+If you are unsure, use the default values already selected.
+</p>");
+
+    // Screen title for timezone screen
+    Wizard::SetContents( _("Clock and Time Zone Configuration"), contents,
+			 help_text,
+			 Args(0), Args(1) );
+
+
+    // Initially set the current timezone to establish a consistent state.
+    //
+    Timezone::Set( Timezone::timezone );
+
+    symbol hwclock_s      = (hwclock == "-u") ? `hwclock_utc : `hwclock_localtime;
+    symbol hwclock_s_old  = hwclock_s;
+    
+    any ret = nil;
+
+    repeat
+    {
+	ret = Wizard::UserInput();
+
+	if ( (ret == `abort)
+	     && CallFunction(`inst_confirm_abort(`painless) ) )
+	{
+	    break;
+	}
+
+	if ( ret == `next
+	     || ret == `timezone
+	     || ret == `hwclock )
+	{
+	    // Get current settings.
+	    // UTC vs. localtime, only if needed
+	    //
+	    if ( hwclock_utc_only )
+	    {
+		hwclock_s = `hwclock_utc;
+	    }
+	    else
+	    {
+		hwclock_s = UI::QueryWidget (`id (`hwclock), `Value);
+	    }
+
+	    timezone = UI::QueryWidget( `id( `timezone ), `CurrentItem );
+
+	    // Change only if s.th. has really changed.
+	    //
+	    if ( timezone != timezone_old
+		 || hwclock_s != hwclock_s_old )
+	    {
+		timezone_old = timezone;
+		hwclock_s_old = hwclock_s;
+	    
+		Timezone::hwclock = (hwclock_s == `hwclock_utc) ? "-u" : "--localtime";
+		Timezone::Set( timezone );
+		
+		// Redisplay date/time.
+		//
+		date = Timezone::GetDateTime();
+		UI::ChangeWidget(`id(`date), `Value, date );
+		UI::RecalcLayout();
+	    }
+	    
+	    if ( ret == `next )
+	    {
+		// User wants to keep his changes.
+		// Set user_decision flag in timezone module.
+		//
+		Timezone::user_decision = true;
+	    }
+	}
+
+    } until ( ret == `next || ret == `back || ret == `cancel );
+
+    // Back to original values.
+    //
+    if ( ret == `back )
+    {
+	y2milestone("`back or `cancel restoring: <%1>", timezone_on_entry );
+
+	// Reset timezone to initial state.
+	//
+	Timezone::hwclock = hwclock_on_entry;
+	Timezone::Set( timezone_on_entry );
+    }
+
+    Wizard::CloseDialog();
+
+    return ret;
+}

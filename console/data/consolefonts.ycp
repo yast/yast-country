@@ -1,0 +1,73 @@
+ $[
+      // LANG		font		    unicode map	screen map,	console magic	encoding
+      "en_GB@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-15" ],
+      "en_GB"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "en_US"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "en"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+
+      "de_DE@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(B",		"ISO-8859-15" ],
+      "de_DE"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "de_CH"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "de"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+
+      "fr_FR@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(B",		"ISO-8859-15" ],
+      "fr_FR"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "fr_CH"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "fr"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+
+      "it_IT@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-15" ],
+      "it_IT"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "it"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+
+      "es_ES@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(B",		"ISO-8859-15" ],
+      "es_ES"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "es"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+
+      "nl_NL@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-15" ],
+      "nl_NL"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "nl"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+
+      "pt_PT@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-15" ],
+      "pt_PT"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "pt_BR"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "pt"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+
+      "ca_ES@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-15" ],
+      "ca_ES"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "ca"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+
+      "gl_ES@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-15" ],
+      "gl_ES"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "gl"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+
+      "br_FR@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-15" ],
+      "br_FR"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "br"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+
+      "el_GR"		: [ "lat7-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-7" ],
+      "el"		: [ "lat7-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-7" ],
+
+      "pl_PL"		: [ "lat2-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-2" ],
+      "pl"		: [ "lat2-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-2" ],
+
+      "cs_CZ"		: [ "lat2-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-2" ],
+      "cs"		: [ "lat2-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-2" ],
+
+      "sk_SK"		: [ "lat2-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-2" ],
+      "sk"		: [ "lat2-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-2" ],
+
+      "hu_HU"		: [ "lat2-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-2" ],
+      "hu"		: [ "lat2-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-2" ],
+
+      "lt_LT"		: [ "lt-brim-8x14.psfu","",	"trivial",	"(K",		"ISO-8859-13" ],
+      "lt"		: [ "lt-brim-8x14.psfu","",	"trivial",	"(K",		"ISO-8859-13" ],
+
+      "ru_RU.KOI8-R"	: [ "Cyr_a8x16.psfu",	"",	"koi2alt",	"(K",		"KOI8-R" ],
+      "ru"		: [ "Cyr_a8x16.psfu",	"",	"koi2alt",	"(K",		"ISO-8859-5" ],
+
+      "ja_JP.sjis"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K",		"sjis" ],
+      "ja"		: [ "lat1-16.psfu",	"",	"none",		"(K",		"sjis" ],
+
+      "tr_TR"		: [ "lat5-16.psfu",	"",	"none",		"(K",		"ISO-8859-9" ],
+      "tr"		: [ "lat5-16.psfu",	"",	"none",		"(K",		"ISO-8859-9" ]
+  ]

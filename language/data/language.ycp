@@ -1,0 +1,168 @@
+// $Id$
+//
+// *** WATCH FOR CORRECT SETTING OF "," ***
+//
+// Format is
+// <LANG-Code> : [ <Language-to-display-UTF8-coded>,
+//		   <Language-to-display-ASCII-coded-if-needed>,
+//		   <mandatory-LANG-modifier>,
+//		   <optional-LANG-modifier> ]
+//
+// The LANG-Code is used internally to reference the language
+// The mandatory-LANG-modifier is attached to LANG-Code and
+//   assigned to the LANG environment variable during installation
+// The optional-LANG-modifier is attached to LANG-Code+mandatory-LANG-modifier
+//   and written to RC_LANG in rc.config.
+// ==> the running system uses
+//     LANG=LANG-Code+mandatory-LANG-modifier+optional-LANG-modifier
+
+$[
+
+  /* Highly incomplete, no active translator.
+  "ca_ES"	: [ "Català",
+		  "Catala",
+		  "",
+		  "@euro" ],
+  End of comment */
+
+  "cs_CZ"	: [ "Čeština ",
+		  "Cestina",
+		  "",
+		  "" ],
+
+  "da_DK"	: [ "Dansk",
+		  "Dansk",
+		  "",
+		  "" ],
+
+  "de_DE"	: [ "Deutsch",
+		  "Deutsch",
+		  "",
+		  "@euro" ],
+
+  "el_GR"	: [ "Ελληνικά ",
+		  "Greek",
+		  "",
+		  "@ISO-8859-7" ],
+
+  "en_GB"	: [ "English (GB)",
+		  "English (GB)",
+		  "",
+		  "" ],
+
+  "en_IE"	: [ "Irish",
+		  "Irish",
+		  "",
+		  "@euro" ],
+
+  "en_US"	: [ "English (US)",
+		  "English (US)",
+		  "",
+		  "" ],
+
+  "es_ES"	: [ "Español",
+		  "Espanol",
+		  "",
+		  "@euro" ],
+
+  "fr_FR"	: [ "Français",
+		  "Francais",
+		  "",
+		  "@euro" ],
+
+  /* Incomplete, inactive translator.
+  "gl_ES"	: [ "Galego",
+		  "Galego",
+		  "",
+		  "@euro" ],
+  End of comment */
+
+  /* Incomplete, inactive translator.
+  "hr_HR"	: [ "Hrvatski",
+		  "Croatian",
+		  "",
+		  "" ],
+  End of comment */
+
+  "hu_HU"	: [ "Magyar",
+		  "Magyar",
+		  "",
+		  "" ],
+
+  "it_IT"	: [ "Italiano",
+		  "Italiano",
+		  "",
+		  "@euro" ],
+
+  "ja_JP"	: [ "日本語",
+		  "Japanese",
+		  "",
+		  "" ],
+
+  "lt_LT"	: [ "Lietuvių",
+		  "Lithuanian",
+		  "",
+		  "" ],
+
+  "nl_NL"	: [ "Nederlands",
+		  "Nederlands",
+		  "",
+		  "@euro" ],
+
+  "no_NO"	: [ "Norsk",
+		  "Norsk",
+		  "",
+		  "" ],
+
+  "pt_BR"	: [ "Português brasileiro",
+		  "Portugues brasileiro",
+		  "",
+		  "" ],
+
+  "pt_PT"	: [ "Português",
+		  "Portugues",
+		  "",
+		  "@euro" ],
+
+  /* Highly incomplete
+  "ru_RU"	 : [ "Русский ",
+		   "Russian",
+		   ".KOI8-R",
+		   "" ],
+  End of comment */
+
+  "sl_SI"	: [ "Slovenščina",
+		  "Slovenscina",
+		  "",
+		  "" ],
+
+  "sk_SK"	: [ "Slovenčina ",
+		  "Slovencina",
+		  "",
+		  "" ],
+
+  "sv_SE"	: [ "Svenska",
+		  "Svenska",
+		  "",
+		  "" ],
+
+  "tr_TR"	: [ "Türkçe",
+		  "Turkce",
+		  "",
+		  "" ]
+
+/* -------------------------------------------- */
+/*          May be future expansion		*/
+/* -------------------------------------------- */
+/*						*/
+/*      "ko_KR"    : [ "한글 ",	*/
+/*		     "Korean",			*/
+/*		     "",			*/
+/*		     "" ],			*/
+/*      "id_ID"    : [ "Indonesia",		*/
+/*      "zh_CN"    : [ "中文 (Chinese)"	*/
+/*      "ar_eg"    : [ "ﻲﺑﺮﻋ"	*/
+/*      "pl_PL"    : [ "Polski"			*/
+/*      "ro_RO"    : [ "Romania"		*/
+
+]

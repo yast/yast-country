@@ -1,0 +1,85 @@
+@HEADER-COMMENT@
+# neededforbuild yast2-devtools  autoconf automake ycpdoc yast2-testsuite dejagnu expect tcl yast2-base libycp libycp-devel liby2 libyui libscr yast2-core-wfm yast2-core-scr yast2-agent-system
+
+@HEADER@
+Requires:	yast2 yast2-lib-wizard
+
+Provides:	yast2-config-environment
+Provides:	yast2-config-keyboard
+Provides:	yast2-config-language
+Provides:	yast2-config-timezone
+Obsoletes:	yast2-config-environment
+Obsoletes:	yast2-config-keyboard
+Obsoletes:	yast2-config-language
+Obsoletes:	yast2-config-timezone
+
+BuildArchitectures:	noarch
+
+Summary:	Setting the keyboard
+
+%description
+-
+
+@PREP@
+
+@BUILD-YCP@
+
+@INSTALL-YCP@
+
+@CLEAN@
+
+# common
+%files
+%defattr(-,root,root)
+%doc @DOCDIR@
+
+# console
+
+@YAST2DIR@/modules/Console.ycp
+@YAST2DIR@/scrconf/cfg_console.scr
+
+# keyboard
+
+@YAST2DIR@/modules/Keyboard.ycp
+@YAST2DIR@/modules/XF86Keyboard.ycp
+
+@YAST2DIR@/clients/keyboard.ycp
+@YAST2DIR@/clients/inst_keyboard.ycp
+
+@YAST2DIR@/config/keyboard.y2cc
+
+@YAST2DIR@/keyboard_raw.ycp
+@YAST2DIR@/lang2keyboard.ycp
+@YAST2DIR@/xkblayout2keyboard.ycp
+@YAST2DIR@/keymap2mac.ycp
+
+@YAST2DIR@/scrconf/cfg_keyboard.scr
+
+# language
+@YAST2DIR@/modules/Language.ycp
+@YAST2DIR@/modules/XF86Path.ycp
+
+@YAST2DIR@/clients/language.ycp
+@YAST2DIR@/clients/inst_language.ycp
+
+@YAST2DIR@/config/language.y2cc
+
+@YAST2DIR@/language.ycp
+@YAST2DIR@/lang2iso.ycp
+
+@YAST2DIR@/scrconf/cfg_language.scr
+
+# timezone
+
+@YAST2DIR@/modules/Timezone.ycp
+
+@YAST2DIR@/clients/timezone.ycp
+@YAST2DIR@/clients/inst_timezone.ycp
+
+@YAST2DIR@/config/timezone.y2cc
+
+@YAST2DIR@/timezone_raw.ycp
+@YAST2DIR@/lang2tz.ycp
+
+@YAST2DIR@/scrconf/cfg_clock.scr
+
