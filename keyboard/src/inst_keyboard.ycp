@@ -187,29 +187,22 @@ Scroll Lock should be set
     string keyboard_on_entry = Keyboard::current_kbd;
     string cur_kbd = Keyboard::current_kbd;
 
-    // default for keyboard is set to "english-us" in
-    // inst_finish.ycp:    string keyboard_name = lookup (user_settings, "keyboard", "english-us");
-    // -> ok for s390 ?
-
     term keyboardsel = `dummy();
     string keyboard = "";
 
     // Create keyboard selection box with the default selection.
     // First build a map sorted by translations.
     //
-    list<term> keyboardlist_by_translation =
-	maplist( string keyboard_code, string keyboard_name, Keyboard::Selection(),
-	    ``{
-	    return `item( `id(keyboard_code),
-			  keyboard_name,
-			  Keyboard::current_kbd==keyboard_code );
-	    });
+    list<term> keyboardlist_by_translation = maplist (
+	string code, string name, Keyboard::Selection(), ``(
+	    `item (`id(code), name, Keyboard::current_kbd == code)
+	));
 
-    keyboardlist_by_translation =
-	sort( term a, term b, keyboardlist_by_translation,
-	      ``(select( lsort( [a[1]:"", b[1]:"" ]), 0, "" ) ==
-		 a[1]:"" && a[1]:""!=b[1]:"" ));
-
+    keyboardlist_by_translation = sort (
+	term a, term b, keyboardlist_by_translation, {
+	    list lsorted	= lsort ([a[1]:"", b[1]:""]);
+	    return (lsorted[0]:"" == a[1]:"" && a[1]:"" != b[1]:"");
+	});
 
     keyboardsel = `SelectionBox( `id( `keyboard ), `opt(`notify,`immediate),
 		// title for selection box 'keyboard layout'

@@ -19,7 +19,7 @@ X-SuSE-YaST-AutoInstResource=
 Icon=babelfish
 Exec=/sbin/yast2 language 
 
-Name=Choose Language
+Name=Language Selection
 GenericName=Change the system's language here.
 Name[cs]=Výběr jazyka
 GenericName[cs]=Zde můžete změnit systémový jazyk.
