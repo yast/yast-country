@@ -1,3 +1,8 @@
+/**
+ * tests for Language.ycp functions
+ * Maintainer:	jsuchome@suse.cz
+ * $Id$
+ */
 {
 
 // testedfiles: Language.ycp
