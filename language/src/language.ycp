@@ -23,6 +23,7 @@
 
     import "Popup";
     import "Label";
+    import "Encoding";
 
     // Memozize the current language.
     //
@@ -79,7 +80,7 @@
 	//
 	Console::SelectFont( language_on_entry );
 
-	Installation::encoding = (use_utf8) ? "UTF-8" : Console::encoding;
+	Installation::encoding = (use_utf8) ? "UTF-8" : Encoding::console;
 
 	// Set it in YaST2
 	Language::WfmSetLanguage();

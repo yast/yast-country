@@ -24,6 +24,7 @@
     import "Misc";
     import "Installation";
     import "Console";
+    import "Encoding";
     import "Language";
     import "Timezone";
     import "Keyboard";
@@ -351,7 +352,7 @@ Adapt keyboard settings?
 		    Keyboard::user_decision = true;
 		    }
 
-		Installation::encoding = (use_utf8) ? "UTF-8" : Console::encoding;
+		Installation::encoding = (use_utf8) ? "UTF-8" : Encoding::console;
 
 		// Set it in YaST2
 		Language::WfmSetLanguage();

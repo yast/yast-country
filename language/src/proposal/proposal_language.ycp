@@ -14,6 +14,8 @@
 
     import "Language";
     import "Wizard";
+    import "Encoding";
+    import "Console";
 
     string func  = (string) WFM::Args(0);
     map    param = (map) WFM::Args(1);
@@ -110,7 +112,7 @@
 	    //
 	    Console::SelectFont( language_on_entry );
 
-	    Installation::encoding = (use_utf8) ? "UTF-8" : Console::encoding;
+	    Installation::encoding = (use_utf8) ? "UTF-8" : Encoding::console;
 
 	    // Set it in YaST2
 	    //
