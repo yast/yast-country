@@ -247,13 +247,13 @@
 
 	// If not in initial mode try to restore from sysconfig.
 	//
-	if ( !(Mode::initial || Mode::update))
+	if ( !Mode::initial )
 	{
 	    success = Restore();
 
 	    // If this failed and we are in a running system try to restore from XF86Config.
 	    //
-	    if ( ! success && Mode::normal )
+	    if ( !success && Mode::normal )
 	    {
 		// Only possible with XFree 4x
 		//
@@ -289,7 +289,7 @@
 
 	// In initial mode or if restoring failed do probe.
 	//
-	if( Mode::initial || Mode::update || !success )	// initial mode or no restore success
+	if( Mode::initial || !success )	// initial mode or no restore success
 	{
 	    // On module entry probe the hardware and set all those data
 	    // needed for public access.
@@ -393,7 +393,7 @@ global define string MakeProposal( boolean force_reset,
 	// a keyboard. The indicator for this is user_decision which is
 	// set from outside the module.
 	//
-	if( user_decision || Mode::autoinst)
+	if( user_decision || Mode::update || Mode::autoinst)
 	    {
 	    if( language_changed )
 		{
