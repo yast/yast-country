@@ -190,7 +190,7 @@
 	if (Mode::initial)
 	{
 	    serial = SCR::Read (.etc.install_inf.Console);
-	    if (isnil (serial)) serial = "";
+	    if (serial == nil) serial = "";
 	}
 	else
 	{
