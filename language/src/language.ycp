@@ -88,11 +88,11 @@
 	WFM::SetLanguage(language_on_entry, "UTF-8");
     }
     else
-    {
+	{
 	// User wants to keep his changes --> save to sysconfig.
 	//
-	if ( Language::language != language_on_entry )
-	{
+	if( Language::language != language_on_entry )
+	    {
 	    y2milestone( "Language changed --> saving" );
 
 	    Language::Save();
@@ -113,12 +113,17 @@
 	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module kdm3");
 
 	    WFM::CallFunction( `inst_suseconfig( false, false ) );
-	}
+	    UI::MessagePopup( _("Your language setting has been changed.
+
+If necessary you may want to adapt your keyboard settings to the new
+language. This is possible either in the YaST2 Control Center or by 
+calling \"yast2 keyboard\" explicitely."));
+	    }
 	else
-	{
+	    {
 	    y2milestone( "Language not changed --> doing nothing" );
+	    }
 	}
-    }
 
     return UI::CloseDialog();
 }

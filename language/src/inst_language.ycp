@@ -25,6 +25,7 @@
     import "Installation";
     import "Console";
     import "Language";
+    import "Timezone";
     import "Keyboard";
 
     import "Wizard";
@@ -195,6 +196,18 @@ Choose the new <b>language</b> for your SuSE Linux system.
 	    {
 		y2milestone( "Language changed from %1 to %2", Language::language, language );
 
+		string msg = _("You are about to change the selected language?
+
+Do you want current keyboard settings be adapted according
+to the new language or should they be kept as they are now.
+
+Adapt keyboard setting?");
+
+		boolean kbd_adapt = false;
+
+		if( !Mode::normal )
+		    kbd_adapt = UI::YesNoPopup( msg );
+
 		// Set it in the Language module.
 		//
 		Language::Set( language );
@@ -202,7 +215,16 @@ Choose the new <b>language</b> for your SuSE Linux system.
 		// Set Console font
 		//
 		Console::SelectFont( language );
-		Keyboard::SetKeyboardForLang( language );
+
+		Timezone::user_decision = true;
+		if( kbd_adapt )
+		    {
+		    Keyboard::SetKeyboardForLang( language );
+		    }
+		else
+		    {
+		    Keyboard::user_decision = true;
+		    }
 
 		Installation::encoding = (use_utf8) ? "UTF-8" : Console::encoding;
 

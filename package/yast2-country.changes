@@ -2,6 +2,10 @@
 Wed Jan 15 13:20:53 CET 2003  - fehr@suse.de
 
 - add dialog with expert settings to keyboard dialog
+- do not automatically adapt keyboard settings when changing 
+  language in installation system, add popup instead (#20807)
+- ask if keyboard setting should be adapted to changed language 
+  when changing language proposal during installation
 
 -------------------------------------------------------------------
 Wed Dec  4 14:49:44 CET 2002  - fehr@suse.de
