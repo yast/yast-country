@@ -436,6 +436,11 @@ With <b>Install language dependent packages</b> option, additional packages with
 		(string) UI::QueryWidget(`id(`language), `Value) :
 		(string) UI::QueryWidget(`id(`language), `CurrentItem);
 
+	    if (adapt_term)
+	    {
+		kbd_adapt = (boolean) UI::QueryWidget (`id(`adapt_kbd), `Value);
+		tmz_adapt = (boolean) UI::QueryWidget (`id(`adapt_tmz), `Value);
+	    }
 	    if (language != Language::language)
 	    {
 		y2milestone ("Language changed from %1 to %2", Language::language, language);
@@ -476,13 +481,6 @@ With <b>Install language dependent packages</b> option, additional packages with
 		    kbd_adapt = true;
 		    Timezone::ResetZonemap ();
 		}
-		else if (adapt_term)
-		{
-		    kbd_adapt = (boolean)
-			UI::QueryWidget (`id(`adapt_kbd), `Value);
-		    tmz_adapt = (boolean)
-			UI::QueryWidget (`id(`adapt_tmz), `Value);
-		}
 
 		// Set it in the Language module.
 		//
@@ -494,19 +492,6 @@ With <b>Install language dependent packages</b> option, additional packages with
 
 		// Set it in YaST2
 		Language::WfmSetLanguage ();
-
-		if (kbd_adapt)
-		{
-		    Keyboard::SetKeyboardForLanguage (language);
-		    if (Stage::initial () && set_default)
-		    {
-			Keyboard::SetKeyboardDefault();
-		    }
-		}
-		else
-		{
-		    Keyboard::user_decision = true;
-		}
 
 		if (ret != `next)
 		{
@@ -537,12 +522,28 @@ With <b>Install language dependent packages</b> option, additional packages with
 		    Timezone::user_decision = true;
 		}
 
+		if (kbd_adapt)
+		{
+		    Keyboard::SetKeyboardForLanguage (language);
+		    if (Stage::initial () && set_default)
+		    {
+			Keyboard::SetKeyboardDefault();
+		    }
+		}
+		else
+		{
+		    Keyboard::user_decision = true;
+		}
 
 		if (!Stage::initial () && !Mode::update ())
 		{
 		    // save language and console settings
 		    Language::Save();
 		    Console::Save();
+		    if (kbd_adapt)
+			Keyboard::Save (true);
+		    if (tmz_adapt)
+			Timezone::Save ();
 		}
 		y2milestone ("Language: '%1', system encoding '%2'", language,
 		             WFM::GetEncoding());
@@ -558,20 +559,20 @@ With <b>Install language dependent packages</b> option, additional packages with
 		    // now adapt language seletions
 		    if ((boolean)UI::QueryWidget (`id(`packages), `Value))
 		    {
-		    if (Stage::initial () || Mode::update ())
-		    {
-			Pkg::SetAdditionalLocales (selected_languages);
-		    }
-		    else // install new packages right now
-		    {
-			PackageSystem::EnsureSourceInit ();
-			PackageSystem::EnsureTargetInit ();
+			if (Stage::initial () || Mode::update ())
+			{
+			    Pkg::SetAdditionalLocales (selected_languages);
+			}
+			else // install new packages right now
+			{
+			    PackageSystem::EnsureSourceInit ();
+			    PackageSystem::EnsureTargetInit ();
 
-			Pkg::SetAdditionalLocales (selected_languages);
+			    Pkg::SetAdditionalLocales (selected_languages);
 
-			Pkg::PkgSolve (true);
-			Pkg::PkgCommit (0);
-		    }
+			    Pkg::PkgSolve (true);
+			    Pkg::PkgCommit (0);
+			}
 		    }
 		}
 	    }

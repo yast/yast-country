@@ -73,5 +73,7 @@ $[
 
 	"is"        : "icelandic",
 
-	"lt"		: "lithuanian"
+	"lt"		: "lithuanian",
+
+	"hr"		: "croatian"
 ]

@@ -784,9 +784,8 @@ global define void Keyboard() {
 
 	    // Get the current layout from XF86Config and set keyboard module accordingly.
 	    //
-	    list kbs = (list)SCR::Read( .xf86config.keyboard );
+	    map kbs = (map)SCR::Read( .xf86config.keyboard );
 	    map keyboard_section = kbs[0,"Keyboard"]:$[];
-
 	    string current_layout = XkblayoutToKeyboard( keyboard_section["XkbLayout"]:"" );
 
 	    y2milestone("keyboard layout YaST2: %1", current_layout );
@@ -1012,11 +1011,11 @@ global define void Save( boolean update_x11 )
     // Change the respective XF86Config content to match the current settings.
     // Do this only in the running system _and_ if XFree4 is installed.
     //
-    if( update_x11 && ( Mode::normal () || Stage::reprobe () ) )
-	{
-	y2milestone( "Storing current settings into XF86Config file (XFree4)." );
+    if (x11_setup_needed() && update_x11 &&(Mode::normal() || Stage::reprobe()))
+    {
+	y2milestone ("Storing current settings into XF86Config file (XFree4).");
 	Keyboard::xf86_update();
-	}
+    }
 
     y2milestone("Saved data for keyboard: <%1>", current_kbd );
 
