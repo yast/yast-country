@@ -38,4 +38,8 @@ Summary:	Setting the keyboard
 @clientdir@/*.ycp
 @configdir@/*.y2cc
 @ydatadir@/*.ycp
-@scrconfdir@/*.scr
+%ifnarch s390 s390x
+/usr/share/YaST2/config/keyboard.y2cc
+#endif
+/usr/share/YaST2/config/language.y2cc
+/usr/share/YaST2/config/timezone.y2cc
