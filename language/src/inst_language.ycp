@@ -48,10 +48,10 @@ If unsure, use the default values already selected.
     help_text = help_text + _("<p>
 <b>LANG Environment Settings for User root:</b>
 This determines how the locale variables (LC_*) are set for the root user.</p>
-<b>ctype:</b> Root user has same LC_CTYPE as normal user. Other values
+<b>ctype:</b> root has the same LC_CTYPE as a normal user. Other values
 are unset.<br>
-<b>yes:</b> Root user has same locale settings as normal user.<br>
-<b>no:</b> Root user has all locale variables unset.
+<b>yes:</b> root has the same locale settings as normal user.<br>
+<b>no:</b> root has all locale variables unset.
 </p>
 ");
 
@@ -71,7 +71,7 @@ are unset.<br>
 						 [ "ctype", "yes", "no" ] )),
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`CheckBox( `id(`use_utf8),
-						 _("Use &UTF-8 encoding"),
+						 _("Use &UTF-8 Encoding"),
 						 false )),
 				`VSpacing(`opt(`vstretch), 7),
 				`HBox(
