@@ -114,7 +114,7 @@ define map<string, string> get_lang2tz()
  * @see	get_lang2tz()
  */
 
-define list < map < string, any> > get_zonemap() {
+global define list < map < string, any> > get_zonemap() {
 
     if( size(zonemap)==0 )
 	{
@@ -616,6 +616,15 @@ global define boolean CheckDate( string day, string month, string year )
     ret = ret && yea>=1970 && yea<2032;
     return( ret );
     }
+
+// does the hwclock run on UTC only ? -> skip asking
+global define boolean utc_only () {
+
+    y2milestone( "Arch::sparc () %1 Arch::board_iseries () %2 Arch::board_chrp () %3 Arch::board_prep () %4", Arch::sparc (), Arch::board_iseries (), Arch::board_chrp (), Arch::board_prep () );
+
+    return (Arch::sparc () || Arch::board_iseries () ||
+	    Arch::board_chrp () || Arch::board_prep ());
+}
 
 // ------------------------------------------------------------------
 // END: Globally defined functions
