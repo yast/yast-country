@@ -103,7 +103,7 @@
 		WFM::SetLanguage (language);			// switch lang
 		encoding    = WFM::GetEncoding();		// get encoding for switched lang
 
-		WFM::SetLanguage (currentLang, currentEncoding);// reset as it was before
+		WFM::SetLanguage (currentLanguage, currentEncoding);// reset as it was before
 	    }
 	    else
 	    {
