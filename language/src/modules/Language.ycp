@@ -48,7 +48,7 @@ global define void Language() ``{
 
     if ( Mode::initial )
     {
-    	y2milestone( "Mode::language %1 Installation::defaultLanguage %2", 
+    	y2milestone( "Mode::language %1 Installation::defaultLanguage %2",
 	             Mode::language, Installation::defaultLanguage );
 	if (Mode::language == "")
 	{
@@ -65,7 +65,7 @@ global define void Language() ``{
 	if( size(local_lang)==0 )
 	    {
 	    // Try to read the old YaST1 language and convert setting.
-	    string y1lang = 
+	    string y1lang =
 		Misc::SysconfigRead(.sysconfig.language.DEFAULT_LANGUAGE, "" );
 	    map lang2iso = get_lang2iso();
 	    if( size(y1lang)>0 && size(lang2iso[y1lang]:"")>0 )
@@ -83,7 +83,7 @@ global define void Language() ``{
 	if( pos >= 0 )
 	    local_lang = substring( local_lang, 0, pos );
 
-	y2milestone( "setting laguage to %1", local_lang );
+	y2milestone( "setting language to %1", local_lang );
 
 	Set( local_lang );
 
@@ -114,7 +114,7 @@ global define string MakeProposal( boolean force_reset, boolean language_changed
  * Store current language as default language.
  */
 global define string SetDefault() ``{
-    y2milestone("Setting default laguage: %1", language);
+    y2milestone("Setting default language: %1", language);
     default_language = language;
     return;
 }
