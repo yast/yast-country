@@ -59,6 +59,8 @@ boolean use_utf8 = true;
 
 global boolean ExpertSettingsChanged = false;
 
+// level of translation completeness
+map<string,integer> translation_status	= $[];
 
 /**
  * Get the language DB
@@ -66,10 +68,8 @@ global boolean ExpertSettingsChanged = false;
  */
 define map<string, list> get_languages_map() {
 
-    // The system_language DB
-    //
     map<string, list> languages_map = (map<string, list>)
-	eval (SCR::Read (.target.yast2, ["language.ycp", $[]]));
+	WFM::CallFunction ("languages", []);
 
     if ( languages_map == nil ) languages_map = $[];
 
@@ -470,6 +470,20 @@ global define string GetLanguageCountry() {
 
     y2debug("language=%1",lang);
     return lang;
+}
+
+/**
+ * Returns true if translation for given language is not complete
+ */
+global define boolean IncompleteTranslation (string lang) {
+
+    if (!haskey (translation_status,lang))
+    {
+	translation_status[lang]	= 99;
+    }
+    integer necessary_status	= 95; // FIXME get it from ProductF...
+
+    return translation_status[lang]:0 < necessary_status;
 }
 
 /* EOF */

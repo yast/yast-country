@@ -22,18 +22,20 @@
 
     import "Console";
     import "Encoding";
+    import "GetInstArgs";
     import "Installation";
     import "Keyboard";
     import "Label";
     import "Language";
     import "Misc";
     import "Mode";
+    import "PackageCallbacksInit";
     import "PackageSystem";
     import "Popup";
+    import "Report";
     import "Stage";
     import "Timezone";
     import "Wizard";
-    import "GetInstArgs";
 
 
 
@@ -450,6 +452,11 @@ Additional packages with support for the selected primary and secondary language
 	    if (language != Language::language)
 	    {
 		y2milestone ("Language changed from %1 to %2", Language::language, language);
+		if (Language::IncompleteTranslation (language))
+		{
+		    // warning message
+		    Popup::Warning (_("The translation of this language is not complete."))
+		}
 
 		if (more_languages)
 		{
@@ -542,9 +549,7 @@ Additional packages with support for the selected primary and secondary language
 
 		if (!Stage::initial () && !Mode::update ())
 		{
-		    // save language and console settings
-		    Language::Save();
-		    Console::Save();
+		    // save settings (rest is saved in LanguageWrite)
 		    if (kbd_adapt)
 			Keyboard::Save (true);
 		    if (tmz_adapt)
@@ -574,6 +579,27 @@ Additional packages with support for the selected primary and secondary language
 			Pkg::SetAdditionalLocales (selected_languages);
 
 			Pkg::PkgSolve (true);
+
+			boolean error	= false;
+			// check for disk space (#50745)
+			foreach (string mountpoint, list<integer> usage,
+			    Pkg::TargetGetDU (),
+			{
+			    if (usage[2]:0 > usage[0]:0)
+			    {
+				error = true;
+			    }
+			});
+			if (error)
+			{
+			    // error message
+			    Report::Error (_("There is not enough space to install all additional packages.
+Remove some languages from the selection."));
+			    ret = `not_next;
+			    continue;
+			}
+
+			PackageCallbacksInit::InitPackageCallbacks ();
 			Pkg::PkgCommit (0);
 		    }
 		}
