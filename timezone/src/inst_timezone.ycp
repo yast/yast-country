@@ -330,6 +330,7 @@ If you are unsure, use the default values already selected.
 			 help_text,
 			 (boolean)WFM::Args(0), (boolean)WFM::Args(1) );
 
+    Wizard::SetDesktopIcon("timezone");
     if ( Mode::initial || Mode::firstboot)
     {
 	Wizard::SetTitleIcon( "timezone" );

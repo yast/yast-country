@@ -31,7 +31,6 @@ import "Label";
 
     // create the wizard dialog
     Wizard::CreateDialog();
-    Wizard::SetDesktopIcon("timezone");
 
     //------------------------------------------------------------
 

@@ -46,7 +46,6 @@
     // create the wizard dialog
     //
     Wizard::CreateDialog();
-    Wizard::SetDesktopIcon("keyboard");
 
     any result = nil;
 

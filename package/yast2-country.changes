@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep 22 13:41:15 CEST 2004 - fehr@suse.de
+
+- place calls to SetDesktopIcon where they work (#45714)
+- 2.10.12
+
+-------------------------------------------------------------------
 Tue Sep 14 12:26:35 CEST 2004 - fehr@suse.de
 
 - add "Traditional Chinese HongKong" to language list (#45239)
