@@ -113,6 +113,8 @@ global define void Set( string lang )
 	    AsciiFile::AppendLine( yinf, ["Language:", language] );
 	    }
 	AsciiFile::RewriteFile( yinf, "/etc/yast.inf" );
+
+	SCR::Write( .FvwmCommand.lang, language );
 	}
     }
 
