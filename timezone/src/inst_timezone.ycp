@@ -322,7 +322,7 @@ If you are unsure, use the default values already selected.
 			 (boolean)WFM::Args(0), (boolean)WFM::Args(1) );
 
     if ( Mode::initial )
-	Wizard::SetIcon( "timezone" );
+	Wizard::SetTitleIcon( "timezone" );
 
 
     // Initially set the current timezone to establish a consistent state.
