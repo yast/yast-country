@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Apr 10 16:41:31 CEST 2003 - fehr@suse.de
+
+- some changes necessary becuase of changed Sax2 kbd handling
+
+-------------------------------------------------------------------
 Tue Mar 18 12:27:18 CET 2003 - kkaempf@suse.de
 
 - Use locale el_GR.ISO-8859-7, consolefont lat7a-14.psfu for

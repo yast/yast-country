@@ -33,7 +33,6 @@
  *	XkbKeyCodes
  *	XkbVariant
  *	XkbOptions
- *	MapName
  *	LeftAlt
  *	RightAlt
  *	ScrollLock
@@ -129,10 +128,6 @@
     // X11 Options string
     //
     global string XkbOptions = "";
-
-    // X11 MapName 
-    //
-    global string MapName = "";
 
     // X11 LeftAlt 
     //
@@ -824,7 +819,6 @@ global define boolean CalledRestore()
 	    XkbOptions = x11data["XkbOptions"]:"";
 	    XkbKeyCodes = x11data["XkbKeyCodes"]:"";
 	    Protocol = x11data["Protocol"]:"Standard";
-	    MapName = x11data["MapName"]:"";
 	    LeftAlt = x11data["LeftAlt"]:"";
 	    RightAlt = x11data["RightAlt"]:"";
 	    ScrollLock = x11data["ScrollLock"]:"";
@@ -861,7 +855,7 @@ global define boolean CalledRestore()
 	if( size(Apply)>0 && Mode::x11_setup_needed )
 
 	    {
-	    xkb_cmd = "/usr/X11R6/bin/xkbset -l \"" + Apply + "\"";
+	    xkb_cmd = "/usr/X11R6/bin/setxkbmap " + Apply;
 	    }
 	else
 	    {
