@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Mar 12 13:13:42 CET 2003 - fehr@suse.de
+
+- fix possible unowanted abort dialog after langauge change (#25147)
+- 2.7.12
+
+-------------------------------------------------------------------
 Mon Mar 10 13:12:11 CET 2003 - kkaempf@suse.de
 
 - fix console_encoding (#24689)

@@ -184,6 +184,7 @@ Choose the new <b>language</b> for your SuSE Linux system.
     {
 	ret = Wizard::UserInput();
 
+	y2milestone( "ret %1", ret );
 
 	if ( ret == `abort &&
 	     WFM::CallFunction(`inst_confirm_abort(abort_mode) ) )
@@ -259,6 +260,7 @@ Adapt keyboard settings?
 		{
 		    // Display newly translated dialog.
 		    //
+		    UI::SetFocus(`id(`next));
 		    return( `again );
 		}
 	    }
