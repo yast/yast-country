@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Feb 25 13:13:02 CET 2005 - jsuchome@suse.cz
+
+- fixed help text for (un)installation of language packages (#66599)
+- warning for incomplete translation shown after Accept (#66544)
+- fixed translation of 'romanian' (#66574)
+
+-------------------------------------------------------------------
 Thu Feb 24 15:03:24 CET 2005 - jsuchome@suse.cz
 
 - do not re-sort list of languages (#66287)
