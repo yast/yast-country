@@ -269,6 +269,9 @@ If unsure, use the default values already selected.
 			 help_text, (boolean)WFM::Args(0), 
 			 (boolean)WFM::Args(1) );
 
+    if ( Mode::initial )
+	Wizard::SetTitleIcon( "keyboard" );
+
     // Initially set the current keyboard to establish a consistent state.
     //
 
