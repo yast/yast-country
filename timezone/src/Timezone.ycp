@@ -477,7 +477,8 @@ global define list Selection( integer num )
     map tmap = mapmap( string key, string name, zmap[num,"entries"]:$[],
 		       ``{
 		       translate = name;
-		       return $[ (string)eval(name): key ];
+			   string k = (string)eval(name);
+		       return ($[ k : key ]);
 		       });
     textdomain "country";
 

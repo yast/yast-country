@@ -185,11 +185,9 @@ Enter the correct date.
     // Autoinstall
     if (Mode::config)
     {
-        /* FIXME
 	import "AutoinstGeneral";
 	timezone = AutoinstGeneral::Clock["timezone"]:"";
 	hwclock = ( AutoinstGeneral::Clock["hwclock"]:"" == "UTC" ) ? "-u"  : "--localtime";
-	*/
     }
 
     string date = "";
@@ -329,9 +327,7 @@ If you are unsure, use the default values already selected.
     integer sel = 0;
     if (Mode::config)
 	{
-        /* FIXME
 	sel = Timezone::Set(AutoinstGeneral::Clock["timezone"]:"", true);
-	*/
 	}
     else
 	sel = Timezone::Set( Timezone::timezone, true );
@@ -413,12 +409,10 @@ If you are unsure, use the default values already selected.
 	    //
 	    if (Mode::config)
 	    {
-		/* FIXME
 		// Autoinstall
 		import "AutoinstGeneral";
 		AutoinstGeneral::Clock["hwclock"] = ( hwclock_s == `hwclock_utc ) ? "UTC" : "localtime";
 		AutoinstGeneral::Clock["timezone"]  =  timezone;
-		*/
 	    }
 	    else
 	    {
