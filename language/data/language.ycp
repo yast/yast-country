@@ -104,6 +104,11 @@ $[
 		  "",
 		  "" ],
 
+  "ko_KR"       : [ "한글 ",
+  		    "Korean",
+  		    "",	
+  		    "" ],
+
   "lt_LT"	: [ "Lietuvių",
 		  "Lithuanian",
 		  "",
@@ -153,6 +158,11 @@ $[
 
   "zh_CN"       : [ "中文 (Chinese)",
 		  "Simplified Chinese",
+		  "",
+		  "" ],
+
+  "zh_TW"       : [ "粵語,廣東話 (traditional Chinese)",
+		  "Traditional Chinese",
 		  "",
 		  "" ],
 

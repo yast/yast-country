@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 10 19:48:29 CEST 2002 - fehr@suse.de
+
+- add languages Korean and traditional Chinese to languages
+- 2.6.27
+
+-------------------------------------------------------------------
 Tue Sep 10 16:45:25 CEST 2002 - msvec@suse.cz
 
 - add missing Provides/Obsoletes
