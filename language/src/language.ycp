@@ -75,7 +75,10 @@ define any LanguageSequence () {
 	Wizard::OpenAcceptDialog();	// This dialog will actually be used
 
 	// Params are:				`back `next  set_default
-        result = WFM::CallFunction ("inst_language", [true, true, false]);
+        map args = $[];
+        args["enable_back"] = true;
+        args["enable_next"] = true;
+        result = WFM::CallFunction ("inst_language", [args]);
 
 	Wizard::CloseDialog();
     }

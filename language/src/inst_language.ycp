@@ -33,6 +33,7 @@
     import "Stage";
     import "Timezone";
     import "Wizard";
+    import "GetInstArgs";
 
 
 
@@ -124,7 +125,7 @@ are unset.<br>
     // In this case if the user exits with next the the current setting
     // will be made the default that is restored with "Reset to defaults".
     //
-    boolean set_default = (boolean)WFM::Args( 2 );
+    boolean set_default = GetInstArgs::argmap()["first_run"]:"no" == "yes";
 
     y2milestone("set_default: %1", set_default );
 
@@ -385,7 +386,9 @@ With <b>Install language dependent packages</b> option, additional packages with
 </p>");
     }
 
-    Wizard::SetContents (heading_text, contents, help_text, (boolean)WFM::Args(0), (boolean)WFM::Args(1));
+    // Screen title for the first interactive dialog
+
+    Wizard::SetContents (heading_text, contents, help_text,GetInstArgs::enable_back() , GetInstArgs::enable_next());
 
     Wizard::SetDesktopIcon("yast-language");
 

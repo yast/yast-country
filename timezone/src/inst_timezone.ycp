@@ -23,6 +23,7 @@ import "Popup";
 import "Stage";
 import "Timezone";
 import "Wizard";
+import "GetInstArgs";
 
 symbol hwclock_s_initial = `none;
 
@@ -305,8 +306,7 @@ If you are unsure, use the default values already selected.
 
     // Screen title for timezone screen
     Wizard::SetContents (_("Clock and Time Zone Configuration"), contents,
-			 help_text,
-			 (boolean)WFM::Args(0), (boolean)WFM::Args(1) );
+			 help_text, GetInstArgs::enable_back(), GetInstArgs::enable_next() );
 
     Wizard::SetDesktopIcon ("timezone");
     if ( Stage::initial () || Stage::firstboot ())
