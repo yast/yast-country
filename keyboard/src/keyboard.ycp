@@ -86,7 +86,7 @@ define any KeyboardSequence () {
 }
 
 /**
- * Handler for kyeboard summary
+ * Handler for keyboard summary
  */
 define boolean KeyboardSummaryHandler (map options) {
 
