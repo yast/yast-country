@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul 28 15:49:11 CEST 2004 - fehr@suse.de
+
+- do not pop up language dialog if linuxrc set language to something
+  other than english (#37679)
+
+-------------------------------------------------------------------
 Thu Jul 15 10:36:34 CEST 2004 - fehr@suse.de
 
 - merged SuSE-Linux-9_1-Branch

@@ -34,6 +34,8 @@ global string language = "en_US";
  */
 string name = "English (US)";
 
+boolean linuxrc_language_set = false;
+
 /**
  * Default language to be restored with MakeProposal.
  */
@@ -118,6 +120,10 @@ global define void Set( string lang )
 	}
     }
 
+global define boolean LinuxrcLangSet()
+    ``{
+    return( linuxrc_language_set );
+    }
 
 global define string GetLocaleString( string lang )
     ``{
@@ -183,7 +189,13 @@ global define void Language()
 	    string tmp_l = (string)SCR::Read (.etc.install_inf.Locale);
 	    y2milestone( "install_inf Locale %1", tmp_l );
 	    if( tmp_l!=nil && size(tmp_l)>0 )
+		{
 		lang = tmp_l;
+		if( lang != "en_US" )
+		    {
+		    linuxrc_language_set = true;
+		    }
+		}
 	    }
 	if( lang == nil)
 	    lang = "";

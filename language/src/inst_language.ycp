@@ -156,12 +156,14 @@ are unset.<br>
     // on textmode probed above (workaround because there isn't any
     // usable console font for all languages).
 
-    map<string,list> languageselsort = mapmap(string lang_code, list lang_info, Language::Selection(), ``{
-				string s = lang_info[1]:"";
-				return $[ s :	// ASCII value is the key
-				    [lang_info[use_ascii?1:0]:"", lang_code]
-			       ];
-			   });
+    map<string,list> languageselsort = 
+	mapmap(string lang_code, list lang_info, Language::Selection(), 
+	    ``{
+	    string s = lang_info[1]:"";
+	    return $[ s :	// ASCII value is the key
+			    [lang_info[use_ascii?1:0]:"", lang_code]
+		    ];
+	    });
 
     term languagesel =
       `SelectionBox(`id(`language), `opt(`notify), "",
@@ -269,24 +271,34 @@ Choose the new <b>language</b> for your system.
 </p>\n");
 	}
 
-    // Screen title for the first interactive dialog
+    boolean skip_dialog = set_default && Language::LinuxrcLangSet();
 
-    Wizard::SetContents( heading_text, contents, help_text, (boolean)WFM::Args(0), (boolean)WFM::Args(1));
+    y2milestone( "skip_dialog %1", skip_dialog );
 
-    if ( Mode::initial )	// No .desktop files in inst-sys - use icon explicitly
-	Wizard::SetTitleIcon( "babelfish" );
+    if( !skip_dialog )
+	{
+	// Screen title for the first interactive dialog
 
+	Wizard::SetContents( heading_text, contents, help_text, 
+			     (boolean)WFM::Args(0), (boolean)WFM::Args(1));
+
+	if( Mode::initial ) // No .desktop files in inst-sys - use icon explicitly
+	    Wizard::SetTitleIcon( "babelfish" );
+	UI::SetFocus(`id(`language));
+	}
     
     // Get the user input.
     //
     any ret = nil;
 
-    UI::SetFocus(`id(`language));
 
     repeat
 	{
-	ret = Wizard::UserInput();
-	y2warning( "UserInput() returned %1", ret );
+	if( !skip_dialog )
+	    ret = Wizard::UserInput();
+	else
+	    ret = `next;
+	y2milestone( "UserInput() returned %1", ret );
 
 	if ( ret == `abort && Popup::ConfirmAbort(`painless) )
 	    {
@@ -308,9 +320,12 @@ Choose the new <b>language</b> for your system.
 	    {
 	    // Get the selected language.
 	    //
-	    language = (string) UI::QueryWidget(`id(`language), `CurrentItem);
+	    if( skip_dialog )
+		language = Language::language;
+	    else
+		language = (string) UI::QueryWidget(`id(`language), `CurrentItem);
 
-	    if( language != Language::language )
+	    if( set_default || language != Language::language )
 		{
 		y2milestone( "Language changed from %1 to %2", Language::language, language );
 
@@ -341,7 +356,7 @@ Choose the new <b>language</b> for your system.
 		// Set it in YaST2
 		Language::WfmSetLanguage();
 
-		if( !Mode::normal && (!Mode::initial || !set_default) )
+		if( !Mode::normal && !set_default )
 		    {
 		    string msg = _("The language will be changed.
 
