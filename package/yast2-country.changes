@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Feb 11 19:11:48 CET 2003 - fehr@suse.de
+
+- allow language setting with two char locale (#19431)
+
+-------------------------------------------------------------------
 Tue Feb 11 10:50:47 CET 2003 - fehr@suse.de
 
 - removed language testsuite, second time in two weeks it caused

@@ -146,19 +146,32 @@ global define map Selection() ``{
  * Set module to selected language.
  * @param lang language string ISO code of language
  */
-global define void Set( string lang ) ``{
-
+global define void Set( string lang ) 
+    ``{
     y2milestone( "lang:%1", lang );
 
-    if ( language != lang )	// Do it only if different
-    {
-	language = lang;
-
+    if( language != lang )	// Do it only if different
+	{
 	map languages_map = get_languages_map();
 
+	if( !haskey( languages_map, lang ) && size(lang)>0 )
+	    {
+	    lang = substring( lang, 0, 2 );
+	    boolean found = false;
+	    foreach( `k, `e, languages_map,
+		``{
+		if( !found && substring( k, 0, 2)==lang )
+		    {
+		    found = true;
+		    lang = k;
+		    }
+		}
+
+	    }
 	name = languages_map[lang, 0]:"English";
+	language = lang;
+	}
     }
-}
 
 
 /**
