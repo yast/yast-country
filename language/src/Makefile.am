@@ -1,7 +1,7 @@
 #
 # Makefile.am for country/language/src
 #
-SUBDIRS = modules
+SUBDIRS = modules proposal
 
 client_DATA =			\
 	language.ycp		\

@@ -1,7 +1,7 @@
 #
 # Makefile.am for country/keyboard/src
 #
-SUBDIRS = modules
+SUBDIRS = modules proposal
 
 client_DATA =				\
 	keyboard.ycp			\

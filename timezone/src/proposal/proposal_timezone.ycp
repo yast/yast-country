@@ -1,0 +1,71 @@
+/**
+ * Module:		proposal_timezone.ycp
+ *
+ * $Id$
+ *
+ * Author:		Klaus Kaempf <kkaempf@suse.de>
+ *
+ * Purpose:		Proposal function dispatcher - timezone.
+ *
+ *			See also file proposal-API.txt for details.
+ */
+{
+    textdomain "proposal";
+
+    import "Timezone";
+
+    string func  = Args(0);
+    map    param = Args(1);
+    map    ret   = $[];
+
+    if ( func == "MakeProposal" )
+    {
+	boolean force_reset      = param["force_reset"     ]:false;
+	boolean language_changed = param["language_changed"]:false;
+
+	// call some function that makes a proposal here:
+	//
+	// DummyMod::MakeProposal( force_reset );
+
+	// Fill return map
+
+	ret =
+	    $[
+	      "raw_proposal"    : [ Timezone::MakeProposal( force_reset, language_changed ) ],
+	      "language_changed": false
+	    ];
+    }
+    else if ( func == "AskUser" )
+    {
+	boolean has_next = param["has_next"]:false;
+
+	// call some function that displays a user dialog
+	// or a sequence of dialogs here:
+	//
+	// sequence = DummyMod::AskUser( has_next );
+
+	symbol result = CallFunction (`inst_timezone (true, has_next));
+
+	// Fill return map
+	
+	ret = $[
+		"workflow_sequence" : result,
+		"language_changed"  : false
+	       ];
+    }
+    else if ( func == "Description" )
+    {
+	// Fill return map.
+	//
+	// Static values do just nicely here, no need to call a function.
+	
+	ret =
+	    $[
+	      "rich_text_title"	:	_("Time zone"),
+	      "menu_title"	:	_("&Time zone"),
+	      "id"		:	"timezone_stuff"
+	    ];
+    }
+
+    return ret;
+}

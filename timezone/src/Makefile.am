@@ -1,6 +1,8 @@
 #
 # Makefile.am for country/timezone/src
 #
+SUBDIRS = proposal
+
 client_DATA =			\
 	timezone.ycp		\
 	inst_timezone.ycp
