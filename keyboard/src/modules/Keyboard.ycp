@@ -388,38 +388,75 @@
 	    // a keyboard. The indicator for this is user_decision which is
 	    // set from outside the module.
 	    //
-	    if ( user_decision )
-	    {
-		if ( language_changed )
+	    if( user_decision )
 		{
+		if( language_changed )
+		    {
 		    y2milestone("User has chosen a keyboard; not following language - only retranslation.");
 		
 		    SetConsole( current_kbd );
 		    SetX11( current_kbd );
+		    }
 		}
-	    }
 	    else
-	    {
-		// User has not yet chosen a keyboard ==> follow language.
-		//
-		string local_kbd = GetKeyboardForLanguage( Language::language, "english-us" );
-
-		if ( local_kbd != "" )
 		{
+		string local_kbd = "";
+		string kt = SCR::Read( .etc.install_inf.Keytable );
+		if( kt != nil )
+		    {
+		    map trans = $[ "de-lat1-nd" : "de-latin1-nodeadkeys",
+				   "mac-fr_CH" : "mac-fr_CH-latin1",
+				   "mac-fi" : "mac-fi-latin1",
+				   "cz-us-qwertz" : "cz-lat2",
+				   "dk" : "dk-latin1",
+				   "fi" : "fi-latin1",
+				   "sk-qwertz" : "sk-qwerty" ];
+		    map kbs = get_reduced_keyboard_db();
+		    y2milestone( "install.inf contains keytable %1", kt );
+		    y2milestone( "kbmodel %1", kb_model );
+		    integer idx=0;
+		    kt = trans[kt]:kt;
+		    if( kt == "us" || kt == "sunkeymap" ) 
+			local_kbd = "english-us";
+		    if( find( kt, ".map.gz" )<0 )
+			{
+			kt = kt + ".map.gz";
+			}
+		    foreach( `key, `entry, get_reduced_keyboard_db(),
+			``{
+			if( size(local_kbd)==0 )
+			    {
+			    if( entry[1,"ncurses"]:"" == kt )
+				{
+				local_kbd = key;
+				}
+			    }
+			});
+		    y2milestone( "keymap says local_kbd %1", local_kbd );
+		    }
+		if( size(local_kbd)==0 )
+		    {
+		    // User has not yet chosen a keyboard ==> follow language.
+		    //
+		    local_kbd = GetKeyboardForLanguage( Language::language, 
+							"english-us" );
+		    }
+		if( local_kbd != "" )
+		    {
 		    SetConsole( local_kbd );
 		    SetX11( local_kbd );
-		}
+		    }
 		else
-		{
-		    if ( language_changed )
 		    {
+		    if( language_changed )
+			{
 			y2error("Can't follow language - only retranslation");
 		
 			SetConsole( current_kbd );
 			SetX11( current_kbd );
+			}
 		    }
 		}
-	    }
 	}
 	
 	return name;
@@ -712,7 +749,7 @@
 	//
 	map keyboards = get_reduced_keyboard_db();
 	
-	y2milestone( "red kbd db %1", keyboards );
+	y2debug( "reduced kbd db %1", keyboards );
 	// Get the entry from the reduced local map for the given language.
 	//
 	kbd_descr = keyboards[keyboard]:[];

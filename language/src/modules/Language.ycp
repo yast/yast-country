@@ -48,6 +48,8 @@ global define void Language() ``{
 
     if ( Mode::initial )
     {
+    	y2milestone( "Mode::language %1 Installation::defaultLanguage %2", 
+	             Mode::language, Installation::defaultLanguage );
 	if (Mode::language == "")
 	{
 	    Mode::language = Installation::defaultLanguage;
@@ -57,11 +59,24 @@ global define void Language() ``{
     }
     else
     {
-	// Try to read the old YaST1 language and conevertt setting).
-	//
 	string local_lang =
-	    Misc::SysconfigRead(.sysconfig.language.RC_LANG, language );
+	    Misc::SysconfigRead(.sysconfig.language.RC_LANG, "" );
 	y2milestone( "reading RC_LANG %1", local_lang );
+	if( size(local_lang)==0 )
+	    {
+	    // Try to read the old YaST1 language and convert setting.
+	    string y1lang = 
+		Misc::SysconfigRead(.sysconfig.language.DEFAULT_LANGUAGE, "" );
+	    map lang2iso = get_lang2iso();
+	    if( size(y1lang)>0 && size(lang2iso[y1lang]:"")>0 )
+		{
+		local_lang = lang2iso[y1lang]:"";
+		}
+	    }
+	if( size(local_lang)==0 )
+	    {
+	    local_lang = language;
+	    }
 
 	integer pos = findfirstof( local_lang, ".@" );
 
@@ -132,6 +147,8 @@ global define map Selection() ``{
  * @param lang language string ISO code of language
  */
 global define void Set( string lang ) ``{
+
+    y2milestone( "lang:%1", lang );
 
     if ( language != lang )	// Do it only if different
     {
