@@ -2,6 +2,7 @@
 Mon Aug  5 17:34:23 CEST 2002 - fehr@suse.de
 
 - write language and model to YAST_KEYBOARD in /etc/sysconfig/keyboard
+- version 2.6.10
 
 -------------------------------------------------------------------
 Mon Aug 05 14:19:29 CEST 2002 - arvin@suse.de
