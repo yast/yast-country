@@ -1,5 +1,5 @@
 /**
- * tests for Language::Set
+ * tests for Language::MakeProposal
  * Author:	jsuchome@suse.cz
  * $Id: Language.ycp 21839 2005-02-22 14:29:39Z jsuchome $
  */
