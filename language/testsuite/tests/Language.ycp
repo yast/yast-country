@@ -9,6 +9,7 @@ map READ = $[
 	"language" : $[ "DEFAULT_LANGUAGE" : "" ],
     ],
     "target" : $[
+	"bash_output" : $[],
 	"symlink" : nil,
         "size" : -1,
     ],
@@ -17,7 +18,7 @@ map READ = $[
     ],
 ];
 
-TESTSUITE_INIT([READ], nil);
+TESTSUITE_INIT([READ,$[],READ], nil);
 import "Pkg";
 import "Language";
 
