@@ -179,8 +179,8 @@ are unset.<br>
 	{
 	// initial heading for language selection
 	// (first 'user visible' screen)
-	heading_text = _("Welcome to YaST2 -- the
-installation and system administration program.
+	heading_text = _("Welcome to YaST2 -- The
+Installation and System Administration Program
 ");
 	}
     else if ( Mode::repair )
