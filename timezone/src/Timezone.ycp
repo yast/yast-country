@@ -202,7 +202,8 @@ global define string MakeProposal( boolean force_reset,
                                    boolean language_changed )
     ``{
     y2milestone("force_reset: %1", force_reset);
-    y2milestone("language_changed: %1", language_changed);
+    y2milestone("language_changed: %1 user_decision %2", language_changed,
+                user_decision );
 
     if( !user_decision || force_reset )
 	{

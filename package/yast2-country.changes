@@ -1,7 +1,8 @@
 -------------------------------------------------------------------
-Wed Feb 19 15:34:25 CET 2003 - fehr@suse.de
+Wed Feb 19 17:10:02 CET 2003 - fehr@suse.de
 
 - add comments to texts for translators (#23774)
+- fix wrong timezone proposal (#23818)
 
 -------------------------------------------------------------------
 Tue Feb 18 17:33:51 CET 2003 - fehr@suse.de

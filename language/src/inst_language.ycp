@@ -222,9 +222,13 @@ Adapt keyboard settings?
 		    {
 		    kbd_adapt = true;
 		    }
-		else if( !Mode::normal )
+		else 
 		    {
-		    kbd_adapt = UI::YesNoPopup( msg );
+		    Timezone::user_decision = true;
+		    if( !Mode::normal )
+			{
+			kbd_adapt = UI::YesNoPopup( msg );
+			}
 		    }
 
 		// Set it in the Language module.
@@ -235,7 +239,6 @@ Adapt keyboard settings?
 		//
 		Console::SelectFont( language );
 
-		Timezone::user_decision = true;
 		if( kbd_adapt )
 		    {
 		    Keyboard::SetKeyboardForLang( language );
