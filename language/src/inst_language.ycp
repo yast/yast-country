@@ -35,16 +35,6 @@
 
 
 
-
-// WARNING: UI::WidgetExists( `id(`abort) ) now ALWAYS returns 'false' in the Qt UI!
-// There is no more widget with ID `abort in the wizard now!
-    
-
-
-
-
-    
-
 define void LanguageExpertDialog()
     ``{
     symbol ret = `none;
@@ -183,27 +173,26 @@ are unset.<br>
 
     string heading_text = "";
 
-    if ( Mode::initial &&   // UI::WidgetExists(`id(`abort) ) &&
-	 ! Mode::repair )
-    {
+    if( Mode::initial && set_default && !Mode::repair )
+	{
 	// initial heading for language selection
 	// (first 'user visible' screen)
 	heading_text = _("Welcome to YaST2 -- the SuSE Linux
 installation and system administration program.
 ");
-    }
+	}
     else if ( Mode::repair )
-    {
+	{
 	// heading text
 	heading_text = _("Welcome to YaST2 System Repair");
-    }
+	}
     else
-    {
+	{
 	// heading text
 	heading_text = _("Language selection");
-    }
+	}
 
-    if( Mode::initial && UI::WidgetExists( `id(`abort) ) )
+    if( Mode::initial && set_default )
 	{
 	show_expert = false;
 	}
@@ -239,7 +228,7 @@ installation and system administration program.
     string help_text = "";
 
     if (Mode::initial)
-    {
+	{
 	// help text for initial (first time) language screen
 	help_text = _("<p>
 Choose the <b>language</b> to use during installation and for
@@ -259,7 +248,7 @@ Click <b>Accept</b> to proceed to the next dialog.
 all your settings in the last installation dialog.
 </p>
 ");
-	if ( UI::WidgetExists( `id(`abort ) ) )
+	if( set_default )
 	    {
 	    // help text, continued
 	    help_text = help_text + _("<p>
@@ -268,15 +257,15 @@ installation process.
 </p>
 ");
 	    }
-    }
+	}
     else
-    {
+	{
 	// different help text when called after installation
 	// in an installed system
 	help_text = _("<p>
 Choose the new <b>language</b> for your SuSE Linux system.
 </p>\n");
-    }
+	}
 
     // Screen title for the first interactive dialog
 
@@ -331,7 +320,7 @@ Adapt keyboard settings?
 
 		boolean kbd_adapt = false;
 
-		if( Mode::initial && UI::WidgetExists(`id(`abort) ))
+		if( Mode::initial && set_default )
 		    {
 		    kbd_adapt = true;
 		    }
