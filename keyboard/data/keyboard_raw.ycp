@@ -403,13 +403,13 @@ return ($[
   "czech-qwerty":
     [
 	_("Czech (qwerty)"),
-	$[ "i386" : $[ "pc104": $[ "ncurses": "cz-lat2.map.gz",
+	$[ "i386" : $[ "pc104": $[ "ncurses": "cz-lat2-us.map.gz",
 				   "compose" : "latin2" ]],
-	   "ia64" : $[ "pc104": $[ "ncurses": "cz-lat2.map.gz",
+	   "ia64" : $[ "pc104": $[ "ncurses": "cz-lat2-us.map.gz",
 				   "compose" : "latin2" ]],
-	   "x86_64" : $[ "pc104": $[ "ncurses": "cz-lat2.map.gz",
+	   "x86_64" : $[ "pc104": $[ "ncurses": "cz-lat2-us.map.gz",
 				     "compose" : "latin2" ]],
-	   "alpha" : $[ "pc104": $[ "ncurses": "cz-lat2.map.gz",
+	   "alpha" : $[ "pc104": $[ "ncurses": "cz-lat2-us.map.gz",
 				  "compose" : "latin2" ]],
 	   "sparc" : $[ "type4": $[ "ncurses": "sunkeymap.map.gz" ],
 			"type5": $[ "ncurses": "sunkeymap.map.gz" ],
@@ -417,10 +417,10 @@ return ($[
 	   "sparc64" : $[ "type4": $[ "ncurses": "sunkeymap.map.gz" ],
 			  "type5": $[ "ncurses": "sunkeymap.map.gz" ],
 			  "type5_euro": $[ "ncurses": "sunkeymap.map.gz" ],
-			  "pc104": $[ "ncurses": "cz-lat2.map.gz",
+			  "pc104": $[ "ncurses": "cz-lat2-us.map.gz",
 				      "compose" : "latin2" ]],
 	   "ppc" : $[ "macintosh" : $[ "ncurses": "mac-us.map.gz" ],
-		      "pc104" : $[ "ncurses": "cz-lat2.map.gz" ]]
+		      "pc104" : $[ "ncurses": "cz-lat2-us.map.gz" ]]
 	]
     ],
   "slovak":

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct 26 14:38:45 CEST 2004 - jsuchome@suse.cz
+
+- timezone: show time formated by locale settings (#34633) 
+- set correct keyboard map for czech-qwerty (#46829)
+
+-------------------------------------------------------------------
 Mon Oct 11 15:21:45 CEST 2004 - jsrain@suse.cz
 
 - adapted to new Arch:: interface

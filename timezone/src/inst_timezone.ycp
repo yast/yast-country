@@ -27,10 +27,10 @@ import "Popup";
 
 symbol hwclock_s_initial = `none;
 
-define void SetTimezone( symbol hwclock, string timezone, boolean really,
-                         boolean changed_time )
-    ``{
-    y2milestone( "SetTimezone hw %1, tz %2 really %3 tchanged %4 initial:%5", 
+define void SetTimezone ( symbol hwclock, string timezone, boolean really,
+                         boolean changed_time ) {
+
+    y2milestone( "SetTimezone hw %1, tz %2 really %3 tchanged %4 initial:%5",
                  hwclock, timezone, really, changed_time, hwclock_s_initial );
     Timezone::hwclock = (hwclock == `hwclock_utc) ? "-u" : "--localtime";
     Timezone::Set( timezone, really );
@@ -38,11 +38,10 @@ define void SetTimezone( symbol hwclock, string timezone, boolean really,
     y2milestone( "SetTimezone diff %1", Timezone::diff ); 
     // Redisplay date/time.
     //
-    UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime(really) );
-    };
+    UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime (really, true));
+};
 
-define boolean SetTimeDialog()
-    ``{
+define boolean SetTimeDialog() {
     // help text
     string htext = _("<p>This dialog offers the possibility to change
 the system time and date.</p>
@@ -159,7 +158,7 @@ Enter the correct date.
     until( ret==`apply || ret==`cancel );
     UI::CloseDialog();
     return( ret==`apply );
-    };
+};
 
 /* ----------------------------------------------------------------------
  * Timezone
@@ -176,7 +175,7 @@ Enter the correct date.
 
     map dpy = UI::GetDisplayInfo();
     boolean ncurses = dpy["TextMode"]:false;
-    y2milestone( "timezone_old %1", timezone_old );
+    y2internal ( "timezone_old %1", timezone_old );
     y2milestone( "GetDisplayInfo %1 ncurses %2", dpy, ncurses );
 
     // Autoinstall
@@ -223,7 +222,9 @@ Enter the correct date.
 
     // Assign system date and time.
     //
-    date = Timezone::GetDateTime(true);
+    date = Timezone::GetDateTime(true, true);
+
+y2internal ("map: %1", Timezone::GetDateTimeMap());
 
     // Ask for UTC vs. Localtime
 
@@ -386,14 +387,14 @@ If you are unsure, use the default values already selected.
 		}
 	    }
 	else if( ret == `settime )
+	{
+	    if ( SetTimeDialog() )
 	    {
-	    if( SetTimeDialog() )
-		{
-		y2milestone( "date %1", Timezone::GetDateTime(false) );
-		UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime(false) );
+		UI::ChangeWidget(`id(`date), `Value,
+		    Timezone::GetDateTime (false, true));
 		changed_time = true;
-		}
 	    }
+	}
 	else if( ret == `next || ret == `timezone || ret == `hwclock )
 	    {
 	    // Get current settings.

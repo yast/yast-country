@@ -297,19 +297,22 @@ global define string GetTimezoneForLanguage( string sys_language,
 /**
  * GetDateTime()
  *
- * Get the output of /bin/date "+%H:%M:%S - %Y-%m-%d"
+ * Get the output of /bin/date "+%H:%M:%S - %Y-%m-%d" FIXME
  *
  * @param	flag if to get real system time or if to simulate changed
  *		timezone settings with TZ=
+ * @param	if the date and time should be returned in locale defined format
  *
  * @return  The string output.
  *
  * @see	-
  */
-global define string GetDateTime( boolean real_time )
-    ``{
+global define string GetDateTime (boolean real_time, boolean locale_format) {
+
     string cmd = "";
-    string date_format = "+%H:%M:%S - %d-%m-%Y";
+
+    string date_format = locale_format ? "+%c" : "+%H:%M:%S - %d-%m-%Y";
+
     y2milestone( "GetDateTime hwclock %1 real:%2", hwclock, real_time );
     if( !real_time )
 	{
@@ -339,9 +342,10 @@ global define string GetDateTime( boolean real_time )
 	    {
 	    cmd = sformat( "TZ=%1 ", timezone );
 	    }
-	cmd = cmd + sformat( "/bin/date \"%1\" \"--date=now %2sec\"", 
+	cmd = cmd + sformat( "/bin/date \"%1\" \"--date=now %2sec\"",
 			     date_format, ds*diff );
-	}
+// FIXME does it work with TZ change???
+    }
     else
 	{
 	cmd = sformat( "/bin/date \"%1\"", date_format );
@@ -349,10 +353,7 @@ global define string GetDateTime( boolean real_time )
     y2milestone( "GetDateTime cmd=%1", cmd );
     string local_date = lookup( (map)SCR::Execute( .target.bash_output, cmd ),
 				"stdout", "" );
-	
-    // cut off LF
-    //
-    local_date = substring( local_date, 0 , size( local_date ) - 1 );
+
     y2milestone( "GetDateTime local_date=%1", local_date );
 
     return( local_date );
@@ -464,7 +465,7 @@ global define string MakeProposal( boolean force_reset,
 
     clock_setting = deletechars(add_text,":") + " " + clock_setting;
 
-    string date = GetDateTime(true);
+    string date = GetDateTime (true, true);
 
     y2milestone( "MakeProposal hwclock %1", hwclock );
 
@@ -555,20 +556,25 @@ global define void Save()
     return;
     }
 
-global define map GetDateTimeMap()
-    ``{
+
+/**
+ * Return current date and time in the map
+ */
+global define map GetDateTimeMap() {
+
     map ret = $[];
-    list dparts = filter( string v, splitstring( GetDateTime(false), " -:" ), 
-                          ``(size(v)>0));
+    list dparts = filter (
+	string v,splitstring (GetDateTime (false,false), " -:" ),``(size(v)>0));
+
     ret["hour"] = dparts[0]:"";
     ret["minute"] = dparts[1]:"";
     ret["second"] = dparts[2]:"";
     ret["day"] = dparts[3]:"";
     ret["month"] = dparts[4]:"";
-    ret["year"] = dparts[5]:"";
+    ret["year"] = dparts[5]:""; //FIXME \n?
     y2milestone( "GetDateTimeMap dparts %1 ret %2", dparts, ret );
     return( ret );
-    }
+}
 
 global define boolean CheckTime( string hour, string minute, string second )
     ``{
