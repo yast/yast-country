@@ -200,7 +200,7 @@ $[
     ],
   "portugese-br":
     [
-	_("Portugese (Brazil)"),
+	_("Portuguese (Brazil)"),
 	$[ "i386" : $[ "pc104": $[ "ncurses": "br-abnt2.map.gz"]],
 	   "ia64" : $[ "pc104": $[ "ncurses": "br-abnt2.map.gz"]],
 	   "x86_64" : $[ "pc104": $[ "ncurses": "br-abnt2.map.gz"]],
