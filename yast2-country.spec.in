@@ -36,7 +36,7 @@ Summary:	Setting the keyboard
 # console
 
 @moduledir@/Console.ycp
-@agentdir@/cfg_console.scr
+@scrconfdir@/cfg_console.scr
 
 # keyboard
 
@@ -55,7 +55,7 @@ Summary:	Setting the keyboard
 @ydatadir@/xkblayout2keyboard.ycp
 @ydatadir@/keymap2mac.ycp
 
-@agentdir@/cfg_keyboard.scr
+@scrconfdir@/cfg_keyboard.scr
 
 # language
 @moduledir@/Language.ycp
@@ -71,7 +71,7 @@ Summary:	Setting the keyboard
 @ydatadir@/language.ycp
 @ydatadir@/lang2iso.ycp
 
-@agentdir@/cfg_language.scr
+@scrconfdir@/cfg_language.scr
 
 # timezone
 
@@ -87,4 +87,4 @@ Summary:	Setting the keyboard
 @ydatadir@/timezone_raw.ycp
 @ydatadir@/lang2tz.ycp
 
-@agentdir@/cfg_clock.scr
+@scrconfdir@/cfg_clock.scr
