@@ -20,6 +20,7 @@
     import "Arch";
     import "Mode";
     import "Popup";
+    import "GetInstArgs";
 
     // After import "Arch" and "Mode"
     //
@@ -259,8 +260,8 @@ If unsure, use the default values already selected.
 
     // Screen title for keyboard screen
     Wizard::SetContents( _("Keyboard Configuration"), contents,
-			 help_text, (boolean)WFM::Args(0), 
-			 (boolean)WFM::Args(1) );
+			 help_text, GetInstArgs::enable_back(), 
+			 GetInstArgs::enable_next() );
 
     Wizard::SetDesktopIcon("keyboard");
     if ( Stage::initial () )
