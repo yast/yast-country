@@ -1,8 +1,11 @@
 -------------------------------------------------------------------
 Thu Sep  4 15:30:22 CEST 2003 - fehr@suse.de
 
-- fix bug with wron default timezone (#29968)
+- fix bug with wrong default timezone (#29968)
 - forget temporary changes when aborting timzone dialog (#29974)
+- fix saving changed language details in running system (#30054)
+- do not use use utf-8 as default for locale any more
+- 2.8.12
 
 -------------------------------------------------------------------
 Mon Sep 01 10:04:35 CEST 2003 - arvin@suse.de

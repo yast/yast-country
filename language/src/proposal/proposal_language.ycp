@@ -34,6 +34,13 @@
 	y2milestone( "language_on_entry:%1 lang:%2", language_on_entry,
 	             Language::language );
 
+	if( force_reset && language_on_entry != Language::language )
+	    {
+	    // Set it in YaST2
+	    UI::SetLanguage (Language::language, Installation::encoding);
+	    WFM::SetLanguage(Language::language, "UTF-8");
+	    }
+
 	ret =
 	    $[
 	      "raw_proposal"    : [ prop ],
