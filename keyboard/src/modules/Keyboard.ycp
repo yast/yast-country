@@ -80,10 +80,13 @@
     import "Arch";
     import "AsciiFile";
     import "Directory";
+    import "Installation";
     import "Language";
+    import "Linuxrc";
     import "Misc";
     import "Mode";
     import "ProductFeatures";
+    import "Stage";
 
     // ---------------------------------------------------------------------------------------
     // START: Globally defined data to be accessed via Keyboard::<variable>
@@ -449,7 +452,7 @@ global define boolean SetLanguage( string keyboard )
 
 	// X11 command...
 	// do not try to run this with remote X display
-	if( size(Apply)>0 && Mode::x11_setup_needed )
+	if( size(Apply)>0 && Installation::x11_setup_needed () )
 
 	    {
 	    xkb_cmd = "/usr/X11R6/bin/setxkbmap " + Apply;
@@ -495,7 +498,7 @@ global define boolean Restore()
 
     GetKbdSysconfig();
 
-    if( !Mode::initial )
+    if( !Stage::initial () )
 	{
 	// Read YaST2 keyboard var.
 	//
@@ -600,7 +603,7 @@ define void probe_settings()
 
     // Probe the keyboard.
     //
-    if (!Mode::config)
+    if (!Mode::config ())
 	{
 	keyboardprobelist = (list)SCR::Read( .probe.keyboard );
 
@@ -751,7 +754,7 @@ global define void Probe()
  */
 global define void Keyboard()
     ``{
-    if ( Mode::config )
+    if ( Mode::config () )
 	return;
 
     // We have three possible sources of information:
@@ -760,19 +763,19 @@ global define void Keyboard()
     // sysconfig:		- installation continue mode or normal mode
     // XF86Config:		- restoring from sysconfig failed and running system
     //
-    y2milestone( "Keyboard::Keyboard init:%1 update:%2", Mode::initial,
-		 Mode::update );
+    y2milestone( "Keyboard::Keyboard init:%1 update:%2", Stage::initial (),
+		 Mode::update () );
     boolean success = false;
 
     // If not in initial mode try to restore from sysconfig.
     //
-    if( !Mode::initial )
+    if( !Stage::initial () )
 	{
 	success = Restore();
 
 	// If this failed and we are in a running system try to restore from XF86Config.
 	//
-	if( !success && Mode::normal )
+	if( !success && Mode::normal () )
 	    {
 	    // Only possible with XFree 4x
 	    //
@@ -805,7 +808,7 @@ global define void Keyboard()
 
     // In initial mode or if restoring failed do probe.
     //
-    if( Mode::initial || !success )	// initial mode or no restore success
+    if( Stage::initial () || !success )	// initial mode or no restore success
 	{
 	// On module entry probe the hardware and set all those data
 	// needed for public access.
@@ -873,7 +876,7 @@ global define boolean xf86_update()
  */
 global define void Save( boolean update_x11 )
     ``{
-    if( Mode::update )
+    if( Mode::update () )
 	{
 	string kbd = Misc::SysconfigRead( .sysconfig.keyboard.YAST_KEYBOARD, "" );
 	if( size(kbd)==0 )
@@ -995,7 +998,7 @@ global define void Save( boolean update_x11 )
 	SCR::Write( .probe.status.configured, unique_key, `yes );
 	y2milestone("Marked keyboard <%1> as configured", unique_key );
 
-	if( ! Mode::serial_console )
+	if( ! Linuxrc::serial_console () )
 	    {
 	    SCR::Write( .probe.status.needed, unique_key, `yes );
 	    y2milestone("Marked keyboard <%1> as needed", unique_key );
@@ -1009,7 +1012,7 @@ global define void Save( boolean update_x11 )
     // Change the respective XF86Config content to match the current settings.
     // Do this only in the running system _and_ if XFree4 is installed.
     //
-    if( update_x11 && ( Mode::normal || Mode::reprobe ) )
+    if( update_x11 && ( Mode::normal () || Stage::reprobe () ) )
 	{
 	y2milestone( "Storing current settings into XF86Config file (XFree4)." );
 	Keyboard::xf86_update();
@@ -1072,7 +1075,7 @@ global define string SetConsole( string keyboard )
 
     y2milestone("loadkeys command: <%1>", ckb_cmd );
 
-    if ( Mode::test )
+    if ( Mode::test () )
 	{
 	y2milestone("Test mode - NOT setting keyboard" );
 	}
@@ -1105,7 +1108,7 @@ global define string SetX11( string keyboard )
 
     y2milestone("Setting X11 keyboard to: <%1>", current_kbd );
 
-    if( Mode::test )
+    if( Mode::test () )
 	{
 	y2milestone ("Test mode - NOT setting X keyboard - would have called:\n %1", xkb_cmd );
 	}
@@ -1113,7 +1116,7 @@ global define string SetX11( string keyboard )
 	{
 	// Actually do it only if we are in graphical mode.
 	//
-	if ( Mode::text )
+	if ( Linuxrc::text () )
 	    {
 	    y2milestone("Not setting X keyboard due to text mode");
 	    }
@@ -1148,7 +1151,7 @@ global define void Set( string keyboard )
     y2milestone( "set to %1", keyboard );
     SetConsole( keyboard );
     SetX11( keyboard );
-    if( Mode::initial )
+    if( Stage::initial () )
 	{
         map yinf = $[];
         AsciiFile::SetDelimiter( yinf, " " );
@@ -1206,7 +1209,7 @@ global define string MakeProposal( boolean force_reset,
 	// a keyboard. The indicator for this is user_decision which is
 	// set from outside the module.
 	//
-	if( user_decision || (Mode::update && !Mode::initial) || Mode::autoinst || ProductFeatures::keyboard!="")
+	if( user_decision || (Mode::update () && !Stage::initial ()) || Mode::autoinst () || ProductFeatures::keyboard!="")
 	    {
 	    if( language_changed )
 		{

@@ -14,13 +14,14 @@ module "Language";
 textdomain "country";
 
 
+import "AsciiFile";
+import "Encoding";
+import "Installation";
 import "Misc";
 import "Mode";
-import "Installation";
-import "AsciiFile";
-import "XF86Path";
-import "Encoding";
 import "ProductFeatures";
+import "Stage";
+import "XF86Path";
 
 
 /**
@@ -100,7 +101,7 @@ global define void Set( string lang )
 	language = lang;
 	Encoding::SetEncLang( language );
 	}
-    if( Mode::initial && !Mode::test)
+    if( Stage::initial () && !Mode::test ())
 	{
 	map yinf = $[];
 	AsciiFile::SetDelimiter( yinf, " " );
@@ -180,7 +181,7 @@ define map get_lang2iso() ``{
  */
 global define void Language()
     ``{
-    if( Mode::initial )
+    if( Stage::initial () )
 	{
 	string lang = (string)SCR::Read( .content.LANGUAGE );
 	y2milestone( "content LANGUAGE %1", lang );
@@ -249,7 +250,7 @@ global define void Language()
 	{
 	rootlang = Misc::SysconfigRead( .sysconfig.language.ROOT_USES_LANG, 
                                         rootlang );
-	if( !Mode::initial )
+	if( !Stage::initial () )
 	    {
 	    string val = toupper( Misc::SysconfigRead( .sysconfig.language.RC_LANG,
 						       "" ));
@@ -389,7 +390,7 @@ global define void Save() ``{
 
     // Change the respective XF86Config content to match the current settings.
     // Do this only in the running system _and_ if XFree4 is installed.
-    if ( Mode::normal )
+    if ( Mode::normal () )
     {
 	y2milestone("Storing current settings into XF86Config file (XFree4)." );
 	XF86Path::update();

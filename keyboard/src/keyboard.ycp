@@ -19,12 +19,12 @@
     textdomain "country";
 
     import "Keyboard";
+    import "Label";
     import "Misc";
     import "Mode";
-
-    import "Wizard";
     import "Popup";
-    import "Label";
+    import "Stage";
+    import "Wizard";
 
     // Memorize the current keyboard.
     //
@@ -32,7 +32,7 @@
 
     // Check if this is a reconfiguration run.
     //
-    if ( Mode::reprobe )
+    if ( Stage::reprobe () )
     {
 	// Reprobe keyboard module to achieve same behaviour as during installation.
 	//

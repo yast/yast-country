@@ -20,18 +20,18 @@
 {
     textdomain "country";
 
-    import "Mode";
-    import "Misc";
-    import "Installation";
     import "Console";
     import "Encoding";
-    import "Language";
-    import "Timezone";
+    import "Installation";
     import "Keyboard";
-    import "Wizard";
     import "Label";
+    import "Language";
+    import "Misc";
+    import "Mode";
     import "Popup";
-
+    import "Stage";
+    import "Timezone";
+    import "Wizard";
 
 
 
@@ -177,7 +177,7 @@ are unset.<br>
 
     string heading_text = "";
 
-    if( Mode::initial && set_default && !Mode::repair )
+    if( Stage::initial () && set_default && !Mode::repair () )
 	{
 	// initial heading for language selection
 	// (first 'user visible' screen)
@@ -185,7 +185,7 @@ are unset.<br>
 Installation and System Administration Program
 ");
 	}
-    else if ( Mode::repair )
+    else if ( Mode::repair () )
 	{
 	// heading text
 	heading_text = _("Welcome to YaST2 System Repair");
@@ -196,7 +196,7 @@ Installation and System Administration Program
 	heading_text = _("Language selection");
 	}
 
-    if( Mode::initial && set_default )
+    if( Stage::initial () && set_default )
 	{
 	show_expert = false;
 	}
@@ -231,7 +231,7 @@ Installation and System Administration Program
 
     string help_text = "";
 
-    if (Mode::initial)
+    if (Stage::initial ())
 	{
 	// help text for initial (first time) language screen
 	help_text = _("<p>
@@ -276,7 +276,7 @@ Choose the new <b>language</b> for your system.
     Wizard::SetContents( heading_text, contents, help_text, (boolean)WFM::Args(0), (boolean)WFM::Args(1));
 
     Wizard::SetDesktopIcon("yast-language");
-    if ( Mode::initial )	// No .desktop files in inst-sys - use icon explicitly
+    if ( Stage::initial () )	// No .desktop files in inst-sys - use icon explicitly
 	Wizard::SetTitleIcon( "babelfish" );
 
     
@@ -321,7 +321,7 @@ Choose the new <b>language</b> for your system.
 
 		boolean kbd_adapt = false;
 
-		if( Mode::initial && set_default )
+		if( Stage::initial () && set_default )
 		    {
 		    kbd_adapt = true;
 		    Timezone::ResetZonemap();
@@ -344,7 +344,7 @@ Choose the new <b>language</b> for your system.
 		// Set it in YaST2
 		Language::WfmSetLanguage();
 
-		if( !Mode::normal && !set_default )
+		if( !Mode::normal () && !set_default )
 		    {
 		    string msg = _("The language will be changed.
 
@@ -359,7 +359,7 @@ Adapt keyboard settings?
 		if( kbd_adapt )
 		    {
 		    Keyboard::SetKeyboardForLang( language );
-		    if( Mode::initial && set_default )
+		    if( Stage::initial () && set_default )
 			{
 			Keyboard::SetKeyboardDefault();
 			}
@@ -390,7 +390,7 @@ Adapt keyboard settings?
 		    Language::SetDefault();
 		    }
 
-		if( !Mode::initial )
+		if( !Stage::initial () )
 		    {
 		    // save language and console settings
 		    Language::Save();

@@ -17,6 +17,7 @@ import "Arch";
 import "Language";
 import "Misc";
 import "Mode";
+import "Stage";
 import "Storage";
 import "String";
 import "ProductFeatures";
@@ -152,7 +153,7 @@ global define integer Set( string zone, boolean really )
 
     // Adjust system to the new timezone.
     //
-    if( !Mode::config && really )
+    if( !Mode::config () && really )
 	{
 	string cmd = "/usr/sbin/zic -l " + timezone;
 	y2milestone( "Set cmd %1", cmd );
@@ -199,7 +200,7 @@ global define void Timezone()
     //
     hwclock = "-u";
 
-    if( Mode::initial )
+    if( Stage::initial () )
 	{
 	// language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
 	map<string, string> lang2tz = get_lang2tz();
@@ -212,7 +213,7 @@ global define void Timezone()
 	    Set( new_timezone, true );
 	    }
 	}
-    else if( !Mode::config )
+    else if( !Mode::config () )
 	{
 	timezone = Misc::SysconfigRead(.sysconfig.clock.TIMEZONE, timezone );
 	default_timezone = 
@@ -418,7 +419,7 @@ global define string MakeProposal( boolean force_reset,
 	// a timezone. The indicator for this is user_decision which is
 	// set from outside the module.
 	//
-	if( user_decision || Mode::autoinst || ProductFeatures::timezone!="")
+	if( user_decision || Mode::autoinst () || ProductFeatures::timezone!="")
 	    {
 	    if( language_changed )
 		{
@@ -540,7 +541,7 @@ global define list Region()
  */
 global define void Save()
     ``{
-    if ( Mode::update )
+    if ( Mode::update () )
     {
 	return;
     }
