@@ -1373,15 +1373,20 @@ global define void SetExpertValues( map val )
 	}
     }
 
-global define void SetKeyboardForLang( string lang )
-    ``{
-    string lkbd = GetKeyboardForLanguage( lang, "english-us" );
-    y2milestone( "lang %1 lkbd %2", lang, lkbd );
-    if( lkbd != "" )
-	{
+// set the keayboard layout according to given language
+global define void SetKeyboardForLanguage (string lang) {
+
+    string lkbd = GetKeyboardForLanguage (lang, "english-us");
+    y2milestone ("language %1 proposed keyboard %2", lang, lkbd);
+    if (lkbd != "")
+    {
 	Set( lkbd );
-	}
-    };
+    }
+};
+
+global define void SetKeyboardForLang (string lang) {
+    return SetKeyboardForLanguage (lang);
+}
 
 global define void SetKeyboardDefault()
     ``{
