@@ -164,7 +164,6 @@
      * restore data to system (rc.config agent)
      * returns encoding
      */
-
     global define string Restore ()
     ``{
 	font	   = (string)SCR::Read (.sysconfig.console.CONSOLE_FONT);
@@ -172,17 +171,23 @@
 	unicodeMap = (string)SCR::Read (.sysconfig.console.CONSOLE_UNICODEMAP);
 	magic	   = (string)SCR::Read (.sysconfig.console.CONSOLE_MAGIC);
 	language   = (string)SCR::Read (.sysconfig.language.RC_LANG);
+	y2milestone( "encoding %1", Encoding::console );
+	return Encoding::console;
+    }
+
+    /**
+     * initialize console settings
+     */
+    global define void Init () {
+
 	if (Linuxrc::braille ())
 	{
 	    SCR::Execute (.target.bash, "/usr/bin/setfont");
 	}
 	else
 	{
-	    //UI::SetConsoleFont (magic, font, screenMap, unicodeMap, encoding);
-	    UI::SetConsoleFont (magic, font, screenMap, unicodeMap, language); 
+	    UI::SetConsoleFont (magic, font, screenMap, unicodeMap, language);
 	}
-	y2milestone( "encoding %1", Encoding::console );
-	return Encoding::console;
     }
 
     /**

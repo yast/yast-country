@@ -64,6 +64,8 @@ define any LanguageSequence () {
 
     LanguageRead ();
 
+    Console::Init ();
+
     Wizard::CreateDialog();
 
     any result = `again;
