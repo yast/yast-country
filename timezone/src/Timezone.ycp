@@ -109,15 +109,15 @@ define map<string, string> get_lang2tz()
  * @see	get_lang2tz()
  */
 
-define list < map < string, any> > get_zonemap()
-    ``{
+define list < map < string, any> > get_zonemap() {
+
     if( size(zonemap)==0 )
 	{
 	zonemap = (list < map < string, any> >)eval(SCR::Read( .target.yast2, "timezone_raw.ycp" ));
 	if( zonemap == nil ) zonemap = [];
 	}
     return( zonemap );
-    }	// get_zonemap()
+} // get_zonemap()
 
 // ------------------------------------------------------------------
 // END: Locally defined functions
@@ -132,52 +132,77 @@ define list < map < string, any> > get_zonemap()
  * @return	the number of the region that contains the timezone
  *
  */
-global define integer Set( string zone, boolean really )
-    ``{
+global define integer Set (string zone, boolean really) {
+
     list <map <string, any> > zmap = get_zonemap();
 
     // Set the new timezone internally
     timezone = zone;
 
     integer sel = 0;
-    while( sel<size(zmap) && !haskey(zmap[sel,"entries"]:$[], zone) )
-	{
+    while (sel<size (zmap) && !haskey (zmap[sel,"entries"]:$[], zone))
+    {
 	sel = sel + 1;
-	}
+    }
 
-    locale translate =  zmap[sel,"name"]:"";
-    name = (string)eval(translate);
-    name = name + " / ";
-    translate = zmap[sel,"entries",timezone]:zone;
-    name = name + (string)eval(translate);
+    name	= zmap [sel,"name"]:"" + " / " + zmap[sel,"entries",zone]:zone;
 
     // Adjust system to the new timezone.
     //
-    if( !Mode::config () && really )
-	{
+    if (!Mode::config () && really )
+    {
 	string cmd = "/usr/sbin/zic -l " + timezone;
 	y2milestone( "Set cmd %1", cmd );
 	y2milestone( "Set ret %1", SCR::Execute( .target.bash_output, cmd ));
-	if( !Arch::s390 () )
-	    {
+	if (!Arch::s390 ())
+	{
 	    cmd = "/sbin/hwclock --hctosys " + hwclock;
 	    y2milestone( "Set cmd %1", cmd );
 	    y2milestone( "Set ret %1", SCR::Execute(.target.bash_output, cmd ));
-	    }
 	}
-    
+    }
+
     // On first assignment store default timezone.
     //
-    if( default_timezone == "" )	// not yet assigned
-	{
+    if (default_timezone == "")	// not yet assigned
+    {
 	default_timezone = timezone;
 	y2milestone( "Set default timezone: <%1>", timezone );
-	}
+    }
 
     y2milestone( "Set timezone:%1 sel:%2 name:%3", timezone, sel, name );
+    return sel;
+}
 
-    return( sel );
+/**
+ * Convert the duplicated timezone to the only one supported
+ * Temporary solution - a result of discussion of bug #47472
+ * @param tmz current timezone
+ */
+global define string UpdateTimezone (string tmz) {
+
+    string updated_tmz	= tmz;
+
+    map tmz_duplicates	= $[
+	"Australia/Adelaide"	: "Australia/South",
+	"Australia/Darwin"	: "Australia/North",
+	"Australia/Sydney"	: "Australia/NSW",
+	"Australia/Canberra"	: "Australia/ACT",
+	"Australia/Brisbane"	: "Australia/Queensland",
+	"Australia/Hobart"	: "Australia/Tasmania",
+	"Australia/Perth"	: "Australia/West"
+	// etc.
+    ];
+
+    if (haskey (tmz_duplicates, tmz))
+    {
+	updated_tmz	= tmz_duplicates[tmz]:tmz;
+	y2milestone ("updating timezone from %1 to %2", tmz, updated_tmz);
+	// TODO if still not present, search file in /usr/share/zoneinfo
     }
+
+    return updated_tmz;
+}
 
 /**
   * Timezone()
@@ -194,57 +219,60 @@ global define integer Set( string zone, boolean really )
   *
   * @see	Set()
   */
-global define void Timezone()
-    ``{
+global define void Timezone() {
+
     // Set default values.
     //
     hwclock = "-u";
 
-    if( Stage::initial () )
-	{
+    if (Stage::initial ())
+    {
 	// language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
 	map<string, string> lang2tz = get_lang2tz();
 
 	string new_timezone = lang2tz[Language::language]:"";
 	y2milestone( "Timezone new_timezone %1", new_timezone );
 
-	if( new_timezone != "" )
-	    {
-	    Set( new_timezone, true );
-	    }
-	}
-    else if( !Mode::config () )
+	if (new_timezone != "")
 	{
+	    Set (new_timezone, true);
+	}
+    }
+    else if (!Mode::config ())
+    {
 	timezone = Misc::SysconfigRead(.sysconfig.clock.TIMEZONE, timezone );
-	default_timezone = 
-	    Misc::SysconfigRead(.sysconfig.clock.DEFAULT_TIMEZONE, 
+
+	default_timezone =
+	    Misc::SysconfigRead(.sysconfig.clock.DEFAULT_TIMEZONE,
 	                        default_timezone);
 	hwclock = Misc::SysconfigRead(.sysconfig.clock.HWCLOCK, hwclock);
-	}
-    return;
     }
+    return;
+}
 
 
-global define void SetTime( string year, string month, string day, 
-                            string hour, string minute, string second )
-    ``{
-    if ( !Arch::s390 () )
-	{
-	string date = sformat( " --date=\"%1/%2/%3 %4:%5:%6\" ", month, day, 
+/**
+ * Set the new time and date given by user
+ */
+global define void SetTime (string year, string month, string day,
+                            string hour, string minute, string second ) {
+    if (!Arch::s390 ())
+    {
+	string date = sformat( " --date=\"%1/%2/%3 %4:%5:%6\" ", month, day,
 	                       year, hour, minute, second );
 	string cmd = "";
-	if( size(timezone)>0 && hwclock != "--localtime" )
-	    {
+	if (size (timezone) >0 && hwclock != "--localtime")
+	{
 	    cmd = "TZ=" + timezone + " ";
-	    }
+	}
 	cmd = cmd + "/sbin/hwclock --set " + hwclock + date;
 	y2milestone( "SetTime cmd %1", cmd );
 	SCR::Execute(.target.bash, cmd );
 	cmd = "/sbin/hwclock --hctosys " + hwclock;
 	y2milestone( "SetTime cmd %1", cmd );
 	SCR::Execute(.target.bash, cmd );
-	}
-    };
+    }
+};
 
 global define void PushVal()
     ``{
@@ -345,7 +373,6 @@ global define string GetDateTime (boolean real_time, boolean locale_format) {
 	    }
 	cmd = cmd + sformat( "/bin/date \"%1\" \"--date=now %2sec\"",
 			     date_format, ds*diff );
-// FIXME does it work with TZ change???
     }
     else
 	{
@@ -482,52 +509,38 @@ global define string MakeProposal( boolean force_reset,
   *
   * @param	-
   *
-  * @return	map	map for timezones 
+  * @return	map	map for timezones
   *			'timezone_id' is used internally in Set and Probe
   *			functions. 'timezone_name' is a user-readable string.
   *			Uses Language::language for translation.
   * @see Set()
   */
 
-global define list Selection( integer num )
-    ``{
-    string trans_str = "";
-    locale translate = "";
-    list <map <string, any> > zmap = get_zonemap();
+global define list Selection (integer num) {
 
-    list<list <string> > trl = maplist( string key, locale name, zmap[num,"entries"]:$[],
-		       ``{
-		       translate = name;
-		       return [ name, key ];
-		       });
+    list<map<string,any> > zmap = get_zonemap();
 
-    trl = sort( list<string> a, list<string> b, trl, 
-                ``(select( lsort( [a[0]:"", b[0]:""] ), 0, "" ) == a[0]:"" && a[0]:""!=b[0]:"") );
-    y2milestone( "trl = %1", trl );
+    list<list<string> > trl	= maplist (
+	string key, string name, zmap[num,"entries"]:$[], ``([ name, key ]));
 
-    list ret = maplist( list e, trl,
-	``{
-	return( `item( `id(e[1]:""), e[0]:"", false ));
-	});
-    return( ret );
-    }
+    trl = sort (list<string> a, list<string> b, trl,
+	``(select (lsort ([a[0]:"", b[0]:""]), 0, "") == a[0]:"" && a[0]:""!=b[0]:""));
+    y2debug ("trl = %1", trl);
 
-global define list Region()
-    ``{
-    list <map <string, any> > zmap = get_zonemap();
-    string trans_str = "";
-    locale translate = "";
+    return maplist (list e, trl, ``(`item (`id(e[1]:""), e[0]:"", false)));
+}
+
+/**
+ * Return list of regions for timezone selection list
+ */
+global define list Region() {
 
     integer num = -1;
-    list ret = maplist( map entry, zmap,
-	``{
-	translate = entry["name"]:"";
-	trans_str = (string)eval(translate);
+    return maplist (map entry, get_zonemap (), {
 	num = num + 1;
-	return( `item( `id(num), trans_str, false ));
-	});
-    return( ret );
-    }
+	return (`item (`id(num), entry["name"]:"", false ));
+    });
+}
 
 
 /**
@@ -539,8 +552,8 @@ global define list Region()
  *
  * @return	-
  */
-global define void Save()
-    ``{
+global define void Save() {
+
     if ( Mode::update () )
     {
 	return;
@@ -555,7 +568,7 @@ global define void Save()
     y2milestone( "Save Saved data for timezone: <%1>", timezone );
 
     return;
-    }
+}
 
 
 /**
@@ -567,12 +580,12 @@ global define map GetDateTimeMap() {
     list dparts = filter (
 	string v,splitstring (GetDateTime (false,false), " -:" ),``(size(v)>0));
 
-    ret["hour"] = dparts[0]:"";
-    ret["minute"] = dparts[1]:"";
-    ret["second"] = dparts[2]:"";
-    ret["day"] = dparts[3]:"";
-    ret["month"] = dparts[4]:"";
-    ret["year"] = dparts[5]:""; //FIXME \n?
+    ret["hour"]		= dparts[0]:"";
+    ret["minute"]	= dparts[1]:"";
+    ret["second"]	= dparts[2]:"";
+    ret["day"]		= dparts[3]:"";
+    ret["month"]	= dparts[4]:"";
+    ret["year"]		= deletechars (dparts[5]:"", "\n");
     y2milestone( "GetDateTimeMap dparts %1 ret %2", dparts, ret );
     return( ret );
 }
