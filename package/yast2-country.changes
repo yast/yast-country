@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jul 23 13:43:14 CEST 2002 - fehr@suse.de
+
+- add eval() around assignment of locale to string
+- fix wrong data srtructure in keyboard_raw.ycp
+
+-------------------------------------------------------------------
 Tue Jul 23 12:13:07 CEST 2002 - fehr@suse.de
 
 - change it so that the _db.ycp files are not needed any more

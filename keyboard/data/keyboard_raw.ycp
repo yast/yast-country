@@ -29,7 +29,7 @@
 $[
   "english-us":
 	[
-		[	_("English (US)") ],
+		_("English (US)"),
 		$[	"i386" : $[ "pc104": $[	"ncurses": "us.map.gz" ]],
 			"ia64" : $[ "pc104": $[	"ncurses": "us.map.gz" ]],
 			"axp" : $[ "pc104": $[	"ncurses": "us.map.gz" ]],
@@ -48,7 +48,7 @@ $[
 	],
   "english-uk":
 	[
-		[	_("English (UK)") ],
+		_("English (UK)"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "uk.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "uk.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "uk.map.gz"]],
@@ -66,7 +66,7 @@ $[
 	],
   "german":
 	[
-		[	_("German") ],
+		_("German"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "de-latin1-nodeadkeys.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "de-latin1-nodeadkeys.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "de-latin1-nodeadkeys.map.gz"]],
@@ -84,7 +84,7 @@ $[
 	],
   "german-ch":
 	[
-		[	_("German (Swiss)") ],
+		_("German (Swiss)"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "sg-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "sg-latin1.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "de-latin1-nodeadkeys.map.gz"]],
@@ -102,7 +102,7 @@ $[
 	],
   "french":
 	[
-		[	_("French") ],
+		_("French"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "fr-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "fr-latin1.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "fr-latin1.map.gz"]],
@@ -120,7 +120,7 @@ $[
 	],
   "french-ch":
 	[
-		[	_("French (Switzerland)") ],
+		_("French (Switzerland)"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "fr_CH-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "fr_CH-latin1.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "fr_CH-latin1.map.gz"]],
@@ -138,7 +138,7 @@ $[
 	],
   "spanish":
 	[
-		[	_("Spanish") ],
+		_("Spanish"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "es.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "es.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "es.map.gz"]],
@@ -156,7 +156,7 @@ $[
 	],
   "italian":
 	[
-		[	_("Italian") ],
+		_("Italian"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "it.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "it.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "it.map.gz"]],
@@ -174,7 +174,7 @@ $[
 	],
   "portugese":
 	[
-		[	_("Portugese") ],
+		_("Portugese"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "pt-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "pt-latin1.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "pt-latin1.map.gz"]],
@@ -192,7 +192,7 @@ $[
 	],
   "portugese-br":
 	[
-		[	_("Portugese (Brazil)") ],
+		_("Portugese (Brazil)"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "br-abnt2.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "br-abnt2.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "br-abnt2.map.gz"]],
@@ -210,7 +210,7 @@ $[
 	],
   "greek":
 	[
-		[	_("Greek") ],
+		_("Greek"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "gr.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "gr.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "gr.map.gz"]],
@@ -228,7 +228,7 @@ $[
 	],
   "dutch":
 	[
-		[	_("Dutch") ],
+		_("Dutch"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "us.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "us.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "us.map.gz"]],
@@ -246,7 +246,7 @@ $[
 	],
   "danish":
 	[
-		[	_("Danish") ],
+		_("Danish"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "dk-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "dk-latin1.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "dk-latin1.map.gz"]],
@@ -264,7 +264,7 @@ $[
 	],
   "norwegian":
 	[
-		[	_("Norwegian") ],
+		_("Norwegian"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "no-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "no-latin1.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "dk-latin1.map.gz"]],
@@ -282,7 +282,7 @@ $[
 	],
   "swedish":
 	[
-		[	_("Swedish") ],
+		_("Swedish"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "se-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "se-latin1.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "se-latin1.map.gz"]],
@@ -300,7 +300,7 @@ $[
 	],
   "finnish":
 	[
-		[	_("Finnish") ],
+		_("Finnish"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "fi-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "fi-latin1.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "fi-latin1.map.gz"]],
@@ -318,7 +318,7 @@ $[
 	],
   "czech":
 	[
-		[	_("Czech") ],
+		_("Czech"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "cz-us-qwertz.map.gz",
 						"compose" : "latin2" ]],
 			"ia64" : $[ "pc104": $[ "ncurses": "cz-us-qwertz.map.gz",
@@ -340,7 +340,7 @@ $[
 	],
   "czech-qwerty":
 	[
-		[	_("Czech (qwerty)") ],
+		_("Czech (qwerty)"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "cz-lat2.map.gz",
 						"compose" : "latin2" ]],
 			"ia64" : $[ "pc104": $[ "ncurses": "cz-lat2.map.gz",
@@ -362,7 +362,7 @@ $[
 	],
   "slovak":
 	[
-		[	_("Slovak") ],
+		_("Slovak"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "sk-qwertz.map.gz",
 						"compose" : "latin2" ]],
 			"ia64" : $[ "pc104": $[ "ncurses": "sk-qwertz.map.gz",
@@ -384,7 +384,7 @@ $[
 	],
   "slovak-qwerty":
 	[
-		[	_("Slovak (qwerty)") ],
+		_("Slovak (qwerty)"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "sk-qwerty.map.gz",
 						"compose" : "latin2" ]],
 			"ia64" : $[ "pc104": $[ "ncurses": "sk-qwerty.map.gz",
@@ -406,7 +406,7 @@ $[
 	],
   "slovene":
 	[
-		[	_("Slovene") ],
+		_("Slovene"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "slovene.map.gz",
 						"compose" : "latin2" ]],
 			"ia64" : $[ "pc104": $[ "ncurses": "slovene.map.gz",
@@ -428,7 +428,7 @@ $[
 	],
   "hungarian":
 	[
-		[	_("Hungarian") ],
+		_("Hungarian"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "hu.map.gz",
 						"compose" : "latin2"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "hu.map.gz",
@@ -450,7 +450,7 @@ $[
 	],
   "polish":
 	[
-		[	_("Polish") ],
+		_("Polish"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "Pl02.map.gz",
 						"compose" : "latin2"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "Pl02.map.gz",
@@ -472,7 +472,7 @@ $[
 	],
   "russian":
 	[
-		[	_("Russian") ],
+		_("Russian"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "ru1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "ru1.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "ru1.map.gz"]],
@@ -490,7 +490,7 @@ $[
 	],
   "estonian":
 	[
-		[	_("Estonian") ],
+		_("Estonian"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "et.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "et.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "et.map.gz"]],
@@ -508,7 +508,7 @@ $[
 	],
   "turkish":
 	[
-		[	_("Turkish") ],
+		_("Turkish"),
 		$[	"i386" : $[ "pc104": $[	"ncurses": "trq.map.gz" ]],
 
 			"ia64" : $[ "pc104": $[	"ncurses": "trq.map.gz" ]],
@@ -528,7 +528,7 @@ $[
 	],
   "croatian":
 	[
-		[	_("Croatian") ],
+		_("Croatian"),
 		$[	"i386" : $[ "pc104": $[	"ncurses": "croat.map.gz" ]],
 
 			"ia64" : $[ "pc104": $[	"ncurses": "croat.map.gz" ]],
@@ -548,7 +548,7 @@ $[
 	],
   "japanese":
 	[
-		[	_("Japanese") ],
+		_("Japanese"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "jp106.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "jp106.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "ru1.map.gz"]],
@@ -566,7 +566,7 @@ $[
 	],
   "belgian":
 	[
-		[	_("Belgian") ],
+		_("Belgian"),
 		$[	"i386" : $[ "pc104": $[ "ncurses": "be-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "be-latin1.map.gz"]],
 			"axp" : $[ "pc104": $[ "ncurses": "be-latin1.map.gz"]],
@@ -584,7 +584,7 @@ $[
 	],
   "dvorak":
 	[
-		[ _("Dvorak") ],
+		_("Dvorak"),
 		$[	"i386" : $[ "pc104": $[	"ncurses": "dvorak.map.gz" ]],
 			"ia64" : $[ "pc104": $[	"ncurses": "dvorak.map.gz" ]],
 			"axp" : $[ "pc104": $[	"ncurses": "dvorak.map.gz" ]],

@@ -717,7 +717,7 @@
 	    //
 	    keymap = kbd_descr[1, "ncurses"]:"us.map.gz";
 	    locale translate = kbd_descr[0]:keyboard;
-	    name = translate;
+	    name = eval(translate);
 
 	    map x11data = GetX11KeyData( keymap );
 	    y2milestone( "x11data=%1", x11data );
@@ -934,7 +934,7 @@
 	return mapmap( string keyboard_code, list keyboard_value, keyboards,
 		       ``{
 	    translate = keyboard_value[0]:$[];
-	    trans_str = translate;
+	    trans_str = eval(translate);
 	    return  [ keyboard_code, trans_str ];
 	});
     }

@@ -145,7 +145,7 @@
 
 	textdomain "timezone_db";
 	locale translate =  zonemap[zone]:zone;
-	name = translate;
+	name = eval(translate);
 	textdomain "country";
 
 	// Adjust system to the new timezone.
@@ -279,7 +279,7 @@
 	map ret = mapmap( `key, `languagemap, zonemap,
 	``{
 	    translate = languagemap;
-	    trans_str = translate;
+	    trans_str = eval(translate);
 	    return( [ trans_str, key ] );
 	});
 	textdomain "country";
