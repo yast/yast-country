@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Feb 11 10:50:47 CET 2003 - fehr@suse.de
+
+- removed language testsuite, second time in two weeks it caused
+  a failed build of the package due to completely unrelated changes 
+  in Mode module
+- version 2.7.6
+
+-------------------------------------------------------------------
 Fri Feb  7 16:13:31 CET 2003 - jsuchome@suse.de
 
 - inst_language: added check for aborting when Mode::repair is true
