@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Dec  4 14:49:44 CET 2002  - fehr@suse.de
+
+- add dialog to set time/date
+- timezone selection is now hierarchical
+- 2.7.1
+
+-------------------------------------------------------------------
 Wed Nov 20 16:22:58 CET 2002  - fehr@suse.de
 
 - merged up to version 2.6.35 of 8.1 branch 

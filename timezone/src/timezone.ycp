@@ -16,14 +16,14 @@
  */
 
 {
-    textdomain "country";
+textdomain "country";
 
-    import "Timezone";
-    import "Wizard";
+import "Timezone";
+import "Wizard";
 
-    include "ui/common_popups.ycp";
-    include "ui/common_functions.ycp";
-    include "ui/common_messages.ycp";
+include "ui/common_popups.ycp";
+include "ui/common_functions.ycp";
+include "ui/common_messages.ycp";
 
     // Memorize the current timezone.
     //
@@ -40,13 +40,13 @@
     result = WFM::CallFunction( `inst_timezone( true, true ) );
 
     if ( result == `next )
-    {
+	{
 	// User accepted the setting.
 	// Only if the user has chosen a different timezone change the configuration.
 	//
-	if ( timezone_on_entry != Timezone::timezone
-	     || hwclock_on_entry != Timezone::hwclock )
-	{
+	if( timezone_on_entry != Timezone::timezone ||
+	    hwclock_on_entry != Timezone::hwclock )
+	    {
 	    y2milestone("User selected new timezone/clock setting: <%1> <%2>",
 			Timezone::timezone,
 			Timezone::hwclock );
@@ -57,24 +57,17 @@
 
 	    // Run SuSEconfig...
 	    //
-	    // According to ro@suse.de it doesn't make sense to run individual
-	    // SuSEcongig modules because the set of modules and the variables
-	    // they contain may change any time.
-	    // ==> full SuSEconfig run
-	    //
-	    // SCR::Execute (.target.bash, "/sbin/SuSEconfig --quick --nonewpackage");
-
 	    WFM::CallFunction( `inst_suseconfig( false, false ) );
-	}
+	    }
 	else
-	{
+	    {
 	    y2milestone( "Timezone not changed --> doing nothing" );
+	    }
 	}
-    }
     else	// `cancel or `back
-    {
+	{
 	y2milestone( "User cancelled --> no change" );
-    }
+	}
 
     return UI::CloseDialog();
-}
+    }
