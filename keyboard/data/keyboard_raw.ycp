@@ -141,6 +141,18 @@ $[
 	   "ppc64" : $[ "pc104" : $[ "ncurses": "de-latin1-nodeadkeys.map.gz"]]
 	]
     ],
+  "french-ca":
+    [
+	_("French (Canadian)"),
+	$[ "i386" : $[ "pc104": $[ "ncurses": "cf.map.gz"]],
+	   "ia64" : $[ "pc104": $[ "ncurses": "cf.map.gz"]],
+	   "x86_64" : $[ "pc104": $[ "ncurses": "cf.map.gz"]],
+	   "axp" : $[ "pc104": $[ "ncurses": "cf.map.gz"]],
+	   "sparc64" : $[ "pc104": $[ "ncurses": "cf.map.gz"]],
+	   "ppc" : $[ "pc104" : $[ "ncurses": "cf.map.gz"]],
+	   "ppc64" : $[ "pc104" : $[ "ncurses": "cf.map.gz"]]
+	]
+    ],
   "spanish":
     [
 	_("Spanish"),

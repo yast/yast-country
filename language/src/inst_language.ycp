@@ -205,8 +205,14 @@ Adapt keyboard setting?");
 
 		boolean kbd_adapt = false;
 
-		if( !Mode::normal )
+		if( Mode::initial && UI::WidgetExists(`id(`abort) ))
+		    {
+		    kbd_adapt = true;
+		    }
+		else if( !Mode::normal )
+		    {
 		    kbd_adapt = UI::YesNoPopup( msg );
+		    }
 
 		// Set it in the Language module.
 		//

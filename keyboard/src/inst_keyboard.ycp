@@ -136,11 +136,16 @@ Scroll Lock should be set") )),
     //
     list keyboardlist_by_translation =
 	maplist( string keyboard_code, string keyboard_name, Keyboard::Selection(),
-		 ``{
-		     return `item(`id( keyboard_code ),
-				  keyboard_name,
-				  Keyboard::current_kbd == keyboard_code);
-		 } );
+	    ``{
+	    return `item( `id(keyboard_code),
+			  keyboard_name,
+			  Keyboard::current_kbd==keyboard_code );
+	    });
+    keyboardlist_by_translation =
+	sort( `a, `b, keyboardlist_by_translation,
+	    ``{
+	    return( select(a,1,"") < select(b,1,"") );
+	    });
 
     keyboardsel = `SelectionBox( `id( `keyboard ), `opt(`notify,`immediate),
 		// title for selection box 'keyboard layout'

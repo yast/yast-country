@@ -6,6 +6,9 @@ Wed Jan 15 13:20:53 CET 2003  - fehr@suse.de
   language in installation system, add popup instead (#20807)
 - ask if keyboard setting should be adapted to changed language 
   when changing language proposal during installation
+- sort keyboard selection after translated texts (#20488)
+- add french canadian keyboard to keyboard list (#21167)A
+- 2.7.2
 
 -------------------------------------------------------------------
 Wed Dec  4 14:49:44 CET 2002  - fehr@suse.de
