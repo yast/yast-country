@@ -293,13 +293,13 @@ define map<string,list> get_reduced_keyboard_db()
     // The new reduced map of keyboard data.
     //
     map<string,list> keyboards = $[];
-    string arch = Arch::architecture;
+    string arch = Arch::architecture ();
     if( arch == "ppc64" )
 	{
 	arch = "ppc";
 	}
-    y2milestone( "get_reduced_keyboard_db: Arch::architecture %1 used %2", 
-                 Arch::architecture, arch );
+    y2milestone( "get_reduced_keyboard_db: Arch::architecture () %1 used %2", 
+                 Arch::architecture (), arch );
 
     foreach( string kb_lang, list description, all_keyboards,
 	``{	// loop over all languages
