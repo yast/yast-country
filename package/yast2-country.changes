@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Dec 15 16:04:34 CET 2003 - jsrain@suse.de
+
+- Console::encoding handling moved to Encoding.ycp in yast2 package
+
+-------------------------------------------------------------------
 Thu Oct  9 15:49:33 CEST 2003 - fehr@suse.de
 
 - fix description texts for timezone module (#32165)

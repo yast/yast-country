@@ -32,11 +32,7 @@
 
     import "Mode";
     import "Language";
-
-    /**
-     * @return encoding string defining current (ISO) encoding
-     */
-    global string encoding      = "ISO-8859-1";
+    import "Encoding";
 
     // current base language, used in Check
     string language	= "en_US";
@@ -94,7 +90,7 @@
 	    {
 		string currentEncoding = WFM::GetEncoding();	// save encoding
 
-		encoding = WFM::SetLanguage (language);		// switch lang, get proposed encoding
+		Encoding::console = WFM::SetLanguage (language);// switch lang, get proposed encoding
 
 		WFM::SetLanguage (currentLanguage, currentEncoding);// reset as it was before
 	    }
@@ -110,8 +106,9 @@
 	    }
 	}
 
-	y2milestone ("Language %1 -> Console encoding %2", language, encoding);
-	return encoding;
+	y2milestone ("Language %1 -> Console encoding %2", language,
+	    Encoding::console);
+	return Encoding::console;
     };
 
     /**
@@ -163,24 +160,7 @@
 	screenMap  = (string)SCR::Read (.sysconfig.console.CONSOLE_SCREENMAP);
 	unicodeMap = (string)SCR::Read (.sysconfig.console.CONSOLE_UNICODEMAP);
 	magic	   = (string)SCR::Read (.sysconfig.console.CONSOLE_MAGIC);
-	encoding   = (string)SCR::Read (.sysconfig.console.CONSOLE_ENCODING);
 	language   = (string)SCR::Read (.sysconfig.language.RC_LANG);
-        list out = splitstring( lookup( (map)SCR::Execute( .target.bash_output, 
-							   "locale -k charmap" ),
-					"stdout", "" ),
-				 "\n" );
-	y2milestone( "list %1", out );
-	out = filter( string e, out, ``(find(e, "charmap=")==0) );
-	y2milestone( "list %1", out );
-	if( size(out[0]:"")>0 )
-	    {
-	    string enc = substring( out[0]:"", 8 );
-	    y2milestone( "enc %1", enc );
-	    enc = deletechars( enc, "\" " );
-	    y2milestone( "enc %1", enc );
-	    if( size(enc)>0 )
-		encoding = enc;
-	    }
 	if (Mode::braille)
 	{
 	    SCR::Execute (.target.bash, "/usr/bin/setfont");
@@ -190,8 +170,8 @@
 	    //UI::SetConsoleFont (magic, font, screenMap, unicodeMap, encoding);
 	    UI::SetConsoleFont (magic, font, screenMap, unicodeMap, language); 
 	}
-	y2milestone( "encoding %1", encoding );
-	return encoding;
+	y2milestone( "encoding %1", Encoding::console );
+	return Encoding::console;
     }
 
     /**
