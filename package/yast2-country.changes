@@ -2,6 +2,8 @@
 Mon Mar 22 13:10:55 CET 2004 - fehr@suse.de
 
 - Fix problem with untranslated timezone strings (#36484)
+- Set language sooner so that keyboard question is already in
+  new language (#36687)
 - 2.9.15
 
 -------------------------------------------------------------------

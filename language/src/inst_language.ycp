@@ -310,13 +310,6 @@ Choose the new <b>language</b> for your system.
 		y2milestone( "Language changed from %1 to %2", Language::language, language );
 
 		// popup text
-		string msg = _("The language will be changed.
-
-Current keyboard settings can be adapted according
-to the new language or they can be kept as they are now.
-
-Adapt keyboard settings?
-");
 
 		boolean kbd_adapt = false;
 
@@ -328,10 +321,6 @@ Adapt keyboard settings?
 		else
 		    {
 		    Timezone::user_decision = true;
-		    if( !Mode::normal )
-			{
-			kbd_adapt = Popup::YesNo( msg );
-			}
 		    }
 
 		// Set it in the Language module.
@@ -341,6 +330,23 @@ Adapt keyboard settings?
 		// Set Console font
 		//
 		Console::SelectFont( language );
+
+		Installation::encoding = (use_utf8) ? "UTF-8" : Encoding::console;
+
+		// Set it in YaST2
+		Language::WfmSetLanguage();
+
+		if( !Mode::normal && (!Mode::initial || !set_default) )
+		    {
+		    string msg = _("The language will be changed.
+
+Current keyboard settings can be adapted according
+to the new language or they can be kept as they are now.
+
+Adapt keyboard settings?
+");
+		    kbd_adapt = Popup::YesNo( msg );
+		    }
 
 		if( kbd_adapt )
 		    {
@@ -354,11 +360,6 @@ Adapt keyboard settings?
 		    {
 		    Keyboard::user_decision = true;
 		    }
-
-		Installation::encoding = (use_utf8) ? "UTF-8" : Encoding::console;
-
-		// Set it in YaST2
-		Language::WfmSetLanguage();
 
 		if( ret != `next )
 		    {
