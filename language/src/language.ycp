@@ -111,7 +111,7 @@
 
 	    if( Language::language != language_on_entry )
 		{
-		Bootloader::UpdateGfxMenu()
+		Bootloader::UpdateGfxMenu();
 		}
 	    // popup text
 	    Popup::Message( _("Your language setting has been changed.
