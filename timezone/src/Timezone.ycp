@@ -142,7 +142,11 @@
 	// Set the new timezone internally
 	//
 	timezone = zone;
-	name = Misc::translate( zonemap[zone]:$[], Language::language );
+
+	textdomain "timezone_db";
+	locale translate =  zonemap[zone]:zone;
+	name = translate;
+	textdomain "country";
 
 	// Adjust system to the new timezone.
 	//
@@ -268,12 +272,18 @@
     global define map Selection()
     ``{
 	map zonemap = get_zonemap();
+	locale translate = "";
+	string trans_str = "";
 
-	return mapmap( `key, `languagemap, zonemap,
+	textdomain "timezone_db";
+	map ret = mapmap( `key, `languagemap, zonemap,
 	``{
-	    string selname = Misc::translate( languagemap, Language::language );
-	    return( [ selname, key ] );
+	    translate = languagemap;
+	    trans_str = translate;
+	    return( [ trans_str, key ] );
 	});
+	textdomain "country";
+	return( ret );
     }
 
 
@@ -378,18 +388,7 @@
 
     define map get_zonemap()
 	``{
-	// The timezone database comes in two versions:
-	// Translated: "Europe/Berlin" : $[ "default" : "Europe/Germany",
-	//                                   "bg": "Европа/Германия",
-	//                                   "br": "Europa/Alamagn",
-	//                                   "ca": "Europa/Alemanya",
-	//					 ...
-	// Untranslated:  "Europe/Berlin" : $[ "default" : "Europe/Germany" ]
-	//                ...
-	// Try translated timezone_db.ycp first, if this doesnt exist
-	// use the untranslated version timezone_raw.ycp.
-	//
-	map zonemap = Misc::ReadAlternateFile( "timezone_db.ycp", "timezone_raw.ycp" );
+	map zonemap = SCR::Read( .target.yast2, "timezone_raw.ycp" );
 
 	if ( zonemap == nil ) zonemap = $[];
 

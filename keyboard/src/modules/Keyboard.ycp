@@ -716,7 +716,8 @@
 	    // Get keymap for ncurses
 	    //
 	    keymap = kbd_descr[1, "ncurses"]:"us.map.gz";
-	    name = Misc::translate( kbd_descr[0]:$[], Language::language );
+	    locale translate = kbd_descr[0]:keyboard;
+	    name = translate;
 
 	    map x11data = GetX11KeyData( keymap );
 	    y2milestone( "x11data=%1", x11data );
@@ -918,7 +919,6 @@
      * @return	map of $[ keyboard_code : keyboard_name, ...] for all known
      *		keyboards. 'keyboard_code' is used internally in Set and Get
      *		functions. 'keyboard_name' is a user-readable string.
-     *		Uses Language::language for translation.
      *
      * @see	-
      */
@@ -928,12 +928,14 @@
 	// Get the reduced keyboard DB.
 	//
 	map keyboards = get_reduced_keyboard_db();
+	locale translate = "";
+	string trans_str = "";
 
 	return mapmap( string keyboard_code, list keyboard_value, keyboards,
 		       ``{
-	    map keyboard_name_map = keyboard_value[0]:$[];
-	    string keyboard_name = Misc::translate( keyboard_name_map, Language::language );
-	    return  [ keyboard_code, keyboard_name ];
+	    translate = keyboard_value[0]:$[];
+	    trans_str = translate;
+	    return  [ keyboard_code, trans_str ];
 	});
     }
 
@@ -1043,12 +1045,11 @@
 	 * What now follows is code that cuts out from this map the unnecessary architectures
 	 * and XkbModels. The different languages are kept.
 	 *
-	 * Load the keyboard DB. Try translated keyboard_db.ycp first, if this doesnt exist
-	 * use the raw (untranslated) version.
+	 * Load the keyboard DB. 
 	 * Do not hold this database in a permanent module variable (it's very large).
 	 */
 	
-	map all_keyboards = Misc::ReadAlternateFile ("keyboard_db.ycp", "keyboard_raw.ycp");
+	map all_keyboards = SCR::Read( .target.yast2, "keyboard_raw.ycp" );
 
 	if ( all_keyboards == nil ) all_keyboards = $[];
 

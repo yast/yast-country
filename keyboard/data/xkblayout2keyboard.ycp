@@ -9,7 +9,7 @@
  * Maps xkblayout-codes to YaST2-keyboard-codes.
  *
  * The YaST2-keyboard-codes are used for looking up a keyboard description in
- * the YaST2-keyboard-database (see keyboard_db.ycp and keyboard_raw.ycp).
+ * the YaST2-keyboard-database (see keyboard_raw.ycp).
  *
  * The xkblayout-codes may or may not resemble a locale code, therefore
  * an extra conversion map is necessary (see also lang2keyboard.ycp).
