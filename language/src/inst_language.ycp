@@ -35,7 +35,7 @@ global define LanguageExpertDialog()
     symbol ret = `none;
     // help text for keyboard expert screen
     string help_text = _("<p>
-Here, fine tune settings for the language handling.
+Here, fine-tune settings for the language handling.
 These settings are written into the file <b>/etc/sysconfig/language</b>.
 </p>
 ");
@@ -46,13 +46,14 @@ If unsure, use the default values already selected.
 </p>");
 
     help_text = help_text + _("<p>
-<b>LANG environment settings for user root:</b>
-This determines how the locale variable (LC_*) are set for the root user</p>
-<b>ctype:</b> Root user has same LC_CTYPE as normal User. Other Values 
+<b>LANG Environment Settings for User root:</b>
+This determines how the locale variables (LC_*) are set for the root user.</p>
+<b>ctype:</b> Root user has same LC_CTYPE as normal user. Other values 
 are unset.<br>
-<b>yes:</b> Root user has same locale settings as normal User.<br>
+<b>yes:</b> Root user has same locale settings as normal user.<br>
 <b>no:</b> Root user has all locale variables unset.
-</p>");
+</p>
+");
 
     UI::OpenDialog( `opt(`decorated  ),
 		    `HBox(
@@ -66,7 +67,7 @@ are unset.<br>
 				`Heading( _("Language Detail Dialog") ),
 				`VSpacing(`opt(`vstretch), 2),
 				`Left(`ComboBox( `id(`rootlang), 
-						 _("Locale settings for user &root"),
+						 _("Locale Settings for User &root"),
 						 [ "ctype", "yes", "no" ] )),
 				`VSpacing(`opt(`vstretch), 8),
 				`HBox(
