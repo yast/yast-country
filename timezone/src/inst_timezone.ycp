@@ -162,9 +162,21 @@ Enter the correct date.
 
     string hwclock = Timezone::hwclock;
 
+    // Autoinstall
+    if (Mode::config)
+    {
+	import "AIgeneral";
+	timezone = AIgeneral::Clock["timezone"]:"";	
+	hwclock = ( AIgeneral::Clock["hwclock"]:"" == "UTC" ) ? "-u"  : "--localtime";
+    }
+
     string date = "";
 
-    Wizard::OpenAcceptDialog();	// do this as early as possible for instant user feedback!
+    if (Mode::config)
+	Wizard::ReplaceAbortButton(`Empty());
+    else
+	Wizard::OpenAcceptDialog();	// do this as early as possible for instant user feedback!
+    
     // build up timezone selection box
     //
     term timezonesel =
@@ -222,7 +234,7 @@ Enter the correct date.
 	}
 
     term settime = `Empty();
-    if( !Arch::s390 )
+    if( !Arch::s390 && !Mode::config)
 	{
 	settime = `PushButton( `id(`settime), _("Change &Time or Date"));
 	}
@@ -288,7 +300,11 @@ If you are unsure, use the default values already selected.
 
     // Initially set the current timezone to establish a consistent state.
     //
-    integer sel = Timezone::Set( Timezone::timezone );
+    integer sel = 0;
+    if (Mode::config)
+	sel = Timezone::Set(AIgeneral::Clock["timezone"]:"");
+    else
+	sel = Timezone::Set( Timezone::timezone );
 
     symbol hwclock_s = (hwclock=="-u") ? `hwclock_utc : `hwclock_localtime;
     symbol hwclock_s_old = hwclock_s;
@@ -308,7 +324,7 @@ If you are unsure, use the default values already selected.
 
 	y2milestone( "ret %1", ret );
 
-	if( ret == `abort && WFM::CallFunction(`inst_confirm_abort(`painless)) )
+	if( !Mode::config && ret == `abort && WFM::CallFunction(`inst_confirm_abort(`painless)) )
 	    {
 	    break;
 	    }
@@ -353,26 +369,36 @@ If you are unsure, use the default values already selected.
 
 	    // Change only if s.th. has really changed.
 	    //
-	    if( timezone != timezone_old || hwclock_s != hwclock_s_old )
+	    if (Mode::config)
+	    {
+		// Autoinstall
+		import "AIgeneral";
+		AIgeneral::Clock["hwclock"] = ( hwclock_s == `hwclock_utc ) ? "UTC" : "localtime";
+		AIgeneral::Clock["timezone"]  =  timezone;
+	    }
+	    else
+	    {
+		if( timezone != timezone_old || hwclock_s != hwclock_s_old )
 		{
-		timezone_old = timezone;
-		hwclock_s_old = hwclock_s;
-		SetTimezone( hwclock_s, timezone );
+		    timezone_old = timezone;
+		    hwclock_s_old = hwclock_s;
+		    SetTimezone( hwclock_s, timezone );
 		}
 
-	    if ( ret == `next )
+		if ( ret == `next )
 		{
-		// User wants to keep his changes.
-		// Set user_decision flag in timezone module.
-		//
-		Timezone::user_decision = true;
+		    // User wants to keep his changes.
+		    // Set user_decision flag in timezone module.
+		    //
+		    Timezone::user_decision = true;
 		}
+	    }
 	    }
 	} until ( ret == `next || ret == `back || ret == `cancel );
 
     // Back to original values.
     //
-    if ( ret == `back )
+    if ( ret == `back && !Mode::config)
 	{
 	y2milestone("`back or `cancel restoring: <%1>", timezone_on_entry );
 
