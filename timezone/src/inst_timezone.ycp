@@ -27,15 +27,24 @@ import "GetInstArgs";
 
 symbol hwclock_s_initial = `none;
 
-define void SetTimezone ( symbol hwclock, string timezone, boolean really,
-                         boolean changed_time ) {
+define void SetTimezone (symbol hwclock, string timezone, boolean really,
+                         boolean changed_time)
+{
 
     y2milestone( "SetTimezone hw %1, tz %2 really %3 tchanged %4 initial:%5",
                  hwclock, timezone, really, changed_time, hwclock_s_initial );
-    Timezone::hwclock = (hwclock == `hwclock_utc) ? "-u" : "--localtime";
-    Timezone::Set( timezone, really );
+
+    // simulate the time change
+    if (!really && hwclock != hwclock_s_initial)
+	Timezone::diff = (hwclock==`hwclock_utc)?1:-1;
+    else
+	Timezone::diff = 0;
 
     y2milestone( "SetTimezone diff %1", Timezone::diff );
+
+    Timezone::hwclock = (hwclock == `hwclock_utc) ? "-u" : "--localtime";
+    Timezone::Set (timezone, really);
+
     // Redisplay date/time.
     //
     UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime (really, true));
