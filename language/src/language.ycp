@@ -50,10 +50,7 @@
     }
 
     Wizard::CloseDialog();
-
-    Wizard::ReplaceButtonBox( Wizard::HasAcceptButton() ?
-			      Wizard::AbortAcceptButtonBox() :
-			      Wizard::BackAbortNextButtonBox() );
+    Wizard::RetranslateButtons();
 
     y2milestone ("result '%1'", result);
 
