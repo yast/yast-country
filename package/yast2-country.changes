@@ -1,5 +1,10 @@
 -------------------------------------------------------------------
-Sun Apr  4 22:49:11 CEST 2004 - adrian@suse.de
+Sun Mar 21 19:49:54 CET 2004 - nashif@suse.de
+
+- Use settings from product feature module if available
+
+-------------------------------------------------------------------
+Sun Mar 20 22:49:11 CEST 2004 - adrian@suse.de
 
 - rename language.desktop to yast-language.desktop
   (fixes a name clash with a KDE CC modul)
