@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Wed Mar  2 14:43:55 CET 2005 - jsuchome@suse.cz
+
+- show correct time when switching time zones (#66458, #56944)
+- 2.11.17
+
+-------------------------------------------------------------------
+Wed Mar  2 08:56:20 CET 2005 - jsuchome@suse.cz
+
+- merged texts from proofreading
+- set "basic" as default value for XkbVariant (#66546) 
+
+-------------------------------------------------------------------
 Mon Feb 28 08:29:35 CET 2005 - jsuchome@suse.cz
 
 - changed welcome text (#66617)
