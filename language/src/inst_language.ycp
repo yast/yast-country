@@ -177,7 +177,7 @@ are unset.<br>
 	{
 	// initial heading for language selection
 	// (first 'user visible' screen)
-	heading_text = _("Welcome to YaST2 -- the SuSE Linux
+	heading_text = _("Welcome to YaST2 -- the
 installation and system administration program.
 ");
 	}
@@ -263,7 +263,7 @@ installation process.
 	// different help text when called after installation
 	// in an installed system
 	help_text = _("<p>
-Choose the new <b>language</b> for your SuSE Linux system.
+Choose the new <b>language</b> for your system.
 </p>\n");
 	}
 
