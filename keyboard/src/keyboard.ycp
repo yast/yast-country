@@ -18,7 +18,6 @@
 {
     textdomain "country";
 
-    import "X11Version";
     import "Keyboard";
     import "Misc";
     import "Mode";
@@ -49,38 +48,6 @@
     Wizard::CreateDialog();
 
     any result = nil;
-
-    // A new layout can be set for X11 only if the version is XFree 4x.
-    // ==> determine the XFree version used.
-    //
-    string xfree_version = X11Version::version;
-
-    if ( xfree_version == "3" )
-    {
-	// popup text
-	// Advise the user that configuring the keyboard layout
-	// for X11 is possible only with XFree 4.
-	Popup::Message(_("
-The X11 keyboard layout can only be changed within the running system
-with XFree86 version 4 or later.
-Your graphics card requires XFree86 version 3.
-Therefore, only the console keyboard layout can be changed here.
-
-Use SaX to change your X11 keyboard layout.
-") );
-    }
-    else if ( xfree_version == "" )
-    {
-	// popup text
-	// If X11 is not used we may not be able to detect and and preselect
-	// the current keyboard layout in the following dialog.
-	// Advise the user to select one.
-	Popup::Message(_("
-The current keyboard layout could not be determined.
-
-To change anything here, select a layout from the list.
-") );
-    }
 
     // The keyboard module should be initialized to the current keyboard from
     // sysconfig, XF86Config or probing. Either way this Keyboard will be
