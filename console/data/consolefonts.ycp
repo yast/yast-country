@@ -96,7 +96,7 @@ $[
       "ja"		: [ "lat1-16.psfu",	"",	"none",		"(K" ],
       "ja_JP.UTF-8"     : [ "lat9w-16.psfu",	"",	"trivial",	"(K" ],
 
-      "tr_TR"		: [ "iso09.16",		"",	"none",		"(K" ],
-      "tr"		: [ "iso09.16",		"",	"none",		"(K" ],
-      "tr_TR.UTF-8"     : [ "iso09.16",		"",	"trivial",	"(K" ]
+      "tr_TR"		: [ "iso09.f16n",	"",	"none",		"(K" ],
+      "tr"		: [ "iso09.f16n",	"",	"none",		"(K" ],
+      "tr_TR.UTF-8"     : [ "iso09.f16n",	"",	"trivial",	"(K" ]
   ]
