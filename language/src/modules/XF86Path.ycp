@@ -18,10 +18,9 @@
  */
 {
     module "XF86Path";
-    
+
     textdomain "country";
-    
-    import "Installation";
+
     import "Mode";
 
     // The XFree version has to be determined in different ways depending on mode.
