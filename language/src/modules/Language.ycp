@@ -20,7 +20,6 @@ import "Misc";
 import "Mode";
 import "ProductFeatures";
 import "Stage";
-import "XF86Path";
 
 
 /**
@@ -403,14 +402,6 @@ global define void Save() {
 
     SCR::Write (.sysconfig.language.ROOT_USES_LANG, rootlang);
     SCR::Write (.sysconfig.language, nil);
-
-    // Change the respective XF86Config content to match the current settings.
-    // Do this only in the running system _and_ if XFree4 is installed.
-    if (Mode::normal ())
-    {
-	y2milestone("Storing current settings into XF86Config file (XFree4)." );
-	XF86Path::update();
-    }
 
     y2milestone("Saved data for language: <%1>", GetLocaleString(language) );
 }

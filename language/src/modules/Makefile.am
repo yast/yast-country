@@ -1,8 +1,7 @@
 # Makefile.am for country/language/src/modules
 
 module_DATA = 				\
-	Language.ycp			\
-	XF86Path.ycp
+	Language.ycp
 
 EXTRA_DIST = $(module_DATA)
 
