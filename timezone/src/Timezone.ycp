@@ -18,7 +18,6 @@ import "Language";
 import "Misc";
 import "Mode";
 import "Stage";
-import "Storage";
 import "String";
 import "ProductFeatures";
 
@@ -46,6 +45,12 @@ global boolean user_decision = false;
 global boolean user_hwclock = false;
 
 global integer diff = 0;
+
+
+/**
+ * If there is windows partition, assume that local time is used
+ */
+global boolean windows_partition	= false;
 
 map push = $[];
 
@@ -224,7 +229,6 @@ global define void Timezone() {
     // Set default values.
     //
     hwclock = "-u";
-
     if (Stage::initial ())
     {
 	// language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
@@ -326,7 +330,7 @@ global define string GetTimezoneForLanguage( string sys_language,
 /**
  * GetDateTime()
  *
- * Get the output of /bin/date "+%H:%M:%S - %Y-%m-%d" FIXME
+ * Get the output of date "+%H:%M:%S - %Y-%m-%d" or in locale defined format
  *
  * @param	flag if to get real system time or if to simulate changed
  *		timezone settings with TZ=
@@ -405,30 +409,28 @@ global define void  ResetZonemap()
  *		stored in default_timezone.
  */
 
-global define string MakeProposal( boolean force_reset, 
+global define string MakeProposal (boolean force_reset,
                                    boolean language_changed )
-    ``{
-    y2milestone( "MakeProposal force_reset: %1", force_reset );
-    y2milestone( "MakeProposal language_changed: %1 user_decision %2 user_hwclock %3", 
-                 language_changed, user_decision, user_hwclock );
+{
+    y2milestone ("force_reset: %1", force_reset);
+    y2milestone ("language_changed: %1 user_decision %2 user_hwclock %3",
+	language_changed, user_decision, user_hwclock);
 
-    if( language_changed ) 
+    if (language_changed)
 	ResetZonemap();
 
-    if( !user_hwclock || force_reset )
-	{
+    if (!user_hwclock || force_reset)
+    {
 	hwclock = "-u";
-	if( size(Storage::GetWinPrimPartitions(Storage::GetTargetMap())) > 0 ||
-	    Arch::board_mac () )
-	    {
+	if (windows_partition || Arch::board_mac ())
+	{
 	    // Win partitions present ==> assume local time.
 	    //
 	    hwclock = "--localtime";
-	    y2milestone("Assuming local time");
-	    }
 	}
-    if( force_reset )
-	{
+    }
+    if (force_reset)
+    {
 	// If user wants to reset do it if a default is available.
 	//
 	if( default_timezone != "" )
@@ -439,9 +441,9 @@ global define string MakeProposal( boolean force_reset,
 	// Reset user_decision flag.
 	//
 	user_decision = false;
-	}
+    }
     else	// no reset
-	{
+    {
 	// Only follow the language if the user has never actively chosen
 	// a timezone. The indicator for this is user_decision which is
 	// set from outside the module.
@@ -459,7 +461,7 @@ global define string MakeProposal( boolean force_reset,
 	    {
 	    // User has not yet chosen a timezone ==> follow language.
 	    //
-	    string local_timezone = 
+	    string local_timezone =
 		GetTimezoneForLanguage( Language::language, "english-us" );
 
 	    if( local_timezone != "" )
@@ -477,28 +479,24 @@ global define string MakeProposal( boolean force_reset,
 		    }
 		}
 	    }
-	}
+    }
 
-    // Clock setting: Abbreviation for Greenwhich mean time
-    //
-
-    // label text
+    // label text (Clock setting)
     string clock_setting = _("UTC");
 
-    // label text, Clock setting: local time (not UTC)
-    if ( hwclock == "--localtime" ) clock_setting = _("local time");
+    if (hwclock == "--localtime")
+	// label text, Clock setting: local time (not UTC)
+	clock_setting = _("local time");
 
     // label text
-    string add_text = deletechars( _("&Hardware clock set to"), "&" );
-
-    clock_setting = deletechars(add_text,":") + " " + clock_setting;
+    clock_setting = _("Hardware clock set to") + " " + clock_setting;
 
     string date = GetDateTime (true, true);
 
     y2milestone( "MakeProposal hwclock %1", hwclock );
 
-    return( name + " - " + clock_setting + " " + date );
-    }
+    return name + " - " + clock_setting + " " + date;
+}
 
 /**
   * Selection()
