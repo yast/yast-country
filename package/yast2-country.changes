@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug 17 15:21:58 CEST 2004 - fehr@suse.de
+
+- Add bengali to languages
+- 2.10.5
+
+-------------------------------------------------------------------
 Thu Aug 12 00:26:01 CEST 2004 - nashif@suse.de
 
 - Adapted timezone client for firstboot

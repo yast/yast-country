@@ -47,6 +47,11 @@ $[
 		    ".UTF-8",
 		    "" ],
 
+  "bn_IN"       : [ "Bengali",
+                    "Bengali",
+		    ".UTF-8",
+		    "" ],
+
   "cs_CZ"	: [ "Čeština ",
 		  "Cestina",
 		  ".UTF-8",
