@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun  5 16:47:56 CEST 2003 - fehr@suse.de
+
+- make it build under new rules (unpackaged files)
+- 2.8.1
+
+-------------------------------------------------------------------
 Thu Apr 24 10:43:02 CEST 2003 - fehr@suse.de
 
 - use alpha instead of axp in the raw database

@@ -42,6 +42,10 @@ Summary:	Setting the keyboard
 
 @INSTALL@
 
+%ifarch s390 s390x
+rm -f $RPM_BUILD_ROOT@configdir@/keyboard.y2cc
+%endif
+
 @CLEAN@
 
 # common
