@@ -279,7 +279,7 @@ global define void Save() ``{
 	}
     else
 	{
-	val = val + language_info[4]:"";
+	val = val + language_info[3]:"";
 	}
 
     SCR::Write(.sysconfig.language.RC_LANG, val );
