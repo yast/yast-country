@@ -21,8 +21,6 @@
 
     textdomain "country";
 
-    import "Mode";
-
     // The XFree version has to be determined in different ways depending on mode.
     //
 
@@ -44,7 +42,6 @@
 	return;
     }
 
-    
     /**
      * create_info_map()
      *
