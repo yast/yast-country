@@ -22,6 +22,7 @@
 $[
   "ar_eg"     		: "Africa/Cairo",
   "br_FR"    		: "Europe/Paris",
+  "bn_BD"    		: "Asia/Dhaka",
   "cs_CZ"    		: "Europe/Prague",
   "da_DK"		: "Europe/Copenhagen",
   "de" 	 		: "Europe/Berlin",

@@ -29,6 +29,7 @@ return $[
     "ar_YE" : _("Yemen"),
     "be_BY" : _("Belarus"),
     "bg_BG" : _("Bulgaria"),
+    "bn_BD" : _("Bangladesh"),
     "br_FR" : _("France"),
     "bs_BA" : _("Bosnia and Herzegowina"),
     "ca_ES" : _("Catalonia"),

@@ -17,6 +17,7 @@ return $[
     "BE" : _("Belgium"),
     "BG" : _("Bulgaria"),
     "BH" : _("Bahrein"),
+    "BN" : _("Bangladesh"),
     "BO" : _("Bolivia"),
     "BR" : _("Brasil"),
     "BW" : _("Botswana"),
