@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 23 15:40:00 CET 2004 - fehr@suse.de
+
+- remove some warnings by new interpreter
+- 2.9.5
+
+-------------------------------------------------------------------
 Fri Feb 20 11:19:46 CET 2004 - fehr@suse.de
 
 - changes to adapt to new sort function semantics
