@@ -25,63 +25,44 @@
  */
 
       $[
-	"en"	 	: "english-us",
-	"en_US"    	: "english-us",
-	"en_GB"    	: "english-uk",
-	
-	"de" 	 	: "german",
-	"de_DE"    	: "german",
-	"de_CH"    	: "german-ch",
-	
-	"fr_FR"    	: "french",
-	"br_FR"    	: "french",
-	"fr_CH"    	: "french-ch",
-
-	"it_IT"    	: "italian",
-	
-	"es_ES"    	: "spanish",
-
-	"pt_PT"    	: "portugese",
-	"pt_BR"    	: "portugese-br",
-
-	"el_GR"    	: "greek",
-	
-	"nl_NL"    	: "dutch",
-
+	"ar_eg"		: "english-us",
+	"be_BY"		: "belgian",
+	"br_FR"		: "french",
+	"cs_CZ"		: "czech",
 	"da_DK"		: "danish",
-
-	"cs_CZ"    	: "czech",
-	"sl_SI"		: "slovene",
-	"sk_SK"    	: "slovak",
-	
-	"hu_HU"    	: "hungarian",
-
-	"pl_PL"    	: "polish",
-
-	"ru"	 	: "russian",
-	"ru_RU"	 	: "russian",
-	"ru_RU.KOI8-R"	: "russian",
-
+	"de"		: "german",
+	"de_DE"		: "german",
+	"de_CH"		: "german-ch",
+	"el_GR"		: "greek",
+	"en"		: "english-us",
+	"en_US"		: "english-us",
+	"en_GB"		: "english-uk",
+	"es_ES"		: "spanish",
+	"fi_FI"		: "finnish",
+	"fr_FR"		: "french",
+	"fr_CH"		: "french-ch",
+	"hr_HR"		: "croatian",
+	"hu_HU"		: "hungarian",
+	"is_IS"         : "icelandic",
+	"it_IT"		: "italian",
+	"ja_JP"		: "japanese",
+	"ko_KR"		: "english-us",
+	"lt_LT"		: "lithuanian",
+	"nb_NO"		: "norwegian",
 	"no_NO"		: "norwegian",
 	"nn_NO"		: "norwegian",
-	"nb_NO"		: "norwegian",
-	
+	"nl_NL"		: "dutch",
+	"pa_IN"		: "english-us",
+	"pl_PL"		: "polish",
+	"pt_BR"		: "portugese-br",
+	"pt_PT"		: "portugese",
+	"ru"		: "russian",
+	"ru_RU"		: "russian",
+	"ru_RU.KOI8-R"	: "russian",
+	"sk_SK"		: "slovak",
+	"sl_SI"		: "slovene",
 	"sv_SE"		: "swedish",
-
-	"fi_FI"		: "finnish",
-	
 	"tr_TR"		: "turkish",
-	
-	"ja_JP"    	: "japanese",
-
-	"be_BY"		: "belgian",
-	
 	"zh_CN"		: "english-us",
 	"zh_TW"		: "english-us",
-	"ko_KR"		: "english-us",
-	"ar_eg"		: "english-us",
-	"is_IS"         : "icelandic",
-
-	"lt_LT"		: "lithuanian",
-	"hr_HR"		: "croatian",
       ]
