@@ -205,10 +205,7 @@ Enter the correct date.
 	// label text
 	`id(`region),`opt(`notify,`immediate), _("&Region"),Timezone::Region());
 
-    // does the hwclock run on UTC only ? -> skip asking
-    boolean utc_only = Arch::sparc () || Arch::board_iseries () ||
-		       Arch::board_chrp () || Arch::board_prep ();
-    y2milestone( "Arch::sparc () %1 Arch::board_iseries () %2 Arch::board_chrp () %3 Arch::board_prep () %4", Arch::sparc (), Arch::board_iseries (), Arch::board_chrp (), Arch::board_prep () );
+    boolean utc_only = Timezone::utc_only ();
     y2milestone( "utc_only %1", utc_only );
 
     /* ----------------------------------------------------------------------
