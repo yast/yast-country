@@ -1,6 +1,6 @@
 /**
  * File:
- *   keyboard_raw.ycp
+ *   xkblayout2keyboard.ycp
  *
  * Authors:
  *   Thomas Roelz <tom@suse.de>
@@ -21,56 +21,57 @@
  * lang2keyboard.ycp, xkblayout2keyboard.ycp, keyboard_raw.ycp
  * *****************************************************************
  */
-	$[
-	  "us"	      : "english-us",
-	  "gb"        : "english-uk",
-	  
-	  "de"        : "german",
-	  "de_CH"     : "german-ch",
-	  
-	  "fr"        : "french",
-	  "fr_CH"     : "french-ch",
+$[
+	"us"		: "english-us",
+	"gb"        : "english-uk",
+	"de"        : "german",
+	"de_CH"     : "german-ch",
 
-	  "it"        : "italian",
-	  
-	  "es"        : "spanish",
-	  
-	  "pt"        : "portugese",
-	  "br"        : "portugese-br",
-	  
-	  "gr"        : "greek",
-	  
-	  "nl"        : "dutch",
+	"fr"        : "french",
+	"fr_CH"     : "french-ch",
 
-	  "no"	      : "norwegian",
-	  
-	  "dk"        : "danish",
+	"it"        : "italian",
 
-	  "cz"        : "czech",
-	  "cz_querty" : "czech_qwerty",
-	  "si"	      : "slovene",
-	  "sk"        : "slovak",
-	  "sk_querty" : "slovak_qwerty",
+	"es"        : "spanish",
 
-	  "hu"        : "hungarian",
+	"pt"        : "portugese",
+	"br"        : "portugese-br",
 
-	  "pl"        : "polish",
+	"gr"        : "greek",
 
-	  "ru"        : "russian",
+	"nl"        : "dutch",
 
-	  "no"        : "norwegian",
+	"no"	      : "norwegian",
 
-	  "se"        : "swedish",
-	  
-	  "fi"        : "finnish",
+	"dk"        : "danish",
 
-	  "tr"        : "turkish",
+	"cz"		: "czech",
+	"cz_querty"	: "czech_qwerty",
+	"si"		: "slovene",
+	"sk"		: "slovak",
+	"sk_querty"	: "slovak_qwerty",
 
-	  "jp"        : "japanese",
-	  
-	  "be"        : "belgian",
-	  
-	  "dvorak"    : "dvorak",
-	  
-	  "is"        : "icelandic"
-	]
+	"hu"        : "hungarian",
+
+	"pl"        : "polish",
+
+	"ru"        : "russian",
+
+	"no"        : "norwegian",
+
+	"se"        : "swedish",
+
+	"fi"        : "finnish",
+
+	"tr"        : "turkish",
+
+	"jp"        : "japanese",
+
+	"be"        : "belgian",
+
+	"dvorak"    : "dvorak",
+
+	"is"        : "icelandic",
+
+	"lt"		: "lithuanian"
+]

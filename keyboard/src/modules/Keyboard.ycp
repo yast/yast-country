@@ -752,9 +752,9 @@ global define void Probe()
  *
  * @see	Probe()
  */
-global define void Keyboard()
-    ``{
-    if ( Mode::config () )
+global define void Keyboard() {
+
+    if (Mode::config ())
 	return;
 
     // We have three possible sources of information:
@@ -769,8 +769,8 @@ global define void Keyboard()
 
     // If not in initial mode try to restore from sysconfig.
     //
-    if( !Stage::initial () )
-	{
+    if (!Stage::initial ())
+    {
 	success = Restore();
 
 	// If this failed and we are in a running system try to restore from XF86Config.
@@ -800,24 +800,24 @@ global define void Keyboard()
 		success = true;
 		}
 	    }
-	}
+    }
     else
-	{
+    {
 	GetKbdSysconfig();
-	}
+    }
 
     // In initial mode or if restoring failed do probe.
     //
     if( Stage::initial () || !success )	// initial mode or no restore success
-	{
+    {
 	// On module entry probe the hardware and set all those data
 	// needed for public access.
 	//
 	Probe();
-	}
+    }
 
     return;
-    }	// Keyboard()
+}	// Keyboard()
 
 /**
  * xf86_update()
