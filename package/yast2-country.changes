@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jul 22 17:02:42 CEST 2002 - msvec@suse.cz
+
+- merged yast2-db-country
+- again added the language testsuite
+- 2.6.4
+
+-------------------------------------------------------------------
 Mon Jul 15 16:17:39 CEST 2002 - fehr@suse.de
 
 - fix namespace lookup

@@ -1,6 +1,5 @@
 @HEADER-COMMENT@
-
-# neededforbuild  yast2-devel-packages yast2-installation yast2-x11
+# neededforbuild yast2-devel-packages yast2-installation yast2-x11
 
 @HEADER@
 Requires:	yast2
@@ -35,61 +34,8 @@ Summary:	Setting the keyboard
 %files
 %defattr(-,root,root)
 %doc @docdir@
-
-# console
-
-@moduledir@/Console.ycp
-@scrconfdir@/cfg_console.scr
-@ydatadir@/consolefonts.ycp
-
-# keyboard
-
-@moduledir@/Keyboard.ycp
-@moduledir@/XF86Keyboard.ycp
-
-@clientdir@/keyboard.ycp
-@clientdir@/inst_keyboard.ycp
-
-@clientdir@/proposal_keyboard.ycp
-
-@configdir@/keyboard.y2cc
-
-@ydatadir@/keyboard_raw.ycp
-@ydatadir@/lang2keyboard.ycp
-@ydatadir@/xkblayout2keyboard.ycp
-@ydatadir@/keymap2mac.ycp
-
-@scrconfdir@/cfg_keyboard.scr
-
-# language
-
-@moduledir@/Language.ycp
-@moduledir@/XF86Path.ycp
-
-@clientdir@/language.ycp
-@clientdir@/inst_language.ycp
-
-@clientdir@/proposal_language.ycp
-
-@configdir@/language.y2cc
-
-@ydatadir@/language.ycp
-@ydatadir@/lang2iso.ycp
-
-@scrconfdir@/cfg_language.scr
-
-# timezone
-
-@moduledir@/Timezone.ycp
-
-@clientdir@/timezone.ycp
-@clientdir@/inst_timezone.ycp
-
-@clientdir@/proposal_timezone.ycp
-
-@configdir@/timezone.y2cc
-
-@ydatadir@/timezone_raw.ycp
-@ydatadir@/lang2tz.ycp
-
-@scrconfdir@/cfg_clock.scr
+@moduledir@/*.ycp
+@clientdir@/*.ycp
+@configdir@/*.y2cc
+@ydatadir@/*.ycp
+@scrconfdir@/*.scr
