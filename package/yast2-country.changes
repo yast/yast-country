@@ -2,6 +2,7 @@
 Thu Sep 18 14:58:31 CEST 2003 - gs@suse.de
 
 - Console::Restore(): read RC_LANG (bug #31206) 
+- fix wrong switch from UTC/local time (#31263)
 - 2.8.17
 
 -------------------------------------------------------------------
