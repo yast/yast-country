@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Mar 30 14:14:15 CEST 2004 - fehr@suse.de
+
+- use iso09.16 as turkish console font (#37247)
+  
+-------------------------------------------------------------------
 Mon Mar 29 15:04:31 CEST 2004 - fehr@suse.de
 
 - add call to UI::SetLanguage
