@@ -92,7 +92,7 @@
 	    unicodeMap  = consolefont[1]:"";
 	    screenMap	= consolefont[2]:"";
 	    magic	= consolefont[3]:"";
-	    encoding    = consolefont[4]:"";
+	    encoding    = consolefont[4]:"ISO-8859-1";
 
 	    if (Mode::braille)
 	    {
