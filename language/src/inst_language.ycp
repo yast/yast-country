@@ -80,13 +80,17 @@
 
     term heading = `Empty();
 
-    if ( Mode::initial && UI::WidgetExists(`id(`abort) ) )
+    if ( Mode::initial && UI::WidgetExists(`id(`abort) ) && ! Mode::repair )
     {
 	// initial heading for language selection
 	// (first 'user visible' screen)
 	heading = `Heading (_("Welcome to YaST2 -- the SuSE Linux
 installation and system administration program.
 "));
+    }
+    else if ( Mode::repair )
+    {
+	heading = `Heading (_("Welcome to YaST2 System Repair"));
     }
     else
     {
