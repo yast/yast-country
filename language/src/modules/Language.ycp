@@ -55,11 +55,11 @@ global boolean ExpertSettingsChanged = false;
  * Get the language DB
  * @return Language DB
  */
-define map get_languages_map() ``{
+define map<string, list> get_languages_map() ``{
 
     // The system_language DB
     //
-    map languages_map = (map)SCR::Read (.target.yast2, ["language.ycp", $[]]);
+    map<string, list> languages_map = (map<string, list>)SCR::Read (.target.yast2, ["language.ycp", $[]]);
 
     if ( languages_map == nil ) languages_map = $[];
 
@@ -76,13 +76,13 @@ global define void Set( string lang )
 
     if( language != lang )	// Do it only if different
 	{
-	map languages_map = get_languages_map();
+	map<string, list> languages_map = get_languages_map();
 
 	if( !haskey( languages_map, lang ) && size(lang)>0 )
 	    {
 	    lang = substring( lang, 0, 2 );
 	    boolean found = false;
-	    foreach( string k, map e, languages_map,
+	    foreach( string k, list dummy, languages_map,
 		``{
 		if( !found && substring( k, 0, 2)==lang )
 		    {
@@ -116,7 +116,7 @@ global define void Set( string lang )
 
 global define string GetLocaleString( string lang )
     ``{
-    map languages_map = get_languages_map();
+    map<string, list> languages_map = get_languages_map();
     list language_info = languages_map[lang]:[];
 
     // full language code
@@ -340,9 +340,9 @@ global define string MakeProposal( boolean force_reset, boolean language_changed
  *			'ascii-name' is an english (ascii encoded !) string.
  * @see Set
  */
-global define map Selection() ``{
+global define map<string, list> Selection() ``{
 
-    map languages_map = get_languages_map();
+    map<string, list> languages_map = get_languages_map();
 
     return mapmap( string code, list data, languages_map,
 		   ``($[code: [data[0]:"", data[1]:""]]));

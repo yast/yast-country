@@ -23,6 +23,8 @@
 //     e.g. for key = "de_DE"
 //     LANG="de_DE" + use_utf8 ? l["de_DE",2] : l["de_DE",3]
 
+// map <string, list>
+
 $[
 
   /* Highly incomplete, no active translator.
@@ -206,10 +208,10 @@ $[
 /*		     "Korean",			*/
 /*		     ".UTF-8",			*/
 /*		     "" ],			*/
-/*      "id_ID"    : [ "Indonesia",		*/
-/*      "zh_CN"    : [ "中文 (Chinese)"	*/
-/*      "ar_EG"    : [ "ﻲﺑﺮﻋ"		*/
-/*      "pl_PL"    : [ "Polski"			*/
-/*      "ro_RO"    : [ "Romania"		*/
+/*      "id_ID"    : [ "Indonesia",]		*/
+/*      "zh_CN"    : [ "中文 (Chinese)"]	*/
+/*      "ar_EG"    : [ "ﻲﺑﺮﻋ"	]	*/
+/*      "pl_PL"    : [ "Polski"		]	*/
+/*      "ro_RO"    : [ "Romania"	]	*/
 
 ]

@@ -151,7 +151,7 @@ are unset.<br>
     // on textmode probed above (workaround because there isn't any
     // usable console font for all languages).
 
-    map languageselsort = mapmap(string lang_code, map lang_info, Language::Selection(), ``{
+    map<string,list> languageselsort = mapmap(string lang_code, list lang_info, Language::Selection(), ``{
 				string s = lang_info[1]:"";
 				return $[ s :	// ASCII value is the key
 				    [lang_info[use_ascii?1:0]:"", lang_code]
