@@ -116,8 +116,8 @@ $[
 		  ".UTF-8",
 		  "" ],
 
-  "he_IL"	: [ "Ivrit",
-		  "עברית",
+  "he_IL"	: ["עברית",
+                  "Ivrit",
 		  ".UTF-8",
 		  "" ],
 
@@ -201,14 +201,13 @@ $[
 		  ".UTF-8",
 		  "" ],
 
-  /* "zh_HK"       : [ "繁體中文", */
-  "zh_HK"       : [ "Traditional Chinese Hongkong",
-		  "Traditional Chinese Hongkong",
+  "zh_HK"       : [ "繁體中文 (中國香港)",
+                  "Traditional Chinese (China Hongkong)",
 		  ".UTF-8",
 		  "" ],
 
-  "zh_TW"       : [ "繁體中文",
-		  "Traditional Chinese",
+  "zh_TW"       : [ "繁體中文 (中國臺灣)",
+		  "Traditional Chinese (China Taiwan)",
 		  ".UTF-8",
 		  "" ],
 
@@ -226,15 +225,6 @@ $[
 /*		  ".UTF-8",			*/
 /*		  "@euro" ],			*/
 /*						*/
-/*  "zh_TW"       : [ "繁體中文",       */
-/*		  "Traditional Chinese",	*/
-/*		  ".UTF-8",			*/
-/*		  "" ],				*/
-/*						*/
-/*      "ko_KR"    : [ "한글 ",		*/
-/*		     "Korean",			*/
-/*		     ".UTF-8",			*/
-/*		     "" ],			*/
 /*      "id_ID"    : [ "Indonesia",]		*/
 /*      "zh_CN"    : [ "中文 (Chinese)"]	*/
 /*      "ar_EG"    : [ "ﻲﺑﺮﻋ"	]	*/
