@@ -1,6 +1,5 @@
-#
 # Makefile.am for country/language/src
-#
+
 SUBDIRS = modules proposal
 
 client_DATA =			\
@@ -14,3 +13,5 @@ desktop_DATA =			\
 	language.desktop
 
 EXTRA_DIST = $(client_DATA) $(config_DATA) $(desktop_DATA)
+
+include $(top_srcdir)/Makefile.am.common
