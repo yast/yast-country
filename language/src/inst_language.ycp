@@ -361,7 +361,7 @@ Adapt keyboard settings?
 		    {
 		    // Display newly translated dialog.
 		    //
-		    if (UI::WidgetExists(`id(`next)) )		Wizard::SetFocusToNextButton();
+		    Wizard::SetFocusToNextButton();
 
 		    return( `again );
 		    }
