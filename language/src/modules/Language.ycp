@@ -18,7 +18,6 @@ import "Misc";
 import "Mode";
 import "Installation";
 import "AsciiFile";
-import "X11Version";
 import "XF86Path";
 
 
@@ -123,6 +122,24 @@ global define void SetDefault() ``{
     y2milestone("Setting default language: %1", language);
     default_language = language;
     return;
+}
+
+
+/**
+ * Get the map for conversion of old lang codes to new ISO-codes
+ * (since Rel. 8.0)
+ *
+ * @return conversion map
+ */
+define map get_lang2iso() ``{
+
+    // The old_lang --> ISO conversion map.
+    //
+    map lang2iso = (map) SCR::Read( .target.yast2, "lang2iso.ycp");
+
+    if ( lang2iso == nil ) lang2iso = $[];
+
+    return( lang2iso );
 }
 
 
@@ -242,7 +259,7 @@ global define void SetExpertValues( map val )
         }
     if( haskey(val,"use_utf8") )
         {
-        use_utf8 = val["use_utf8"]:"";
+        use_utf8 = val["use_utf8"]:nil;
         }
     }
 
@@ -309,7 +326,7 @@ global define map Selection() ``{
     map languages_map = get_languages_map();
 
     return mapmap (string code, list data, languages_map, ``{
-	return [code, [data[0]:"", data[1]:""]];
+	return $[code: [data[0]:"", data[1]:""]];
     });
 }
 
@@ -346,31 +363,13 @@ global define void Save() ``{
 
     // Change the respective XF86Config content to match the current settings.
     // Do this only in the running system _and_ if XFree4 is installed.
-    if ( Mode::normal && X11Version::version == "4" )
+    if ( Mode::normal )
     {
 	y2milestone("Storing current settings into XF86Config file (XFree4)." );
 	XF86Path::update();
     }
 
     y2milestone("Saved data for language: <%1>", GetLocaleString(language) );
-}
-
-
-/**
- * Get the map for conversion of old lang codes to new ISO-codes
- * (since Rel. 8.0)
- *
- * @return conversion map
- */
-define map get_lang2iso() ``{
-
-    // The old_lang --> ISO conversion map.
-    //
-    map lang2iso = SCR::Read( .target.yast2, "lang2iso.ycp");
-
-    if ( lang2iso == nil ) lang2iso = $[];
-
-    return( lang2iso );
 }
 
 
