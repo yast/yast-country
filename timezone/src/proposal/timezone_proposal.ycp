@@ -1,5 +1,5 @@
 /**
- * Module:		proposal_timezone.ycp
+ * File:		timezone_proposal.ycp
  *
  * $Id$
  *
@@ -23,32 +23,36 @@
 	boolean force_reset      = param["force_reset"     ]:false;
 	boolean language_changed = param["language_changed"]:false;
 
-	// call some function that makes a proposal here:
-	//
-	// DummyMod::MakeProposal( force_reset );
+	map m = (map) SCR::Execute( .target.bash_output, "/bin/date +%Y" );
+	y2milestone ("date call: %1", m);
 
-	map m = (map)SCR::Execute( .target.bash_output, "/bin/date +%Y" );
-	y2milestone( "m %1", m );
-	if( tointeger( m["stdout"]:"0" )<2004 )
-	    {
+	if (tointeger (m["stdout"]:"0") < 2004)
+	{
 	    ret["raw_proposal"] = [];
-	    // popup text
 	    map m = (map)SCR::Execute( .target.bash_output, "/bin/date" );
+	    // error text, %1 is output of 'date' command
 	    ret["warning"] = sformat( _("Time %1 is in the past.
 Set a correct time before starting installation."), m["stdout"]:"" );
             ret["warning_level"] = `blocker;
-	    }
-	else
-	    {
-	    // Fill return map
-
-	    ret =
-		$[
-		  "raw_proposal"    : [ Timezone::MakeProposal( force_reset, language_changed ) ],
-		  "language_changed": false
-		];
-	    }
 	}
+	else
+	{
+	    Timezone::windows_partition = false;
+	    import "Storage";
+	    if (size (Storage::GetWinPrimPartitions(Storage::GetTargetMap()))>0)
+	    {
+		Timezone::windows_partition = true;
+		y2milestone ("windows partition found: assuming local time");
+	    }
+
+	    // Fill return map
+	    ret = $[
+		"raw_proposal"		: [
+		    Timezone::MakeProposal (force_reset, language_changed) ],
+		"language_changed"	: false
+	    ];
+	}
+    }
     else if ( func == "AskUser" )
     {
 	boolean has_next = param["has_next"]:false;
