@@ -193,7 +193,7 @@ Enter the correct date.
     string date = "";
 
     if (Mode::config)
-	Wizard::ReplaceAbortButton(`Empty());
+	Wizard::HideAbortButton();
     else
 	Wizard::OpenAcceptDialog();	// do this as early as possible for instant user feedback!
 

@@ -237,7 +237,7 @@ Scroll Lock should be set
      * ----------------------------------------------------------------------*/
 
     if (Mode::config)
-	Wizard::ReplaceAbortButton(`Empty());
+	Wizard::HideAbortButton();
     else
 	Wizard::OpenAcceptDialog();
 
