@@ -207,7 +207,7 @@ Scroll Lock should be set
 
     keyboardlist_by_translation =
 	sort( term a, term b, keyboardlist_by_translation,
-	      ``(select( sort( [a[1]:"", b[1]:"" ]), 0, "" ) ==
+	      ``(select( lsort( [a[1]:"", b[1]:"" ]), 0, "" ) ==
 		 a[1]:"" && a[1]:""!=b[1]:"" ));
 
 
