@@ -1178,106 +1178,62 @@ global define void Set( string keyboard )
  * @param	boolean force_reset
  *		boolean language_changed
  *
- * @return 	string	user readable description.
+ * @return	string	user readable description.
  *		If force_reset is true reset the module to the keyboard
  *		stored in default_kbd.
  */
 
-global define string MakeProposal( boolean force_reset,
-                                   boolean language_changed )
-    ``{
+global define string MakeProposal (boolean force_reset,boolean language_changed)
+{
     y2milestone("force_reset: %1", force_reset);
     y2milestone("language_changed: %1", language_changed);
 
-    if( force_reset )
-	{
+    if (force_reset)
+    {
 	// If user wants to reset do it if a default is available.
-	//
-	if( default_kbd != "" )
-	    {
-	    Set( default_kbd );	// reset
-	    }
+	if (default_kbd != "")
+	{
+	    Set (default_kbd);	// reset
+	}
 
 	// Reset user_decision flag.
-	//
-	user_decision = false;
-	restore_called = false;
-	}
+	user_decision	= false;
+	restore_called	= false;
+    }
     else	// no reset
-	{
+    {
 	// Only follow the language if the user has never actively chosen
 	// a keyboard. The indicator for this is user_decision which is
 	// set from outside the module.
-	//
-	if( user_decision || (Mode::update () && !Stage::initial ()) || Mode::autoinst () || ProductFeatures::keyboard!="")
+	if (user_decision ||
+	    (Mode::update () && !Stage::initial ()) ||
+	    Mode::autoinst () || ProductFeatures::keyboard != "")
+	{
+	    if (language_changed)
 	    {
-	    if( language_changed )
-		{
 		y2milestone("User has chosen a keyboard; not following language - only retranslation.");
 
-		Set( current_kbd );
-		}
-	    }
-	else
-	    {
-	    string local_kbd = "";
-	    string kt = (string)SCR::Read( .etc.install_inf.Keytable );
-	    if( kt!=nil && size(kt)>0 )
-		{
-		map trans = $[ "de-lat1-nd" : "de-latin1-nodeadkeys",
-			       "mac-fr_CH" : "mac-fr_CH-latin1",
-			       "mac-fi" : "mac-fi-latin1",
-			       "cz-us-qwertz" : "cz-lat2",
-			       "dk" : "dk-latin1",
-			       "fi" : "fi-latin1",
-			       "sk-qwertz" : "sk-qwerty" ];
-		map kbs = get_reduced_keyboard_db();
-		y2milestone( "install.inf contains keytable %1", kt );
-		y2milestone( "kbmodel %1", kb_model );
-		integer idx=0;
-		kt = trans[kt]:kt;
-		if( kt == "us" || kt == "sunkeymap" )
-		    local_kbd = "english-us";
-		if( find( kt, ".map.gz" )<0 )
-		    {
-		    kt = kt + ".map.gz";
-		    }
-		foreach( string key, list entry, get_reduced_keyboard_db(),
-		    ``{
-		    if( size(local_kbd)==0 )
-			{
-			if( entry[1,"ncurses"]:"" == kt )
-			    {
-			    local_kbd = key;
-			    }
-			}
-		    });
-		y2milestone( "keymap says local_kbd %1", local_kbd );
-		}
-	    if( size(local_kbd)==0 )
-		{
-		// User has not yet chosen a keyboard ==> follow language.
-		//
-		local_kbd = GetKeyboardForLanguage( Language::language,
-						    "english-us" );
-		}
-	    if( local_kbd != "" )
-		{
-		Set( local_kbd );
-		}
-	    else
-		{
-		if( language_changed )
-		    {
-		    y2error("Can't follow language - only retranslation");
-
-		    Set( current_kbd );
-		    }
-		}
+		Set (current_kbd);
 	    }
 	}
+	else
+	{
+	    // User has not yet chosen a keyboard ==> follow language.
+	    string local_kbd =
+		GetKeyboardForLanguage ( Language::language, "english-us" );
+	    if (local_kbd != "")
+	    {
+		Set (local_kbd);
+	    }
+	    else if (language_changed)
+	    {
+		y2error ("Can't follow language - only retranslation");
+		Set (current_kbd);
+	    }
+	}
+    }
     return name;
-    }	// MakeProposal()
+}	// MakeProposal()
 
 
 /**
