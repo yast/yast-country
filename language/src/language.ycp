@@ -27,6 +27,7 @@ import "Popup";
 import "Wizard";
 
 string language_on_entry = "";
+string languages_on_entry = "";
 
 /**
  * read language settings
@@ -35,8 +36,10 @@ define boolean LanguageRead () {
 
     // Memozize the current language.
     language_on_entry	= Language::language;
+    languages_on_entry	= Language::languages;
 
-    y2milestone("language_on_entry: <%1>", language_on_entry );
+    y2milestone("language_on_entry: %1, languages: %2",
+	language_on_entry, languages_on_entry);
     return true;
 }
 
@@ -109,7 +112,8 @@ define any LanguageSequence () {
     }
     else
     {
-	if (Language::language != language_on_entry ||
+	if (Language::language != language_on_entry	||
+	    Language::languages != languages_on_entry	||
 	    Language::ExpertSettingsChanged)
 	{
 	    LanguageWrite ();
