@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Feb 21 16:58:28 CET 2005 - jsuchome@suse.cz
+
+- use client with a data for languages (workaround for #50815)
+- check disk space before installing new packages (#50745)
+- check for completeness of translations (feature #100197)
+- 2.11.14
+
+-------------------------------------------------------------------
 Thu Feb 10 09:00:57 CET 2005 - jsuchome@suse.cz
 
 - show region in Timezone adaptation proposal
