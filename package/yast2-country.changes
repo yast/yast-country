@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Mar 16 11:36:07 CET 2004 - fehr@suse.de
+
+- adapt testsuite
+- 2.9.13
+
+-------------------------------------------------------------------
 Mon Mar 15 16:06:05 CET 2004 - fehr@suse.de
 
 - set language value in Encoding module (needed to fix bug #34559)
