@@ -125,11 +125,11 @@ Scroll Lock should be set
 
     if (Mode::config)
     {
-	import "AIgeneral";
-	if (AIgeneral::Keyboard["keymap"]:"" != "")
-	    Keyboard::current_kbd = AIgeneral::Keyboard["keymap"]:"";
+	import "AutoinstGeneral";
+	if (AutoinstGeneral::Keyboard["keymap"]:"" != "")
+	    Keyboard::current_kbd = AutoinstGeneral::Keyboard["keymap"]:"";
 	else
-	    Keyboard::current_kbd =  Keyboard::GetKeyboardForLanguage( AIgeneral::Language, "english-us" );	
+	    Keyboard::current_kbd =  Keyboard::GetKeyboardForLanguage( AutoinstGeneral::Language, "english-us" );	
     }
 
     
@@ -258,9 +258,9 @@ If unsure, use the default values already selected.
 	    //
 	    if ( Mode::config)
 	    {
-		import "AIgeneral";
+		import "AutoinstGeneral";
 		y2milestone("Autoyast keyboard: %1", keyboard);
-		AIgeneral::Keyboard["keymap"]  = keyboard;
+		AutoinstGeneral::Keyboard["keymap"]  = keyboard;
 	    }
 	    else
 	    {

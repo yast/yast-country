@@ -165,9 +165,9 @@ Enter the correct date.
     // Autoinstall
     if (Mode::config)
     {
-	import "AIgeneral";
-	timezone = AIgeneral::Clock["timezone"]:"";	
-	hwclock = ( AIgeneral::Clock["hwclock"]:"" == "UTC" ) ? "-u"  : "--localtime";
+	import "AutoinstGeneral";
+	timezone = AutoinstGeneral::Clock["timezone"]:"";	
+	hwclock = ( AutoinstGeneral::Clock["hwclock"]:"" == "UTC" ) ? "-u"  : "--localtime";
     }
 
     string date = "";
@@ -302,7 +302,7 @@ If you are unsure, use the default values already selected.
     //
     integer sel = 0;
     if (Mode::config)
-	sel = Timezone::Set(AIgeneral::Clock["timezone"]:"");
+	sel = Timezone::Set(AutoinstGeneral::Clock["timezone"]:"");
     else
 	sel = Timezone::Set( Timezone::timezone );
 
@@ -374,9 +374,9 @@ If you are unsure, use the default values already selected.
 	    if (Mode::config)
 	    {
 		// Autoinstall
-		import "AIgeneral";
-		AIgeneral::Clock["hwclock"] = ( hwclock_s == `hwclock_utc ) ? "UTC" : "localtime";
-		AIgeneral::Clock["timezone"]  =  timezone;
+		import "AutoinstGeneral";
+		AutoinstGeneral::Clock["hwclock"] = ( hwclock_s == `hwclock_utc ) ? "UTC" : "localtime";
+		AutoinstGeneral::Clock["timezone"]  =  timezone;
 	    }
 	    else
 	    {
