@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Nov  3 09:07:41 CET 2004 - jsuchome@suse.cz
+
+- do not show duplicate australian timezones (#47472)
+
+-------------------------------------------------------------------
 Wed Nov  3 09:05:33 CET 2004 - jsuchome@suse.cz
 
 - do not call loadkeys on iseries (#39025)
