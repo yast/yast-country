@@ -21,12 +21,15 @@
  *
  * Added "compose" tag for COMPOSETABLE flag in rc.config
  * non-latin1 keyboards need this, see bug #7023
+ *
+   textdomain "country";
+ *
  */
 
 $[
   "english-us":
 	[
-		$[	"default": "English (US)"
+		$[	"default": _("English (US)")
 		],
 		$[	"i386" : $[ "pc104": $[	"ncurses": "us.map.gz" ]],
 			"ia64" : $[ "pc104": $[	"ncurses": "us.map.gz" ]],
@@ -46,7 +49,7 @@ $[
 	],
   "english-uk":
 	[
-		$[	"default": "English (UK)"
+		$[	"default": _("English (UK)")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "uk.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "uk.map.gz"]],
@@ -65,7 +68,7 @@ $[
 	],
   "german":
 	[
-		$[	"default": "German"
+		$[	"default": _("German")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "de-latin1-nodeadkeys.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "de-latin1-nodeadkeys.map.gz"]],
@@ -84,7 +87,7 @@ $[
 	],
   "german-ch":
 	[
-		$[	"default": "German (Swiss)"
+		$[	"default": _("German (Swiss)")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "sg-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "sg-latin1.map.gz"]],
@@ -103,7 +106,7 @@ $[
 	],
   "french":
 	[
-		$[	"default": "French"
+		$[	"default": _("French")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "fr-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "fr-latin1.map.gz"]],
@@ -122,7 +125,7 @@ $[
 	],
   "french-ch":
 	[
-		$[	"default": "French (Switzerland)"
+		$[	"default": _("French (Switzerland)")
 
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "fr_CH-latin1.map.gz"]],
@@ -142,7 +145,7 @@ $[
 	],
   "spanish":
 	[
-		$[	"default": "Spanish"
+		$[	"default": _("Spanish")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "es.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "es.map.gz"]],
@@ -161,7 +164,7 @@ $[
 	],
   "italian":
 	[
-		$[	"default": "Italian"
+		$[	"default": _("Italian")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "it.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "it.map.gz"]],
@@ -180,7 +183,7 @@ $[
 	],
   "portugese":
 	[
-		$[	"default": "Portugese"
+		$[	"default": _("Portugese")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "pt-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "pt-latin1.map.gz"]],
@@ -199,7 +202,7 @@ $[
 	],
   "portugese-br":
 	[
-		$[	"default": "Portugese (Brazil)"
+		$[	"default": _("Portugese (Brazil)")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "br-abnt2.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "br-abnt2.map.gz"]],
@@ -218,7 +221,7 @@ $[
 	],
   "greek":
 	[
-		$[	"default": "Greek"
+		$[	"default": _("Greek")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "gr.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "gr.map.gz"]],
@@ -237,7 +240,7 @@ $[
 	],
   "dutch":
 	[
-		$[	"default": "Dutch"
+		$[	"default": _("Dutch")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "us.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "us.map.gz"]],
@@ -256,7 +259,7 @@ $[
 	],
   "danish":
 	[
-		$[	"default": "Danish"
+		$[	"default": _("Danish")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "dk-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "dk-latin1.map.gz"]],
@@ -275,7 +278,7 @@ $[
 	],
   "norwegian":
 	[
-		$[	"default": "Norwegian"
+		$[	"default": _("Norwegian")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "no-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "no-latin1.map.gz"]],
@@ -294,7 +297,7 @@ $[
 	],
   "swedish":
 	[
-		$[	"default": "Swedish"
+		$[	"default": _("Swedish")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "se-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "se-latin1.map.gz"]],
@@ -313,7 +316,7 @@ $[
 	],
   "finnish":
 	[
-		$[	"default": "Finnish"
+		$[	"default": _("Finnish")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "fi-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "fi-latin1.map.gz"]],
@@ -332,7 +335,7 @@ $[
 	],
   "czech":
 	[
-		$[	"default": "Czech"
+		$[	"default": _("Czech")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "cz-us-qwertz.map.gz",
 						"compose" : "latin2" ]],
@@ -355,7 +358,7 @@ $[
 	],
   "czech-qwerty":
 	[
-		$[	"default": "Czech (qwerty)"
+		$[	"default": _("Czech (qwerty)")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "cz-lat2.map.gz",
 						"compose" : "latin2" ]],
@@ -378,7 +381,7 @@ $[
 	],
   "slovak":
 	[
-		$[	"default": "Slovak"
+		$[	"default": _("Slovak")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "sk-qwertz.map.gz",
 						"compose" : "latin2" ]],
@@ -401,7 +404,7 @@ $[
 	],
   "slovak-qwerty":
 	[
-		$[	"default": "Slovak (qwerty)"
+		$[	"default": _("Slovak (qwerty)")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "sk-qwerty.map.gz",
 						"compose" : "latin2" ]],
@@ -424,7 +427,7 @@ $[
 	],
   "slovene":
 	[
-		$[	"default": "Slovene"
+		$[	"default": _("Slovene")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "slovene.map.gz",
 						"compose" : "latin2" ]],
@@ -447,7 +450,7 @@ $[
 	],
   "hungarian":
 	[
-		$[	"default": "Hungarian"
+		$[	"default": _("Hungarian")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "hu.map.gz",
 						"compose" : "latin2"]],
@@ -470,7 +473,7 @@ $[
 	],
   "polish":
 	[
-		$[	"default": "Polish"
+		$[	"default": _("Polish")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "Pl02.map.gz",
 						"compose" : "latin2"]],
@@ -493,7 +496,7 @@ $[
 	],
   "russian":
 	[
-		$[	"default": "Russian"
+		$[	"default": _("Russian")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "ru1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "ru1.map.gz"]],
@@ -512,7 +515,7 @@ $[
 	],
   "estonian":
 	[
-		$[	"default": "Estonian"
+		$[	"default": _("Estonian")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "et.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "et.map.gz"]],
@@ -531,7 +534,7 @@ $[
 	],
   "turkish":
 	[
-		$[	"default": "Turkish"
+		$[	"default": _("Turkish")
 		],
 		$[	"i386" : $[ "pc104": $[	"ncurses": "trq.map.gz" ]],
 
@@ -552,7 +555,7 @@ $[
 	],
   "croatian":
 	[
-		$[	"default": "Croatian"
+		$[	"default": _("Croatian")
 		],
 		$[	"i386" : $[ "pc104": $[	"ncurses": "croat.map.gz" ]],
 
@@ -573,7 +576,7 @@ $[
 	],
   "japanese":
 	[
-		$[	"default": "Japanese"
+		$[	"default": _("Japanese")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "jp106.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "jp106.map.gz"]],
@@ -592,7 +595,7 @@ $[
 	],
   "belgian":
 	[
-		$[	"default": "Belgian"
+		$[	"default": _("Belgian")
 		],
 		$[	"i386" : $[ "pc104": $[ "ncurses": "be-latin1.map.gz"]],
 			"ia64" : $[ "pc104": $[ "ncurses": "be-latin1.map.gz"]],
@@ -611,7 +614,7 @@ $[
 	],
   "dvorak":
 	[
-		$[ "default": "Dvorak"
+		$[ "default": _("Dvorak")
 		],
 		$[	"i386" : $[ "pc104": $[	"ncurses": "dvorak.map.gz" ]],
 			"ia64" : $[ "pc104": $[	"ncurses": "dvorak.map.gz" ]],
