@@ -1,6 +1,12 @@
 -------------------------------------------------------------------
 Tue Aug  6 10:47:27 CEST 2002 - fehr@suse.de
 
+- removed access to variable DEFAULT_LANGUAGE 
+  (RC_LANG is unsed instead)
+
+-------------------------------------------------------------------
+Tue Aug  6 10:47:27 CEST 2002 - fehr@suse.de
+
 - removed testsuite from language to make the package build again
   (and if anyone adds that crap again, I will personally kill him)
 - version 2.6.11

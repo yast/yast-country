@@ -57,30 +57,20 @@ global define void Language() ``{
     }
     else
     {
-	// Read language from sysconfig (default is current setting).
+	// Try to read the old YaST1 language and conevertt setting).
 	//
 	string local_lang =
-	    Misc::SysconfigRead(.sysconfig.language.DEFAULT_LANGUAGE, language );
+	    Misc::SysconfigRead(.sysconfig.language.RC_LANG, language );
+	y2milestone( "reading RC_LANG %1", local_lang );
 
-	// In case of update this may be an old language code which must be translated to ISO.
-	// == Try to translate it.
-	//
-	map lang2iso = get_lang2iso();	// Conversion map
-	string local_lang_conv = lang2iso[local_lang]:"";
+	integer pos = findfirstof( local_lang, ".@" );
 
-	if ( local_lang_conv == "" )	// Not to be translated.
-	{
-	    y2milestone( "sysconfig: lang key <%1>", local_lang );
-	    Set( local_lang );
-	}
-	else
-	{
-	    y2milestone( "sysconfig: old lang key <%1> - translated to <%2>",
-			 local_lang,
-			 local_lang_conv );
+	if( pos >= 0 )
+	    local_lang = substring( local_lang, 0, pos );
 
-	    Set( local_lang_conv );
-	}
+	y2milestone( "setting laguage to %1", local_lang );
+
+	Set( local_lang );
 
 	SetDefault();		// also default
     }
@@ -167,9 +157,6 @@ global define void Save() ``{
     SCR::Write(.sysconfig.language.RC_LANG, language
 		    + language_info[2]:""	// mandatory-LANG-modifier
 		    + language_info[3]:"" );// optional-LANG-modifier
-
-    // minimal language code
-    SCR::Write(.sysconfig.language.DEFAULT_LANGUAGE, language);
 
     SCR::Write(.sysconfig.language, nil);
 
