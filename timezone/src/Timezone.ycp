@@ -154,10 +154,14 @@ global define integer Set( string zone, boolean really )
     //
     if( !Mode::config && really )
 	{
-	SCR::Execute( .target.bash, "/usr/sbin/zic -l " + timezone );
+	string cmd = "/usr/sbin/zic -l " + timezone;
+	y2milestone( "cmd %1", cmd );
+	y2milestone( "ret %1", SCR::Execute( .target.bash_output, cmd ));
 	if( !Arch::s390 )
 	    {
-	    SCR::Execute(.target.bash, "/sbin/hwclock --hctosys " + hwclock);
+	    cmd = "/sbin/hwclock --hctosys " + hwclock;
+	    y2milestone( "cmd %1", cmd );
+	    y2milestone( "ret %1", SCR::Execute(.target.bash_output, cmd ));
 	    }
 	}
     
