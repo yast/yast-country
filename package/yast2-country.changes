@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Nov  3 09:05:33 CET 2004 - jsuchome@suse.cz
+
+- do not call loadkeys on iseries (#39025)
+
+-------------------------------------------------------------------
 Wed Oct 27 09:44:25 CEST 2004 - jsuchome@suse.cz
 
 - adapted for new Mode:: interface
