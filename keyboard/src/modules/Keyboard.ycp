@@ -578,7 +578,7 @@ global define void SetKeyboardForLang( string lang )
 	SCR::Write(.sysconfig.keyboard.KBD_DELAY, kbd_delay );
 	SCR::Write(.sysconfig.keyboard.KBD_NUMLOCK, kbd_numlock );
 	SCR::Write(.sysconfig.keyboard.KBD_CAPSLOCK, kbd_capslock );
-	SCR::Write(.sysconfig.keyboard.KBD_SCRLOCK, kbd_capslock );
+	SCR::Write(.sysconfig.keyboard.KBD_SCRLOCK, kbd_scrlock );
 	SCR::Write(.sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK, 
 		   kbd_disable_capslock );
 
@@ -958,6 +958,7 @@ global define boolean CalledRestore()
 
 global define void Set( string keyboard )
     ``{
+    y2milestone( "set to %1", keyboard );
     SetConsole( keyboard );
     SetX11( keyboard );
     if( Mode::initial )

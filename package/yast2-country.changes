@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Sep 17 13:07:30 CEST 2003 - fehr@suse.de
+
+- fix saving numlock state (#30915)
+
+-------------------------------------------------------------------
 Sun Sep 14 21:01:10 CEST 2003 - adrian@suse.de
 
 - make it working in kcontrol

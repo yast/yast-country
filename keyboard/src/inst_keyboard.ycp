@@ -135,7 +135,8 @@ Scroll Lock should be set
 	    val["delay"] = UI::QueryWidget( `id(`delay), `Value );
 	    val["numlock"] = "";
 	    tmp = UI::QueryWidget( `id(`numlock), `Value );
-	    if( contains( ["bios", "on", "off"], tmp ) )
+	    y2milestone( "tmp %1", tmp );
+	    if( contains( ["bios", "yes", "no"], tmp ) )
 		{
 		val["numlock"] = tmp;
 		}
@@ -180,7 +181,7 @@ Scroll Lock should be set
     // Memorize the current keyboard language to be able to restore it.
     //
     string keyboard_on_entry = Keyboard::current_kbd;
-
+    string cur_kbd = Keyboard::current_kbd;
 
     // default for keyboard is set to "english-us" in
     // inst_finish.ycp:    string keyboard_name = lookup (user_settings, "keyboard", "english-us");
@@ -274,6 +275,7 @@ If unsure, use the default values already selected.
 
     any ret = nil;
 
+    
     repeat
 	{
 	ret = Wizard::UserInput();
@@ -297,6 +299,9 @@ If unsure, use the default values already selected.
 	    //
 	    keyboard = UI::QueryWidget( `id( `keyboard ), `CurrentItem );
 
+	    y2milestone( "on entry %1 current %2 ret %3", keyboard_on_entry,
+			 cur_kbd, keyboard );
+
 	    // Set it in Keyboard module.
 	    //
 	    if ( Mode::config)
@@ -305,9 +310,10 @@ If unsure, use the default values already selected.
 		y2milestone("Autoyast keyboard: %1", keyboard);
 		AutoinstGeneral::Keyboard["keymap"]  = keyboard;
 	    }
-	    else
+	    else if( cur_kbd != keyboard )
 	    {
 		Keyboard::Set( keyboard );
+		cur_kbd = keyboard;
 	    }
 
 
@@ -318,7 +324,7 @@ If unsure, use the default values already selected.
 		//
 		Keyboard::user_decision = true;
 
-		if ( keyboard_on_entry != Keyboard::current_kbd && !Mode::config )
+		if ( keyboard_on_entry != Keyboard::current_kbd )
 		    {
 		    // User has chosen a different keyboard from the database.
 		    // ==> clear unique_key in the keyboard module to achieve
