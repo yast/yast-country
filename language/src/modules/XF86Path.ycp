@@ -103,7 +103,7 @@
 
 	// Call the isax agent to update the path settings in the XF86Config file.
 	//
-	any ret = SCR::Write( .xf86config.path, info );
+	boolean ret = (boolean)SCR::Write( .xf86config.path, info );
 
 	return (boolean) ret;
     }

@@ -96,11 +96,91 @@ define map get_lang2tz()
     //
     if( size(lang2tz)==0 )
 	{
-	lang2tz = (map) SCR::Read( .target.yast2, "lang2tz.ycp" );
+	lang2tz = (map)SCR::Read( .target.yast2, "lang2tz.ycp" );
 	if( lang2tz == nil ) lang2tz = $[];
 	}
     return( lang2tz );
     }	// get_lang2tz()
+
+/*
+ * get_zonemap()
+ *
+ * Get the timezone database.
+ *
+ * @param	-
+ *
+ * @return  timezone DB (map)
+ *
+ * @see	get_lang2tz()
+ */
+
+define list get_zonemap()
+    ``{
+    if( size(zonemap)==0 )
+	{
+	zonemap = (list)SCR::Read( .target.yast2, "timezone_raw.ycp" );
+	if( zonemap == nil ) zonemap = [];
+	}
+    return( zonemap );
+    }	// get_zonemap()
+
+// ------------------------------------------------------------------
+// END: Locally defined functions
+// ------------------------------------------------------------------
+/**
+ * Set()
+ *
+ * Set system to selected timezone.
+ *
+ * @param	string timezone to select, e.g. "Europe/Berlin"
+ *
+ * @return	the number of the region that contains the timezone
+ *
+ */
+global define integer Set( string zone, boolean really )
+    ``{
+    list zmap = get_zonemap();
+
+    // Set the new timezone internally
+    timezone = zone;
+
+    integer sel = 0;
+    while( sel<size(zmap) && !haskey(zmap[sel,"entries"]:$[], zone) )
+	{
+	sel = sel + 1;
+	}
+
+    textdomain "timezone_db";
+    locale translate =  zmap[sel,"name"]:"";
+    name = (string)eval(translate);
+    name = name + " / ";
+    translate = zmap[sel,"entries",timezone]:zone;
+    name = name + (string)eval(translate);
+    textdomain "country";
+
+    // Adjust system to the new timezone.
+    //
+    if( !Mode::config && really )
+	{
+	SCR::Execute( .target.bash, "/usr/sbin/zic -l " + timezone );
+	if( !Arch::s390 )
+	    {
+	    SCR::Execute(.target.bash, "/sbin/hwclock --hctosys " + hwclock);
+	    }
+	}
+    
+    // On first assignment store default timezone.
+    //
+    if( default_timezone == "" )	// not yet assigned
+	{
+	default_timezone = timezone;
+	y2milestone( "Set default timezone: <%1>", timezone );
+	}
+
+    y2milestone( "Set timezone:%1 sel:%2 name:%3", timezone, sel, name );
+
+    return( sel );
+    }
 
 /**
   * Timezone()
@@ -148,61 +228,6 @@ global define void Timezone()
     }
 
 
-/**
- * Set()
- *
- * Set system to selected timezone.
- *
- * @param	string timezone to select, e.g. "Europe/Berlin"
- *
- * @return	the number of the region that contains the timezone
- *
- */
-global define integer Set( string zone, boolean really )
-    ``{
-    list zmap = get_zonemap();
-
-    // Set the new timezone internally
-    timezone = zone;
-
-    integer sel = 0;
-    while( sel<size(zmap) && !haskey(zmap[sel,"entries"]:$[], zone) )
-	{
-	sel = sel + 1;
-	}
-
-    textdomain "timezone_db";
-    locale translate =  zmap[sel,"name"]:"";
-    name = eval(translate);
-    name = name + " / ";
-    translate = zmap[sel,"entries",timezone]:zone;
-    name = name + eval(translate);
-    textdomain "country";
-
-    // Adjust system to the new timezone.
-    //
-    if( !Mode::config && really )
-	{
-	SCR::Execute( .target.bash, "/usr/sbin/zic -l " + timezone );
-	if( !Arch::s390 )
-	    {
-	    SCR::Execute(.target.bash, "/sbin/hwclock --hctosys " + hwclock);
-	    }
-	}
-    
-    // On first assignment store default timezone.
-    //
-    if( default_timezone == "" )	// not yet assigned
-	{
-	default_timezone = timezone;
-	y2milestone( "Set default timezone: <%1>", timezone );
-	}
-
-    y2milestone( "Set timezone:%1 sel:%2 name:%3", timezone, sel, name );
-
-    return( sel );
-    }
-
 global define void SetTime( string year, string month, string day, 
                             string hour, string minute, string second )
     ``{
@@ -230,6 +255,95 @@ global define void PopVal()
 	timezone = push["timezone"]:timezone;
     push = $[];
     y2milestone( "timezone %1 hwclock %2", timezone, hwclock );
+    }
+
+/**
+ * GetTimezoneForLanguage()
+ *
+ * Get the timezone for the given system language.
+ *
+ * @param	System language code, e.g. "en_US".
+ *		Default timezone to be returned if nothing found.
+ *
+ * @return  The timezone for this language, e.g. "english-us"
+ *		or the default value if nothing found.
+ *
+ * @see	-
+ */
+global define string GetTimezoneForLanguage( string sys_language, 
+                                             string default_language )
+    ``{
+    // The system_language --> timezone conversion map.
+    //
+    map lang2timezone = get_lang2tz();
+
+    string ret = lang2timezone[sys_language]:"";
+    if( size(ret)==0 )
+	{
+	ret = lang2timezone[default_language]:"US/Pacific";
+	}
+    y2milestone( "sys %1 def %2 ret %3", sys_language, default_language, ret );
+    return ret;
+    }
+
+
+
+/**
+ * GetDateTime()
+ *
+ * Get the output of /bin/date "+%H:%M:%S - %Y-%m-%d"
+ *
+ * @param	flag if to get real system time or if to simulate changed
+ *		timezone settings with TZ=
+ *
+ * @return  The string output.
+ *
+ * @see	-
+ */
+global define string GetDateTime( boolean real_time )
+    ``{
+    string cmd = "";
+    string date_format = "+%H:%M:%S - %d-%m-%Y";
+    y2milestone( "hwclock %1", hwclock );
+    if( !real_time )
+	{
+	integer ds = 0;
+	string tzs = sformat( "TZ=%1 ", timezone );
+	if( diff!=0 )
+	    {
+	    integer t = 0;
+	    string tzd = 
+		lookup( (map)SCR::Execute( .target.bash_output, 
+				      sformat( "TZ=%1 date \"+%%z\"", timezone )),
+			"stdout", "" );
+	    y2milestone( "tcd=%1", tzd );
+	    t = tointeger( Misc::RemoveLeadingZero( substring( tzd, 1, 2 )));
+	    ds = ds + t * 3600;
+	    t = tointeger( Misc::RemoveLeadingZero( substring( tzd, 3, 2 )));
+	    ds = ds + t * 60;
+	    if( substring( tzd, 0, 1 )=="-" )
+		{
+		ds = -ds;
+		}
+	    ds = ds;
+	    y2milestone( "ds %1 diff %2", ds, diff );
+	    }
+	cmd = sformat( "TZ=%1 /bin/date \"%2\" \"--date=now %3sec\"", timezone,
+	               date_format, ds*diff );
+	}
+    else
+	{
+	cmd = sformat( "/bin/date \"%1\"", date_format );
+	}
+    y2milestone( "cmd=%1", cmd );
+    string local_date = lookup( (map)SCR::Execute( .target.bash_output, cmd ),
+				"stdout", "" );
+	
+    // cut off LF
+    //
+    local_date = substring( local_date, 0 , size( local_date ) - 1 );
+
+    return( local_date );
     }
 
 /**
@@ -360,19 +474,23 @@ global define list Selection( integer num )
     list zmap = get_zonemap();
 
     textdomain "timezone_db";
-    map tmap = mapmap( `key, `name, zmap[num,"entries"]:$[],
+    map tmap = mapmap( string key, string name, zmap[num,"entries"]:$[],
 		       ``{
 		       translate = name;
-		       return [ eval(name), key ];
+		       return $[ (string)eval(name): key ];
 		       });
     textdomain "country";
 
-    list trl = maplist( `name, `key, tmap, ``{ return( [ name, key ] ); });
-    trl = sort( `a, `b, trl, 
+    list trl = maplist( string name, string key, tmap, ``{ return( [ name, key ] ); });
+    /* Fixme lsort function needed 
+    trl = sort( list a, list b, trl, 
                 ``(select( lsort( [a[0]:"", b[0]:""] ), 0, "" ) == a[0]:"" ));
+    */
+    trl = sort( list a, list b, trl, 
+                ``(select( sort( [a[0]:"", b[0]:""] ), 0, "" ) == a[0]:"" ));
     y2milestone( "trl = %1", trl );
 
-    list ret = maplist( `e, trl,
+    list ret = maplist( list e, trl,
 	``{
 	return( `item( `id(e[1]:""), e[0]:"", false ));
 	});
@@ -387,10 +505,10 @@ global define list Region()
 
     textdomain "timezone_db";
     integer num = -1;
-    list ret = maplist( `entry, zmap,
+    list ret = maplist( map entry, zmap,
 	``{
 	translate = entry["name"]:"";
-	trans_str = eval(translate);
+	trans_str = (string)eval(translate);
 	num = num + 1;
 	return( `item( `id(num), trans_str, false ));
 	});
@@ -426,101 +544,10 @@ global define void Save()
     return;
     }
 
-
-
-/**
- * GetTimezoneForLanguage()
- *
- * Get the timezone for the given system language.
- *
- * @param	System language code, e.g. "en_US".
- *		Default timezone to be returned if nothing found.
- *
- * @return  The timezone for this language, e.g. "english-us"
- *		or the default value if nothing found.
- *
- * @see	-
- */
-global define string GetTimezoneForLanguage( string sys_language, 
-                                             string default_language )
-    ``{
-    // The system_language --> timezone conversion map.
-    //
-    map lang2timezone = get_lang2tz();
-
-    string ret = lang2timezone[sys_language]:"";
-    if( size(ret)==0 )
-	{
-	ret = lang2timezone[default_language]:"US/Pacific";
-	}
-    y2milestone( "sys %1 def %2 ret %3", sys_language, default_language, ret );
-    return ret;
-    }
-
-
-
-/**
- * GetDateTime()
- *
- * Get the output of /bin/date "+%H:%M:%S - %Y-%m-%d"
- *
- * @param	flag if to get real system time or if to simulate changed
- *		timezone settings with TZ=
- *
- * @return  The string output.
- *
- * @see	-
- */
-global define string GetDateTime( boolean real_time )
-    ``{
-    string cmd = "";
-    string date_format = "+%H:%M:%S - %d-%m-%Y";
-    y2milestone( "hwclock %1", hwclock );
-    if( !real_time )
-	{
-	integer ds = 0;
-	string tzs = sformat( "TZ=%1 ", timezone );
-	if( diff!=0 )
-	    {
-	    integer t = 0;
-	    string tzd = 
-		lookup( SCR::Execute( .target.bash_output, 
-				      sformat( "TZ=%1 date \"+%%z\"", timezone )),
-			"stdout", "" );
-	    y2milestone( "tcd=%1", tzd );
-	    t = tointeger( Misc::RemoveLeadingZero( substring( tzd, 1, 2 )));
-	    ds = ds + t * 3600;
-	    t = tointeger( Misc::RemoveLeadingZero( substring( tzd, 3, 2 )));
-	    ds = ds + t * 60;
-	    if( substring( tzd, 0, 1 )=="-" )
-		{
-		ds = -ds;
-		}
-	    ds = ds;
-	    y2milestone( "ds %1 diff %2", ds, diff );
-	    }
-	cmd = sformat( "TZ=%1 /bin/date \"%2\" \"--date=now %3sec\"", timezone,
-	               date_format, ds*diff );
-	}
-    else
-	{
-	cmd = sformat( "/bin/date \"%1\"", date_format );
-	}
-    y2milestone( "cmd=%1", cmd );
-    string local_date = lookup( SCR::Execute( .target.bash_output, cmd ),
-				"stdout", "" );
-	
-    // cut off LF
-    //
-    local_date = substring( local_date, 0 , size( local_date ) - 1 );
-
-    return( local_date );
-    }
-
 global define map GetDateTimeMap()
     ``{
     map ret = $[];
-    list dparts = filter( `v, splitstring( GetDateTime(true), " -:" ), 
+    list dparts = filter( string v, splitstring( GetDateTime(true), " -:" ), 
                           ``(size(v)>0));
     ret["hour"] = dparts[0]:"";
     ret["minute"] = dparts[1]:"";
@@ -548,17 +575,17 @@ global define boolean CheckDate( string day, string month, string year )
     ``{
     list mdays = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
     boolean ret = true;
-    integer year = tointeger(  Misc::RemoveLeadingZero(year) );
+    integer yea = tointeger(  Misc::RemoveLeadingZero(year) );
     y2milestone( "xxx %1 %2", month, Misc::RemoveLeadingZero(month) );
     integer mon = tointeger(  Misc::RemoveLeadingZero(month) );
     ret = ret && mon>=1 && mon<=12;
-    if( year%4==0 && (year%100!=0 || year%400==0))
+    if( yea%4==0 && (yea%100!=0 || yea%400==0))
 	{
 	mdays[1] = 29;
 	}
-    integer day = tointeger(  Misc::RemoveLeadingZero(day) );
-    ret = ret && day>=1 && day<=mdays[mon-1]:0;
-    ret = ret && year>=1970 && year<2032;
+    integer da = tointeger(  Misc::RemoveLeadingZero(day) );
+    ret = ret && da>=1 && da<=mdays[mon-1]:0;
+    ret = ret && yea>=1970 && yea<2032;
     return( ret );
     }
 
@@ -567,38 +594,6 @@ global define boolean CheckDate( string day, string month, string year )
 // ------------------------------------------------------------------
 
 
-
-// ------------------------------------------------------------------
-// START: Locally defined functions
-// ------------------------------------------------------------------
-
-/*
- * get_zonemap()
- *
- * Get the timezone database.
- *
- * @param	-
- *
- * @return  timezone DB (map)
- *
- * @see	get_lang2tz()
- */
-
-define list get_zonemap()
-    ``{
-    if( size(zonemap)==0 )
-	{
-	zonemap = SCR::Read( .target.yast2, "timezone_raw.ycp" );
-	if( zonemap == nil ) zonemap = [];
-	}
-    return( zonemap );
-    }	// get_zonemap()
-
-
-
-// ------------------------------------------------------------------
-// END: Locally defined functions
-// ------------------------------------------------------------------
 
 }
 

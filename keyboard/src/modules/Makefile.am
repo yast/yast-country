@@ -3,7 +3,6 @@
 #
 
 module_DATA = 				\
-	Keyboard.ycp			\
-	XF86Keyboard.ycp
+	Keyboard.ycp		
 
 EXTRA_DIST = $(module_DATA)

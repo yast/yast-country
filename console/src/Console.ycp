@@ -63,7 +63,7 @@
 
 	list consolefont = [];
 
-	map consolefonts = WFM::Read (.local.yast2, "consolefonts.ycp");
+	map consolefonts = (map)WFM::Read (.local.yast2, "consolefonts.ycp");
 
 	string fqlanguage = Language::GetLocaleString(lang);
 	consolefont = consolefonts[fqlanguage]:[];
@@ -159,18 +159,18 @@
 
     global define string Restore ()
     ``{
-	font	   = SCR::Read (.sysconfig.console.CONSOLE_FONT);
-	screenMap  = SCR::Read (.sysconfig.console.CONSOLE_SCREENMAP);
-	unicodeMap = SCR::Read (.sysconfig.console.CONSOLE_UNICODEMAP);
-	magic	   = SCR::Read (.sysconfig.console.CONSOLE_MAGIC);
-	encoding   = SCR::Read (.sysconfig.console.CONSOLE_ENCODING);
-	language   = SCR::Read (.sysconfig.language.RC_LANG);
-        list out = splitstring( lookup( SCR::Execute( .target.bash_output, 
-	                                              "locale -k charmap" ),
+	font	   = (string)SCR::Read (.sysconfig.console.CONSOLE_FONT);
+	screenMap  = (string)SCR::Read (.sysconfig.console.CONSOLE_SCREENMAP);
+	unicodeMap = (string)SCR::Read (.sysconfig.console.CONSOLE_UNICODEMAP);
+	magic	   = (string)SCR::Read (.sysconfig.console.CONSOLE_MAGIC);
+	encoding   = (string)SCR::Read (.sysconfig.console.CONSOLE_ENCODING);
+	language   = (string)SCR::Read (.sysconfig.language.RC_LANG);
+        list out = splitstring( lookup( (map)SCR::Execute( .target.bash_output, 
+							   "locale -k charmap" ),
 					"stdout", "" ),
 				 "\n" );
 	y2milestone( "list %1", out );
-	out = filter( `e, out, ``(find(e, "charmap=")==0) );
+	out = filter( string e, out, ``(find(e, "charmap=")==0) );
 	y2milestone( "list %1", out );
 	if( size(out[0]:"")>0 )
 	    {
@@ -206,7 +206,7 @@
 
     global define boolean Check ()
     ``{
-	return 0;
+	return true;
     }
 
     /**
@@ -220,7 +220,7 @@
     ``{
 	if (Mode::initial)
 	{
-	    serial = SCR::Read (.etc.install_inf.Console);
+	    serial = (string)SCR::Read (.etc.install_inf.Console);
 	    if (serial == nil) serial = "";
 	}
 	else

@@ -59,13 +59,12 @@ define map get_languages_map() ``{
 
     // The system_language DB
     //
-    map languages_map = (map) SCR::Read (.target.yast2, ["language.ycp", $[]]);
+    map languages_map = (map)SCR::Read (.target.yast2, ["language.ycp", $[]]);
 
     if ( languages_map == nil ) languages_map = $[];
 
     return( languages_map );
 }
-
 
 /**
  * Set module to selected language.
@@ -83,7 +82,7 @@ global define void Set( string lang )
 	    {
 	    lang = substring( lang, 0, 2 );
 	    boolean found = false;
-	    foreach( string k, any e, languages_map,
+	    foreach( string k, map e, languages_map,
 		``{
 		if( !found && substring( k, 0, 2)==lang )
 		    {
@@ -115,6 +114,26 @@ global define void Set( string lang )
     }
 
 
+global define string GetLocaleString( string lang )
+    ``{
+    map languages_map = get_languages_map();
+    list language_info = languages_map[lang]:[];
+
+    // full language code
+    string val = language;
+    if( use_utf8 )
+	{
+	val = val + language_info[2]:"";
+	}
+    else
+	{
+	val = val + language_info[3]:"";
+	}
+    y2milestone( "locale %1", val );
+    return val;
+    }
+
+
 /**
  * Store current language as default language.
  */
@@ -123,7 +142,6 @@ global define void SetDefault() ``{
     default_language = language;
     return;
 }
-
 
 /**
  * Get the map for conversion of old lang codes to new ISO-codes
@@ -135,7 +153,7 @@ define map get_lang2iso() ``{
 
     // The old_lang --> ISO conversion map.
     //
-    map lang2iso = (map) SCR::Read( .target.yast2, "lang2iso.ycp");
+    map lang2iso = (map)SCR::Read( .target.yast2, "lang2iso.ycp");
 
     if ( lang2iso == nil ) lang2iso = $[];
 
@@ -153,11 +171,11 @@ global define void Language()
     ``{
     if( Mode::initial )
 	{
-	string lang = (string) SCR::Read( .content.LANGUAGE );
+	string lang = (string)SCR::Read( .content.LANGUAGE );
 	y2milestone( "content LANGUAGE %1", lang );
 	if( SCR::Read( .target.size, "/etc/install.inf") > 0 )
 	    {
-	    string tmp_l = (string) SCR::Read (.etc.install_inf.Locale);
+	    string tmp_l = (string)SCR::Read (.etc.install_inf.Locale);
 	    y2milestone( "install_inf Locale %1", tmp_l );
 	    if( tmp_l!=nil && size(tmp_l)>0 )
 		lang = tmp_l;
@@ -259,7 +277,7 @@ global define void SetExpertValues( map val )
         }
     if( haskey(val,"use_utf8") )
         {
-        use_utf8 = val["use_utf8"]:nil;
+        use_utf8 = val["use_utf8"]:false;
         }
     }
 
@@ -309,6 +327,7 @@ global define string MakeProposal( boolean force_reset, boolean language_changed
 }
 
 
+
 /**
  * Return a map of ids and names to build up a selection list
  * for the user. The key is used later in the Set function
@@ -325,30 +344,9 @@ global define map Selection() ``{
 
     map languages_map = get_languages_map();
 
-    return mapmap (string code, list data, languages_map, ``{
-	return $[code: [data[0]:"", data[1]:""]];
-    });
+    return mapmap( string code, list data, languages_map,
+		   ``($[code: [data[0]:"", data[1]:""]]));
 }
-
-
-global define string GetLocaleString( string lang )
-    ``{
-    map languages_map = get_languages_map();
-    list language_info = languages_map[lang]:[];
-
-    // full language code
-    string val = language;
-    if( use_utf8 )
-	{
-	val = val + language_info[2]:"";
-	}
-    else
-	{
-	val = val + language_info[3]:"";
-	}
-    y2milestone( "locale %1", val );
-    return val;
-    }
 
 
 /**
@@ -371,6 +369,7 @@ global define void Save() ``{
 
     y2milestone("Saved data for language: <%1>", GetLocaleString(language) );
 }
+
 
 
 /**
