@@ -388,7 +388,18 @@ global define void Save() {
     SCR::Write (.sysconfig.language.RC_LANG, loc);
 
     if (find (loc, "zh_HK") == 0)
+    {
 	SCR::Write(.sysconfig.language.RC_LC_MESSAGES,"zh_TW"+substring(loc,5));
+    }
+    else
+    {
+	// FIXME ugly hack: see bug #47711
+	string lc_mess = (string)SCR::Read(.sysconfig.language.RC_LC_MESSAGES);
+	if (find (lc_mess, "zh_TW") == 0)
+	{
+	    SCR::Write (.sysconfig.language.RC_LC_MESSAGES, "");
+	}
+    }
 
     SCR::Write (.sysconfig.language.ROOT_USES_LANG, rootlang);
     SCR::Write (.sysconfig.language, nil);
