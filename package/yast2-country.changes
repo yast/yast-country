@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 28 08:29:35 CET 2005 - jsuchome@suse.cz
+
+- changed welcome text (#66617)
+- 2.11.16 
+
+-------------------------------------------------------------------
 Fri Feb 25 13:13:02 CET 2005 - jsuchome@suse.cz
 
 - fixed help text for (un)installation of language packages (#66599)
