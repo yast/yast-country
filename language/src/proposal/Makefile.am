@@ -1,6 +1,6 @@
 # Makefile.am for country/language/src/proposal
 
-client_DATA = proposal_language.ycp
+client_DATA = language_proposal.ycp
 EXTRA_DIST = $(client_DATA)
 
 include $(top_srcdir)/Makefile.am.common

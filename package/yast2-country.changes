@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb 26 20:29:54 CET 2004 - nashif@suse.de
+
+- Changed proposal file name proposal_* to *_proposal
+
+-------------------------------------------------------------------
 Thu Feb 26 11:59:47 CET 2004 - fehr@suse.de
 
 - fix crash while sorting keyboard lists (#35062)
