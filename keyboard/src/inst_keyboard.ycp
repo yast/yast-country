@@ -222,8 +222,7 @@ If unsure, use the default values already selected.
 
     if (!Mode::config)
     {
-	Keyboard::SetConsole( Keyboard::current_kbd );
-	Keyboard::SetX11( Keyboard::current_kbd );
+	Keyboard::Set( Keyboard::current_kbd );
     }
 
     UI::SetFocus( `id(`keyboard ));
@@ -264,8 +263,7 @@ If unsure, use the default values already selected.
 	    }
 	    else
 	    {
-		Keyboard::SetConsole( keyboard );
-		Keyboard::SetX11( keyboard );
+		Keyboard::Set( keyboard );
 	    }
 	   
 
@@ -298,8 +296,7 @@ If unsure, use the default values already selected.
 
 	// Reset keyboard to initial state.
 	//
-	Keyboard::SetConsole( keyboard_on_entry );
-	Keyboard::SetX11( keyboard_on_entry );
+	Keyboard::Set( keyboard_on_entry );
 	}
 
     Wizard::CloseDialog();

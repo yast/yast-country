@@ -64,6 +64,7 @@
  *
  *	GetKeyboardForLanguage()	- Get the keyboard language for a given language code.
  *
+ * 	Set()				- Set the keyboard to the given keyboard language.
  * 	SetConsole()			- Set the console keyboard to the given keyboard language.
  *
  * 	SetX11()			- Set the X11 keyboard to the given keyboard language.
@@ -79,6 +80,7 @@
     import "Arch";
     import "Mode";
     import "Language";
+    import "AsciiFile";
     import "Misc";
     import "X11Version";
     import "XF86Keyboard";
@@ -380,8 +382,7 @@ global define string MakeProposal( boolean force_reset,
 	//
 	if( default_kbd != "" )
 	    {
-	    SetConsole( default_kbd );	// reset
-	    SetX11( default_kbd );		// reset
+	    Set( default_kbd );	// reset
 	    }
 
 	// Reset user_decision flag.
@@ -401,8 +402,7 @@ global define string MakeProposal( boolean force_reset,
 		{
 		y2milestone("User has chosen a keyboard; not following language - only retranslation.");
 	    
-		SetConsole( current_kbd );
-		SetX11( current_kbd );
+		Set( current_kbd );
 		}
 	    }
 	else
@@ -450,8 +450,7 @@ global define string MakeProposal( boolean force_reset,
 		}
 	    if( local_kbd != "" )
 		{
-		SetConsole( local_kbd );
-		SetX11( local_kbd );
+		Set( local_kbd );
 		}
 	    else
 		{
@@ -459,8 +458,7 @@ global define string MakeProposal( boolean force_reset,
 		    {
 		    y2error("Can't follow language - only retranslation");
 	    
-		    SetConsole( current_kbd );
-		    SetX11( current_kbd );
+		    Set( current_kbd );
 		    }
 		}
 	    }
@@ -475,8 +473,7 @@ global define void SetKeyboardForLang( string lang )
     y2milestone( "lang %1 lkbd %2", lang, lkbd );
     if( lkbd != "" )
 	{
-	SetConsole( lkbd );
-	SetX11( lkbd );
+	Set( lkbd );
 	}
     };
 
@@ -930,6 +927,39 @@ global define boolean CalledRestore()
     }
 
 
+/**
+  * Set()
+  *
+  * Set the keyboard to the given keyboard language.
+  *
+  * @param   Keyboard language e.g.  "english-us"
+  *
+  * @return  void
+  *
+  * @see     SetX11(), SetConsole() 
+  */
+
+global define void Set( string keyboard )
+    ``{
+    SetConsole( keyboard );
+    SetX11( keyboard );
+    if( Mode::initial )
+	{
+        map yinf = $[];
+        AsciiFile::SetDelimiter( yinf, " " );
+        AsciiFile::ReadFile( yinf, "/etc/yast.inf" );
+        list lines = AsciiFile::FindLineField( yinf, 0, "Keytable:" );
+        if( size(lines)>0 )
+            {
+            AsciiFile::ChangeLineField( yinf, lines[0]:-1, 1, keyboard );
+            }
+        else
+            {
+            AsciiFile::AppendLine( yinf, ["Keytable:", keyboard] );
+            }
+        AsciiFile::RewriteFile( yinf, "/etc/yast.inf" );
+	}
+    }
 
     /**
      * SetConsole()

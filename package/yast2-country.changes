@@ -1,7 +1,8 @@
 -------------------------------------------------------------------
-Tue Feb 11 19:11:48 CET 2003 - fehr@suse.de
+Wed Feb 12 12:40:20 CET 2003 - fehr@suse.de
 
 - allow language setting with two char locale (#19431)
+- write intermediary yast.inf with lang and keyboard settings (#16263)
 
 -------------------------------------------------------------------
 Tue Feb 11 10:50:47 CET 2003 - fehr@suse.de

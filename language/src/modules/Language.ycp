@@ -17,6 +17,7 @@ textdomain "country";
 import "Misc";
 import "Mode";
 import "Installation";
+import "AsciiFile";
 import "X11Version";
 import "XF86Path";
 
@@ -165,11 +166,27 @@ global define void Set( string lang )
 		    found = true;
 		    lang = k;
 		    }
-		}
+		});
 
 	    }
 	name = languages_map[lang, 0]:"English";
 	language = lang;
+	}
+    if( Mode::initial )
+	{
+	map yinf = $[];
+	AsciiFile::SetDelimiter( yinf, " " );
+	AsciiFile::ReadFile( yinf, "/etc/yast.inf" );
+	list lines = AsciiFile::FindLineField( yinf, 0, "Language:" );
+	if( size(lines)>0 )
+	    {
+	    AsciiFile::ChangeLineField( yinf, lines[0]:-1, 1, language );
+	    }
+	else
+	    {
+	    AsciiFile::AppendLine( yinf, ["Language:", language] );
+	    }
+	AsciiFile::RewriteFile( yinf, "/etc/yast.inf" );
 	}
     }
 
