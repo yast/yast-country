@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jan 14 12:18:51 CET 2004 - fehr@suse.de
+
+- fix name of swedish keyboard map (#33944)
+
+-------------------------------------------------------------------
 Mon Dec 15 16:04:34 CET 2003 - jsrain@suse.de
 
 - Console::encoding handling moved to Encoding.ycp in yast2 package

@@ -361,20 +361,20 @@ $[
   "swedish":
     [
 	_("Swedish"),
-	$[ "i386" : $[ "pc104": $[ "ncurses": "se-latin1.map.gz"]],
-	   "ia64" : $[ "pc104": $[ "ncurses": "se-latin1.map.gz"]],
-	   "x86_64" : $[ "pc104": $[ "ncurses": "se-latin1.map.gz"]],
-	   "alpha" : $[ "pc104": $[ "ncurses": "se-latin1.map.gz"]],
+	$[ "i386" : $[ "pc104": $[ "ncurses": "sv-latin1.map.gz"]],
+	   "ia64" : $[ "pc104": $[ "ncurses": "sv-latin1.map.gz"]],
+	   "x86_64" : $[ "pc104": $[ "ncurses": "sv-latin1.map.gz"]],
+	   "alpha" : $[ "pc104": $[ "ncurses": "sv-latin1.map.gz"]],
 	   "sparc" : $[ "type4": $[ "ncurses": "sunkeymap.map.gz"],
 			"type5": $[ "ncurses": "sunt5-se-latin1.map.gz" ],
 			"type5_euro": $[ "ncurses": "sunt5-se-latin.map.gz" ]],
 	   "sparc64" : $[ "type4": $[ "ncurses": "sunkeymap.map.gz"],
 			  "type5": $[ "ncurses": "sunt5-se-latin1.map.gz" ],
 			  "type5_euro": $[ "ncurses": "sunt5-se-latin.map.gz" ],
-			  "pc104": $[ "ncurses": "se-latin1.map.gz"]],
+			  "pc104": $[ "ncurses": "sv-latin1.map.gz"]],
 	   "ppc" : $[ "macintosh" : $[ "ncurses": "mac-se.map.gz"],
-		      "pc104" : $[ "ncurses": "se-latin1.map.gz"]],
-	   "ppc64" : $[ "pc104" : $[ "ncurses": "se-latin1.map.gz"]]
+		      "pc104" : $[ "ncurses": "sv-latin1.map.gz"]],
+	   "ppc64" : $[ "pc104" : $[ "ncurses": "sv-latin1.map.gz"]]
 	]
     ],
   "finnish":
