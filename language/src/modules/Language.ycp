@@ -44,12 +44,12 @@ string default_language = "en_US";
 
 
 /**
- * Default settings for ROOT_USES_LANG in /etc/sysconfig/language 
+ * Default settings for ROOT_USES_LANG in /etc/sysconfig/language
  */
 string rootlang = "ctype";
 
 /**
- * Use utf8 in locale 
+ * Use utf8 in locale
  */
 boolean use_utf8 = true;
 
@@ -60,11 +60,12 @@ global boolean ExpertSettingsChanged = false;
  * Get the language DB
  * @return Language DB
  */
-define map<string, list> get_languages_map() ``{
+define map<string, list> get_languages_map() {
 
     // The system_language DB
     //
-    map<string, list> languages_map = (map<string, list>)SCR::Read (.target.yast2, ["language.ycp", $[]]);
+    map<string, list> languages_map = (map<string, list>)
+	SCR::Read (.target.yast2, ["language.ycp", $[]]);
 
     if ( languages_map == nil ) languages_map = $[];
 
@@ -75,59 +76,59 @@ define map<string, list> get_languages_map() ``{
  * Set module to selected language.
  * @param lang language string ISO code of language
  */
-global define void Set( string lang ) 
-    ``{
+global define void Set (string lang) {
+
     y2milestone( "lang:%1", lang );
 
-    if( language != lang )	// Do it only if different
-	{
+    if (language != lang)	// Do it only if different
+    {
 	map<string, list> languages_map = get_languages_map();
 
-	if( !haskey( languages_map, lang ) && size(lang)>0 )
-	    {
-	    lang = substring( lang, 0, 2 );
+	if (!haskey (languages_map, lang) && size(lang) > 0)
+	{
+	    lang = substring (lang, 0, 2);
 	    boolean found = false;
-	    foreach( string k, list dummy, languages_map,
-		``{
-		if( !found && substring( k, 0, 2)==lang )
-		    {
+	    foreach (string k, list dummy, languages_map,
+	    {
+		if (!found && substring (k, 0, 2) ==lang)
+		{
 		    found = true;
 		    lang = k;
-		    }
-		});
-
-	    }
-	name = languages_map[lang, 0]:"English";
-	language = lang;
-	Encoding::SetEncLang( language );
+		}
+	    });
 	}
-    if( Stage::initial () && !Mode::test ())
-	{
+	name		= languages_map[lang, 0]:"English";
+	language	= lang;
+	Encoding::SetEncLang (language);
+    }
+
+    if (Stage::initial () && !Mode::test ())
+    {
 	map yinf = $[];
-	AsciiFile::SetDelimiter( yinf, " " );
-	AsciiFile::ReadFile( yinf, "/etc/yast.inf" );
-	list lines = AsciiFile::FindLineField( yinf, 0, "Language:" );
-	if( size(lines)>0 )
-	    {
-	    AsciiFile::ChangeLineField( yinf, lines[0]:-1, 1, language );
-	    }
-	else
-	    {
-	    AsciiFile::AppendLine( yinf, ["Language:", language] );
-	    }
-	AsciiFile::RewriteFile( yinf, "/etc/yast.inf" );
-
-	SCR::Write( .FvwmCommand.lang, language );
+	AsciiFile::SetDelimiter (yinf, " ");
+	AsciiFile::ReadFile (yinf, "/etc/yast.inf");
+	list lines = AsciiFile::FindLineField (yinf, 0, "Language:");
+	if (size(lines) > 0)
+	{
+	    AsciiFile::ChangeLineField (yinf, lines[0]:-1, 1, language);
 	}
-    }
+	else
+	{
+	    AsciiFile::AppendLine (yinf, ["Language:", language] );
+	}
+	AsciiFile::RewriteFile (yinf, "/etc/yast.inf");
 
-global define boolean LinuxrcLangSet()
-    ``{
-    return( linuxrc_language_set );
+	SCR::Write (.FvwmCommand.lang, language);
     }
+}
 
-global define string GetLocaleString( string lang )
-    ``{
+global define boolean LinuxrcLangSet() {
+
+    return linuxrc_language_set;
+}
+
+global define string GetLocaleString (string lang) {
+
     map<string, list> languages_map = get_languages_map();
     list language_info = languages_map[lang]:[];
 
@@ -149,7 +150,7 @@ global define string GetLocaleString( string lang )
 /**
  * Store current language as default language.
  */
-global define void SetDefault() ``{
+global define void SetDefault() {
     y2milestone("Setting default language: %1", language);
     default_language = language;
     return;
@@ -179,92 +180,93 @@ define map get_lang2iso() ``{
  * Initializes module either from /etc/install.inf
  * or from /etc/sysconfig/language
  */
-global define void Language()
-    ``{
-    if( Stage::initial () )
+global define void Language() {
+
+    if (Stage::initial ())
+    {
+	string lang = (string)SCR::Read (.content.LANGUAGE);
+	y2milestone ("content LANGUAGE %1", lang);
+	if (SCR::Read (.target.size, "/etc/install.inf") > 0)
 	{
-	string lang = (string)SCR::Read( .content.LANGUAGE );
-	y2milestone( "content LANGUAGE %1", lang );
-	if( SCR::Read( .target.size, "/etc/install.inf") > 0 )
-	    {
 	    string tmp_l = (string)SCR::Read (.etc.install_inf.Locale);
-	    y2milestone( "install_inf Locale %1", tmp_l );
-	    if( tmp_l!=nil && size(tmp_l)>0 )
-		{
+	    y2milestone ("install_inf Locale %1", tmp_l);
+	    if (tmp_l!=nil && size(tmp_l)>0)
+	    {
 		lang = tmp_l;
 		if( lang != "en_US" )
-		    {
+		{
 		    linuxrc_language_set = true;
-		    }
 		}
 	    }
-	if( lang == nil)
+	}
+	if (lang == nil)
 	    lang = "";
-	y2milestone( "lang %1 Installation::defaultLanguage %2", lang,
+	y2milestone( "lang %1, Installation::defaultLanguage %2", lang,
 	             Installation::defaultLanguage );
-	if( lang == "" )
-	    {
+	if (lang == "")
+	{
 	    lang = Installation::defaultLanguage;
-	    }
+	}
         // Ignore any previous settings and take language from control file.
-        if (ProductFeatures::language!="")
+        if (ProductFeatures::language != "")
         {
             lang = ProductFeatures::language;
         }
-	Set( lang );		// coming from /etc/install.inf
-	SetDefault();		// also default
-	}
+	Set (lang);		// coming from /etc/install.inf
+	SetDefault ();		// also default
+    }
     else
-	{
+    {
 	string local_lang =
-	    Misc::SysconfigRead(.sysconfig.language.RC_LANG, "" );
+	    Misc::SysconfigRead (.sysconfig.language.RC_LANG, "");
 	y2milestone( "reading RC_LANG %1", local_lang );
-	if( size(local_lang)==0 )
-	    {
+	if (size (local_lang) == 0)
+	{
 	    // Try to read the old YaST1 language and convert setting.
 	    string y1lang =
-		Misc::SysconfigRead(.sysconfig.language.DEFAULT_LANGUAGE, "" );
+		Misc::SysconfigRead (.sysconfig.language.DEFAULT_LANGUAGE, "");
 	    map lang2iso = get_lang2iso();
-	    if( size(y1lang)>0 && size(lang2iso[y1lang]:"")>0 )
-		{
-		local_lang = lang2iso[y1lang]:"";
-		}
-	    }
-	if( size(local_lang)==0 )
+	    if (size (y1lang)>0 && size (lang2iso[y1lang]:"") > 0)
 	    {
-	    local_lang = language;
+		local_lang = lang2iso[y1lang]:"";
 	    }
+	}
+	if (size(local_lang) == 0)
+	{
+	    local_lang = language;
+	}
 
-	integer pos = findfirstof( local_lang, ".@" );
+	integer pos = findfirstof (local_lang, ".@");
 
-	if( pos != nil && pos >= 0 )
+	if (pos != nil && pos >= 0)
+	{
 	    local_lang = substring( local_lang, 0, pos );
+	}
 
 	y2milestone( "setting language to %1", local_lang );
 
-	Set( local_lang );
-
+	Set (local_lang);
 	SetDefault();		// also default
-	}
-    if( SCR::Read( .target.size, "/etc/sysconfig/language" )>0 )
-	{
-	rootlang = Misc::SysconfigRead( .sysconfig.language.ROOT_USES_LANG, 
-                                        rootlang );
-	if( !Stage::initial () )
-	    {
-	    string val = toupper( Misc::SysconfigRead( .sysconfig.language.RC_LANG,
-						       "" ));
-	    use_utf8 = find( val, ".UTF-8" )>0;
-	    }
-	else
-	    {
-	    use_utf8 = true;
-	    }
-	}
-    Encoding::SetUtf8Lang( use_utf8 );
     }
+    if (SCR::Read (.target.size, "/etc/sysconfig/language") > 0)
+    {
+	rootlang =
+	    Misc::SysconfigRead (.sysconfig.language.ROOT_USES_LANG, rootlang);
+	if (!Stage::initial ())
+	{
+	    string val = toupper (
+		Misc::SysconfigRead (.sysconfig.language.RC_LANG, ""));
+	    use_utf8 = find (val, ".UTF-8") > 0;
+	}
+	else
+	{
+	    use_utf8 = true;
+	}
+    }
+    Encoding::SetUtf8Lang (use_utf8);
+}
 
-/*
+/**
  * GetExpertValues()
  *
  * Return the values for the various expert settings in a map
@@ -274,64 +276,63 @@ global define void Language()
  * @return  map with values filled in
  *
  */
+global define map GetExpertValues () {
 
-global define map GetExpertValues()
-    ``{
-    map ret = $[ "rootlang"  : rootlang,
-                 "use_utf8"  : use_utf8 ];
-    return( ret );
-    }
+    return $[
+	"rootlang"  : rootlang,
+        "use_utf8"  : use_utf8
+    ];
+}
 
-/*
+/**
  * SetExpertValues()
  *
- * Return the values for the various expert setting in a map
+ * Set the values of the various expert setting
  *
  * @param       val     map with new values of expert settings
  *
  * @return  void
  *
  */
+global define void SetExpertValues (map val) {
 
-global define void SetExpertValues( map val )
-    ``{
-    if( haskey(val,"rootlang") && size(val["rootlang"]:"")>0 )
-        {
+    if (haskey (val,"rootlang") && size (val["rootlang"]:"") >0)
+    {
         rootlang = val["rootlang"]:"";
-        }
-    if( haskey(val,"use_utf8") )
-        {
-        use_utf8 = val["use_utf8"]:false;
-	Encoding::SetUtf8Lang( use_utf8 );
-        }
     }
+    if (haskey (val,"use_utf8"))
+    {
+        use_utf8 = val["use_utf8"]:false;
+	Encoding::SetUtf8Lang (use_utf8);
+    }
+}
 
 
-/*
+/**
  * WfmSetLanguage()
  *
- * Set the current language in WFM and UI 
+ * Set the current language in WFM and UI
  *
  * @param       -
  *
  * @return      -
  */
+global define void WfmSetLanguage() {
 
-global define void WfmSetLanguage()
-    ``{
-    y2milestone( "language %1 enc %2 utf8:%3", language, Installation::encoding,
-                 use_utf8 );
-    UI::SetLanguage( language, Installation::encoding );
-    if( use_utf8 )
-	{
+    y2milestone( "language %1 enc %2 utf8:%3",
+	language, Installation::encoding, use_utf8 );
+
+    UI::SetLanguage (language, Installation::encoding);
+
+    if (use_utf8)
+    {
 	WFM::SetLanguage(language, "UTF-8");
-	}
-    else
-	{
-	WFM::SetLanguage(language);
-	}
     }
-
+    else
+    {
+	WFM::SetLanguage(language);
+    }
+}
 
 
 /**
@@ -341,13 +342,15 @@ global define void WfmSetLanguage()
  *		If force_reset is true reset the module to the language
  *		stored in default_language.
  */
-global define string MakeProposal( boolean force_reset, boolean language_changed ) ``{
-
+global define string MakeProposal (boolean force_reset,boolean language_changed)
+{
     y2milestone("force_reset: %1", force_reset);
     y2milestone("language_changed: %1", language_changed);
 
-    if ( force_reset ) Set( default_language );	// reset
-
+    if (force_reset)
+    {
+	Set (default_language);	// reset
+    }
     return name;
 }
 
@@ -365,32 +368,33 @@ global define string MakeProposal( boolean force_reset, boolean language_changed
  *			'ascii-name' is an english (ascii encoded !) string.
  * @see Set
  */
-global define map<string, list> Selection() ``{
+global define map<string, list> Selection() {
 
     map<string, list> languages_map = get_languages_map();
 
-    return mapmap( string code, list data, languages_map,
-		   ``($[code: [data[0]:"", data[1]:""]]));
+    return mapmap (string code, list data, languages_map,
+	``($[code: [data[0]:"", data[1]:""]]));
 }
 
 
 /**
  * Save state to target.
  */
-global define void Save() ``{
+global define void Save() {
 
-    string loc = GetLocaleString(language);
+    string loc = GetLocaleString (language);
 
-    SCR::Write(.sysconfig.language.RC_LANG, loc );
-    if( find( loc, "zh_HK" )==0 )
-	SCR::Write(.sysconfig.language.RC_LC_MESSAGES, "zh_TW"+substring(loc,5) );
-    SCR::Write(.sysconfig.language.ROOT_USES_LANG, rootlang );
+    SCR::Write (.sysconfig.language.RC_LANG, loc);
 
-    SCR::Write(.sysconfig.language, nil);
+    if (find (loc, "zh_HK") == 0)
+	SCR::Write(.sysconfig.language.RC_LC_MESSAGES,"zh_TW"+substring(loc,5));
+
+    SCR::Write (.sysconfig.language.ROOT_USES_LANG, rootlang);
+    SCR::Write (.sysconfig.language, nil);
 
     // Change the respective XF86Config content to match the current settings.
     // Do this only in the running system _and_ if XFree4 is installed.
-    if ( Mode::normal () )
+    if (Mode::normal ())
     {
 	y2milestone("Storing current settings into XF86Config file (XFree4)." );
 	XF86Path::update();
@@ -405,19 +409,23 @@ global define void Save() ``{
  * de_DE@UTF-8 -> "DE"
  * @return country part of language
  */
-global define string GetLanguageCountry() ``{
+global define string GetLanguageCountry() {
 
     string lang = Language::language;
-    if(lang == nil || lang == "")
+    if (lang == nil || lang == "")
         lang = Language::default_language;
-    if(lang != nil && lang != "")
-        if(find(lang, "@") != -1)
+    if (lang != nil && lang != "")
+    {
+        if (find (lang, "@") != -1)
             lang = select(splitstring(lang, "@"), 0, "");
-    if(lang != nil && lang != "")
-        if(find(lang, "_") != -1)
+    }
+    if (lang != nil && lang != "")
+    {
+        if (find(lang, "_") != -1)
             lang = select(splitstring(lang, "_"), 1, "");
 	else
 	    lang = toupper(lang);
+    }
 
     y2debug("language=%1",lang);
     return lang;
