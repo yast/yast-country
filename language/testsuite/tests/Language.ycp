@@ -11,15 +11,14 @@ include "testsuite.ycp";
 
 map READ = $[
     "sysconfig" : $[
-	"language" : $[ "DEFAULT_LANGUAGE" : "" ],
+	"language" : $[
+	    "DEFAULT_LANGUAGE"	: "en_US",
+	 ],
     ],
     "target" : $[
-	"bash_output" : $[],
-	"symlink" : nil,
-        "size" : -1,
-    ],
-    "probe" : $[
-	"display" : [],
+	"bash_output"	: $[],
+        "size"		: 1,
+	"yast2"		: $[],
     ],
 ];
 
@@ -34,8 +33,8 @@ Language::language = "de_AT";
 TEST(``(Language::GetLanguageCountry()), [], nil);
 Language::language = "de";
 TEST(``(Language::GetLanguageCountry()), [], nil);
-Language::language = "";
-Language::default_language = "";
-TEST(``(Language::GetLanguageCountry()), [], nil);
 
+Language::language = ""; // use default language
+
+TEST(``(Language::GetLanguageCountry()), [], nil);
 }

@@ -1,0 +1,45 @@
+/**
+ * tests for Language::IncompleteTranslation
+ * Author:	jsuchome@suse.cz
+ * $Id: Language.ycp 21839 2005-02-22 14:29:39Z jsuchome $
+ */
+{
+
+    // testedfiles: Language.ycp
+
+    include "testsuite.ycp";
+
+    map READ = $[
+	"target" : $[
+	    "bash_output"	: $[],
+	    "size"		: 1,
+	    "yast2"		: $[],
+	],
+    ];
+
+    TESTSUITE_INIT([READ,$[],READ], nil);
+
+    map R	= $[
+	"target" : $[
+	    "string"	: "",
+	]
+    ];
+
+    import "Language";
+
+    // not present	-> complete
+    TEST(``(Language::IncompleteTranslation ("en_US")), [R,$[],$[]], nil);
+
+    // incomplete
+    R["target","string"]	= "50";
+    TEST(``(Language::IncompleteTranslation ("en_GB")), [R,$[],$[]], nil);
+
+    // no SCR call, cached from previous
+    TEST(``(Language::IncompleteTranslation ("en_GB")), [R,$[],$[]], nil);
+
+    // complete
+    R["target","string"]	= "99";
+    TEST(``(Language::IncompleteTranslation ("de_DE")), [R,$[],$[]], nil);
+
+
+}
