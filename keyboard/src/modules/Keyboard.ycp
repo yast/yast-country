@@ -247,21 +247,21 @@
 
 	// If not in initial mode try to restore from sysconfig.
 	//
-	if ( !Mode::initial )
-	{
+	if( !Mode::initial )
+	    {
 	    success = Restore();
 
 	    // If this failed and we are in a running system try to restore from XF86Config.
 	    //
-	    if ( !success && Mode::normal )
-	    {
+	    if( !success && Mode::normal )
+		{
 		// Only possible with XFree 4x
 		//
 		import "X11Version";
 		string xfree_version = X11Version::version;
 		
 		if ( xfree_version == "4" )  // running system and XFree 4
-		{
+		    {
 		    // The XkbLayout --> keyboard_language conversion map.
 		    //
 	    
@@ -278,14 +278,18 @@
 		    // Set the keyboard variables to this value if possible.
 		    //
 		    if ( current_layout != "" )
-		    {
+			{
 			SetLanguage( current_layout );
 			y2milestone("Restored data (XF86Config) for keyboard: <%1>", current_kbd );
 			success = true;
+			}
 		    }
 		}
 	    }
-	}
+	else
+	    {
+	    GetKbdSysconfig();
+	    }
 
 	// In initial mode or if restoring failed do probe.
 	//
@@ -681,26 +685,18 @@ global define void SetKeyboardForLang( string lang )
 	return;
     }	// Save()
 
-
-
 /**
- * Restore()
+ * GetKbdSysconfig()
  *
- * Restore the the data from sysconfig.
+ * Restore the the non-keyboard values from sysconfig.
  *
  * @param 	-
  *
- * @return  true	- Data could be restored
- *		false	- Restore not successful
- *
- * @see	Save()
+ * @return      -
  */
-global define boolean Restore()
+
+define void GetKbdSysconfig()
     ``{
-    boolean ret = false;
-
-    restore_called = true;
-
     // Read the the variables not touched by the module to be able to
     // store them again on Save().
     //
@@ -721,6 +717,28 @@ global define boolean Restore()
 		 kbd_rate, kbd_delay, kbd_numlock, kbd_capslock, 
 		 kbd_scrlock, kbd_disable_capslock );
     y2milestone( "tty:%1", kbd_tty );
+    }
+
+
+/**
+ * Restore()
+ *
+ * Restore the the data from sysconfig.
+ *
+ * @param 	-
+ *
+ * @return  true	- Data could be restored
+ *		false	- Restore not successful
+ *
+ * @see	Save()
+ */
+global define boolean Restore()
+    ``{
+    boolean ret = false;
+
+    restore_called = true;
+
+    GetKbdSysconfig();
 
     if( !Mode::initial )
 	{
