@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Feb 10 09:00:57 CET 2005 - jsuchome@suse.cz
+
+- show region in Timezone adaptation proposal
+- fix saving INSTALLED_LANGUAGES on running system
+- 2.11.13
+
+-------------------------------------------------------------------
 Wed Feb  9 14:06:02 CET 2005 - jsuchome@suse.cz
 
 - installation proposal always mentions primary language (#50620)
