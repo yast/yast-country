@@ -403,9 +403,10 @@ With <b>Install language dependent packages</b> option, additional packages with
     UI::SetFocus(`id(`language));
 
     // adapt keyboard for language?
-    boolean kbd_adapt = false;
+    boolean kbd_adapt = (Stage::initial () && set_default);
     // adapt timezone for language?
-    boolean tmz_adapt = false;
+    boolean tmz_adapt = (Stage::initial () && set_default);
+
 
     repeat
     {
@@ -478,7 +479,6 @@ With <b>Install language dependent packages</b> option, additional packages with
 
 		if (Stage::initial () && set_default)
 		{
-		    kbd_adapt = true;
 		    Timezone::ResetZonemap ();
 		}
 
