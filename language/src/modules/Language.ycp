@@ -53,6 +53,80 @@ global boolean ExpertSettingsChanged = false;
 
 
 /**
+ * Get the language DB
+ * @return Language DB
+ */
+define map get_languages_map() ``{
+
+    // The system_language DB
+    //
+    map languages_map = (map) SCR::Read (.target.yast2, ["language.ycp", $[]]);
+
+    if ( languages_map == nil ) languages_map = $[];
+
+    return( languages_map );
+}
+
+
+/**
+ * Set module to selected language.
+ * @param lang language string ISO code of language
+ */
+global define void Set( string lang ) 
+    ``{
+    y2milestone( "lang:%1", lang );
+
+    if( language != lang )	// Do it only if different
+	{
+	map languages_map = get_languages_map();
+
+	if( !haskey( languages_map, lang ) && size(lang)>0 )
+	    {
+	    lang = substring( lang, 0, 2 );
+	    boolean found = false;
+	    foreach( string k, any e, languages_map,
+		``{
+		if( !found && substring( k, 0, 2)==lang )
+		    {
+		    found = true;
+		    lang = k;
+		    }
+		});
+
+	    }
+	name = languages_map[lang, 0]:"English";
+	language = lang;
+	}
+    if( Mode::initial )
+	{
+	map yinf = $[];
+	AsciiFile::SetDelimiter( yinf, " " );
+	AsciiFile::ReadFile( yinf, "/etc/yast.inf" );
+	list lines = AsciiFile::FindLineField( yinf, 0, "Language:" );
+	if( size(lines)>0 )
+	    {
+	    AsciiFile::ChangeLineField( yinf, lines[0]:-1, 1, language );
+	    }
+	else
+	    {
+	    AsciiFile::AppendLine( yinf, ["Language:", language] );
+	    }
+	AsciiFile::RewriteFile( yinf, "/etc/yast.inf" );
+	}
+    }
+
+
+/**
+ * Store current language as default language.
+ */
+global define void SetDefault() ``{
+    y2milestone("Setting default language: %1", language);
+    default_language = language;
+    return;
+}
+
+
+/**
  * Constructor
  *
  * Initializes module either from /etc/install.inf
@@ -62,11 +136,11 @@ global define void Language()
     ``{
     if( Mode::initial )
 	{
-	string lang = SCR::Read( .content.LANGUAGE );
+	string lang = (string) SCR::Read( .content.LANGUAGE );
 	y2milestone( "content LANGUAGE %1", lang );
 	if( SCR::Read( .target.size, "/etc/install.inf") > 0 )
 	    {
-	    string tmp_l = SCR::Read (.etc.install_inf.Locale);
+	    string tmp_l = (string) SCR::Read (.etc.install_inf.Locale);
 	    y2milestone( "install_inf Locale %1", tmp_l );
 	    if( tmp_l!=nil && size(tmp_l)>0 )
 		lang = tmp_l;
@@ -219,16 +293,6 @@ global define string MakeProposal( boolean force_reset, boolean language_changed
 
 
 /**
- * Store current language as default language.
- */
-global define string SetDefault() ``{
-    y2milestone("Setting default language: %1", language);
-    default_language = language;
-    return;
-}
-
-
-/**
  * Return a map of ids and names to build up a selection list
  * for the user. The key is used later in the Set function
  * to select this language. The name is a translated string.
@@ -248,54 +312,6 @@ global define map Selection() ``{
 	return [code, [data[0]:"", data[1]:""]];
     });
 }
-
-
-/**
- * Set module to selected language.
- * @param lang language string ISO code of language
- */
-global define void Set( string lang ) 
-    ``{
-    y2milestone( "lang:%1", lang );
-
-    if( language != lang )	// Do it only if different
-	{
-	map languages_map = get_languages_map();
-
-	if( !haskey( languages_map, lang ) && size(lang)>0 )
-	    {
-	    lang = substring( lang, 0, 2 );
-	    boolean found = false;
-	    foreach( `k, `e, languages_map,
-		``{
-		if( !found && substring( k, 0, 2)==lang )
-		    {
-		    found = true;
-		    lang = k;
-		    }
-		});
-
-	    }
-	name = languages_map[lang, 0]:"English";
-	language = lang;
-	}
-    if( Mode::initial )
-	{
-	map yinf = $[];
-	AsciiFile::SetDelimiter( yinf, " " );
-	AsciiFile::ReadFile( yinf, "/etc/yast.inf" );
-	list lines = AsciiFile::FindLineField( yinf, 0, "Language:" );
-	if( size(lines)>0 )
-	    {
-	    AsciiFile::ChangeLineField( yinf, lines[0]:-1, 1, language );
-	    }
-	else
-	    {
-	    AsciiFile::AppendLine( yinf, ["Language:", language] );
-	    }
-	AsciiFile::RewriteFile( yinf, "/etc/yast.inf" );
-	}
-    }
 
 
 global define string GetLocaleString( string lang )
@@ -337,22 +353,6 @@ global define void Save() ``{
     }
 
     y2milestone("Saved data for language: <%1>", GetLocaleString(language) );
-}
-
-
-/**
- * Get the language DB
- * @return Language DB
- */
-define map get_languages_map() ``{
-
-    // The system_language DB
-    //
-    map languages_map = SCR::Read (.target.yast2, ["language.ycp", $[]]);
-
-    if ( languages_map == nil ) languages_map = $[];
-
-    return( languages_map );
 }
 
 

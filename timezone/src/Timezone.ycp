@@ -78,6 +78,30 @@ map lang2tz = $[];
 // START: Globally defined functions
 // ---------------------------------------------------------------------------------------
 
+/*
+ * get_lang2tz()
+ *
+ * Get the language --> timezone conversion map.
+ *
+ * @param	-
+ *
+ * @return  conversion map
+ *
+ * @see	get_zonemap()
+ */
+
+define map get_lang2tz()
+    ``{
+    // language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
+    //
+    if( size(lang2tz)==0 )
+	{
+	lang2tz = (map) SCR::Read( .target.yast2, "lang2tz.ycp" );
+	if( lang2tz == nil ) lang2tz = $[];
+	}
+    return( lang2tz );
+    }	// get_lang2tz()
+
 /**
   * Timezone()
   *
@@ -571,30 +595,6 @@ define list get_zonemap()
     }	// get_zonemap()
 
 
-
-/*
- * get_lang2tz()
- *
- * Get the language --> timezone conversion map.
- *
- * @param	-
- *
- * @return  conversion map
- *
- * @see	get_zonemap()
- */
-
-define map get_lang2tz()
-    ``{
-    // language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
-    //
-    if( size(lang2tz)==0 )
-	{
-	lang2tz = SCR::Read( .target.yast2, "lang2tz.ycp" );
-	if( lang2tz == nil ) lang2tz = $[];
-	}
-    return( lang2tz );
-    }	// get_lang2tz()
 
 // ------------------------------------------------------------------
 // END: Locally defined functions

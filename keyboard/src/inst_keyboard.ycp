@@ -35,7 +35,7 @@
     import "Wizard";
     import "Label";
 
-global define KeyboardExpertDialog()
+global define symbol KeyboardExpertDialog()
     ``{
 
     symbol ret = `none;

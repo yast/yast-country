@@ -105,6 +105,6 @@
 	//
 	any ret = SCR::Write( .xf86config.path, info );
 
-	return( ret );
+	return (boolean) ret;
     }
 }

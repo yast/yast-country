@@ -218,6 +218,98 @@
     // ---------------------------------------------------------------------------------------
 
     /**
+     * GetKbdSysconfig()
+     *
+     * Restore the the non-keyboard values from sysconfig.
+     *
+     * @param 	-
+     *
+     * @return      -
+     */
+
+    define void GetKbdSysconfig()
+        ``{
+        // Read the the variables not touched by the module to be able to
+        // store them again on Save().
+        //
+        kbd_tty = Misc::SysconfigRead( .sysconfig.keyboard.KBD_TTY, kbd_tty );
+        kbd_rate = Misc::SysconfigRead( .sysconfig.keyboard.KBD_RATE, kbd_rate );
+        kbd_delay = Misc::SysconfigRead( .sysconfig.keyboard.KBD_DELAY, kbd_delay );
+        kbd_numlock = Misc::SysconfigRead( .sysconfig.keyboard.KBD_NUMLOCK, 
+                                           kbd_numlock );
+        kbd_capslock = Misc::SysconfigRead( .sysconfig.keyboard.KBD_CAPSLOCK, 
+                                            kbd_capslock );
+        kbd_scrlock = Misc::SysconfigRead( .sysconfig.keyboard.KBD_SCRLOCK, 
+                                           kbd_scrlock );
+        kbd_disable_capslock = 
+            Misc::SysconfigRead( .sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK,
+                                 kbd_disable_capslock );
+
+        y2milestone( "rate:%1 delay:%2 numlock:%3 capslock:%4 scrlock:%5 disclock:%6",
+                     kbd_rate, kbd_delay, kbd_numlock, kbd_capslock, 
+                     kbd_scrlock, kbd_disable_capslock );
+        y2milestone( "tty:%1", kbd_tty );
+        }
+
+
+        /**
+         * Restore()
+         *
+         * Restore the the data from sysconfig.
+         *
+         * @param 	-
+         *
+         * @return  true	- Data could be restored
+         *		false	- Restore not successful
+         *
+         * @see	Save()
+         */
+        global define boolean Restore()
+        ``{
+        boolean ret = false;
+
+        restore_called = true;
+
+        GetKbdSysconfig();
+
+        if( !Mode::initial )
+            {
+            // Read YaST2 keyboard var.
+            //
+            current_kbd = Misc::SysconfigRead( .sysconfig.keyboard.YAST_KEYBOARD, 
+                                               "" );
+            integer pos = find( current_kbd, "," );
+            if( pos>0 )
+                {
+                kb_model = substring( current_kbd, pos+1 );
+                current_kbd = substring( current_kbd, 0, pos );
+                }
+
+            y2milestone( "current_kbd %1 model %2", current_kbd, kb_model );
+            if( current_kbd == "" )
+                {
+                y2milestone("Restoring data failed");
+                ret = false;
+                }
+            else
+                {
+                // Restore module data.
+                //
+                SetLanguage( current_kbd );
+                y2milestone( "Restored data (sysconfig) for keyboard: <%1>", 
+                             current_kbd );
+                ret = true;
+                }
+            }
+        else
+            {
+            ret = true;
+            }
+        return ret;
+        }	// Restore()
+
+
+    /**
      * Keyboard()
      *
      * The module constructor.
@@ -684,98 +776,6 @@ global define void SetKeyboardForLang( string lang )
 
 	return;
     }	// Save()
-
-/**
- * GetKbdSysconfig()
- *
- * Restore the the non-keyboard values from sysconfig.
- *
- * @param 	-
- *
- * @return      -
- */
-
-define void GetKbdSysconfig()
-    ``{
-    // Read the the variables not touched by the module to be able to
-    // store them again on Save().
-    //
-    kbd_tty = Misc::SysconfigRead( .sysconfig.keyboard.KBD_TTY, kbd_tty );
-    kbd_rate = Misc::SysconfigRead( .sysconfig.keyboard.KBD_RATE, kbd_rate );
-    kbd_delay = Misc::SysconfigRead( .sysconfig.keyboard.KBD_DELAY, kbd_delay );
-    kbd_numlock = Misc::SysconfigRead( .sysconfig.keyboard.KBD_NUMLOCK, 
-                                       kbd_numlock );
-    kbd_capslock = Misc::SysconfigRead( .sysconfig.keyboard.KBD_CAPSLOCK, 
-                                        kbd_capslock );
-    kbd_scrlock = Misc::SysconfigRead( .sysconfig.keyboard.KBD_SCRLOCK, 
-                                       kbd_scrlock );
-    kbd_disable_capslock = 
-	Misc::SysconfigRead( .sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK,
-	                     kbd_disable_capslock );
-
-    y2milestone( "rate:%1 delay:%2 numlock:%3 capslock:%4 scrlock:%5 disclock:%6",
-		 kbd_rate, kbd_delay, kbd_numlock, kbd_capslock, 
-		 kbd_scrlock, kbd_disable_capslock );
-    y2milestone( "tty:%1", kbd_tty );
-    }
-
-
-/**
- * Restore()
- *
- * Restore the the data from sysconfig.
- *
- * @param 	-
- *
- * @return  true	- Data could be restored
- *		false	- Restore not successful
- *
- * @see	Save()
- */
-global define boolean Restore()
-    ``{
-    boolean ret = false;
-
-    restore_called = true;
-
-    GetKbdSysconfig();
-
-    if( !Mode::initial )
-	{
-	// Read YaST2 keyboard var.
-	//
-	current_kbd = Misc::SysconfigRead( .sysconfig.keyboard.YAST_KEYBOARD, 
-	                                   "" );
-	integer pos = find( current_kbd, "," );
-	if( pos>0 )
-	    {
-	    kb_model = substring( current_kbd, pos+1 );
-	    current_kbd = substring( current_kbd, 0, pos );
-	    }
-
-	y2milestone( "current_kbd %1 model %2", current_kbd, kb_model );
-	if( current_kbd == "" )
-	    {
-	    y2milestone("Restoring data failed");
-	    ret = false;
-	    }
-	else
-	    {
-	    // Restore module data.
-	    //
-	    SetLanguage( current_kbd );
-	    y2milestone( "Restored data (sysconfig) for keyboard: <%1>", 
-			 current_kbd );
-	    ret = true;
-	    }
-	}
-    else
-	{
-	ret = true;
-	}
-    return ret;
-    }	// Restore()
-
 
 /**
  * CalledRestore()
