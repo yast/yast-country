@@ -1,10 +1,10 @@
 /**
  * File:
- *   timezone_raw.ycp
+ *   lang2tz.ycp
  *
  * Authors:
  *   Thomas Roelz <tom@suse.de>
- *   (original authors unknown; now maintained by tom)
+ *   (original authors unknown)
  *
  *
  * Summary:  map language code to default timezone
@@ -20,41 +20,47 @@
 // map<string, string>
 
 $[
-  "ar_eg"     		: "Africa/Cairo",
-  "br_FR"    		: "Europe/Paris",
-  "bn_BD"    		: "Asia/Dhaka",
-  "cs_CZ"    		: "Europe/Prague",
+  "ar_eg"		: "Africa/Cairo",
+  "bg_BG"		: "Europe/Sofia",
+  "br_FR"		: "Europe/Paris",
+  "bn_BD"		: "Asia/Dhaka",
+  "cs_CZ"		: "Europe/Prague",
+  "cy_GB"		: "Europe/London",
   "da_DK"		: "Europe/Copenhagen",
-  "de" 	 		: "Europe/Berlin",
-  "de_AT"    		: "Europe/Vienna",
-  "de_CH"    		: "Europe/Zurich",
-  "de_DE"    		: "Europe/Berlin",
-  "el_GR"    		: "Europe/Athens",
-  "en"	 		: "US/Pacific",
-  "en_GB"    		: "Europe/London",
+  "de"			: "Europe/Berlin",
+  "de_AT"		: "Europe/Vienna",
+  "de_CH"		: "Europe/Zurich",
+  "de_DE"		: "Europe/Berlin",
+  "el_GR"		: "Europe/Athens",
+  "en"			: "US/Pacific",
+  "en_GB"		: "Europe/London",
   "en_IE"		: "Europe/Belfast",
-  "en_US"    		: "US/Pacific",
-  "es_ES"    		: "Europe/Madrid",
-  "fr"	 		: "Europe/Paris",
-  "fr_CH"    		: "Europe/Zurich",
-  "fr_FR"    		: "Europe/Paris",
-  "hu_HU"    		: "Europe/Budapest",
-  "he_IL"    		: "Asia/Tel_Aviv",
-  "it_IT"    		: "Europe/Rome",
-  "ja_JP"     		: "Asia/Tokyo",
-  "ko_KR"     		: "Asia/Seoul",
+  "en_US"		: "US/Mountain",
+  "es_ES"		: "Europe/Madrid",
+  "fr"			: "Europe/Paris",
+  "fr_CH"		: "Europe/Zurich",
+  "fr_FR"		: "Europe/Paris",
+  "hu_HU"		: "Europe/Budapest",
+  "he_IL"		: "Asia/Tel_Aviv",
+  "hr_HR"		: "Europe/Zagreb",
+  "it_IT"		: "Europe/Rome",
+  "ja_JP"		: "Asia/Tokyo",
+  "ko_KR"		: "Asia/Seoul",
   "lt_LT"		: "Europe/Vilnius",
-  "nl_NL"    		: "Europe/Amsterdam",
+  "nl_NL"		: "Europe/Amsterdam",
   "no_NO"		: "Europe/Oslo",
-  "pl_PL"    		: "Europe/Warsaw",
-  "pt_BR"    		: "Brazil/East",
-  "pt_PT"    		: "Europe/Lisbon",
-  "ru"	 		: "Europe/Moscow",
-  "ru_RU"	 	: "Europe/Moscow",
+  "nb_NO"		: "Europe/Oslo",
+  "pl_PL"		: "Europe/Warsaw",
+  "pt_BR"		: "Brazil/East",
+  "pt_PT"		: "Europe/Lisbon",
+  "ro_RO"		: "Europe/Bucharest",
+  "ru"			: "Europe/Moscow",
+  "ru_RU"		: "Europe/Moscow",
   "ru_RU.KOI8-R"	: "Europe/Moscow",
   "sk_SK"		: "Europe/Bratislava",
-  "sl_SI" 		: "Europe/Ljubljana",
+  "sl_SI"		: "Europe/Ljubljana",
   "sv_SE"		: "Europe/Stockholm",
   "tr_TR"		: "Europe/Istanbul",
-  "zh_CN"     		: "Asia/Shanghai"
+  "zh_CN"		: "Asia/Shanghai",
+  "zh_TW"		: "Asia/Taipei",
 ]

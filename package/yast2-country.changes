@@ -1,4 +1,25 @@
 -------------------------------------------------------------------
+Thu Jan 20 16:20:09 CET 2005 - jsuchome@suse.cz
+
+- timezone: new SetTimezoneForLanguage function
+- Asia/Tel_Aviv is "Tel Aviv" in english, not "Tel_Aviv"
+- language: added 'Adapt Keyboard' and 'Adapt Timezone' checkboxes
+- language dependent packages are installed on demand (checkbox)
+- 2.11.7
+
+-------------------------------------------------------------------
+Mon Jan 17 13:09:56 CET 2005 - jsuchome@suse.cz
+
+- use INSTALLED_LANGUAGES in /etc/sysconfig/language to save list of
+  languages
+- added support for lithuanian keyboard
+
+-------------------------------------------------------------------
+Tue Jan 11 11:16:40 CET 2005 - jsuchome@suse.cz
+
+- do not save language settings from update proposal (#46708) 
+
+-------------------------------------------------------------------
 Fri Dec 17 11:25:26 CET 2004 - jsuchome@suse.cz
 
 - fixed yast-language.desktop file
