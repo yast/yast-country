@@ -169,6 +169,29 @@ global define void SetExpertValues( map val )
     }
 
 
+/*
+ * WfmSetLanguage()
+ *
+ * Set the current language in WFM and UI 
+ *
+ * @param       -
+ *
+ * @return      -
+ */
+
+global define void WfmSetLanguage()
+    ``{
+    UI::SetLanguage( language, Installation::encoding );
+    if( use_utf8 )
+	{
+	WFM::SetLanguage(language, "UTF-8");
+	}
+    else
+	{
+	WFM::SetLanguage(language);
+	}
+    }
+
 
 
 /**
@@ -302,10 +325,7 @@ global define void Save() ``{
 	XF86Path::update();
     }
 
-    y2milestone("Saved data for language: <%1>",
-	    language
-	    + language_info[2]:""	// mandatory-LANG-modifier
-	    + language_info[3]:"");	// optional-LANG-modifier
+    y2milestone("Saved data for language: <%1>", val );	// optional-LANG-modifier
 }
 
 

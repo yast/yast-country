@@ -55,8 +55,8 @@
 
     y2milestone ("result '%1'", result);
 
-    if (  result == `cancel || result == `back )
-    {
+    if( result == `cancel || result == `back )
+	{
 	// Back to original values...
 	//
 	y2milestone( "`cancel or `back --> restoring: <%1>", language_on_entry );
@@ -66,10 +66,10 @@
 
 	boolean use_utf8 = true;		// utf8 is default
 
-	if ( ! lookup (UI::GetDisplayInfo(), "HasFullUtf8Support", true ) )
-	{
+	if( ! lookup (UI::GetDisplayInfo(), "HasFullUtf8Support", true ) )
+	    {
 	    use_utf8 = false;		// fallback to ascii
-	}
+	    }
 
 	// Set it in the Language module.
 	//
@@ -82,10 +82,8 @@
 	Installation::encoding = (use_utf8) ? "UTF-8" : Console::encoding;
 
 	// Set it in YaST2
-	//
-	UI::SetLanguage (language_on_entry, Installation::encoding);
-	WFM::SetLanguage(language_on_entry, "UTF-8");
-    }
+	Language::WfmSetLanguage();
+	}
     else
 	{
 	// User wants to keep his changes --> save to sysconfig.

@@ -273,34 +273,35 @@ Choose the new <b>language</b> for your SuSE Linux system.
     UI::SetFocus(`id(`language));
 
     repeat
-    {
+	{
 	ret = Wizard::UserInput();
 	y2warning( "UserInput() returned %1", ret );
 
 	if ( ret == `abort && Popup::ConfirmAbort(`painless) )
-	{
+	    {
 	    Wizard::RestoreNextButton();
 	    return `abort;
-	}
+	    }
 
 	if( ret==`expert )
 	    {
 	    LanguageExpertDialog();
 	    }
 
-	if ( ret == `help )
-	{
+	if( ret == `help )
+	    {
 	    Wizard::ShowHelp( help_text );
-	}
+	    }
 
-	if ( ret == `next || ret == `language )
-	{
+	if( ret == `next || ret == `language )
+	    {
 	    // Get the selected language.
 	    //
 	    language = UI::QueryWidget(`id(`language), `CurrentItem);
 
-	    if ( language != Language::language )
-	    {
+	    if( language != Language::language ||
+		Language::ExpertSettingsChanged )
+		{
 		y2milestone( "Language changed from %1 to %2", Language::language, language );
 
 		// popup text
@@ -347,36 +348,38 @@ Adapt keyboard settings?
 		Installation::encoding = (use_utf8) ? "UTF-8" : Console::encoding;
 
 		// Set it in YaST2
-		//
-		UI::SetLanguage (language, Installation::encoding);
-		WFM::SetLanguage(language, "UTF-8");
+		Language::WfmSetLanguage();
 
-		if ( ret != `next )
-		{
+		if( ret != `next )
+		    {
 		    // Display newly translated dialog.
 		    //
 		    if (UI::WidgetExists(`id(`next)) )		UI::SetFocus(`id(`next));
-		    if (UI::WidgetExists(`id(`accept)) )		UI::SetFocus(`id(`accept));
+		    if (UI::WidgetExists(`id(`accept)) )	UI::SetFocus(`id(`accept));
 
 		    return( `again );
+		    }
 		}
-	    }
 
-	    if ( ret == `next )
-	    {
+	    if( ret == `next )
+		{
 		// Language has been set already.
 		// On first run store users decision as default.
 		//
-		if ( set_default )
-		{
+		if( set_default )
+		    {
 		    y2milestone("Resetting to default language");
 		    Language::SetDefault();
-		}
+		    }
+		// save language and console settings
+		Language::Save();
+		Console::Save();
 
-		y2milestone ("Language: '%1', Encoding '%2'", language, Installation::encoding);
+		y2milestone( "Language: '%1', system encoding '%2'", language, 
+		             WFM::GetEncoding() );
+		}
 	    }
 	}
-    }
     until ( ret == `next || ret == `back );
 
     // HEAVY UGLINESS  :-((((

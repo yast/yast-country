@@ -131,7 +131,7 @@
 	SCR::Write (.sysconfig.console.CONSOLE_UNICODEMAP, unicodeMap);
 	SCR::Write (.sysconfig.console.CONSOLE_MAGIC,	   magic);
 
-	SCR::Write (.sysconfig.console.CONSOLE_ENCODING,   encoding);
+	SCR::Write (.sysconfig.console.CONSOLE_ENCODING, WFM::GetEncoding() );
 	SCR::Write (.sysconfig.console.CONSOLE_ENCODING.comment, "\n# Encoding used for output of non-ascii characters.\n#\n");
 	SCR::Write (.sysconfig.console, nil);
 
