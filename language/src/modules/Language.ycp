@@ -378,7 +378,11 @@ global define map<string, list> Selection() ``{
  */
 global define void Save() ``{
 
-    SCR::Write(.sysconfig.language.RC_LANG, GetLocaleString(language) );
+    string loc = GetLocaleString(language);
+
+    SCR::Write(.sysconfig.language.RC_LANG, loc );
+    if( find( loc, "zh_HK" )==0 )
+	SCR::Write(.sysconfig.language.RC_LC_MESSAGES, "zh_TW"+substring(loc,5) );
     SCR::Write(.sysconfig.language.ROOT_USES_LANG, rootlang );
 
     SCR::Write(.sysconfig.language, nil);

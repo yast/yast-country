@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 14 12:26:35 CEST 2004 - fehr@suse.de
+
+- add "Traditional Chinese HongKong" to language list (#45239)
+- 2.10.11
+
+-------------------------------------------------------------------
 Wed Sep  8 14:53:56 CEST 2004 - fehr@suse.de
 
 - Change desktop files (#44824)
