@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Sep 10 12:21:23 CEST 2003 - fehr@suse.de
+
+- fix bug with wrong default language (#30351)
+- fix endless loop in language dialog (#30353)
+- 2.8.14
+
+-------------------------------------------------------------------
 Mon Sep  8 13:05:03 CEST 2003 - fehr@suse.de
 
 - fix bug with default values for /etc/sysconfig/keyboard (#30030)

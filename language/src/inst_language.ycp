@@ -299,8 +299,7 @@ Choose the new <b>language</b> for your SuSE Linux system.
 	    //
 	    language = UI::QueryWidget(`id(`language), `CurrentItem);
 
-	    if( language != Language::language ||
-		Language::ExpertSettingsChanged )
+	    if( language != Language::language )
 		{
 		y2milestone( "Language changed from %1 to %2", Language::language, language );
 
@@ -371,10 +370,13 @@ Adapt keyboard settings?
 		    y2milestone("Resetting to default language");
 		    Language::SetDefault();
 		    }
-		// save language and console settings
-		Language::Save();
-		Console::Save();
 
+		if( !Mode::initial )
+		    {
+		    // save language and console settings
+		    Language::Save();
+		    Console::Save();
+		    }
 		y2milestone( "Language: '%1', system encoding '%2'", language, 
 		             WFM::GetEncoding() );
 		}

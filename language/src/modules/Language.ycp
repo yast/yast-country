@@ -63,9 +63,13 @@ global define void Language()
     if( Mode::initial )
 	{
 	string lang = SCR::Read( .content.LANGUAGE );
+	y2milestone( "content LANGUAGE %1", lang );
 	if( SCR::Read( .target.size, "/etc/install.inf") > 0 )
 	    {
-	    lang = SCR::Read (.etc.install_inf.Locale);
+	    string tmp_l = SCR::Read (.etc.install_inf.Locale);
+	    y2milestone( "install_inf Locale %1", tmp_l );
+	    if( tmp_l!=nil && size(tmp_l)>0 )
+		lang = tmp_l;
 	    }
 	if( lang == nil) 
 	    lang = "";
@@ -181,6 +185,8 @@ global define void SetExpertValues( map val )
 
 global define void WfmSetLanguage()
     ``{
+    y2milestone( "language %1 enc %2 utf8:%3", language, Installation::encoding,
+                 use_utf8 );
     UI::SetLanguage( language, Installation::encoding );
     if( use_utf8 )
 	{
