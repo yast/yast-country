@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Aug  4 09:09:56 CEST 2003 - fehr@suse.de
+
+- fix wrong return code handling of Read(.target.size, ) in 
+  Language.ycp
+- version 2.8.6
+
+-------------------------------------------------------------------
 Sat Aug 02 20:41:06 CEST 2003 - arvin@suse.de
 
 - added desktop files
