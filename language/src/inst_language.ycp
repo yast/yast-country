@@ -271,6 +271,9 @@ Choose the new <b>language</b> for your system.
 
     Wizard::SetContents( heading_text, contents, help_text, (boolean)WFM::Args(0), (boolean)WFM::Args(1));
 
+    if ( Mode::initial )	// No .desktop files in inst-sys - use icon explicitly
+	Wizard::SetTitleIcon( "babelfish" );
+
     
     // Get the user input.
     //
