@@ -46,7 +46,7 @@
     string magic	= "(B";
 
     // non-empty if serial console (written /etc/inittab)
-    // -> S0:123:respawn:/sbin/agetty -L 9600<n8> ttyS0
+    // -> S0:1235:respawn:/sbin/agetty -L 9600<n8> ttyS0
     // something like "ttyS0,9600" from /etc/install.inf
     string serial	= "";
 
@@ -129,7 +129,7 @@
 	    string baud = splitserial[1]:"";
 	    if ((tty != "") && (baud != ""))
 	    {
-		string initline = sformat ("S0:123:respawn:/sbin/agetty -L %1 %2", baud, tty);
+		string initline = sformat ("S0:1235:respawn:/sbin/agetty -L %1 %2", baud, tty);
 		//SCR::Write (.etc.inittab.S0, initline);
 		SCR::Execute (.target.bash, "/bin/grep -v S0 /etc/inittab >/tmp/inittab");
 		SCR::Execute (.target.bash, "/bin/echo '" + initline + "' >>/tmp/inittab");
