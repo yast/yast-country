@@ -37,6 +37,7 @@ Summary:	Setting the keyboard
 @moduledir@/*.ycp
 @clientdir@/*.ycp
 @ydatadir@/*.ycp
+@scrconfdir@/*.scr
 %ifnarch s390 s390x
 @configdir@/keyboard.y2cc
 %endif
