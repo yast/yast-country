@@ -164,6 +164,7 @@
 	unicodeMap = SCR::Read (.sysconfig.console.CONSOLE_UNICODEMAP);
 	magic	   = SCR::Read (.sysconfig.console.CONSOLE_MAGIC);
 	encoding   = SCR::Read (.sysconfig.console.CONSOLE_ENCODING);
+	language   = SCR::Read (.sysconfig.language.RC_LANG);
 	if (Mode::braille)
 	{
 	    SCR::Execute (.target.bash, "/usr/bin/setfont");
