@@ -188,7 +188,7 @@
     global define void Console ()
     ``{
 	if (Mode::initial)
-	    string serial = Mode::installMap["console"]:"";
+	    serial = Mode::installMap["console"]:"";
 	else
 	    Restore();
 	return;
