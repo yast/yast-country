@@ -285,7 +285,7 @@ define map get_reduced_keyboard_db()
      * Do not hold this database in a permanent module variable (it's very large).
      */
 
-    map all_keyboards = (map)SCR::Read( .target.yast2, "keyboard_raw.ycp" );
+    map all_keyboards = (map) eval(SCR::Read( .target.yast2, "keyboard_raw.ycp" ));
 
     if ( all_keyboards == nil ) all_keyboards = $[];
 
@@ -320,7 +320,7 @@ define map get_reduced_keyboard_db()
 
 		// Add the language stuff.
 		//
-		keyboard_selected = add( keyboard_selected, description[0]:$[] );
+		keyboard_selected = add( keyboard_selected, description[0]:"" );
 
 		// Add the Qt- and ncurses-data.
 		//

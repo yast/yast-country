@@ -22,11 +22,11 @@
  * Added "compose" tag for COMPOSETABLE flag in rc.config
  * non-latin1 keyboards need this, see bug #7023
  *
-   textdomain "country";
- *
  */
+{
+textdomain "country";
 
-$[
+return ($[
   "english-us":
     [
 	_("English (US)"),
@@ -703,4 +703,6 @@ $[
 	   "ppc64" : $[ "pc104" : $[ "ncurses": "dvorak.map.gz"]]
 	 ]
     ]
-]
+]);
+
+}
