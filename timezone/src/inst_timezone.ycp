@@ -197,10 +197,14 @@ Enter the correct date.
 
     string date = "";
 
-    if (Mode::config)
+    if (Mode::config || Mode::mode == "firstboot")
+    {
 	Wizard::HideAbortButton();
+    }
     else
+    {
 	Wizard::OpenAcceptDialog();	// do this as early as possible for instant user feedback!
+    }
 
     // build up timezone selection box
     //
@@ -326,20 +330,24 @@ If you are unsure, use the default values already selected.
 			 help_text,
 			 (boolean)WFM::Args(0), (boolean)WFM::Args(1) );
 
-    if ( Mode::initial )
+    if ( Mode::initial && Mode::firstboot)
+    {
 	Wizard::SetTitleIcon( "timezone" );
+    }
 
 
     // Initially set the current timezone to establish a consistent state.
     //
     integer sel = 0;
     if (Mode::config)
-	{
+    {
 	import "AutoinstGeneral";
 	sel = Timezone::Set(AutoinstGeneral::Clock["timezone"]:"", true);
-	}
+    }
     else
+    {
 	sel = Timezone::Set( Timezone::timezone, true );
+    }
 
     symbol hwclock_s = (hwclock=="-u") ? `hwclock_utc : `hwclock_localtime;
     symbol hwclock_s_old = hwclock_s;
@@ -363,7 +371,7 @@ If you are unsure, use the default values already selected.
 	{
 	ret = Wizard::UserInput();
 
-	y2milestone( "ret %1", ret );
+	y2debug( "ret %1", ret );
 
 	if( !Mode::config && ret == `abort && Popup::ConfirmAbort(`painless) )
 	    {
@@ -455,9 +463,14 @@ If you are unsure, use the default values already selected.
 	} until ( ret == `next || ret == `back || ret == `cancel );
 
     if( ret != `next )
+    {
 	Timezone::PopVal();
+    }
 
-    Wizard::CloseDialog();
+    if (Mode::mode == "firstboot")
+    {
+        Wizard::CloseDialog();
+    }
 
     return ret;
 }
