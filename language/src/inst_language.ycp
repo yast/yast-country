@@ -339,10 +339,8 @@ Choose the new <b>language</b> for your system.
 		//
 		Console::SelectFont( language );
 
-		Installation::encoding = (use_utf8) ? "UTF-8" : Encoding::console;
-
 		// Set it in YaST2
-		Language::WfmSetLanguage();
+		Language::WfmSetLanguage ();
 
 		if( !Mode::normal () && !set_default )
 		    {

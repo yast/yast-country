@@ -78,10 +78,8 @@
 	//
 	Console::SelectFont( language_on_entry );
 
-	Installation::encoding = (use_utf8) ? "UTF-8" : Encoding::console;
-
 	// Set it in YaST2
-	Language::WfmSetLanguage();
+	Language::WfmSetLanguage ();
     }
     else
     {
