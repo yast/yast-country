@@ -24,6 +24,7 @@
     import "Popup";
     import "Label";
     import "Encoding";
+    import "Bootloader";
 
     // Memozize the current language.
     //
@@ -111,6 +112,11 @@
 	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module kdm3");
 
 	    WFM::CallFunction( "inst_suseconfig", [ false, false ] );
+
+	    if( Language::language != language_on_entry )
+		{
+		Bootloader::UpdateGfxMenu()
+		}
 	    // popup text
 	    Popup::Message( _("Your language setting has been changed.
 

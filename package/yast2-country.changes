@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jul 13 09:36:47 CEST 2004 - fehr@suse.de
+
+- call Booloader::UpdateGfxMenu() if languge is changed (#35835)
+
+-------------------------------------------------------------------
 Mon Jun  7 11:41:40 CEST 2004 - fehr@suse.de
 
 - removed duplicated entry Turkey from timezone_raw.ycp (#41609)
