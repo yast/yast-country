@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Aug 27 14:29:33 CEST 2003 - fehr@suse.de
+
+- make sorting of keyboard entries locale dependent (#21856)
+
+-------------------------------------------------------------------
 Mon Aug 25 17:39:31 CEST 2003 - fehr@suse.de
 
 - fix wrong locale for non-utf8 case (#29318)

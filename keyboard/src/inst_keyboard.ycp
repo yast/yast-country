@@ -198,11 +198,11 @@ Scroll Lock should be set
 			  keyboard_name,
 			  Keyboard::current_kbd==keyboard_code );
 	    });
-    keyboardlist_by_translation =
+
+    keyboardlist_by_translation = 
 	sort( `a, `b, keyboardlist_by_translation,
-	    ``{
-	    return( select(a,1,"") < select(b,1,"") );
-	    });
+	      ``(select( lsort( [select(a,1,""), select(b,1,"") ]), 0, "" ) == 
+	         select(a,1,"")));
 
     keyboardsel = `SelectionBox( `id( `keyboard ), `opt(`notify,`immediate),
 		// title for selection box 'keyboard layout'
