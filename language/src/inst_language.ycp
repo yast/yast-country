@@ -78,7 +78,7 @@ are unset.<br>
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`CheckBox( `id(`use_utf8),
 						 _("Use &UTF-8 Encoding"),
-						 false )),
+						 true )),
 				`VSpacing(`opt(`vstretch), 7),
 				`HBox(
 				     `PushButton(`id(`ok), `opt(`default),
