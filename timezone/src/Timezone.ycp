@@ -96,21 +96,12 @@ global define void Timezone()
 
     if( Mode::initial )
 	{
-	if( size(Storage::GetWinPrimPartitions(Storage::GetTargetMap())) > 0 ||
-	    Arch::board_mac )
-	    {
-	    // Win partitions present ==> assume local time.
-	    //
-	    hwclock = "--localtime";
-	    y2milestone("Assuming local time");
-	    }
 	// language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
-	//
 	map lang2tz = get_lang2tz();
 
 	string new_timezone = lang2tz[Language::language]:"";
 
-	if ( new_timezone != "" )
+	if( new_timezone != "" )
 	    {
 	    Set( new_timezone );
 	    }
@@ -213,6 +204,18 @@ global define string MakeProposal( boolean force_reset,
     y2milestone("force_reset: %1", force_reset);
     y2milestone("language_changed: %1", language_changed);
 
+    if( !user_decision || force_reset )
+	{
+	hwclock = "-u";
+	if( size(Storage::GetWinPrimPartitions(Storage::GetTargetMap())) > 0 ||
+	    Arch::board_mac )
+	    {
+	    // Win partitions present ==> assume local time.
+	    //
+	    hwclock = "--localtime";
+	    y2milestone("Assuming local time");
+	    }
+	}
     if( force_reset )
 	{
 	// If user wants to reset do it if a default is available.
@@ -232,9 +235,9 @@ global define string MakeProposal( boolean force_reset,
 	// a timezone. The indicator for this is user_decision which is
 	// set from outside the module.
 	//
-	if ( user_decision || Mode::autoinst)
+	if( user_decision || Mode::autoinst)
 	    {
-	    if ( language_changed )
+	    if( language_changed )
 		{
 		y2milestone("User has chosen a timezone; not following language - only retranslation.");
 
@@ -248,13 +251,13 @@ global define string MakeProposal( boolean force_reset,
 	    string local_timezone = 
 		GetTimezoneForLanguage( Language::language, "english-us" );
 
-	    if ( local_timezone != "" )
+	    if( local_timezone != "" )
 		{
 		Set( local_timezone );
 		}
 	    else
 		{
-		if ( language_changed )
+		if( language_changed )
 		    {
 		    y2error("Can't follow language - only retranslation");
 
