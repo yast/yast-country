@@ -57,6 +57,7 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 @clientdir@/*.ycp
 @ydatadir@/*.ycp
 @scrconfdir@/*.scr
+@agentdir@/*
 %ifnarch s390 s390x
 @desktopdir@/keyboard.desktop
 %endif
