@@ -71,7 +71,6 @@
 		     "XKBLAYOUT"      : [ Keyboard::XkbLayout, "Keyboard Layout"],
 		     "XKBVARIANT"     : [ Keyboard::XkbVariant, "Keyboard Variant"],
 		     "XKBKEYCODES"    : [ Keyboard::XkbKeyCodes, "Keycodes"],
-		     "MAPNAME"        : [ Keyboard::MapName, "Map name"],
 		     "LEFTALT"	      : [ Keyboard::LeftAlt, "Left alt"],
 		     "RIGHTALT"	      : [ Keyboard::RightAlt, "Right alt"],
 		     "SCROLLOCK"      : [ Keyboard::ScrollLock, "Scroll lock"],

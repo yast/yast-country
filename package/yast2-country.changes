@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jul 24 12:22:36 CEST 2003 - fehr@suse.de
+
+- remove MapName from XF86Keyboard.ycp
+- version 2.8.3
+
+-------------------------------------------------------------------
 Tue Jul 15 15:14:18 CEST 2003 - fehr@suse.de
 
 - really change timezone only when pressing next not when clicking
