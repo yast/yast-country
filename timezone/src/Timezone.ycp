@@ -104,7 +104,7 @@ global define void Timezone()
 
 	if( new_timezone != "" )
 	    {
-	    Set( new_timezone );
+	    Set( new_timezone, true );
 	    }
 	}
     else if( !Mode::config )
@@ -129,7 +129,7 @@ global define void Timezone()
  * @return	the number of the region that contains the timezone
  *
  */
-global define integer Set( string zone )
+global define integer Set( string zone, boolean really )
     ``{
     list zmap = get_zonemap();
 
@@ -152,12 +152,13 @@ global define integer Set( string zone )
 
     // Adjust system to the new timezone.
     //
-    if (!Mode::config)
-	SCR::Execute( .target.bash, "/usr/sbin/zic -l " + timezone );
-
-    if ( !Arch::s390 && !Mode::config )
+    if( !Mode::config && really )
 	{
-	SCR::Execute(.target.bash, "/sbin/hwclock --hctosys " + hwclock);
+	SCR::Execute( .target.bash, "/usr/sbin/zic -l " + timezone );
+	if( !Arch::s390 )
+	    {
+	    SCR::Execute(.target.bash, "/sbin/hwclock --hctosys " + hwclock);
+	    }
 	}
     
     // On first assignment store default timezone.
@@ -224,7 +225,7 @@ global define string MakeProposal( boolean force_reset,
 	//
 	if( default_timezone != "" )
 	    {
-	    Set( default_timezone );	// reset
+	    Set( default_timezone, true );	// reset
 	    }
 
 	// Reset user_decision flag.
@@ -243,7 +244,7 @@ global define string MakeProposal( boolean force_reset,
 		{
 		y2milestone("User has chosen a timezone; not following language - only retranslation.");
 
-		Set( timezone );
+		Set( timezone, true );
 		}
 	    }
 	else
@@ -255,7 +256,7 @@ global define string MakeProposal( boolean force_reset,
 
 	    if( local_timezone != "" )
 		{
-		Set( local_timezone );
+		Set( local_timezone, true );
 		}
 	    else
 		{
@@ -263,7 +264,7 @@ global define string MakeProposal( boolean force_reset,
 		    {
 		    y2error("Can't follow language - only retranslation");
 
-		    Set( timezone );
+		    Set( timezone, true );
 		    }
 		}
 	    }
@@ -283,7 +284,7 @@ global define string MakeProposal( boolean force_reset,
 
     clock_setting = deletechars(add_text,":") + " " + clock_setting;
 
-    string date = GetDateTime();
+    string date = GetDateTime(true);
 
     return( name + " - " + clock_setting + " " + date );
     }
@@ -415,18 +416,24 @@ global define string GetTimezoneForLanguage( string sys_language,
  *
  * Get the output of /bin/date "+%H:%M:%S - %Y-%m-%d"
  *
- * @param	-
+ * @param	flag if to get real system time or if to simulate changed
+ *		timezone settings with TZ=
  *
  * @return  The string output.
  *
  * @see	-
  */
-global define string GetDateTime()
+global define string GetDateTime( boolean real_time )
     ``{
-    string local_date = 
-	lookup( SCR::Execute( .target.bash_output,
-			      "/bin/date \"+%H:%M:%S - %d-%m-%Y\"" ),
-			      "stdout", "" );
+    string tzs = "";
+    if( !real_time )
+	{
+	tzs = sformat( "TZ=%1 ", hwclock!="-u" ? "UTC" : timezone );
+	}
+    string cmd = sformat( "%1/bin/date \"%2\"", tzs, "+%H:%M:%S - %d-%m-%Y" );
+    y2milestone( "cmd=%1", cmd );
+    string local_date = lookup( SCR::Execute( .target.bash_output, cmd ),
+				"stdout", "" );
 	
     // cut off LF
     //
@@ -438,7 +445,7 @@ global define string GetDateTime()
 global define map GetDateTimeMap()
     ``{
     map ret = $[];
-    list dparts = filter( `v, splitstring( GetDateTime(), " -:" ), 
+    list dparts = filter( `v, splitstring( GetDateTime(true), " -:" ), 
                           ``(size(v)>0));
     ret["hour"] = dparts[0]:"";
     ret["minute"] = dparts[1]:"";

@@ -1,5 +1,12 @@
 -------------------------------------------------------------------
-Wed Jul  9 14:33:20 CEST 2003 - fehr@suse.de
+Tue Jul 15 15:14:18 CEST 2003 - fehr@suse.de
+
+- really change timezone only when pressing next not when clicking
+  into scroll list (#26173)
+- fix lang entries for Chinese in language.ycp
+
+-------------------------------------------------------------------
+Wed Jul 10 14:33:20 CEST 2003 - fehr@suse.de
 
 - add two spanish keyboard layouts for latin america (#25474)
 

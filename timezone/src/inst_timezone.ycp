@@ -25,14 +25,16 @@ import "Wizard";
 import "Label";
 import "Popup";
 
-define void SetTimezone( symbol hwclock, string timezone )
+define void SetTimezone( symbol hwclock, string timezone, boolean really )
     ``{
+    y2milestone( "SetTimezone hw %1, tz %2 really %3", hwclock, timezone, 
+                 really );
     Timezone::hwclock = (hwclock == `hwclock_utc) ? "-u" : "--localtime";
-    Timezone::Set( timezone );
+    Timezone::Set( timezone, really );
 
     // Redisplay date/time.
     //
-    UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime() );
+    UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime(really) );
     };
 
 define boolean SetTimeDialog()
@@ -47,7 +49,7 @@ the input fields. Change them to the correct values and press the
 Apply button.
 ");
 
-    map val = Timezone::GetDateTimeMap();
+    map val = Timezone::GetDateTimeMap(true);
 
     UI::OpenDialog( `opt(`decorated),
 	`HBox( 
@@ -159,11 +161,6 @@ Enter the correct date.
  * Timezone
  * ----------------------------------------------------------------------*/
 
-    // Remember the current timezone settings to be able to restore them.
-    //
-    string timezone_on_entry = Timezone::timezone;
-    string hwclock_on_entry  = Timezone::hwclock;
-
     // get current timezone and clock setting
     //
     string timezone = Timezone::timezone;
@@ -213,7 +210,7 @@ Enter the correct date.
 
     // Assign system date and time.
     //
-    date = Timezone::GetDateTime();
+    date = Timezone::GetDateTime(true);
 
     // Ask for UTC vs. Localtime
     
@@ -317,9 +314,9 @@ If you are unsure, use the default values already selected.
     //
     integer sel = 0;
     if (Mode::config)
-	sel = Timezone::Set(AutoinstGeneral::Clock["timezone"]:"");
+	sel = Timezone::Set(AutoinstGeneral::Clock["timezone"]:"", true);
     else
-	sel = Timezone::Set( Timezone::timezone );
+	sel = Timezone::Set( Timezone::timezone, true );
 
     symbol hwclock_s = (hwclock=="-u") ? `hwclock_utc : `hwclock_localtime;
     symbol hwclock_s_old = hwclock_s;
@@ -366,8 +363,8 @@ If you are unsure, use the default values already selected.
 	    {
 	    if( SetTimeDialog() )
 		{
-		y2milestone( "date %1", Timezone::GetDateTime() );
-		UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime() );
+		y2milestone( "date %1", Timezone::GetDateTime(true) );
+		UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime(true) );
 		}
 	    }
 	else if( ret == `next || ret == `timezone || ret == `hwclock )
@@ -403,11 +400,12 @@ If you are unsure, use the default values already selected.
 	    }
 	    else
 	    {
-		if( timezone != timezone_old || hwclock_s != hwclock_s_old )
+		if( timezone != timezone_old || hwclock_s != hwclock_s_old ||
+		    ret==`next )
 		{
 		    timezone_old = timezone;
 		    hwclock_s_old = hwclock_s;
-		    SetTimezone( hwclock_s, timezone );
+		    SetTimezone( hwclock_s, timezone, ret==`next );
 		}
 
 		if ( ret == `next )
@@ -421,18 +419,6 @@ If you are unsure, use the default values already selected.
 	    }
 	    }
 	} until ( ret == `next || ret == `back || ret == `cancel );
-
-    // Back to original values.
-    //
-    if ( ret == `back && !Mode::config)
-	{
-	y2milestone("`back or `cancel restoring: <%1>", timezone_on_entry );
-
-	// Reset timezone to initial state.
-	//
-	Timezone::hwclock = hwclock_on_entry;
-	Timezone::Set( timezone_on_entry );
-	}
 
     Wizard::CloseDialog();
 
