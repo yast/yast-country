@@ -72,8 +72,8 @@ $[
 		  ".UTF-8",
 		  ".ISO-8859-7" ],
 
-  "en_GB"	: [ "English (GB)",
-		  "English (GB)",
+  "en_GB"	: [ "English (UK)",
+		  "English (UK)",
 		  ".UTF-8",
 		  "" ],
 
