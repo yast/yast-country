@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb  6 22:11:28 CET 2003 - nashif@suse.de
+
+- adapted timezone, mouse and keyboard for use with autoyast
+
+-------------------------------------------------------------------
 Mon Feb  3 17:36:22 CET 2003  - fehr@suse.de
 
 - pot file now in source tarball
