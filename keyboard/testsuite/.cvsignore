@@ -1,9 +1,11 @@
 Makefile
 Makefile.in
-.libs
-.deps
 site.exp
 *.sum
 *.log
-tmp.*
-tmp.*
+tmp.out*
+tmp.err*
+tmp.log*
+config
+run
+*.test

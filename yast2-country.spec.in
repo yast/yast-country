@@ -1,5 +1,5 @@
 @HEADER-COMMENT@
-# neededforbuild yast2-devtools  autoconf automake ycpdoc yast2-testsuite dejagnu expect tcl yast2-core
+# neededforbuild yast2-devel-packages
 
 @HEADER@
 Requires:	yast2 yast2-lib-wizard
@@ -31,61 +31,60 @@ Summary:	Setting the keyboard
 # common
 %files
 %defattr(-,root,root)
-%doc @DOCDIR@
+%doc @docdir@
 
 # console
 
-@YAST2DIR@/modules/Console.ycp
-@YAST2DIR@/scrconf/cfg_console.scr
+@moduledir@/Console.ycp
+@agentdir@/cfg_console.scr
 
 # keyboard
 
-@YAST2DIR@/modules/Keyboard.ycp
-@YAST2DIR@/modules/XF86Keyboard.ycp
+@moduledir@/Keyboard.ycp
+@moduledir@/XF86Keyboard.ycp
 
-@YAST2DIR@/clients/keyboard.ycp
-@YAST2DIR@/clients/inst_keyboard.ycp
+@clientdir@/keyboard.ycp
+@clientdir@/inst_keyboard.ycp
 
-@YAST2DIR@/clients/proposal_keyboard.ycp
+@clientdir@/proposal_keyboard.ycp
 
-@YAST2DIR@/config/keyboard.y2cc
+@configdir@/keyboard.y2cc
 
-@YAST2DIR@/keyboard_raw.ycp
-@YAST2DIR@/lang2keyboard.ycp
-@YAST2DIR@/xkblayout2keyboard.ycp
-@YAST2DIR@/keymap2mac.ycp
+@ydatadir@/keyboard_raw.ycp
+@ydatadir@/lang2keyboard.ycp
+@ydatadir@/xkblayout2keyboard.ycp
+@ydatadir@/keymap2mac.ycp
 
-@YAST2DIR@/scrconf/cfg_keyboard.scr
+@agentdir@/cfg_keyboard.scr
 
 # language
-@YAST2DIR@/modules/Language.ycp
-@YAST2DIR@/modules/XF86Path.ycp
+@moduledir@/Language.ycp
+@moduledir@/XF86Path.ycp
 
-@YAST2DIR@/clients/language.ycp
-@YAST2DIR@/clients/inst_language.ycp
+@clientdir@/language.ycp
+@clientdir@/inst_language.ycp
 
-@YAST2DIR@/clients/proposal_language.ycp
+@clientdir@/proposal_language.ycp
 
-@YAST2DIR@/config/language.y2cc
+@configdir@/language.y2cc
 
-@YAST2DIR@/language.ycp
-@YAST2DIR@/lang2iso.ycp
+@ydatadir@/language.ycp
+@ydatadir@/lang2iso.ycp
 
-@YAST2DIR@/scrconf/cfg_language.scr
+@agentdir@/cfg_language.scr
 
 # timezone
 
-@YAST2DIR@/modules/Timezone.ycp
+@moduledir@/Timezone.ycp
 
-@YAST2DIR@/clients/timezone.ycp
-@YAST2DIR@/clients/inst_timezone.ycp
+@clientdir@/timezone.ycp
+@clientdir@/inst_timezone.ycp
 
-@YAST2DIR@/clients/proposal_timezone.ycp
+@clientdir@/proposal_timezone.ycp
 
-@YAST2DIR@/config/timezone.y2cc
+@configdir@/timezone.y2cc
 
-@YAST2DIR@/timezone_raw.ycp
-@YAST2DIR@/lang2tz.ycp
+@ydatadir@/timezone_raw.ycp
+@ydatadir@/lang2tz.ycp
 
-@YAST2DIR@/scrconf/cfg_clock.scr
-
+@agentdir@/cfg_clock.scr
