@@ -6,7 +6,7 @@ X-KDE-ModuleType=Library
 X-KDE-RootOnly=true
 X-KDE-HasReadOnlyMode=true
 X-KDE-Library=yast2
-X-KDE-FactoryName=timezone
+X-SuSE-YaST-Call=timezone
 
 X-SuSE-YaST-Group=System
 X-SuSE-YaST-Argument=
