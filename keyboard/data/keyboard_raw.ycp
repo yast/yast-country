@@ -181,7 +181,7 @@ $[
     ],
   "portugese":
     [
-	_("Portugese"),
+	_("Portuguese"),
 	$[ "i386" : $[ "pc104": $[ "ncurses": "pt-latin1.map.gz"]],
 	   "ia64" : $[ "pc104": $[ "ncurses": "pt-latin1.map.gz"]],
 	   "x86_64" : $[ "pc104": $[ "ncurses": "pt-latin1.map.gz"]],

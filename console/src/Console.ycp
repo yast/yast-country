@@ -131,7 +131,7 @@
 	    {
 		string initline = sformat ("S0:1235:respawn:/sbin/agetty -L %1 %2", baud, tty);
 		//SCR::Write (.etc.inittab.S0, initline);
-		SCR::Execute (.target.bash, "/bin/grep -v S0 /etc/inittab >/tmp/inittab");
+		SCR::Execute (.target.bash, "/bin/grep -v ^S0 /etc/inittab >/tmp/inittab");
 		SCR::Execute (.target.bash, "/bin/echo '" + initline + "' >>/tmp/inittab");
 		SCR::Execute (.target.bash, "/bin/mv /tmp/inittab /etc/inittab");
 		SCR::Execute (.target.bash, "/bin/echo " + tty + " >>/etc/securetty");
