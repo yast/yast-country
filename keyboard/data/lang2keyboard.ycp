@@ -46,7 +46,7 @@
 
 	"el_GR"    	: "greek",
 	
-	"nl_NL"    	: "english-us",
+	"nl_NL"    	: "dutch",
 
 	"da_DK"		: "danish",
 
@@ -76,10 +76,12 @@
 
 	"be_BY"		: "belgian",
 	
-	"zh_CN"    	: "english-us",
-	"ko_KR"    	: "english-us",
-	"ar_eg"    	: "english-us",
+	"zh_CN"		: "english-us",
+	"zh_TW"		: "english-us",
+	"ko_KR"		: "english-us",
+	"ar_eg"		: "english-us",
 	"is_IS"         : "icelandic",
 
-	"lt_LT"		: "lithuanian"
+	"lt_LT"		: "lithuanian",
+	"hr_HR"		: "croatian",
       ]
