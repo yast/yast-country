@@ -344,6 +344,10 @@ Adapt keyboard settings?
 		if( kbd_adapt )
 		    {
 		    Keyboard::SetKeyboardForLang( language );
+		    if( Mode::initial && set_default )
+			{
+			Keyboard::SetKeyboardDefault();
+			}
 		    }
 		else
 		    {

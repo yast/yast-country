@@ -1413,6 +1413,12 @@ global define void SetKeyboardForLang( string lang )
 	}
     };
 
+global define void SetKeyboardDefault()
+    ``{
+    y2milestone( "SetKeyboardDefault to %1", current_kbd );
+    default_kbd = current_kbd;
+    };
+
 }
 
 // - EOF -
