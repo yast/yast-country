@@ -16,14 +16,13 @@
 textdomain "country";
 
 import "Arch";
+import "Label";
 import "Mode";
 import "Misc";
-import "Timezone";
-
-import "Wizard";
-
-import "Label";
 import "Popup";
+import "Stage";
+import "Timezone";
+import "Wizard";
 
 symbol hwclock_s_initial = `none;
 
@@ -179,7 +178,7 @@ Enter the correct date.
     y2milestone( "GetDisplayInfo %1 ncurses %2", dpy, ncurses );
 
     // Autoinstall
-    if (Mode::config)
+    if (Mode::config ())
     {
 	import "AutoinstGeneral";
 	timezone = AutoinstGeneral::Clock["timezone"]:"";
@@ -188,7 +187,7 @@ Enter the correct date.
 
     string date = "";
 
-    if (Mode::config || Mode::mode == "firstboot")
+    if (Mode::config () || Mode::mode () == "firstboot")
     {
 	Wizard::HideAbortButton();
     }
@@ -260,7 +259,7 @@ y2internal ("map: %1", Timezone::GetDateTimeMap());
 	}
 
     term settime = `Empty();
-    if( !Arch::s390 () && !Mode::config)
+    if( !Arch::s390 () && !Mode::config ())
 	{
 	// button text
 	settime = `PushButton( `id(`settime), _("Change &Time or Date"));
@@ -324,7 +323,7 @@ If you are unsure, use the default values already selected.
 			 (boolean)WFM::Args(0), (boolean)WFM::Args(1) );
 
     Wizard::SetDesktopIcon("timezone");
-    if ( Mode::initial || Mode::firstboot)
+    if ( Stage::initial () || Stage::firstboot ())
     {
 	Wizard::SetTitleIcon( "timezone" );
     }
@@ -333,7 +332,7 @@ If you are unsure, use the default values already selected.
     // Initially set the current timezone to establish a consistent state.
     //
     integer sel = 0;
-    if (Mode::config)
+    if (Mode::config ())
     {
 	import "AutoinstGeneral";
 	sel = Timezone::Set(AutoinstGeneral::Clock["timezone"]:"", true);
@@ -367,7 +366,7 @@ If you are unsure, use the default values already selected.
 
 	y2debug( "ret %1", ret );
 
-	if( !Mode::config && ret == `abort && Popup::ConfirmAbort(`painless) )
+	if( !Mode::config () && ret == `abort && Popup::ConfirmAbort(`painless) )
 	    {
 	    break;
 	    }
@@ -422,7 +421,7 @@ If you are unsure, use the default values already selected.
 
 	    // Change only if s.th. has really changed.
 	    //
-	    if (Mode::config)
+	    if (Mode::config ())
 	    {
 		// Autoinstall
 		import "AutoinstGeneral";
@@ -461,7 +460,7 @@ If you are unsure, use the default values already selected.
 	Timezone::PopVal();
     }
 
-    if (Mode::mode != "firstboot")
+    if (Mode::mode () != "firstboot")
     {
         Wizard::CloseDialog();
     }

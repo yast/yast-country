@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Oct 27 09:44:25 CEST 2004 - jsuchome@suse.cz
+
+- adapted for new Mode:: interface
+- 2.11.3 
+
+-------------------------------------------------------------------
 Tue Oct 26 14:38:45 CEST 2004 - jsuchome@suse.cz
 
 - timezone: show time formated by locale settings (#34633) 

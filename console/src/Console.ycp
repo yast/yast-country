@@ -32,7 +32,9 @@
 
     import "Mode";
     import "Language";
+    import "Linuxrc";
     import "Encoding";
+    import "Stage";
 
     // current base language, used in Check
     string language	= "en_US";
@@ -95,7 +97,7 @@
 		WFM::SetLanguage (currentLanguage, currentEncoding);// reset as it was before
 	    }
 
-	    if (Mode::braille)
+	    if (Linuxrc::braille ())
 	    {
 		SCR::Execute (.target.bash, "/usr/bin/setfont");
 	    }
@@ -170,7 +172,7 @@
 	unicodeMap = (string)SCR::Read (.sysconfig.console.CONSOLE_UNICODEMAP);
 	magic	   = (string)SCR::Read (.sysconfig.console.CONSOLE_MAGIC);
 	language   = (string)SCR::Read (.sysconfig.language.RC_LANG);
-	if (Mode::braille)
+	if (Linuxrc::braille ())
 	{
 	    SCR::Execute (.target.bash, "/usr/bin/setfont");
 	}
@@ -207,7 +209,7 @@
 
     global define void Console ()
     ``{
-	if (Mode::initial)
+	if (Stage::initial ())
 	{
 	    serial = (string)SCR::Read (.etc.install_inf.Console);
 	    if (serial == nil) serial = "";
