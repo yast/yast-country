@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sun Sep 14 21:01:10 CEST 2003 - adrian@suse.de
+
+- make it working in kcontrol
+
+-------------------------------------------------------------------
 Thu Sep 11 16:33:08 CEST 2003 - fehr@suse.de
 
 - fix bug writing wrong console font (#30514)
