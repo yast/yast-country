@@ -939,6 +939,32 @@ global define map Selection()
 	});
     }
 
+    /**
+     * Return a map for conversion from keymap to YaST2 keyboard code()
+     * Get the map of translated keyboard names.
+     * @param   -
+     * @return  map of $[ keyboard_code : keyboard_name, ...] for all known
+     *      keyboards. 'keyboard_code' is used internally in Set and Get
+     *      functions. 'keyboard_name' is a user-readable string.
+     *      Uses Language::language for translation.
+     *
+     */
+
+    global define map keymap2yast()
+    ``{
+    // Get the reduced keyboard DB.
+    //
+    map keyboards = get_reduced_keyboard_db();
+
+    return mapmap( string keyboard_code, list keyboard_value, keyboards,
+               ``{
+        map code_map = keyboard_value[1]:$[];
+        string code = select(splitstring(code_map["ncurses"]:"", "."), 0, "");
+        return  [ code  , keyboard_code ];
+    });
+    }
+
+
     // ---------------------------------------------------------------------------------------
     // END: Globally defined functions
     // ---------------------------------------------------------------------------------------
