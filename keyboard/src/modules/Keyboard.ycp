@@ -309,7 +309,6 @@
 
     define string XkblayoutToKeyboard( string x11_layout ) ``{
 	map xkblayout2keyboard = get_xkblayout2keyboard();
-	y2milestone("keyboard layout XF86Config: %1", current_layout );
 
 	// Now get the YaST2 internal representation of this keyboard layout.
 	//
