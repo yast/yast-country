@@ -111,7 +111,8 @@
 	    }
 	    else
 	    {
-		UI::SetConsoleFont (magic, font, screenMap, unicodeMap, encoding);
+		//UI::SetConsoleFont (magic, font, screenMap, unicodeMap, encoding);
+		UI::SetConsoleFont (magic, font, screenMap, unicodeMap, language);	
 	    }
 	}
 
@@ -175,7 +176,8 @@
 	}
 	else
 	{
-	    UI::SetConsoleFont (magic, font, screenMap, unicodeMap, encoding);
+	    //UI::SetConsoleFont (magic, font, screenMap, unicodeMap, encoding);
+	    UI::SetConsoleFont (magic, font, screenMap, unicodeMap, language); 
 	}
 	return encoding;
     }
