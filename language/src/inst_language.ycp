@@ -196,12 +196,13 @@ Choose the new <b>language</b> for your SuSE Linux system.
 	    {
 		y2milestone( "Language changed from %1 to %2", Language::language, language );
 
-		string msg = _("You are about to change the selected language?
+		string msg = _("The language will be changed.
 
-Do you want current keyboard settings be adapted according
-to the new language or should they be kept as they are now.
+Current keyboard settings can be adapted according
+to the new language or they can be kept as they are now.
 
-Adapt keyboard setting?");
+Adapt keyboard settings?
+");
 
 		boolean kbd_adapt = false;
 

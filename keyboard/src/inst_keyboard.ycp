@@ -38,9 +38,10 @@ global define KeyboardExpertDialog()
     symbol ret = `none;
     // help text for keyboard expert screen
     string help_text = _("<p>
-Here you may fine tune various settings of the keyboard module.
-These settings are written into the file <b>/etc/sysconfig/keyboard</b>
-</p>");
+Here, fine tune various settings of the keyboard module.
+These settings are written into the file <b>/etc/sysconfig/keyboard</b>.
+</p>
+");
 
     // general help trailer
     help_text = help_text + _("<p>
@@ -60,18 +61,19 @@ If unsure, use the default values already selected.
 				`Left(`TextEntry( `id(`rate), 
 				                  _("Repeat &Rate"))),
 				`Left(`TextEntry( `id(`delay), 
-				            _("De&lay before repetition starts")) ),
+				            _("De&lay before Repetition Starts")) ),
 				`VSpacing(`opt(`vstretch), 1),
-				`Left(`ComboBox( `id(`numlock), _("&Num Lock on"),
+				`Left(`ComboBox( `id(`numlock), _("&Num Lock On"),
 				           [ "bios", "yes", "no", ""] )),
 				`VSpacing(`opt(`vstretch), 1),
-				`Left(`CheckBox( `id(`capslock), _("Ca&ps Lock on") )),
+				`Left(`CheckBox( `id(`capslock), _("Ca&ps Lock On") )),
 				`Left(`CheckBox( `id(`scrlock), 
-				           _("&Scroll Lock on") )),
+				           _("&Scroll Lock On") )),
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`TextEntry( `id(`tty), 
-				            _("Devices on which the values for Num Lock, Caps Lock and
-Scroll Lock should be set") )),
+				            _("Devices on which the values for Num Lock, Caps Lock, and
+Scroll Lock should be set
+") )),
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`CheckBox( `id(`discaps), 
 				           _("&Disable Caps Lock")) ),

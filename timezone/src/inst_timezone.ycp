@@ -37,10 +37,12 @@ define void SetTimezone( symbol hwclock, string timezone )
 define boolean SetTimeDialog()
     ``{
     string htext = _("This dialog offers the possibility to change
-system time and date.<p>");
+the system time and date.<p>
+");
     htext = htext + _("Current system time and date are displayed in
 the input fields. Change them to the correct values and press the
-Apply-Button." );
+Apply button.
+");
 
     map val = Timezone::GetDateTimeMap();
 
@@ -52,11 +54,11 @@ Apply-Button." );
 	    `HWeight(70,
 		`VBox(
 		    `HBox( `HSpacing(60) ),
-		    `Heading( _("Change system date and time") ),
+		    `Heading( _("Change System Date and Time") ),
 		    `VSpacing(3),
 		    `VStretch(),
 		    `HBox( `HSpacing(10), 
-		           `Label( _("Current time in HH:MM:SS format")),
+		           `Label( _("Current Time in HH:MM:SS Format")),
 			   `HStretch() ),
 		    `HBox( `HSpacing(10),
 		           `TextEntry( `id(`hour), `opt(`shrinkable), "", 
@@ -72,7 +74,7 @@ Apply-Button." );
 		    `VSpacing(2),
 		    `VStretch(),
 		    `HBox( `HSpacing(10), 
-			   `Label( _("Current date in DD-MM-YYYY format") ),
+			   `Label( _("Current Date in DD-MM-YYYY Format") ),
 			   `HStretch() ),
 		    `HBox( `HSpacing(10),
 			   `VBox( `HSpacing(2),
@@ -119,7 +121,8 @@ Apply-Button." );
 		{
 		string tmp = sformat( "%1:%2:%3", hour, minute, second );
 		tmp = sformat( _("Invalid time (HH:MM:SS) %1
-Please enter a correct time"), tmp );
+Enter the correct time.
+"), tmp );
 		UI::ErrorPopup( tmp );
 		ret = `retry;
 		}
@@ -127,7 +130,8 @@ Please enter a correct time"), tmp );
 		{
 		string tmp = sformat( "%1-%2-%3", day, month, year );
 		tmp = sformat( _("Invalid date (DD-MM-YYYY) %1
-Please enter a correct date"), tmp );
+Enter the correct date.
+"), tmp );
 		UI::ErrorPopup( tmp );
 		ret = `retry;
 		}
@@ -220,7 +224,7 @@ Please enter a correct date"), tmp );
     term settime = `Empty();
     if( !Arch::s390 )
 	{
-	settime = `PushButton( `id(`settime), _("Change &time/date"));
+	settime = `PushButton( `id(`settime), _("Change &Time or Date"));
 	}
 
     term contents = `VBox( `HBox(
