@@ -23,7 +23,7 @@
 
     // After import "Arch" and "Mode"
     //
-    if ( Arch::s390 || Mode::serial_console )
+    if ( Arch::s390 )
     {
 	return `next;
     }

@@ -127,6 +127,8 @@ are unset.<br>
 
     string language = Language::language;
 
+    UI::SetLanguage(language);
+
     // Build the contents of the dialog.
 
     // build up language selection box
