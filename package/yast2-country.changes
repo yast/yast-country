@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb 20 09:41:05 CET 2003  - fehr@suse.de
+
+- use sentence style capitalisation in y2cc files (#23848)
+
+-------------------------------------------------------------------
 Wed Feb 19 17:10:02 CET 2003 - fehr@suse.de
 
 - add comments to texts for translators (#23774)
