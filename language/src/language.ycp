@@ -65,10 +65,11 @@
 
 	boolean use_utf8 = true;		// utf8 is default
 
-	if( ! lookup (UI::GetDisplayInfo(), "HasFullUtf8Support", true ) )
-	    {
+	map display_info    = UI::GetDisplayInfo ();
+	if (! display_info["HasFullUtf8Support"]:true)
+	{
 	    use_utf8 = false;		// fallback to ascii
-	    }
+	}
 
 	// Set it in the Language module.
 	//
