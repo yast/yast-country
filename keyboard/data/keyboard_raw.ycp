@@ -84,6 +84,25 @@ $[
 	   "ppc64" : $[ "pc104" : $[ "ncurses": "de-latin1-nodeadkeys.map.gz"]]
 	]
     ],
+  "german-deadkey":
+    [
+	_("German (with deadkeys)"),
+	$[ "i386" : $[ "pc104": $[ "ncurses": "de-latin1.map.gz"]],
+	   "ia64" : $[ "pc104": $[ "ncurses": "de-latin1.map.gz"]],
+	   "x86_64" : $[ "pc104": $[ "ncurses": "de-latin1.map.gz"]],
+	   "alpha" : $[ "pc104": $[ "ncurses": "de-latin1.map.gz"]],
+	   "sparc" : $[ "type4": $[ "ncurses": "sunkeymap.map.gz" ],
+			"type5": $[ "ncurses": "sunt5-de-latin1.map.gz" ],
+			"type5_euro": $[ "ncurses": "sunt5-de-latin1.map.gz" ]],
+	   "sparc64" : $[ "type4": $[ "ncurses": "sunkeymap.map.gz" ],
+			  "type5": $[ "ncurses": "sunt5-de-latin1.map.gz" ],
+			  "type5_euro": $[ "ncurses": "sunt5-de-latin1.map.gz" ],
+			  "pc104": $[ "ncurses": "de-latin1-nodeadkeys.map.gz"]],
+	   "ppc" : $[ "macintosh" : $[ "ncurses": "mac-de-latin1.map.gz"],
+		      "pc104" : $[ "ncurses": "de-latin1.map.gz"]],
+	   "ppc64" : $[ "pc104" : $[ "ncurses": "de-latin1.map.gz"]]
+	]
+    ],
   "german-ch":
     [
 	_("German (Swiss)"),

@@ -1,6 +1,11 @@
 -------------------------------------------------------------------
 Thu Aug 14 15:17:30 CEST 2003 - fehr@suse.de
 
+- add german keyboard entry for nodeadkey (#29071)
+
+-------------------------------------------------------------------
+Thu Aug 14 15:17:30 CEST 2003 - fehr@suse.de
+
 - add button for selection of UTF-8 encoding to language details
 - use ascii test for language display in textmode
 
