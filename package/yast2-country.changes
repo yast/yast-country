@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Aug 12 00:26:01 CEST 2004 - nashif@suse.de
+
+- Adapted timezone client for firstboot
+- Dont write yast.inf in test mode
+- 2.10.4
+
+-------------------------------------------------------------------
 Tue Aug 10 09:54:58 CEST 2004 - fehr@suse.de
 
 - patch proofread texts back into ycp
