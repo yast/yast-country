@@ -88,7 +88,7 @@
 			 `item( `id(`hwclock_utc ), _("UTC"), (hwclock == "-u"))
 			]
 			),
-	      `Label( `id(`date), date )
+	      `Label( `id(`date), `opt(`hstretch), date )
 	      );
     }
 
@@ -196,7 +196,6 @@ If you are unsure, use the default values already selected.
 		//
 		date = Timezone::GetDateTime();
 		UI::ChangeWidget(`id(`date), `Value, date );
-		UI::RecalcLayout();
 	    }
 
 	    if ( ret == `next )
