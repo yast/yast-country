@@ -64,11 +64,11 @@
 
 	map consolefonts = WFM::Read (.local.yast2, "consolefonts.ycp");
 	map languages_map = WFM::Read (.local.yast2, "language.ycp");
-	
+
 	list language_info = languages_map[lang]:nil;
 	if (language_info != nil)
 	{
-	    string fqlanguage = lang 
+	    string fqlanguage = lang
 	        + language_info[2]:""	// mandatory-LANG-modifier
 	        + language_info[3]:"";  // optional-LANG-modifier
 	    consolefont = consolefonts[fqlanguage]:[];
@@ -174,7 +174,7 @@
 
     global define boolean Check ()
     ``{
-	
+
 	return 0;
     }
 
@@ -188,9 +188,15 @@
     global define void Console ()
     ``{
 	if (Mode::initial)
-	    serial = Mode::installMap["console"]:"";
+	{
+	    serial = SCR::Read (.etc.install_inf.Console);
+	    if (isnil (serial)) serial = "";
+	}
 	else
-	    Restore();
+	{
+	    Restore ();
+	}
+
 	return;
     }
 }
