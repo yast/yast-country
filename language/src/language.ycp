@@ -115,9 +115,9 @@
 	    WFM::CallFunction( `inst_suseconfig( false, false ) );
 	    UI::MessagePopup( _("Your language setting has been changed.
 
-If necessary you may want to adapt your keyboard settings to the new
+If necessary, you may want to adapt your keyboard settings to the new
 language. This is possible either in the YaST2 Control Center or by 
-calling \"yast2 keyboard\" explicitely."));
+starting \"yast2 keyboard\" directly."));
 	    }
 	else
 	    {
