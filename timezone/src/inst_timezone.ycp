@@ -333,6 +333,8 @@ If you are unsure, use the default values already selected.
 
     any ret = nil;
 
+    Timezone::PushVal();
+
     repeat
 	{
 	ret = Wizard::UserInput();
@@ -418,6 +420,9 @@ If you are unsure, use the default values already selected.
 	    }
 	    }
 	} until ( ret == `next || ret == `back || ret == `cancel );
+
+    if( ret != `next )
+	Timezone::PopVal();
 
     Wizard::CloseDialog();
 

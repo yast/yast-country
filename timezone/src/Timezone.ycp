@@ -50,6 +50,8 @@ global string default_timezone = "";
 global boolean user_decision = false;
 global boolean user_hwclock = false;
 
+map push = $[];
+
 // ------------------------------------------------------------------
 // END: Globally defined data to be accessed via Timezone::<variable>
 // ------------------------------------------------------------------
@@ -101,6 +103,7 @@ global define void Timezone()
 	map lang2tz = get_lang2tz();
 
 	string new_timezone = lang2tz[Language::language]:"";
+	y2milestone( "new_timezone %1", new_timezone );
 
 	if( new_timezone != "" )
 	    {
@@ -186,6 +189,22 @@ global define void SetTime( string year, string month, string day,
 	}
     };
 
+global define void PushVal()
+    ``{
+    push = $[ "hwclock" : hwclock, "timezone" : timezone ];
+    y2milestone( "map %1", push );
+    }
+
+global define void PopVal()
+    ``{
+    y2milestone( "timezone %1 hwclock %2", timezone, hwclock );
+    if( haskey( push, "hwclock" ))
+	hwclock = push["hwclock"]:hwclock;
+    if( haskey( push, "timezone" ))
+	timezone = push["timezone"]:timezone;
+    push = $[];
+    y2milestone( "timezone %1 hwclock %2", timezone, hwclock );
+    }
 
 /**
  * MakeProposal()
@@ -257,6 +276,7 @@ global define string MakeProposal( boolean force_reset,
 	    if( local_timezone != "" )
 		{
 		Set( local_timezone, true );
+		default_timezone = local_timezone;
 		}
 	    else
 		{

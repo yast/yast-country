@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep  4 15:30:22 CEST 2003 - fehr@suse.de
+
+- fix bug with wron default timezone (#29968)
+- forget temporary changes when aborting timzone dialog (#29974)
+
+-------------------------------------------------------------------
 Mon Sep 01 10:04:35 CEST 2003 - arvin@suse.de
 
 - use Popup::ConfirmAbort
