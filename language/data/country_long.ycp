@@ -136,7 +136,7 @@ return $[
     "yi_US" : _("USA"),
     "zh_CN" : _("Peoples Republic of China"),
     "zh_HK" : _("Hong Kong"),
-    "zh_TW" : _("Taiwan R.O.C."),
+    "zh_TW" : _("Taiwan"),
 ];
 
 /* EOF */
