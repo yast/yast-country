@@ -16,23 +16,54 @@
  */
 
 {
-    textdomain "country";
 
-    import "Language";
-    import "Wizard";
+textdomain "country";
 
-    import "Popup";
-    import "Label";
-    import "Encoding";
-    import "Bootloader";
+import "Bootloader";
+import "CommandLine";
+import "Console";
+import "Language";
+import "Popup";
+import "Wizard";
+
+string language_on_entry = "";
+
+/**
+ * read language settings
+ */
+define boolean LanguageRead () {
 
     // Memozize the current language.
-    //
-    string language_on_entry = Language::language;
+    language_on_entry	= Language::language;
 
     y2milestone("language_on_entry: <%1>", language_on_entry );
+    return true;
+}
 
-    // create the wizard dialog
+/**
+ * write language settings
+ */
+define boolean LanguageWrite () {
+
+    Language::Save ();
+    Console::Save ();
+
+    y2milestone ("Language changed --> saving");
+
+    WFM::CallFunction ("inst_suseconfig", [ false, false ]);
+
+    Bootloader::UpdateGfxMenu();
+
+    return true;
+}
+
+/**
+ * the language configuration sequence
+ */
+define any LanguageSequence () {
+
+    LanguageRead ();
+
     Wizard::CreateDialog();
 
     any result = `again;
@@ -58,70 +89,123 @@
     {
 	// Back to original values...
 	//
-	y2milestone( "`cancel or `back --> restoring: <%1>", language_on_entry);
-
-	import "Console";
-	import "Installation";
-
-	boolean use_utf8 = true;		// utf8 is default
-
-	map display_info    = UI::GetDisplayInfo ();
-	if (! display_info["HasFullUtf8Support"]:true)
-	{
-	    use_utf8 = false;		// fallback to ascii
-	}
+	y2milestone ("`cancel or `back --> restoring: <%1>", language_on_entry);
 
 	// Set it in the Language module.
 	//
-	Language::Set( language_on_entry );
+	Language::Set (language_on_entry );
 
 	// Set Console font
 	//
-	Console::SelectFont( language_on_entry );
+	Console::SelectFont (language_on_entry);
 
 	// Set it in YaST2
 	Language::WfmSetLanguage ();
     }
     else
     {
-	// User wants to keep his changes --> save to sysconfig.
-	//
-	if( Language::language != language_on_entry || Language::ExpertSettingsChanged )
-	    {
-	    Language::Save();
-	    y2milestone( "Language changed --> saving" );
-	    // According to ro@suse.de it doesn't make sense to run individual
-	    // SuSEcongig modules only because the set of modules and the variables
-	    // they contain may change any time.
-	    // ==> full SuSEconfig run
-	    //
-	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --quick --nonewpackage");
-	    // propagate language to Shell
-	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module profiles");
-	    // propagate language to ispell
-	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module ispell");
-	    // propagate language to susewm
-	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module susewm");
-	    // propagate language to KDE2
-	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module kdm3");
-
-	    WFM::CallFunction( "inst_suseconfig", [ false, false ] );
-
-	    if( Language::language != language_on_entry )
-		{
-		Bootloader::UpdateGfxMenu();
-		}
+	if (Language::language != language_on_entry ||
+	    Language::ExpertSettingsChanged)
+	{
+	    LanguageWrite ();
 	    // popup text
 	    Popup::Message( _("Your language setting has been changed.
 
 If necessary, you may want to adapt your keyboard settings to the new
 language. This is possible either in the YaST2 Control Center or by 
 starting \"yast2 keyboard\" directly."));
-	    }
+	}
 	else
-	    {
+	{
 	    y2milestone( "Language not changed --> doing nothing" );
-	    }
+	}
     }
-    return UI::CloseDialog();
+    UI::CloseDialog();
+    return result;
+}
+
+/**
+ * Handler for language summary
+ */
+define boolean LanguageSummaryHandler (map options) {
+
+    // summary label
+    CommandLine::Print (sformat (_("Current language: %1 (%2)"),
+	Language::language, Language::Selection()[Language::language,1]:""));
+    return false;
+}
+
+/**
+ * Handler for listing available languages
+ */
+define boolean LanguageListHandler (map options) {
+
+    foreach (string lang_code, list lang_info, Language::Selection(), {
+	CommandLine::Print (sformat ("%1 (%2)", lang_code, lang_info[1]:""));
+    });
+    return false;
+}
+
+
+/**
+ * Handler for changing language settings
+ */
+define boolean LanguageSetHandler (map options) {
+
+    string language	= options["lang"]:"";
+
+    if (language == "" || !haskey (Language::Selection(), language))
+    {
+	// error message (%1 is given layout); do not translate 'list'
+	CommandLine::Print (sformat (_("Not valid language '%1'. Use a 'list' command to see possible values."), language));
+    }
+    Language::Set (language);
+    Console::SelectFont (language);
+
+    return (language_on_entry != Language::language);
+}
+
+
+/* -- the command line description map -------------------------------------- */
+map cmdline = $[
+    "id"		: "language",
+    // translators: command line help text for Securoty module
+    "help"		: _("Language configuration."),
+    "guihandler"	: LanguageSequence,
+    "initialize"	: LanguageRead,
+    "finish"		: LanguageWrite,
+    "actions"		: $[
+	"summary" :$[
+	    "handler"	: LanguageSummaryHandler,
+	    // command line help text for 'summary' action
+	    "help"	: _("Language configuration summary."),
+	],
+	"set" :$[
+	    "handler"	: LanguageSetHandler,
+	    // command line help text for 'set' action
+	    "help"	: _("Set new values for language."),
+	],
+	"list": $[
+	    "handler"	: LanguageListHandler,
+	    // command line help text for 'list' action
+	    "help"	: _("List all available languages.")
+	],
+    ],
+    "options"		: $[
+	"lang"		: $[
+	    // command line help text for 'set lang' option
+	    "help"	: _("New language value"),
+	    "type"	: "string"
+	],
+    ],
+    "mappings"		: $[
+	"summary"	: [],
+	"set"		: [ "lang" ],
+	"list"		: [],
+    ]
+];
+
+CommandLine::Run (cmdline);
+return true;
+
 }
