@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb  7 13:04:47 CET 2003 - kkaempf@suse.de
+
+- drop fixed encoding in consolefonts table, glibc can tell
+  this value now (#23348)
+
+-------------------------------------------------------------------
 Thu Feb  6 22:11:28 CET 2003 - nashif@suse.de
 
 - adapted timezone, mouse and keyboard for use with autoyast

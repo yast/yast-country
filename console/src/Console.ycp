@@ -92,7 +92,23 @@
 	    unicodeMap  = consolefont[1]:"";
 	    screenMap	= consolefont[2]:"";
 	    magic	= consolefont[3]:"";
-	    encoding    = consolefont[4]:"ISO-8859-1";
+
+	    string currentLanguage = WFM::GetLanguage ();
+
+	    // Eventually must switch languages to get correct encoding
+	    if (currentLanguage != language)
+	    {
+		string currentEncoding = WFM::GetEncoding();	// save encoding
+
+		WFM::SetLanguage (language);			// switch lang
+		encoding    = WFM::GetEncoding();		// get encoding for switched lang
+
+		WFM::SetLanguage (currentLang, currentEncoding);// reset as it was before
+	    }
+	    else
+	    {
+		encoding    = WFM::GetEncoding();
+	    }
 
 	    if (Mode::braille)
 	    {
