@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Aug  1 16:01:31 CEST 2002 - fehr@suse.de
+
+- add keyboard entries for x86_64 (#17334)
+
+-------------------------------------------------------------------
 Wed Jul 31 16:31:20 CEST 2002 - kkaempf@suse.de
 
 - /etc/sysconfig/UTC is boolean, not hwclock parameter.
