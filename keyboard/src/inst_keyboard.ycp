@@ -205,7 +205,7 @@ Scroll Lock should be set
 	    return (lsorted[0]:"" == a[1]:"" && a[1]:"" != b[1]:"");
 	});
 
-    keyboardsel = `SelectionBox( `id( `keyboard ), `opt(`notify,`immediate),
+    keyboardsel = `SelectionBox( `id( `keyboard ), `opt(`notify),
 		// title for selection box 'keyboard layout'
 		_("&Keyboard layout"),
 		keyboardlist_by_translation);
