@@ -1,5 +1,11 @@
 -------------------------------------------------------------------
 Mon Jun 24 10:38:11 CEST 2002 - kkaempf@suse.de
+Thu Jun 27 12:42:15 CEST 2002 - fehr@suse.de
+
+- minor fixes (typo, superfluous textdomain) in keyboard subdir
+
+-------------------------------------------------------------------
+Mon Jun 24 10:38:11 CEST 2002 - kkaempf@suse.de
 
 - Initial version, merge console, keyboard, language, and timezone.
 
