@@ -151,7 +151,7 @@ are unset.<br>
     // on textmode probed above (workaround because there isn't any
     // usable console font for all languages).
 
-    map languageselsort = mapmap(`lang_code, map lang_info, Language::Selection(), ``{
+    map languageselsort = mapmap(string lang_code, map lang_info, Language::Selection(), ``{
 				string s = lang_info[1]:"";
 				return $[ s :	// ASCII value is the key
 				    [lang_info[use_ascii?1:0]:"", lang_code]
@@ -160,7 +160,7 @@ are unset.<br>
 
     term languagesel =
       `SelectionBox(`id(`language), `opt(`notify), "",
-	maplist (`name, list codelist, languageselsort,
+	maplist (any name, list codelist, languageselsort,
 		 ``(`item(`id(codelist[1]:""), codelist[0]:"",
 			  (language == codelist[1]:"")))));
 
