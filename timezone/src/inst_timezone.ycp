@@ -198,8 +198,8 @@ Enter the correct date.
 				      _("Time &Zone") ));
 
 		// label text
-    term region = `SelectionBox( `id(`region), `opt(`notify), _("&Region"),
-                                 Timezone::Region() );
+    term region = `SelectionBox( `id(`region), `opt(`notify,`immediate), 
+                                 _("&Region"), Timezone::Region() );
 
     // does the hwclock run on UTC only ? -> skip asking
 
@@ -354,8 +354,6 @@ If you are unsure, use the default values already selected.
 					      // label text
 					      _("Time &Zone"),
 					      Timezone::Selection(num) ));
-	    if( ncurses )
-		UI::SetFocus( `id(`timezone ));
 	    if( num==sel )
 		{
 		UI::ChangeWidget( `id(`timezone), `CurrentItem, 
