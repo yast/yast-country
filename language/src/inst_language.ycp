@@ -389,7 +389,7 @@ In the selection box, specify additional languages you want to use on your syste
 ");
 
 	help_text       = help_text + _("<p>
-Additional packages with support for the selected primary and secondary languages will be installed.
+Additional packages with support for the selected primary and secondary languages will be installed. Packages no longer needed will be removed.
 </p>");
     }
 
@@ -449,16 +449,21 @@ Additional packages with support for the selected primary and secondary language
 		kbd_adapt = (boolean) UI::QueryWidget (`id(`adapt_kbd), `Value);
 		tmz_adapt = (boolean) UI::QueryWidget (`id(`adapt_tmz), `Value);
 	    }
+
+	    if (ret == `next && Language::IncompleteTranslation (language))
+	    {
+		// continue/cancel message
+		if (!Popup::ContinueCancel (_("Translation of this language is not complete.
+Some texts may be displayed in English.")))
+		{
+		    ret = `not_next;
+		    continue;
+		}
+	    }
+
 	    if (language != Language::language)
 	    {
 		y2milestone ("Language changed from %1 to %2", Language::language, language);
-		if (Language::IncompleteTranslation (language))
-		{
-		    // warning message
-		    Popup::Warning (_("Translation of this language is not complete.
-Some texts may be displayed in English."));
-		}
-
 		if (more_languages)
 		{
 		    list<string> selected_languages = (list<string>)

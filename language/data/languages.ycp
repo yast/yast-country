@@ -247,12 +247,13 @@ $[
 		   ],
   */
 
-  "ro_RO"	 : [ "Romanian",
-		   "Romanian",
-		   ".UTF-8",
-		   "",
-		   // language name
-		   _("Romanian") ],
+  "ro_RO"	 : [
+		    "Română",
+		    "Romana",
+		    ".UTF-8",
+		    "",
+		    // language name
+		    _("Romanian") ],
 
   "ru_RU"	 : [ "Русский ",
 		   "Russian",
