@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Oct  6 17:50:46 CEST 2004 - fehr@suse.de
+
+- change country names (#46909)
+
+-------------------------------------------------------------------
 Tue Oct  5 14:17:56 CEST 2004 - fehr@suse.de
 
 - add support for icelandic keyboard (#46823)
