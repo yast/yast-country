@@ -214,7 +214,7 @@ global define void Language()
 
 	integer pos = findfirstof( local_lang, ".@" );
 
-	if( pos >= 0 )
+	if( pos != nil && pos >= 0 )
 	    local_lang = substring( local_lang, 0, pos );
 
 	y2milestone( "setting language to %1", local_lang );

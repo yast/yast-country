@@ -327,6 +327,7 @@ If you are unsure, use the default values already selected.
     integer sel = 0;
     if (Mode::config)
 	{
+	import "AutoinstGeneral";
 	sel = Timezone::Set(AutoinstGeneral::Clock["timezone"]:"", true);
 	}
     else
