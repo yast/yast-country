@@ -138,7 +138,7 @@ are unset.<br>
     if (! contains (languages, language))
 	languages	= add (languages, language);
 
-    UI::SetLanguage(language);
+    Language::WfmSetLanguage ();
 
     // Build the contents of the dialog.
 
@@ -147,16 +147,10 @@ are unset.<br>
 
     // set up selection list with default item
 
-    boolean use_utf8 = true;		// utf8 is default
-    boolean use_ascii = false;          // default is utf8 text
+    boolean use_ascii	= false;          // default is utf8 text
     boolean show_expert = true;
 
     map display_info	= UI::GetDisplayInfo ();
-    if (! display_info["HasFullUtf8Support"]:true)
-    {
-	use_utf8 = false;		// no utf8 support
-    }
-
     if (display_info["TextMode"]:false)
     {
         use_ascii = true;               // fallback to ascii
@@ -239,6 +233,9 @@ Installation and System Administration Program
 	`VSpacing (2)
     );
 
+    // if checkboxes for adapting keyboard and timezone should be shown
+    boolean adapt_term = more_languages;
+
     if (more_languages)
     {
 
@@ -267,19 +264,53 @@ Installation and System Administration Program
 	    )
 	);
 
+	term primary_term = `HBox (
+			`Left (primary_language_term),
+			`Right (expert)
+	);
+
+	if (adapt_term)
+	{
+	    string kb		=
+		Keyboard::GetKeyboardForLanguage (language, "english-us");
+	    string kbd_name	= Keyboard::Selection ()[kb]:"";
+	    string tz		=
+		Timezone::GetTimezoneForLanguage (language, "US/Mountain");
+	    string tmz_name	= Timezone::GetTimezoneCountry (tz);
+
+	    // frame label
+	    primary_term = `Frame (_("Primary Language Settings"), `HBox (
+		`HSpacing (0.5),
+		`VBox (
+		    primary_term,
+		    `VSpacing (0.5),
+		    `Left (`CheckBox (`id (`adapt_kbd),
+			// check box label (%1 is keyboard layout name)
+			sformat(_("Adapt &Keyboard Layout to '%1'"),kbd_name))),
+		    `Left (`CheckBox (`id (`adapt_tmz),
+			// check box label (%1 is country name)
+			sformat (_("Adapt &Time Zone to '%1'"), tmz_name))),
+		    `VSpacing (0.5)
+		),
+		`HSpacing (0.5))
+	    );
+	}
+
 	contents = `VBox (
 	    `VSpacing (),
 	    `HBox (
-		`HSpacing (5),
+		`HSpacing (2),
 		`VBox (
-		    `HBox (
-			`Left (primary_language_term),
-			`Right (expert)
-		    ),
+		    primary_term,
 		    `VSpacing (),
-		    `ReplacePoint (`id(`rplangs), languages_term)
+		    `ReplacePoint (`id(`rplangs), languages_term),
+		    `VSpacing (0.5),
+		    `Left (
+			// checkbox label
+			`CheckBox (`id (`packages), _("&Install Language Dependent Packages"), true)
+		    )
 		),
-		`HSpacing (5)
+		`HSpacing (2)
 	    ),
 	    `VSpacing()
 	);
@@ -334,14 +365,25 @@ Choose the new <b>language</b> for your system.
 Choose the new <b>primary language</b> for your system.
 </p>\n");
 
+	// help text for 'adapt keyboard checkbox'
+	help_text	= help_text + _("<p>
+Check the <b>Adapt Keyboard Layout</b> option for automatic adaptation of keyboard layout to the primary language.
+</p>") +
+
+	_("<p>
+Check the <b>Adapt Time Zone</b> option for changing current time zone according to the primary language.
+</p>");
+
 	// help text when "multiple languages" are suported 2/2
 	help_text	= help_text + _("<p>
 <b>Secondary languages</b><br>
-In the selection box, you can specify more languages which you want to use on your system. According to the selection, additional language specific packages will be installed.
+In the selection box, you can specify more languages which you want to use on your system.
+</p>");
+
+	help_text       = help_text + _("<p>
+With <b>Install language dependent packages</b> option, additional packages with a support for primary language and the list of secondary languages will be installed.
 </p>");
     }
-
-    // Screen title for the first interactive dialog
 
     Wizard::SetContents (heading_text, contents, help_text, (boolean)WFM::Args(0), (boolean)WFM::Args(1));
 
@@ -356,6 +398,11 @@ In the selection box, you can specify more languages which you want to use on yo
     any ret = nil;
 
     UI::SetFocus(`id(`language));
+
+    // adapt keyboard for language?
+    boolean kbd_adapt = false;
+    // adapt timezone for language?
+    boolean tmz_adapt = false;
 
     repeat
     {
@@ -421,16 +468,17 @@ In the selection box, you can specify more languages which you want to use on yo
 		}
 
 
-		boolean kbd_adapt = false;
-
 		if (Stage::initial () && set_default)
 		{
 		    kbd_adapt = true;
-		    Timezone::ResetZonemap();
+		    Timezone::ResetZonemap ();
 		}
-		else
+		else if (adapt_term)
 		{
-		    Timezone::user_decision = true;
+		    kbd_adapt = (boolean)
+			UI::QueryWidget (`id(`adapt_kbd), `Value);
+		    tmz_adapt = (boolean)
+			UI::QueryWidget (`id(`adapt_tmz), `Value);
 		}
 
 		// Set it in the Language module.
@@ -444,22 +492,9 @@ In the selection box, you can specify more languages which you want to use on yo
 		// Set it in YaST2
 		Language::WfmSetLanguage ();
 
-		if (!Mode::normal () && !set_default)
-		{
-		    // yes/no popup message
-		    string msg = _("The language will be changed.
-
-Current keyboard settings can be adapted according
-to the new language or they can be kept as they are now.
-
-Adapt keyboard settings?
-");
-		    kbd_adapt = Popup::YesNo (msg);
-		}
-
 		if (kbd_adapt)
 		{
-		    Keyboard::SetKeyboardForLang (language);
+		    Keyboard::SetKeyboardForLanguage (language);
 		    if (Stage::initial () && set_default)
 		    {
 			Keyboard::SetKeyboardDefault();
@@ -469,7 +504,6 @@ Adapt keyboard settings?
 		{
 		    Keyboard::user_decision = true;
 		}
-
 
 		if (ret != `next)
 		{
@@ -491,6 +525,16 @@ Adapt keyboard settings?
 		    Language::SetDefault();
 		}
 
+		if (tmz_adapt)
+		{
+		    Timezone::SetTimezoneForLanguage (language);
+		}
+		else
+		{
+		    Timezone::user_decision = true;
+		}
+
+
 		if (!Stage::initial () && !Mode::update ())
 		{
 		    // save language and console settings
@@ -508,6 +552,9 @@ Adapt keyboard settings?
 
 		    Language::languages = mergestring (selected_languages, ",");
 
+		    // now adapt language seletions
+		    if ((boolean)UI::QueryWidget (`id(`packages), `Value))
+		    {
 		    if (Stage::initial () || Mode::update ())
 		    {
 			Pkg::SetAdditionalLocales (selected_languages);
@@ -521,6 +568,7 @@ Adapt keyboard settings?
 
 			Pkg::PkgSolve (true);
 			Pkg::PkgCommit (0);
+		    }
 		    }
 		}
 	    }

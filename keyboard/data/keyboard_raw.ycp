@@ -644,7 +644,7 @@ return ($[
 			  "type5": $[ "ncurses": "sunkeymap.map.gz" ],									// please correct!
 			  "type5_euro": $[ "ncurses": "sunkeymap.map.gz" ],
 						        // please correct!
-			  "pc104": $[ "ncurses": "trq.map.gz" ]],									// please check!
+			  "pc104": $[ "ncurses": "croat.map.gz" ]],									// please check!
 	   "ppc" : $[ "macintosh" : $[ "ncurses": "mac-us.map.gz" ], // please correct!
 		      "pc104" : $[ "ncurses": "croat.map.gz"]]
 	 ]

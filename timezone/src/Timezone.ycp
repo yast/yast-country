@@ -308,24 +308,50 @@ global define void PopVal()
  *
  * @see	-
  */
-global define string GetTimezoneForLanguage( string sys_language, 
-                                             string default_language )
-    ``{
+global define string GetTimezoneForLanguage (string sys_language,
+                                             string default_timezone)
+{
     // The system_language --> timezone conversion map.
     //
     map<string, string> lang2timezone = get_lang2tz();
+    string ret = lang2timezone[sys_language]:default_timezone;
 
-    string ret = lang2timezone[sys_language]:"";
-    if( size(ret)==0 )
-	{
-	ret = lang2timezone[default_language]:"US/Pacific";
-	}
-    y2milestone( "GetTimezoneForLanguage sys %1 def %2 ret %3", 
-                 sys_language, default_language, ret );
+    y2milestone ("language %1 default timezone %2 returned timezone %3",
+                 sys_language, default_timezone, ret);
     return ret;
+}
+
+/**
+ * Set the timezone for the given system language.
+ * @param	System language code, e.g. "en_US".
+ * @return the number of the region that contains the timezone
+ */
+global define void SetTimezoneForLanguage (string sys_language) {
+
+    string tmz = GetTimezoneForLanguage (sys_language, "US/Mountain");
+    y2debug ("language %1 proposed timezone %2", sys_language, tmz);
+    if (tmz != "")
+    {
+	Set (tmz, true);
+    }
+}
+
+/**
+ * Return translated country name of given timezone
+ * @param timezone value (as saved in sysconfig/clock)
+ */
+global define string GetTimezoneCountry (string zone) {
+
+    list zmap = (list) eval (SCR::Read (.target.yast2, "timezone_raw.ycp"));
+
+    integer sel = 0;
+    while (sel<size (zmap) && !haskey (zmap[sel,"entries"]:$[], zone))
+    {
+	sel = sel + 1;
     }
 
-
+    return zmap [sel,"entries",zone]:"";
+}
 
 /**
  * GetDateTime()
@@ -461,7 +487,7 @@ global define string MakeProposal (boolean force_reset,
 	    // User has not yet chosen a timezone ==> follow language.
 	    //
 	    string local_timezone =
-		GetTimezoneForLanguage( Language::language, "english-us" );
+		GetTimezoneForLanguage( Language::language, "US/Mountain");
 
 	    if( local_timezone != "" )
 		{
