@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Jul 26 10:11:33 CEST 2002 - kkaempf@suse.de
+
+- honor 'Console' from /etc/install.inf properly (#17233)
+
+-------------------------------------------------------------------
 Tue Jul 23 13:43:14 CEST 2002 - fehr@suse.de
 
 - add eval() around assignment of locale to string
