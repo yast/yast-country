@@ -36,9 +36,11 @@ define void SetTimezone( symbol hwclock, string timezone )
 
 define boolean SetTimeDialog()
     ``{
+    // help text
     string htext = _("This dialog offers the possibility to change
 the system time and date.<p>
 ");
+    // help text
     htext = htext + _("Current system time and date are displayed in
 the input fields. Change them to the correct values and press the
 Apply button.
@@ -54,10 +56,12 @@ Apply button.
 	    `HWeight(70,
 		`VBox(
 		    `HBox( `HSpacing(60) ),
+		    // heading text
 		    `Heading( _("Change System Date and Time") ),
 		    `VSpacing(3),
 		    `VStretch(),
 		    `HBox( `HSpacing(10), 
+			   // label text, do not change "HH:MM:SS"
 		           `Label( _("Current Time in HH:MM:SS Format")),
 			   `HStretch() ),
 		    `HBox( `HSpacing(10),
@@ -74,6 +78,7 @@ Apply button.
 		    `VSpacing(2),
 		    `VStretch(),
 		    `HBox( `HSpacing(10), 
+			   // label text, do not change "DD-MM-YYYY"
 			   `Label( _("Current Date in DD-MM-YYYY Format") ),
 			   `HStretch() ),
 		    `HBox( `HSpacing(10),
@@ -93,6 +98,7 @@ Apply button.
 		    `VSpacing(4),
 		    `VStretch(),
 		    `HBox( 
+		        // button text
 			`PushButton(`id(`apply), `opt(`default), _("&Apply")),
 			`PushButton(`id(`cancel), CancelButtonLabel() ))
 		    )
@@ -120,6 +126,7 @@ Apply button.
 	    if( !Timezone::CheckTime( hour, minute, second ))
 		{
 		string tmp = sformat( "%1:%2:%3", hour, minute, second );
+		// popup text
 		tmp = sformat( _("Invalid time (HH:MM:SS) %1
 Enter the correct time.
 "), tmp );
@@ -129,6 +136,7 @@ Enter the correct time.
 	    else if( !Timezone::CheckDate( day, month, year ))
 		{
 		string tmp = sformat( "%1-%2-%3", day, month, year );
+		// popup text
 		tmp = sformat( _("Invalid date (DD-MM-YYYY) %1
 Enter the correct date.
 "), tmp );
@@ -185,6 +193,7 @@ Enter the correct date.
 				      // title for selection box 'timezone'
 				      _("Time &Zone") ));
 
+		// label text
     term region = `SelectionBox( `id(`region), `opt(`notify), _("&Region"),
                                  Timezone::Region() );
 
@@ -202,7 +211,8 @@ Enter the correct date.
     date = Timezone::GetDateTime();
 
     // Ask for UTC vs. Localtime
-    //
+    
+    // label text
     string hw_label = _("&Hardware clock set to");
     term hw_clock = `Empty();
     if (!utc_only)
@@ -236,6 +246,7 @@ Enter the correct date.
     term settime = `Empty();
     if( !Arch::s390 && !Mode::config)
 	{
+	// button text
 	settime = `PushButton( `id(`settime), _("Change &Time or Date"));
 	}
 
@@ -257,7 +268,6 @@ Enter the correct date.
 			 );
 
     // help for timezone screen
-
     string help_text = _("<p>
 Select the appropriate <b>time zone</b>:
 Choose the country or region where you are located.
@@ -312,6 +322,7 @@ If you are unsure, use the default values already selected.
     UI::ChangeWidget( `id(`region), `CurrentItem, sel );
     UI::ReplaceWidget( `id(`tzsel), 
 		       `SelectionBox( `id(`timezone), `opt(`notify),
+		                      // label text
 				      _("Time &Zone"),
 				      Timezone::Selection(sel) ));
     UI::ChangeWidget( `id(`timezone), `CurrentItem, Timezone::timezone );
@@ -336,6 +347,7 @@ If you are unsure, use the default values already selected.
 	    y2milestone( "new region %1", num );
 	    UI::ReplaceWidget( `id(`tzsel), 
 	                       `SelectionBox( `id(`timezone), `opt(`notify),
+					      // label text
 					      _("Time &Zone"),
 					      Timezone::Selection(num) ));
 	    if( num==sel )

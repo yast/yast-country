@@ -58,9 +58,9 @@
 
     if ( xfree_version == "3" )
     {
+	// popup text
 	// Advise the user that configuring the keyboard layout
 	// for X11 is possible only with XFree 4.
-	//
 	UI::MessagePopup(_("
 The X11 keyboard layout can only be changed within the running system
 with XFree86 version 4 or later.
@@ -72,10 +72,10 @@ Use SaX to change your X11 keyboard layout.
     }
     else if ( xfree_version == "" )
     {
+	// popup text
 	// If X11 is not used we may not be able to detect and and preselect
 	// the current keyboard layout in the following dialog.
 	// Advise the user to select one.
-	//
 	UI::MessagePopup(_("
 The current keyboard layout could not be determined.
 

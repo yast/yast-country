@@ -113,6 +113,7 @@
 	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module kdm3");
 
 	    WFM::CallFunction( `inst_suseconfig( false, false ) );
+	    // popup text
 	    UI::MessagePopup( _("Your language setting has been changed.
 
 If necessary, you may want to adapt your keyboard settings to the new

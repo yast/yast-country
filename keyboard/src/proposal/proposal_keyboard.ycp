@@ -68,7 +68,9 @@
 
 	ret =
 	    $[
+	      // label text
 	      "rich_text_title"	:	_( "Keyboard layout"  ),
+	      // menue label text
 	      "menu_title"	:	_( "&Keyboard layout" ),
 	      "id"		:	"keyboard_stuff"
 	    ];

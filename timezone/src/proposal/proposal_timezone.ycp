@@ -61,7 +61,9 @@
 
 	ret =
 	    $[
+	      // label text
 	      "rich_text_title"	:	_("Time zone"),
+	      // menue label text
 	      "menu_title"	:	_("&Time zone"),
 	      "id"		:	"timezone_stuff"
 	    ];

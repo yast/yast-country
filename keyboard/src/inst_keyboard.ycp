@@ -48,6 +48,7 @@ These settings are written into the file <b>/etc/sysconfig/keyboard</b>.
 If unsure, use the default values already selected.
 </p>");
 
+    // label text
     string num_lock_unt = _("<Untouched>");
 
     UI::OpenDialog( `opt(`decorated  ),
@@ -58,32 +59,41 @@ If unsure, use the default values already selected.
 			`HWeight(70,
 			    `VBox(
 				`HSpacing( 60 ),
+				// heading text
 				`Heading( _("Keyboard Expert Dialog") ),
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`TextEntry( `id(`rate),
+						  // label text
 				                  _("Repeat &Rate"))),
 				`Left(`TextEntry( `id(`delay), 
+					    // label text
 				            _("De&lay before Repetition Starts")) ),
 				`VSpacing(`opt(`vstretch), 1),
 				`Frame(
+				    // label text
 				    _("Startup states"),
 				    `VBox(
 					`Left(`ComboBox( `id(`numlock), 
+							 // label text
 							 _("&Num Lock On"),
 							 [ "bios", "yes", "no", 
 							   num_lock_unt] )),
 					`VSpacing(`opt(`vstretch), 1),
 					`Left(`CheckBox( `id(`capslock), 
+							 // label text
 					                 _("Ca&ps Lock On") )),
 					`Left(`CheckBox( `id(`scrlock), 
+							 // label text
 							 _("&Scroll Lock On") )))),
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`TextEntry( `id(`tty), 
+					    // label text
 				            _("Devices on which the values for Num Lock, Caps Lock, and
 Scroll Lock should be set
 ") )),
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`CheckBox( `id(`discaps), 
+					   // label text
 				           _("&Disable Caps Lock")) ),
 				`VSpacing(1),
 				`VStretch(),
@@ -196,6 +206,7 @@ Scroll Lock should be set
 		keyboardsel,
 		test,
 		`VSpacing( 0.8 ),
+		// push button
 		`PushButton( `id(`expert), _("E&xpert Settings") )
 	     );
 

@@ -90,10 +90,12 @@ installation and system administration program.
     }
     else if ( Mode::repair )
     {
+	// heading text
 	heading = `Heading (_("Welcome to YaST2 System Repair"));
     }
     else
     {
+	// heading text
 	heading = `Heading (_("Language selection"));
     }
 
@@ -104,6 +106,7 @@ installation and system administration program.
 			      `HWeight( 25, `HStretch() ),
 			      `HWeight( 50,
 					`VBox (
+						// label text
 					       `Left( `Label ( _("Select your language:") ) ),
 					       languagesel
 					       )
@@ -204,6 +207,7 @@ Choose the new <b>language</b> for your SuSE Linux system.
 	    {
 		y2milestone( "Language changed from %1 to %2", Language::language, language );
 
+		// popup text
 		string msg = _("The language will be changed.
 
 Current keyboard settings can be adapted according

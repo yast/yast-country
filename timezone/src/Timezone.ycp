@@ -269,13 +269,14 @@ global define string MakeProposal( boolean force_reset,
 
     // Clock setting: Abbreviation for Greenwhich mean time
     //
+
+    // label text
     string clock_setting = _("UTC");
 
-    // Clock setting: local time (not UTC)
-    //
+    // label text, Clock setting: local time (not UTC)
     if ( hwclock == "--localtime" ) clock_setting = _("local time");
 
-    // get rid of "&" in text, reuse existing text because of text freeze
+    // label text
     string add_text = deletechars( _("&Hardware clock set to"), "&" );
 
     clock_setting = deletechars(add_text,":") + " " + clock_setting;
