@@ -100,14 +100,9 @@
 	    {
 		string currentEncoding = WFM::GetEncoding();	// save encoding
 
-		WFM::SetLanguage (language);			// switch lang
-		encoding    = WFM::GetEncoding();		// get encoding for switched lang
+		encoding = WFM::SetLanguage (language);		// switch lang, get proposed encoding
 
 		WFM::SetLanguage (currentLanguage, currentEncoding);// reset as it was before
-	    }
-	    else
-	    {
-		encoding    = WFM::GetEncoding();
 	    }
 
 	    if (Mode::braille)
@@ -120,6 +115,7 @@
 	    }
 	}
 
+	y2milestone ("Language %1 -> Console encoding %2", language, encoding);
 	return encoding;
     };
 
