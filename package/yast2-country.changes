@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan 24 19:28:25 CET 2005 - nashif@suse.de
+
+- Adapted arguments to new installation workflow  interface 
+- 2.11.8
+
+-------------------------------------------------------------------
 Thu Jan 20 16:20:09 CET 2005 - jsuchome@suse.cz
 
 - timezone: new SetTimezoneForLanguage function
