@@ -140,12 +140,13 @@ are unset.<br>
     boolean use_ascii = false;          // default is utf8 text
     boolean show_expert = true;
 
-    if ( ! lookup (UI::GetDisplayInfo(), "HasFullUtf8Support", true ) )
+    map display_info	= UI::GetDisplayInfo ();
+    if (! display_info["HasFullUtf8Support"]:true)
     {
 	use_utf8 = false;		// no utf8 support
     }
 
-    if ( lookup (UI::GetDisplayInfo(), "TextMode", false ) )
+    if (display_info["TextMode"]:false)
     {
         use_ascii = true;               // fallback to ascii
     }
@@ -175,40 +176,36 @@ are unset.<br>
     * Build dialog
     * ----------------------------------------------------------------------*/
 
-    string heading_text = "";
+    // heading text
+    string heading_text = _("Language selection");
 
-    if( Stage::initial () && set_default && !Mode::repair () )
-	{
+    if (Stage::initial () && set_default && !Mode::repair ())
+    {
 	// initial heading for language selection
 	// (first 'user visible' screen)
 	heading_text = _("Welcome to YaST2 -- The
 Installation and System Administration Program
 ");
-	}
-    else if ( Mode::repair () )
-	{
+    }
+    else if (Mode::repair ())
+    {
 	// heading text
 	heading_text = _("Welcome to YaST2 System Repair");
-	}
-    else
-	{
-	// heading text
-	heading_text = _("Language selection");
-	}
+    }
 
-    if( Stage::initial () && set_default )
-	{
+    if (Stage::initial () && set_default)
+    {
 	show_expert = false;
-	}
+    }
 
     term expert = `HStretch();
-    if( show_expert )
-	{
+    if (show_expert)
+    {
 	expert = `VBox( `VStretch(),
 		        `PushButton( `id(`expert), _("&Details") ),
 			`VSpacing(2)
 		      );
-	}
+    }
 
     term contents = `VBox(
 			`VSpacing(0.3),
@@ -279,7 +276,6 @@ Choose the new <b>language</b> for your system.
     if ( Stage::initial () )	// No .desktop files in inst-sys - use icon explicitly
 	Wizard::SetTitleIcon( "babelfish" );
 
-    
     // Get the user input.
     //
     any ret = nil;

@@ -429,12 +429,12 @@ global define string GetLanguageCountry() {
     if (lang != nil && lang != "")
     {
         if (find (lang, "@") != -1)
-            lang = select(splitstring(lang, "@"), 0, "");
+            lang = splitstring (lang, "@") [0]:"";
     }
     if (lang != nil && lang != "")
     {
         if (find(lang, "_") != -1)
-            lang = select(splitstring(lang, "_"), 1, "");
+            lang = splitstring (lang, "_") [1]:"";
 	else
 	    lang = toupper(lang);
     }
