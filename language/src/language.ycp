@@ -73,6 +73,8 @@ define any LanguageSequence () {
 
     any result = `again;
 
+    // set the language accoring to Language.ycp initialization
+    Language::WfmSetLanguage ();
     Wizard::OpenAcceptDialog();		// Reduce flicker (yes, it's a kludge)
 
     while (result == `again)
@@ -89,7 +91,6 @@ define any LanguageSequence () {
     }
 
     Wizard::CloseDialog();
-    Wizard::RetranslateButtons();
 
     y2milestone ("result '%1'", result);
 
