@@ -19,7 +19,7 @@
  */
 {
     module "Timezone";
-    textdomain "timezone";
+    textdomain "country";
 
     import "Arch";
     import "Misc";

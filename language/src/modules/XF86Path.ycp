@@ -19,7 +19,7 @@
 {
     module "XF86Path";
     
-    textdomain "language";
+    textdomain "country";
     
     import "Installation";
     import "Mode";

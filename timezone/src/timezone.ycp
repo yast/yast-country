@@ -16,7 +16,7 @@
  */
 
 {
-    textdomain "timezone";
+    textdomain "country";
 
     import "Timezone";
     import "Wizard";
@@ -57,8 +57,6 @@
 
 	    // Run SuSEconfig...
 	    //
-	    textdomain "general";
-
 	    // According to ro@suse.de it doesn't make sense to run individual
 	    // SuSEcongig modules because the set of modules and the variables
 	    // they contain may change any time.

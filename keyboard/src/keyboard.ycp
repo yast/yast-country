@@ -16,7 +16,7 @@
  */
 
 {
-    textdomain "keyboard";
+    textdomain "country";
 
     import "X11Version";
     import "Keyboard";

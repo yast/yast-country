@@ -16,7 +16,7 @@
  */
 
 {
-    textdomain "language";
+    textdomain "country";
 
     import "Language";
     import "Wizard";
@@ -92,10 +92,6 @@
 	    y2milestone( "Language changed --> saving" );
 	    
 	    Language::Save();
-
-	    // Run SuSEconfig...
-	    //
-	    textdomain "general";
 
 	    // According to ro@suse.de it doesn't make sense to run individual
 	    // SuSEcongig modules only because the set of modules and the variables

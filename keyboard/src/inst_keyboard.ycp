@@ -13,7 +13,7 @@
  * $Id$
  */
 {
-    textdomain "keyboard";
+    textdomain "country";
 
     // dont ask for keyboard on S/390 or serial console
 

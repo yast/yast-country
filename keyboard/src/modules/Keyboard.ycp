@@ -74,7 +74,7 @@
 
 {
     module "Keyboard";
-    textdomain "keyboard";
+    textdomain "country";
 
     import "Arch";
     import "Mode";

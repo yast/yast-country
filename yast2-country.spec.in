@@ -1,5 +1,5 @@
 @HEADER-COMMENT@
-# neededforbuild yast2-devel-packages
+# neededforbuild yast2-devel-packages ycpdoc yast2-x11
 
 @HEADER@
 Requires:	yast2 yast2-lib-wizard
@@ -37,6 +37,7 @@ Summary:	Setting the keyboard
 
 @moduledir@/Console.ycp
 @scrconfdir@/cfg_console.scr
+@ydatadir@/consolefonts.ycp
 
 # keyboard
 
