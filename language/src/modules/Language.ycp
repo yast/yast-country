@@ -298,14 +298,10 @@ global define void Set( string lang )
     }
 
 
-/**
- * Save state to target.
- */
-global define void Save() ``{
-
+global define string GetLocaleString( string lang )
+    ``{
     map languages_map = get_languages_map();
-
-    list language_info = languages_map[language]:[];
+    list language_info = languages_map[lang]:[];
 
     // full language code
     string val = language;
@@ -317,8 +313,17 @@ global define void Save() ``{
 	{
 	val = val + language_info[3]:"";
 	}
+    y2milestone( "locale %1", val );
+    return val;
+    }
 
-    SCR::Write(.sysconfig.language.RC_LANG, val );
+
+/**
+ * Save state to target.
+ */
+global define void Save() ``{
+
+    SCR::Write(.sysconfig.language.RC_LANG, GetLocaleString(language) );
     SCR::Write(.sysconfig.language.ROOT_USES_LANG, rootlang );
 
     SCR::Write(.sysconfig.language, nil);
@@ -331,7 +336,7 @@ global define void Save() ``{
 	XF86Path::update();
     }
 
-    y2milestone("Saved data for language: <%1>", val );	// optional-LANG-modifier
+    y2milestone("Saved data for language: <%1>", GetLocaleString(language) );
 }
 
 

@@ -31,6 +31,7 @@
     module "Console";
 
     import "Mode";
+    import "Language";
 
     /**
      * @return encoding string defining current (ISO) encoding
@@ -63,23 +64,16 @@
 	list consolefont = [];
 
 	map consolefonts = WFM::Read (.local.yast2, "consolefonts.ycp");
-	map languages_map = WFM::Read (.local.yast2, "language.ycp");
 
-	list language_info = languages_map[lang]:nil;
-	if (language_info != nil)
-	{
-	    string fqlanguage = lang
-	        + language_info[2]:""	// mandatory-LANG-modifier
-	        + language_info[3]:"";  // optional-LANG-modifier
-	    consolefont = consolefonts[fqlanguage]:[];
-        }
-	else
-	{
+	string fqlanguage = Language::GetLocaleString(lang);
+	consolefont = consolefonts[fqlanguage]:[];
+
+	if( size(consolefont)==0 )
+	    {
 	    consolefont = consolefonts[lang]:[];
-	}
+	    }
 
-	if ((size (consolefont) == 0)
-	    && (size (lang) > 2))
+	if ((size (consolefont) == 0) && (size (lang) > 2))
 	{
 	    consolefont = consolefonts[substring(lang, 0, 2)]:[];
 	}

@@ -78,9 +78,9 @@
       "hu"		: [ "lat2-16.psfu",	"",	"trivial",	"(K" ],
       "hu_HU.UTF-8"     : [ "lat2-16.psfu",	"",	"trivial",	"(K" ],
 
-      "lt_LT"		: [ "lt-brim-8x14.psfu", "",	"trivial",	"(K" ],
-      "lt"		: [ "lt-brim-8x14.psfu", "",	"trivial",	"(K" ],
-      "lt_LT.UTF-8"     : [ "lt-brim-8x14.psfu", "",	"trivial",	"(K" ],
+      "lt_LT"		: [ "lat7a-16.psf", 	"",	"trivial",	"(K" ],
+      "lt"		: [ "lat7a-16.psf", 	"",	"trivial",	"(K" ],
+      "lt_LT.UTF-8"     : [ "lat7a-16.psf", 	"",	"trivial",	"(K" ],
 
       "ru_RU.KOI8-R"	: [ "Cyr_a8x16.psfu",	"",	"koi2alt",	"(K" ],
       "ru"		: [ "Cyr_a8x16.psfu",	"",	"koi2alt",	"(K" ],
