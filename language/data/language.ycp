@@ -201,11 +201,6 @@ $[
 		  ".UTF-8",
 		  "" ],
 
-  "zh_HK"       : [ "繁體中文 (中國香港)",
-                  "Traditional Chinese (China Hongkong)",
-		  ".UTF-8",
-		  "" ],
-
   "zh_TW"       : [ "繁體中文 (中國臺灣)",
 		  "Traditional Chinese (China Taiwan)",
 		  ".UTF-8",
@@ -220,6 +215,10 @@ $[
 /*          May be future expansion		*/
 /* -------------------------------------------- */
 /*						*/
+/*  "zh_HK"       : [ "繁體中文 (中國香港)", */
+/*                  "Traditional Chinese (China Hongkong)",               */
+/*		  ".UTF-8",                                               */
+/*		  "" ],                                                   */
 /*  "en_IE"	: [ "Irish",			*/
 /*		  "Irish",			*/
 /*		  ".UTF-8",			*/
