@@ -445,7 +445,7 @@ global define boolean SetLanguage( string keyboard )
 
 	// Console command...
 	//
-	ckb_cmd = "/bin/loadkeys " + keymap;
+	ckb_cmd = "/bin/loadkeys " + keymap + " ; dumpkeys | loadkeys -u";
 
 	// X11 command...
 	// do not try to run this with remote X display
