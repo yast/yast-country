@@ -2,6 +2,7 @@
 Thu Aug 15 14:20:51 CEST 2002 - fehr@suse.de
 
 - fix bug ignoring the linuxrc keyboard setting (#15373)
+- version 2.6.17
 
 -------------------------------------------------------------------
 Thu Aug 15 10:41:58 CEST 2002 - kkaempf@suse.de
