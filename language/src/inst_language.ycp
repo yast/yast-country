@@ -3,7 +3,7 @@
  *	inst_language.ycp
  *
  * Module:
- *	inst_language.ycp 	 
+ *	inst_language.ycp
  *
  * Authors:
  *	Klaus   Kämpf <kkaempf@suse.de>
@@ -19,7 +19,7 @@
  */
 {
     textdomain "country";
-    
+
     import "Mode";
     import "Misc";
     import "Installation";
@@ -36,12 +36,12 @@
     // In this case if the user exits with next the the current setting
     // will be made the default that is restored with "Reset to defaults".
     //
-    boolean set_default = Args( 2 );
+    boolean set_default = WFM::Args( 2 );
 
     y2milestone("set_default: %1", set_default );
-    
+
     string language = Language::language;
-    
+
     // Build the contents of the dialog.
 
     // build up language selection box
@@ -66,7 +66,7 @@
 				    [lang_info[use_utf8?0:1]:"", lang_code]
 				   ]));
 
-    term languagesel = 
+    term languagesel =
       `SelectionBox(`id(`language), `opt(`notify), "",
 	maplist (`name, `codelist, languageselsort,
 		 ``(`item(`id(codelist[1]:""), codelist[0]:"",
@@ -77,7 +77,7 @@
     * ----------------------------------------------------------------------*/
 
     term heading = `Empty();
-    
+
     if ( Mode::initial && UI::WidgetExists(`id(`abort) ) )
     {
 	// initial heading for language selection
@@ -149,11 +149,11 @@ installation process.
 Choose the new <b>language</b> for your SuSE Linux system.
 </p>\n");
     }
-  
+
     // Screen title for the first interactive dialog
-   
-    Wizard::SetContents( "", contents, help_text, Args(0), Args(1));
-    
+
+    Wizard::SetContents( "", contents, help_text, WFM::Args(0), WFM::Args(1));
+
     if ( !Mode::initial )
     {
 	UI::ChangeWidget (`id (`title), `Label, `Empty());
@@ -163,15 +163,15 @@ Choose the new <b>language</b> for your SuSE Linux system.
     //
     any ret = nil;
 
-    UI::SetFocus(`id(`language));    
-  
+    UI::SetFocus(`id(`language));
+
     repeat
     {
 	ret = Wizard::UserInput();
-	
+
 
 	if ( ret == `abort
-	     && CallFunction(`inst_confirm_abort(`painless) ) )
+	     && WFM::CallFunction(`inst_confirm_abort(`painless) ) )
 	{
 	    Wizard::RestoreNextButton();
 	    return `abort;
@@ -181,7 +181,7 @@ Choose the new <b>language</b> for your SuSE Linux system.
 	{
 	    Wizard::ShowHelp( help_text );
 	}
-      
+
 	if ( ret == `next || ret == `language )
 	{
 	    // Get the selected language.
@@ -191,7 +191,7 @@ Choose the new <b>language</b> for your SuSE Linux system.
 	    if ( language != Language::language )
 	    {
 		y2milestone( "Language changed from %1 to %2", Language::language, language );
-		
+
 		// Set it in the Language module.
 		//
 		Language::Set( language );
@@ -225,7 +225,7 @@ Choose the new <b>language</b> for your SuSE Linux system.
 		    y2milestone("Resetting to default language");
 		    Language::SetDefault();
 		}
-		
+
 		y2milestone ("Language: '%1', Encoding '%2'", language, Installation::encoding);
 	    }
 	}
@@ -235,6 +235,6 @@ Choose the new <b>language</b> for your SuSE Linux system.
     // HEAVY UGLINESS  :-((((
     // Restoring in case of `back to be done outside the module because of
     // the retranslation loop in proposal_language.ycp.
-    
+
     return ret;
 }

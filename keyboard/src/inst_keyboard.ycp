@@ -40,14 +40,14 @@
     // Memorize the current keyboard language to be able to restore it.
     //
     string keyboard_on_entry = Keyboard::current_kbd;
-    
+
     // default for keyboard is set to "english-us" in
     // inst_finish.ycp:    string keyboard_name = lookup (user_settings, "keyboard", "english-us");
     // -> ok for s390 ?
 
     term keyboardsel = `dummy();
     string keyboard = "";
-    
+
     // Create keyboard selection box with the default selection.
     // First build a map sorted by translations.
     //
@@ -78,8 +78,8 @@
      * ----------------------------------------------------------------------*/
 
     Wizard::OpenAcceptDialog();
-    
-    term contents = 
+
+    term contents =
 	    `VBox(
 		`HBox(
 		    `HWeight ( 20, `HStretch() ),
@@ -104,7 +104,7 @@ If unsure, use the default values already selected.
     // Screen title for keyboard screen
     Wizard::SetContents( _("Keyboard Configuration"), contents,
 			     help_text,
-			     Args(0), Args(1) );
+			     WFM::Args(0), WFM::Args(1) );
 
     // Initially set the current keyboard to establish a consistent state.
     //
@@ -118,7 +118,7 @@ If unsure, use the default values already selected.
 	ret = Wizard::UserInput();
 
 	if ( (ret == `abort)
-	     && CallFunction(`inst_confirm_abort(`painless) ) )
+	     && WFM::CallFunction(`inst_confirm_abort(`painless) ) )
 	{
 	    Wizard::CloseDialog();
 	    return `abort;
@@ -141,7 +141,7 @@ If unsure, use the default values already selected.
 		// Set user_decision flag in keyboard module.
 		//
 		Keyboard::user_decision = true;
-		
+
 		if ( keyboard_on_entry != Keyboard::current_kbd )
 		{
 		    // User has chosen a different keyboard from the database.
@@ -161,7 +161,7 @@ If unsure, use the default values already selected.
     if ( ret == `back || ret == `cancel )
     {
 	y2milestone("`back or `cancel restoring: <%1>", keyboard_on_entry );
-	
+
 	// Reset keyboard to initial state.
 	//
 	Keyboard::SetConsole( keyboard_on_entry );
@@ -169,6 +169,6 @@ If unsure, use the default values already selected.
     }
 
     Wizard::CloseDialog();
-    
+
     return ret;
-} 
+}

@@ -14,8 +14,8 @@
 
     import "Timezone";
 
-    string func  = Args(0);
-    map    param = Args(1);
+    string func  = WFM::Args(0);
+    map    param = WFM::Args(1);
     map    ret   = $[];
 
     if ( func == "MakeProposal" )
@@ -44,10 +44,10 @@
 	//
 	// sequence = DummyMod::AskUser( has_next );
 
-	symbol result = CallFunction (`inst_timezone (true, has_next));
+	symbol result = WFM::CallFunction (`inst_timezone (true, has_next));
 
 	// Fill return map
-	
+
 	ret = $[
 		"workflow_sequence" : result,
 		"language_changed"  : false
@@ -58,7 +58,7 @@
 	// Fill return map.
 	//
 	// Static values do just nicely here, no need to call a function.
-	
+
 	ret =
 	    $[
 	      "rich_text_title"	:	_("Time zone"),

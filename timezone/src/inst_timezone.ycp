@@ -35,7 +35,7 @@
     //
     string timezone     = Timezone::timezone;
     string timezone_old = timezone;
-    
+
     string hwclock = Timezone::hwclock;
 
     string date = "";
@@ -69,7 +69,7 @@
     // Assign system date and time.
     //
     date = Timezone::GetDateTime();
-    
+
     // Ask for UTC vs. Localtime
     //
     if (!hwclock_utc_only)
@@ -141,7 +141,7 @@ If you are unsure, use the default values already selected.
     // Screen title for timezone screen
     Wizard::SetContents( _("Clock and Time Zone Configuration"), contents,
 			 help_text,
-			 Args(0), Args(1) );
+			 WFM::Args(0), WFM::Args(1) );
 
 
     // Initially set the current timezone to establish a consistent state.
@@ -150,7 +150,7 @@ If you are unsure, use the default values already selected.
 
     symbol hwclock_s      = (hwclock == "-u") ? `hwclock_utc : `hwclock_localtime;
     symbol hwclock_s_old  = hwclock_s;
-    
+
     any ret = nil;
 
     repeat
@@ -158,7 +158,7 @@ If you are unsure, use the default values already selected.
 	ret = Wizard::UserInput();
 
 	if ( (ret == `abort)
-	     && CallFunction(`inst_confirm_abort(`painless) ) )
+	     && WFM::CallFunction(`inst_confirm_abort(`painless) ) )
 	{
 	    break;
 	}
@@ -188,17 +188,17 @@ If you are unsure, use the default values already selected.
 	    {
 		timezone_old = timezone;
 		hwclock_s_old = hwclock_s;
-	    
+
 		Timezone::hwclock = (hwclock_s == `hwclock_utc) ? "-u" : "--localtime";
 		Timezone::Set( timezone );
-		
+
 		// Redisplay date/time.
 		//
 		date = Timezone::GetDateTime();
 		UI::ChangeWidget(`id(`date), `Value, date );
 		UI::RecalcLayout();
 	    }
-	    
+
 	    if ( ret == `next )
 	    {
 		// User wants to keep his changes.

@@ -37,17 +37,17 @@
     any result = `again;
 
     Wizard::OpenAcceptDialog();		// Reduce flicker (yes, it's a kludge)
-    
+
     while (result == `again)
     {
 	Wizard::OpenAcceptDialog();	// This dialog will actually be used
 
 	// Params are:		 	      `back `next  set_default
-        result = CallFunction (`inst_language( true, true, false));
+        result = WFM::CallFunction (`inst_language( true, true, false));
 
 	Wizard::CloseDialog();
     }
-    
+
     Wizard::CloseDialog();
 
     y2milestone ("result '%1'", result);
@@ -57,7 +57,7 @@
 	// Back to original values...
 	//
 	y2milestone( "`cancel or `back --> restoring: <%1>", language_on_entry );
-	
+
 	import "Console";
 	import "Installation";
 
@@ -67,7 +67,7 @@
 	{
 	    use_utf8 = false;		// fallback to ascii
 	}
-	
+
 	// Set it in the Language module.
 	//
 	Language::Set( language_on_entry );
@@ -90,7 +90,7 @@
 	if ( Language::language != language_on_entry )
 	{
 	    y2milestone( "Language changed --> saving" );
-	    
+
 	    Language::Save();
 
 	    // According to ro@suse.de it doesn't make sense to run individual
@@ -108,7 +108,7 @@
 	    // propagate language to KDE2
 	    //SCR::Execute (.target.bash, "/sbin/SuSEconfig --module kdm3");
 
-	    CallFunction( `inst_suseconfig( false, false ) );
+	    WFM::CallFunction( `inst_suseconfig( false, false ) );
 	}
 	else
 	{

@@ -27,7 +27,7 @@
     include "ui/common_popups.ycp";
     include "ui/common_functions.ycp";
     include "ui/common_messages.ycp";
-    
+
     // Memorize the current keyboard.
     //
     string keyboard_on_entry = Keyboard::current_kbd;
@@ -55,14 +55,14 @@
     // ==> determine the XFree version used.
     //
     string xfree_version = X11Version::version;
-    
+
     if ( xfree_version == "3" )
     {
 	// Advise the user that configuring the keyboard layout
 	// for X11 is possible only with XFree 4.
 	//
 	UI::MessagePopup(_("
-The X11 keyboard layout can only be changed within the running system 
+The X11 keyboard layout can only be changed within the running system
 with XFree86 version 4 or later.
 Your graphics card requires XFree86 version 3.
 Therefore, only the console keyboard layout can be changed here.
@@ -88,7 +88,7 @@ To change anything here, select a layout from the list.
     // selected in the list in inst_keyboard.ycp. Now let the user choose a new
     // keyboard layout.
     //
-    result =  CallFunction( `inst_keyboard( true, true ) );
+    result = WFM::CallFunction( `inst_keyboard( true, true ) );
 
     if ( result == `next )
     {
@@ -102,7 +102,7 @@ To change anything here, select a layout from the list.
 	    // Save changes...
 	    //
 	    Keyboard::Save( true );
-	    
+
 	}
 	else
 	{
@@ -113,6 +113,6 @@ To change anything here, select a layout from the list.
     {
 	y2milestone( "User cancelled --> no change" );
     }
-    
+
     return UI::CloseDialog();
 }

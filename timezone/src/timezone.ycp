@@ -20,7 +20,7 @@
 
     import "Timezone";
     import "Wizard";
-    
+
     include "ui/common_popups.ycp";
     include "ui/common_functions.ycp";
     include "ui/common_messages.ycp";
@@ -37,7 +37,7 @@
 
     any result = nil;
 
-    result =  CallFunction( `inst_timezone( true, true ) );
+    result = WFM::CallFunction( `inst_timezone( true, true ) );
 
     if ( result == `next )
     {
@@ -63,8 +63,8 @@
 	    // ==> full SuSEconfig run
 	    //
 	    // SCR::Execute (.target.bash, "/sbin/SuSEconfig --quick --nonewpackage");
-	    
-	    CallFunction( `inst_suseconfig( false, false ) );
+
+	    WFM::CallFunction( `inst_suseconfig( false, false ) );
 	}
 	else
 	{
