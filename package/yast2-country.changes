@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul 29 11:40:09 CEST 2004 - fehr@suse.de
+
+- refuse installation when time is in the past (#42458)
+
+-------------------------------------------------------------------
 Thu Jul 15 10:36:34 CEST 2004 - fehr@suse.de
 
 - merged SuSE-Linux-9_1-Branch

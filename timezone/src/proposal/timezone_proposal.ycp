@@ -27,14 +27,28 @@
 	//
 	// DummyMod::MakeProposal( force_reset );
 
-	// Fill return map
+	map m = (map)SCR::Execute( .target.bash_output, "/bin/date +%Y" );
+	y2milestone( "m %1", m );
+	if( tointeger( m["stdout"]:"0" )<2004 )
+	    {
+	    ret["raw_proposal"] = [];
+	    // popup text
+	    map m = (map)SCR::Execute( .target.bash_output, "/bin/date" );
+	    ret["warning"] = sformat( _("Time %1 is in the past.
+Set a correct time before starting installation."), m["stdout"]:"" );
+            ret["warning_level"] = `blocker;
+	    }
+	else
+	    {
+	    // Fill return map
 
-	ret =
-	    $[
-	      "raw_proposal"    : [ Timezone::MakeProposal( force_reset, language_changed ) ],
-	      "language_changed": false
-	    ];
-    }
+	    ret =
+		$[
+		  "raw_proposal"    : [ Timezone::MakeProposal( force_reset, language_changed ) ],
+		  "language_changed": false
+		];
+	    }
+	}
     else if ( func == "AskUser" )
     {
 	boolean has_next = param["has_next"]:false;
