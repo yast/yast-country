@@ -19,6 +19,7 @@ import "Mode";
 import "Installation";
 import "AsciiFile";
 import "XF86Path";
+import "Encoding";
 
 
 /**
@@ -94,6 +95,7 @@ global define void Set( string lang )
 	    }
 	name = languages_map[lang, 0]:"English";
 	language = lang;
+	Encoding::SetEncLang( language );
 	}
     if( Mode::initial )
 	{
