@@ -42,7 +42,6 @@
     while (result == `again)
     {
 	Wizard::OpenAcceptDialog();	// This dialog will actually be used
-	Wizard::SetDesktopIcon("language");
 
 	// Params are:		 	      `back `next  set_default
         result = WFM::CallFunction ("inst_language", [true, true, false]);
