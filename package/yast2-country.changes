@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan 28 11:00:40 CET 2003  - fehr@suse.de
+
+- change testsuite output to match again 
+- 2.7.3
+
+-------------------------------------------------------------------
 Wed Jan 15 13:20:53 CET 2003  - fehr@suse.de
 
 - add dialog with expert settings to keyboard dialog
@@ -7,7 +13,7 @@ Wed Jan 15 13:20:53 CET 2003  - fehr@suse.de
 - ask if keyboard setting should be adapted to changed language 
   when changing language proposal during installation
 - sort keyboard selection after translated texts (#20488)
-- add french canadian keyboard to keyboard list (#21167)A
+- add french canadian keyboard to keyboard list (#21167)
 - 2.7.2
 
 -------------------------------------------------------------------
