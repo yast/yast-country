@@ -359,7 +359,10 @@ global define list<string> MakeProposal (boolean force_reset,boolean language_ch
     {
 	Set (default_language);	// reset
     }
-    list<string> ret =  [ name ];
+    list<string> ret =  [
+	// summary label
+	sformat (_("Primary Language: %1"), name)
+    ];
     if (languages != "" && languages != language)
     {
 	list<string> langs	= [];
@@ -374,12 +377,9 @@ global define list<string> MakeProposal (boolean force_reset,boolean language_ch
 	});
 	if (size (langs) > 0)
 	{
-	    ret = [
+	    ret = add (ret,
 		// summary label
-		sformat (_("Primary Language: %1"), name),
-		// summary label
-		sformat (_("Additional Languages: %1"), mergestring (langs,","))
-	    ];
+		sformat(_("Additional Languages: %1"),mergestring (langs,",")));
 	}
     }
     return ret;
