@@ -1211,7 +1211,7 @@ global define string MakeProposal( boolean force_reset,
 	    {
 	    string local_kbd = "";
 	    string kt = (string)SCR::Read( .etc.install_inf.Keytable );
-	    if( size(kt)>0 )
+	    if( kt!=nil && size(kt)>0 )
 		{
 		map trans = $[ "de-lat1-nd" : "de-latin1-nodeadkeys",
 			       "mac-fr_CH" : "mac-fr_CH-latin1",
