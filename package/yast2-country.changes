@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Mar  6 10:31:41 CET 2003  - fehr@suse.de
+
+- fix bug that lead to broken timezone entries (#24711)
+
+-------------------------------------------------------------------
 Tue Mar  4 17:07:52 CET 2003  - fehr@suse.de
 
 - fix writing of keytable into yast.inf

@@ -341,7 +341,8 @@ If you are unsure, use the default values already selected.
 
 	y2milestone( "ret %1", ret );
 
-	if( !Mode::config && ret == `abort && WFM::CallFunction(`inst_confirm_abort(`painless)) )
+	if( !Mode::config && ret == `abort && 
+	    WFM::CallFunction(`inst_confirm_abort(`painless)) )
 	    {
 	    break;
 	    }
@@ -384,6 +385,11 @@ If you are unsure, use the default values already selected.
 		}
 
 	    timezone = UI::QueryWidget( `id(`timezone ), `CurrentItem );
+	    if( timezone == nil )
+		{
+		timezone = timezone_old;
+		}
+	    y2milestone( "timezone %1", timezone );
 
 	    // Change only if s.th. has really changed.
 	    //
