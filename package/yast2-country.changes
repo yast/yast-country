@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar  3 13:20:33 CET 2003  - fehr@suse.de
+
+- patch proofreaded text back into ycp
+- version 2.7.9
+
+-------------------------------------------------------------------
 Mon Feb 24 17:13:59 CET 2003  - fehr@suse.de
 
 - undo change explict focus change for #23941 on Thu Feb 20 (#23848)

@@ -72,7 +72,7 @@ If unsure, use the default values already selected.
 				`VSpacing(`opt(`vstretch), 1),
 				`Frame(
 				    // label text
-				    _("Startup states"),
+				    _("Start-up States"),
 				    `VBox(
 					`Left(`ComboBox( `id(`numlock), 
 							 // label text
