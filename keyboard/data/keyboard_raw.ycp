@@ -172,6 +172,28 @@ $[
 	   "ppc64" : $[ "pc104" : $[ "ncurses": "es.map.gz"]]
 	]
     ],
+  "spanish-lat":
+    [
+	_("Spanish (Latin America)"),
+	$[ "i386" : $[ "pc104": $[ "ncurses": "la-latin1.map.gz"]],
+	   "ia64" : $[ "pc104": $[ "ncurses": "la-latin1.map.gz"]],
+	   "x86_64" : $[ "pc104": $[ "ncurses": "la-latin1.map.gz"]],
+	   "alpha" : $[ "pc104": $[ "ncurses": "la-latin1.map.gz"]],
+	   "ppc" : $[ "pc104" : $[ "ncurses": "la-latin1.map.gz"]],
+	   "ppc64" : $[ "pc104" : $[ "ncurses": "la-latin1.map.gz"]]
+	]
+    ],
+  "spanish-lat-cp850":
+    [
+	_("Spanish (CP 850)"),
+	$[ "i386" : $[ "pc104": $[ "ncurses": "es-cp850.map.gz"]],
+	   "ia64" : $[ "pc104": $[ "ncurses": "es-cp850.map.gz"]],
+	   "x86_64" : $[ "pc104": $[ "ncurses": "es-cp850.map.gz"]],
+	   "alpha" : $[ "pc104": $[ "ncurses": "es-cp850.map.gz"]],
+	   "ppc" : $[ "pc104" : $[ "ncurses": "es-cp850.map.gz"]],
+	   "ppc64" : $[ "pc104" : $[ "ncurses": "es-cp850.map.gz"]]
+	]
+    ],
   "italian":
     [
 	_("Italian"),

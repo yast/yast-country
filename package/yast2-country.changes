@@ -1,6 +1,11 @@
 -------------------------------------------------------------------
 Wed Jul  9 14:33:20 CEST 2003 - fehr@suse.de
 
+- add two spanish keyboard layouts for latin america (#25474)
+
+-------------------------------------------------------------------
+Wed Jul  9 14:33:20 CEST 2003 - fehr@suse.de
+
 - fix bug caused by leading zeros in time/date fields (#26171)
 - make sorting of timezone entries locale dependent (#23850)
 - remove Mode::language, now handled in Laguage module (#27115)
