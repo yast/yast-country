@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar  7 15:24:16 CET 2005 - jsuchome@suse.cz
+
+- require yast2-trans-stats, so we can new about translation status
+- 2.11.19 
+
+-------------------------------------------------------------------
 Wed Mar  2 16:45:23 CET 2005 - jsuchome@suse.cz
 
 - added pt_PT (portugese) again
