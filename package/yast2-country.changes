@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Aug 12 21:14:55 CEST 2002 - arvin@suse.de
+
+- fixed file list
+
+-------------------------------------------------------------------
 Mon Aug 12 17:29:14 CEST 2002 - fehr@suse.de
 
 - remove keyboard config for s390 (#17630)
@@ -8,7 +13,7 @@ Mon Aug 12 17:29:14 CEST 2002 - fehr@suse.de
 -------------------------------------------------------------------
 Tue Aug  6 10:47:27 CEST 2002 - fehr@suse.de
 
-- removed access to variable DEFAULT_LANGUAGE 
+- removed access to variable DEFAULT_LANGUAGE
   (RC_LANG is unsed instead)
 
 -------------------------------------------------------------------
