@@ -1,0 +1,11 @@
+Read	.target.tmpdir nil
+Read	.target.ycp ["/var/lib/YaST2/installmap.ycp", $[]] nil
+Read	.target.symlink "/var/X11R6/bin/X" nil
+Read	.sysconfig.language.DEFAULT_LANGUAGE ""
+Read	.target.yast2 "lang2iso.ycp" nil
+Read	.target.yast2 ["language.ycp", $[]] nil
+Dump	GetLanguageCountry
+Return	AT
+Return	AT
+Return	DE
+Return	

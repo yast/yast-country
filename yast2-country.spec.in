@@ -1,6 +1,5 @@
 @HEADER-COMMENT@
-
-# neededforbuild  yast2-devel-packages yast2-x11
+# neededforbuild yast2-devel-packages yast2-installation yast2-x11
 
 @HEADER@
 Requires:	yast2 yast2-lib-wizard
