@@ -106,7 +106,7 @@ $[
   "ja_JP"	: [ "日本語",
 		  "Japanese",
 		  ".UTF-8",
-		  "" ],
+		  ".eucJP" ],
 
   "ko_KR"       : [ "한글 ",
   		    "Korean",

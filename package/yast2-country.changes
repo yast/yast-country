@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Sep 25 10:37:42 CEST 2003 - fehr@suse.de
+
+- use ja_JP.eucJP as default encoding for Japanese (#31737)
+
+-------------------------------------------------------------------
 Tue Sep 23 11:21:49 CEST 2003 - fehr@suse.de
 
 - disabled languages Bosnian and Russion on request of ke (#30351)
