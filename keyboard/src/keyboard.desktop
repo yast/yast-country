@@ -8,7 +8,7 @@ X-KDE-HasReadOnlyMode=true
 X-KDE-Library=yast2
 X-SuSE-YaST-Call=keyboard
 
-X-SuSE-YaST-Group=System
+X-SuSE-YaST-Group=Hardware
 X-SuSE-YaST-Argument=
 X-SuSE-YaST-RootOnly=true
 X-SuSE-YaST-AutoInst=
@@ -19,7 +19,7 @@ X-SuSE-YaST-AutoInstResource=
 Icon=keyboard
 Exec=/sbin/yast2 keyboard 
 
-Name=Select Keyboard Layout
+Name=Keyboard Layout
 GenericName=This module changes the keyboard layout
 Name[cs]=Výběr rozložení klávesnice
 GenericName[cs]=Tento modul mění rozvržení klávesnice
