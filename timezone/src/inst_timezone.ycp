@@ -330,7 +330,7 @@ If you are unsure, use the default values already selected.
 			 help_text,
 			 (boolean)WFM::Args(0), (boolean)WFM::Args(1) );
 
-    if ( Mode::initial && Mode::firstboot)
+    if ( Mode::initial || Mode::firstboot)
     {
 	Wizard::SetTitleIcon( "timezone" );
     }
@@ -467,7 +467,7 @@ If you are unsure, use the default values already selected.
 	Timezone::PopVal();
     }
 
-    if (Mode::mode == "firstboot")
+    if (Mode::mode != "firstboot")
     {
         Wizard::CloseDialog();
     }
