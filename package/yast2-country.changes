@@ -2,6 +2,7 @@
 Mon Mar  1 13:30:59 CET 2004 - fehr@suse.de
 
 - patch proofreaded texts back into ycp
+- make sorting of keyboard entries locale dependent again
 - 2.9.7
 
 -------------------------------------------------------------------
