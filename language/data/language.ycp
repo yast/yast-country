@@ -26,10 +26,13 @@ $[
 		  "@euro" ],
   End of comment */
 
+  /* disabled on request of ke #30351
+
   "bs_BA"	: [ "Bosnia ",
 		  "Bosnia",
 		  ".UTF-8",
 		  "" ],
+  */
 
   "bg_BG"       : [ "Български",
                     "Bulgarian",
@@ -142,10 +145,12 @@ $[
 		  "@euro" ],
   */
 
+  /* disabled on request of ke #30351
   "ru_RU"	 : [ "Русский ",
 		   "Russian",
 		   ".UTF-8",
 		   "" ],
+  */
 
   "sl_SI"	: [ "Slovenščina",
 		  "Slovenscina",

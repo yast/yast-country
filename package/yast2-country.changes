@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 23 11:21:49 CEST 2003 - fehr@suse.de
+
+- disabled languages Bosnian and Russion on request of ke (#30351)
+- 2.8.19
+
+-------------------------------------------------------------------
 Fri Sep 19 14:06:25 CEST 2003 - fehr@suse.de
 
 - Initialize Console::encoding in the running system to the
