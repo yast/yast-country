@@ -32,6 +32,19 @@
     import "Label";
     import "Popup";
 
+
+
+
+
+// WARNING: UI::WidgetExists( `id(`abort) ) now ALWAYS returns 'false' in the Qt UI!
+// There is no more widget with ID `abort in the wizard now!
+    
+
+
+
+
+    
+
 define void LanguageExpertDialog()
     ``{
     symbol ret = `none;
@@ -168,25 +181,26 @@ are unset.<br>
     * Build dialog
     * ----------------------------------------------------------------------*/
 
-    term heading = `Empty();
+    string heading_text = "";
 
-    if ( Mode::initial && UI::WidgetExists(`id(`abort) ) && ! Mode::repair )
+    if ( Mode::initial &&   // UI::WidgetExists(`id(`abort) ) &&
+	 ! Mode::repair )
     {
 	// initial heading for language selection
 	// (first 'user visible' screen)
-	heading = `Heading (_("Welcome to YaST2 -- the SuSE Linux
+	heading_text = _("Welcome to YaST2 -- the SuSE Linux
 installation and system administration program.
-"));
+");
     }
     else if ( Mode::repair )
     {
 	// heading text
-	heading = `Heading (_("Welcome to YaST2 System Repair"));
+	heading_text = _("Welcome to YaST2 System Repair");
     }
     else
     {
 	// heading text
-	heading = `Heading (_("Language selection"));
+	heading_text = _("Language selection");
     }
 
     if( Mode::initial && UI::WidgetExists( `id(`abort) ) )
@@ -204,8 +218,7 @@ installation and system administration program.
 	}
 
     term contents = `VBox(
-			heading,
-			`VSpacing(0.7),
+			`VSpacing(0.3),
 			`HBox(
 			      `HWeight( 25, `HStretch() ),
 			      `HWeight( 50,
@@ -267,13 +280,9 @@ Choose the new <b>language</b> for your SuSE Linux system.
 
     // Screen title for the first interactive dialog
 
-    Wizard::SetContents( "", contents, help_text, (boolean)WFM::Args(0), (boolean)WFM::Args(1));
+    Wizard::SetContents( heading_text, contents, help_text, (boolean)WFM::Args(0), (boolean)WFM::Args(1));
 
-    if ( !Mode::initial )
-    {
-	UI::ChangeWidget (`id (`title), `Label, `Empty());
-    }
-
+    
     // Get the user input.
     //
     any ret = nil;
