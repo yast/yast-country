@@ -202,6 +202,8 @@ If unsure, use the default values already selected.
     Keyboard::SetConsole( Keyboard::current_kbd );
     Keyboard::SetX11( Keyboard::current_kbd );
 
+    UI::SetFocus( `id(`keyboard ));
+
     any ret = nil;
 
     repeat

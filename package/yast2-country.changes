@@ -2,6 +2,7 @@
 Mon Feb  3 17:36:22 CET 2003  - fehr@suse.de
 
 - pot file now in source tarball
+- set focus to list in keyboard module (#23349)
 
 -------------------------------------------------------------------
 Wed Jan 29 12:23:25 CET 2003  - fehr@suse.de
