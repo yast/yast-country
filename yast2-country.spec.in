@@ -13,6 +13,8 @@ Obsoletes:	yast2-config-environment
 Obsoletes:	yast2-config-keyboard
 Obsoletes:	yast2-config-language
 Obsoletes:	yast2-config-timezone
+Provides:	yast2-db-country yast2-db-keyboard yast2-db-timezone
+Obsoletes:	yast2-db-country yast2-db-keyboard yast2-db-timezone
 
 BuildArchitectures:	noarch
 
