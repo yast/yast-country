@@ -35,7 +35,7 @@
     import "Wizard";
     import "Label";
 
-global define symbol KeyboardExpertDialog()
+define symbol KeyboardExpertDialog()
     ``{
 
     symbol ret = `none;
@@ -206,9 +206,10 @@ Scroll Lock should be set
 	    });
 
     keyboardlist_by_translation =
-	sort( list a, list b, keyboardlist_by_translation,
-	      ``(select( lsort( [select(a,1,""), select(b,1,"") ]), 0, "" ) ==
-	         select(a,1,"") && a!=b ));
+	sort( term a, term b, keyboardlist_by_translation,
+	      ``(select( sort( [a[1]:"", b[1]:"" ]), 0, "" ) ==
+		 a[1]:"" && a[1]:""!=b[1]:"" ));
+
 
     keyboardsel = `SelectionBox( `id( `keyboard ), `opt(`notify,`immediate),
 		// title for selection box 'keyboard layout'

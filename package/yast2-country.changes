@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Feb 26 11:59:47 CET 2004 - fehr@suse.de
+
+- fix crash while sorting keyboard lists (#35062)
+
+-------------------------------------------------------------------
 Tue Feb 24 15:26:39 CET 2004 - fehr@suse.de
 
 - fix wrong default for usage of UTF8
