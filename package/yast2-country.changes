@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Oct 11 15:21:45 CEST 2004 - jsrain@suse.cz
+
+- adapted to new Arch:: interface
+
+-------------------------------------------------------------------
 Wed Oct  6 17:50:46 CEST 2004 - fehr@suse.de
 
 - change country names (#46909)

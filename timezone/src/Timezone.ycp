@@ -157,7 +157,7 @@ global define integer Set( string zone, boolean really )
 	string cmd = "/usr/sbin/zic -l " + timezone;
 	y2milestone( "Set cmd %1", cmd );
 	y2milestone( "Set ret %1", SCR::Execute( .target.bash_output, cmd ));
-	if( !Arch::s390 )
+	if( !Arch::s390 () )
 	    {
 	    cmd = "/sbin/hwclock --hctosys " + hwclock;
 	    y2milestone( "Set cmd %1", cmd );
@@ -227,7 +227,7 @@ global define void Timezone()
 global define void SetTime( string year, string month, string day, 
                             string hour, string minute, string second )
     ``{
-    if ( !Arch::s390 )
+    if ( !Arch::s390 () )
 	{
 	string date = sformat( " --date=\"%1/%2/%3 %4:%5:%6\" ", month, day, 
 	                       year, hour, minute, second );
@@ -390,7 +390,7 @@ global define string MakeProposal( boolean force_reset,
 	{
 	hwclock = "-u";
 	if( size(Storage::GetWinPrimPartitions(Storage::GetTargetMap())) > 0 ||
-	    Arch::board_mac )
+	    Arch::board_mac () )
 	    {
 	    // Win partitions present ==> assume local time.
 	    //

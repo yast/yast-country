@@ -212,9 +212,9 @@ Enter the correct date.
 
     // does the hwclock run on UTC only ? -> skip asking
 
-    boolean utc_only = Arch::sparc || Arch::board_iseries ||
-		       Arch::board_chrp || Arch::board_prep;
-    y2milestone( "Arch::sparc %1 Arch::board_iseries %2 Arch::board_chrp %3 Arch::board_prep %4", Arch::sparc, Arch::board_iseries, Arch::board_chrp, Arch::board_prep );
+    boolean utc_only = Arch::sparc () || Arch::board_iseries () ||
+		       Arch::board_chrp () || Arch::board_prep ();
+    y2milestone( "Arch::sparc () %1 Arch::board_iseries () %2 Arch::board_chrp () %3 Arch::board_prep () %4", Arch::sparc (), Arch::board_iseries (), Arch::board_chrp (), Arch::board_prep () );
     y2milestone( "utc_only %1", utc_only );
 
     /* ----------------------------------------------------------------------
@@ -259,7 +259,7 @@ Enter the correct date.
 	}
 
     term settime = `Empty();
-    if( !Arch::s390 && !Mode::config)
+    if( !Arch::s390 () && !Mode::config)
 	{
 	// button text
 	settime = `PushButton( `id(`settime), _("Change &Time or Date"));
