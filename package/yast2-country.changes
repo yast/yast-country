@@ -1,21 +1,8 @@
 -------------------------------------------------------------------
-Tue Sep 10 19:48:29 CEST 2002 - fehr@suse.de
+Wed Nov 20 16:22:58 CET 2002  - fehr@suse.de
 
-- prevent one unnecessary screen redraw in ncurses (#18893)
-- 2.6.28
-
--------------------------------------------------------------------
-Tue Sep 10 19:48:29 CEST 2002 - fehr@suse.de
-
-- add languages Korean and traditional Chinese to languages
-- make keyboard follow language in update mode (#19370)
-- 2.6.27
-
--------------------------------------------------------------------
-Tue Sep 10 16:45:25 CEST 2002 - msvec@suse.cz
-
-- add missing Provides/Obsoletes
-- 2.6.26
+- merged up to version 2.6.35 of 8.1 branch 
+- 2.7.0
 
 -------------------------------------------------------------------
 Tue Sep 10 13:10:44 CEST 2002 - arvin@suse.de

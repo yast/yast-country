@@ -239,11 +239,13 @@
 	// sysconfig:		- installation continue mode or normal mode
 	// XF86Config:		- restoring from sysconfig failed and running system
 	//
+	y2milestone( "Keyboard::Keyboard init:%1 update:%2", Mode::initial,
+	             Mode::update );
 	boolean success = false;
 
 	// If not in initial mode try to restore from sysconfig.
 	//
-	if ( !(Mode::initial && Mode::update))
+	if ( !(Mode::initial || Mode::update))
 	{
 	    success = Restore();
 
@@ -463,7 +465,17 @@
     }	// MakeProposal()
 
 
-    
+global define void SetKeyboardForLang( string lang )
+    ``{
+    string lkbd = GetKeyboardForLanguage( lang, "english-us" );
+    y2milestone( "lang %1 lkbd %2", lang, lkbd );
+    if( lkbd != "" )
+	{
+	SetConsole( lkbd );
+	SetX11( lkbd );
+	}
+    };
+
     /**
      * Probe()
      *
@@ -479,6 +491,7 @@
 	``{
 	// Probe the keyboard....
 	//
+	y2milestone( "Keyboard::Probe" );
 	probe_settings();
 
 	// Set the module to the current system language to achieve a consistent
@@ -501,6 +514,7 @@
 	// Set the module state.
 	//
 	SetLanguage( default_keyboard );
+	y2milestone( "End Probe %1", default_keyboard );
 
 	return;
     }	// Probe()
@@ -873,6 +887,9 @@
 	// The system_language --> keyboard_language conversion map.
 	//
 	map lang2keyboard = get_lang2keyboard();
+	y2milestone( "GetKeyboardForLanguage lang:%1 def:%2 ret:%3",
+	             sys_language, default_language, 
+		     lang2keyboard[sys_language]:default_language );
 	
 	return lang2keyboard[sys_language]:default_language;
     }

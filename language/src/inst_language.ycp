@@ -25,6 +25,7 @@
     import "Installation";
     import "Console";
     import "Language";
+    import "Keyboard";
 
     import "Wizard";
 
@@ -201,6 +202,7 @@ Choose the new <b>language</b> for your SuSE Linux system.
 		// Set Console font
 		//
 		Console::SelectFont( language );
+		Keyboard::SetKeyboardForLang( language );
 
 		Installation::encoding = (use_utf8) ? "UTF-8" : Console::encoding;
 

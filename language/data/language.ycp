@@ -55,11 +55,6 @@ $[
 		  "",
 		  "" ],
 
-  "en_IE"	: [ "Irish",
-		  "Irish",
-		  "",
-		  "@euro" ],
-
   "en_US"	: [ "English (US)",
 		  "English (US)",
 		  "",
@@ -161,11 +156,6 @@ $[
 		  "",
 		  "" ],
 
-  "zh_TW"       : [ "粵語,廣東話 (traditional Chinese)",
-		  "Traditional Chinese",
-		  "",
-		  "" ],
-
   "tr_TR"	: [ "Türkçe",
 		  "Turkce",
 		  "",
@@ -175,13 +165,23 @@ $[
 /*          May be future expansion		*/
 /* -------------------------------------------- */
 /*						*/
-/*      "ko_KR"    : [ "한글 ",	*/
+/*  "en_IE"	: [ "Irish",			*/
+/*		  "Irish",			*/
+/*		  "",				*/
+/*		  "@euro" ],			*/
+/*						*/
+/*  "zh_TW"       : [ "粵語,廣東話 (traditional Chinese)",*/
+/*		  "Traditional Chinese",	*/
+/*		  "",				*/
+/*		  "" ],				*/
+/*						*/
+/*      "ko_KR"    : [ "한글 ",		*/
 /*		     "Korean",			*/
 /*		     "",			*/
 /*		     "" ],			*/
 /*      "id_ID"    : [ "Indonesia",		*/
 /*      "zh_CN"    : [ "中文 (Chinese)"	*/
-/*      "ar_eg"    : [ "ﻲﺑﺮﻋ"	*/
+/*      "ar_eg"    : [ "ﻲﺑﺮﻋ"		*/
 /*      "pl_PL"    : [ "Polski"			*/
 /*      "ro_RO"    : [ "Romania"		*/
 

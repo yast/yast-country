@@ -29,7 +29,7 @@
 
       "pt_PT@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-15" ],
       "pt_PT"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
-      "pt_BR"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
+      "pt_BR"		: [ "lat1-16.psfu",	"",	"trivial",	"(B",		"ISO-8859-1" ],
       "pt"		: [ "lat1-16.psfu",	"",	"none",		"(B",		"ISO-8859-1" ],
 
       "ca_ES@euro"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K",		"ISO-8859-15" ],

@@ -170,7 +170,7 @@ $[
 "PST8PDT" : _("Global/PST8PDT"),
 "Poland" : _("Global/Poland"),
 "Portugal" : _("Global/Portugal"),
-"ROC" : _("Global/ROC"),
+#"ROC" : _("Global/ROC"),
 "ROK" : _("Global/ROK"),
 "Singapore" : _("Global/Singapore"),
 "Turkey" : _("Global/Turkey"),

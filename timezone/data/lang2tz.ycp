@@ -28,7 +28,7 @@ $[
   "de_DE"    		: "Europe/Berlin",
   "el_GR"    		: "Europe/Athens",
   "en"	 		: "US/Pacific",
-  "en_GB"    		: "Greenwich",
+  "en_GB"    		: "Europe/London",
   "en_IE"		: "Europe/Belfast",
   "en_US"    		: "US/Pacific",
   "es_ES"    		: "Europe/Madrid",
