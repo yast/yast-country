@@ -1,0 +1,40 @@
+/**
+ * tests for Language::Set
+ * Author:	jsuchome@suse.cz
+ * $Id: Language.ycp 21839 2005-02-22 14:29:39Z jsuchome $
+ */
+{
+
+    // testedfiles: Language.ycp
+
+    include "testsuite.ycp";
+
+    map READ = $[
+	"sysconfig" : $[
+	    "language" : $[
+		"RC_LANG"	: "en_US.UTF-8",
+	    ],
+	],
+	"target" : $[
+	    "bash_output"	: $[],
+	    "size"		: 1,
+	    "yast2"		: $[],
+	],
+    ];
+
+    TESTSUITE_INIT([READ,$[],READ], nil);
+
+    import "Language";
+
+    TEST(``(Language::GetLocaleString (Language::language)), [], nil);
+
+    TEST(``(Language::Set ("de_DE")), [], nil);
+
+    TEST(``(Language::GetLocaleString (Language::language)), [], nil);
+
+    map expert	= $[
+	"use_utf8"	: false
+    ];
+    TEST(``(Language::SetExpertValues (expert)), [], nil);
+    TEST(``(Language::GetLocaleString (Language::language)), [], nil);
+}
