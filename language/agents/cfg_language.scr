@@ -26,5 +26,5 @@
 .sysconfig.language
 
 `ag_ini(
-  SysConfigFile("/etc/sysconfig/language")
+  SCR::SysConfigFile("/etc/sysconfig/language")
 )
