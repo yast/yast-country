@@ -25,6 +25,11 @@ $[
 		  "@euro" ],
   End of comment */
 
+  "bs_BA"	: [ "Bosnia ",
+		  "Bosnia",
+		  "",
+		  "" ],
+
   "cs_CZ"	: [ "Čeština ",
 		  "Cestina",
 		  "",

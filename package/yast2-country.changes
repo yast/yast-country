@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Aug 12 17:29:14 CEST 2002 - fehr@suse.de
+
+- remove keyboard config for s390 (#17630)
+- add Bosnian to languages
+- version 2.6.12
+
+-------------------------------------------------------------------
 Tue Aug  6 10:47:27 CEST 2002 - fehr@suse.de
 
 - removed access to variable DEFAULT_LANGUAGE 
