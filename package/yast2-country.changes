@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul 31 16:31:20 CEST 2002 - kkaempf@suse.de
+
+- /etc/sysconfig/UTC is boolean, not hwclock parameter.
+- call /sbin/hwclock instead of /sbin/hwclock_wrapper.
+
+-------------------------------------------------------------------
 Mon Jul 29 10:21:23 CEST 2002 - fehr@suse.de
 
 - rename GMT to UTC in /etc/sysconfig/clock (#17265)

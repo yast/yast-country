@@ -29,14 +29,14 @@
     // Remember the current timezone settings to be able to restore them.
     //
     string timezone_on_entry = Timezone::timezone;
-    string hwclock_on_entry  = Timezone::hwclock;
+    string utc_on_entry  = Timezone::utc;
 
     // get current timezone and clock setting
     //
     string timezone     = Timezone::timezone;
     string timezone_old = timezone;
 
-    string hwclock = Timezone::hwclock;
+    string utc = Timezone::utc;
 
     string date = "";
 
@@ -57,10 +57,10 @@
 
     // does the hwclock run on UTC only ? -> skip asking
 
-    boolean hwclock_utc_only = (Arch::sparc ||
-				Arch::board_iseries ||
-				Arch::board_chrp ||
-				Arch::board_prep);
+    boolean utc_only = (Arch::sparc ||
+			Arch::board_iseries ||
+			Arch::board_chrp ||
+			Arch::board_prep);
 
     /* ----------------------------------------------------------------------
      * Build dialog
@@ -72,7 +72,7 @@
 
     // Ask for UTC vs. Localtime
     //
-    if (!hwclock_utc_only)
+    if (!utc_only)
     {
 	timezonesel =
 	`VBox(
@@ -82,10 +82,10 @@
 			_("&Hardware clock set to"),
 			[
 			 // ComboBox entry: hardware clock set to local time
-			 `item( `id(`hwclock_localtime), _("local time"), (hwclock == "--localtime")),
+			 `item( `id(`hwclock_localtime), _("local time"), (utc == false)),
 
 			 // ComboBox entry: hardware clock set UTC
-			 `item( `id(`hwclock_utc ), _("UTC"), (hwclock == "-u"))
+			 `item( `id(`hwclock_utc ), _("UTC"), (utc == true))
 			]
 			),
 	      `Label( `id(`date), date )
@@ -110,7 +110,7 @@ Choose the country or region where you are located.
 </p>
 ");
 
-    if (!hwclock_utc_only)
+    if (!utc_only)
     {
 	// help for time calculation basis:
 	// hardware clock references local time or UTC?
@@ -148,7 +148,7 @@ If you are unsure, use the default values already selected.
     //
     Timezone::Set( Timezone::timezone );
 
-    symbol hwclock_s      = (hwclock == "-u") ? `hwclock_utc : `hwclock_localtime;
+    symbol hwclock_s      = (utc) ? `hwclock_utc : `hwclock_localtime;
     symbol hwclock_s_old  = hwclock_s;
 
     any ret = nil;
@@ -170,7 +170,7 @@ If you are unsure, use the default values already selected.
 	    // Get current settings.
 	    // UTC vs. localtime, only if needed
 	    //
-	    if ( hwclock_utc_only )
+	    if ( utc_only )
 	    {
 		hwclock_s = `hwclock_utc;
 	    }
@@ -189,7 +189,7 @@ If you are unsure, use the default values already selected.
 		timezone_old = timezone;
 		hwclock_s_old = hwclock_s;
 
-		Timezone::hwclock = (hwclock_s == `hwclock_utc) ? "-u" : "--localtime";
+		Timezone::utc = (hwclock_s == `hwclock_utc) ? true : false;
 		Timezone::Set( timezone );
 
 		// Redisplay date/time.
@@ -218,7 +218,7 @@ If you are unsure, use the default values already selected.
 
 	// Reset timezone to initial state.
 	//
-	Timezone::hwclock = hwclock_on_entry;
+	Timezone::utc = utc_on_entry;
 	Timezone::Set( timezone_on_entry );
     }
 

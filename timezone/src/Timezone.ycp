@@ -33,8 +33,7 @@
 
     global string timezone = "";	// e.g. "Europe/Berlin"
 
-    global string hwclock = "-u";
-                                        
+    global boolean utc = true;		// clock runs UTC
 
     // The default timezone if set.
     //
@@ -90,14 +89,16 @@
 	{
 	    // Win partitions present ==> assume local time.
 	    //
-	    hwclock = "--localtime";	// "--localtime"  	--> local time
+	    utc = false;
+	    SetHwclock (utc);
 	    y2milestone("Assuming local time");
 	}
 	else
 	{
 	    // No Win partitions ==> assume UTC.
 	    //
-	    hwclock = "-u";			// "-u"  	--> UTC
+	    utc = true;
+	    SetHwclock (utc);
 	    y2milestone("Assuming UTC");
 	}					// "-u" at least for sparc, iSeries and pSeries
 
@@ -118,7 +119,8 @@
 	{
 	    timezone         = Misc::SysconfigRead(.sysconfig.clock.TIMEZONE, timezone );
 	    default_timezone = Misc::SysconfigRead(.sysconfig.clock.DEFAULT_TIMEZONE, default_timezone);
-	    hwclock          = Misc::SysconfigRead(.sysconfig.clock.UTC, hwclock);
+	    utc		     = Misc::SysconfigRead(.sysconfig.clock.UTC, utc);
+	    SetHwclock (utc);
 	}
 	return;
     }
@@ -154,7 +156,8 @@
 
 	if ( ! Arch::s390 )
 	{
-	    SCR::Execute(.target.bash, "/sbin/hwclock_wrapper --hctosys " + hwclock);
+	    string hwclock = GetHwclock (utc);
+	    SCR::Execute(.target.bash, "/sbin/hwclock --hctosys " + hwclock);
 	}
 	
 	// On first assignment store default timezone.
@@ -245,7 +248,7 @@
 
 	// Clock setting: local time (not UTC)
 	//
-	if ( hwclock != "-u" ) clock_setting = _("local time");
+	if ( !utc ) clock_setting = _("local time");
 
 	string date = GetDateTime();
 
@@ -305,7 +308,7 @@
 
 	SCR::Write(.sysconfig.clock.TIMEZONE, timezone);
 	SCR::Write(.sysconfig.clock.DEFAULT_TIMEZONE, default_timezone);
-	SCR::Write(.sysconfig.clock.UTC, hwclock);
+	SCR::Write(.sysconfig.clock.UTC, utc);
 
 	SCR::Write(.sysconfig.clock, nil);	// flush
 
@@ -373,6 +376,27 @@
     // ---------------------------------------------------------------------------------------
     // START: Locally defined functions
     // ---------------------------------------------------------------------------------------
+
+    /*
+     * string GetHwclock (boolean utc_flag)
+     *
+     * return /sbin/hwclock parameter according to utc
+     *
+     * @param	utc_flag
+     *
+     * @return  "-u" or "--localtime"
+     *
+     * @see	/sbin/hwclock
+     */
+
+    define string GetHwclock (boolean utc_flag)
+    ``{
+	if (utc_flag == true)
+	{
+	    return "-u";	// "-u"  	--> UTC time
+	}
+	return "--localtime";	// "--localtime"  	--> local time
+    }
 
     /*
      * get_zonemap()
