@@ -1,7 +1,8 @@
 -------------------------------------------------------------------
-Mon Jul  7 12:01:01 CEST 2003 - fehr@suse.de
+Tue Jul  8 16:01:50 CEST 2003 - fehr@suse.de
 
 - fix bug caused by leading zeros in time/date fields (#26171)
+- make sorting of timezone entries locale dependent (#23850)
 
 -------------------------------------------------------------------
 Tue Jun 10 14:36:04 CEST 2003 - fehr@suse.de

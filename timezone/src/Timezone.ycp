@@ -318,9 +318,14 @@ global define list Selection( integer num )
 		       });
     textdomain "country";
 
-    list ret = maplist( `name, `key, tmap,
+    list trl = maplist( `name, `key, tmap, ``{ return( [ name, key ] ); });
+    trl = sort( `a, `b, trl, 
+                ``(select( lsort( [a[0]:"", b[0]:""] ), 0, "" ) == a[0]:"" ));
+    y2milestone( "trl = %1", trl );
+
+    list ret = maplist( `e, trl,
 	``{
-	return( `item( `id(key), name, false ));
+	return( `item( `id(e[1]:""), e[0]:"", false ));
 	});
     return( ret );
     }
