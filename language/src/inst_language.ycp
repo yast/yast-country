@@ -173,9 +173,8 @@ are unset.<br>
 	// initial heading for language selection
 	// (first 'user visible' screen)
 	// %1 is product name
-	heading_text = sformat (_("Welcome to YaST2 -- %1
-Installation and System Administration Program
-"), Product::name);
+	heading_text = sformat (_("Welcome to the %1 Installation"),
+	    Product::name);
     }
     else if (Mode::repair ())
     {
