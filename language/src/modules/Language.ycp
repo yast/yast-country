@@ -240,6 +240,7 @@ global define void Language()
 	    use_utf8 = true;
 	    }
 	}
+    Encoding::SetUtf8Lang( use_utf8 );
     }
 
 /*
@@ -280,6 +281,7 @@ global define void SetExpertValues( map val )
     if( haskey(val,"use_utf8") )
         {
         use_utf8 = val["use_utf8"]:false;
+	Encoding::SetUtf8Lang( use_utf8 );
         }
     }
 
