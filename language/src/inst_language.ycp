@@ -249,7 +249,7 @@ Installation and System Administration Program
 	term primary_language_term =
 	    `ComboBox (`id(`language), `opt (`notify),
 	    // combo box label
-	    _("Select your primary &language"),
+	    _("Primary &Language"),
 	    maplist (any name, list codelist, languageselsort,
 		``(`item (
 		    `id(codelist[1]:""),
@@ -261,7 +261,7 @@ Installation and System Administration Program
 
 	term languages_term = `MultiSelectionBox (`id(`languages),
 	    // multiselection box label
-	    _("&Select secondary languages"),
+	    _("&Secondary Languages"),
 	    maplist (any name, list codelist, languageselsort,
 		``(`item (
 		    `id(codelist[1]:""),
@@ -370,18 +370,21 @@ Choose the new <b>primary language</b> for your system.
 
 	// help text for 'adapt keyboard checkbox'
 	help_text	= help_text + _("<p>
-Check the <b>Adapt Keyboard Layout</b> option for automatic adaptation of keyboard layout to the primary language.
-</p>") +
+Check <b>Adapt Keyboard Layout</b> to adapt the keyboard layout to the primary language.
+</p>
+") +
 
 	_("<p>
-Check the <b>Adapt Time Zone</b> option for changing current time zone according to the primary language.
-</p>");
+Check the <b>Adapt Time Zone</b> option to change the current time zone according to the primary language.
+</p>
+");
 
 	// help text when "multiple languages" are suported 2/2
 	help_text	= help_text + _("<p>
-<b>Secondary languages</b><br>
-In the selection box, you can specify more languages which you want to use on your system.
-</p>");
+<b>Secondary Languages</b><br>
+In the selection box, specify additional languages you want to use on your system.
+</p>
+");
 
 	help_text       = help_text + _("<p>
 Additional packages with support for the selected primary and secondary languages will be installed.
@@ -462,7 +465,7 @@ Additional packages with support for the selected primary and secondary language
 		    UI::ReplaceWidget (`id(`rplangs),
 			`MultiSelectionBox (`id(`languages),
 			    // multiselection box label
-			    _(" Select secondary languages "),
+			    _("Secondary Languages"),
 			    maplist (any name, list codes, languageselsort, ``(
 				`item (
 				    `id(codes[1]:""),
