@@ -323,6 +323,7 @@ Adapt keyboard settings?
 		if( Mode::initial && set_default )
 		    {
 		    kbd_adapt = true;
+		    Timezone::ResetZonemap();
 		    }
 		else
 		    {

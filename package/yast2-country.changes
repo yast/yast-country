@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 22 13:10:55 CET 2004 - fehr@suse.de
+
+- Fix problem with untranslated timezone strings (#36484)
+- 2.9.15
+
+-------------------------------------------------------------------
 Sun Mar 21 19:49:54 CET 2004 - nashif@suse.de
 
 - Use settings from product feature module if available

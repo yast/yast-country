@@ -144,13 +144,11 @@ global define integer Set( string zone, boolean really )
 	sel = sel + 1;
 	}
 
-    textdomain "timezone_db";
     locale translate =  zmap[sel,"name"]:"";
     name = (string)eval(translate);
     name = name + " / ";
     translate = zmap[sel,"entries",timezone]:zone;
     name = name + (string)eval(translate);
-    textdomain "country";
 
     // Adjust system to the new timezone.
     //
@@ -340,6 +338,11 @@ global define string GetDateTime( boolean real_time )
     return( local_date );
     }
 
+global define void  ResetZonemap()
+    ``{
+    zonemap = [];
+    }
+
 /**
  * MakeProposal()
  *
@@ -359,6 +362,9 @@ global define string MakeProposal( boolean force_reset,
     y2milestone( "force_reset: %1", force_reset );
     y2milestone( "language_changed: %1 user_decision %2 user_hwclock %3", 
                  language_changed, user_decision, user_hwclock );
+
+    if( language_changed ) 
+	ResetZonemap();
 
     if( !user_hwclock || force_reset )
 	{
@@ -467,13 +473,11 @@ global define list Selection( integer num )
     locale translate = "";
     list <map <string, any> > zmap = get_zonemap();
 
-    textdomain "timezone_db";
     list<list <string> > trl = maplist( string key, locale name, zmap[num,"entries"]:$[],
 		       ``{
 		       translate = name;
 		       return [ name, key ];
 		       });
-    textdomain "country";
 
     trl = sort( list<string> a, list<string> b, trl, 
                 ``(select( lsort( [a[0]:"", b[0]:""] ), 0, "" ) == a[0]:"" && a[0]:""!=b[0]:"") );
@@ -492,7 +496,6 @@ global define list Region()
     string trans_str = "";
     locale translate = "";
 
-    textdomain "timezone_db";
     integer num = -1;
     list ret = maplist( map entry, zmap,
 	``{
@@ -501,7 +504,6 @@ global define list Region()
 	num = num + 1;
 	return( `item( `id(num), trans_str, false ));
 	});
-    textdomain "country";
     return( ret );
     }
 
