@@ -208,6 +208,8 @@
     string kbd_scrlock = "";
     string kbd_disable_capslock = "";
 
+    global boolean ExpertSettingsChanged = false;
+    
     list keyboardprobelist = [];	// List of all probed keyboards
 
     // ---------------------------------------------------------------------------------------

@@ -35,6 +35,7 @@
 
 global define KeyboardExpertDialog()
     ``{
+    
     symbol ret = `none;
     // help text for keyboard expert screen
     string help_text = _("<p>
@@ -106,6 +107,7 @@ Scroll Lock should be set
 				))
 			 ));
     map val = Keyboard::GetExpertValues();
+    map val_on_entry = val;
     y2milestone( "map %1", val );
     UI::ChangeWidget( `id(`rate), `Value, val["rate"]:"" );
     UI::ChangeWidget( `id(`rate), `ValidChars, "0123456789." );
@@ -141,8 +143,11 @@ Scroll Lock should be set
 	    val["discaps"] = UI::QueryWidget( `id(`discaps), `Value );
 	    y2milestone( "map ok %1", val );
 	    Keyboard::SetExpertValues( val );
+	    if (val != val_on_entry)
+		Keyboard::ExpertSettingsChanged = true;
+	    
 	    }
-	} until ( ret == `cancel || ret == `ok );
+	} until ( ret == `cancel || ret == `ok );    
     UI::CloseDialog();
     };
 
@@ -155,9 +160,18 @@ Scroll Lock should be set
     {
 	import "AutoinstGeneral";
 	if (AutoinstGeneral::Keyboard["keymap"]:"" != "")
+	{
 	    Keyboard::current_kbd = AutoinstGeneral::Keyboard["keymap"]:"";
+	    if (haskey(AutoinstGeneral::Keyboard, "keyboard_values")
+		&& AutoinstGeneral::Keyboard["keyboard_values"]:$[] != $[])
+	    {
+		Keyboard::SetExpertValues(AutoinstGeneral::Keyboard["keyboard_values"]:$[]);
+	    }
+	}
 	else
-	    Keyboard::current_kbd =  Keyboard::GetKeyboardForLanguage( AutoinstGeneral::Language, "english-us" );	
+	{
+	    Keyboard::current_kbd =  Keyboard::GetKeyboardForLanguage( AutoinstGeneral::Language, "english-us" );
+	}
     }
 
     
