@@ -498,6 +498,7 @@
 		    if( size(data["XkbLayout"]:"")>0 )
 			{
 			kbd = XkblayoutToKeyboard( data["XkbLayout"]:"" );
+			kbd = kbd + "," + data["XkbModel"]:"pc104";
 			SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD, kbd );
 			SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD.comment,
 			       "\n# The YaST-internal identifier of the attached keyboard.\n#\n");
@@ -512,7 +513,8 @@
 	// Write some sysconfig variables.
 	// Set keytable, compose_table and tty list.
 	//
-	SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD, current_kbd );
+	SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD, 
+	           current_kbd+","+kb_model );
 	SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD.comment,
 		   "\n# The YaST-internal identifier of the attached keyboard.\n#\n");
 	
@@ -663,6 +665,14 @@
 	// Read YaST2 keyboard var.
 	//
 	current_kbd = Misc::SysconfigRead(.sysconfig.keyboard.YAST_KEYBOARD, "" );
+	integer pos = find( current_kbd, "," );
+	if( pos>0 )
+	    {
+	    kb_model = substring( current_kbd, pos+1 );
+	    current_kbd = substring( current_kbd, 0, pos );
+	    }
+
+	y2milestone( "current_kbd %1 model %2", current_kbd, kb_model );
 
 	if ( current_kbd == "" )
 	{
@@ -703,6 +713,7 @@
 	//
 	map keyboards = get_reduced_keyboard_db();
 	
+	y2milestone( "red kbd db %1", keyboards );
 	// Get the entry from the reduced local map for the given language.
 	//
 	kbd_descr = keyboards[keyboard]:[];

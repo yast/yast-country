@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Aug  5 17:34:23 CEST 2002 - fehr@suse.de
+
+- write language and model to YAST_KEYBOARD in /etc/sysconfig/keyboard
+
+-------------------------------------------------------------------
 Mon Aug 05 14:19:29 CEST 2002 - arvin@suse.de
 
 - adaption for new /etc/install.inf agent
@@ -8,6 +13,11 @@ Mon Aug  5 13:16:41 CEST 2002 - kkaempf@suse.de
 
 - drop /etc/sysconfig/UTC, use /etc/sysconfig/HWCLOCK to allow
   for all three values (unchange,utc,localtime).
+
+-------------------------------------------------------------------
+Fri Aug  2 14:41:32 CEST 2002 - fehr@suse.de
+
+- fix typo "X11SetLaguange" --> "X11SetLanguage"
 
 -------------------------------------------------------------------
 Thu Aug  1 16:01:31 CEST 2002 - fehr@suse.de
