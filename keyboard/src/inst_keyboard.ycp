@@ -131,14 +131,14 @@ Scroll Lock should be set
     UI::ChangeWidget( `id(`discaps), `Value, val["discaps"]:false );
     repeat
 	{
-	ret = UI::UserInput();
+	ret = (symbol)UI::UserInput();
 	if( ret == `ok )
 	    {
 	    val = $[];
 	    val["rate"] = UI::QueryWidget( `id(`rate), `Value );
 	    val["delay"] = UI::QueryWidget( `id(`delay), `Value );
 	    val["numlock"] = "";
-	    tmp = UI::QueryWidget( `id(`numlock), `Value );
+	    tmp = (string)UI::QueryWidget( `id(`numlock), `Value );
 	    y2milestone( "tmp %1", tmp );
 	    if( contains( ["bios", "yes", "no"], tmp ) )
 		{
@@ -165,6 +165,7 @@ Scroll Lock should be set
 
     if (Mode::config)
     {
+        /* Fixme Autoinst modules not available for new Interpreter 
 	import "AutoinstGeneral";
 	if (AutoinstGeneral::Keyboard["keymap"]:"" != "")
 	{
@@ -179,6 +180,7 @@ Scroll Lock should be set
 	{
 	    Keyboard::current_kbd =  Keyboard::GetKeyboardForLanguage( AutoinstGeneral::Language, "english-us" );
 	}
+	*/
     }
 
 
@@ -206,8 +208,9 @@ Scroll Lock should be set
 	    });
 
     keyboardlist_by_translation =
-	sort( `a, `b, keyboardlist_by_translation,
-	      ``(select( lsort( [select(a,1,""), select(b,1,"") ]), 0, "" ) ==
+	sort( list a, list b, keyboardlist_by_translation,
+	/* FIXME lsort */
+	      ``(select( sort( [select(a,1,""), select(b,1,"") ]), 0, "" ) ==
 	         select(a,1,"")));
 
     keyboardsel = `SelectionBox( `id( `keyboard ), `opt(`notify,`immediate),
@@ -265,7 +268,8 @@ If unsure, use the default values already selected.
 
     // Screen title for keyboard screen
     Wizard::SetContents( _("Keyboard Configuration"), contents,
-			 help_text, WFM::Args(0), WFM::Args(1) );
+			 help_text, (boolean)WFM::Args(0), 
+			 (boolean)WFM::Args(1) );
 
     // Initially set the current keyboard to establish a consistent state.
     //
@@ -301,7 +305,7 @@ If unsure, use the default values already selected.
 	    {
 	    // Get the selected keyboard.
 	    //
-	    keyboard = UI::QueryWidget( `id( `keyboard ), `CurrentItem );
+	    keyboard = (string)UI::QueryWidget( `id( `keyboard ), `CurrentItem );
 
 	    y2milestone( "on entry %1 current %2 ret %3", keyboard_on_entry,
 			 cur_kbd, keyboard );
@@ -310,9 +314,11 @@ If unsure, use the default values already selected.
 	    //
 	    if ( Mode::config)
 	    {
+		/* FIXME 
 		import "AutoinstGeneral";
 		y2milestone("Autoyast keyboard: %1", keyboard);
 		AutoinstGeneral::Keyboard["keymap"]  = keyboard;
+		*/
 	    }
 	    else if( cur_kbd != keyboard )
 	    {
@@ -355,5 +361,5 @@ If unsure, use the default values already selected.
 
     Wizard::CloseDialog();
 
-    return ret;
+    return (symbol)ret;
     }

@@ -25,6 +25,8 @@ import "Wizard";
 import "Label";
 import "Popup";
 
+symbol hwclock_s_initial = `none;
+
 define void SetTimezone( symbol hwclock, string timezone, boolean really )
     ``{
     y2milestone( "SetTimezone hw %1, tz %2 really %3", hwclock, timezone,
@@ -183,9 +185,11 @@ Enter the correct date.
     // Autoinstall
     if (Mode::config)
     {
+        /* FIXME
 	import "AutoinstGeneral";
 	timezone = AutoinstGeneral::Clock["timezone"]:"";
 	hwclock = ( AutoinstGeneral::Clock["hwclock"]:"" == "UTC" ) ? "-u"  : "--localtime";
+	*/
     }
 
     string date = "";
@@ -317,20 +321,24 @@ If you are unsure, use the default values already selected.
     // Screen title for timezone screen
     Wizard::SetContents( _("Clock and Time Zone Configuration"), contents,
 			 help_text,
-			 WFM::Args(0), WFM::Args(1) );
+			 (boolean)WFM::Args(0), (boolean)WFM::Args(1) );
 
 
     // Initially set the current timezone to establish a consistent state.
     //
     integer sel = 0;
     if (Mode::config)
+	{
+        /* FIXME
 	sel = Timezone::Set(AutoinstGeneral::Clock["timezone"]:"", true);
+	*/
+	}
     else
 	sel = Timezone::Set( Timezone::timezone, true );
 
     symbol hwclock_s = (hwclock=="-u") ? `hwclock_utc : `hwclock_localtime;
     symbol hwclock_s_old = hwclock_s;
-    symbol hwclock_s_initial = hwclock_s;
+    hwclock_s_initial = hwclock_s;
 
     UI::ChangeWidget( `id(`region), `CurrentItem, sel );
     UI::ReplaceWidget( `id(`tzsel),
@@ -358,7 +366,7 @@ If you are unsure, use the default values already selected.
 	    }
 	if( ret == `region )
 	    {
-	    integer num = UI::QueryWidget( `id(`region), `CurrentItem );
+	    integer num = (integer)UI::QueryWidget( `id(`region), `CurrentItem );
 	    y2milestone( "new region %1", num );
 	    UI::ReplaceWidget( `id(`tzsel),
 	                       `SelectionBox( `id(`timezone), `opt(`notify),
@@ -387,15 +395,15 @@ If you are unsure, use the default values already selected.
 	    hwclock_s = `hwclock_utc;
 	    if( !utc_only )
 		{
-		hwclock_s = UI::QueryWidget( `id(`hwclock), `Value );
+		hwclock_s = (symbol)UI::QueryWidget( `id(`hwclock), `Value );
 		}
 	    if( ret == `timezone )
 		{
-		sel = UI::QueryWidget( `id(`region), `CurrentItem );
+		sel = (integer)UI::QueryWidget( `id(`region), `CurrentItem );
 		}
 
-	    timezone = UI::QueryWidget( `id(`timezone ), `CurrentItem );
-	    if( timezone == nil )
+	    timezone = (string)UI::QueryWidget( `id(`timezone ), `CurrentItem );
+	    if( size(timezone) == 0 )
 		{
 		timezone = timezone_old;
 		}
@@ -405,10 +413,12 @@ If you are unsure, use the default values already selected.
 	    //
 	    if (Mode::config)
 	    {
+		/* FIXME
 		// Autoinstall
 		import "AutoinstGeneral";
 		AutoinstGeneral::Clock["hwclock"] = ( hwclock_s == `hwclock_utc ) ? "UTC" : "localtime";
 		AutoinstGeneral::Clock["timezone"]  =  timezone;
+		*/
 	    }
 	    else
 	    {

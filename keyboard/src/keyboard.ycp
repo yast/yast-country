@@ -87,7 +87,7 @@ To change anything here, select a layout from the list.
     // selected in the list in inst_keyboard.ycp. Now let the user choose a new
     // keyboard layout.
     //
-    result = WFM::CallFunction( `inst_keyboard( true, true ) );
+    result = WFM::CallFunction( "inst_keyboard", [ true, true ] );
 
     if( result == `next )
 	{
