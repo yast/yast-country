@@ -118,7 +118,7 @@
 	{
 	    timezone         = Misc::SysconfigRead(.sysconfig.clock.TIMEZONE, timezone );
 	    default_timezone = Misc::SysconfigRead(.sysconfig.clock.DEFAULT_TIMEZONE, default_timezone);
-	    hwclock          = Misc::SysconfigRead(.sysconfig.clock.GMT, hwclock);
+	    hwclock          = Misc::SysconfigRead(.sysconfig.clock.UTC, hwclock);
 	}
 	return;
     }
@@ -305,7 +305,7 @@
 
 	SCR::Write(.sysconfig.clock.TIMEZONE, timezone);
 	SCR::Write(.sysconfig.clock.DEFAULT_TIMEZONE, default_timezone);
-	SCR::Write(.sysconfig.clock.GMT, hwclock);
+	SCR::Write(.sysconfig.clock.UTC, hwclock);
 
 	SCR::Write(.sysconfig.clock, nil);	// flush
 

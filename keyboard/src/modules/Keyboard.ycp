@@ -923,19 +923,19 @@
      * @see	-
      */
 
-    global define map Selection()
-	``{
-	// Get the reduced keyboard DB.
-	//
-	map keyboards = get_reduced_keyboard_db();
-	locale translate = "";
-	string trans_str = "";
+global define map Selection()
+    ``{
+    // Get the reduced keyboard DB.
+    //
+    map keyboards = get_reduced_keyboard_db();
+    locale translate = "";
+    string trans_str = "";
 
-	return mapmap( string keyboard_code, list keyboard_value, keyboards,
-		       ``{
-	    translate = keyboard_value[0]:$[];
-	    trans_str = eval(translate);
-	    return  [ keyboard_code, trans_str ];
+    return mapmap( string keyboard_code, list keyboard_value, keyboards,
+        ``{
+	translate = keyboard_value[0]:$[];
+	trans_str = eval(translate);
+	return  [ keyboard_code, trans_str ];
 	});
     }
 
