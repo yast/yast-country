@@ -151,6 +151,11 @@ $[
 		  "",
 		  "" ],
 
+  "zh_CN"       : [ "中文 (Chinese)"
+		  "Simplified Chinese",
+		  "",
+		  "" ],
+
   "tr_TR"	: [ "Türkçe",
 		  "Turkce",
 		  "",

@@ -90,7 +90,8 @@
 	``{
 	// Set default values.
 	//
-	if ( size( Storage::GetWinPrimPartitions( Storage::GetTargetMap() ) ) > 0 )
+	if( size(Storage::GetWinPrimPartitions(Storage::GetTargetMap())) > 0 ||
+	    Arch::board_mac )
 	{
 	    // Win partitions present ==> assume local time.
 	    //
