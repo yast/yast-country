@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 10 16:45:25 CEST 2002 - msvec@suse.cz
+
+- add missing Provides/Obsoletes
+- 2.6.26
+
+-------------------------------------------------------------------
 Tue Sep 10 13:10:44 CEST 2002 - arvin@suse.de
 
 - for serial console set default baud rate to 9600
