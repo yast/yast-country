@@ -260,7 +260,7 @@ define void GetKbdSysconfig()
  * @see
  */
 
-define map get_reduced_keyboard_db()
+define map<string,list> get_reduced_keyboard_db()
     ``{
     /*
      * Search the YaST2 keyboard DB for the corresponding kb_model entry and architecture.
@@ -285,13 +285,13 @@ define map get_reduced_keyboard_db()
      * Do not hold this database in a permanent module variable (it's very large).
      */
 
-    map all_keyboards = (map) eval(SCR::Read( .target.yast2, "keyboard_raw.ycp" ));
+    map<string,list> all_keyboards = (map<string,list>) eval(SCR::Read( .target.yast2, "keyboard_raw.ycp" ));
 
     if ( all_keyboards == nil ) all_keyboards = $[];
 
     // The new reduced map of keyboard data.
     //
-    map keyboards = $[];
+    map<string,list> keyboards = $[];
 
     foreach( string kb_lang, list description, all_keyboards,
 	``{	// loop over all languages
@@ -1295,11 +1295,11 @@ global define boolean CalledRestore()
      * @see	-
      */
 
-global define map Selection()
+global define map<string, string> Selection()
     ``{
     // Get the reduced keyboard DB.
     //
-    map keyboards = get_reduced_keyboard_db();
+    map<string, list> keyboards = get_reduced_keyboard_db();
     locale translate = "";
     string trans_str = "";
 
@@ -1322,16 +1322,16 @@ global define map Selection()
      *
      */
 
-    global define map keymap2yast()
+    global define map<string, string> keymap2yast()
     ``{
     // Get the reduced keyboard DB.
     //
-    map keyboards = get_reduced_keyboard_db();
+    map<string, list> keyboards = get_reduced_keyboard_db();
 
     return mapmap( string keyboard_code, list keyboard_value, keyboards,
                ``{
         map code_map = keyboard_value[1]:$[];
-        string code = select(splitstring(code_map["ncurses"]:"", "."), 0, "");
+        string code = select (splitstring (code_map["ncurses"]:"", "."), 0, "");
         return  $[ code: keyboard_code ];
     });
     }

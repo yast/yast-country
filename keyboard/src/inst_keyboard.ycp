@@ -197,7 +197,7 @@ Scroll Lock should be set
     // Create keyboard selection box with the default selection.
     // First build a map sorted by translations.
     //
-    list keyboardlist_by_translation =
+    list<term> keyboardlist_by_translation =
 	maplist( string keyboard_code, string keyboard_name, Keyboard::Selection(),
 	    ``{
 	    return `item( `id(keyboard_code),

@@ -26,6 +26,8 @@
 {
 textdomain "country";
 
+// map <string, list>
+
 return ($[
   "english-us":
     [
