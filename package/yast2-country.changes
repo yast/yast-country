@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-Thu Aug 19 15:12:23 CEST 2004 - nashif@suse.de
+Thu Aug 19 15:12:23 CEST 2004 - fehr@suse.de
 
 - fix keyboard handling for 64 bit Macs (#43955)
 - 2.10.7
