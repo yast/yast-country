@@ -126,21 +126,28 @@ are unset.<br>
     // set up selection list with default item
 
     boolean use_utf8 = true;		// utf8 is default
+    boolean use_ascii = false;          // default is utf8 text 
     boolean show_expert = true;         
 
     if ( ! lookup (UI::GetDisplayInfo(), "HasFullUtf8Support", true ) )
     {
-	use_utf8 = false;		// fallback to ascii
+	use_utf8 = false;		// no utf8 support
     }
 
+    if ( lookup (UI::GetDisplayInfo(), "TextMode", false ) )
+    {
+        use_ascii = true;               // fallback to ascii
+    }
+    
     // sort language by ASCII with help of a map
     // $[ "ascii-name" : [ "user-readable-string", "code" ], ...]
     // the "user-readable-string" is either ascii or utf8, depending
-    // on HasFullUtf8Support probed above.
+    // on textmode probed above (workaround because there isn't any
+    // usable console font for all languages).
 
     map languageselsort = mapmap(`lang_code, `lang_info, Language::Selection(),
 				``([lang_info[1]:"",	// ASCII value is the key
-				    [lang_info[use_utf8?0:1]:"", lang_code]
+				    [lang_info[use_ascii?1:0]:"", lang_code]
 				   ]));
 
     term languagesel =
