@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Feb  4 13:49:59 CET 2005 - jsuchome@suse.cz
+
+- language: drop "Install packages" checkbox (#50344)
+- translate all langauge names (new languages_db textdomain)
+- add list of additional languages to the installation summary
+- 2.11.11
+
+-------------------------------------------------------------------
 Thu Feb  3 16:57:47 CET 2005 - jsuchome@suse.cz
 
 - fixed keyboard & timezone adaptation from the 1st screen (#50426)

@@ -31,20 +31,20 @@
 	boolean language_changed = param["language_changed"]:false;
 
 	// Make proposal and fill return map
+	list<string> prop =
+	    Language::MakeProposal (force_reset, language_changed);
 
-	string prop = Language::MakeProposal( force_reset, language_changed );
+	y2milestone ("language_on_entry:%1 lang:%2, languages: %3",
+	    language_on_entry, Language::language, Language::languages);
 
-	y2milestone( "language_on_entry:%1 lang:%2", language_on_entry,
-	             Language::language );
-
-	if( force_reset && language_on_entry != Language::language )
+	if (force_reset && language_on_entry != Language::language)
 	{
 	    // Set it in YaST2
 	    Language::WfmSetLanguage();
 	}
 
 	ret = $[
-	      "raw_proposal"    : [ prop ],
+	      "raw_proposal"    : prop,
 	      "language_changed": (language_on_entry != Language::language )
 	];
     }
