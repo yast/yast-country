@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Apr 18 16:25:56 CEST 2005 - jsuchome@suse.cz
+
+- updated for new interface of ProductFeatures.ycp
+- 2.12.1 
+
+-------------------------------------------------------------------
 Tue Mar 29 14:07:46 CET 2005 - jsuchome@suse.cz
 
 - updated testsuite

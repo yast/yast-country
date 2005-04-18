@@ -236,9 +236,10 @@ global define void Language() {
 	    y2milestone ("setting lang to default language: %1", lang);
 	}
         // Ignore any previous settings and take language from control file.
-        if (ProductFeatures::language != "")
+	string l = ProductFeatures::GetStringFeature ("globals","language");
+        if (l != nil && l != "")
         {
-            lang = ProductFeatures::language;
+            lang = l;
 	    y2milestone ("setting lang to ProductFeatures::language: %1", lang);
         }
 	Set (lang);		// coming from /etc/install.inf
@@ -520,8 +521,8 @@ global define boolean IncompleteTranslation (string lang) {
 	else
 	    translation_status[lang]	= 100;
     }
-    integer treshold =
-	tointeger (ProductFeatures::incomplete_translation_treshold);
+    integer treshold = tointeger (ProductFeatures::GetStringFeature (
+	"globals", "incomplete_translation_treshold"));
     if (treshold == nil) treshold = 95;
 
     return translation_status[lang]:0 < treshold;
