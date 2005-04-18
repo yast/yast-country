@@ -1214,7 +1214,8 @@ global define string MakeProposal (boolean force_reset,boolean language_changed)
 	// set from outside the module.
 	if (user_decision ||
 	    (Mode::update () && !Stage::initial ()) ||
-	    Mode::autoinst () || ProductFeatures::keyboard != "")
+	    Mode::autoinst () ||
+	    ProductFeatures::GetStringFeature ("globals", "keyboard") != "")
 	{
 	    if (language_changed)
 	    {

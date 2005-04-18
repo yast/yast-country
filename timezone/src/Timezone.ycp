@@ -470,17 +470,18 @@ global define string MakeProposal (boolean force_reset,
 	// a timezone. The indicator for this is user_decision which is
 	// set from outside the module.
 	//
-	if( user_decision || Mode::autoinst () || ProductFeatures::timezone!="")
-	    {
+	if (user_decision || Mode::autoinst () ||
+	    ProductFeatures::GetStringFeature ("globals", "timezone") != "")
+	{
 	    if( language_changed )
 		{
 		y2milestone("User has chosen a timezone; not following language - only retranslation.");
 
 		Set( timezone, true );
 		}
-	    }
+	}
 	else
-	    {
+	{
 	    // User has not yet chosen a timezone ==> follow language.
 	    //
 	    string local_timezone =
@@ -500,7 +501,7 @@ global define string MakeProposal (boolean force_reset,
 		    Set( timezone, true );
 		    }
 		}
-	    }
+	}
     }
 
     // label text (Clock setting)
