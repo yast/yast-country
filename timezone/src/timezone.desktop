@@ -16,7 +16,7 @@ X-SuSE-YaST-Geometry=
 X-SuSE-YaST-SortKey=
 X-SuSE-YaST-AutoInstResource=
 
-Icon=timezone
+Icon=yast-timezone
 Exec=/sbin/yast2 timezone 
 
 Name=Date and Time
