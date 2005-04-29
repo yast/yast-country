@@ -92,6 +92,10 @@ $[
       "ru"		: [ "Cyr_a8x16.psfu",	"",	"koi2alt",	"(K" ],
       "ru_RU.UTF-8"     : [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
 
+      "bg_BG"		: [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
+      "bg"		: [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
+      "bg_BG.UTF-8"     : [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
+
       "ja_JP.sjis"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K" ],
       "ja"		: [ "lat1-16.psfu",	"",	"none",		"(K" ],
       "ja_JP.UTF-8"     : [ "lat9w-16.psfu",	"",	"trivial",	"(K" ],

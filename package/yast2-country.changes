@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr 29 17:08:58 CEST 2005 - jsuchome@suse.cz
+
+- added support for Bulgarian font on the console (#63083)
+- 2.12.2 
+
+-------------------------------------------------------------------
 Mon Apr 18 16:25:56 CEST 2005 - jsuchome@suse.cz
 
 - updated for new interface of ProductFeatures.ycp
