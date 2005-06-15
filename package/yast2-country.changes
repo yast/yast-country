@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jun 14 17:09:56 CEST 2005 - jsuchome@suse.cz
+
+- added writing progress dialog (#73044)
+- added support for installing language packages with CLI "set" command
+- 2.12.3 
+
+-------------------------------------------------------------------
 Fri Apr 29 17:08:58 CEST 2005 - jsuchome@suse.cz
 
 - added support for Bulgarian font on the console (#63083)

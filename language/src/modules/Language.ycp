@@ -18,6 +18,8 @@ import "AsciiFile";
 import "Encoding";
 import "Misc";
 import "Mode";
+import "PackageCallbacksInit";
+import "PackageSystem";
 import "ProductFeatures";
 import "Stage";
 
@@ -467,6 +469,40 @@ global define void Save() {
     SCR::Write (.sysconfig.language, nil);
 
     y2milestone("Saved data for language: <%1>", GetLocaleString(language) );
+}
+
+/**
+ * Initializes source and target,
+ * computes the packages necessary to install and uninstall,
+ * checks for disk space (#50745)
+ * @return false when there is not enough disk space for new packages
+ */
+global define boolean PackagesInit (list<string> selected_languages) {
+
+    PackageSystem::EnsureSourceInit ();
+    PackageSystem::EnsureTargetInit ();
+
+    Pkg::SetAdditionalLocales (selected_languages);
+    Pkg::PkgSolve (true);
+
+    boolean ok	= true;
+    foreach (string mountpoint, list<integer> usage, Pkg::TargetGetDU (), {
+	if (usage[2]:0 > usage[0]:0)
+	{
+	    ok = false;
+	}
+    });
+    return ok;;
+}
+
+/**
+ * Install and uninstall packages selected by Pkg::SetAdditionalLocales
+ */
+global define boolean PackagesCommit () {
+
+    PackageCallbacksInit::InitPackageCallbacks ();
+    Pkg::PkgCommit (0);
+    return true;
 }
 
 
