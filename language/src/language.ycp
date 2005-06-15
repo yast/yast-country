@@ -23,7 +23,9 @@ import "Bootloader";
 import "CommandLine";
 import "Console";
 import "Language";
+import "Mode";
 import "Popup";
+import "Progress";
 import "Wizard";
 
 string language_on_entry = "";
@@ -48,14 +50,55 @@ define boolean LanguageRead () {
  */
 define boolean LanguageWrite () {
 
+    y2milestone ("Language changed --> saving");
+
+    integer steps	= 3;
+
+    Progress::New (_("Saving Language Configuration"), " ", steps, [
+	// progress stage
+	_("Save language and console settings"),
+	// progress stage
+	_("Install and uninstall affected packages"),
+	// progress stage
+	_("Update translations in boot loader menu"),
+	], [
+	// progress step
+	_("Saving language and console settings..."),
+	// progress step
+	_("Installing and uninstalling affected packages..."),
+	// progress step
+	_("Updating translations in boot loader menu..."),
+	// last progress step
+	_("Starting SuSEconfig...")
+	], ""
+    );
+
+    Progress::NextStage ();
+
     Language::Save ();
     Console::Save ();
 
-    y2milestone ("Language changed --> saving");
+    Progress::NextStage ();
 
-    WFM::CallFunction ("inst_suseconfig", [ false, false ]);
+    boolean enough_space	= true;
+    if (Mode::commandline ())
+    {
+	// if not commandline, packages were already initialized in inst_ client
+	enough_space = Language::PackagesInit (
+	    splitstring (Language::languages, ","));
+    }
+    if (enough_space)
+    {
+	Language::PackagesCommit ();
+    }
+
+    Progress::NextStage ();
 
     Bootloader::UpdateGfxMenu();
+
+    Progress::NextStage ();
+
+    WFM::CallFunction ("inst_suseconfig", [ false, false ]);
 
     return true;
 }
@@ -117,6 +160,8 @@ define any LanguageSequence () {
 	    Language::languages != languages_on_entry	||
 	    Language::ExpertSettingsChanged)
 	{
+	    // help for write dialog
+	    Wizard::RestoreHelp (_("<p><b>Saving Configuration</b><br>Please wait...</p>"));
 	    LanguageWrite ();
 	}
 	else
@@ -175,11 +220,18 @@ define boolean LanguageSetHandler (map options) {
     {
 	// error message (%1 is given layout); do not translate 'list'
 	CommandLine::Print (sformat (_("'%1' is not a valid language. Use a 'list' command to see possible values."), language));
+	return false;
     }
+    list<string> languages       = splitstring (Language::languages, ",");
+    if (! contains (languages, language))
+	languages       = add (languages, language);
+
+    Language::languages	= mergestring (languages, ",");
     Language::Set (language);
     Console::SelectFont (language);
 
-    return (language_on_entry != Language::language);
+    return (language_on_entry != Language::language ||
+	    languages_on_entry != Language::languages);
 }
 
 
