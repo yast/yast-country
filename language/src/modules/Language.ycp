@@ -16,6 +16,7 @@ textdomain "country";
 
 import "AsciiFile";
 import "Encoding";
+import "Linuxrc";
 import "Misc";
 import "Mode";
 import "PackageCallbacksInit";
@@ -216,22 +217,20 @@ global define void Language() {
     {
 	string lang = (string)SCR::Read (.content.LANGUAGE);
 	y2milestone ("content LANGUAGE %1", lang);
-	if (SCR::Read (.target.size, "/etc/install.inf") > 0)
+
+	string tmp_l = Linuxrc::InstallInf ("Locale");
+	y2milestone ("install_inf Locale %1", tmp_l);
+	if (tmp_l != nil && size(tmp_l) > 0)
 	{
-	    string tmp_l = (string)SCR::Read (.etc.install_inf.Locale);
-	    y2milestone ("install_inf Locale %1", tmp_l);
-	    if (tmp_l!=nil && size(tmp_l)>0)
+	    lang = tmp_l;
+	    if (lang != "en_US")
 	    {
-		lang = tmp_l;
-		if( lang != "en_US" )
-		{
-		    linuxrc_language_set = true;
-		}
+		linuxrc_language_set = true;
 	    }
 	}
 	if (lang == nil)
 	    lang = "";
-	y2milestone( "lang from /etc/install.inf: %1", lang );
+	y2milestone ("lang after checking /etc/install.inf: %1", lang );
 	if (lang == "")
 	{
 	    lang = Pkg::GetLocale();

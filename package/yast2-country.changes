@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jun 22 18:03:41 CEST 2005 - jsuchome@suse.cz
+
+- use Linuxrc module for accessing /etc/install.inf 
+
+-------------------------------------------------------------------
 Tue Jun 14 17:09:56 CEST 2005 - jsuchome@suse.cz
 
 - added writing progress dialog (#73044)
