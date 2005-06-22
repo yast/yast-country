@@ -216,7 +216,7 @@
     ``{
 	if (Stage::initial ())
 	{
-	    serial = (string)SCR::Read (.etc.install_inf.Console);
+	    serial = Linuxrc::InstallInf ("Console");
 	    if (serial == nil) serial = "";
 	}
 	else
