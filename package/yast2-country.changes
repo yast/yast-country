@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jul  8 15:27:58 CEST 2005 - jsuchome@suse.cz
+
+- text fixes from rwalter 
+- 2.12.4
+
+-------------------------------------------------------------------
 Wed Jun 22 18:03:41 CEST 2005 - jsuchome@suse.cz
 
 - use Linuxrc module for accessing /etc/install.inf 

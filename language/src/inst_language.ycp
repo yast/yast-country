@@ -43,22 +43,18 @@ define void LanguageExpertDialog()
     // help text for keyboard expert screen
     string help_text = _("<p>
 Here, fine-tune settings for the language handling.
-These settings are written into the file <b>/etc/sysconfig/language</b>.
+These settings are written into the file <tt>/etc/sysconfig/language</tt>.
+If unsure, use the default values already selected.
 </p>
 ");
 
-    // general help trailer
     help_text = help_text + _("<p>
-If unsure, use the default values already selected.
-</p>");
-
-    help_text = help_text + _("<p>
-<b>LANG Environment Settings for User root:</b>
-This determines how the locale variables (LC_*) are set for the root user.</p>
-<p><b>ctype only:</b> root has the same LC_CTYPE as a normal user. Other values
+<b>Locale Settings for User root</b>
+determines how the locale variables (LC_*) are set for the root user.</p>
+<p><b>ctype Only</b>: root has the same LC_CTYPE as a normal user. Other values
 are unset.<br>
-<b>yes:</b> root has the same locale settings as normal user.<br>
-<b>no:</b> root has all locale variables unset.
+<b>Yes</b>: root has the same locale settings as normal user.<br>
+<b>No</b>: root has all locale variables unset.
 </p>
 ");
 
@@ -157,7 +153,7 @@ are unset.<br>
     * ----------------------------------------------------------------------*/
 
     // heading text
-    string heading_text = _("Language selection");
+    string heading_text = _("Languages");
 
     if (Stage::initial () && set_default && !Mode::repair ())
     {
@@ -172,7 +168,7 @@ are unset.<br>
     else if (Mode::repair ())
     {
 	// heading text
-	heading_text = _("Welcome to YaST2 System Repair");
+	heading_text = _("Welcome to System Repair");
     }
 
     if (Stage::initial () && set_default)
@@ -234,7 +230,7 @@ are unset.<br>
 	    `HWeight (50,
 		`VBox (
 		    // label text
-		    `Left (`Label (_("Select your language:"))),
+		    `Left (`Label (_("Language"))),
 		    languagesel
 		)
 	    ),
@@ -264,7 +260,7 @@ are unset.<br>
 
 	term languages_term = `MultiSelectionBox (`id(`languages),
 	    // multiselection box label
-	    _("&Secondary Languages"),
+	    _("&Installed Languages"),
 	    maplist (string trans_lang, lsort (lang_list), {
 		string code	= lang2code [trans_lang]:"";
 		return
@@ -294,10 +290,10 @@ are unset.<br>
 		    `VSpacing (0.5),
 		    `Left (`CheckBox (`id (`adapt_kbd),
 			// check box label (%1 is keyboard layout name)
-			sformat(_("Adapt &Keyboard Layout to '%1'"),kbd_name))),
+			sformat(_("Adapt &Keyboard Layout to %1"),kbd_name))),
 		    `Left (`CheckBox (`id (`adapt_tmz),
 			// check box label (%1 is country name)
-			sformat (_("Adapt &Time Zone to '%1'"), tmz_name))),
+			sformat (_("Adapt &Time Zone to %1"), tmz_name))),
 		    `VSpacing (0.5)
 		),
 		`HSpacing (0.5))
@@ -322,14 +318,14 @@ are unset.<br>
 
     string help_text		= "";
     string packages_help	= _("<p>
-Additional packages with support for the selected primary and secondary languages will be installed. Packages no longer needed will be removed.
+Additional packages with support for the selected languages will be installed. Packages no longer needed will be removed.
 </p>");
 
     if (Stage::initial ())
     {
 	// help text for initial (first time) language screen
 	help_text = _("<p>
-Choose the <b>language</b> to use during installation and for
+Choose the <b>Language</b> to use during installation and for
 the installed system.
 </p>
 ");
@@ -342,7 +338,7 @@ Click <b>Accept</b> to proceed to the next dialog.
 
 	// help text, continued
 	help_text = help_text + _("<p>
-<b><i>Nothing will happen</i></b> to your computer until you confirm
+Nothing will happen to your computer until you confirm
 all your settings in the last installation dialog.
 </p>
 ");
@@ -361,7 +357,7 @@ installation process.
 	// different help text when called after installation
 	// in an installed system
 	help_text = _("<p>
-Choose the new <b>language</b> for your system.
+Choose the new <b>Language</b> for your system.
 </p>\n");
     }
 
@@ -369,24 +365,21 @@ Choose the new <b>language</b> for your system.
     {
 	// help text when "multiple languages" are suported 1/2
 	help_text = _("<p>
-Choose the new <b>primary language</b> for your system.
+Choose the new <b>Primary Language</b> for your system.
 </p>\n");
 
 	// help text for 'adapt keyboard checkbox'
 	help_text	= help_text + _("<p>
 Check <b>Adapt Keyboard Layout</b> to adapt the keyboard layout to the primary language.
-</p>
-") +
-
-	_("<p>
 Check <b>Adapt Time Zone</b> to change the current time zone according to the primary language.
 </p>
 ");
 
 	// help text when "multiple languages" are suported 2/2
 	help_text	= help_text + _("<p>
-<b>Secondary Languages</b><br>
-In the selection box, specify additional languages to use on your system.
+In <b>Installed Languages</b>,
+specify all languages to use on your system.  The primary language 
+is preselected. 
 </p>
 ");
 
@@ -479,7 +472,7 @@ Some texts may be displayed in English.
 		    UI::ReplaceWidget (`id(`rplangs),
 			`MultiSelectionBox (`id(`languages),
 			    // multiselection box label
-			    _("Secondary Languages"),
+			    _("Installed Languages"),
 			    maplist (string trans_lang, lsort (lang_list), {
 				string code	= lang2code [trans_lang]:"";
 				return `item (`id (code), trans_lang,

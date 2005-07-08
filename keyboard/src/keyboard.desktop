@@ -20,7 +20,7 @@ Icon=yast-keyboard
 Exec=/sbin/yast2 keyboard 
 
 Name=Keyboard Layout
-GenericName=This module changes the keyboard layout
+GenericName=Select the keyboard layout
 Name[cs]=Výběr rozložení klávesnice
 GenericName[cs]=Tento modul mění rozvržení klávesnice
 Name[de]=Tastaturbelegung auswählen

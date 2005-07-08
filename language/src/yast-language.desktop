@@ -20,7 +20,7 @@ Icon=yast-yast-language
 Exec=/sbin/yast2 language 
 
 Name=Language Selection
-GenericName=Change the system's language here.
+GenericName=Change the language and install additional languages
 Name[cs]=Výběr jazyka
 GenericName[cs]=Zde můžete změnit systémový jazyk.
 Name[de]=Sprache wählen

@@ -219,7 +219,7 @@ define boolean LanguageSetHandler (map options) {
     if (language == "" || !haskey (Language::Selection(), language))
     {
 	// error message (%1 is given layout); do not translate 'list'
-	CommandLine::Print (sformat (_("'%1' is not a valid language. Use a 'list' command to see possible values."), language));
+	CommandLine::Print (sformat (_("%1 is not a valid language. Use the list command to see possible values."), language));
 	return false;
     }
     list<string> languages       = splitstring (Language::languages, ",");
@@ -239,7 +239,7 @@ define boolean LanguageSetHandler (map options) {
 map cmdline = $[
     "id"		: "language",
     // translators: command line help text for language module
-    "help"		: _("Language configuration."),
+    "help"		: _("Language configuration"),
     "guihandler"	: LanguageSequence,
     "initialize"	: LanguageRead,
     "finish"		: LanguageWrite,
@@ -247,12 +247,12 @@ map cmdline = $[
 	"summary" :$[
 	    "handler"	: LanguageSummaryHandler,
 	    // command line help text for 'summary' action
-	    "help"	: _("Language configuration summary."),
+	    "help"	: _("Language configuration summary"),
 	],
 	"set" :$[
 	    "handler"	: LanguageSetHandler,
 	    // command line help text for 'set' action
-	    "help"	: _("Set new values for language."),
+	    "help"	: _("Set new values for language"),
 	],
 	"list": $[
 	    "handler"	: LanguageListHandler,

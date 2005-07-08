@@ -43,13 +43,16 @@ define symbol KeyboardExpertDialog()
     // help text for keyboard expert screen
     string help_text = _("<p>
 Here, fine tune various settings of the keyboard module.
-These settings are written into the file <b>/etc/sysconfig/keyboard</b>.
+These settings are written into the file <tt>/etc/sysconfig/keyboard</tt>.
+If unsure, use the default values already selected.
 </p>
+<p>Settings made here apply only to the console keyboard.  Configure the keyboard for the graphical user interface with another tool, such as SaX.</p>
 ");
 
     // general help trailer
     help_text = help_text + _("<p>
-If unsure, use the default values already selected.
+<p>
+For <b>Devices for Lock</b>, enter a space-separated list of devices to which to apply the Scroll Lock, Num Lock, and Caps Lock settings.
 </p>");
 
     // label text
@@ -63,7 +66,7 @@ If unsure, use the default values already selected.
 			    `VBox(
 				`HSpacing( 60 ),
 				// heading text
-				`Heading( _("Keyboard Expert Dialog") ),
+				`Heading( _("Expert Keyboard Settings") ),
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`TextEntry( `id(`rate),
 						  // label text
@@ -74,7 +77,7 @@ If unsure, use the default values already selected.
 				`VSpacing(`opt(`vstretch), 1),
 				`Frame(
 				    // label text
-				    _("Start-up States"),
+				    _("Start-Up States"),
 				    `VBox(
 					`Left(`ComboBox( 
 					    `id(`numlock),
@@ -96,9 +99,7 @@ If unsure, use the default values already selected.
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`TextEntry( `id(`tty),
 					    // label text
-				            _("&Devices on which the values for Num Lock, Caps Lock, and
-Scroll Lock should be set
-") )),
+				            _("&Devices for Lock") )),
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`CheckBox( `id(`discaps),
 					   // label text
@@ -207,12 +208,12 @@ Scroll Lock should be set
 
     keyboardsel = `SelectionBox( `id( `keyboard ), `opt(`notify),
 		// title for selection box 'keyboard layout'
-		_("&Keyboard layout"),
+		_("&Keyboard Layout"),
 		keyboardlist_by_translation);
 
     // title for input field to test the keyboard setting
     // (no more than about 25 characters!)
-    term test = `TextEntry( _("Keyboard &test:") );
+    term test = `TextEntry( _("&Test") );
     if (Mode::config ())
 	test = `Empty();
 
@@ -223,7 +224,7 @@ Scroll Lock should be set
 		test,
 		`VSpacing( 0.8 ),
 		// push button
-		`PushButton( `id(`expert), _("E&xpert Settings") )
+		`PushButton( `id(`expert), _("E&xpert Settings...") )
 	     );
 
     /* ----------------------------------------------------------------------
@@ -247,9 +248,13 @@ Scroll Lock should be set
 	    );
 
     // help text for keyboard screen
-    string help_text = _("<p>
-Choose the <b>keyboard layout</b> to use for
-installation and in the installed system.
+    string help_text = _("
+<p><big><b>Keyboard Configuration</b></big></p>
+<p>
+Choose the <b>Keyboard Layout</b> to use for
+installation and in the installed system.  
+Test the layout in <b>Test</b>.
+For advanced options, such as repeat rate and delay, select <b>Expert Settings</b>.
 </p>
 ");
 

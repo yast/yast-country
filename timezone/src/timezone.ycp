@@ -100,7 +100,7 @@ define boolean TimezoneSummaryHandler (map options) {
     {
 	// summary label
 	CommandLine::Print (sformat (_("Hardware Clock Set To:\t%1"),
-	    Timezone::hwclock == "-u" ? _("UTC") : _("local time")));
+	    Timezone::hwclock == "-u" ? _("UTC") : _("Local time")));
 
     }
     // summary label
@@ -150,8 +150,8 @@ define boolean TimezoneSetHandler (map options) {
 /* -- the command line description map -------------------------------------- */
 map cmdline = $[
     "id"		: "timezone",
-    // translators: command line help text for Securoty module
-    "help"		: _("Time zone configuration."),
+    // translators: command line help text for timezone module
+    "help"		: _("Time zone configuration"),
     "guihandler"	: TimezoneSequence,
     "initialize"	: TimezoneRead,
     "finish"		: TimezoneWrite,
@@ -159,17 +159,17 @@ map cmdline = $[
 	"summary" :$[
 	    "handler"	: TimezoneSummaryHandler,
 	    // command line help text for 'summary' action
-	    "help"	: _("Time zone configuration summary."),
+	    "help"	: _("Time zone configuration summary"),
 	],
 	"set" :$[
 	    "handler"	: TimezoneSetHandler,
 	    // command line help text for 'set' action
-	    "help"	: _("Set new values for time zone configuration."),
+	    "help"	: _("Set new values for time zone configuration"),
 	],
 	"list": $[
 	    "handler"	: TimezoneListHandler,
 	    // command line help text for 'list' action
-	    "help"	: _("List all available time zones.")
+	    "help"	: _("List all available time zones")
 	],
     ],
     "options"		: $[
