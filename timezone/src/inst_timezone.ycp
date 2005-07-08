@@ -52,13 +52,12 @@ define void SetTimezone (symbol hwclock, string timezone, boolean really,
 
 define boolean SetTimeDialog() {
     // help text
-    string htext = _("<p>This dialog offers the possibility to change
+    string htext = _("<p>Here, change
 the system time and date.</p>
 ");
     // help text
-    htext = htext + _("Current system time and date are displayed in
-the input fields. Change them to the correct values and press the
-Apply button.
+    htext = htext + _("The current system time and date are displayed. Change them to the correct values and press 
+<b>Apply</b>.
 ");
 
     map val = Timezone::GetDateTimeMap();
@@ -142,8 +141,8 @@ Apply button.
 	    if (!Timezone::CheckTime (hour, minute, second))
 	    {
 		string tmp = sformat( "%1:%2:%3", hour, minute, second );
-		// popup text
-		tmp = sformat( _("Invalid time (HH:MM:SS) %1
+		// popup text, %1 is entered value
+		tmp = sformat( _("Invalid time (HH:MM:SS) %1.
 Enter the correct time.
 "), tmp );
 		Popup::Error( tmp );
@@ -152,8 +151,8 @@ Enter the correct time.
 	    else if( !Timezone::CheckDate( day, month, year ))
 	    {
 		string tmp = sformat( "%1-%2-%3", day, month, year );
-		// popup text
-		tmp = sformat( _("Invalid date (DD-MM-YYYY) %1
+		// popup text, %1 is entered value
+		tmp = sformat( _("Invalid date (DD-MM-YYYY) %1.
 Enter the correct date.
 "), tmp );
 		Popup::Error( tmp );
@@ -233,10 +232,10 @@ Enter the correct date.
 	    `ComboBox (
 		`id (`hwclock), `opt(`hstretch, `notify ),
 		// combo box label
-		 _("&Hardware clock set to"),
+		 _("&Hardware Clock Set To"),
 		[
 		    // ComboBox entry: hardware clock set to local time
-		    `item (`id (`hwclock_localtime), _("local time"),
+		    `item (`id (`hwclock_localtime), _("Local Time"),
 			    (hwclock == "--localtime")),
 
 		    // ComboBox entry: hardware clock set UTC
@@ -250,7 +249,7 @@ Enter the correct date.
     {
 	hw_clock = `VBox (
 	    // label text
-	    `Label (`id(`hwcl), `opt(`hstretch), _("Hardware clock set to")),
+	    `Label (`id(`hwcl), `opt(`hstretch), _("Hardware Clock Set To")),
 	    `Label( `id(`date), `opt(`hstretch), date )
 	);
     }
@@ -280,9 +279,12 @@ Enter the correct date.
     );
 
     // help for timezone screen
-    string help_text = _("<p>
-Select the appropriate <b>time zone</b>:
-Choose the country or region where you are located.
+    string help_text = _("
+<p><b><big>Time Zone and Clock Settings</big></b></p>
+<p>
+To select the time zone to use in your system, first select the <b>Region</b>.
+In <b>Time Zone</b>, then select the appropriate time zone, country, or 
+region from those available.
 </p>
 ");
 
@@ -291,17 +293,10 @@ Choose the country or region where you are located.
 	// help for time calculation basis:
 	// hardware clock references local time or UTC?
 	help_text = help_text + _("<p>
-Specify whether the <b>hardware clock</b> of your machine is set to local time or UTC.
-</p>");
-	// additional help for hardware clock
-	help_text = help_text + _("<p>
+Specify whether your machine is set to local time or UTC in <b>Hardware Clock Set To</b>.
 Most PCs that also have other operating systems installed (such as Microsoft
 Windows) use local time.
-</p>");
-
-	// additional help for hardware clock
-	help_text = help_text + _("<p>
-Machines that have only Linux installed should be
+Machines that have only Linux installed are usually
 set to Universal Time Coordinated (UTC).
 </p>
 ");
@@ -310,11 +305,11 @@ set to Universal Time Coordinated (UTC).
 
     // general help trailer
     help_text = help_text + _("<p>
-If you are unsure, use the default values already selected.
+If the current time is not correct, use <b>Change Time or Date</b> to adjust it.
 </p>");
 
     // Screen title for timezone screen
-    Wizard::SetContents (_("Clock and Time Zone Configuration"), contents,
+    Wizard::SetContents (_("Clock and Time Zone"), contents,
 			 help_text, GetInstArgs::enable_back(), GetInstArgs::enable_next() );
 
     Wizard::SetDesktopIcon ("timezone");

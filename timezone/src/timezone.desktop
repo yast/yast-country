@@ -20,5 +20,5 @@ Icon=yast-timezone
 Exec=/sbin/yast2 timezone 
 
 Name=Date and Time
-GenericName=Control settings of timezone, date and system time.
+GenericName=Control time zone, date, and system time
 X-KDE-SubstituteUID=true

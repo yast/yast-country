@@ -509,10 +509,10 @@ global define string MakeProposal (boolean force_reset,
 
     if (hwclock == "--localtime")
 	// label text, Clock setting: local time (not UTC)
-	clock_setting = _("local time");
+	clock_setting = _("Local Time");
 
     // label text
-    clock_setting = _("Hardware clock set to") + " " + clock_setting;
+    clock_setting = _("Hardware Clock Set To") + " " + clock_setting;
 
     string date = GetDateTime (true, true);
 
