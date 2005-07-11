@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Jul 11 11:16:18 CEST 2005 - jsuchome@suse.cz
+
+- modified UI for timezone and initial langauge dialogs
+- timezone: used specialized `Date and `Time widgets in Qt
+- some help text fixes (check_ycp)
+- 2.12.5
+
+-------------------------------------------------------------------
 Fri Jul  8 15:27:58 CEST 2005 - jsuchome@suse.cz
 
 - text fixes from rwalter 

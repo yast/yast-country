@@ -40,7 +40,8 @@
 define void LanguageExpertDialog()
     ``{
     symbol ret = `none;
-    // help text for keyboard expert screen
+
+    // help text for langauge expert screen
     string help_text = _("<p>
 Here, fine-tune settings for the language handling.
 These settings are written into the file <tt>/etc/sysconfig/language</tt>.
@@ -48,10 +49,13 @@ If unsure, use the default values already selected.
 </p>
 ");
 
+    // help text for langauge expert screen
     help_text = help_text + _("<p>
 <b>Locale Settings for User root</b>
-determines how the locale variables (LC_*) are set for the root user.</p>
-<p><b>ctype Only</b>: root has the same LC_CTYPE as a normal user. Other values
+determines how the locale variables (LC_*) are set for the root user.</p>") +
+
+    // help text for langauge expert screen
+    _("<p><b>ctype Only</b>: root has the same LC_CTYPE as a normal user. Other values
 are unset.<br>
 <b>Yes</b>: root has the same locale settings as normal user.<br>
 <b>No</b>: root has all locale variables unset.
@@ -151,21 +155,15 @@ are unset.<br>
    /* ----------------------------------------------------------------------
     * Build dialog
     * ----------------------------------------------------------------------*/
-
     // heading text
     string heading_text = _("Languages");
 
     if (Stage::initial () && set_default && !Mode::repair ())
     {
-	import "Product";
-
-	// initial heading for language selection
-	// (first 'user visible' screen)
-	// %1 is product name
-	heading_text = sformat (_("Welcome to the %1 Installation"),
-	    Product::name);
+	// heading text
+	heading_text = _("Language");
     }
-    else if (Mode::repair ())
+    if (Mode::repair ())
     {
 	// heading text
 	heading_text = _("Welcome to System Repair");
@@ -211,9 +209,13 @@ are unset.<br>
 			  (language == codelist[1]:""))))
     );
 
+    // this type of contents will be shown only for initial installation dialog
+    term contents = `HVCenter (
+	`BackgroundPixmap ("wallpapers/welcome.jpg"),
+	`MinSize (25, 12, languagesel)
+    );
 
     term expert = `HStretch();
-
     if (show_expert)
     {
 	expert = `VBox (
@@ -223,28 +225,11 @@ are unset.<br>
 	);
     }
 
-    term contents = `VBox (
-	`VSpacing (0.3),
-	`HBox (
-	    `HWeight (25, `HStretch ()),
-	    `HWeight (50,
-		`VBox (
-		    // label text
-		    `Left (`Label (_("Language"))),
-		    languagesel
-		)
-	    ),
-	    `HWeight (25, expert)
-	),
-	`VSpacing (2)
-    );
-
     // if checkboxes for adapting keyboard and timezone should be shown
     boolean adapt_term = more_languages;
 
     if (more_languages)
     {
-
 	term primary_language_term =
 	    `ComboBox (`id(`language), `opt (`notify),
 	    // combo box label
@@ -388,7 +373,8 @@ is preselected.
 
     // Screen title for the first interactive dialog
 
-    Wizard::SetContents (heading_text, contents, help_text,GetInstArgs::enable_back() , GetInstArgs::enable_next());
+    Wizard::SetContents (heading_text, contents, help_text,
+	GetInstArgs::enable_back() , GetInstArgs::enable_next());
 
     Wizard::SetDesktopIcon("yast-language");
 
