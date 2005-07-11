@@ -47,20 +47,82 @@ define void SetTimezone (symbol hwclock, string timezone, boolean really,
 
     // Redisplay date/time.
     //
-    UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime (really, true));
+    UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime (really, false));
+    //true));
 };
 
+/**
+ * Dialog for setinge system date and time
+ */
 define boolean SetTimeDialog() {
+
     // help text
     string htext = _("<p>Here, change
 the system time and date.</p>
 ");
     // help text
-    htext = htext + _("The current system time and date are displayed. Change them to the correct values and press 
-<b>Apply</b>.
+    htext = htext + _("<p>The current system time and date are displayed. Change them to the correct values and press 
+<b>Apply</b>.</p>
 ");
 
     map val = Timezone::GetDateTimeMap();
+
+    string hour		= val["hour"]:"";
+    string minute	= val["minute"]:"";
+    string second	= val["second"]:"";
+    string day		= val["day"]:"";
+    string month	= val["month"]:"";
+    string year		= val["year"]:"";
+
+    term dateterm	= `VBox (
+	`HBox (
+	    `HSpacing(1),
+	    // label text, do not change "DD-MM-YYYY"
+	    `Left (`Label(_("Current Date in DD-MM-YYYY Format")))
+	),
+	`HBox (
+	    `HSpacing(10),
+	    `TextEntry( `id(`day), `opt(`shrinkable), "", day),
+	    `HSpacing (),
+	    `TextEntry( `id(`month), `opt(`shrinkable), "", month),
+	    `HSpacing (),
+	    `TextEntry( `id(`year), `opt(`shrinkable), "", year),
+	    `HSpacing(30)
+	)
+    );
+    term timeterm	= `VBox (
+	`HBox (
+	    `HSpacing (1),
+	    // label text, do not change "HH:MM:SS"
+	    `Left (`Label (_("Current Time in HH:MM:SS Format")))
+	),
+	`HBox (
+	    `HSpacing(10),
+	    `TextEntry (`id(`hour), `opt(`shrinkable), "", hour),
+	    `HSpacing (),
+	    `TextEntry (`id(`minute), `opt(`shrinkable), "", minute),
+	    `HSpacing (),
+	    `TextEntry (`id(`second), `opt(`shrinkable), "", second),
+	    `HSpacing(30)
+	)
+    );
+    boolean dt_widgets = false;
+    if (UI::HasSpecialWidget (`Date) && UI::HasSpecialWidget (`Time))
+    {
+	dateterm	= `HBox (
+	    // label text
+	    `Date (`id(`date), _("Current Date"),
+		sformat ("%1-%2-%3", year, month, day)
+	    )
+	);
+	timeterm = `HBox (
+	    // label text
+	    `Time (`id(`time), _("Current Time"),
+		sformat ("%1:%2:%3", hour, minute, second)
+	    )
+	);
+	dt_widgets	= true;
+    }
 
     UI::OpenDialog( `opt(`decorated),
 	`HBox(
@@ -68,76 +130,66 @@ the system time and date.</p>
 	    `HStretch(),
 	    `HSpacing(1),
 	    `HWeight(70,
-		`VBox(
-		    `HBox( `HSpacing(60) ),
+		`VBox (
+		    `HBox (`HSpacing(55)),
 		    // heading text
 		    `Heading( _("Change System Date and Time") ),
-		    `VSpacing(3),
-		    `VStretch(),
-		    `HBox ( `HSpacing(10),
-			   // label text, do not change "HH:MM:SS"
-		           `Label( _("Current Time in HH:MM:SS Format")),
-			   `HStretch()
-		    ),
-		    `HBox (`HSpacing(10),
-		           `TextEntry( `id(`hour), `opt(`shrinkable), "",
-			               val["hour"]:"" ),
-			   `Label( ":" ),
-		           `TextEntry( `id(`minute), `opt(`shrinkable), "",
-			                val["minute"]:"" ),
-			   `Label( ":" ),
-		           `TextEntry( `id(`second), `opt(`shrinkable), "",
-			                val["second"]:"" ),
-			   `HSpacing(32)
-		    ),
 		    `VSpacing(2),
 		    `VStretch(),
-		    `HBox( `HSpacing(10),
-			   // label text, do not change "DD-MM-YYYY"
-			   `Label( _("Current Date in DD-MM-YYYY Format") ),
-			   `HStretch() ),
-		    `HBox( `HSpacing(10),
-			   `VBox( `HSpacing(2),
-			          `TextEntry( `id(`day), `opt(`shrinkable), "",
-				              val["day"]:"" )),
-			   `Label( "-" ),
-			   `VBox( `HSpacing(2),
-				  `TextEntry( `id(`month), `opt(`shrinkable),
-				               "", val["month"]:"" )),
-			   `Label( "-" ),
-			   `VBox( `HSpacing(4),
-				  `TextEntry( `id(`year), `opt(`shrinkable), "",
-				              val["year"]:"" )),
-			   `HSpacing(30)
-		    ),
-		    `VSpacing(4),
+		    timeterm,
+		    `VSpacing(),
+		    `VStretch(),
+		    dateterm,
+		    `VSpacing(2),
 		    `VStretch(),
 		    `HBox(
 		        // button text
 			`PushButton(`id(`apply), `opt(`default), _("&Apply")),
-			`PushButton(`id(`cancel), Label::CancelButton() ))
-		    )
+			`PushButton(`id(`cancel), Label::CancelButton() )
+		    ),
+		    `VSpacing()
 		)
+	    )
     ));
-    UI::ChangeWidget( `id(`hour), `ValidChars, "0123456789" );
-    UI::ChangeWidget( `id(`minute), `ValidChars, "0123456789" );
-    UI::ChangeWidget( `id(`second), `ValidChars, "0123456789" );
-    UI::ChangeWidget( `id(`day), `ValidChars, "0123456789" );
-    UI::ChangeWidget( `id(`month), `ValidChars, "0123456789" );
-    UI::ChangeWidget( `id(`year), `ValidChars, "0123456789" );
+
+
+    if (!dt_widgets)
+    {
+	foreach (symbol widget, [`hour, `minute, `second, `day, `month, `year],{
+	    UI::ChangeWidget (`id(widget), `ValidChars, "0123456789");
+	    UI::ChangeWidget (`id(widget), `InputMaxLength,
+		widget == `year ? 4 : 2);
+	});
+    }
     any ret = `cancel;
     repeat
     {
 	ret = UI::UserInput();
-	y2milestone( "UserInput ret:%1", ret );
+	y2debug ("UserInput ret:%1", ret );
 	if (ret == `apply)
 	{
-	    string hour = (string) UI::QueryWidget( `id(`hour), `Value );
-	    string minute = (string) UI::QueryWidget( `id(`minute), `Value );
-	    string second = (string) UI::QueryWidget( `id(`second), `Value );
-	    string day = (string) UI::QueryWidget( `id(`day), `Value );
-	    string month = (string) UI::QueryWidget( `id(`month), `Value );
-	    string year = (string) UI::QueryWidget( `id(`year), `Value );
+	    if (dt_widgets)
+	    {
+		list datel	= splitstring (
+		    (string) UI::QueryWidget (`id(`date), `Value), "-");
+		year	= datel[0]:"";
+		month	= datel[1]:"";
+		day	= datel[2]:"";
+		list timel	= splitstring (
+		    (string) UI::QueryWidget (`id(`time), `Value), ":");
+		hour	= timel[0]:"";
+		minute	= timel[1]:"";
+		second	= timel[2]:"";
+	    }
+	    else
+	    {
+		hour	= (string) UI::QueryWidget(`id(`hour), `Value );
+		minute	= (string) UI::QueryWidget(`id(`minute), `Value );
+		second	= (string) UI::QueryWidget(`id(`second), `Value );
+		day	= (string) UI::QueryWidget(`id(`day), `Value );
+		month	= (string) UI::QueryWidget(`id(`month), `Value );
+		year	= (string) UI::QueryWidget(`id(`year), `Value );
+	    }
 	    if (!Timezone::CheckTime (hour, minute, second))
 	    {
 		string tmp = sformat( "%1:%2:%3", hour, minute, second );
@@ -204,6 +256,17 @@ Enter the correct date.
 	// do this as early as possible for instant user feedback!
     }
 
+    boolean utc_only = Timezone::utc_only ();
+    y2milestone( "utc_only %1", utc_only );
+
+    /* ----------------------------------------------------------------------
+     * Build dialog
+     * ----------------------------------------------------------------------*/
+
+    // Assign system date and time.
+    //
+    date = Timezone::GetDateTime(true, false);//true);
+
     // build up timezone selection box
     //
     term timezonesel = `ReplacePoint (`id(`tzsel),
@@ -214,74 +277,62 @@ Enter the correct date.
 	// label text
 	`id(`region),`opt(`notify,`immediate), _("&Region"),Timezone::Region());
 
-    boolean utc_only = Timezone::utc_only ();
-    y2milestone( "utc_only %1", utc_only );
-
-    /* ----------------------------------------------------------------------
-     * Build dialog
-     * ----------------------------------------------------------------------*/
-
-    // Assign system date and time.
-    //
-    date = Timezone::GetDateTime(true, true);
-
-    term hw_clock = `Empty();
-    if (!utc_only)
-    {
-	hw_clock = `VBox(
-	    `ComboBox (
-		`id (`hwclock), `opt(`hstretch, `notify ),
-		// combo box label
-		 _("&Hardware Clock Set To"),
-		[
-		    // ComboBox entry: hardware clock set to local time
-		    `item (`id (`hwclock_localtime), _("Local Time"),
-			    (hwclock == "--localtime")),
-
-		    // ComboBox entry: hardware clock set UTC
-		    `item (`id(`hwclock_utc ), _("UTC"), (hwclock == "-u"))
-		]
-	    ),
-	    `Label (`id(`date), `opt(`hstretch), date)
-	);
-    }
-    else
-    {
-	hw_clock = `VBox (
-	    // label text
-	    `Label (`id(`hwcl), `opt(`hstretch), _("Hardware Clock Set To")),
-	    `Label( `id(`date), `opt(`hstretch), date )
-	);
-    }
-
     term settime = `Empty();
+
     if (!Arch::s390 () && !Mode::config ())
     {
 	// button text
-	settime = `PushButton( `id(`settime), _("Change &Time or Date"));
+	settime = `PushButton (`id(`settime), _("Cha&nge..."));
     }
 
-    term contents = `VBox (`HBox (
-				`HWeight( 3, `HStretch() ),
-				`HWeight( 40, region ),
-				`HWeight( 5, `HStretch() ),
-				`HWeight( 50, timezonesel ),
-				`HWeight( 2, `HStretch() )
-				),
-			   `HBox(
-				`HWeight( 3, `HStretch() ),
-				`HWeight( 40, settime ),
-				`HWeight( 5, `HStretch() ),
-				`HWeight( 50, hw_clock ),
-				`HWeight( 2, `HStretch() )
-				),
-			   `VSpacing()
+    term contents = `MarginBox (
+	`leftMargin (2), `rightMargin (2), `topMargin (0), `bottomMargin (0.5),
+	`VBox (
+	    `HBox (
+		region,
+		`HSpacing (),
+		timezonesel
+	    ),
+	    `VSpacing (0.5),
+	    `VSquash (`HBox (
+		`HWeight (1,
+		    utc_only ? `Empty () :
+		    `Left (`ComboBox (
+			`id (`hwclock), `opt(`hstretch, `notify),
+			    // combo box label
+			    _("&Hardware Clock Set To"),
+			    [
+			    // ComboBox entry: clock set to local time
+			    `item (`id (`hwclock_localtime), _("Local Time"),
+				(hwclock == "--localtime")),
+
+			    // ComboBox entry: clock set UTC
+			    `item (`id(`hwclock_utc ), _("UTC"),
+				(hwclock == "-u"))
+			    ]
+		    ))
+		),
+		`HSpacing (1),
+		// frame label
+		`HWeight (1, `Frame (_("Time and Date"), `MarginBox (
+		    `leftMargin (1.2), `rightMargin (1),
+		    `topMargin (0.2), `bottomMargin (0.2),
+		    `HBox (
+			`Label (`id(`date), `opt(`outputField,`hstretch), date),
+			`HStretch(),
+			settime
+		    )
+		)))
+	    ))
+	)
     );
 
     // help for timezone screen
     string help_text = _("
-<p><b><big>Time Zone and Clock Settings</big></b></p>
-<p>
+<p><b><big>Time Zone and Clock Settings</big></b></p>") +
+
+    // help for timezone screen
+    _("<p>
 To select the time zone to use in your system, first select the <b>Region</b>.
 In <b>Time Zone</b>, then select the appropriate time zone, country, or 
 region from those available.
@@ -380,7 +431,7 @@ If the current time is not correct, use <b>Change Time or Date</b> to adjust it.
 	    {
 		Timezone::diff = 0;
 		UI::ChangeWidget(`id(`date), `Value,
-		    Timezone::GetDateTime (false, true));
+		    Timezone::GetDateTime (false, false));//true));
 		changed_time = true;
 	    }
 	}
