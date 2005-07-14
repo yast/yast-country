@@ -68,9 +68,7 @@ define any TimezoneSequence () {
     TimezoneRead ();
 
     // create the wizard dialog
-    Wizard::CreateDialog();
-
-    //------------------------------------------------------------
+    Wizard::OpenAcceptDialog();
 
     any result = nil;
 
@@ -84,7 +82,7 @@ define any TimezoneSequence () {
     {
 	y2milestone( "User cancelled --> no change" );
     }
-    UI::CloseDialog();
+    Wizard::CloseDialog ();
     return result;
 }
 

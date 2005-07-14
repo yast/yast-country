@@ -250,11 +250,6 @@ Enter the correct date.
     {
 	Wizard::HideAbortButton();
     }
-    else
-    {
-	Wizard::OpenAcceptDialog();
-	// do this as early as possible for instant user feedback!
-    }
 
     boolean utc_only = Timezone::utc_only ();
     y2milestone( "utc_only %1", utc_only );
@@ -297,7 +292,7 @@ Enter the correct date.
 	    `VSquash (`HBox (
 		`HWeight (1,
 		    utc_only ? `Empty () :
-		    `Left (`ComboBox (
+		    `ComboBox (
 			`id (`hwclock), `opt(`hstretch, `notify),
 			    // combo box label
 			    _("&Hardware Clock Set To"),
@@ -310,7 +305,7 @@ Enter the correct date.
 			    `item (`id(`hwclock_utc ), _("UTC"),
 				(hwclock == "-u"))
 			    ]
-		    ))
+		    )
 		),
 		`HSpacing (1),
 		// frame label
@@ -499,11 +494,6 @@ If the current time is not correct, use <b>Change Time or Date</b> to adjust it.
     if( ret != `next )
     {
 	Timezone::PopVal();
-    }
-
-    if (Mode::mode () != "firstboot")
-    {
-        Wizard::CloseDialog();
     }
 
     return ret;
