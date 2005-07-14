@@ -13,6 +13,7 @@
     textdomain "country";
 
     import "Timezone";
+    import "Wizard";
 
     string func  = (string) WFM::Args(0);
     map    param = (map) WFM::Args(1);
@@ -61,11 +62,14 @@ Set a correct time before starting installation."), m["stdout"]:"" );
 	// or a sequence of dialogs here:
 	//
 	// sequence = DummyMod::AskUser( has_next );
+	Wizard::OpenAcceptDialog();
 
-	symbol result = (symbol)WFM::CallFunction ("inst_timezone", [true, has_next]);
+	symbol result = (symbol) WFM::CallFunction ("inst_timezone", [
+	    $[ "enable_back": true, "enable_next": has_next ]]
+	);
+	Wizard::CloseDialog();
 
 	// Fill return map
-
 	ret = $[
 		"workflow_sequence" : result,
 		"language_changed"  : false
