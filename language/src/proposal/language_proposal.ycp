@@ -15,7 +15,6 @@
     import "Language";
     import "Wizard";
     import "Encoding";
-    import "Console";
 
     string func  = (string) WFM::Args(0);
     map    param = (map) WFM::Args(1);
@@ -89,7 +88,6 @@
 	if ( result == `back )
 	{
 	    import "Console";
-	    import "Installation";
 
 	    boolean use_utf8 = true;		// utf8 is default
 
