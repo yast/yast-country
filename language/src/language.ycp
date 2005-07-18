@@ -40,7 +40,7 @@ define boolean LanguageRead () {
     language_on_entry	= Language::language;
     languages_on_entry	= Language::languages;
 
-    y2milestone("language_on_entry: %1, languages: %2",
+    y2debug ("language_on_entry: %1, languages: %2",
 	language_on_entry, languages_on_entry);
     return true;
 }
@@ -135,7 +135,7 @@ define any LanguageSequence () {
 
     Wizard::CloseDialog();
 
-    y2milestone ("result '%1'", result);
+    y2debug ("result '%1'", result);
 
     if (result == `cancel || result == `back)
     {

@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Jul 14 13:56:11 CEST 2005 - jsuchome@suse.cz
+
+- enable usage of inst_timezone in installation sequence
+- added client for different language proposal (language_simple_proposal)
+- proposal for selecting locale (feature 100175)
+- 2.12.6
+
+-------------------------------------------------------------------
 Mon Jul 11 11:16:18 CEST 2005 - jsuchome@suse.cz
 
 - modified UI for timezone and initial langauge dialogs
