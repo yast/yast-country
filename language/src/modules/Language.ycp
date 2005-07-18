@@ -30,6 +30,11 @@ import "Stage";
  */
 global string language = "en_US";
 
+/**
+ * currently selected language, doesn't be the language for which the
+ * translation exists
+ */
+global string detailed_language = "en_US";
 
 /**
  * user readable description of language
@@ -72,6 +77,11 @@ global boolean ExpertSettingsChanged = false;
  */
 map<string,integer> translation_status	= $[];
 
+// map of countries and language codes
+map<string,string> country_map = $[];
+
+// map with all languages (cached - needs to be reread for retranslation)
+map<string, list> languages_map = $[];
 
 /**
  * return the value of text_mode (true for ncurses)
@@ -87,17 +97,45 @@ global define boolean GetTextMode () {
 }
 
 /**
- * Get the language DB
- * @return Language DB
+ * Read language DB: translatable strings will be translated to current language
  */
-define map<string, list> get_languages_map() {
+define void read_languages_map() {
 
-    map<string, list> languages_map = (map<string, list>)
-	WFM::CallFunction ("languages", []);
+    languages_map = (map<string, list>) WFM::CallFunction ("languages", []);
 
-    if ( languages_map == nil ) languages_map = $[];
+    if (languages_map == nil) languages_map = $[];
+}
 
-    return( languages_map );
+/**
+ * return the map of all supported countries and language codes
+ */
+global define map<string,string> GetCountryMap () {
+
+    if (country_map == nil || country_map == $[])
+    {
+	/*
+	country_map = (map<string,string>)
+	eval (SCR::Read (.target.yast2, "country_long.ycp"));
+	*/
+	map out = (map)SCR::Execute (.target.bash_output, "/usr/bin/locale -a");
+	foreach (string l, splitstring (out["stdout"]:"", "\n"), {
+	    country_map [l]	= l;
+	});
+    }
+
+    return country_map;
+}
+
+/**
+ * return the map of language codes used for primary languages
+ */
+global define map<string,boolean> GetLanguageCodes () {
+
+    if (size (languages_map) == 0)
+	read_languages_map ();
+
+    return (map<string,boolean>) mapmap (string code, list l, languages_map,
+	``($[ code : true]));
 }
 
 /**
@@ -106,11 +144,12 @@ define map<string, list> get_languages_map() {
  */
 global define void Set (string lang) {
 
-    y2milestone( "lang:%1", lang );
+    y2milestone ("original language: %1; setting to lang:%2", language, lang);
 
     if (language != lang)	// Do it only if different
     {
-	map<string, list> languages_map = get_languages_map();
+	if (size (languages_map) == 0)
+	    read_languages_map();
 
 	if (!haskey (languages_map, lang) && size(lang) > 0)
 	{
@@ -158,9 +197,15 @@ global define boolean LinuxrcLangSet() {
     return linuxrc_language_set;
 }
 
+/**
+ * generate the whole locale string for given language according to DB
+ * (e.g. de_DE -> de_DE.UTF-8)
+ */
 global define string GetLocaleString (string lang) {
 
-    map<string, list> languages_map = get_languages_map();
+    if (size (languages_map) == 0)
+	read_languages_map();
+
     list language_info = languages_map[lang]:[];
 
     // full language code
@@ -175,7 +220,7 @@ global define string GetLocaleString (string lang) {
 	}
     y2milestone( "locale %1", val );
     return val;
-    }
+}
 
 
 /**
@@ -189,7 +234,7 @@ global define void SetDefault() {
 
 /**
  * Get the map for conversion of old lang codes to new ISO-codes
- * (since Rel. 8.0)
+ * (since Rel. 8.0) FIXME obsolete
  *
  * @return conversion map
  */
@@ -312,8 +357,9 @@ global define void Language() {
 global define map GetExpertValues () {
 
     return $[
-	"rootlang"  : rootlang,
-        "use_utf8"  : use_utf8
+	"rootlang"		: rootlang,
+        "use_utf8"		: use_utf8,
+	"detailed_language"	: detailed_language,
     ];
 }
 
@@ -332,6 +378,10 @@ global define void SetExpertValues (map val) {
     if (haskey (val,"rootlang") && size (val["rootlang"]:"") >0)
     {
         rootlang = val["rootlang"]:"";
+    }
+    if (val["detailed_language"]:"" != "")
+    {
+	detailed_language	= val["detailed_language"]:"";
     }
     if (haskey (val,"use_utf8"))
     {
@@ -391,8 +441,8 @@ global define list<string> MakeProposal (boolean force_reset,boolean language_ch
     ];
     if (languages != "" && languages != language)
     {
+	read_languages_map();
 	list<string> langs	= [];
-	map<string, list> languages_map = get_languages_map();
 	foreach (string lang, splitstring (languages, ","), {
 	    if (lang != language)
 	    {
@@ -409,6 +459,43 @@ global define list<string> MakeProposal (boolean force_reset,boolean language_ch
 	}
     }
     return ret;
+}
+
+/**
+ * Return 'simple' proposal string.
+ * @return string preformated description.
+ */
+global define string MakeSimpleProposal ()
+{
+    import "HTML";
+
+    list<string> ret =  [
+	// summary label
+	sformat (_("Primary Language: %1"), name)
+    ];
+    if (true)//languages != "" && languages != language)
+    {
+	list<string> langs	= [];
+	foreach (string lang, splitstring (languages, ","), {
+	    if (lang != language)
+	    {
+		string l = languages_map[lang,4]:languages_map[lang,0]:"";
+		if (l != "")
+		    langs = add (langs, l);
+	    }
+	});
+	if (langs == [])
+	{
+	    langs = [ "Quenya", "Sindarin", "Telerin" ];
+	}
+	if (size (langs) > 0)
+	{
+	    // summary label
+	    ret = add (ret, sformat (_("Additional Languages: %1"),
+		HTML::List (langs)));
+	}
+    }
+    return HTML::List (ret);
 }
 
 /**
@@ -433,7 +520,7 @@ global define string GetName () {
  */
 global define map<string, list> Selection() {
 
-    map<string, list> languages_map = get_languages_map();
+    read_languages_map();
 
     return mapmap (string code, list data, languages_map,
 	``($[code: [data[0]:"", data[1]:"", data[4]:data[0]:""]]));
@@ -467,7 +554,7 @@ global define void Save() {
     SCR::Write (.sysconfig.language.INSTALLED_LANGUAGES, languages);
     SCR::Write (.sysconfig.language, nil);
 
-    y2milestone("Saved data for language: <%1>", GetLocaleString(language) );
+    y2milestone("Saved data for language: <%1>", loc);
 }
 
 /**
