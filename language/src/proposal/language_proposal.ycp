@@ -67,15 +67,17 @@
 	y2milestone("language_on_entry - 1: %1", language_on_entry );
 
 	Wizard::OpenAcceptDialog();	// Reduce flicker (yes, it's a kludge)
+	map args = $[
+	    "enable_back"	: true,
+	    "enable_next"	: has_next,
+	    "first_call"	: true
+	];
 	do
 	{
 	    Wizard::OpenAcceptDialog();	// This dialog will actually be used
 
-            map args = $[];
-            args["enable_back"] = true;
-            args["enable_next"] = has_next;
-	    result = (symbol)
-		WFM::CallFunction ("inst_language", [args]);
+	    result	= (symbol) WFM::CallFunction ("inst_language", [args]);
+	    args	= remove (args, "first_call");
 	    Wizard::CloseDialog();
 
 	} while (result == `again);

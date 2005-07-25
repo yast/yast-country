@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Mon Jul 25 17:28:22 CEST 2005 - jsuchome@suse.cz
+
+- allow setting of locale (feature 100175)
+- do not show primary language in the list of secondary languages
+- 2.12.7 
+
+-------------------------------------------------------------------
+Mon Jul 25 11:22:01 CEST 2005 - jsuchome@suse.cz
+
+- fixed name for Welsh ("Cymraeg", #97958) 
+
+-------------------------------------------------------------------
 Thu Jul 14 13:56:11 CEST 2005 - jsuchome@suse.cz
 
 - enable usage of inst_timezone in installation sequence

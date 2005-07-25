@@ -37,13 +37,10 @@
 
     string language		= Language::language;
 
-    // primary languages codes
-    map<string,boolean> language_codes	= $[];
-
 /**
  * Popup for setting expert language values
  */
-define void LanguageExpertDialog() {
+define symbol LanguageExpertDialog() {
 
     // help text for langauge expert screen
     string help_text = _("<p>
@@ -71,21 +68,15 @@ are unset.<br>
 
     map val		= Language::GetExpertValues();
     map val_on_entry	= val;
-    y2milestone ("map %1", val);
+    y2debug ("expert values %1", val);
 
     // get the list of locales for our language
     string lang		= substring (language, 0, 2);
     list locales_list	= [];
-    string detailed_language = val["detailed_language"]:language;
 
-    foreach (string code, string country, Language::GetCountryMap (), {
+    foreach (string code, integer i, Language::GetLocales (), {
 	if (substring (code, 0, 2) == lang)
 	{
-	    // remove locales for languages in the primary list
-	    // e.g. remove en_US when current lang == en_GB
-	    string loc = substring (code, 0, 5);
-	    if (language_codes [loc]:false && loc != language)
-		return;
 	    locales_list = add (locales_list, code);
 	}
     });
@@ -118,10 +109,11 @@ are unset.<br>
 			val["use_utf8"]:true)
 	    ),
 	    `VSpacing (),
-`Left (
-    // combo box label
-    `ComboBox (`id(`locales), _("Detailed Locale Setting"), locales_list)
-),
+	    `Left (
+	    // combo box label
+	        `ComboBox (`id(`locales), _("Detailed Locale Setting"),
+		    locales_list)
+	    ),
 	    `VSpacing (`opt(`vstretch), 7),
 	    `HBox (
 		`PushButton(`id(`ok), `opt(`default), Label::OKButton()),
@@ -132,12 +124,10 @@ are unset.<br>
     ));
 
     UI::ChangeWidget (`id(`rootlang), `Value, val["rootlang"]:"ctype");
-    if (contains (locales_list, detailed_language))
-	UI::ChangeWidget (`id(`locales), `Value, detailed_language);
-    else
-	UI::ChangeWidget (`id(`locales), `Value, language);
+    UI::ChangeWidget (`id(`locales), `Value, language);
 
-    symbol ret = `none;
+    symbol ret		= `none;
+    symbol retval	= `expert;
     repeat
     {
 	ret = (symbol)UI::UserInput();
@@ -146,16 +136,21 @@ are unset.<br>
 	    val = $[];
 	    val["rootlang"]	= UI::QueryWidget( `id(`rootlang), `Value );
 	    val["use_utf8"]	= UI::QueryWidget( `id(`use_utf8), `Value );
-	    val["detailed_language"] = UI::QueryWidget( `id(`locales), `Value);
 	    if (val != val_on_entry)
 	    {
 		y2milestone ("expert settings changed to %1", val );
 		Language::SetExpertValues (val);
 		Language::ExpertSettingsChanged = true;
 	    }
+	    if (language != (string)UI::QueryWidget( `id(`locales), `Value))
+	    {
+	        language	= (string)UI::QueryWidget(`id(`locales),`Value);
+		retval		= `changed_locale;
+	    }
 	}
     } until ( ret == `cancel || ret == `ok );
     UI::CloseDialog();
+    return retval;
 };
 
     /* ----------------------------------------------------------------------
@@ -167,7 +162,6 @@ are unset.<br>
     // will be made the default that is restored with "Reset to defaults".
     //
     boolean set_default = GetInstArgs::argmap()["first_run"]:"no" == "yes";
-
     y2milestone("set_default: %1", set_default );
 
     // when the possibility for selecting more languages should be shown
@@ -175,8 +169,8 @@ are unset.<br>
     boolean more_languages	= true;
 
     list<string>languages	= splitstring (Language::languages, ",");
-    if (! contains (languages, language))
-	languages	= add (languages, language);
+    if (GetInstArgs::argmap()["first_call"]:false)
+	languages	= filter (string l, languages, ``(l != language));
 
 
     Language::WfmSetLanguage ();
@@ -232,7 +226,6 @@ are unset.<br>
 	    ];
 	}
     );
-    language_codes	= Language::GetLanguageCodes ();
 
     // mapping of language name (translated) to language code
     map lang2code		= $[];
@@ -270,22 +263,27 @@ are unset.<br>
 
     if (more_languages)
     {
-	term primary_language_term =
-	    `ComboBox (`id(`language), `opt (`notify),
+	boolean primary_included	= false;
+	list primary_items = maplist (any name, list codelist, languageselsort,
+	{
+	    if (language == codelist[1]:"")
+	    {
+		primary_included	= true;
+	    }
+	    return `item (
+		`id(codelist[1]:""), codelist[0]:"",language == codelist[1]:"");
+	});
+	if (!primary_included)
+	    primary_items = add (primary_items,
+		`item (`id (language), language, true));
+
+	term primary_language_term = `ComboBox (`id(`language), `opt (`notify),
 	    // combo box label
-	    _("Primary &Language"),
-	    maplist (any name, list codelist, languageselsort,
-		``(`item (
-		    `id(codelist[1]:""),
-		    codelist[0]:"",
-		    language == codelist[1]:"")
-		)
-	    )
-	);
+	    _("Primary &Language"), primary_items);
 
 	term languages_term = `MultiSelectionBox (`id(`languages),
 	    // multiselection box label
-	    _("&Installed Languages"),
+	    _("&Secondary Languages"),
 	    maplist (string trans_lang, lsort (lang_list), {
 		string code	= lang2code [trans_lang]:"";
 		return
@@ -343,7 +341,7 @@ are unset.<br>
 
     string help_text		= "";
     string packages_help	= _("<p>
-Additional packages with support for the selected languages will be installed. Packages no longer needed will be removed.
+Additional packages with support for the selected primary and secondary languages will be installed. Packages no longer needed will be removed.
 </p>");
 
     if (Stage::initial ())
@@ -402,9 +400,8 @@ Check <b>Adapt Time Zone</b> to change the current time zone according to the pr
 
 	// help text when "multiple languages" are suported 2/2
 	help_text	= help_text + _("<p>
-In <b>Installed Languages</b>,
-specify all languages to use on your system.  The primary language 
-is preselected. 
+<b>Secondary Languages</b><br>
+In the selection box, specify additional languages to use on your system.
 </p>
 ");
 
@@ -447,7 +444,7 @@ is preselected.
 
 	if (ret==`expert)
 	{
-	    LanguageExpertDialog();
+	    ret	= LanguageExpertDialog();
 	}
 
 	if (ret == `help)
@@ -455,15 +452,18 @@ is preselected.
 	    Wizard::ShowHelp( help_text );
 	}
 
-	if (ret == `next || ret == `language)
+	if (ret == `next || ret == `language || ret == `changed_locale)
 	{
 	    // Get the selected language.
 	    //
-	    language = more_languages ?
-		(string) UI::QueryWidget(`id(`language), `Value) :
-		(string) UI::QueryWidget(`id(`language), `CurrentItem);
+	    if (ret != `changed_locale)
+	    {
+		language = more_languages ?
+		    (string) UI::QueryWidget(`id(`language), `Value) :
+		    (string) UI::QueryWidget(`id(`language), `CurrentItem);
+	    }
 
-	    if (adapt_term)
+	    if (ret != `changed_locale && adapt_term)
 	    {
 		kbd_adapt = (boolean) UI::QueryWidget (`id(`adapt_kbd), `Value);
 		tmz_adapt = (boolean) UI::QueryWidget (`id(`adapt_tmz), `Value);
@@ -488,23 +488,6 @@ Some texts may be displayed in English.
 		{
 		    list<string> selected_languages = (list<string>)
 			UI::QueryWidget (`id(`languages),`SelectedItems);
-		    if (!contains (selected_languages, language))
-		    {
-			selected_languages = add (selected_languages, language);
-		    }
-		    selected_languages	= filter (string l, selected_languages,
-			``(l != Language::language));
-
-		    UI::ReplaceWidget (`id(`rplangs),
-			`MultiSelectionBox (`id(`languages),
-			    // multiselection box label
-			    _("Installed Languages"),
-			    maplist (string trans_lang, lsort (lang_list), {
-				string code	= lang2code [trans_lang]:"";
-				return `item (`id (code), trans_lang,
-				    contains(selected_languages, code));
-			    })
-			));
 
 		    if (ret != `next)
 		    {
