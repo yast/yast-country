@@ -680,17 +680,22 @@ define map get_lang2keyboard()
  *
  */
 global define string GetKeyboardForLanguage( string sys_language,
-                                             string default_language )
-    ``{
+                                             string default_keyboard) {
+
     // The system_language --> keyboard_language conversion map.
     //
-    map lang2keyboard = get_lang2keyboard();
-    y2milestone( "GetKeyboardForLanguage lang:%1 def:%2 ret:%3",
-		 sys_language, default_language,
-		 lang2keyboard[sys_language]:default_language );
+    map lang2keyboard	= get_lang2keyboard();
+    string lang		= lang2keyboard[sys_language]:"";
 
-    return lang2keyboard[sys_language]:default_language;
+    if (lang == "")
+    {
+	sys_language	= substring (sys_language, 0,2);
+	lang		= lang2keyboard[sys_language]:default_keyboard;
     }
+    y2milestone( "GetKeyboardForLanguage lang:%1 def:%2 ret:%3",
+		 sys_language, default_keyboard, lang);
+    return lang;
+}
 
 
 /**
