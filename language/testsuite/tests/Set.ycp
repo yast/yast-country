@@ -28,7 +28,13 @@
 
     TEST(``(Language::GetLocaleString (Language::language)), [], nil);
 
-    TEST(``(Language::Set ("de_DE")), [], nil);
+    map EX	= $[
+	"target" : $[
+	    "bash_output"       : $[],
+	],
+    ];
+
+    TEST(``(Language::Set ("de_DE")), [$[],$[],EX], nil);
 
     TEST(``(Language::GetLocaleString (Language::language)), [], nil);
 

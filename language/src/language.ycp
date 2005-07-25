@@ -120,15 +120,18 @@ define any LanguageSequence () {
     Language::WfmSetLanguage ();
     Wizard::OpenAcceptDialog();		// Reduce flicker (yes, it's a kludge)
 
+    // Params are:				`back `next  set_default
+    map args = $[];
+    args["enable_back"] = true;
+    args["enable_next"] = true;
+    args["first_call"]	= true;
+
     while (result == `again)
     {
 	Wizard::OpenAcceptDialog();	// This dialog will actually be used
 
-	// Params are:				`back `next  set_default
-        map args = $[];
-        args["enable_back"] = true;
-        args["enable_next"] = true;
-        result = WFM::CallFunction ("inst_language", [args]);
+        result	= WFM::CallFunction ("inst_language", [args]);
+	args	= remove (args, "first_call");
 
 	Wizard::CloseDialog();
     }
@@ -157,7 +160,8 @@ define any LanguageSequence () {
     else
     {
 	if (Language::language != language_on_entry	||
-	    Language::languages != languages_on_entry	||
+	    sort (splitstring (Language::languages, ",")) !=
+	    sort (splitstring (languages_on_entry, ","))||
 	    Language::ExpertSettingsChanged)
 	{
 	    // help for write dialog

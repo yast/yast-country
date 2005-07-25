@@ -77,8 +77,8 @@ global boolean ExpertSettingsChanged = false;
  */
 map<string,integer> translation_status	= $[];
 
-// map of countries and language codes
-map<string,string> country_map = $[];
+// map (locale: 1) of available locales
+map<string,integer> locales	= $[];
 
 // map with all languages (cached - needs to be reread for retranslation)
 map<string, list> languages_map = $[];
@@ -109,34 +109,24 @@ define void read_languages_map() {
 /**
  * return the map of all supported countries and language codes
  */
-global define map<string,string> GetCountryMap () {
+global define map<string,integer> GetLocales () {
 
-    if (country_map == nil || country_map == $[])
+    if (locales == nil || locales == $[])
     {
-	/*
-	country_map = (map<string,string>)
-	eval (SCR::Read (.target.yast2, "country_long.ycp"));
-	*/
 	map out = (map)SCR::Execute (.target.bash_output, "/usr/bin/locale -a");
 	foreach (string l, splitstring (out["stdout"]:"", "\n"), {
-	    country_map [l]	= l;
+	    integer pos = findfirstof (l, ".@");
+
+	    if (pos != nil && pos >= 0)
+		l = substring (l, 0, pos);
+
+	    locales [l]	= 1;
 	});
     }
 
-    return country_map;
+    return locales;
 }
 
-/**
- * return the map of language codes used for primary languages
- */
-global define map<string,boolean> GetLanguageCodes () {
-
-    if (size (languages_map) == 0)
-	read_languages_map ();
-
-    return (map<string,boolean>) mapmap (string code, list l, languages_map,
-	``($[ code : true]));
-}
 
 /**
  * Set module to selected language.
@@ -151,7 +141,10 @@ global define void Set (string lang) {
 	if (size (languages_map) == 0)
 	    read_languages_map();
 
-	if (!haskey (languages_map, lang) && size(lang) > 0)
+	if (size (locales) == 0)
+	    GetLocales ();
+
+	if (locales[lang]:0 != 1 && size(lang) > 0)
 	{
 	    lang = substring (lang, 0, 2);
 	    boolean found = false;
@@ -164,7 +157,7 @@ global define void Set (string lang) {
 		}
 	    });
 	}
-	name		= languages_map[lang, 0]:"English";
+	name		= languages_map[lang, 0]:lang;
 	language	= lang;
 	Encoding::SetEncLang (language);
     }
@@ -207,17 +200,16 @@ global define string GetLocaleString (string lang) {
 	read_languages_map();
 
     list language_info = languages_map[lang]:[];
+    if (!haskey (languages_map, lang))
+	language_info	= [ lang, lang, ".UTF-8" ];
 
     // full language code
     string val = language;
     if( use_utf8 )
-	{
 	val = val + language_info[2]:"";
-	}
     else
-	{
 	val = val + language_info[3]:"";
-	}
+
     y2milestone( "locale %1", val );
     return val;
 }
@@ -359,7 +351,6 @@ global define map GetExpertValues () {
     return $[
 	"rootlang"		: rootlang,
         "use_utf8"		: use_utf8,
-	"detailed_language"	: detailed_language,
     ];
 }
 
@@ -379,10 +370,12 @@ global define void SetExpertValues (map val) {
     {
         rootlang = val["rootlang"]:"";
     }
+    /*
     if (val["detailed_language"]:"" != "")
     {
 	detailed_language	= val["detailed_language"]:"";
     }
+    */
     if (haskey (val,"use_utf8"))
     {
         use_utf8 = val["use_utf8"]:false;
@@ -473,7 +466,7 @@ global define string MakeSimpleProposal ()
 	// summary label
 	sformat (_("Primary Language: %1"), name)
     ];
-    if (true)//languages != "" && languages != language)
+    if (languages != "" && languages != language)
     {
 	list<string> langs	= [];
 	foreach (string lang, splitstring (languages, ","), {
@@ -484,10 +477,6 @@ global define string MakeSimpleProposal ()
 		    langs = add (langs, l);
 	    }
 	});
-	if (langs == [])
-	{
-	    langs = [ "Quenya", "Sindarin", "Telerin" ];
-	}
 	if (size (langs) > 0)
 	{
 	    // summary label
@@ -554,7 +543,7 @@ global define void Save() {
     SCR::Write (.sysconfig.language.INSTALLED_LANGUAGES, languages);
     SCR::Write (.sysconfig.language, nil);
 
-    y2milestone("Saved data for language: <%1>", loc);
+    y2milestone ("Saved data for language: <%1>", loc);
 }
 
 /**
