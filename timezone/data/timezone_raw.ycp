@@ -198,6 +198,7 @@ $[ "name" : _("Africa"),
 
 $[ "name" : _("Pacific"),
    "entries" : $[
+	"Pacific/Auckland" : _("New Zealand"),
 	"Pacific/Fiji" : _("Fiji"),
 	"Pacific/Galapagos" : _("Galapagos"),
 	"Pacific/Guadalcanal" : _("Guadalcanal"),
