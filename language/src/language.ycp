@@ -28,21 +28,13 @@ import "Popup";
 import "Progress";
 import "Wizard";
 
-string language_on_entry = "";
-string languages_on_entry = "";
 
 /**
  * read language settings
  */
 define boolean LanguageRead () {
 
-    // Memozize the current language.
-    language_on_entry	= Language::language;
-    languages_on_entry	= Language::languages;
-
-    y2debug ("language_on_entry: %1, languages: %2",
-	language_on_entry, languages_on_entry);
-    return true;
+    return Language::Read ();
 }
 
 /**
@@ -144,25 +136,23 @@ define any LanguageSequence () {
     {
 	// Back to original values...
 	//
-	y2milestone ("`cancel or `back --> restoring: <%1>", language_on_entry);
+	y2milestone ("`cancel or `back --> restoring: <%1>",
+	    Language::language_on_entry);
 
 	// Set it in the Language module.
 	//
-	Language::Set (language_on_entry );
+	Language::Set (Language::language_on_entry );
 
 	// Set Console font
 	//
-	Console::SelectFont (language_on_entry);
+	Console::SelectFont (Language::language_on_entry);
 
 	// Set it in YaST2
 	Language::WfmSetLanguage ();
     }
     else
     {
-	if (Language::language != language_on_entry	||
-	    sort (splitstring (Language::languages, ",")) !=
-	    sort (splitstring (languages_on_entry, ","))||
-	    Language::ExpertSettingsChanged)
+	if (Language::Modified ())
 	{
 	    // help for write dialog
 	    Wizard::RestoreHelp (_("<p><b>Saving Configuration</b><br>Please wait...</p>"));
@@ -234,8 +224,7 @@ define boolean LanguageSetHandler (map options) {
     Language::Set (language);
     Console::SelectFont (language);
 
-    return (language_on_entry != Language::language ||
-	    languages_on_entry != Language::languages);
+    return (Language::Modified ());
 }
 
 
