@@ -19,7 +19,7 @@ X-SuSE-YaST-AutoInstResource=
 Icon=yast-yast-language
 Exec=/sbin/yast2 language 
 
-Name=Language Selection
+Name=Language
 GenericName=Change the language and install additional languages
 Name[cs]=Výběr jazyka
 GenericName[cs]=Zde můžete změnit systémový jazyk.
