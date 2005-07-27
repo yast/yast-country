@@ -64,7 +64,7 @@ are unset.<br>
 ") +
 
     // help text for langauge expert screen
-    _("<p>FIXME help text for locales</p>");
+    _("<p>Use <b>Detailed Locale Setting</b> to set a locale for the primary language that is not offered in the list in the main dialog. Translation may not be available for the selected locale.</p>");
 
     map val		= Language::GetExpertValues();
     map val_on_entry	= val;
@@ -584,7 +584,7 @@ Some texts may be displayed in English.
 		    {
 			Pkg::SetAdditionalLocales (selected_languages);
 		    }
-		    else
+		    else if (Language::Modified ())
 		    {
 			if (!Language::PackagesInit (selected_languages))
 			{

@@ -31,10 +31,9 @@ import "Stage";
 global string language = "en_US";
 
 /**
- * currently selected language, doesn't be the language for which the
- * translation exists
+ * original language
  */
-global string detailed_language = "en_US";
+global string language_on_entry = "en_US";
 
 /**
  * user readable description of language
@@ -58,7 +57,12 @@ string rootlang = "ctype";
 /**
  * Default settings for INSTALLED_LANGUAGES in /etc/sysconfig/language
  */
-global string languages	= "";
+global string languages		= "";
+
+/**
+ * Original value of INSTALLED_LANGUAGES
+ */
+string languages_on_entry	= "";
 
 /**
  * Use utf8 in locale
@@ -337,6 +341,33 @@ global define void Language() {
 }
 
 /**
+ * Just store inital values - read was done in constructor
+ */
+global define boolean Read () {
+
+    language_on_entry	= language;
+    languages_on_entry	= languages;
+
+    y2debug("language: %1, languages: %2",language_on_entry,languages_on_entry);
+
+    ExpertSettingsChanged	= false;
+
+    return true;
+}
+
+/**
+ * was anything modified?
+ */
+global define boolean Modified () {
+
+    return (language != language_on_entry			||
+	    ExpertSettingsChanged				||
+	    sort (splitstring (languages, ",")) !=
+	    sort (splitstring (languages_on_entry, ","))
+    );
+}
+
+/**
  * GetExpertValues()
  *
  * Return the values for the various expert settings in a map
@@ -370,12 +401,6 @@ global define void SetExpertValues (map val) {
     {
         rootlang = val["rootlang"]:"";
     }
-    /*
-    if (val["detailed_language"]:"" != "")
-    {
-	detailed_language	= val["detailed_language"]:"";
-    }
-    */
     if (haskey (val,"use_utf8"))
     {
         use_utf8 = val["use_utf8"]:false;
