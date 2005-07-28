@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Thu Jul 28 10:58:37 CEST 2005 - jsuchome@suse.cz
+
+- updated desktop files
+- 2.12.8
+
+-------------------------------------------------------------------
+Wed Jul 27 11:21:24 CEST 2005 - jsuchome@suse.cz
+
+- fixed path to xkbctrl (#98838)
+- run sax2 for configuring keyboard in graphical mode (feature 100115)
+- introduced Langage::Modified () function
+- help text for locale feature
+
+-------------------------------------------------------------------
 Mon Jul 25 17:28:22 CEST 2005 - jsuchome@suse.cz
 
 - allow setting of locale (feature 100175)
