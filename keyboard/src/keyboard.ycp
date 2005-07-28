@@ -19,6 +19,7 @@
 textdomain "country";
 
 import "CommandLine";
+import "Confirm";
 import "Keyboard";
 import "Service";
 import "Stage";
@@ -52,7 +53,7 @@ define boolean KeyboardRead () {
  */
 define boolean KeyboardWrite () {
 
-    Keyboard::Save (keyboard_on_entry != Keyboard::current_kbd);
+    Keyboard::Save (false);
     Service::Restart ("kbd");
     return true;
 }
@@ -61,6 +62,18 @@ define boolean KeyboardWrite () {
  * the keyboard configuration sequence
  */
 define any KeyboardSequence () {
+
+    map display_info	= (map) UI::GetDisplayInfo ();
+    if (!display_info["TextMode"]:true)
+    {
+	if (Confirm::MustBeRoot ())
+	{
+	    // call sax
+	    SCR::Execute (.target.bash, "/usr/sbin/sax2 -O Keyboard");
+	    return `finish;
+	}
+	return `cancel;
+    }
 
     KeyboardRead ();
 

@@ -357,19 +357,24 @@ define map<string,list> get_reduced_keyboard_db()
  * @return  map containing the x11 config data
  *
  */
-global define map GetX11KeyData( string keymap )
-    ``{
-    string cmd = "/usr/X11R6/bin/xkbctrl " + keymap;
-    string file = Directory::tmpdir + "/xkbctrl.out";
+global define map GetX11KeyData (string keymap) {
 
+    string cmd	= "/usr/sbin/xkbctrl";
     map x11data = $[];
-    if (SCR::Read(.target.size, "/usr/X11R6/bin/xkbctrl") > 0 )
-	{
+
+    if (SCR::Read(.target.size, cmd) > 0 )
+    {
+	string file = Directory::tmpdir + "/xkbctrl.out";
+	cmd	= cmd + " " + keymap;
 	SCR::Execute (.target.bash, cmd + " > " + file );
 	x11data = (map)SCR::Read(.target.ycp, file );
-	}
-    return( x11data );
     }
+    else
+    {
+	y2warning ("/usr/sbin/xkbctrl not found");
+    }
+    return x11data;
+}
 
 
 /**
@@ -709,8 +714,8 @@ global define string GetKeyboardForLanguage( string sys_language,
  *
  * @see	Keyboard()
  */
-global define void Probe()
-    ``{
+global define void Probe() {
+
     // Probe the keyboard....
     //
     y2milestone( "Keyboard::Probe" );
@@ -781,14 +786,9 @@ global define void Keyboard() {
 	// If this failed and we are in a running system try to restore from XF86Config.
 	//
 	if( !success && Mode::normal () )
-	    {
-	    // Only possible with XFree 4x
-	    //
-	    // The XkbLayout --> keyboard_language conversion map.
-	    //
-
-	    // Get the current layout from XF86Config and set keyboard module accordingly.
-	    //
+	{
+	    // Get the current layout from XF86Config and
+	    // set keyboard module accordingly.
 	    map kbs = (map)SCR::Read( .xf86config.keyboard );
 	    map keyboard_section = kbs[0,"Keyboard"]:$[];
 	    string current_layout = XkblayoutToKeyboard( keyboard_section["XkbLayout"]:"" );
@@ -839,8 +839,7 @@ global define void Keyboard() {
  * @see	create_info_map()
  */
 
-global define boolean xf86_update()
-    ``{
+global define boolean xf86_update() {
     // Create the map for the isax agent.
     //
     map info = $[
@@ -863,7 +862,7 @@ global define boolean xf86_update()
     boolean ret = (boolean)SCR::Write( .xf86config.keyboard, info );
 
     return( ret );
-    }
+}
 
 
 /**
@@ -878,53 +877,48 @@ global define boolean xf86_update()
  *
  * @see	Restore()
  */
-global define void Save( boolean update_x11 )
-    ``{
-    if( Mode::update () )
+global define void Save (boolean update_x11) {
+
+    if (Mode::update ())
+    {
+	string kbd = Misc::SysconfigRead (.sysconfig.keyboard.YAST_KEYBOARD,"");
+	if (size(kbd)==0)
 	{
-	string kbd = Misc::SysconfigRead( .sysconfig.keyboard.YAST_KEYBOARD, "" );
-	if( size(kbd)==0 )
+	    string kmap = Misc::SysconfigRead(.sysconfig.keyboard.KEYTABLE, "");
+	    if (size(kmap)>0)
 	    {
-	    string kmap = Misc::SysconfigRead(.sysconfig.keyboard.KEYTABLE, "" );
-	    if( size(kmap)>0 )
-		{
 		map data = GetX11KeyData( kmap );
-		if( size(data["XkbLayout"]:"")>0 )
-		    {
+		if (size(data["XkbLayout"]:"")>0)
+		{
 		    kbd = XkblayoutToKeyboard( data["XkbLayout"]:"" );
 		    kbd = kbd + "," + data["XkbModel"]:"pc104";
-		    SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD, kbd );
-		    SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD.comment,
-			   "\n# The YaST-internal identifier of the attached keyboard.\n#\n");
+		    SCR::Write (.sysconfig.keyboard.YAST_KEYBOARD, kbd );
+		    SCR::Write (.sysconfig.keyboard.YAST_KEYBOARD.comment,
+"\n# The YaST-internal identifier of the attached keyboard.\n#\n");
 		    SCR::Write (.sysconfig.keyboard, nil );	// flush
-		    }
 		}
 	    }
-	// do nothing
-	return;
 	}
+	return;
+    }
 
     // Write some sysconfig variables.
     // Set keytable, compose_table and tty list.
     //
-    SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD,
-	       current_kbd+","+kb_model );
+    SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD, current_kbd+","+kb_model );
     SCR::Write(.sysconfig.keyboard.YAST_KEYBOARD.comment,
-	       "\n# The YaST-internal identifier of the attached keyboard.\n#\n");
+       "\n# The YaST-internal identifier of the attached keyboard.\n#\n");
 
     SCR::Write(.sysconfig.keyboard.KEYTABLE, keymap );
     SCR::Write(.sysconfig.keyboard.COMPOSETABLE, compose_table );
-
     SCR::Write(.sysconfig.keyboard.KBD_TTY, kbd_tty );
     SCR::Write(.sysconfig.keyboard.KBD_RATE, kbd_rate );
     SCR::Write(.sysconfig.keyboard.KBD_DELAY, kbd_delay );
     SCR::Write(.sysconfig.keyboard.KBD_NUMLOCK, kbd_numlock );
     SCR::Write(.sysconfig.keyboard.KBD_CAPSLOCK, kbd_capslock );
     SCR::Write(.sysconfig.keyboard.KBD_SCRLOCK, kbd_scrlock );
-    SCR::Write(.sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK,
-	       kbd_disable_capslock );
-
-    SCR::Write( .sysconfig.keyboard, nil );	// flush
+    SCR::Write(.sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK, kbd_disable_capslock);
+    SCR::Write(.sysconfig.keyboard, nil );	// flush
 
     // As a preliminary step mark all keyboards except the one to be configured
     // as configured = no and needed = no. Afterwards this one keyboard will be
@@ -951,12 +945,12 @@ global define void Save( boolean update_x11 )
 
     integer list_size = size( keyboardprobelist );
 
-    if( list_size > 0 )
-	{
+    if (list_size > 0)
+    {
 	integer i = 0;
 
 	while ( i < list_size )	// Loop over all keyboards
-	    {
+	{
 	    map    current_keyboard = keyboardprobelist[i]:$[];
 	    string current_key   = current_keyboard["unique_key"]:"";
 
@@ -984,12 +978,12 @@ global define void Save( boolean update_x11 )
 		}
 
 	    i = i + 1;	// next keyboard
-	    }
 	}
+    }
     else
-	{
+    {
 	y2milestone("No probed keyboards. Not unconfiguring any keyboards");
-	}
+    }
 
     // Only if the keyboard has been probed in this run the unique_key
     // is not empty. Only in this case mark the device as "configured".
@@ -1019,33 +1013,13 @@ global define void Save( boolean update_x11 )
     if (x11_setup_needed() && update_x11 &&(Mode::normal() || Stage::reprobe()))
     {
 	y2milestone ("Storing current settings into XF86Config file (XFree4).");
-	Keyboard::xf86_update();
+	xf86_update();
     }
 
     y2milestone("Saved data for keyboard: <%1>", current_kbd );
 
     return;
-    }	// Save()
-/**
- * X11SetLanguage()
- *
- * Set sysconfig variable YAST_LANGUAGE according to the given X11 layout name
- * e.g. "de" --> "german". Save the settings without writing XF86config
- *
- * @param	string x11_layout
- *
- */
-
-global define void X11SetLanguage( string x11_layout )
-    ``{
-    string new_kbd = XkblayoutToKeyboard( x11_layout );
-    if( size(new_kbd)>0 )
-	{
-	current_kbd = new_kbd;
-	Save( false );
-	y2milestone( "X11SetLanguage current_kbd=%1", current_kbd );
-	}
-    }
+}	// Save()
 
 
 /**
@@ -1054,10 +1028,9 @@ global define void X11SetLanguage( string x11_layout )
  * @return string user readable description.
  */
 
-global define string Name()
-    ``{
+global define string Name() {
     return name;
-    }
+}
 
 /**
  * SetConsole()
@@ -1073,12 +1046,6 @@ global define string Name()
  */
 global define string SetConsole (string keyboard) {
 
-    SetLanguage (keyboard);	// in any case (retranslation)
-
-    y2milestone("Setting console keyboard to: <%1>", current_kbd );
-
-    y2milestone("loadkeys command: <%1>", ckb_cmd );
-
     if (Mode::test ())
     {
 	y2milestone("Test mode - NOT setting keyboard" );
@@ -1089,10 +1056,14 @@ global define string SetConsole (string keyboard) {
     }
     else
     {
+	SetLanguage (keyboard);	// (retranslation)
+
+	y2milestone("Setting console keyboard to: <%1>", current_kbd );
+	y2milestone("loadkeys command: <%1>", ckb_cmd );
+
 	SCR::Execute (.target.bash, ckb_cmd);
 	UI::SetKeyboard ();
     }
-
     return ckb_cmd;
 };	// SetConsole()
 
@@ -1111,10 +1082,6 @@ global define string SetConsole (string keyboard) {
  * @see	SetConsole()
  */
 global define string SetX11 (string keyboard) {
-
-    SetLanguage (keyboard);	// in any case (retranslation)
-
-    y2milestone ("Setting X11 keyboard to: <%1>", current_kbd );
 
     if (Mode::test ())
     {
@@ -1136,11 +1103,12 @@ global define string SetX11 (string keyboard) {
 	}
 	else if (size (xkb_cmd)>0)
 	{
-	    y2milestone ("Setting X keyboard:\n %1", xkb_cmd );
+	    SetLanguage (keyboard);	// (retranslation)
+	    y2milestone ("Setting X11 keyboard to: <%1>", current_kbd );
+	    y2milestone ("Setting X11 keyboard:\n %1", xkb_cmd );
 	    SCR::Execute (.target.bash, xkb_cmd);
 	}
     }
-
     return xkb_cmd;
 };	// SetX11()
 
@@ -1158,28 +1126,24 @@ global define string SetX11 (string keyboard) {
   * @see     SetX11(), SetConsole()
   */
 
-global define void Set( string keyboard )
-    ``{
-    y2milestone( "set to %1", keyboard );
-    SetConsole( keyboard );
-    SetX11( keyboard );
-    if( Stage::initial () )
-	{
+global define void Set (string keyboard) {
+
+    y2milestone ("set to %1", keyboard);
+    SetConsole (keyboard);
+    SetX11 (keyboard);
+    if (Stage::initial ())
+    {
         map yinf = $[];
         AsciiFile::SetDelimiter( yinf, " " );
         AsciiFile::ReadFile( yinf, "/etc/yast.inf" );
         list lines = AsciiFile::FindLineField( yinf, 0, "Keytable:" );
         if( size(lines)>0 )
-            {
             AsciiFile::ChangeLineField( yinf, lines[0]:-1, 1, keymap );
-            }
         else
-            {
             AsciiFile::AppendLine( yinf, ["Keytable:", keymap] );
-            }
         AsciiFile::RewriteFile( yinf, "/etc/yast.inf" );
-	}
     }
+}
 
 
 /**
@@ -1256,10 +1220,9 @@ global define string MakeProposal (boolean force_reset,boolean language_changed)
  * /etc/sysconfig/keyboard
  *
  */
-global define boolean CalledRestore()
-    ``{
+global define boolean CalledRestore() {
     return( restore_called );
-    };
+};
 
     /**
      * Selection()
@@ -1274,9 +1237,7 @@ global define boolean CalledRestore()
      *
      * @see	-
      */
-
-global define map<string, string> Selection()
-    ``{
+  global define map<string, string> Selection() {
     // Get the reduced keyboard DB.
     //
     map<string, list> keyboards = get_reduced_keyboard_db();
@@ -1289,7 +1250,7 @@ global define map<string, string> Selection()
 	trans_str = (string)eval(translate);
 	return  $[ keyboard_code: trans_str ];
 	});
-    }
+  }
 
     /**
      * Return a map for conversion from keymap to YaST2 keyboard code()
