@@ -45,13 +45,14 @@ define symbol KeyboardExpertDialog()
 Here, fine tune various settings of the keyboard module.
 These settings are written into the file <tt>/etc/sysconfig/keyboard</tt>.
 If unsure, use the default values already selected.
-</p>
-<p>Settings made here apply only to the console keyboard.  Configure the keyboard for the graphical user interface with another tool, such as SaX.</p>
+</p>")
+
+    // help text for keyboard expert screen cont.
+    + _("<p>Settings made here apply only to the console keyboard.  Configure the keyboard for the graphical user interface with another tool, such as SaX.</p>
 ");
 
     // general help trailer
     help_text = help_text + _("<p>
-<p>
 For <b>Devices for Lock</b>, enter a space-separated list of devices to which to apply the Scroll Lock, Num Lock, and Caps Lock settings.
 </p>");
 
@@ -103,7 +104,7 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
 				`VSpacing(`opt(`vstretch), 1),
 				`Left(`CheckBox( `id(`discaps),
 					   // label text
-				           _("&Disable Caps Lock")) ),
+				           _("D&isable Caps Lock")) ),
 				`VSpacing(1),
 				`VStretch(),
 				`HBox(
@@ -247,10 +248,12 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
 		`VSpacing()
 	    );
 
-    // help text for keyboard screen
+    // help text for keyboard screen (header)
     string help_text = _("
-<p><big><b>Keyboard Configuration</b></big></p>
-<p>
+<p><big><b>Keyboard Configuration</b></big></p>") +
+
+    // help text for keyboard screen
+    _("<p>
 Choose the <b>Keyboard Layout</b> to use for
 installation and in the installed system.  
 Test the layout in <b>Test</b>.

@@ -123,7 +123,8 @@ define any LanguageSequence () {
 	Wizard::OpenAcceptDialog();	// This dialog will actually be used
 
         result	= WFM::CallFunction ("inst_language", [args]);
-	args	= remove (args, "first_call");
+	if (haskey (args, "first_call"))
+	    args	= remove (args, "first_call");
 
 	Wizard::CloseDialog();
     }
