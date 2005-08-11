@@ -111,7 +111,7 @@ are unset.<br>
 	    `VSpacing (),
 	    `Left (
 	    // combo box label
-	        `ComboBox (`id(`locales), _("Detailed Locale Setting"),
+	        `ComboBox (`id(`locales), _("&Detailed Locale Setting"),
 		    locales_list)
 	    ),
 	    `VSpacing (`opt(`vstretch), 7),

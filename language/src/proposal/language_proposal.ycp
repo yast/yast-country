@@ -77,7 +77,8 @@
 	    Wizard::OpenAcceptDialog();	// This dialog will actually be used
 
 	    result	= (symbol) WFM::CallFunction ("inst_language", [args]);
-	    args	= remove (args, "first_call");
+	    if (haskey (args, "first_call"))
+		args	= remove (args, "first_call");
 	    Wizard::CloseDialog();
 
 	} while (result == `again);
