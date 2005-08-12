@@ -98,7 +98,11 @@ define boolean TimezoneSummaryHandler (map options) {
     {
 	// summary label
 	CommandLine::Print (sformat (_("Hardware Clock Set To:\t%1"),
-	    Timezone::hwclock == "-u" ? _("UTC") : _("Local time")));
+		// summary text (Clock setting)
+	    Timezone::hwclock == "-u" ? _("UTC") :
+		// summary text (Clock setting)
+		_("Local time"))
+	);
 
     }
     // summary label

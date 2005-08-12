@@ -58,63 +58,76 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
 
     // label text
 
-    UI::OpenDialog( `opt(`decorated  ),
-		    `HBox(
-			`HWeight(30, `RichText( help_text )),
-			`HStretch(),
-			`HSpacing(1),
-			`HWeight(70,
-			    `VBox(
-				`HSpacing( 60 ),
-				// heading text
-				`Heading( _("Expert Keyboard Settings") ),
-				`VSpacing(`opt(`vstretch), 1),
-				`Left(`TextEntry( `id(`rate),
-						  // label text
-				                  _("Repeat &Rate"))),
-				`Left(`TextEntry( `id(`delay),
-					    // label text
-				            _("De&lay before Repetition Starts")) ),
-				`VSpacing(`opt(`vstretch), 1),
-				`Frame(
-				    // label text
-				    _("Start-Up States"),
-				    `VBox(
-					`Left(`ComboBox( 
-					    `id(`numlock),
-					     // label text
-					     _("&Num Lock On"),
-					     [ `item( `id("bios"), 
-					              _("BIOS Settings")), 
-					       `item( `id("yes"), _("Yes")),
-					       `item( `id("no"), _("No")),
-					       `item( `id("untouched"), 
-						      _("<Untouched>")) ] )),
-					`VSpacing(`opt(`vstretch), 1),
-					`Left(`CheckBox( `id(`capslock),
-							 // label text
-					                 _("Ca&ps Lock On") )),
-					`Left(`CheckBox( `id(`scrlock),
-							 // label text
-							 _("&Scroll Lock On") )))),
-				`VSpacing(`opt(`vstretch), 1),
-				`Left(`TextEntry( `id(`tty),
-					    // label text
-				            _("&Devices for Lock") )),
-				`VSpacing(`opt(`vstretch), 1),
-				`Left(`CheckBox( `id(`discaps),
-					   // label text
-				           _("D&isable Caps Lock")) ),
-				`VSpacing(1),
-				`VStretch(),
-				`HBox(
-				     `PushButton(`id(`ok), `opt(`default),
-						 Label::OKButton() ),
-				     `PushButton(`id(`cancel),
-				                 Label::CancelButton() )
-				     )
-				))
-			 ));
+    UI::OpenDialog (`opt(`decorated),
+	`HBox (
+	    `HWeight(30, `RichText( help_text )),
+	    `HStretch(),
+	    `HSpacing(1),
+	    `HWeight(70,
+		`VBox (
+		    `HSpacing( 60 ),
+		    // heading text
+		    `Heading (_("Expert Keyboard Settings")),
+		    `VSpacing(`opt(`vstretch), 1),
+		    `Left (
+			// label text
+			`TextEntry( `id(`rate), _("Repeat &Rate"))
+		    ),
+		    `Left (
+			`TextEntry(`id(`delay),
+			// label text
+			_("De&lay before Repetition Starts"))
+		    ),
+		    `VSpacing (`opt(`vstretch), 1),
+		    `Frame (
+			// frame label
+			_("Start-Up States"),
+			`VBox(
+			    `Left (`ComboBox(
+				// combobox label
+				`id(`numlock), _("&Num Lock On"),
+				[
+				    // combobox item
+				    `item (`id("bios"), _("BIOS Settings")),
+				    // combobox item
+				    `item( `id("yes"), _("Yes")),
+				    // combobox item
+				    `item( `id("no"), _("No")),
+				    // combobox item
+				    `item( `id("untouched"), _("<Untouched>"))
+				]
+			    )),
+			    `VSpacing(`opt(`vstretch), 1),
+			    `Left (
+				// checkbox label
+				`CheckBox (`id(`capslock), _("Ca&ps Lock On"))
+			    ),
+			    `Left(
+				// checkbox label
+				`CheckBox( `id(`scrlock), _("&Scroll Lock On"))
+			    )
+			)
+		    ),
+		    `VSpacing(`opt(`vstretch), 1),
+		    `Left (
+			// textentry label
+			`TextEntry (`id(`tty), _("&Devices for Lock"))
+		    ),
+		    `VSpacing(`opt(`vstretch), 1),
+		    `Left (
+			// label text
+			`CheckBox (`id(`discaps), _("D&isable Caps Lock"))
+		    ),
+		    `VSpacing (1),
+		    `VStretch(),
+		    `HBox (
+			`PushButton (`id(`ok),`opt(`default),Label::OKButton()),
+			`PushButton (`id(`cancel), Label::CancelButton())
+		    )
+		)
+	    )
+	)
+    );
     map val = Keyboard::GetExpertValues();
     map val_on_entry = val;
     y2milestone( "map %1", val );
