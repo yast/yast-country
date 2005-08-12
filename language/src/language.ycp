@@ -46,6 +46,7 @@ define boolean LanguageWrite () {
 
     integer steps	= 3;
 
+    // progress title
     Progress::New (_("Saving Language Configuration"), " ", steps, [
 	// progress stage
 	_("Save language and console settings"),
