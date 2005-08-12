@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Aug 12 15:46:20 CEST 2005 - jsuchome@suse.cz
+
+- check for CJK language during installation (#102958)
+- 2.12.10
+
+-------------------------------------------------------------------
 Thu Aug 11 17:18:03 CEST 2005 - jsuchome@suse.cz
 
 - fixed texts and shortcuts (check_ycp)

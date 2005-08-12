@@ -173,7 +173,15 @@ are unset.<br>
 	languages	= filter (string l, languages, ``(l != language));
 
 
-    Language::WfmSetLanguage ();
+    if (Language::CJKLanguage (language) &&
+	Language::GetTextMode () && Stage::initial ())
+    {
+	Language::WfmSetGivenLanguage ("en_US");
+    }
+    else
+    {
+	Language::WfmSetLanguage ();
+    }
 
     // Build the contents of the dialog.
 
@@ -340,6 +348,7 @@ are unset.<br>
     }
 
     string help_text		= "";
+    // help text (language dependent packages) - at the end of help
     string packages_help	= _("<p>
 Additional packages with support for the selected primary and secondary languages will be installed. Packages no longer needed will be removed.
 </p>");
@@ -506,12 +515,24 @@ Some texts may be displayed in English.
 		//
 		Language::Set (language);
 
-		// Set Console font
-		//
-		Console::SelectFont (language);
+		if (Language::CJKLanguage (language) &&
+		    Language::GetTextMode () && Stage::initial ())
+		{
+		    // popup message (user selected CJK language in text mode)
+		    Popup::Message (_("The selected language cannot be used in text mode. English is used for
+installation, but the selected language will be used for the new system."));
 
-		// Set it in YaST2
-		Language::WfmSetLanguage ();
+		    Language::WfmSetGivenLanguage ("en_US");
+		}
+		else
+		{
+		    // Set Console font
+		    //
+		    Console::SelectFont (language);
+
+		    // Set it in YaST2
+		    Language::WfmSetLanguage ();
+		}
 
 		if (ret != `next)
 		{
