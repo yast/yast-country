@@ -87,6 +87,10 @@ map<string,integer> locales	= $[];
 // map with all languages (cached - needs to be reread for retranslation)
 map<string, list> languages_map = $[];
 
+// languages that cannot be correctly shown in text mode
+list cjk_languages	= [ "ja", "ko", "zh" ];
+
+
 /**
  * return the value of text_mode (true for ncurses)
  */
@@ -408,6 +412,33 @@ global define void SetExpertValues (map val) {
     }
 }
 
+/**
+ * WfmSetLanguag()
+ *
+ * Set the given language in WFM and UI
+ *
+ * @param       language (could be different from current in CJK case)
+ *
+ * @return      -
+ */
+global define void WfmSetGivenLanguage (string lang) {
+
+    string encoding	= (use_utf8) ? "UTF-8" : Encoding::console;
+
+    y2milestone ( "language %1 enc %2 utf8:%3", lang, encoding, use_utf8 );
+
+    UI::SetLanguage (lang, encoding);
+
+    if (use_utf8)
+    {
+	WFM::SetLanguage(lang, "UTF-8");
+    }
+    else
+    {
+	WFM::SetLanguage(lang);
+    }
+}
+
 
 /**
  * WfmSetLanguag()
@@ -420,20 +451,7 @@ global define void SetExpertValues (map val) {
  */
 global define void WfmSetLanguage () {
 
-    string encoding	= (use_utf8) ? "UTF-8" : Encoding::console;
-
-    y2milestone( "language %1 enc %2 utf8:%3", language, encoding, use_utf8 );
-
-    UI::SetLanguage (language, encoding);
-
-    if (use_utf8)
-    {
-	WFM::SetLanguage(language, "UTF-8");
-    }
-    else
-    {
-	WFM::SetLanguage(language);
-    }
+    WfmSetGivenLanguage (language);
 }
 
 
@@ -663,6 +681,17 @@ global define boolean IncompleteTranslation (string lang) {
 
     return translation_status[lang]:0 < treshold;
 }
+
+/**
+ * Check if the language is "CJK"
+ * (and thus could not be shown in text mode - see bug #102958)
+ */
+global define boolean CJKLanguage (string lang) {
+
+    string l = substring (lang, 0, 2);
+    return contains (cjk_languages, l);
+}
+
 
 /* EOF */
 }
