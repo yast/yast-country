@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug 15 10:13:45 CEST 2005 - jsuchome@suse.cz
+
+- added support for Finnish language
+- 2.12.11
+
+-------------------------------------------------------------------
 Fri Aug 12 15:46:20 CEST 2005 - jsuchome@suse.cz
 
 - check for CJK language during installation (#102958)

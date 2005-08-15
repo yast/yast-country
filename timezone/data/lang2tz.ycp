@@ -51,6 +51,7 @@ $[
   "es_UY"		: "America/Montevideo",
   "es_VE"		: "America/Caracas",
   "es_ES"		: "Europe/Madrid",
+  "fi_FI"		: "Europe/Helsinki",
   "fr"			: "Europe/Paris",
   "fr_BE"		: "Europe/Brussels",
   "fr_CA"		: "Canada/Eastern",

@@ -132,6 +132,14 @@ $[
 		  _("Spanish")
 		   ],
 
+  "fi_FI"	: [
+		    "Suomi",
+		    "Suomi",
+		    ".UTF-8",
+		    "@euro",
+		    // language name
+		    _("Finnish"),
+		],
   "fr_FR"	: [ "Français",
 		  "Francais",
 		  ".UTF-8",
