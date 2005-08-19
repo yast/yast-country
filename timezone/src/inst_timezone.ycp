@@ -361,7 +361,7 @@ If the current time is not correct, use <b>Change Time or Date</b> to adjust it.
     Wizard::SetDesktopIcon ("timezone");
     if ( Stage::initial () || Stage::firstboot ())
     {
-	Wizard::SetTitleIcon( "timezone" );
+	Wizard::SetTitleIcon ("yast-timezone");
     }
 
 

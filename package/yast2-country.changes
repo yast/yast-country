@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Aug 17 17:25:54 CEST 2005 - jsuchome@suse.cz
+
+- better solution for CJK languages during installation (#102958)
+- fixed the icon names (#105157, #105163)
+- 2.12.12 
+
+-------------------------------------------------------------------
 Mon Aug 15 10:13:45 CEST 2005 - jsuchome@suse.cz
 
 - added support for Finnish language
