@@ -21,13 +21,10 @@
     textdomain "country";
 
     import "Console";
-    import "Encoding";
     import "GetInstArgs";
-    import "Installation";
     import "Keyboard";
     import "Label";
     import "Language";
-    import "Misc";
     import "Mode";
     import "Popup";
     import "Report";
@@ -172,9 +169,12 @@ are unset.<br>
     if (GetInstArgs::argmap()["first_call"]:false)
 	languages	= filter (string l, languages, ``(l != language));
 
+    string preselected = Language::preselected;
 
     if (Language::CJKLanguage (language) &&
-	Language::GetTextMode () && Stage::initial ())
+	Language::GetTextMode () && Stage::initial () &&
+	// CJKLanguage (preselected) -> fbiterm is probably running (#102958)
+	!Language::CJKLanguage (preselected))
     {
 	Language::WfmSetGivenLanguage ("en_US");
     }
@@ -426,7 +426,7 @@ In the selection box, specify additional languages to use on your system.
 
     // No .desktop files in inst-sys - use icon explicitly
     if (Stage::initial ())
-	Wizard::SetTitleIcon ("babelfish");
+	Wizard::SetTitleIcon ("yast-yast-language");
 
     // Get the user input.
     //
@@ -516,6 +516,7 @@ Some texts may be displayed in English.
 		Language::Set (language);
 
 		if (Language::CJKLanguage (language) &&
+		    !Language::CJKLanguage (preselected) &&
 		    Language::GetTextMode () && Stage::initial ())
 		{
 		    // popup message (user selected CJK language in text mode)

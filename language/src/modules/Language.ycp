@@ -36,6 +36,11 @@ global string language = "en_US";
 global string language_on_entry = "en_US";
 
 /**
+ * language preselected in /etc/install.inf
+ */
+global string preselected	= "en_US";
+
+/**
  * user readable description of language
  */
 string name = "English (US)";
@@ -89,6 +94,16 @@ map<string, list> languages_map = $[];
 
 // languages that cannot be correctly shown in text mode
 list cjk_languages	= [ "ja", "ko", "zh" ];
+
+/**
+ * Check if the language is "CJK"
+ * (and thus could not be shown in text mode - see bug #102958)
+ */
+global define boolean CJKLanguage (string lang) {
+
+    string l = substring (lang, 0, 2);
+    return contains (cjk_languages, l);
+}
 
 
 /**
@@ -190,6 +205,11 @@ global define void Set (string lang) {
 	{
 	    SCR::Write (.FvwmCommand.lang, language);
 	}
+	// update "name" for proposal when it cannot be shown correctly
+	else if (CJKLanguage (lang) && !CJKLanguage (preselected))
+	{
+	    name	= languages_map[lang, 1]:lang;
+	}
     }
 }
 
@@ -263,16 +283,19 @@ global define void Language() {
 	string lang = (string)SCR::Read (.content.LANGUAGE);
 	y2milestone ("content LANGUAGE %1", lang);
 
-	string tmp_l = Linuxrc::InstallInf ("Locale");
-	y2milestone ("install_inf Locale %1", tmp_l);
-	if (tmp_l != nil && size(tmp_l) > 0)
+	preselected = Linuxrc::InstallInf ("Locale");
+	y2milestone ("install_inf Locale %1", preselected);
+	if (preselected != nil && preselected != "")
 	{
-	    lang = tmp_l;
+	    lang = preselected;
 	    if (lang != "en_US")
 	    {
 		linuxrc_language_set = true;
 	    }
 	}
+	else
+	    preselected	= "en_US";
+
 	if (lang == nil)
 	    lang = "";
 	y2milestone ("lang after checking /etc/install.inf: %1", lang );
@@ -681,17 +704,6 @@ global define boolean IncompleteTranslation (string lang) {
 
     return translation_status[lang]:0 < treshold;
 }
-
-/**
- * Check if the language is "CJK"
- * (and thus could not be shown in text mode - see bug #102958)
- */
-global define boolean CJKLanguage (string lang) {
-
-    string l = substring (lang, 0, 2);
-    return contains (cjk_languages, l);
-}
-
 
 /* EOF */
 }

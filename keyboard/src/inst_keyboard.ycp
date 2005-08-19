@@ -285,8 +285,8 @@ If unsure, use the default values already selected.
 			 GetInstArgs::enable_next() );
 
     Wizard::SetDesktopIcon("keyboard");
-    if ( Stage::initial () )
-	Wizard::SetTitleIcon( "keyboard" );
+    if (Stage::initial ())
+	Wizard::SetTitleIcon ("yast-keyboard");
 
     // Initially set the current keyboard to establish a consistent state.
     //
