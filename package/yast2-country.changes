@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug 22 10:30:53 CEST 2005 - jsuchome@suse.cz
+
+- earlier check for possible local time during installation (#104868)
+- 2.12.13 
+
+-------------------------------------------------------------------
 Wed Aug 17 17:25:54 CEST 2005 - jsuchome@suse.cz
 
 - better solution for CJK languages during installation (#102958)
