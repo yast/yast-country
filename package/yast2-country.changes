@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug 25 17:37:41 CEST 2005 - jsuchome@suse.cz
+
+- fixed time initialization during installation (#112900)
+- 2.12.14 
+
+-------------------------------------------------------------------
 Mon Aug 22 10:30:53 CEST 2005 - jsuchome@suse.cz
 
 - earlier check for possible local time during installation (#104868)
