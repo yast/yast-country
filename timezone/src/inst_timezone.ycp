@@ -261,12 +261,19 @@ Enter the correct date.
 	hwclock = ( AutoinstGeneral::Clock["hwclock"]:"" == "UTC" ) ? "-u"  : "--localtime";
     }
 
-    string date = "";
-
-    if (Mode::config () || Mode::mode () == "firstboot")
+    // Initially set the current timezone to establish a consistent state.
+    //
+    integer sel = 0;
+    if (Mode::config ())
     {
-	Wizard::HideAbortButton();
+	import "AutoinstGeneral";
+	sel = Timezone::Set (AutoinstGeneral::Clock["timezone"]:"", true);
     }
+    else
+    {
+	sel = Timezone::Set (timezone, true);
+    }
+
 
     boolean utc_only = Timezone::utc_only ();
     y2milestone( "utc_only %1", utc_only );
@@ -277,7 +284,7 @@ Enter the correct date.
 
     // Assign system date and time.
     //
-    date = Timezone::GetDateTime(true, false);//true);
+    string date = Timezone::GetDateTime(true, false);//true);
 
     // build up timezone selection box
     //
@@ -371,28 +378,19 @@ set to Universal Time Coordinated (UTC).
 If the current time is not correct, use <b>Change Time or Date</b> to adjust it.
 </p>");
 
+    if (Mode::config () || Mode::mode () == "firstboot")
+    {
+	Wizard::HideAbortButton();
+    }
+
     // Screen title for timezone screen
     Wizard::SetContents (_("Clock and Time Zone"), contents,
-			 help_text, GetInstArgs::enable_back(), GetInstArgs::enable_next() );
+	help_text, GetInstArgs::enable_back(), GetInstArgs::enable_next());
 
     Wizard::SetDesktopIcon ("timezone");
     if ( Stage::initial () || Stage::firstboot ())
     {
 	Wizard::SetTitleIcon ("yast-timezone");
-    }
-
-
-    // Initially set the current timezone to establish a consistent state.
-    //
-    integer sel = 0;
-    if (Mode::config ())
-    {
-	import "AutoinstGeneral";
-	sel = Timezone::Set (AutoinstGeneral::Clock["timezone"]:"", true);
-    }
-    else
-    {
-	sel = Timezone::Set (timezone, true);
     }
 
     symbol hwclock_s = (hwclock=="-u") ? `hwclock_utc : `hwclock_localtime;
