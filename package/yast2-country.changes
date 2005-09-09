@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Sep  9 17:33:15 CEST 2005 - jsuchome@suse.cz
+
+- fixed loadkeys command for some keyboards (#116143)
+- set the keyboard in constructor if language was preselected (#113664)
+- 2.12.15
+
+-------------------------------------------------------------------
 Thu Aug 25 17:37:41 CEST 2005 - jsuchome@suse.cz
 
 - fixed time initialization during installation (#112900)
