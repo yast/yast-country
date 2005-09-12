@@ -7,5 +7,5 @@ Read	.target.yast2 "keyboard_raw.ycp" $["czech-qwerty":["Czech (qwerty)", $["i38
 Read	.target.size "/usr/sbin/xkbctrl" []
 Execute	.target.bash "/usr/sbin/xkbctrl cz-lat2-us.map.gz > /tmp/xkbctrl.out" 0
 Read	.target.ycp "/tmp/xkbctrl.out" $["XkbLayout":"cz_qwerty,us"]
-Execute	.target.bash "/bin/loadkeys cz-lat2-us.map.gz ; dumpkeys | loadkeys -u" 0
+Execute	.target.bash "/bin/loadkeys cz-lat2-us.map.gz ; dumpkeys -c iso-8859-2  | loadkeys -u" 0
 Return	Czech (qwerty)
