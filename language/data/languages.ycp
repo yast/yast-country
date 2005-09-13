@@ -37,13 +37,14 @@ $[
 		  "@euro" ],
   End of comment */
 
-  /* Highly incomplete, no active translator. Cf. #30351
-
-  "bs_BA"	: [ "Bosnia ",
-		  "Bosnia",
-		  ".UTF-8",
-		  "" ],
-  End of comment */
+  "bs_BA"	: [
+		    "Bosanski",
+		    "Bosanski",
+		    ".UTF-8",
+		    "",
+		    // language name
+		    _("Bosnian"),
+		],
 
   "bg_BG"       : [ "Български",
                     "Bulgarian",
@@ -281,6 +282,16 @@ $[
 		  "",
 		  // language name
 		  _("Slovak") ],
+
+  "sr_CS"	: [
+//		    "Српски", -- translation doesn't use cyrilic...
+		    "Srpski",
+		    "Srpski",
+		    ".UTF-8",
+		    "",
+		    // language name
+		    _("Serbian"),
+		],
 
   "sv_SE"	: [ "Svenska",
 		  "Svenska",
