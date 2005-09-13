@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 13 13:55:34 CEST 2005 - jsuchome@suse.cz
+
+- new languages supported: Serbian, Bosnian (#116724)
+- 2.12.17
+
+-------------------------------------------------------------------
 Mon Sep 12 07:23:43 CEST 2005 - jsuchome@suse.cz
 
 - fixed testsuite causing package not to build

@@ -27,6 +27,7 @@
       $[
 	"ar_eg"		: "english-us",
 	"be_BY"		: "belgian",
+	"bs_BA"		: "english-us",
 	"br_FR"		: "french",
 	"cs_CZ"		: "czech",
 	"da_DK"		: "danish",
@@ -67,6 +68,8 @@
 	"ru_RU.KOI8-R"	: "russian",
 	"sk_SK"		: "slovak",
 	"sl_SI"		: "slovene",
+	"sr_CS"		: "serbian",
+	"sr_YU"		: "serbian",
 	"sv_SE"		: "swedish",
 	"tr_TR"		: "turkish",
 	"zh_CN"		: "english-us",
