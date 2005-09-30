@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Sep 30 15:00:45 CEST 2005 - jsuchome@suse.cz
+
+- do not ignore the keyboard layout set in linuxrc (#118571)
+- 2.13.0
+
+-------------------------------------------------------------------
 Tue Sep 13 13:55:34 CEST 2005 - jsuchome@suse.cz
 
 - new languages supported: Serbian, Bosnian (#116724)
