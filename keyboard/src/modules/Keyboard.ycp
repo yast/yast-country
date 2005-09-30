@@ -230,9 +230,9 @@
 	"slovene.map.gz"		: "iso-8859-2"
     ];
 
-    // ---------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------
     // END: Locally defined data
-    // ---------------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------
 
     // function prototypes
     global define void Set (string keyboard);
@@ -245,10 +245,6 @@
  * GetKbdSysconfig()
  *
  * Restore the the non-keyboard values from sysconfig.
- *
- * @param 	-
- *
- * @return      -
  */
 
 define void GetKbdSysconfig()
@@ -280,17 +276,11 @@ define void GetKbdSysconfig()
  *
  * Read the Keyboard DB and select entries for current XkbModel and architecture.
  *
- * @param 	-
- *
  * @return  Reduced keyboard DB (map)
- *
- * @see
  */
 
-define map<string,list> get_reduced_keyboard_db()
-    ``{
+define map<string,list> get_reduced_keyboard_db() {
     /*
-     * Search the YaST2 keyboard DB for the corresponding kb_model entry and architecture.
      * The keyboard DB is a very big map containing entries for all known keyboard
      * languages. Each of these entries contains a map of the different known
      * architectures and each of these architectures contains a map for the different
@@ -305,33 +295,35 @@ define map<string,list> get_reduced_keyboard_db()
      *	       $[ "pc104":
      *	          $[   "ncurses": "us.map.gz" ]],
      *
-     * What now follows is code that cuts out from this map the unnecessary architectures
-     * and XkbModels. The different languages are kept.
+     * What now follows is code that cuts out from this map the unnecessary
+     * architectures and XkbModels. The different languages are kept.
      *
      * Load the keyboard DB.
      * Do not hold this database in a permanent module variable (it's very large).
      */
 
-    map<string,list> all_keyboards = (map<string,list>) eval(SCR::Read( .target.yast2, "keyboard_raw.ycp" ));
+    // eval is necessary for translating the texts needed to be translated
+    map<string,list> all_keyboards = (map<string,list>)
+	eval(SCR::Read( .target.yast2, "keyboard_raw.ycp" ));
 
-    if ( all_keyboards == nil ) all_keyboards = $[];
+    if (all_keyboards == nil) all_keyboards = $[];
 
     // The new reduced map of keyboard data.
     //
     map<string,list> keyboards = $[];
     string arch = Arch::architecture ();
     if( arch == "ppc64" )
-	{
+    {
 	arch = "ppc";
-	}
-    y2milestone( "get_reduced_keyboard_db: Arch::architecture () %1 used %2", 
+    }
+    y2milestone( "get_reduced_keyboard_db: Arch::architecture () %1 used %2",
                  Arch::architecture (), arch );
 
-    foreach( string kb_lang, list description, all_keyboards,
-	``{	// loop over all languages
+    // loop over all languages
+    foreach (string kb_lang, list description, all_keyboards, {
 
-	if( size( description ) == 2 )
-	    {
+	if (size (description) == 2)
+	{
 	    // Skip langage specific naming of keyboard languages.
 	    // Select the keyboard data.
 	    //
@@ -364,12 +356,30 @@ define map<string,list> get_reduced_keyboard_db()
 		//
 		keyboards[kb_lang] = keyboard_selected;
 		}
-	    }
+	}
+    });
+
+    return keyboards;
+};	// get_reduced_keyboard_db()
+
+    /**
+     * Return a map for conversion from keymap to YaST2 keyboard code()
+     * Get the map of translated keyboard names.
+     * @param   -
+     * @return  map of $[ keyboard_code : keyboard_name, ...] for all known
+     *      keyboards. 'keyboard_code' is used internally in Set and Get
+     *      functions. 'keyboard_name' is a user-readable string.
+     *      Uses Language::language for translation.
+     *
+     */
+    global define map<string, string> keymap2yast() {
+
+	return mapmap (string code, list kbd_value, get_reduced_keyboard_db(), {
+	    map code_map	= kbd_value[1]:$[];
+	    list codel	= splitstring (code_map["ncurses"]:"", ".");
+	    return  $[ codel[0]:"": code ];
 	});
-
-    return( keyboards );
-    };	// get_reduced_keyboard_db()
-
+    }
 
 /**
  * GetX11KeyData()
@@ -746,8 +756,6 @@ global define string GetKeyboardForLanguage( string sys_language,
  */
 global define void Probe() {
 
-    // Probe the keyboard....
-    //
     y2milestone( "Keyboard::Probe" );
     probe_settings();
 
@@ -757,35 +765,49 @@ global define void Probe() {
     //
     string default_keyboard = "";
 
-    // Some keyboards (i.e. sparc) report their layout, try to use this information here.
+    // Some keyboards (i.e. sparc) report their layout, try to use this information here
     //
     if( XkbLayout != "" )	// we do have hardware info
-	{
-	default_keyboard = GetKeyboardForLanguage( XkbLayout,
-	                                           default_keyboard );
-	}
-    else	// no hardware info ==> select default keyboard dependent on system language
-	{
-	default_keyboard = GetKeyboardForLanguage( Language::language,
-	                                           "english-us" );
-	}
+    {
+	default_keyboard = GetKeyboardForLanguage( XkbLayout, default_keyboard);
+    }
+    else // no hardware info ==> select default keyboard dependent on system language
+    {
+	default_keyboard = GetKeyboardForLanguage( Language::language, "english-us" );
+    }
 
     // Set the module state.
     //
     SetLanguage( default_keyboard );
 
-    // set langauge now (before proposal - see bug #113664)
-    if (Stage::initial () && Language::preselected != "en_US")
+    if (Stage::initial ())
     {
-	y2milestone ("language (%1) was preselected -> setting keyboard to %2",
-	    Language::preselected, default_keyboard);
-
-	Set (default_keyboard);
+	string keytable = Linuxrc::InstallInf ("Keytable");
+	// set the keyboard from linuxrc
+	if (keytable != nil)
+	{
+	    y2milestone ("linuxrc keyboard: %1", keytable);
+	    map map2yast = (map) union (keymap2yast (), $[
+		"dk"		: "danish",
+		"de-lat1-nd"	: "german",
+	    ]);
+	    if (map2yast[keytable]:map2yast[keytable + ".map.gz"]:"" != "")
+	    {
+		Set (map2yast[keytable]:map2yast[keytable + ".map.gz"]:"");
+		// do not reset it in proposal
+		user_decision	= true;
+	    }
+	}
+	// set keyboard now (before proposal - see bug #113664)
+	else if (Language::preselected != "en_US")
+	{
+	    y2milestone ("language (%1) was preselected -> setting keyboard to %2",
+		Language::preselected, default_keyboard);
+	    Set (default_keyboard);
+	}
     }
     y2milestone( "End Probe %1", default_keyboard );
-
-    return;
-    }	// Probe()
+} // Probe()
 
 
 /**
@@ -1291,25 +1313,6 @@ global define boolean CalledRestore() {
 	});
   }
 
-    /**
-     * Return a map for conversion from keymap to YaST2 keyboard code()
-     * Get the map of translated keyboard names.
-     * @param   -
-     * @return  map of $[ keyboard_code : keyboard_name, ...] for all known
-     *      keyboards. 'keyboard_code' is used internally in Set and Get
-     *      functions. 'keyboard_name' is a user-readable string.
-     *      Uses Language::language for translation.
-     *
-     */
-
-    global define map<string, string> keymap2yast() {
-
-	return mapmap (string code, list kbd_value, get_reduced_keyboard_db(), {
-	    map code_map	= kbd_value[1]:$[];
-	    list codel	= splitstring (code_map["ncurses"]:"", ".");
-	    return  $[ codel[0]:"": code ];
-	});
-    }
 
 
 /*

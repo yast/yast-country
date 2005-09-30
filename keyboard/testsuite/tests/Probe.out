@@ -1,0 +1,9 @@
+Read	.probe.keyboard nil
+Read	.target.yast2 "lang2keyboard.ycp" $["czech-qwerty":["Czech (qwerty)", $["i386":$["pc104":$["compose":"latin2", "ncurses":"cz-lat2-us.map.gz"]]]], "danish":["Danish", $["i386":$["pc104":$["ncurses":"dk-latin1.map.gz"]]]]]
+Read	.target.yast2 "keyboard_raw.ycp" $["czech-qwerty":["Czech (qwerty)", $["i386":$["pc104":$["compose":"latin2", "ncurses":"cz-lat2-us.map.gz"]]]], "danish":["Danish", $["i386":$["pc104":$["ncurses":"dk-latin1.map.gz"]]]]]
+Read	.target.yast2 "keyboard_raw.ycp" $["czech-qwerty":["Czech (qwerty)", $["i386":$["pc104":$["compose":"latin2", "ncurses":"cz-lat2-us.map.gz"]]]], "danish":["Danish", $["i386":$["pc104":$["ncurses":"dk-latin1.map.gz"]]]]]
+Read	.target.yast2 "keyboard_raw.ycp" $["czech-qwerty":["Czech (qwerty)", $["i386":$["pc104":$["compose":"latin2", "ncurses":"cz-lat2-us.map.gz"]]]], "danish":["Danish", $["i386":$["pc104":$["ncurses":"dk-latin1.map.gz"]]]]]
+Read	.target.size "/usr/sbin/xkbctrl" 1
+Execute	.target.bash "/usr/sbin/xkbctrl dk-latin1.map.gz > /tmp/xkbctrl.out" 0
+Read	.target.ycp "/tmp/xkbctrl.out" $["XkbLayout":"cz_qwerty,us"]
+Execute	.target.bash "/bin/loadkeys dk-latin1.map.gz ; dumpkeys | loadkeys -u" 0
