@@ -27,6 +27,7 @@
     import "Language";
     import "Mode";
     import "Popup";
+    import "ProductFeatures";
     import "Report";
     import "Stage";
     import "Timezone";
@@ -161,18 +162,19 @@ are unset.<br>
     boolean set_default = GetInstArgs::argmap()["first_run"]:"no" == "yes";
     y2milestone("set_default: %1", set_default );
 
-    // when the possibility for selecting more languages should be shown
-    // (this includes differet UI layout)
-    boolean more_languages	= true;
-
-    list<string>languages	= splitstring (Language::languages, ",");
-    if (GetInstArgs::argmap()["first_call"]:false)
-	languages	= filter (string l, languages, ``(l != language));
-
     string preselected = Language::preselected;
 
-    if (Language::CJKLanguage (language) &&
-	Language::GetTextMode () && Stage::initial () &&
+    if (Stage::initial () && preselected != "en_US" && set_default)
+    {
+	if (ProductFeatures::GetBooleanFeature ("globals", "skip_language_dialog"))
+	{
+	    y2milestone("Skipping language dialog, Language changed to %1",preselected);
+	    return `auto;
+	}
+    }
+
+    if (Stage::initial () &&
+	Language::CJKLanguage (language) && Language::GetTextMode () &&
 	// CJKLanguage (preselected) -> fbiterm is probably running (#102958)
 	!Language::CJKLanguage (preselected))
     {
@@ -182,6 +184,15 @@ are unset.<br>
     {
 	Language::WfmSetLanguage ();
     }
+
+    // when the possibility for selecting more languages should be shown
+    // (this includes differet UI layout)
+    boolean more_languages	= true;
+
+    list<string>languages	= splitstring (Language::languages, ",");
+    if (GetInstArgs::argmap()["first_call"]:false)
+	languages	= filter (string l, languages, ``(l != language));
+
 
     // Build the contents of the dialog.
 
