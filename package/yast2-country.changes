@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Oct  3 11:42:19 CEST 2005 - jsuchome@suse.cz
+
+- added a possibility to skip initial language selection
+  (originaly part of installation.ycp)
+- 2.13.1 
+
+-------------------------------------------------------------------
 Fri Sep 30 15:00:45 CEST 2005 - jsuchome@suse.cz
 
 - do not ignore the keyboard layout set in linuxrc (#118571)
