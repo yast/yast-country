@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct  4 14:29:39 CEST 2005 - jsuchome@suse.cz
+
+- "dutch" keyboard layout should be really dutch - nl.map.gz (#119639)
+- 2.13.2
+
+-------------------------------------------------------------------
 Mon Oct  3 11:42:19 CEST 2005 - jsuchome@suse.cz
 
 - added a possibility to skip initial language selection
