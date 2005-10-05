@@ -446,6 +446,9 @@ global define void SetExpertValues (map val) {
  */
 global define void WfmSetGivenLanguage (string lang) {
 
+    if (Mode::config ())
+	return;
+
     string encoding	= (use_utf8) ? "UTF-8" : Encoding::console;
 
     y2milestone ( "language %1 enc %2 utf8:%3", lang, encoding, use_utf8 );

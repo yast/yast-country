@@ -1,0 +1,48 @@
+/**
+ * Autoinstallation client for language setting
+ * Author	: Jiri Suchomel <jsuchome@suse.cz>
+ * $Id$
+ */
+{
+    /* This is a special case of auto client; currently doesn't follow usual API
+       but onlyu provides the "Change" function of other auto-clients
+
+       Might become full-featured auto-client if necessary
+    */
+
+    import "AutoinstGeneral";
+    import "GetInstArgs";
+    import "Language";
+    import "Mode";
+    import "Wizard";
+
+    include "keyboard/dialogs.ycp";
+
+    /**
+     * Autoinstallation config sequence
+     */
+    define symbol AutoSequence () {
+
+	// initialization
+	Language::language = AutoinstGeneral::language;
+
+	Wizard::HideAbortButton();
+
+	// Params are:                              `back `next  set_default
+	map args = GetInstArgs::argmap();
+
+	symbol result	= (symbol) WFM::CallFunction ("select_language", [args]);
+
+	if (result == `next)
+	{
+	    AutoinstGeneral::language  = Language::language;
+	}
+
+	return result;
+    }
+
+    if (Mode::config ())
+	return AutoSequence ();
+    else
+	return `next;
+}

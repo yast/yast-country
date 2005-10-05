@@ -1,35 +1,34 @@
 /**
  * File:
- *	inst_timezone.ycp
+ *	timezone/dialogs.ycp
  *
  * Authors:
  *	Klaus   Kämpf <kkaempf@suse.de>
  *	Michael Hager <mike@suse.de>
  *	Stefan  Hundhammer <sh@suse.de>
+ *	Jiri Suchomel <jsuchome@suse.cz>
  *
  * Summary:
- *	Let the user choose the timezone.
+ *	Dialogs for timezone and time configuration.
  *
  * $Id$
  */
 {
-textdomain "country";
+  textdomain "country";
 
-import "Arch";
-import "Label";
-import "Mode";
-import "Misc";
-import "Popup";
-import "Stage";
-import "Timezone";
-import "Wizard";
-import "GetInstArgs";
+  import "Arch";
+  import "Label";
+  import "Mode";
+  import "Popup";
+  import "Stage";
+  import "Timezone";
+  import "Wizard";
 
-symbol hwclock_s_initial = `none;
+  symbol hwclock_s_initial = `none;
 
-define void SetTimezone (symbol hwclock, string timezone, boolean really,
-                         boolean changed_time)
-{
+  define void SetTimezone (symbol hwclock, string timezone, boolean really,
+			   boolean changed_time)
+  {
 
     y2milestone( "SetTimezone hw %1, tz %2 really %3 tchanged %4 initial:%5",
                  hwclock, timezone, really, changed_time, hwclock_s_initial );
@@ -48,13 +47,12 @@ define void SetTimezone (symbol hwclock, string timezone, boolean really,
     // Redisplay date/time.
     //
     UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime (really, false));
-    //true));
-};
+  };
 
-/**
- * Dialog for setinge system date and time
- */
-define boolean SetTimeDialog() {
+  /**
+   * Dialog for setinge system date and time
+   */
+  define boolean SetTimeDialog() {
 
     // help text
     string htext = _("<p>Here, change
@@ -219,13 +217,15 @@ Enter the correct date.
     until( ret==`apply || ret==`cancel );
     UI::CloseDialog();
     return( ret==`apply );
-};
+  };
 
-/* ----------------------------------------------------------------------
- * Timezone
- * ----------------------------------------------------------------------*/
+  /**
+   * Main dialog for time zone configuration
+   * @param args arguments passwd from the called (back/next buttons etc.)
+   */
+  define symbol TimezoneDialog (map args) {
 
-    boolean first_run = GetInstArgs::argmap()["first_run"]:"no" == "yes";
+    boolean first_run = args["first_run"]:"no" == "yes";
     // inst_timezone as a part of installation sequence
     if (first_run && Stage::initial ())
     {
@@ -253,30 +253,14 @@ Enter the correct date.
 
     timezone		= Timezone::UpdateTimezone (timezone);
 
-    // Autoinstall
-    if (Mode::config ())
-    {
-	import "AutoinstGeneral";
-	timezone = AutoinstGeneral::Clock["timezone"]:"";
-	hwclock = ( AutoinstGeneral::Clock["hwclock"]:"" == "UTC" ) ? "-u"  : "--localtime";
-    }
-
     // Initially set the current timezone to establish a consistent state.
     //
-    integer sel = 0;
-    if (Mode::config ())
-    {
-	import "AutoinstGeneral";
-	sel = Timezone::Set (AutoinstGeneral::Clock["timezone"]:"", true);
-    }
-    else
-    {
-	sel = Timezone::Set (timezone, true);
-    }
-
+    integer sel = Timezone::Set (timezone, true);
 
     boolean utc_only = Timezone::utc_only ();
     y2milestone( "utc_only %1", utc_only );
+
+    Timezone::PushVal();
 
     /* ----------------------------------------------------------------------
      * Build dialog
@@ -284,7 +268,7 @@ Enter the correct date.
 
     // Assign system date and time.
     //
-    string date = Timezone::GetDateTime(true, false);//true);
+    string date = Timezone::GetDateTime(true, false);
 
     // build up timezone selection box
     //
@@ -378,14 +362,9 @@ set to Universal Time Coordinated (UTC).
 If the current time is not correct, use <b>Change Time or Date</b> to adjust it.
 </p>");
 
-    if (Mode::config () || Mode::mode () == "firstboot")
-    {
-	Wizard::HideAbortButton();
-    }
-
     // Screen title for timezone screen
     Wizard::SetContents (_("Clock and Time Zone"), contents,
-	help_text, GetInstArgs::enable_back(), GetInstArgs::enable_next());
+	help_text, args["enable_back"]:true, args["enable_next"]:true);
 
     Wizard::SetDesktopIcon ("timezone");
     if ( Stage::initial () || Stage::firstboot ())
@@ -407,13 +386,11 @@ If the current time is not correct, use <b>Change Time or Date</b> to adjust it.
 
     UI::SetFocus (`id(`region));
 
-    any ret = nil;
-
-    Timezone::PushVal();
+    symbol ret = nil;
 
     repeat
     {
-	ret = Wizard::UserInput();
+	ret = (symbol) Wizard::UserInput();
 
 	y2debug( "ret %1", ret );
 
@@ -441,7 +418,7 @@ If the current time is not correct, use <b>Change Time or Date</b> to adjust it.
 	    {
 		Timezone::diff = 0;
 		UI::ChangeWidget(`id(`date), `Value,
-		    Timezone::GetDateTime (false, false));//true));
+		    Timezone::GetDateTime (false, false));
 		changed_time = true;
 	    }
 	}
@@ -471,45 +448,32 @@ If the current time is not correct, use <b>Change Time or Date</b> to adjust it.
 	    }
 	    y2milestone ("timezone %1 ret %2", timezone, ret);
 
-	    // Change only if s.th. has really changed.
-	    //
-	    if (Mode::config ())
+	    if (timezone != timezone_old || hwclock_s != hwclock_s_old || ret == `next)
 	    {
-		// Autoinstall
-		import "AutoinstGeneral";
-		AutoinstGeneral::Clock["hwclock"] = ( hwclock_s == `hwclock_utc ) ? "UTC" : "localtime";
-		AutoinstGeneral::Clock["timezone"]  =  timezone;
+		if (timezone != timezone_old)
+		{
+		    changed_time = true;
+		}
+		timezone_old	= timezone;
+		hwclock_s_old	= hwclock_s;
+		SetTimezone (hwclock_s, timezone, ret==`next, changed_time);
 	    }
-	    else
-	    {
-		if( timezone != timezone_old || hwclock_s != hwclock_s_old ||
-		    ret == `next)
-		{
-		    if (timezone != timezone_old)
-		    {
-			changed_time = true;
-		    }
-		    timezone_old	= timezone;
-		    hwclock_s_old	= hwclock_s;
-		    SetTimezone (hwclock_s, timezone, ret==`next, changed_time);
-		}
 
-		if (ret == `next)
-		{
-		    // User wants to keep his changes.
-		    // Set user_decision flag in timezone module.
-		    //
-		    Timezone::user_decision	= true;
-		    Timezone::user_hwclock	= true;
-		}
+	    if (ret == `next)
+	    {
+		// User wants to keep his changes.
+		// Set user_decision flag in timezone module.
+		//
+		Timezone::user_decision	= true;
+		Timezone::user_hwclock	= true;
 	    }
 	}
     } until ( ret == `next || ret == `back || ret == `cancel );
 
-    if( ret != `next )
+    if (ret != `next)
     {
 	Timezone::PopVal();
     }
-
     return ret;
+  }
 }

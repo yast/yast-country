@@ -49,8 +49,6 @@
     }
     else if ( func == "AskUser" )
     {
-	boolean has_next = param["has_next"]:false;
-
 	// Special case for language selection: Rebuild dialog completely upon
 	// language change (to get even the wizard widgets re-translated), thus
 	// the loop around that 'CallFunction()'.
@@ -69,14 +67,14 @@
 	Wizard::OpenAcceptDialog();	// Reduce flicker (yes, it's a kludge)
 	map args = $[
 	    "enable_back"	: true,
-	    "enable_next"	: has_next,
+	    "enable_next"	: param["has_next"]:false,
 	    "first_call"	: true
 	];
 	do
 	{
 	    Wizard::OpenAcceptDialog();	// This dialog will actually be used
 
-	    result	= (symbol) WFM::CallFunction ("inst_language", [args]);
+	    result	= (symbol) WFM::CallFunction ("select_language", [args]);
 	    if (haskey (args, "first_call"))
 		args	= remove (args, "first_call");
 	    Wizard::CloseDialog();

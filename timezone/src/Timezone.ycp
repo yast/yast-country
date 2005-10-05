@@ -52,6 +52,7 @@ global integer diff = 0;
  */
 global boolean windows_partition	= false;
 
+// internal map used to store initial data
 map push = $[];
 
 // ------------------------------------------------------------------
@@ -169,7 +170,7 @@ global define integer Set (string zone, boolean really) {
 
     // On first assignment store default timezone.
     //
-    if (default_timezone == "")	// not yet assigned
+    if (default_timezone == "")
     {
 	default_timezone = timezone;
 	y2milestone( "Set default timezone: <%1>", timezone );
@@ -218,10 +219,6 @@ global define string UpdateTimezone (string tmz) {
   * Calls Set() in initial mode.
   * Reads current timezone from sysconfig in normal mode.
   *
-  * @param	-
-  *
-  * @return  -
-  *
   * @see	Set()
   */
 global define void Timezone() {
@@ -254,7 +251,6 @@ global define void Timezone() {
     return;
 }
 
-
 /**
  * Set the new time and date given by user
  */
@@ -278,22 +274,37 @@ global define void SetTime (string year, string month, string day,
     }
 };
 
-global define void PushVal()
-    ``{
-    push = $[ "hwclock" : hwclock, "timezone" : timezone ];
-    y2milestone( "PushVal map %1", push );
-    }
+  /**
+   * save the initial data
+   */
+  global define void PushVal () {
 
-global define void PopVal()
-    ``{
-    y2milestone( "PopVal timezone %1 hwclock %2", timezone, hwclock );
-    if( haskey( push, "hwclock" ))
+    push = $[ "hwclock" : hwclock, "timezone" : timezone ];
+    y2milestone ( "PushVal map %1", push );
+  }
+
+  /**
+   * restore the original data from internal map
+   */
+  global define void PopVal() {
+
+    y2milestone ("before Pop: timezone %1 hwclock %2", timezone, hwclock );
+    if ( haskey( push, "hwclock" ))
 	hwclock = push["hwclock"]:hwclock;
     if( haskey( push, "timezone" ))
 	timezone = push["timezone"]:timezone;
     push = $[];
-    y2milestone( "PopVal timezone %1 hwclock %2", timezone, hwclock );
-    }
+    y2milestone ("after Pop: timezone %1 hwclock %2", timezone, hwclock );
+  }
+
+  /**
+   * was anything modified?
+   */
+  global define boolean Modified () {
+
+    return timezone != push["timezone"]:timezone || hwclock != push["hwclock"]:hwclock;
+  }
+
 
 /**
  * GetTimezoneForLanguage()
@@ -373,7 +384,7 @@ global define string GetDateTime (boolean real_time, boolean locale_format) {
 	? "+%c" : "+%H:%M:%S - %d-%m-%Y";
 
     y2milestone( "GetDateTime hwclock %1 real:%2", hwclock, real_time );
-    if (!real_time)
+    if (!real_time && !Mode::config ())
     {
 	integer ds = 0;
 	if (diff!=0)

@@ -9,7 +9,12 @@
 
        Might become full-featured auto-client if necessary
     */
+    import "AutoinstGeneral";
+    import "GetInstArgs";
+    import "Misc";
     import "Mode";
+    import "Timezone";
+
     include "timezone/dialogs.ycp";
 
     /**
@@ -17,10 +22,28 @@
      */
     define symbol AutoSequence () {
 
+	if (AutoinstGeneral::Clock["timezone"]:"" == "")
+	{
+	    string tz = Misc::SysconfigRead(.sysconfig.clock.TIMEZONE, "" );
+	    if (tz == "")
+	    {
+		tz =Timezone::GetTimezoneForLanguage(AutoinstGeneral::language,"en_US");
+	    }
+	    AutoinstGeneral::Clock["timezone"]  = tz;
+	}
+	Timezone::timezone	= AutoinstGeneral::Clock["timezone"]:"";
+
+	Timezone::hwclock	=
+	    AutoinstGeneral::Clock["hwclock"]:"" == "UTC" ? "-u"  : "--localtime";
+
 	Wizard::CreateDialog();
 	Wizard::HideAbortButton();
 
-	symbol result = TimezoneDialog ();
+	symbol result = TimezoneDialog (GetInstArgs::argmap());
+
+	AutoinstGeneral::Clock["hwclock"] =
+	    Timezone::hwclock == "-u" ? "UTC" : "localtime";
+	AutoinstGeneral::Clock["timezone"]  =  Timezone::timezone;
 
 	Wizard::CloseDialog ();
 

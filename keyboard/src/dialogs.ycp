@@ -1,6 +1,6 @@
 /**
  * File:
- *	inst_keyboard.ycp
+ *	keyboard/dialogs.ycp
  *
  * Authors:
  *	Klaus   Kämpf <kkaempf@suse.de>
@@ -8,36 +8,24 @@
  *	Stefan  Hundhammer <sh@suse.de>
  *
  * Summary:
- *	Let the user choose keyboard
+ *	Dialogs for keyboard configuration
  *
  * $Id$
  */
 {
     textdomain "country";
 
-    // dont ask for keyboard on S/390 or serial console
+  import "Keyboard";
+  import "Label";
+  import "Mode";
+  import "Popup";
+  import "Stage";
+  import "Wizard";
 
-    import "Arch";
-    import "Mode";
-    import "Popup";
-    import "GetInstArgs";
-
-    // After import "Arch" and "Mode"
-    //
-    if ( Arch::s390 () )
-    {
-	return `next;
-    }
-
-    import "Keyboard";
-    import "Label";
-    import "Language";
-    import "Misc";
-    import "Stage";
-    import "Wizard";
-
-define symbol KeyboardExpertDialog()
-    ``{
+  /**
+   * Dialog with expert keyboard configuration
+   */
+  define symbol KeyboardExpertDialog() {
 
     symbol ret = `none;
     // help text for keyboard expert screen
@@ -123,7 +111,8 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
 		    `HBox (
 			`PushButton (`id(`ok),`opt(`default),Label::OKButton()),
 			`PushButton (`id(`cancel), Label::CancelButton())
-		    )
+		    ),
+		    `VSpacing (0.5)
 		)
 	    )
 	)
@@ -172,36 +161,14 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
 	    }
 	} until ( ret == `cancel || ret == `ok );
     UI::CloseDialog();
-    };
+  };
 
-    /* ----------------------------------------------------------------------
-     * Keyboard
-     * ----------------------------------------------------------------------*/
-
-
-    if (Mode::config ())
-    {
-	import "AutoinstGeneral";
-	if (AutoinstGeneral::keyboard["keymap"]:"" != "")
-	{
-	    Keyboard::current_kbd = AutoinstGeneral::keyboard["keymap"]:"";
-	    if (haskey(AutoinstGeneral::keyboard, "keyboard_values")
-		&& AutoinstGeneral::keyboard["keyboard_values"]:$[] != $[])
-	    {
-		Keyboard::SetExpertValues(AutoinstGeneral::keyboard["keyboard_values"]:$[]);
-	    }
-	}
-	else
-	{
-	    Keyboard::current_kbd =  Keyboard::GetKeyboardForLanguage( AutoinstGeneral::language, "english-us" );
-	}
-    }
-
-
-    // Memorize the current keyboard language to be able to restore it.
-    //
-    string keyboard_on_entry = Keyboard::current_kbd;
-    string cur_kbd = Keyboard::current_kbd;
+  /**
+   * main dialog for choosing keyboard
+   * @param args: arguments forwarded from the initial client call
+   * (checking for "enable_back" and "enable_next" keys)
+   */
+  define symbol KeyboardDialog (map args) {
 
     term keyboardsel = `dummy();
     string keyboard = "";
@@ -245,12 +212,6 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
      * Build dialog
      * ----------------------------------------------------------------------*/
 
-    if (Mode::config ())
-	Wizard::HideAbortButton();
-    else
-	Wizard::OpenAcceptDialog();
-
-
     term contents =
 	    `VBox(
 		`HBox(
@@ -280,36 +241,27 @@ If unsure, use the default values already selected.
 </p>");
 
     // Screen title for keyboard screen
-    Wizard::SetContents( _("Keyboard Configuration"), contents,
-			 help_text, GetInstArgs::enable_back(), 
-			 GetInstArgs::enable_next() );
+    Wizard::SetContents ( _("Keyboard Configuration"), contents, help_text,
+	args["enable_back"]:true, args["enable_next"]:true);
 
     Wizard::SetDesktopIcon("keyboard");
-    if (Stage::initial ())
+    if (Stage::initial () || Stage::firstboot ())
 	Wizard::SetTitleIcon ("yast-keyboard");
 
     // Initially set the current keyboard to establish a consistent state.
     //
-
-    if (!Mode::config ())
-    {
-	Keyboard::Set( Keyboard::current_kbd );
-    }
+    Keyboard::Set (Keyboard::current_kbd);
 
     UI::SetFocus( `id(`keyboard ));
 
     any ret = nil;
 
-    
-    repeat
-	{
+    repeat {
+
 	ret = Wizard::UserInput();
-
-
 
 	if (ret == `abort && Popup::ConfirmAbort(`painless) && !Mode::config ())
 	{
-	    Wizard::CloseDialog();
 	    return `abort;
 	}
 
@@ -319,38 +271,29 @@ If unsure, use the default values already selected.
 	    }
 
 	if( ret == `next || ret == `keyboard )
-	    {
+	{
 	    // Get the selected keyboard.
 	    //
 	    keyboard = (string)UI::QueryWidget( `id( `keyboard ), `CurrentItem );
 
-	    y2milestone( "on entry %1 current %2 ret %3", keyboard_on_entry,
-			 cur_kbd, keyboard );
+	    y2milestone ("on entry %1 current %2 ret %3",
+		Keyboard::keyboard_on_entry, Keyboard::current_kbd, keyboard);
 
 	    // Set it in Keyboard module.
-	    //
-	    if ( Mode::config ())
-	    {
-		import "AutoinstGeneral";
-		y2milestone("Autoyast keyboard: %1", keyboard);
-		AutoinstGeneral::keyboard["keymap"]  = keyboard;
-	    }
-	    else if( cur_kbd != keyboard )
+	    if (Keyboard::keyboard_on_entry != keyboard)
 	    {
 		Keyboard::Set( keyboard );
-		cur_kbd = keyboard;
 	    }
 
-
-	    if( ret == `next && !Mode::config ())
-		{
+	    if (ret == `next && !Mode::config ())
+	    {
 		// User wants to keep his changes.
 		// Set user_decision flag in keyboard module.
 		//
 		Keyboard::user_decision = true;
 
-		if ( keyboard_on_entry != Keyboard::current_kbd )
-		    {
+		if (Keyboard::Modified ())
+		{
 		    // User has chosen a different keyboard from the database.
 		    // ==> clear unique_key in the keyboard module to achieve
 		    // configured = no and needed = no in Keyboard::Save() for
@@ -360,21 +303,20 @@ If unsure, use the default values already selected.
 				Keyboard::unique_key );
 
 		    Keyboard::unique_key = "";
-		    }
 		}
 	    }
-	} until ( ret == `next || ret == `back || ret == `cancel );
+	}
+    } until ( ret == `next || ret == `back || ret == `cancel );
 
-    if( ( ret == `back || ret == `cancel ) && !Mode::config () )
-	{
-	y2milestone("`back or `cancel restoring: <%1>", keyboard_on_entry );
+    if (ret == `back || ret == `cancel)
+    {
+	y2milestone("`back or `cancel restoring: <%1>", Keyboard::keyboard_on_entry);
 
 	// Reset keyboard to initial state.
-	//
-	Keyboard::Set( keyboard_on_entry );
-	}
-
-    Wizard::CloseDialog();
+	Keyboard::Set (Keyboard::keyboard_on_entry);
+    }
 
     return (symbol)ret;
-    }
+  }
+
+}

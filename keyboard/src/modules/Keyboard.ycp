@@ -164,6 +164,11 @@
     //
     global string current_kbd = "";
 
+    /**
+     * keyboard set on start
+     */
+    global string keyboard_on_entry	= "";
+
     // The default keyboard if set.
     //
     global string default_kbd = "";
@@ -177,7 +182,8 @@
     //
     global string unique_key = "";
 
-    boolean restore_called = false;
+    // state of Expert settings
+    global boolean ExpertSettingsChanged = false;
 
     // --------------------------------------------------------------
     // END: Globally defined data to be accessed via Keyboard::<variable>
@@ -187,6 +193,9 @@
     // --------------------------------------------------------------
     // START: Locally defined data
     // --------------------------------------------------------------
+
+    // if Keyboard::Restore() was called
+    boolean restore_called = false;
 
     // User readable description, access via Keyboard::MakeProposal()
     //
@@ -204,8 +213,6 @@
     string kbd_capslock = "";
     string kbd_scrlock = "";
     string kbd_disable_capslock = "";
-
-    global boolean ExpertSettingsChanged = false;
 
     list keyboardprobelist = [];	// List of all probed keyboards
 
@@ -885,6 +892,25 @@ global define void Keyboard() {
 }	// Keyboard()
 
 /**
+ * Just store inital values - read was done in constructor
+ */
+global define boolean Read () {
+
+    keyboard_on_entry		= current_kbd;
+    ExpertSettingsChanged	= false;
+    y2debug ("keyboard_on_entry: %1", keyboard_on_entry);
+    return true;
+}
+
+/**
+ * was anything modified?
+ */
+global define boolean Modified () {
+    return (current_kbd != keyboard_on_entry || ExpertSettingsChanged);
+}
+
+
+/**
  * xf86_update()
  *
  * Updates the keyboard settings in the XF86Config file.
@@ -1190,6 +1216,12 @@ global define string SetX11 (string keyboard) {
 global define void Set (string keyboard) {
 
     y2milestone ("set to %1", keyboard);
+    if (Mode::config ())
+    {
+	current_kbd	= keyboard;
+	return;
+    }
+
     SetConsole (keyboard);
     SetX11 (keyboard);
     if (Stage::initial ())
@@ -1290,13 +1322,10 @@ global define boolean CalledRestore() {
      *
      * Get the map of translated keyboard names.
      *
-     * @param 	-
-     *
      * @return	map of $[ keyboard_code : keyboard_name, ...] for all known
      *		keyboards. 'keyboard_code' is used internally in Set and Get
      *		functions. 'keyboard_name' is a user-readable string.
      *
-     * @see	-
      */
   global define map<string, string> Selection() {
     // Get the reduced keyboard DB.

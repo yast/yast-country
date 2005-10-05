@@ -1,16 +1,11 @@
-/*
+/**
  *
- * Module:             language.ycp
+ * Module:		yast2-country
  *
- * Author:             Klaus Kaempf (kkaempf@suse.de)
+ * Authors:		Klaus Kaempf (kkaempf@suse.de)
+ *			Jiri Suchomel (jsuchome@suse.cz)
  *
- * Submodules:
- *
- *
- * Purpose:	configure language in running system
- *
- * Modify:
- *
+ * Purpose:		client for language configuration in running system
  *
  * $Id$
  */
@@ -19,7 +14,6 @@
 
 textdomain "country";
 
-import "Bootloader";
 import "CommandLine";
 import "Console";
 import "Language";
@@ -27,7 +21,6 @@ import "Mode";
 import "Popup";
 import "Progress";
 import "Wizard";
-
 
 /**
  * read language settings
@@ -87,6 +80,7 @@ define boolean LanguageWrite () {
 
     Progress::NextStage ();
 
+    import "Bootloader";
     Bootloader::UpdateGfxMenu();
 
     Progress::NextStage ();
@@ -111,7 +105,7 @@ define any LanguageSequence () {
 
     // set the language accoring to Language.ycp initialization
     Language::WfmSetLanguage ();
-    Wizard::OpenAcceptDialog();		// Reduce flicker (yes, it's a kludge)
+    Wizard::OpenAcceptDialog();
 
     // Params are:				`back `next  set_default
     map args = $[];
@@ -121,13 +115,9 @@ define any LanguageSequence () {
 
     while (result == `again)
     {
-	Wizard::OpenAcceptDialog();	// This dialog will actually be used
-
-        result	= WFM::CallFunction ("inst_language", [args]);
+	result = WFM::CallFunction ("select_language", [args]);
 	if (haskey (args, "first_call"))
 	    args	= remove (args, "first_call");
-
-	Wizard::CloseDialog();
     }
 
     Wizard::CloseDialog();
