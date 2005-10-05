@@ -1,0 +1,35 @@
+/**
+ * Autoinstallation client for timezone setting
+ * Author	: Jiri Suchomel <jsuchome@suse.cz>
+ * $Id$
+ */
+{
+    /* This is a special case of auto client; currently doesn't follow usual API
+       but onlyu provides the "Change" function of other auto-clients
+
+       Might become full-featured auto-client if necessary
+    */
+    import "Mode";
+    include "timezone/dialogs.ycp";
+
+    /**
+     * Autoinstallation config sequence
+     */
+    define symbol AutoSequence () {
+
+	Wizard::CreateDialog();
+	Wizard::HideAbortButton();
+
+	symbol result = TimezoneDialog ();
+
+	Wizard::CloseDialog ();
+
+	return result;
+    }
+
+    if (Mode::config ())
+	return AutoSequence ();
+    else
+	return `next;
+
+}
