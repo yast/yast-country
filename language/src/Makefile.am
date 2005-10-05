@@ -4,7 +4,9 @@ SUBDIRS = modules proposal
 
 client_DATA =			\
 	language.ycp		\
-	inst_language.ycp
+	inst_language.ycp	\
+	select_language.ycp	\
+	language_auto.ycp
 
 desktop_DATA =			\
 	yast-language.desktop

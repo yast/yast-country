@@ -18,6 +18,7 @@
 {
 textdomain "country";
 
+import "Arch";
 import "CommandLine";
 import "Confirm";
 import "Keyboard";
@@ -25,14 +26,14 @@ import "Service";
 import "Stage";
 import "Wizard";
 
-// Memorize the current keyboard
-string keyboard_on_entry = Keyboard::current_kbd;
+include "keyboard/dialogs.ycp";
 
 /**
  * read keyboard settings
  */
 define boolean KeyboardRead () {
 
+    Keyboard::Read ();
     // Check if this is a reconfiguration run.
     //
     if (Stage::reprobe ())
@@ -63,6 +64,10 @@ define boolean KeyboardWrite () {
  */
 define any KeyboardSequence () {
 
+    // dont ask for keyboard on S/390
+    if (Arch::s390 ())
+	return `next;
+
     map display_info	= (map) UI::GetDisplayInfo ();
     if (!display_info["TextMode"]:true)
     {
@@ -77,14 +82,9 @@ define any KeyboardSequence () {
 
     KeyboardRead ();
 
-    Wizard::CreateDialog();
+    Wizard::OpenAcceptDialog();
 
-    // The keyboard module should be initialized to the current keyboard from
-    // sysconfig, XF86Config or probing. Either way this Keyboard will be
-    // selected in the list in inst_keyboard.ycp. Now let the user choose a new
-    // keyboard layout.
-    //
-    any result = WFM::CallFunction( "inst_keyboard", [ true, true ] );
+    symbol result = KeyboardDialog ($[]);
 
     if (result == `next)
     {
@@ -94,7 +94,7 @@ define any KeyboardSequence () {
     {
 	y2milestone( "User cancelled --> no change" );
     }
-    UI::CloseDialog();
+    Wizard::CloseDialog();
     return result;
 }
 
@@ -135,7 +135,7 @@ define boolean KeyboardSetHandler (map options) {
     }
     Keyboard::Set (keyboard);
 
-    return (keyboard_on_entry != Keyboard::current_kbd);
+    return (Keyboard::Modified ());
 }
 
 

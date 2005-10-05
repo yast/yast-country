@@ -12,7 +12,11 @@
 {
     textdomain "country";
 
+    import "Arch";
     import "Keyboard";
+    import "Wizard";
+
+    include "keyboard/dialogs.ycp";
 
     string func  = (string)WFM::Args(0);
     map    param = (map)WFM::Args(1);
@@ -37,22 +41,32 @@
     }
     else if ( func == "AskUser" )
     {
-	boolean has_next = param["has_next"]:false;
+	if (Arch::s390 ())
+	{
+	    ret = $[
+		"workflow_sequence" : `next,
+		"language_changed"  : false
+	    ];
+	    return ret;
+	}
 
-	// call some function that displays a user dialog
-	// or a sequence of dialogs here:
-	//
-	// sequence = DummyMod::AskUser( has_next );
-
-	if( !Keyboard::CalledRestore() )
-	    {
+	if (!Keyboard::CalledRestore())
+	{
 	    Keyboard::Restore();
-	    }
+	}
 
-	symbol result = (symbol)WFM::CallFunction ("inst_keyboard", [true, has_next]);
+	Keyboard::Read (); // save the inital values
+
+	map argmap = $[
+	    "enable_back"	: true,
+	    "enable_next"	: param["has_next"]:false
+	];
+
+	Wizard::OpenAcceptDialog();
+	symbol result = KeyboardDialog (argmap);
+	Wizard::CloseDialog ();
 
 	// Fill return map
-
 	ret = $[
 		"workflow_sequence" : result,
 		"language_changed"  : false

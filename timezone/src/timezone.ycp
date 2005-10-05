@@ -22,19 +22,15 @@ import "CommandLine";
 import "Timezone";
 import "Wizard";
 
+include "timezone/dialogs.ycp";
 
-string timezone_on_entry	= "";
-string hwclock_on_entry		= "";
 
 /**
- * read timezone settings
+ * read timezone settings (store initial values)
  */
 define boolean TimezoneRead () {
 
-    // Memorize the current timezone.
-    //
-    timezone_on_entry	= Timezone::timezone;
-    hwclock_on_entry	= Timezone::hwclock;
+    Timezone::PushVal ();
     return true;
 }
 
@@ -43,8 +39,7 @@ define boolean TimezoneRead () {
  */
 define boolean TimezoneWrite () {
 
-    if (timezone_on_entry != Timezone::timezone ||
-	hwclock_on_entry != Timezone::hwclock )
+    if (Timezone::Modified ())
     {
 	y2milestone ("User selected new timezone/clock setting: <%1> <%2>",
 	    Timezone::timezone, Timezone::hwclock);
@@ -65,14 +60,10 @@ define boolean TimezoneWrite () {
  */
 define any TimezoneSequence () {
 
-    TimezoneRead ();
-
     // create the wizard dialog
     Wizard::OpenAcceptDialog();
 
-    any result = nil;
-
-    result = WFM::CallFunction( "inst_timezone", [ true, true ] );
+    any result = TimezoneDialog ($[]);
 
     if ( result == `next )
     {
@@ -144,8 +135,7 @@ define boolean TimezoneSetHandler (map options) {
     {
 	Timezone::hwclock	= hwclock == "utc" ? "-u" : "--localtime";
     }
-    return (timezone_on_entry != Timezone::timezone ||
-	    hwclock_on_entry != Timezone::hwclock);
+    return (Timezone::Modified ());
 }
 
 

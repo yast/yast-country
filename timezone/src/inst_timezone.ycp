@@ -1,0 +1,22 @@
+/**
+ * Client for initial timezone setting (part of installation sequence)
+ * Author:	Jiri Suchomel <jsuchome@suse.cz>
+ * $Id$
+ */
+{
+    import "GetInstArgs";
+    import "Mode";
+    import "Wizard";
+
+    include "timezone/dialogs.ycp";
+
+    map args = GetInstArgs::argmap();
+
+    if (args["first_run"]:"yes" != "no")
+	args["first_run"]  = "yes";
+
+    if (Mode::mode () == "firstboot")
+	Wizard::HideAbortButton();
+
+    return TimezoneDialog (args);
+}
