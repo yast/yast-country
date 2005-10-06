@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Oct  5 16:14:41 CEST 2005 - jsuchome@suse.cz
+
+- code cleanup: split the clients for one tasks only, use include files,
+  create autoinstallation clients (#104372)
+- 2.13.3
+
+-------------------------------------------------------------------
 Tue Oct  4 14:29:39 CEST 2005 - jsuchome@suse.cz
 
 - "dutch" keyboard layout should be really dutch - nl.map.gz (#119639)
