@@ -276,7 +276,7 @@ are unset.<br>
 	    `HWeight (25, `HStretch()),
 	    `HWeight (50,
 		`VBox (
-		    // label
+		    // label (above selection box with languages)
 		    `Left (`Label ( _("Select your language:"))),
 		    languagesel
 		)
@@ -490,7 +490,8 @@ In the selection box, specify additional languages to use on your system.
 	    Wizard::ShowHelp( help_text );
 	}
 
-	if (ret == `next || ret == `language || ret == `changed_locale)
+	if (ret == `next ||
+	   ((ret == `language || ret == `changed_locale) && ! Mode::config ()))
 	{
 	    // Get the selected language.
 	    //
@@ -565,7 +566,7 @@ installation, but the selected language will be used for the new system."));
 		    Language::WfmSetLanguage ();
 		}
 
-		if (ret != `next && !Mode::config ())
+		if (ret != `next)
 		{
 		    // Display newly translated dialog.
 		    //
