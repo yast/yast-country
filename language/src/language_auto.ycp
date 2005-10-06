@@ -5,7 +5,7 @@
  */
 {
     /* This is a special case of auto client; currently doesn't follow usual API
-       but onlyu provides the "Change" function of other auto-clients
+       but only provides the "Change" function of other auto-clients
 
        Might become full-featured auto-client if necessary
     */
@@ -24,7 +24,10 @@
     define symbol AutoSequence () {
 
 	// initialization
-	Language::language = AutoinstGeneral::language;
+	if (AutoinstGeneral::language != "")
+	{
+	    Language::language = AutoinstGeneral::language;
+	}
 
 	Wizard::HideAbortButton();
 
