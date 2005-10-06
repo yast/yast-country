@@ -125,42 +125,80 @@ $[ "name" : _("Central and South America"),
 
 $[ "name" : _("Asia"),
    "entries" : $[
-	"Japan" : _("Japan"),
-	"PRC" : _("China"),
-	"ROK" : _("Korea"),
-	"Hongkong" : _("Hongkong"),
-	"Asia/Bahrain" : _("Bahrain"),
-	"Asia/Bangkok" : _("Bangkok"),
-	"Asia/Beirut" : _("Beirut"),
-	"Asia/Brunei" : _("Brunei"),
-	"Asia/Calcutta" : _("Calcutta"),
-	"Asia/Colombo" : _("Colombo"),
-	"Asia/Damascus" : _("Damascus"),
-	"Asia/Dhaka" : _("Dhaka"),
-	"Asia/Dubai" : _("Dubai"),
-	"Asia/Gaza" : _("Gaza"),
-	"Asia/Jakarta" : _("Jakarta"),
-	"Asia/Katmandu" : _("Katmandu"),
-	"Asia/Kuala_Lumpur" : _("Kuala Lumpur"),
-	"Asia/Kuwait" : _("Kuwait"),
-	"Asia/Macao" : _("Macao"),
-	"Asia/Manila" : _("Manila"),
-	"Asia/Qatar" : _("Qatar"),
-	"Asia/Saigon" : _("Saigon"),
-	"Asia/Samarkand" : _("Samarkand"),
-	"Asia/Tashkent" : _("Tashkent"),
-	"Asia/Tel_Aviv" : _("Tel Aviv"),
-	"Asia/Vladivostok" : _("Vladivostok"),
-	"Asia/Yekaterinburg" : _("Yekaterinburg"),
-	"Asia/Tokyo" : _("Tokyo"),
-	"Asia/Shanghai" : _("Shanghai"),
-	"Asia/Taipei" : _("Taipei"),
-	"Asia/Seoul" : _("Seoul"),
-	"Israel" : _("Israel"),
-	"Mideast/Riyadh87" : _("Mideast Riyadh87"),
-	"Mideast/Riyadh88" : _("Mideast Riyadh88"),
-	"Mideast/Riyadh89" : _("Mideast Riyadh89"),
-	"Asia/Singapore" : _("Singapore") ] ],
+	// time zone
+	"Japan"			: _("Japan"),
+	// time zone
+	"PRC"			: _("China"),
+	// time zone
+	"ROK"			: _("Korea"),
+	// time zone
+	"Hongkong"		: _("Hongkong"),
+	// time zone
+	"Asia/Bahrain"		: _("Bahrain"),
+	// time zone
+	"Asia/Bangkok"		: _("Bangkok"),
+	// time zone
+	"Asia/Beirut"		: _("Beirut"),
+	// time zone
+	"Asia/Brunei"		: _("Brunei"),
+	// time zone
+	"Asia/Calcutta"		: _("Calcutta"),
+	// time zone
+	"Asia/Colombo"		: _("Colombo"),
+	// time zone
+	"Asia/Damascus"		: _("Damascus"),
+	// time zone
+	"Asia/Dhaka"		: _("Dhaka"),
+	// time zone
+	"Asia/Dubai"		: _("Dubai"),
+	// time zone
+	"Asia/Gaza"		: _("Gaza"),
+	// time zone
+	"Asia/Jakarta"		: _("Jakarta"),
+	// time zone
+	"Asia/Katmandu"		: _("Katmandu"),
+	// time zone
+	"Asia/Kuala_Lumpur"	: _("Kuala Lumpur"),
+	// time zone
+	"Asia/Kuwait"		: _("Kuwait"),
+	// time zone
+	"Asia/Macao"		: _("Macao"),
+	// time zone
+	"Asia/Manila"		: _("Manila"),
+	// time zone
+	"Asia/Qatar"		: _("Qatar"),
+	// time zone
+	"Asia/Saigon"		: _("Saigon"),
+	// time zone
+	"Asia/Samarkand"	: _("Samarkand"),
+	// time zone
+	"Asia/Tashkent"		: _("Tashkent"),
+	// time zone
+	"Asia/Tel_Aviv"		: _("Tel Aviv"),
+	// time zone
+	"Asia/Vladivostok"	: _("Vladivostok"),
+	// time zone
+	"Asia/Yekaterinburg"	: _("Yekaterinburg"),
+	// time zone
+	"Asia/Tokyo"		: _("Tokyo"),
+	// time zone
+	"Asia/Shanghai"		: _("Shanghai"),
+	// time zone
+	"Asia/Taipei"		: _("Taipei"),
+	// time zone
+	"Asia/Seoul"		: _("Seoul"),
+	// time zone
+	"Israel"		: _("Israel"),
+	// time zone
+	"Mideast/Riyadh87"	: _("Mideast Riyadh87"),
+	// time zone
+	"Mideast/Riyadh88"	: _("Mideast Riyadh88"),
+	// time zone
+	"Mideast/Riyadh89"	: _("Mideast Riyadh89"),
+	// time zone
+	"Asia/Singapore"	: _("Singapore")
+    ]
+],
 
 $[ "name" : _("Australia"),
    "entries" : $[
@@ -232,7 +270,7 @@ $[ "name" : _("Global"),
 	"NZ-CHAT" : _("NZ-CHAT"),
 	"Navajo" : _("Navajo"),
 	"PST8PDT" : _("PST8PDT"),
-	#"ROC" : _("ROC"),
+//	"ROC" : _("ROC"),
 	"UCT" : _("UCT"),
 	"UTC" : _("UTC"),
 	"Universal" : _("Universal"),
