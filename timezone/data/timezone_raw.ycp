@@ -36,6 +36,8 @@ $[ "name" : _("Europe"),
 	"Europe/Gibraltar" : _("Gibraltar"),
 	"Europe/Helsinki" : _("Finland"),
 	"Europe/Istanbul" : _("Turkey"),
+	// time zone
+	"Europe/Kaliningrad"	: _("Russia (Kaliningrad)"),
 	"Europe/Kiev" : _("Ukraine"),
 	"Europe/Lisbon" : _("Portugal"),
 	"Europe/Ljubljana" : _("Slovenia"),
@@ -44,12 +46,15 @@ $[ "name" : _("Europe"),
 	"Europe/Madrid" : _("Spain"),
 	"Europe/Malta" : _("Malta"),
 	"Europe/Monaco" : _("Monaco"),
-	"Europe/Moscow" : _("Russia"),
+	// time zone
+	"Europe/Moscow"		: _("Russia (Moscow)"),
 	"Europe/Oslo" : _("Norway"),
 	"Europe/Paris" : _("France"),
 	"Europe/Prague" : _("Czech Republic"),
 	"Europe/Riga" : _("Latvia"),
 	"Europe/Rome" : _("Italy"),
+	// time zone
+	"Europe/Samara"		: _("Russia (Samara)"),
 	"Europe/Sarajevo" : _("Bosnia & Herzegovina"),
 	"Europe/Skopje" : _("Macedonia"),
 	"Europe/Sofia" : _("Bulgaria"),
@@ -123,6 +128,41 @@ $[ "name" : _("Central and South America"),
 	"America/Virgin" : _("Virgin"),
 	"Mexico/General" : _("Mexico General") ] ],
 
+$[
+    // name of region
+    "name"	: _("Russia"),
+    "entries"	: $[
+	// time zone
+	"Europe/Kaliningrad"	: _("Kaliningrad"),
+	// time zone
+	"Europe/Moscow"		: _("Moscow"),
+	// time zone
+	"Europe/Samara"		: _("Samara"),
+	// time zone
+	"Asia/Anadyr"		: _("Anadyr"),
+	// time zone
+	"Asia/Irkutsk"		: _("Irkutsk"),
+	// time zone
+	"Asia/Kamchatka"	: _("Kamchatka"),
+	// time zone
+	"Asia/Krasnoyarsk"	: _("Krasnoyarsk"),
+	// time zone
+	"Asia/Magadan"		: _("Magadan"),
+	// time zone
+	"Asia/Novosibirsk"	: _("Novosibirsk"),
+	// time zone
+	"Asia/Omsk"		: _("Omsk"),
+	// time zone
+	"Asia/Sakhalin"		: _("Sakhalin"),
+	// time zone
+	"Asia/Vladivostok"	: _("Vladivostok"),
+	// time zone
+	"Asia/Yakutsk"		: _("Yakutsk"),
+	// time zone
+	"Asia/Yekaterinburg"	: _("Yekaterinburg"),
+    ]
+],
+
 $[ "name" : _("Asia"),
    "entries" : $[
 	// time zone
@@ -133,6 +173,8 @@ $[ "name" : _("Asia"),
 	"ROK"			: _("Korea"),
 	// time zone
 	"Hongkong"		: _("Hongkong"),
+	// time zone
+	"Asia/Anadyr"		: _("Anadyr"),
 	// time zone
 	"Asia/Bahrain"		: _("Bahrain"),
 	// time zone
@@ -154,9 +196,15 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Asia/Gaza"		: _("Gaza"),
 	// time zone
+	"Asia/Irkutsk"		: _("Irkutsk"),
+	// time zone
 	"Asia/Jakarta"		: _("Jakarta"),
 	// time zone
+	"Asia/Kamchatka"	: _("Kamchatka"),
+	// time zone
 	"Asia/Katmandu"		: _("Katmandu"),
+	// time zone
+	"Asia/Krasnoyarsk"	: _("Krasnoyarsk"),
 	// time zone
 	"Asia/Kuala_Lumpur"	: _("Kuala Lumpur"),
 	// time zone
@@ -164,11 +212,19 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Asia/Macao"		: _("Macao"),
 	// time zone
+	"Asia/Magadan"		: _("Magadan"),
+	// time zone
 	"Asia/Manila"		: _("Manila"),
+	// time zone
+	"Asia/Novosibirsk"	: _("Novosibirsk"),
+	// time zone
+	"Asia/Omsk"		: _("Omsk"),
 	// time zone
 	"Asia/Qatar"		: _("Qatar"),
 	// time zone
 	"Asia/Saigon"		: _("Saigon"),
+	// time zone
+	"Asia/Sakhalin"		: _("Sakhalin"),
 	// time zone
 	"Asia/Samarkand"	: _("Samarkand"),
 	// time zone
@@ -196,7 +252,9 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Mideast/Riyadh89"	: _("Mideast Riyadh89"),
 	// time zone
-	"Asia/Singapore"	: _("Singapore")
+	"Asia/Singapore"	: _("Singapore"),
+	// time zone
+	"Asia/Yakutsk"		: _("Yakutsk"),
     ]
 ],
 
