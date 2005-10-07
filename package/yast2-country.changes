@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Oct  7 11:17:46 CEST 2005 - jsuchome@suse.cz
+
+- timezone: added Russia region and rest of russian time zones (#120618)
+- 2.13.4
+
+-------------------------------------------------------------------
 Wed Oct  5 16:14:41 CEST 2005 - jsuchome@suse.cz
 
 - code cleanup: split the clients for one tasks only, use include files,
