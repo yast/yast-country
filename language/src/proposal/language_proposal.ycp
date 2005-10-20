@@ -29,6 +29,19 @@
 	boolean force_reset      = param["force_reset"     ]:false;
 	boolean language_changed = param["language_changed"]:false;
 
+	import "Installation";
+	import "Misc";
+	import "Mode";
+
+	if (Mode::update () &&
+	    (Language::languages == "" || Language::languages == language_on_entry) &&
+	    !force_reset && !Language::Modified ())
+	{
+	    Language::languages = Misc::CustomSysconfigRead ("INSTALLED_LANGUAGES", "",
+		Installation::destdir + "/etc/sysconfig/language");
+	    y2milestone ("languages got from target system: %1", Language::languages);
+	}
+
 	// Make proposal and fill return map
 	list<string> prop =
 	    Language::MakeProposal (force_reset, language_changed);

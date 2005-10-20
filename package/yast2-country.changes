@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Oct 20 14:05:02 CEST 2005 - jsuchome@suse.cz
+
+- added support for Croatian (#115341)
+- preserve the list of secondary languages during update (#71935)
+- 2.13.5
+
+-------------------------------------------------------------------
 Fri Oct  7 11:17:46 CEST 2005 - jsuchome@suse.cz
 
 - timezone: added Russia region and rest of russian time zones (#120618)

@@ -156,7 +156,6 @@ $[
 		  "@euro" ],
   End of comment */
 
-  /* Incomplete, inactive translator.
   "hr_HR"	: [ "Hrvatski",
 		  "Croatian",
 		  ".UTF-8",
@@ -164,7 +163,6 @@ $[
 		  // language name
 		  _("Croatian")
 		   ],
-  End of comment */
 
   "hu_HU"	: [ "Magyar",
 		  "Magyar",
