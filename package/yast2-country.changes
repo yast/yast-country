@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Nov  2 12:29:08 CET 2005 - jsuchome@suse.cz
+
+- support for secondary languages in command-line mode (#131746)
+- function for checking and setting keyboard layout during update (#71069)
+- 2.13.6
+
+-------------------------------------------------------------------
 Thu Oct 20 14:05:02 CEST 2005 - jsuchome@suse.cz
 
 - added support for Croatian (#115341)
