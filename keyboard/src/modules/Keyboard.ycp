@@ -80,6 +80,7 @@
     import "Arch";
     import "AsciiFile";
     import "Directory";
+    import "Label";
     import "Language";
     import "Linuxrc";
     import "Misc";
@@ -1344,19 +1345,15 @@ global define boolean CalledRestore() {
 
 
 
-/*
- * GetExpertValues()
- *
- * Return the values for the various expert settings in a map
- *
- * @param 	-
- *
- * @return  map with values filled in
- *
- */
-
-global define map GetExpertValues()
-    ``{
+  /**
+   * GetExpertValues()
+   *
+   * Return the values for the various expert settings in a map
+   *
+   * @return  map with values filled in
+   *
+   */
+  global define map GetExpertValues() {
     map ret = $[ "rate"     : kbd_rate,
                  "delay"    : kbd_delay,
                  "numlock"  : kbd_numlock,
@@ -1365,21 +1362,17 @@ global define map GetExpertValues()
                  "tty"      : kbd_tty,
                  "discaps"  : kbd_disable_capslock=="yes" ? true : false ];
     return( ret );
-    }
+  }
 
-/*
- * SetExpertValues()
- *
- * Return the values for the various expert setting in a map
- *
- * @param 	val     map with new values of expert settings
- *
- * @return  void
- *
- */
+  /**
+   * SetExpertValues()
+   *
+   * Return the values for the various expert setting in a map
+   *
+   * @param	val     map with new values of expert settings
+   */
+  global define void SetExpertValues( map val ) {
 
-global define void SetExpertValues( map val )
-    ``{
     if( haskey(val,"rate") && size(val["rate"]:"")>0 )
 	{
 	kbd_rate = val["rate"]:"";
@@ -1408,10 +1401,10 @@ global define void SetExpertValues( map val )
 	{
 	kbd_disable_capslock = (val["discaps"]:false) ? "yes" : "no";
 	}
-    }
+  }
 
-// set the keayboard layout according to given language
-global define void SetKeyboardForLanguage (string lang) {
+  // set the keayboard layout according to given language
+  global define void SetKeyboardForLanguage (string lang) {
 
     string lkbd = GetKeyboardForLanguage (lang, "english-us");
     y2milestone ("language %1 proposed keyboard %2", lang, lkbd);
@@ -1419,18 +1412,83 @@ global define void SetKeyboardForLanguage (string lang) {
     {
 	Set( lkbd );
     }
-};
+  };
 
-global define void SetKeyboardForLang (string lang) {
+  global define void SetKeyboardForLang (string lang) {
     return SetKeyboardForLanguage (lang);
-}
+  }
 
-global define void SetKeyboardDefault()
-    ``{
+  global define void SetKeyboardDefault() {
+
     y2milestone( "SetKeyboardDefault to %1", current_kbd );
     default_kbd = current_kbd;
-    };
+  };
 
-}
 
-// - EOF -
+  /**
+   * Special function for update mode only.
+   * Checks for the keyboard layout on the system which should be updated and if it
+   * differs from current one, opens a popup with the offer to change the layout.
+   * See discussion in bug #71069
+   * @param destdir path to the mounted system to update (e.g. "/mnt")
+   */
+  global define void CheckKeyboardDuringUpdate (string destdir) {
+
+    string target_kbd	= Misc::CustomSysconfigRead (
+	"YAST_KEYBOARD", current_kbd, destdir + "/etc/sysconfig/keyboard");
+    integer pos = find (target_kbd, ",");
+    if (pos>0)
+    {
+	target_kbd	= substring (target_kbd, 0, pos);
+    }
+
+    if (target_kbd != current_kbd)
+    {
+	y2milestone ("current_kbd: %1, target_kbd: %2", current_kbd, target_kbd);
+
+	string target_name = target_kbd;
+
+	// now get the (translated) name of the keybaord map
+	map keyboards	= get_reduced_keyboard_db ();
+	list descr	= keyboards[target_kbd]:[];
+	if (kbd_descr != [])
+	{
+	    locale translate	= descr[0]:target_kbd;
+	    target_name		= (string)eval(translate);
+	}
+
+	UI::OpenDialog(`opt(`decorated), `HBox(`HSpacing(1.5),
+	    `VBox(
+		`HSpacing(40),
+		`VSpacing(0.5),
+		// label text: user can choose the keyboard from the updated system
+		// or continue with the one defined by his language.
+		// 2 radio-buttons follow this label.
+		// Such keyboard layout is used only for the time of the update,
+		// it is not saved to the system.
+		`Left (`Label (_("You are currently using a keyboard layout
+different from the one in the system to update.
+Select the layout to use during update:"))),
+		`VSpacing(0.5),
+		`RadioButtonGroup (`VBox (
+		    `Left (`RadioButton (`id (`current), name)),
+		    `Left (`RadioButton (`id (`target), target_name, true))
+		)),
+		`VSpacing(0.5),
+		`HBox(
+		    `PushButton(`id(`ok),`opt(`default,`key_F10), Label::OKButton()),
+		    `PushButton(`id(`cancel), `opt(`key_F9), Label::CancelButton())
+		),
+		`VSpacing(0.5)),
+	    `HSpacing(1.5)
+	));
+	any ret = UI::UserInput();
+
+	if (ret == `ok && (boolean) UI::QueryWidget (`id(`target), `Value))
+	    Set (target_kbd);
+
+        UI::CloseDialog();
+    }
+  }
+
+} // - EOF -
