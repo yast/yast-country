@@ -200,21 +200,26 @@ define boolean LanguageListHandler (map options) {
  */
 define boolean LanguageSetHandler (map options) {
 
-    string language	= options["lang"]:"";
+    string language	= options["lang"]:Language::language;
+    string languages	= options["languages"]:"";
 
-    if (language == "" || !haskey (Language::Selection(), language))
+    if (!haskey(Language::Selection(), language))
     {
 	// error message (%1 is given layout); do not translate 'list'
 	CommandLine::Print (sformat (_("%1 is not a valid language. Use the list command to see possible values."), language));
 	return false;
     }
-    list<string> languages       = splitstring (Language::languages, ",");
-    if (! contains (languages, language))
-	languages       = add (languages, language);
+    list<string> llanguages       = splitstring (languages, ",");
+    if (!contains (llanguages, language))
+	llanguages       = add (llanguages, language);
 
-    Language::languages	= mergestring (languages, ",");
-    Language::Set (language);
-    Console::SelectFont (language);
+    Language::languages	= mergestring (llanguages, ",");
+
+    if (language != Language::language)
+    {
+	Language::Set (language);
+	Console::SelectFont (language);
+    }
 
     return (Language::Modified ());
 }
@@ -251,10 +256,15 @@ map cmdline = $[
 	    "help"	: _("New language value"),
 	    "type"	: "string"
 	],
+	"languages"	: $[
+	    // command line help text for 'set languages' option
+	    "help"	: _("List of secondary languages (separated by commas)"),
+	    "type"	: "string"
+	],
     ],
     "mappings"		: $[
 	"summary"	: [],
-	"set"		: [ "lang" ],
+	"set"		: [ "lang", "languages" ],
 	"list"		: [],
     ]
 ];
