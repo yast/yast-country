@@ -4,6 +4,7 @@
  * Summary:	This module does all language related stuff:
  * Authors:	Klaus Kaempf <kkaempf@suse.de>
  *		Thomas Roelz <tom@suse.de>
+ * Maintainer:  Jiri Suchomel <jsuchome@suse.cz>
  *
  * $Id$
  */
@@ -67,7 +68,7 @@ global string languages		= "";
 /**
  * Original value of INSTALLED_LANGUAGES
  */
-string languages_on_entry	= "";
+global string languages_on_entry	= "";
 
 /**
  * Use utf8 in locale
@@ -707,6 +708,51 @@ global define boolean IncompleteTranslation (string lang) {
 
     return translation_status[lang]:0 < treshold;
 }
+
+/**
+ * AutoYaST interface function: Get the Language configuration from a map.
+ * @param settings imported map
+ * @return success
+ */
+global define boolean Import (map settings) {
+
+    if (languages_on_entry == "")
+	Read ();
+
+    Set (settings["language"]:language);
+    languages	= settings["languages"]:languages;
+
+    list<string> llanguages = splitstring (languages, ",");
+    if (!contains (llanguages, language))
+    {
+	llanguages	= add (llanguages, language);
+	languages	= mergestring (llanguages, ",");
+    }
+    return true;
+}
+
+/**
+ * AutoYaST interface function: Return the Language configuration as a map.
+ * @return map with the settings
+ */
+global define map Export () {
+
+    map ret = $[
+	"language"	: language,
+	"languages"	: languages
+    ];
+    return ret;
+}
+
+/**
+ * AutoYaST interface function: Return the summary of Language configuration as a map.
+ * @return summary string
+ */
+global define string Summary () {
+
+    return MakeSimpleProposal ();
+}
+
 
 /* EOF */
 }

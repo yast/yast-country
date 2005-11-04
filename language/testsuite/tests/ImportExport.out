@@ -1,0 +1,12 @@
+Read	.target.yast2 "lang2iso.ycp" $[]
+Read	.target.size "/etc/sysconfig/language" 1
+Return	$["language":"en_US", "languages":""]
+Return	false
+Execute	.target.bash_output "/usr/bin/locale -a" $[]
+Return	true
+Return	true
+Return	$["language":"de_DE", "languages":"de_DE"]
+Return	<ul><li>Primary Language: Deutsch</li></ul>
+Return	true
+Return	$["language":"de_DE", "languages":"cs_CZ,de_DE"]
+Return	<ul><li>Primary Language: Deutsch</li><li>Additional Languages: <ul><li>Czech</li></ul></li></ul>
