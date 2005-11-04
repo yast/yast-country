@@ -1,60 +1,83 @@
 /**
  * Autoinstallation client for keyboard setting
  * Author	: Jiri Suchomel <jsuchome@suse.cz>
+ *
  * $Id$
  */
 {
-    /* This is a special case of auto client; currently doesn't follow usual API
-       but onlyu provides the "Change" function of other auto-clients
-
-       Might become full-featured auto-client if necessary
-    */
-
     import "Arch";
-    import "AutoinstGeneral";
-    import "GetInstArgs";
     import "Keyboard";
-    import "Mode";
     import "Wizard";
 
     include "keyboard/dialogs.ycp";
 
-    /**
-     * Autoinstallation config sequence
-     */
-    define symbol AutoSequence () {
+    any ret = nil;
+    string func = "";
+    map<string,any> param = $[];
 
-	// initialization stuff
-	if (AutoinstGeneral::keyboard["keymap"]:"" != "")
-	{
-	    Keyboard::current_kbd = AutoinstGeneral::keyboard["keymap"]:"";
-	    if (AutoinstGeneral::keyboard["keyboard_values"]:$[] != $[])
-	    {
-		Keyboard::SetExpertValues (
-		    AutoinstGeneral::keyboard["keyboard_values"]:$[]);
-	    }
-	}
-	else
-	{
-	    Keyboard::current_kbd	= Keyboard::GetKeyboardForLanguage (
-		AutoinstGeneral::language, "english-us");
-	}
-	Keyboard::Read (); // save the inital values
+    if(size(WFM::Args()) > 0 && is(WFM::Args(0), string)) {
+    func = (string) WFM::Args(0);
+    if(size(WFM::Args()) > 1 && is(WFM::Args(1), map))
+	param = (map<string,any>)WFM::Args(1);
+    }
+
+    y2debug ("func=%1", func);
+    y2debug ("param=%1", param);
+
+    if (func == "Change" && !Arch::s390 ()) {
 
 	Wizard::CreateDialog();
 	Wizard::HideAbortButton();
 
-	symbol result = KeyboardDialog (GetInstArgs::argmap());
+	ret = KeyboardDialog ($[]);
 
 	Wizard::CloseDialog ();
-
-	AutoinstGeneral::keyboard["keymap"]  = Keyboard::current_kbd;
-
-	return result;
+    }
+    else if(func == "Import") {
+	ret = Keyboard::Import (param);
+    }
+    else if(func == "Summary") {
+	ret = Keyboard::Summary();
+    }
+    else if (func == "Reset") {
+	Keyboard::Import ($[
+	    "keymap"		: Keyboard::keyboard_on_entry,
+	    "keyboard_values"	: Keyboard::expert_on_entry,
+	]);
+	Keyboard::ExpertSettingsChanged	= false;
+	ret =  $[];
+    }
+    else if (func == "Read") {
+	// If we would need reading from system in Mode::config, Restore is necessary
+	if (Mode::config ())
+	    Keyboard::Restore ();
+	ret = Keyboard::Read();
+    }
+    else if (func == "Export") {
+	ret = Keyboard::Export ();
+    }
+    else if (func == "Write") {
+	ret = Keyboard::Save (true);
+    }
+    /**
+     * Return if configuration  was changed
+     * return boolean
+     */
+    else if (func == "GetModified") {
+	ret = Keyboard::Modified ();
+    }
+    /**
+     * Set all modified flags
+     * return boolean
+     */
+    else if (func == "SetModified") {
+	Keyboard::ExpertSettingsChanged	= true;// hook (no general 'modified' variable)
+	ret = true;
     }
 
-    if (Mode::config () && !Arch::s390 ())
-	return AutoSequence ();
-    else
-	return `next;
+    y2debug("ret=%1", ret);
+    y2milestone("keyboard auto finished");
+    y2milestone("----------------------------------------");
+
+    return ret;
 }

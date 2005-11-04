@@ -135,10 +135,10 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
     UI::ChangeWidget( `id(`tty), `Value, val["tty"]:"" );
     UI::ChangeWidget( `id(`discaps), `Value, val["discaps"]:false );
     repeat
-	{
+    {
 	ret = (symbol)UI::UserInput();
 	if( ret == `ok )
-	    {
+	{
 	    val = $[];
 	    val["rate"] = UI::QueryWidget( `id(`rate), `Value );
 	    val["delay"] = UI::QueryWidget( `id(`delay), `Value );
@@ -155,11 +155,8 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
 	    val["discaps"] = UI::QueryWidget( `id(`discaps), `Value );
 	    y2milestone( "map ok %1", val );
 	    Keyboard::SetExpertValues( val );
-	    if (val != val_on_entry)
-		Keyboard::ExpertSettingsChanged = true;
-
-	    }
-	} until ( ret == `cancel || ret == `ok );
+	}
+    } until ( ret == `cancel || ret == `ok );
     UI::CloseDialog();
   };
 

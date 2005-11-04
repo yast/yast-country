@@ -46,6 +46,10 @@ global boolean user_hwclock = false;
 
 global integer diff = 0;
 
+/**
+ * if anyuthing was modified (currently for auto client only)
+ */
+global boolean modified		= false;
 
 /**
  * If there is windows partition, assume that local time is used
@@ -210,6 +214,30 @@ global define string UpdateTimezone (string tmz) {
     return updated_tmz;
 }
 
+
+  /**
+   * Read timezone settings from sysconfig
+   */
+  global define void Read () {
+
+    hwclock		= Misc::SysconfigRead(.sysconfig.clock.HWCLOCK, hwclock);
+    timezone		= Misc::SysconfigRead (.sysconfig.clock.TIMEZONE, timezone);
+    default_timezone	=
+	Misc::SysconfigRead(.sysconfig.clock.DEFAULT_TIMEZONE, default_timezone);
+
+    // get name for cloning purposes
+    if (Mode::config ())
+    {
+	list <map <string, any> > zmap = get_zonemap();
+	integer sel = 0;
+	while (sel<size (zmap) && !haskey (zmap[sel,"entries"]:$[], timezone))
+	{
+	    sel = sel + 1;
+	}
+	name	= zmap [sel,"name"]:"" + " / " + zmap[sel,"entries",timezone]:timezone;
+    }
+  }
+
 /**
   * Timezone()
   *
@@ -241,12 +269,7 @@ global define void Timezone() {
     }
     else if (!Mode::config ())
     {
-	timezone = Misc::SysconfigRead(.sysconfig.clock.TIMEZONE, timezone );
-
-	default_timezone =
-	    Misc::SysconfigRead(.sysconfig.clock.DEFAULT_TIMEZONE,
-	                        default_timezone);
-	hwclock = Misc::SysconfigRead(.sysconfig.clock.HWCLOCK, hwclock);
+	Read ();
     }
     return;
 }
@@ -273,38 +296,6 @@ global define void SetTime (string year, string month, string day,
 	SCR::Execute(.target.bash, cmd );
     }
 };
-
-  /**
-   * save the initial data
-   */
-  global define void PushVal () {
-
-    push = $[ "hwclock" : hwclock, "timezone" : timezone ];
-    y2milestone ( "PushVal map %1", push );
-  }
-
-  /**
-   * restore the original data from internal map
-   */
-  global define void PopVal() {
-
-    y2milestone ("before Pop: timezone %1 hwclock %2", timezone, hwclock );
-    if ( haskey( push, "hwclock" ))
-	hwclock = push["hwclock"]:hwclock;
-    if( haskey( push, "timezone" ))
-	timezone = push["timezone"]:timezone;
-    push = $[];
-    y2milestone ("after Pop: timezone %1 hwclock %2", timezone, hwclock );
-  }
-
-  /**
-   * was anything modified?
-   */
-  global define boolean Modified () {
-
-    return timezone != push["timezone"]:timezone || hwclock != push["hwclock"]:hwclock;
-  }
-
 
 /**
  * GetTimezoneForLanguage()
@@ -662,12 +653,92 @@ global define boolean utc_only () {
 	    Arch::board_chrp () || Arch::board_prep ());
 }
 
-// ------------------------------------------------------------------
-// END: Globally defined functions
-// ------------------------------------------------------------------
+  /**
+   * save the initial data
+   */
+  global define void PushVal () {
+
+    push = $[ "hwclock" : hwclock, "timezone" : timezone ];
+    y2milestone ( "PushVal map %1", push );
+  }
+
+  /**
+   * restore the original data from internal map
+   */
+  global define void PopVal() {
+
+    y2milestone ("before Pop: timezone %1 hwclock %2", timezone, hwclock );
+    if ( haskey( push, "hwclock" ))
+	hwclock = push["hwclock"]:hwclock;
+    if( haskey( push, "timezone" ))
+	timezone = push["timezone"]:timezone;
+    push = $[];
+    y2milestone ("after Pop: timezone %1 hwclock %2", timezone, hwclock );
+  }
+
+  /**
+   * was anything modified?
+   */
+  global define boolean Modified () {
+
+    return modified ||
+	timezone != push["timezone"]:timezone || hwclock != push["hwclock"]:hwclock;
+  }
+
+  /**
+   * AutoYaST interface function: Get the Timezone configuration from a map.
+   * @param settings imported map
+   * @return success
+   */
+  global define boolean Import (map settings) {
+
+    // Read was not called -> do the init
+    if (push == $[])
+	PushVal ();
+
+    if (haskey (settings, "hwclock"))
+	hwclock	= settings["hwclock"]:"UTC" == "UTC" ? "-u" : "--localtime";
+    Set (settings["timezone"]:timezone, true);
+    return true;
+  }
+
+  /**
+   * AutoYaST interface function: Return the Timezone configuration as a map.
+   * @return map with the settings
+   */
+  global define map Export () {
+
+    map ret = $[
+	"timezone"	: timezone,
+	"hwclock"	: hwclock == "-u" ? "UTC" : "localtime",
+    ];
+    return ret;
+  }
+
+  /**
+   * AutoYaST interface function: Return the summary of Timezone configuration as a map.
+   * @return summary string (html)
+   */
+  global define string Summary () {
+
+    import "HTML";
+
+    string clock_setting = _("UTC");
+
+    if (hwclock == "--localtime")
+	// label text, Clock setting: local time (not UTC)
+	clock_setting = _("Local Time");
+
+    // label text
+    clock_setting = _("Hardware Clock Set To") + " " + clock_setting;
+
+    list<string> ret =  [
+	// summary label
+	sformat (_("Current Time Zone: %1"), name),
+	clock_setting
+    ];
+    return HTML::List (ret);
+  }
 
 
-
-}
-
-// -EOF-
+} // -EOF-

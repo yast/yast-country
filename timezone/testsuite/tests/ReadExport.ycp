@@ -1,0 +1,48 @@
+/**
+ * tests for Timezone.ycp autoyast functions
+ * Author:	jsuchome@suse.cz
+ * $Id$
+ */
+{
+    // testedfiles: Timezone.ycp
+
+    import "Testsuite";
+
+    map READ = $[
+	"sysconfig" : $[
+	    "clock" : $[
+		"TIMEZONE"	: "Europe/Prague",
+		"HWCLOCK"	: "-u",
+	    ],
+	],
+	"target" : $[
+	    "size"		: 1,
+	    "yast2"		: $[],
+	],
+    ];
+
+    map E	= $[
+	"target" : $[
+	    "bash_output"	: $[],
+	],
+    ];
+
+    import "Mode";
+
+    // let's simulate Mode::config
+    Mode::SetMode ("autoinst_config");
+
+    Testsuite::Init ([READ,$[],E], nil);
+
+    import "Timezone";
+
+    Testsuite::Test (``(Timezone::Read ()), [READ,$[],E], nil);
+
+    /*
+    Testsuite::Test (``(Timezone::Export ()), [], nil);
+
+    Testsuite::Test (``(Timezone::Summary ()), [], nil);
+
+    Testsuite::Test (``(Timezone::Modified ()), [], nil);
+    */
+}

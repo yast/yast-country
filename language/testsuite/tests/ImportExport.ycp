@@ -1,0 +1,59 @@
+/**
+ * tests for Language.ycp autoyast functions
+ * Author:	jsuchome@suse.cz
+ * $Id: Language.ycp 22461 2005-03-11 15:09:25Z jsuchome $
+ */
+{
+    // testedfiles: Language.ycp
+
+    import "Testsuite";
+
+    map READ = $[
+	"sysconfig" : $[
+	    "language" : $[
+		"DEFAULT_LANGUAGE"	: "en_US",
+	    ],
+	],
+	"target" : $[
+	    "size"		: 1,
+	    "yast2"		: $[],
+	],
+    ];
+
+    map E	= $[
+	"target" : $[
+	    "bash_output"	: $[],
+	],
+    ];
+
+    Testsuite::Init ([READ,$[],E], nil);
+
+    import "Language";
+
+    Testsuite::Test (``(Language::Export ()), [], nil);
+
+    Testsuite::Test (``(Language::Modified ()), [], nil);
+
+    map imported	= $[
+	"language"	: "de_DE"
+    ];
+
+    Testsuite::Test (``(Language::Import (imported)), [$[],$[],E], nil);
+
+    Testsuite::Test (``(Language::Modified ()), [], nil);
+
+    Testsuite::Test (``(Language::Export ()), [], nil);
+
+    Testsuite::Test (``(Language::Summary ()), [], nil);
+
+    // now let's add another language
+    imported	= $[
+	"languages"	: "cs_CZ"
+    ];
+
+    Testsuite::Test (``(Language::Import (imported)), [$[],$[],E], nil);
+
+    Testsuite::Test (``(Language::Export ()), [], nil);
+
+    Testsuite::Test (``(Language::Summary ()), [], nil);
+}

@@ -11,6 +11,8 @@
  * Authors:
  *   Thomas Roelz <tom@suse.de>
  *
+ * Maintainer:	Jiri Suchomel <jsuchome@suse.cz>
+ *
  * $Id$
  *
  * Usage:
@@ -169,6 +171,11 @@
      * keyboard set on start
      */
     global string keyboard_on_entry	= "";
+
+    /**
+     * expert values on start
+     */
+    global map expert_on_entry		= $[];
 
     // The default keyboard if set.
     //
@@ -418,6 +425,98 @@ global define map GetX11KeyData (string keymap) {
     return x11data;
 }
 
+  /**
+   * Return human readable (and translated) name of the given keyboard map
+   * @param kbd keyboard map
+   * @return string
+   */
+  define string GetKeyboardName (string kbd) {
+
+    map keyboards	= get_reduced_keyboard_db ();
+    list descr		= keyboards[kbd]:[];
+    string ret		= kbd;
+
+    if (descr != [])
+    {
+	locale translate	= descr[0]:kbd;
+	ret = (string)eval(translate);
+    }
+    return ret;
+  }
+
+  /**
+   * GetExpertValues()
+   *
+   * Return the values for the various expert settings in a map
+   *
+   * @return  map with values filled in
+   *
+   */
+  global define map GetExpertValues() {
+    map ret = $[ "rate"     : kbd_rate,
+                 "delay"    : kbd_delay,
+                 "numlock"  : kbd_numlock,
+                 "capslock" : kbd_capslock=="yes" ? true : false,
+                 "scrlock"  : kbd_scrlock=="yes" ? true : false,
+                 "tty"      : kbd_tty,
+                 "discaps"  : kbd_disable_capslock=="yes" ? true : false ];
+    return( ret );
+  }
+
+/*
+ * get_lang2keyboard()
+ *
+ * Get the system_language --> keyboard_language conversion map.
+ *
+ * @return  conversion map
+ *
+ * @see	get_xkblayout2keyboard()
+ */
+
+define map get_lang2keyboard()
+    ``{
+    // The system_language --> keyboard_language conversion map.
+    //
+    map lang2keyboard = (map)SCR::Read( .target.yast2, "lang2keyboard.ycp" );
+
+    if ( lang2keyboard == nil ) lang2keyboard = $[];
+
+    return( lang2keyboard );
+    }	// get_lang2keyboard()
+
+
+
+/**
+ * GetKeyboardForLanguage()
+ *
+ * Get the keyboard language for the given system language.
+ *
+ * @param	System language code, e.g. "en_US".
+ *		Default keyboard language to be returned if nothing found.
+ *
+ * @return  The keyboard language for this language, e.g. "english-us"
+ *		or the default value if nothing found.
+ *
+ */
+global define string GetKeyboardForLanguage( string sys_language,
+                                             string default_keyboard) {
+
+    // The system_language --> keyboard_language conversion map.
+    //
+    map lang2keyboard	= get_lang2keyboard();
+    string lang		= lang2keyboard[sys_language]:"";
+
+    if (lang == "")
+    {
+	sys_language	= substring (sys_language, 0,2);
+	lang		= lang2keyboard[sys_language]:default_keyboard;
+    }
+    y2milestone( "GetKeyboardForLanguage lang:%1 def:%2 ret:%3",
+		 sys_language, default_keyboard, lang);
+    return lang;
+}
+
+
 
 /**
  * run X11 configuration after inital boot
@@ -574,11 +673,19 @@ global define boolean Restore () {
 	}
 	else
 	{
-	    // Restore module data.
-	    //
-	    SetLanguage( current_kbd );
-	    y2milestone( "Restored data (sysconfig) for keyboard: <%1>",
-			 current_kbd );
+	    if (!Mode::config ())
+	    {
+		// Restore module data.
+		//
+		SetLanguage( current_kbd );
+		y2milestone("Restored data (sysconfig) for keyboard: <%1>",current_kbd);
+	    }
+	    else
+	    {
+		// for cloning, to be shown in Summary
+		name	= GetKeyboardName (current_kbd);
+	    }
+
 	    ret = true;
 	}
     }
@@ -695,70 +802,10 @@ define void probe_settings()
     return;
     };	// probe_settings()
 
-/*
- * get_lang2keyboard()
- *
- * Get the system_language --> keyboard_language conversion map.
- *
- * @param 	-
- *
- * @return  conversion map
- *
- * @see	get_xkblayout2keyboard()
- */
-
-define map get_lang2keyboard()
-    ``{
-    // The system_language --> keyboard_language conversion map.
-    //
-    map lang2keyboard = (map)SCR::Read( .target.yast2, "lang2keyboard.ycp" );
-
-    if ( lang2keyboard == nil ) lang2keyboard = $[];
-
-    return( lang2keyboard );
-    }	// get_lang2keyboard()
-
-
-
-/**
- * GetKeyboardForLanguage()
- *
- * Get the keyboard language for the given system language.
- *
- * @param	System language code, e.g. "en_US".
- *		Default keyboard language to be returned if nothing found.
- *
- * @return  The keyboard language for this language, e.g. "english-us"
- *		or the default value if nothing found.
- *
- */
-global define string GetKeyboardForLanguage( string sys_language,
-                                             string default_keyboard) {
-
-    // The system_language --> keyboard_language conversion map.
-    //
-    map lang2keyboard	= get_lang2keyboard();
-    string lang		= lang2keyboard[sys_language]:"";
-
-    if (lang == "")
-    {
-	sys_language	= substring (sys_language, 0,2);
-	lang		= lang2keyboard[sys_language]:default_keyboard;
-    }
-    y2milestone( "GetKeyboardForLanguage lang:%1 def:%2 ret:%3",
-		 sys_language, default_keyboard, lang);
-    return lang;
-}
-
-
 /**
  * Probe()
  *
  * Allow for intentional probing by applications.
- *
- * @param 	-
- *
- * @return  -
  *
  * @see	Keyboard()
  */
@@ -824,10 +871,6 @@ global define void Probe() {
  * The module constructor.
  * Sets the proprietary module data defined globally for public access.
  * This is done only once (and automatically) when the module is loaded for the first time.
- *
- * @param 	-
- *
- * @return  -
  *
  * @see	Probe()
  */
@@ -898,6 +941,7 @@ global define void Keyboard() {
 global define boolean Read () {
 
     keyboard_on_entry		= current_kbd;
+    expert_on_entry		= GetExpertValues ();
     ExpertSettingsChanged	= false;
     y2debug ("keyboard_on_entry: %1", keyboard_on_entry);
     return true;
@@ -1220,6 +1264,7 @@ global define void Set (string keyboard) {
     if (Mode::config ())
     {
 	current_kbd	= keyboard;
+	name		= GetKeyboardName (current_kbd);
 	return;
     }
 
@@ -1346,32 +1391,15 @@ global define boolean CalledRestore() {
 
 
   /**
-   * GetExpertValues()
-   *
-   * Return the values for the various expert settings in a map
-   *
-   * @return  map with values filled in
-   *
-   */
-  global define map GetExpertValues() {
-    map ret = $[ "rate"     : kbd_rate,
-                 "delay"    : kbd_delay,
-                 "numlock"  : kbd_numlock,
-                 "capslock" : kbd_capslock=="yes" ? true : false,
-                 "scrlock"  : kbd_scrlock=="yes" ? true : false,
-                 "tty"      : kbd_tty,
-                 "discaps"  : kbd_disable_capslock=="yes" ? true : false ];
-    return( ret );
-  }
-
-  /**
    * SetExpertValues()
    *
-   * Return the values for the various expert setting in a map
+   * Set the values of the various expert setting
    *
    * @param	val     map with new values of expert settings
    */
   global define void SetExpertValues( map val ) {
+
+    map orig_values	= GetExpertValues ();
 
     if( haskey(val,"rate") && size(val["rate"]:"")>0 )
 	{
@@ -1401,6 +1429,9 @@ global define boolean CalledRestore() {
 	{
 	kbd_disable_capslock = (val["discaps"]:false) ? "yes" : "no";
 	}
+
+    if (!ExpertSettingsChanged && orig_values != GetExpertValues ())
+	ExpertSettingsChanged = true;
   }
 
   // set the keayboard layout according to given language
@@ -1446,16 +1477,7 @@ global define boolean CalledRestore() {
     {
 	y2milestone ("current_kbd: %1, target_kbd: %2", current_kbd, target_kbd);
 
-	string target_name = target_kbd;
-
-	// now get the (translated) name of the keybaord map
-	map keyboards	= get_reduced_keyboard_db ();
-	list descr	= keyboards[target_kbd]:[];
-	if (kbd_descr != [])
-	{
-	    locale translate	= descr[0]:target_kbd;
-	    target_name		= (string)eval(translate);
-	}
+	string target_name = GetKeyboardName (target_kbd);
 
 	UI::OpenDialog(`opt(`decorated), `HBox(`HSpacing(1.5),
 	    `VBox(
@@ -1490,5 +1512,56 @@ Select the layout to use during update:"))),
         UI::CloseDialog();
     }
   }
+
+  /**
+   * AutoYaST interface function: Get the Keyboard configuration from a map.
+   * @param settings imported map
+   * @return success
+   */
+  global define boolean Import (map settings) {
+
+    // Read was not called -> do the init
+    if (expert_on_entry == $[])
+	Read ();
+
+    Set (settings["keymap"]:current_kbd);
+    SetExpertValues (settings["keyboard_values"]:$[]);
+    return true;
+  }
+
+  /**
+   * AutoYaST interface function: Return the Keyboard configuration as a map.
+   * @return map with the settings
+   */
+  global define map Export () {
+
+    map diff_values	= $[];
+    foreach (string key, any val, (map<string,any>) GetExpertValues (), {
+	if (expert_on_entry[key]:nil != val)
+	    diff_values[key]	= val;
+    });
+    map ret = $[
+	"keymap"		: current_kbd,
+    ];
+    if (diff_values != $[])
+	ret["keyboard_values"]	= diff_values;
+    return ret;
+  }
+
+  /**
+   * AutoYaST interface function: Return the summary of Keyboard configuration as a map.
+   * @return summary string (html)
+   */
+  global define string Summary () {
+
+    import "HTML";
+
+    list<string> ret =  [
+	// summary label
+	sformat (_("Current Keyboard Layout: %1"), name)
+    ];
+    return HTML::List (ret);
+  }
+
 
 } // - EOF -
