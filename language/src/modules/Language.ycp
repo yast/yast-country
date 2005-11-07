@@ -254,22 +254,41 @@ global define void SetDefault() {
 }
 
 /**
- * Get the map for conversion of old lang codes to new ISO-codes
- * (since Rel. 8.0) FIXME obsolete
- *
- * @return conversion map
+ * Read the RC_LANG value from sysconfig and exctract language from it
+ * @return language
  */
-define map get_lang2iso() ``{
+global define string ReadSysconfigLanguage () {
 
-    // The old_lang --> ISO conversion map.
-    //
-    map lang2iso = (map)SCR::Read( .target.yast2, "lang2iso.ycp");
+    string local_lang = Misc::SysconfigRead (.sysconfig.language.RC_LANG, language);
 
-    if ( lang2iso == nil ) lang2iso = $[];
+    integer pos = findfirstof (local_lang, ".@");
 
-    return( lang2iso );
+    if (pos != nil && pos >= 0)
+    {
+	local_lang = substring (local_lang, 0, pos);
+    }
+
+    y2milestone ("language from sysconfig: %1", local_lang);
+    return local_lang;
 }
 
+/**
+ * Read the rest of language values from sysconfig
+ */
+global define void ReadSysconfigValues () {
+
+    rootlang = Misc::SysconfigRead (.sysconfig.language.ROOT_USES_LANG, rootlang);
+    if (!Stage::initial ())
+    {
+	string val = toupper (Misc::SysconfigRead (.sysconfig.language.RC_LANG, ""));
+	use_utf8 = find (val, ".UTF-8") > 0;
+    }
+    else
+    {
+	use_utf8 = true;
+    }
+    languages = Misc::SysconfigRead (.sysconfig.language.INSTALLED_LANGUAGES, "");
+}
 
 /**
  * Constructor
@@ -278,6 +297,9 @@ define map get_lang2iso() ``{
  * or from /etc/sysconfig/language
  */
 global define void Language() {
+
+    if (Mode::config ())
+	return;
 
     if (Stage::initial ())
     {
@@ -317,66 +339,34 @@ global define void Language() {
     }
     else
     {
-	string local_lang =
-	    Misc::SysconfigRead (.sysconfig.language.RC_LANG, "");
-	y2milestone( "reading RC_LANG %1", local_lang );
-	if (size (local_lang) == 0)
-	{
-	    // Try to read the old YaST1 language and convert setting.
-	    string y1lang =
-		Misc::SysconfigRead (.sysconfig.language.DEFAULT_LANGUAGE, "");
-	    map lang2iso = get_lang2iso();
-	    if (size (y1lang)>0 && size (lang2iso[y1lang]:"") > 0)
-	    {
-		local_lang = lang2iso[y1lang]:"";
-	    }
-	}
-	if (size(local_lang) == 0)
-	{
-	    local_lang = language;
-	}
-
-	integer pos = findfirstof (local_lang, ".@");
-
-	if (pos != nil && pos >= 0)
-	{
-	    local_lang = substring( local_lang, 0, pos );
-	}
-
-	y2milestone( "setting language to %1", local_lang );
+	string local_lang = ReadSysconfigLanguage ();
 
 	Set (local_lang);
 	SetDefault();		// also default
     }
     if (SCR::Read (.target.size, "/etc/sysconfig/language") > 0)
     {
-	rootlang =
-	    Misc::SysconfigRead (.sysconfig.language.ROOT_USES_LANG, rootlang);
-	if (!Stage::initial ())
-	{
-	    string val = toupper (
-		Misc::SysconfigRead (.sysconfig.language.RC_LANG, ""));
-	    use_utf8 = find (val, ".UTF-8") > 0;
-	}
-	else
-	{
-	    use_utf8 = true;
-	}
-	languages =
-	    Misc::SysconfigRead (.sysconfig.language.INSTALLED_LANGUAGES, "");
+	ReadSysconfigValues ();
     }
     Encoding::SetUtf8Lang (use_utf8);
 }
 
 /**
- * Just store inital values - read was done in constructor
+ * Store the inital values; in normal mode, read from system was done in constructor
+ * @param really: also read the values from the system
  */
-global define boolean Read () {
+global define boolean Read (boolean really) {
+
+    if (really)
+    {
+	Set (ReadSysconfigLanguage ());
+	ReadSysconfigValues ();
+    }
 
     language_on_entry	= language;
     languages_on_entry	= languages;
 
-    y2debug("language: %1, languages: %2",language_on_entry,languages_on_entry);
+    y2milestone ("language: %1, languages: %2", language_on_entry, languages_on_entry);
 
     ExpertSettingsChanged	= false;
 
@@ -717,7 +707,7 @@ global define boolean IncompleteTranslation (string lang) {
 global define boolean Import (map settings) {
 
     if (languages_on_entry == "")
-	Read ();
+	Read (false); // only save original values
 
     Set (settings["language"]:language);
     languages	= settings["languages"]:languages;

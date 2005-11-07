@@ -27,7 +27,7 @@ import "Wizard";
  */
 define boolean LanguageRead () {
 
-    return Language::Read ();
+    return Language::Read (false);
 }
 
 /**
