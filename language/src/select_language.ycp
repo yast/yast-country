@@ -225,11 +225,16 @@ are unset.<br>
 	heading_text = _("Welcome to System Repair");
     }
 
-    if ((Stage::initial () && set_default) || Mode::config ())
+    if (Stage::initial () && set_default)
     {
 	show_expert	= false;
 	more_languages	= false;
     }
+    if (Mode::config ())
+    {
+	show_expert	= false;
+    }
+
 
     // sort language by ASCII with help of a map
     // $[ "ascii-name" : [ "user-readable-string", "code" ], ...]
@@ -271,20 +276,6 @@ are unset.<br>
 	`MinSize (25, 12, languagesel)
     );
 
-    if (Mode::config ())
-	contents = `VBox (`HBox (
-	    `HWeight (25, `HStretch()),
-	    `HWeight (50,
-		`VBox (
-		    // label (above selection box with languages)
-		    `Left (`Label ( _("Select your language:"))),
-		    languagesel
-		)
-	    ),
-	    `HWeight (25, `HStretch())
-	), `VSpacing(2));
-
-
     term expert = `HStretch();
     if (show_expert)
     {
@@ -296,7 +287,7 @@ are unset.<br>
     }
 
     // if checkboxes for adapting keyboard and timezone should be shown
-    boolean adapt_term = more_languages;
+    boolean adapt_term = more_languages && !Mode::config ();
 
     if (more_languages)
     {
@@ -633,7 +624,7 @@ installation, but the selected language will be used for the new system."));
 		    Language::languages = mergestring (selected_languages, ",");
 
 		    // now adapt language seletions
-		    if (Stage::initial () || Mode::update ())
+		    if (Stage::initial () || Mode::update () || Mode::config ())
 		    {
 			Pkg::SetAdditionalLocales (selected_languages);
 		    }

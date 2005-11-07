@@ -7,6 +7,7 @@
 {
     import "Language";
     import "Console";
+    import "Wizard";
 
     any ret = nil;
     string func = "";
@@ -22,8 +23,13 @@
     y2debug ("param=%1", param);
 
     if (func == "Change") {
+	Wizard::CreateDialog();
+	Wizard::HideAbortButton();
+
 	ret = WFM::CallFunction ("select_language", [
 	    $["enable_back" : true, "enable_next" : true ]]);
+
+	Wizard::CloseDialog ();
     }
     else if(func == "Import") {
 	ret = Language::Import (param);
@@ -40,8 +46,7 @@
 	ret =  $[];
     }
     else if (func == "Read") {
-	// this doesn't mean 'read from system'! that is done in constructor
-	ret = Language::Read();
+	ret = Language::Read(true);
     }
     else if (func == "Export") {
 	ret = Language::Export ();

@@ -1,4 +1,3 @@
-Read	.target.yast2 "lang2iso.ycp" $[]
 Read	.target.size "/etc/sysconfig/language" 1
 Read	.target.string "/usr/lib/YaST2/trans/en.status" ""
 Read	.target.string "/usr/lib/YaST2/trans/en_US.status" ""

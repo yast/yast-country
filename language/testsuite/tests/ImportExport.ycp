@@ -14,10 +14,6 @@
 		"DEFAULT_LANGUAGE"	: "en_US",
 	    ],
 	],
-	"target" : $[
-	    "size"		: 1,
-	    "yast2"		: $[],
-	],
     ];
 
     map E	= $[
@@ -25,6 +21,9 @@
 	    "bash_output"	: $[],
 	],
     ];
+
+    import "Mode";
+    Mode::SetMode ("autoinst_config");
 
     Testsuite::Init ([READ,$[],E], nil);
 
