@@ -11,10 +11,11 @@ X-SuSE-YaST-Call=keyboard
 X-SuSE-YaST-Group=Hardware
 X-SuSE-YaST-Argument=
 X-SuSE-YaST-RootOnly=true
-X-SuSE-YaST-AutoInst=
+X-SuSE-YaST-AutoInst=all
 X-SuSE-YaST-Geometry=
 X-SuSE-YaST-SortKey=
-X-SuSE-YaST-AutoInstResource=
+X-SuSE-YaST-AutoInstResource=keyboard
+X-SuSE-YaST-AutoInstClonable=true
 
 Icon=yast-keyboard
 Exec=/sbin/yast2 keyboard 
