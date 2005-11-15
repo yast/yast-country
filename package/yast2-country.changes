@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Nov  7 11:15:52 CET 2005 - jsuchome@suse.cz
+
+- adapted to standard autoyast API (#131745)
+- install language-dependent packages during autoinstallation
+- 2.13.7
+
+-------------------------------------------------------------------
 Wed Nov  2 12:29:08 CET 2005 - jsuchome@suse.cz
 
 - support for secondary languages in command-line mode (#131746)
