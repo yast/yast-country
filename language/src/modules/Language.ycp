@@ -718,6 +718,13 @@ global define boolean Import (map settings) {
 	llanguages	= add (llanguages, language);
 	languages	= mergestring (llanguages, ",");
     }
+    // set the language dependent packages to install
+    if (Mode::autoinst ())
+    {
+	Pkg::SetLocale (language);
+	Pkg::SetAdditionalLocales (splitstring (languages, ","));
+    }
+
     return true;
 }
 
