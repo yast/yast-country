@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov 29 08:33:51 CET 2005 - jsuchome@suse.cz
+
+- adapted to correct tointeger behaviour (#115560), added tests
+- 2.13.8 
+
+-------------------------------------------------------------------
 Mon Nov  7 11:15:52 CET 2005 - jsuchome@suse.cz
 
 - adapted to standard autoyast API (#131745)

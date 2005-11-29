@@ -380,19 +380,19 @@ global define string GetDateTime (boolean real_time, boolean locale_format) {
 	integer ds = 0;
 	if (diff!=0)
 	{
-	    integer t = 0;
 	    map out	= (map) SCR::Execute (.target.bash_output, "date +%z");
 	    string tzd = out["stdout"]:"";
 	    y2milestone( "GetDateTime tcd=%1", tzd );
-	    t = tointeger( String::CutZeros( substring( tzd, 1, 2 )));
-	    ds = ds + t * 3600;
-	    t = tointeger( String::CutZeros( substring( tzd, 3, 2 )));
-	    ds = ds + t * 60;
-	    if (substring (tzd, 0, 1) == "-")
+	    integer t = tointeger( String::CutZeros( substring( tzd, 1, 2 )));
+	    if (t != nil)
 	    {
-		ds = -ds;
+		ds = ds + t * 3600;
+		t = tointeger( String::CutZeros( substring( tzd, 3, 2 )));
+		ds = ds + t * 60;
+		if (substring (tzd, 0, 1) == "-")
+		    ds = -ds;
+		y2milestone( "GetDateTime ds %1 diff %2", ds, diff );
 	    }
-	    y2milestone( "GetDateTime ds %1 diff %2", ds, diff );
 	}
 	cmd = "";
 	if (hwclock != "--localtime")
@@ -619,10 +619,13 @@ global define boolean CheckTime( string hour, string minute, string second )
     ``{
     boolean ret = true;
     integer tmp = tointeger( String::CutZeros(hour) );
+    if (tmp == nil) return false;
     ret = ret && tmp>=0 && tmp<24;
     tmp = tointeger( String::CutZeros(minute) );
+    if (tmp == nil) return false;
     ret = ret && tmp>=0 && tmp<60;
     tmp = tointeger( String::CutZeros(second) );
+    if (tmp == nil) return false;
     ret = ret && tmp>=0 && tmp<60;
     return( ret );
     }
@@ -633,12 +636,14 @@ global define boolean CheckDate( string day, string month, string year )
     boolean ret = true;
     integer yea = tointeger( String::CutZeros(year) );
     integer mon = tointeger( String::CutZeros(month) );
+    integer da = tointeger(  String::CutZeros(day) );
+    if (yea == nil || mon == nil || da == nil)
+	return false;
     ret = ret && mon>=1 && mon<=12;
     if( yea%4==0 && (yea%100!=0 || yea%400==0))
 	{
 	mdays[1] = 29;
 	}
-    integer da = tointeger(  String::CutZeros(day) );
     ret = ret && da>=1 && da<=mdays[mon-1]:0;
     ret = ret && yea>=1970 && yea<2032;
     return( ret );
