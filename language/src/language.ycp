@@ -16,6 +16,7 @@ textdomain "country";
 
 import "CommandLine";
 import "Console";
+import "GfxMenu";
 import "Language";
 import "Mode";
 import "Popup";
@@ -80,8 +81,7 @@ define boolean LanguageWrite () {
 
     Progress::NextStage ();
 
-    import "Bootloader";
-    Bootloader::UpdateGfxMenu();
+    GfxMenu::Update();
 
     Progress::NextStage ();
 
