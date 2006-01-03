@@ -152,8 +152,27 @@ are unset.<br>
     return retval;
     };
 
+    /**
+     * helper function for updating the "adapt terms" to current language
+     */
+    define void update_adapt_term () {
 
-    // ------------------------------------- main part of the client --------------
+	string kb = Keyboard::GetKeyboardForLanguage (language, "english-us");
+	string tz = Timezone::GetTimezoneForLanguage (language, "US/Mountain");
+	string kbd_name	= Keyboard::Selection ()[kb]:"";
+	string tmz_name	= Timezone::GetTimezoneCountry (tz);
+
+	UI::ReplaceWidget (`id(`rpadapt), `VBox (
+	    `Left (`CheckBox (`id (`adapt_kbd),
+		// check box label (%1 is keyboard layout name)
+		sformat(_("Adapt &Keyboard Layout to %1"),kbd_name))),
+	    `Left (`CheckBox (`id (`adapt_tmz),
+		// check box label (%1 is country name)
+		sformat (_("Adapt &Time Zone to %1"), tmz_name)))
+	));
+    }
+
+    // ------------------------------------- main part of the client -----------
 
     map argmap = GetInstArgs::argmap();
 
@@ -175,17 +194,6 @@ are unset.<br>
 	}
     }
 
-    if (Stage::initial () &&
-	Language::CJKLanguage (language) && Language::GetTextMode () &&
-	// CJKLanguage (preselected) -> fbiterm is probably running (#102958)
-	!Language::CJKLanguage (preselected))
-    {
-	Language::WfmSetGivenLanguage ("en_US");
-    }
-    else
-    {
-	Language::WfmSetLanguage ();
-    }
 
     // when the possibility for selecting more languages should be shown
     // (this includes differet UI layout)
@@ -194,8 +202,7 @@ are unset.<br>
     list<string>languages	= splitstring (Language::languages, ",");
 
     // filter the primary language from the list of secondary ones:
-    if (argmap["first_call"]:false)
-	languages	= filter (string l, languages, ``(l != language));
+    languages	= filter (string l, languages, ``(l != language));
 
 
     // Build the contents of the dialog.
@@ -291,16 +298,22 @@ are unset.<br>
 
     if (more_languages)
     {
-	boolean primary_included	= false;
-	list primary_items = maplist (any name, list codelist, languageselsort,
-	{
-	    if (language == codelist[1]:"")
-	    {
-		primary_included	= true;
-	    }
-	    return `item (
-		`id(codelist[1]:""), codelist[0]:"",language == codelist[1]:"");
-	});
+	boolean primary_included= false;
+	list primary_items	= [];
+
+	term languages_term = `MultiSelectionBox (`id(`languages),
+	    // multiselection box label
+	    _("&Secondary Languages"),
+	    maplist (string trans_lang, lsort (lang_list), {
+		string code	= lang2code [trans_lang]:"";
+		primary_items = add (primary_items,
+		    `item (`id (code), trans_lang, language == code));
+		if (language == code)
+		    primary_included	= true;
+		return
+		    `item (`id (code), trans_lang, contains (languages, code));
+	    })
+	);
 	if (!primary_included)
 	    primary_items = add (primary_items,
 		`item (`id (language), language, true));
@@ -309,15 +322,6 @@ are unset.<br>
 	    // combo box label
 	    _("Primary &Language"), primary_items);
 
-	term languages_term = `MultiSelectionBox (`id(`languages),
-	    // multiselection box label
-	    _("&Secondary Languages"),
-	    maplist (string trans_lang, lsort (lang_list), {
-		string code	= lang2code [trans_lang]:"";
-		return
-		    `item (`id (code), trans_lang, contains (languages, code));
-	    })
-	);
 
 	term primary_term = `HBox (
 			`Left (primary_language_term),
@@ -326,25 +330,13 @@ are unset.<br>
 
 	if (adapt_term)
 	{
-	    string kb		=
-		Keyboard::GetKeyboardForLanguage (language, "english-us");
-	    string kbd_name	= Keyboard::Selection ()[kb]:"";
-	    string tz		=
-		Timezone::GetTimezoneForLanguage (language, "US/Mountain");
-	    string tmz_name	= Timezone::GetTimezoneCountry (tz);
-
 	    // frame label
 	    primary_term = `Frame (_("Primary Language Settings"), `HBox (
 		`HSpacing (0.5),
 		`VBox (
 		    primary_term,
 		    `VSpacing (0.5),
-		    `Left (`CheckBox (`id (`adapt_kbd),
-			// check box label (%1 is keyboard layout name)
-			sformat(_("Adapt &Keyboard Layout to %1"),kbd_name))),
-		    `Left (`CheckBox (`id (`adapt_tmz),
-			// check box label (%1 is country name)
-			sformat (_("Adapt &Time Zone to %1"), tmz_name))),
+		    `ReplacePoint (`id(`rpadapt), `VBox ()),
 		    `VSpacing (0.5)
 		),
 		`HSpacing (0.5))
@@ -448,6 +440,9 @@ In the selection box, specify additional languages to use on your system.
     if (Stage::initial () || Stage::firstboot ())
 	Wizard::SetTitleIcon ("yast-yast-language");
 
+    if (adapt_term)
+	update_adapt_term ();
+
     // Get the user input.
     //
     any ret = nil;
@@ -535,8 +530,14 @@ Some texts may be displayed in English.
 		// Set it in the Language module.
 		//
 		Language::Set (language);
+		if (adapt_term)
+		    update_adapt_term ();
+	    }
 
-		if (Stage::initial () &&
+	    if (Stage::initial ())
+	    {
+		if ((set_default && ret == `language ||
+			(!set_default && ret == `next)) &&
 		    Language::CJKLanguage (language) &&
 		    !Language::CJKLanguage (preselected) &&
 		    Language::GetTextMode ())
@@ -547,7 +548,7 @@ installation, but the selected language will be used for the new system."));
 
 		    Language::WfmSetGivenLanguage ("en_US");
 		}
-		else if (!Mode::config ())
+		else if (ret == `next || (set_default && ret == `language))
 		{
 		    // Set Console font
 		    //
@@ -556,14 +557,13 @@ installation, but the selected language will be used for the new system."));
 		    // Set it in YaST2
 		    Language::WfmSetLanguage ();
 		}
+	    }
 
-		if (ret != `next)
-		{
-		    // Display newly translated dialog.
-		    //
-		    Wizard::SetFocusToNextButton();
-		    return (`again);
-		}
+	    if (ret == `language && set_default)
+	    {
+		// Display newly translated dialog.
+		Wizard::SetFocusToNextButton();
+		return `again;
 	    }
 
 	    if (ret == `next)

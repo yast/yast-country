@@ -23,6 +23,7 @@
     // Memorize current language to be able to detect a change.
     //
     string language_on_entry = Language::language;
+    y2milestone("language_on_entry - 1: %1", language_on_entry );
 
     if ( func == "MakeProposal" )
     {
@@ -62,71 +63,21 @@
     }
     else if ( func == "AskUser" )
     {
-	// Special case for language selection: Rebuild dialog completely upon
-	// language change (to get even the wizard widgets re-translated), thus
-	// the loop around that 'CallFunction()'.
 
-	symbol result = nil;
-
-	// THIS IS VERY VERY UGLY:
-	// Because of the while-loop restoring in case of cancel must be
-	// done here (outside the loop). :-((((
-	// Remember the current language setting to be able to restore it.
-	//
-	string language_on_entry = Language::language;
-
-	y2milestone("language_on_entry - 1: %1", language_on_entry );
-
-	Wizard::OpenAcceptDialog();	// Reduce flicker (yes, it's a kludge)
+	Wizard::OpenAcceptDialog();
 	map args = $[
 	    "enable_back"	: true,
 	    "enable_next"	: param["has_next"]:false,
-	    "first_call"	: true
 	];
-	do
-	{
-	    Wizard::OpenAcceptDialog();	// This dialog will actually be used
+	symbol result	= (symbol)WFM::CallFunction ("select_language", [args]);
 
-	    result	= (symbol) WFM::CallFunction ("select_language", [args]);
-	    if (haskey (args, "first_call"))
-		args	= remove (args, "first_call");
-	    Wizard::CloseDialog();
+	Wizard::CloseDialog();
 
-	} while (result == `again);
-
-	Wizard::CloseDialog();		// Close superfluous extra dialog
-
-	// SECOND PART OF UGLINESS :-(((
-	// Back to original values.
-	//
 	if ( result == `back )
 	{
-	    import "Console";
+	    y2milestone("back to language_on_entry: %1", language_on_entry );
 
-	    boolean use_utf8 = true;		// utf8 is default
-
-	    map display_info    = UI::GetDisplayInfo ();
-	    if (! display_info["HasFullUtf8Support"]:true)
-	    {
-		use_utf8 = false;		// fallback to ascii
-	    }
-
-	    y2milestone("language_on_entry - 2: %1", language_on_entry );
-
-	    // Set it in the Language module.
-	    //
 	    Language::Set( language_on_entry );
-
-	    // Set Console font
-	    //
-	    Console::SelectFont( language_on_entry );
-
-	    string enc = (use_utf8) ? "UTF-8" : Encoding::console;
-
-	    // Set it in YaST2
-	    //
-	    UI::SetLanguage (language_on_entry, enc);
-	    WFM::SetLanguage(language_on_entry, "UTF-8");
 	}
 
 	// Fill return map

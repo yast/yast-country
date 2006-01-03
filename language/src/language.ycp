@@ -101,8 +101,6 @@ define any LanguageSequence () {
 
     Wizard::CreateDialog();
 
-    any result = `again;
-
     // set the language accoring to Language.ycp initialization
     Language::WfmSetLanguage ();
     Wizard::OpenAcceptDialog();
@@ -111,14 +109,8 @@ define any LanguageSequence () {
     map args = $[];
     args["enable_back"] = true;
     args["enable_next"] = true;
-    args["first_call"]	= true;
 
-    while (result == `again)
-    {
-	result = WFM::CallFunction ("select_language", [args]);
-	if (haskey (args, "first_call"))
-	    args	= remove (args, "first_call");
-    }
+    any result = WFM::CallFunction ("select_language", [args]);
 
     Wizard::CloseDialog();
 
@@ -127,20 +119,8 @@ define any LanguageSequence () {
     if (result == `cancel || result == `back)
     {
 	// Back to original values...
-	//
-	y2milestone ("`cancel or `back --> restoring: <%1>",
-	    Language::language_on_entry);
-
-	// Set it in the Language module.
-	//
-	Language::Set (Language::language_on_entry );
-
-	// Set Console font
-	//
-	Console::SelectFont (Language::language_on_entry);
-
-	// Set it in YaST2
-	Language::WfmSetLanguage ();
+	y2milestone ("canceled -> restoring: %1", Language::language_on_entry);
+	Language::Set (Language::language_on_entry);
     }
     else
     {
