@@ -1,5 +1,5 @@
 Execute	.target.bash_output "/usr/bin/locale -a" $[]
 Return	true
 Return	$["language":"de_DE", "languages":"en_US,de_DE"]
-Return	<ul><li>Primary Language: Deutsch</li><li>Additional Languages: <ul><li>English (US)</li></ul></li></ul>
+Return	<ul><li>Primary Language: German</li><li>Additional Languages: <ul><li>English (US)</li></ul></li></ul>
 Return	false
