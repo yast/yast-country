@@ -29,10 +29,7 @@
  *
  * Set after having called SetLanguage( keyboard ).
  *
- *	XkbRules
  *	XkbModel
- *	Protocol
- *	XkbKeyCodes
  *	XkbVariant
  *	XkbOptions
  *	LeftAlt
@@ -87,12 +84,14 @@
     import "Linuxrc";
     import "Misc";
     import "Mode";
+    import "Package";
     import "ProductFeatures";
     import "Stage";
+    import "XLibAPI";
 
-    // ---------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     // START: Globally defined data to be accessed via Keyboard::<variable>
-    // ---------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
 
     // kb_model string
     //
@@ -111,14 +110,6 @@
     //
     global string XkbVariant = "";
 
-    // XkbRules string
-    //
-    global string XkbRules = "";
-
-    // X11 Protocol string
-    //
-    global string Protocol = "";
-
     // keymap string for ncurses
     //
     global string keymap = "us.map.gz";
@@ -126,10 +117,6 @@
     // compose_table entry
     //
     global string compose_table = "clear winkeys shiftctrl latin1.add";
-
-    // X11 keycodes string
-    //
-    global string XkbKeyCodes = "";
 
     // X11 Options string
     //
@@ -245,9 +232,9 @@
 	"slovene.map.gz"		: "iso-8859-2"
     ];
 
-    // --------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------
     // END: Locally defined data
-    // --------------------------------------------------------------------------------
+    // ----------------------------------------------------------------------
 
     // function prototypes
     global define void Set (string keyboard);
@@ -523,7 +510,7 @@ global define string GetKeyboardForLanguage( string sys_language,
  */
 define boolean x11_setup_needed () {
 
-    return ! (Linuxrc::serial_console() || Linuxrc::vnc() || Linuxrc::usessh());
+    return Arch::x11_setup_needed () && Package::Installed ("yast2-x11");
 }
 
 /**
@@ -553,10 +540,8 @@ global define boolean SetLanguage (string keyboard) {
 
 	y2milestone ("Description for keyboard <%1>: <%2>",keyboard, kbd_descr);
 
-	if ( kbd_descr != [] )	// language found
+	if ( kbd_descr != [] )	// keyboard found
 	{
-	    y2milestone("Retranslating for: %1", Language::language);
-
 	    // Get keymap for ncurses
 	    //
 	    keymap = kbd_descr[1, "ncurses"]:"us.map.gz";
@@ -569,10 +554,7 @@ global define boolean SetLanguage (string keyboard) {
 	    XkbModel = x11data["XkbModel"]:"pc104";
 	    XkbLayout = x11data["XkbLayout"]:"";
 	    XkbVariant = x11data["XkbVariant"]:"basic";
-	    XkbRules = x11data["XkbRules"]:"";
 	    XkbOptions = x11data["XkbOptions"]:"";
-	    XkbKeyCodes = x11data["XkbKeyCodes"]:"";
-	    Protocol = x11data["Protocol"]:"Standard";
 	    LeftAlt = x11data["LeftAlt"]:"";
 	    RightAlt = x11data["RightAlt"]:"";
 	    ScrollLock = x11data["ScrollLock"]:"";
@@ -659,7 +641,7 @@ global define boolean Restore () {
 	//
 	current_kbd = Misc::SysconfigRead(.sysconfig.keyboard.YAST_KEYBOARD,"");
 	integer pos = find (current_kbd, ",");
-	if (pos>0)
+	if (pos != nil && pos > 0)
 	{
 	    kb_model	= substring (current_kbd, pos + 1);
 	    current_kbd	= substring (current_kbd, 0, pos);
@@ -741,16 +723,8 @@ define string XkblayoutToKeyboard( string x11_layout )
      return( ret );
      }
 
-/*
- * probe_settings()
- *
+/**
  * Probe keyboard and set local module data.
- *
- * @param 	-
- *
- * @return  -
- *
- * @see
  */
 
 define void probe_settings()
@@ -897,13 +871,12 @@ global define void Keyboard() {
 
 	// If this failed and we are in a running system try to restore from XF86Config.
 	//
-	if( !success && Mode::normal () )
+	if (!success && Mode::normal () && x11_setup_needed ())
 	{
 	    // Get the current layout from XF86Config and
 	    // set keyboard module accordingly.
-	    map kbs = (map)SCR::Read( .xf86config.keyboard );
-	    map keyboard_section = kbs[0,"Keyboard"]:$[];
-	    string current_layout = XkblayoutToKeyboard( keyboard_section["XkbLayout"]:"" );
+
+	    string current_layout = XLibAPI::getXkbLayout ();
 
 	    y2milestone("keyboard layout YaST2: %1", current_layout );
 
@@ -956,58 +929,42 @@ global define boolean Modified () {
 
 
 /**
- * xf86_update()
- *
- * Updates the keyboard settings in the XF86Config file.
- *
- * !!! only XFree 4 !!!
- *
- *
- * @param	-
- *
- * @return  true	- success
- *		false	- failure
- *
- * @see	create_info_map()
+ * Updates the X11 keyboard settings (using SaX library)
+ * @return boolean - success
  */
 
 global define boolean xf86_update() {
-    // Create the map for the isax agent.
-    //
-    map info = $[
-		 "PROTOCOL"       : [ Keyboard::Protocol, "Keyboard Protocol"],
-		 "XKBRULES"       : [ Keyboard::XkbRules, "Rule set, XFree86"],
-		 "XKBMODEL"	      : [ Keyboard::XkbModel, "Keyboard Model"],
-		 "XKBLAYOUT"      : [ Keyboard::XkbLayout, "Keyboard Layout"],
-		 "XKBVARIANT"     : [ Keyboard::XkbVariant, "Keyboard Variant"],
-		 "XKBKEYCODES"    : [ Keyboard::XkbKeyCodes, "Keycodes"],
-		 "LEFTALT"	      : [ Keyboard::LeftAlt, "Left alt"],
-		 "RIGHTALT"	      : [ Keyboard::RightAlt, "Right alt"],
-		 "SCROLLOCK"      : [ Keyboard::ScrollLock, "Scroll lock"],
-		 "RIGHTCTL"       : [ Keyboard::RightCtl, "Right control"]
-	];
 
-    y2milestone( "keyboard_info: <%1>", info );
+    y2milestone ("Storing current keyboard settings into X11 config file...");
 
-    // Call the isax agent to update the keyboard settings in the XF86Config file.
-    //
-    boolean ret = (boolean)SCR::Write( .xf86config.keyboard, info );
+    map xkbctrl2SaX	= $[
+	"ModeShift"	: "SaX::XKB_MAP_MODESHIFT",
+	"Compose"	: "SaX::XKB_MAP_COMPOSE",
+	"ModeLock"	: "SaX::XKB_MAP_MODELOCK",
+	"ScrollLock"	: "SaX::XKB_MAP_SCROLLLOCK",
+	"Meta"		: "SaX::XKB_MAP_META",
+	"Control"	: "SaX::XKB_MAP_CONTROL"
+    ];
 
-    return( ret );
+    XLibAPI::setXkbLayout (XkbLayout);
+    XLibAPI::setXkbModel (XkbModel);
+    XLibAPI::setXkbVariant (XkbLayout, XkbVariant);
+    XLibAPI::setXkbMappings ($[
+	"SaX::XKB_LEFT_ALT"	: xkbctrl2SaX[LeftAlt]:LeftAlt,
+	"SaX::XKB_RIGHT_ALT"	: xkbctrl2SaX[RightAlt]:RightAlt,
+	"SaX::XKB_SCROLL_LOCK"	: xkbctrl2SaX[ScrollLock]:ScrollLock,
+	"SaX::XKB_RIGHT_CTL"	: xkbctrl2SaX[RightCtl]:RightCtl
+    ]);
+    if (XkbOptions != "")
+	XLibAPI::setXkbOptions (splitstring (XkbOptions, ","));
+    return XLibAPI::Write ();
 }
 
 
 /**
- * Save()
- *
  * Save the current data into a file to be read after a reboot.
  *
- * @param	boolean update_x11
- *			true if XF86config should be updated
- *
- * @return  -
- *
- * @see	Restore()
+ * @param	boolean update_x11: true if X11 config should be updated
  */
 global define void Save (boolean update_x11) {
 
@@ -1139,12 +1096,9 @@ global define void Save (boolean update_x11) {
 	y2milestone("NOT marking keyboard as configured (no unique_key)");
 	}
 
-    // Change the respective XF86Config content to match the current settings.
-    // Do this only in the running system _and_ if XFree4 is installed.
-    //
+    // Adapt the X11 config file content to match the current settings
     if (x11_setup_needed() && update_x11 &&(Mode::normal() || Stage::reprobe()))
     {
-	y2milestone ("Storing current settings into XF86Config file (XFree4).");
 	xf86_update();
     }
 
@@ -1165,16 +1119,12 @@ global define string Name() {
 }
 
 /**
- * SetConsole()
- *
  * Set the console keyboard to the given keyboard language.
  *
  * @param	Keyboard language e.g.  "english-us"
  *
  * @return  The loadkeys command that has been executed to do it.
  *		(also stored in Keyboard::ckb_cmd)
- *
- * @see	SetX11()
  */
 global define string SetConsole (string keyboard) {
 
@@ -1202,16 +1152,12 @@ global define string SetConsole (string keyboard) {
 
 
 /**
- * SetX11()
- *
  * Set the X11 keyboard to the given keyboard language.
  *
  * @param	Keyboard language e.g.  "english-us"
  *
  * @return  The xkbset command that has been executed to do it.
  *		(also stored in Keyboard::xkb_cmd)
- *
- * @see	SetConsole()
  */
 global define string SetX11 (string keyboard) {
 
@@ -1468,7 +1414,7 @@ global define boolean CalledRestore() {
     string target_kbd	= Misc::CustomSysconfigRead (
 	"YAST_KEYBOARD", current_kbd, destdir + "/etc/sysconfig/keyboard");
     integer pos = find (target_kbd, ",");
-    if (pos>0)
+    if (pos != nil && pos > 0)
     {
 	target_kbd	= substring (target_kbd, 0, pos);
     }
@@ -1507,7 +1453,10 @@ Select the layout to use during update:"))),
 	any ret = UI::UserInput();
 
 	if (ret == `ok && (boolean) UI::QueryWidget (`id(`target), `Value))
+	{
 	    Set (target_kbd);
+	    user_decision	= true;
+	}
 
         UI::CloseDialog();
     }

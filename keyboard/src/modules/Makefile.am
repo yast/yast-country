@@ -1,7 +1,8 @@
 # Makefile.am for country/keyboard/src/modules
 
 module_DATA = 				\
-	Keyboard.ycp		
+	Keyboard.ycp			\
+	XLibAPI.pm
 
 EXTRA_DIST = $(module_DATA)
 
