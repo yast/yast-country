@@ -182,6 +182,8 @@ global define void Set (string lang) {
 	    });
 	}
 	name		= languages_map[lang, 0]:lang;
+	if (Mode::config ())
+	    name	= languages_map[lang, 4]:lang;
 	language	= lang;
 	Encoding::SetEncLang (language);
     }
@@ -202,12 +204,8 @@ global define void Set (string lang) {
 	}
 	AsciiFile::RewriteFile (yinf, "/etc/yast.inf");
 
-	if (!GetTextMode ())
-	{
-	    SCR::Write (.FvwmCommand.lang, language);
-	}
 	// update "name" for proposal when it cannot be shown correctly
-	else if (CJKLanguage (lang) && !CJKLanguage (preselected))
+	if (GetTextMode () && CJKLanguage (lang) && !CJKLanguage (preselected))
 	{
 	    name	= languages_map[lang, 1]:lang;
 	}
@@ -453,6 +451,11 @@ global define void WfmSetGivenLanguage (string lang) {
     else
     {
 	WFM::SetLanguage(lang);
+    }
+    if (Stage::initial () && !GetTextMode ())
+    {
+	// update font for windowmanager windows
+	SCR::Write (.FvwmCommand.lang, lang);
     }
 }
 

@@ -550,11 +550,7 @@ installation, but the selected language will be used for the new system."));
 		}
 		else if (ret == `next || (set_default && ret == `language))
 		{
-		    // Set Console font
-		    //
 		    Console::SelectFont (language);
-
-		    // Set it in YaST2
 		    Language::WfmSetLanguage ();
 		}
 	    }
