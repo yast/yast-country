@@ -220,6 +220,8 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Asia/Omsk"		: _("Omsk"),
 	// time zone
+	"Asia/Phnom_Penh"	: _("Phnom Penh"),
+	// time zone
 	"Asia/Qatar"		: _("Qatar"),
 	// time zone
 	"Asia/Saigon"		: _("Saigon"),

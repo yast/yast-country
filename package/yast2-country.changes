@@ -1,4 +1,21 @@
 -------------------------------------------------------------------
+Wed Jan  4 15:04:50 CET 2006 - jsuchome@suse.cz
+
+- fixed setting keyboard during update (CheckKeyboardDuringUpdate)
+- 2.13.10
+
+-------------------------------------------------------------------
+Tue Jan  3 18:02:18 CET 2006 - jsuchome@suse.cz
+
+- added support for Hindi and Khmer languages
+- retranslate language dialog only after `next or if it is the first
+  dialog in installation sequence
+- show list of primary languages translated to current primary
+  language if we're not in the first dialog of installation (F #300408)
+- use new libsax API for X11 Keyboard configuration
+  (XLibAPI wrapper added)
+
+-------------------------------------------------------------------
 Fri Dec 16 15:40:59 CET 2005 - jsuchome@suse.cz
 
 - updated to recent changes in yast2-bootloader: using GfxMenu module
