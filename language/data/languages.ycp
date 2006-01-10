@@ -156,8 +156,17 @@ $[
 		  "@euro" ],
   End of comment */
 
+  "hi_IN"	: [
+		    "हिन्दी",
+		    "Hindi",
+		    ".UTF-8",
+		    "",
+		    // language name
+		    _("Hindi")
+		],
+
   "hr_HR"	: [ "Hrvatski",
-		  "Croatian",
+		  "Hrvatski",
 		  ".UTF-8",
 		  "",
 		  // language name
@@ -191,6 +200,16 @@ $[
 		  ".eucJP",
 		  // language name
 		  _("Japanese") ],
+
+  "km_KH"	: [
+		    "ខ្មែរ",
+		    "Khmer",
+		    ".UTF-8",
+		    "",
+		    // language name
+		    _("Khmer")
+		],
+
 
   "ko_KR"       : [ "한글 ",
 		    "Korean",
