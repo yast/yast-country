@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan 23 13:54:12 CET 2006 - jsuchome@suse.cz
+
+- correct check if X keyboard configuration is needed (#144394)
+- 2.13.11
+
+-------------------------------------------------------------------
 Wed Jan  4 15:04:50 CET 2006 - jsuchome@suse.cz
 
 - fixed setting keyboard during update (CheckKeyboardDuringUpdate)
