@@ -510,7 +510,11 @@ global define string GetKeyboardForLanguage( string sys_language,
  */
 define boolean x11_setup_needed () {
 
-    return Arch::x11_setup_needed () && Package::Installed ("yast2-x11");
+    return
+	Arch::x11_setup_needed () &&
+	! (Linuxrc::serial_console() || Linuxrc::vnc() || Linuxrc::usessh()) &&
+	((Stage::initial () && !Linuxrc::text ()) ||
+	 Package::Installed ("yast2-x11"));
 }
 
 /**
