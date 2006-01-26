@@ -1,7 +1,7 @@
 @HEADER-COMMENT@
-# neededforbuild yast2-devel-packages yast2 yast2-devel yast2-perl-bindings
 
 @HEADER@
+BuildRequires:	yast2-devel yast2-devel-packages
 Requires:	yast2 yast2-trans-stats yast2-perl-bindings
 
 Provides:	yast2-config-environment
