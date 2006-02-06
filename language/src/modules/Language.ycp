@@ -94,7 +94,7 @@ map<string,integer> locales	= $[];
 map<string, list> languages_map = $[];
 
 // languages that cannot be correctly shown in text mode
-list cjk_languages	= [ "ja", "ko", "zh" ];
+list cjk_languages	= [ "ja", "ko", "zh", "hi", "km", "pa", "bn" ];
 
 /**
  * Check if the language is "CJK"

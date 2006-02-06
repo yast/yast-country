@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb  6 17:13:04 CET 2006 - jsuchome@suse.cz
+
+- included patch from Olaf Hering for inittab modification (#41623)
+- 2.13.12
+
+-------------------------------------------------------------------
 Mon Jan 23 13:54:12 CET 2006 - jsuchome@suse.cz
 
 - correct check if X keyboard configuration is needed (#144394)
