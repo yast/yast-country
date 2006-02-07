@@ -138,7 +138,7 @@
 		 * upgrade: disable old entries for serial console
 		 */
 		 SCR::Execute (.target.base,"sed -i '/^\\(hvc\\|hvsi\\|S[0-9]\\)/s@^.*@#&@' /etc/inittab");
-		 SCR::Execute (.target.bash,"grep -E '^cons:' || /bin/echo 'cons:1235:respawn:/sbin/smart_agetty -L 42 console' >> /etc/inittab");
+		 SCR::Execute (.target.bash,"grep -E '^cons:' /etc/inittab || /bin/echo 'cons:1235:respawn:/sbin/smart_agetty -L 42 console' >> /etc/inittab");
 		 SCR::Execute (.target.bash,"grep -Ew ^console /etc/securetty || /bin/echo console >> /etc/securetty");
 	}
     }
