@@ -3,7 +3,7 @@
  * Author:		Jiri Suchomel <jsuchome@suse.cz>
  * Purpose:		Simple language proposal.
  *
- * $Id: language_proposal.ycp 21221 2005-02-04 14:28:06Z jsuchome $
+ * $Id$
  */
 {
     import "Language";

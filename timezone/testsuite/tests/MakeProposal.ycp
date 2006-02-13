@@ -1,7 +1,7 @@
 /**
  * tests for Timezone::MakeProposal
  * Author:	jsuchome@suse.cz
- * $Id: Timezone.ycp 21839 2005-02-22 14:29:39Z jsuchome $
+ * $Id$
  */
 {
     // testedfiles: Timezone.ycp
