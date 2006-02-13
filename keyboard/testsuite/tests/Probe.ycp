@@ -3,7 +3,7 @@
  * Simulate that "dk" keyboard was set in linuxrc: see bug #118571
  *
  * Author:	Jiri Suchomel <jsuchome@suse.cz>
- * $Id: Keyboard.ycp 22461 2005-03-11 15:09:25Z jsuchome $
+ * $Id$
  */
 {
     // testedfiles: Keyboard.ycp

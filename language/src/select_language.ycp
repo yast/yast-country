@@ -15,7 +15,7 @@
  * Summary:
  *	This client shows main dialog for choosing the language.
  *
- * $Id: inst_language.ycp 25747 2005-10-03 10:00:24Z jsuchome $
+ * $Id$
  *
  */
 {

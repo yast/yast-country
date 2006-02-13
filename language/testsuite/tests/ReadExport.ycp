@@ -1,7 +1,7 @@
 /**
  * tests for Language.ycp autoyast functions: prepare for cloning
  * Author:	jsuchome@suse.cz
- * $Id: Language.ycp 22461 2005-03-11 15:09:25Z jsuchome $
+ * $Id$
  */
 {
     // testedfiles: Language.ycp

@@ -1,7 +1,7 @@
 /**
  * tests for Timezone.ycp autoyast functions
  * Author:	jsuchome@suse.cz
- * $Id: Timezone.ycp 22461 2005-03-11 15:09:25Z jsuchome $
+ * $Id$
  */
 {
     // testedfiles: Timezone.ycp
