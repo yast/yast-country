@@ -137,7 +137,7 @@
 		 * fresh install, all is easy: just add the getty to /dev/console
 		 * upgrade: disable old entries for serial console
 		 */
-		 SCR::Execute (.target.base,"sed -i '/^\\(hvc\\|hvsi\\|S[0-9]\\)/s@^.*@#&@' /etc/inittab");
+		 SCR::Execute (.target.bash,"sed -i '/^\\(hvc\\|hvsi\\|S[0-9]\\)/s@^.*@#&@' /etc/inittab");
 		 SCR::Execute (.target.bash,"grep -E '^cons:' /etc/inittab || /bin/echo 'cons:1235:respawn:/sbin/smart_agetty -L 42 console' >> /etc/inittab");
 		 SCR::Execute (.target.bash,"grep -Ew ^console /etc/securetty || /bin/echo console >> /etc/securetty");
 	}
