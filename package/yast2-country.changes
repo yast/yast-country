@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Sat Feb 25 22:40:43 CET 2006 - olh@suse.de
+
+- fix typo in last patch, causing two getty on console (#153555)
+
+-------------------------------------------------------------------
 Tue Feb  7 09:05:43 CET 2006 - jsuchome@suse.cz
 
 - fix the wrongly applied patch
