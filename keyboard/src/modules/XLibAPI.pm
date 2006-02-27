@@ -40,7 +40,7 @@ sub getXkbLayout {
 BEGIN{ $TYPEINFO{setXkbLayout} = ["function", "void", "string"]; }
 sub setXkbLayout {
 
-    my ($self, $layout)	= shift;
+    my ($self, $layout)	= @_;
     initialize ();
     XLib->setXkbLayout ($layout);
 }
@@ -49,7 +49,7 @@ sub setXkbLayout {
 BEGIN{ $TYPEINFO{setXkbModel} = ["function", "void", "string"]; }
 sub setXkbModel {
 
-    my ($self, $model)	= shift;
+    my ($self, $model)	= @_;
     initialize ();
     XLib->setXkbModel ($model);
 }
@@ -59,7 +59,7 @@ sub setXkbModel {
 BEGIN{ $TYPEINFO{setXkbVariant} = ["function", "void", "string", "string"]; }
 sub setXkbVariant {
 
-    my ($self, $layout, $variant)	= shift;
+    my ($self, $layout, $variant)	= @_;
     initialize ();
     XLib->setXkbVariant ($layout, $variant);
 }
@@ -69,7 +69,7 @@ sub setXkbVariant {
 BEGIN{ $TYPEINFO{setXkbMappings} = ["function", "void", ["map", "string", "string"]]; }
 sub setXkbMappings {
 
-    my ($self, $mappings)	= shift;
+    my ($self, $mappings)	= @_;
     initialize ();
     XLib->setXkbMappings ($mappings);
 }
@@ -79,7 +79,7 @@ sub setXkbMappings {
 BEGIN{ $TYPEINFO{setXkbOptions} = ["function", "void", ["list", "string"]]; }
 sub setXkbOptions {
 
-    my ($self, $options)	= shift;
+    my ($self, $options)	= @_;
     initialize ();
     XLib->setXkbOptions ($options);
 }
