@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 27 12:16:35 CET 2006 - jsuchome@suse.cz
+
+- reduced BuildRequires
+- 2.13.15
+
+-------------------------------------------------------------------
 Mon Feb 27 09:27:03 CET 2006 - jsuchome@suse.cz
 
 - fixed XLibAPI (passing parameters)

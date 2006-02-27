@@ -1,7 +1,7 @@
 @HEADER-COMMENT@
 
 @HEADER@
-BuildRequires:	yast2-devel yast2-devel-packages
+BuildRequires:	perl-XML-Writer update-desktop-files yast2-devtools yast2-testsuite yast2 yast2-perl-bindings
 Requires:	yast2 yast2-trans-stats yast2-perl-bindings
 
 Provides:	yast2-config-environment
@@ -31,7 +31,7 @@ Obsoletes:	y2t_inst-language
 Provides:	y2t_inst-environment
 Obsoletes:	y2t_inst-environment
 
-Summary:	Setting the keyboard
+Summary:	Setting the keyboard, language and time zone
 
 %description
 -
