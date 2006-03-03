@@ -824,9 +824,11 @@ global define void Probe() {
 		"dk"		: "danish",
 		"de-lat1-nd"	: "german",
 	    ]);
-	    if (map2yast[keytable]:map2yast[keytable + ".map.gz"]:"" != "")
+	    if (issubstring (keytable, ".map.gz"))
+		keytable = substring (keytable, 0, find (keytable, ".map.gz"));
+	    if (map2yast[keytable]:"" != "")
 	    {
-		Set (map2yast[keytable]:map2yast[keytable + ".map.gz"]:"");
+		Set (map2yast[keytable]:"");
 		// do not reset it in proposal
 		user_decision	= true;
 	    }
