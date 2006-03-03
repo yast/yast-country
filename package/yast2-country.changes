@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Mar  3 14:56:35 CET 2006 - jsuchome@suse.cz
+
+- correctly set the keymap after it was set in linuxrc (#154717)
+- 2.13.16
+
+-------------------------------------------------------------------
 Mon Feb 27 12:16:35 CET 2006 - jsuchome@suse.cz
 
 - reduced BuildRequires
