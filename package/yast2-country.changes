@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Mar 15 10:25:32 CET 2006 - jsuchome@suse.cz
+
+- do not call loadkeys on s390 (#158152, #144265)
+- 2.13.17
+
+-------------------------------------------------------------------
 Fri Mar  3 14:56:35 CET 2006 - jsuchome@suse.cz
 
 - correctly set the keymap after it was set in linuxrc (#154717)

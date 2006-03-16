@@ -1138,7 +1138,7 @@ global define string SetConsole (string keyboard) {
     {
 	y2milestone("Test mode - NOT setting keyboard" );
     }
-    else if (Arch::board_iseries ()) // workaround for bug #39025
+    else if (Arch::board_iseries () || Arch::s390())// workaround for bug #39025
     {
 	y2milestone ("not calling loadkeys on iseries");
     }
