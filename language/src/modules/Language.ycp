@@ -643,6 +643,32 @@ global define boolean PackagesCommit () {
     return true;
 }
 
+/**
+ * de_DE@UTF-8 -> "DE"
+ * @return country part of language
+ */
+global define string GetGivenLanguageCountry (string lang) {
+
+    string country	= lang;
+
+    if (country == nil || country == "")
+        country = default_language;
+    if (country != nil && country != "")
+    {
+        if (find (country, "@") != -1)
+            country = splitstring (country, "@") [0]:"";
+    }
+    if (country != nil && country != "")
+    {
+        if (find(country, "_") != -1)
+            country = splitstring (country, "_") [1]:"";
+	else
+	    country = toupper(country);
+    }
+
+    y2debug("country=%1",country);
+    return country;
+}
 
 
 /**
@@ -651,25 +677,9 @@ global define boolean PackagesCommit () {
  */
 global define string GetLanguageCountry() {
 
-    string lang = Language::language;
-    if (lang == nil || lang == "")
-        lang = Language::default_language;
-    if (lang != nil && lang != "")
-    {
-        if (find (lang, "@") != -1)
-            lang = splitstring (lang, "@") [0]:"";
-    }
-    if (lang != nil && lang != "")
-    {
-        if (find(lang, "_") != -1)
-            lang = splitstring (lang, "_") [1]:"";
-	else
-	    lang = toupper(lang);
-    }
-
-    y2debug("language=%1",lang);
-    return lang;
+    return GetGivenLanguageCountry (language);
 }
+
 
 /**
  * Returns true if translation for given language is not complete
