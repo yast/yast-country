@@ -729,7 +729,10 @@ global define boolean utc_only () {
 	PushVal ();
 
     if (haskey (settings, "hwclock"))
+    {
 	hwclock	= settings["hwclock"]:"UTC" == "UTC" ? "-u" : "--localtime";
+	user_hwclock	= true;
+    }
     Set (settings["timezone"]:timezone, true);
     return true;
   }
