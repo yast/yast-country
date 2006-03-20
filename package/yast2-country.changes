@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 20 16:08:17 CET 2006 - jsuchome@suse.cz
+
+- fixed setting of hwclock in autoinstallaton (#159461)
+- 2.13.19
+
+-------------------------------------------------------------------
 Mon Mar 20 13:27:46 CET 2006 - jsuchome@suse.cz
 
 - get the country for given timezone (#152414)
