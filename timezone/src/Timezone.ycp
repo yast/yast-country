@@ -339,6 +339,33 @@ global define void SetTimezoneForLanguage (string sys_language) {
 }
 
 /**
+ * Return the language code for given timezone (by reverse searching the
+ * "language -> timezone" map)
+ * @param timezone, if empty the current one is used
+ */
+global define string GetLanguageForTimezone (string tz)
+{
+    if (tz == "" || tz == nil)
+	tz	= timezone;
+
+    string lang	= "";
+    foreach (string code, string tmz, get_lang2tz(), {
+	if (tmz == tz && (lang == "" || !issubstring (lang, "_")))
+	    lang	= code;
+    });
+    return lang;
+}
+
+/**
+ * Return the country part of language code for given timezone
+ * @param timezone, if empty the current one is used
+ */
+global define string GetCountryForTimezone (string tz)
+{
+    return Language::GetGivenLanguageCountry (GetLanguageForTimezone(tz));
+}
+
+/**
  * Return translated country name of given timezone
  * @param timezone value (as saved in sysconfig/clock)
  */
