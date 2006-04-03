@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Apr  3 14:53:26 CEST 2006 - jsuchome@suse.cz
+
+- fixed setting of console font (#153190)
+- fixed Australian/NSW time zone (#162820)
+- 2.13.20
+
+-------------------------------------------------------------------
 Mon Mar 20 16:08:17 CET 2006 - jsuchome@suse.cz
 
 - fixed setting of hwclock in autoinstallaton (#159461)
