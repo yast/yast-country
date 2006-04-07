@@ -200,8 +200,9 @@ global define string UpdateTimezone (string tmz) {
 	"Australia/Canberra"	: "Australia/ACT",
 	"Australia/Brisbane"	: "Australia/Queensland",
 	"Australia/Hobart"	: "Australia/Tasmania",
-	"Australia/Perth"	: "Australia/West"
+	"Australia/Perth"	: "Australia/West",
 	// etc.
+	"America/Los_Angeles"	: "US/Pacific",
     ];
 
     if (haskey (tmz_duplicates, tmz))
@@ -330,7 +331,7 @@ global define string GetTimezoneForLanguage (string sys_language,
  */
 global define void SetTimezoneForLanguage (string sys_language) {
 
-    string tmz = GetTimezoneForLanguage (sys_language, "US/Mountain");
+    string tmz = GetTimezoneForLanguage (sys_language, "US/Eastern");
     y2debug ("language %1 proposed timezone %2", sys_language, tmz);
     if (tmz != "")
     {
@@ -514,7 +515,7 @@ global define string MakeProposal (boolean force_reset,
 	    // User has not yet chosen a timezone ==> follow language.
 	    //
 	    string local_timezone =
-		GetTimezoneForLanguage( Language::language, "US/Mountain");
+		GetTimezoneForLanguage( Language::language, "US/Eastern");
 
 	    if( local_timezone != "" )
 		{

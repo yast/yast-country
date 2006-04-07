@@ -40,7 +40,7 @@ $[
   "en_CA"		: "Canada/Eastern",
   "en_GB"		: "Europe/London",
   "en_IE"		: "Europe/Belfast",
-  "en_US"		: "US/Mountain",
+  "en_US"		: "US/Eastern",
   "en_NZ"		: "Pacific/Auckland",
   "en_IN"		: "Asia/Calcutta",
   "es_AR"		: "America/Buenos_Aires",

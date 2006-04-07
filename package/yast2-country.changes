@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr  7 09:08:36 CEST 2006 - jsuchome@suse.cz
+
+- US/Eastern is the default time zone for en_US (#163018)
+- 2.13.21 
+
+-------------------------------------------------------------------
 Mon Apr  3 14:53:26 CEST 2006 - jsuchome@suse.cz
 
 - fixed setting of console font (#153190)
