@@ -894,6 +894,66 @@ return ($[
 	    ]
 	 ]
     ],
+
+    "khmer": [
+	// keyboard layout
+	_("Khmer"),
+	$[
+	    "i386"	: $[
+		"pc104"	: $[
+		    "ncurses"	: "khmer.map.gz",
+		]
+	    ],
+	   "ia64"	: $[
+		"pc104"	: $[
+		    "ncurses"	: "khmer.map.gz",
+		]
+	    ],
+	   "x86_64"	: $[
+		"pc104"	: $[
+		    "ncurses"	: "khmer.map.gz",
+		]
+	    ],
+	   "alpha"	: $[
+		"pc104"	: $[
+		    "ncurses"	: "khmer.map.gz",
+		]
+	    ],
+	   "sparc"	: $[
+		"type4"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+		],
+		"type5"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+		],
+		"type5_euro": $[
+		    "ncurses"	: "sunkeymap.map.gz"
+		]
+	    ],
+	    "sparc64"	: $[
+		"type4"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+		],
+		"type5"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+		],
+		"type5_euro": $[
+		    "ncurses"	: "sunkeymap.map.gz"
+		],
+		"pc104"	: $[
+		    "ncurses"	: "khmer.map.gz",
+		]
+	    ],
+	    "ppc"	: $[
+		"macintosh" : $[
+		    "ncurses"	: "mac-us.map.gz"
+		],
+		"pc104"	: $[
+		    "ncurses"	: "khmer.map.gz"
+		]
+	    ]
+	 ]
+    ],
 ]);
 
 }
