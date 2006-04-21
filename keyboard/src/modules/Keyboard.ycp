@@ -1425,7 +1425,9 @@ global define boolean CalledRestore() {
 	target_kbd	= substring (target_kbd, 0, pos);
     }
 
-    if (target_kbd != current_kbd)
+    map keyboards = get_reduced_keyboard_db();
+
+    if (target_kbd != current_kbd && keyboards[target_kbd]:[] != [])
     {
 	y2milestone ("current_kbd: %1, target_kbd: %2", current_kbd, target_kbd);
 
