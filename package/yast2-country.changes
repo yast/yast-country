@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr 21 15:00:14 CEST 2006 - jsuchome@suse.cz
+
+- do not offer non-existent keyboard map (#168276)
+- 2.13.23
+
+-------------------------------------------------------------------
 Tue Apr 11 13:34:11 CEST 2006 - jsuchome@suse.cz
 
 - Khmer keyboard map added (#164381)
