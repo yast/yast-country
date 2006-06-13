@@ -42,7 +42,7 @@
 	"es_ES"		: "spanish",
 	"fi_FI"		: "finnish",
 	"fr_BE"		: "french",
-	"fr_CA"		: "french",
+	"fr_CA"		: "cn-latin1",
 	"fr_LU"		: "french",
 	"fr_FR"		: "french",
 	"fr_CH"		: "french-ch",
