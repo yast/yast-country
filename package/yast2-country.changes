@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jun 12 16:07:56 CEST 2006 - jsuchome@suse.cz
+
+- added Canadian (Multilingual) layout (#158951)
+- 2.13.24
+
+-------------------------------------------------------------------
 Fri Apr 21 15:00:14 CEST 2006 - jsuchome@suse.cz
 
 - do not offer non-existent keyboard map (#168276)

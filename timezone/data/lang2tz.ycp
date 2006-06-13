@@ -35,7 +35,7 @@ $[
   "de_LU"		: "Europe/Luxembourg",
   "de_BE"		: "Europe/Brussels",
   "el_GR"		: "Europe/Athens",
-  "en"			: "US/Pacific",
+  "en"			: "US/Eastern",
   "en_AU"		: "Australia/Sydney",
   "en_CA"		: "Canada/Eastern",
   "en_GB"		: "Europe/London",
