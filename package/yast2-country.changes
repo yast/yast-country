@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Jun 26 13:27:03 CEST 2006 - jsuchome@suse.cz
+
+- added some missing time zones (#173019)
+- fixed language name in autoyast (#180633)
+- changed the date format displayed in time zone dialog to
+  YYYY-MM-DD (#62312)
+- 2.13.25 
+
+-------------------------------------------------------------------
 Mon Jun 12 16:07:56 CEST 2006 - jsuchome@suse.cz
 
 - added Canadian (Multilingual) layout (#158951)
