@@ -54,6 +54,8 @@ $[ "name" : _("Europe"),
 	"Europe/Riga" : _("Latvia"),
 	"Europe/Rome" : _("Italy"),
 	// time zone
+	"Europe/San_Marino"	: _("San Marino"),
+	// time zone
 	"Europe/Samara"		: _("Russia (Samara)"),
 	"Europe/Sarajevo" : _("Bosnia & Herzegovina"),
 	"Europe/Skopje" : _("Macedonia"),
@@ -100,6 +102,8 @@ $[ "name" : _("Canada"),
 
 $[ "name" : _("Central and South America"),
    "entries" : $[
+	// time zone
+	"Brazil/Acre" : _("Brazil Acre"),
 	"Brazil/East" : _("Brazil East"),
 	"Brazil/West" : _("Brazil West"),
 	"Chile/Continental" : _("Chile Continental"),
@@ -112,6 +116,8 @@ $[ "name" : _("Central and South America"),
 	"America/Barbados" : _("Barbados"),
 	"America/Bogota" : _("Bogota"),
 	"America/Buenos_Aires" : _("Buenos Aires"),
+	// time zone
+	"America/Cayenne" : _("Cayenne"),
 	"America/Caracas" : _("Caracas"),
 	"America/Costa_Rica" : _("Costa Rica"),
 	"America/Dominica" : _("Dominica"),
@@ -119,13 +125,16 @@ $[ "name" : _("Central and South America"),
 	"America/Grenada" : _("Grenada"),
 	"America/Guadeloupe" : _("Guadeloupe"),
 	"America/Guatemala" : _("Guatemala"),
+	// time zone
+	"America/Guyana" : _("Guyana"),
 	"America/Lima" : _("Lima"),
 	"America/Managua" : _("Managua"),
 	"America/Martinique" : _("Martinique"),
 	"America/Panama" : _("Panama"),
 	"America/Puerto_Rico" : _("Puerto Rico"),
 	"America/Montevideo" : _("Uruguay"),
-	"America/Virgin" : _("Virgin"),
+	// time zone
+	"America/Virgin" : _("Virgin Islands"),
 	"Mexico/General" : _("Mexico General") ] ],
 
 $[
@@ -174,7 +183,11 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Hongkong"		: _("Hongkong"),
 	// time zone
+	"Asia/Kabul"		: _("Afghanistan"),
+	// time zone
 	"Asia/Anadyr"		: _("Anadyr"),
+	// time zone
+	"Asia/Baghdad"		: _("Baghdad"),
 	// time zone
 	"Asia/Bahrain"		: _("Bahrain"),
 	// time zone
@@ -330,7 +343,6 @@ $[ "name" : _("Global"),
 	"NZ-CHAT" : _("NZ-CHAT"),
 	"Navajo" : _("Navajo"),
 	"PST8PDT" : _("PST8PDT"),
-//	"ROC" : _("ROC"),
 	"UCT" : _("UCT"),
 	"UTC" : _("UTC"),
 	"Universal" : _("Universal"),

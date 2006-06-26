@@ -297,7 +297,12 @@ global define void ReadSysconfigValues () {
 global define void Language() {
 
     if (Mode::config ())
+    {
+	// read the translated name: bug #180633
+	read_languages_map();
+	name	= languages_map[language, 4]:language;
 	return;
+    }
 
     if (Stage::initial ())
     {
