@@ -30,12 +30,14 @@
     return
 $[
 
-  /* Highly incomplete, no active translator.
-  "ca_ES"	: [ "Català",
-		  "Catala",
-		  ".UTF-8",
-		  "@euro" ],
-  End of comment */
+  "ca_ES"	: [
+		    "Català",
+		    "Catala",
+		    ".UTF-8",
+		    "@euro",
+		    // language name
+		    _("Catalan")
+		],
 
   "bs_BA"	: [
 		    "Bosanski",
