@@ -352,6 +352,8 @@ Most PCs that also have other operating systems installed (such as Microsoft
 Windows) use local time.
 Machines that have only Linux installed are usually
 set to Universal Time Coordinated (UTC).
+If the hardware clock is set to UTC, your system can switch from standard time
+to daylight saving time and back automatically.
 </p>
 ");
     }
