@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jul 10 15:07:54 CEST 2006 - jsuchome@suse.cz
+
+- added support for Catalan language (#190072)
+- mention daylight savings time in the help text (#162948)
+- 2.13.26
+
+-------------------------------------------------------------------
 Mon Jun 26 13:27:03 CEST 2006 - jsuchome@suse.cz
 
 - added some missing time zones (#173019)
