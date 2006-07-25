@@ -326,6 +326,15 @@ $[
 		   // language name
 		   _("Ukrainian") ],
 
+  "vi_VN"       : [
+		  "Tiếng Việt",
+		  "Vietnamese",
+		  ".UTF-8",
+		  "",
+		  // language name
+		  _("Vietnamese") ],
+
+
   "zh_CN"       : [ "简体中文",
 		  "Simplified Chinese",
 		  ".UTF-8",
