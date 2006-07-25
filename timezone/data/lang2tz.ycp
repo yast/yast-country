@@ -91,6 +91,7 @@ $[
   "sv_SE"		: "Europe/Stockholm",
   "tr_TR"		: "Europe/Istanbul",
   "uk_UA"		: "Europe/Kiev",
+  "vi_VN"		: "Etc/GMT+7",
   "zh_CN"		: "Asia/Shanghai",
   "zh_TW"		: "Asia/Taipei",
 ]

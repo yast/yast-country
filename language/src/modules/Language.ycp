@@ -17,6 +17,7 @@ textdomain "country";
 
 import "AsciiFile";
 import "Encoding";
+import "FileUtils";
 import "Linuxrc";
 import "Misc";
 import "Mode";
@@ -694,19 +695,20 @@ global define boolean IncompleteTranslation (string lang) {
     if (!haskey (translation_status,lang))
     {
 	string file	= "/usr/lib/YaST2/trans/" + lang + ".status";
-	string ll	= splitstring (lang, "_") [0]:"";
-	if (ll != "")
-	    file	= "/usr/lib/YaST2/trans/" + ll + ".status";
+	if (!FileUtils::Exists (file))
+	{
+	    string ll	= splitstring (lang, "_") [0]:"";
+	    if (ll != "")
+		file	= "/usr/lib/YaST2/trans/" + ll + ".status";
+	}
 
 	string status	= (string) SCR::Read (.target.string, file);
 
-	if ((status == nil || status == "") && ll != "")
-	{
-	    file	= "/usr/lib/YaST2/trans/" + lang + ".status";
-	    status	= (string) SCR::Read (.target.string, file);
-	}
 	if (status != nil && status != "")
-	    translation_status[lang]	= tointeger (status);
+	{
+	    integer to_i		= tointeger (status);
+	    translation_status[lang]	= (to_i != nil) ? to_i : 0;
+	}
 	else
 	    translation_status[lang]	= 100;
     }
