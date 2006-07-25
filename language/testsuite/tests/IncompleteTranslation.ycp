@@ -22,6 +22,7 @@
     map R	= $[
 	"target" : $[
 	    "string"	: "",
+	    "stat"	: $[],
 	]
     ];
 
@@ -32,6 +33,7 @@
 
     // incomplete
     R["target","string"]	= "50";
+    R["target","stat"]		= $[ 1:2];
     TEST(``(Language::IncompleteTranslation ("en_GB")), [R,$[],$[]], nil);
 
     // no SCR call, cached from previous
