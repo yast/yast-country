@@ -2,6 +2,7 @@
 
 client_DATA 	=		\
     language_proposal.ycp	\
+    country_simple_proposal.ycp	\
     language_simple_proposal.ycp
 
 EXTRA_DIST = $(client_DATA)
