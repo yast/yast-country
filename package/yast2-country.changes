@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Jul 27 14:29:23 CEST 2006 - jsuchome@suse.cz
+
+- added common Overview proposal for language and keyboard
+- fixed time zone for Vietnamese
+- 2.13.28 
+
+-------------------------------------------------------------------
 Tue Jul 25 09:28:13 CEST 2006 - jsuchome@suse.cz
 
 - added support for Vietnamese language
