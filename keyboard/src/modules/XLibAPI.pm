@@ -3,8 +3,6 @@
 # wrapper for XLib.pm functions, accessing libsax
 #
 
-use lib "/usr/share/YaST2/modules";
-
 package XLibAPI;
 
 use strict;
