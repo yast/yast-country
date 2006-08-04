@@ -1,0 +1,481 @@
+/**
+ * File:
+ *	timezone/dialogs.ycp
+ *
+ * Authors:
+ *	Klaus   Kämpf <kkaempf@suse.de>
+ *	Michael Hager <mike@suse.de>
+ *	Stefan  Hundhammer <sh@suse.de>
+ *	Jiri Suchomel <jsuchome@suse.cz>
+ *
+ * Summary:
+ *	Dialogs for timezone and time configuration.
+ *
+ * $Id$
+ */
+{
+  textdomain "country";
+
+  import "Arch";
+  import "Label";
+  import "Mode";
+  import "Popup";
+  import "Stage";
+  import "Timezone";
+  import "Wizard";
+
+  symbol hwclock_s_initial = `none;
+
+  define void SetTimezone (symbol hwclock, string timezone, boolean really,
+			   boolean changed_time)
+  {
+
+    y2milestone( "SetTimezone hw %1, tz %2 really %3 tchanged %4 initial:%5",
+                 hwclock, timezone, really, changed_time, hwclock_s_initial );
+
+    // simulate the time change
+    if (!really && hwclock != hwclock_s_initial)
+	Timezone::diff = (hwclock==`hwclock_utc)?1:-1;
+    else
+	Timezone::diff = 0;
+
+    y2milestone( "SetTimezone diff %1", Timezone::diff );
+
+    Timezone::hwclock = (hwclock == `hwclock_utc) ? "-u" : "--localtime";
+    Timezone::Set (timezone, really);
+
+    // Redisplay date/time.
+    //
+    UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime (really, false));
+  };
+
+  /**
+   * Dialog for setinge system date and time
+   */
+  define boolean SetTimeDialog() {
+
+    // help text
+    string htext = _("<p>Here, change
+the system time and date.</p>
+");
+    // help text
+    htext = htext + _("<p>The current system time and date are displayed. Change them to the correct values and press 
+<b>Apply</b>.</p>
+");
+
+    map val = Timezone::GetDateTimeMap();
+
+    string hour		= val["hour"]:"";
+    string minute	= val["minute"]:"";
+    string second	= val["second"]:"";
+    string day		= val["day"]:"";
+    string month	= val["month"]:"";
+    string year		= val["year"]:"";
+
+    term dateterm	= `VBox (
+	`HBox (
+	    `HSpacing(1),
+	    // label text, do not change "DD-MM-YYYY"
+	    `Left (`Label(_("Current Date in DD-MM-YYYY Format")))
+	),
+	`HBox (
+	    `HSpacing(10),
+	    `TextEntry( `id(`day), `opt(`shrinkable), "", day),
+	    `HSpacing (),
+	    `TextEntry( `id(`month), `opt(`shrinkable), "", month),
+	    `HSpacing (),
+	    `TextEntry( `id(`year), `opt(`shrinkable), "", year),
+	    `HSpacing(30)
+	)
+    );
+    term timeterm	= `VBox (
+	`HBox (
+	    `HSpacing (1),
+	    // label text, do not change "HH:MM:SS"
+	    `Left (`Label (_("Current Time in HH:MM:SS Format")))
+	),
+	`HBox (
+	    `HSpacing(10),
+	    `TextEntry (`id(`hour), `opt(`shrinkable), "", hour),
+	    `HSpacing (),
+	    `TextEntry (`id(`minute), `opt(`shrinkable), "", minute),
+	    `HSpacing (),
+	    `TextEntry (`id(`second), `opt(`shrinkable), "", second),
+	    `HSpacing(30)
+	)
+    );
+    boolean dt_widgets = false;
+    if (UI::HasSpecialWidget (`Date) && UI::HasSpecialWidget (`Time))
+    {
+	dateterm	= `HBox (
+	    // label text
+	    `Date (`id(`date), _("Current Date"),
+		sformat ("%1-%2-%3", year, month, day)
+	    )
+	);
+	timeterm = `HBox (
+	    // label text
+	    `Time (`id(`time), _("Current Time"),
+		sformat ("%1:%2:%3", hour, minute, second)
+	    )
+	);
+	dt_widgets	= true;
+    }
+
+    UI::OpenDialog( `opt(`decorated),
+	`HBox(
+	    `HWeight(30, `RichText( htext )),
+	    `HStretch(),
+	    `HSpacing(1),
+	    `HWeight(70,
+		`VBox (
+		    `HBox (`HSpacing(55)),
+		    // heading text
+		    `Heading( _("Change System Date and Time") ),
+		    `VSpacing(2),
+		    `VStretch(),
+		    timeterm,
+		    `VSpacing(),
+		    `VStretch(),
+		    dateterm,
+		    `VSpacing(2),
+		    `VStretch(),
+		    `HBox(
+		        // button text
+			`PushButton(`id(`apply), `opt(`default), _("&Apply")),
+			`PushButton(`id(`cancel), Label::CancelButton() )
+		    ),
+		    `VSpacing()
+		)
+	    )
+    ));
+
+
+    if (!dt_widgets)
+    {
+	foreach (symbol widget, [`hour, `minute, `second, `day, `month, `year],{
+	    UI::ChangeWidget (`id(widget), `ValidChars, "0123456789");
+	    UI::ChangeWidget (`id(widget), `InputMaxLength,
+		widget == `year ? 4 : 2);
+	});
+    }
+    any ret = `cancel;
+    repeat
+    {
+	ret = UI::UserInput();
+	y2debug ("UserInput ret:%1", ret );
+	if (ret == `apply)
+	{
+	    if (dt_widgets)
+	    {
+		list datel	= splitstring (
+		    (string) UI::QueryWidget (`id(`date), `Value), "-");
+		year	= datel[0]:"";
+		month	= datel[1]:"";
+		day	= datel[2]:"";
+		list timel	= splitstring (
+		    (string) UI::QueryWidget (`id(`time), `Value), ":");
+		hour	= timel[0]:"";
+		minute	= timel[1]:"";
+		second	= timel[2]:"";
+	    }
+	    else
+	    {
+		hour	= (string) UI::QueryWidget(`id(`hour), `Value );
+		minute	= (string) UI::QueryWidget(`id(`minute), `Value );
+		second	= (string) UI::QueryWidget(`id(`second), `Value );
+		day	= (string) UI::QueryWidget(`id(`day), `Value );
+		month	= (string) UI::QueryWidget(`id(`month), `Value );
+		year	= (string) UI::QueryWidget(`id(`year), `Value );
+	    }
+	    if (!Timezone::CheckTime (hour, minute, second))
+	    {
+		string tmp = sformat( "%1:%2:%3", hour, minute, second );
+		// popup text, %1 is entered value
+		tmp = sformat( _("Invalid time (HH:MM:SS) %1.
+Enter the correct time.
+"), tmp );
+		Popup::Error( tmp );
+		ret = `retry;
+	    }
+	    else if( !Timezone::CheckDate( day, month, year ))
+	    {
+		string tmp = sformat( "%1-%2-%3", day, month, year );
+		// popup text, %1 is entered value
+		tmp = sformat( _("Invalid date (DD-MM-YYYY) %1.
+Enter the correct date.
+"), tmp );
+		Popup::Error( tmp );
+		ret = `retry;
+	    }
+	    else
+	    {
+		Timezone::SetTime( year, month, day, hour, minute, second );
+	    }
+	}
+    }
+    until( ret==`apply || ret==`cancel );
+    UI::CloseDialog();
+    return( ret==`apply );
+  };
+
+  /**
+   * Main dialog for time zone configuration
+   * @param args arguments passwd from the called (back/next buttons etc.)
+   */
+  define symbol TimezoneDialog (map args) {
+
+    boolean first_run = args["first_run"]:"no" == "yes";
+    // inst_timezone as a part of installation sequence
+    if (first_run && Stage::initial ())
+    {
+	import "Storage";
+	if (size (Storage::GetWinPrimPartitions(Storage::GetTargetMap()))>0)
+	{
+	    Timezone::windows_partition = true;
+	    y2milestone ("windows partition found: assuming local time");
+	}
+
+	if (Timezone::windows_partition || Arch::board_mac ())
+	{
+	    Timezone::hwclock = "--localtime";
+	}
+    }
+
+    // get current timezone and clock setting
+    //
+    boolean changed_time = false;
+    string timezone	= Timezone::timezone;
+    string timezone_old = timezone;
+    string hwclock	= Timezone::hwclock;
+
+    y2milestone ( "timezone_old %1", timezone_old );
+
+    timezone		= Timezone::UpdateTimezone (timezone);
+
+    // Initially set the current timezone to establish a consistent state.
+    //
+    integer sel = Timezone::Set (timezone, true);
+
+    boolean utc_only = Timezone::utc_only ();
+    y2milestone( "utc_only %1", utc_only );
+
+    Timezone::PushVal();
+
+    /* ----------------------------------------------------------------------
+     * Build dialog
+     * ----------------------------------------------------------------------*/
+
+    // Assign system date and time.
+    //
+    string date = Timezone::GetDateTime(true, false);
+
+    // build up timezone selection box
+    //
+    term timezonesel = `ReplacePoint (`id(`tzsel),
+	// title for selection box 'timezone'
+	`SelectionBox (`id (`timezone), `opt(`notify), _("Time &Zone")));
+
+    term region = `SelectionBox (
+	// label text
+	`id(`region),`opt(`notify,`immediate), _("&Region"),Timezone::Region());
+
+    term settime = `Empty();
+
+    if (!Arch::s390 () && !Mode::config ())
+    {
+	// button text
+	settime = `PushButton (`id(`settime), _("Cha&nge..."));
+    }
+
+    term contents = `MarginBox (
+	`leftMargin (2), `rightMargin (2), `topMargin (0), `bottomMargin (0.5),
+	`VBox (
+	    `HBox (
+		region,
+		`HSpacing (),
+		timezonesel
+	    ),
+	    `VSpacing (0.5),
+	    `VSquash (`HBox (
+		`HWeight (1,
+		    utc_only ? `Empty () :
+		    `ComboBox (
+			`id (`hwclock), `opt(`hstretch, `notify),
+			    // combo box label
+			    _("&Hardware Clock Set To"),
+			    [
+			    // ComboBox entry: clock set to local time
+			    `item (`id (`hwclock_localtime), _("Local Time"),
+				(hwclock == "--localtime")),
+
+			    // ComboBox entry: clock set UTC
+			    `item (`id(`hwclock_utc ), _("UTC"),
+				(hwclock == "-u"))
+			    ]
+		    )
+		),
+		`HSpacing (1),
+		// frame label
+		`HWeight (1, `Frame (_("Time and Date"), `MarginBox (
+		    `leftMargin (1.2), `rightMargin (1),
+		    `topMargin (0.2), `bottomMargin (0.2),
+		    `HBox (
+			`Label (`id(`date), `opt(`outputField,`hstretch), date),
+			`HStretch(),
+			settime
+		    )
+		)))
+	    ))
+	)
+    );
+
+    // help for timezone screen
+    string help_text = _("
+<p><b><big>Time Zone and Clock Settings</big></b></p>") +
+
+    // help for timezone screen
+    _("<p>
+To select the time zone to use in your system, first select the <b>Region</b>.
+In <b>Time Zone</b>, then select the appropriate time zone, country, or 
+region from those available.
+</p>
+");
+
+    if (!utc_only)
+    {
+	// help for time calculation basis:
+	// hardware clock references local time or UTC?
+	help_text = help_text + _("<p>
+Specify whether your machine is set to local time or UTC in <b>Hardware Clock Set To</b>.
+Most PCs that also have other operating systems installed (such as Microsoft
+Windows) use local time.
+Machines that have only Linux installed are usually
+set to Universal Time Coordinated (UTC).
+If the hardware clock is set to UTC, your system can switch from standard time
+to daylight saving time and back automatically.
+</p>
+");
+    }
+
+
+    // general help trailer
+    help_text = help_text + _("<p>
+If the current time is not correct, use <b>Change Time or Date</b> to adjust it.
+</p>");
+
+    // Screen title for timezone screen
+    Wizard::SetContents (_("Clock and Time Zone"), contents,
+	help_text, args["enable_back"]:true, args["enable_next"]:true);
+
+    Wizard::SetDesktopIcon ("timezone");
+    if ( Stage::initial () || Stage::firstboot ())
+    {
+	Wizard::SetTitleIcon ("yast-timezone");
+    }
+
+    symbol hwclock_s = (hwclock=="-u") ? `hwclock_utc : `hwclock_localtime;
+    symbol hwclock_s_old = hwclock_s;
+    hwclock_s_initial = hwclock_s;
+
+    UI::ChangeWidget (`id(`region), `CurrentItem, sel);
+    UI::ReplaceWidget (`id(`tzsel),
+	`SelectionBox ( `id(`timezone), `opt(`notify),
+	    // label text
+	    _("Time &Zone"), Timezone::Selection (sel))
+    );
+    UI::ChangeWidget (`id(`timezone), `CurrentItem, Timezone::timezone);
+
+    UI::SetFocus (`id(`region));
+
+    symbol ret = nil;
+
+    repeat
+    {
+	ret = (symbol) Wizard::UserInput();
+
+	y2debug( "ret %1", ret );
+
+	if (!Mode::config () && ret == `abort && Popup::ConfirmAbort(`painless))
+	{
+	    break;
+	}
+	if (ret == `region)
+	{
+	    integer num = (integer)UI::QueryWidget( `id(`region), `CurrentItem);
+	    y2milestone ("selected region %1", num);
+	    UI::ReplaceWidget (`id(`tzsel),
+		`SelectionBox ( `id(`timezone), `opt(`notify),
+		    // label text
+		    _("Time &Zone"), Timezone::Selection (num))
+	    );
+	    if (num == sel)
+	    {
+		UI::ChangeWidget (`id(`timezone), `CurrentItem, timezone);
+	    }
+	}
+	else if (ret == `settime)
+	{
+	    if (SetTimeDialog())
+	    {
+		Timezone::diff = 0;
+		UI::ChangeWidget(`id(`date), `Value,
+		    Timezone::GetDateTime (false, false));
+		changed_time = true;
+	    }
+	}
+	else if (ret == `next || ret == `timezone || ret == `hwclock)
+	{
+	    // Get current settings.
+	    // UTC vs. localtime, only if needed
+	    //
+	    hwclock_s = `hwclock_utc;
+	    if (!utc_only)
+	    {
+		hwclock_s = (symbol)UI::QueryWidget( `id(`hwclock), `Value );
+	    }
+	    if (ret == `timezone)
+	    {
+		sel = (integer)UI::QueryWidget( `id(`region), `CurrentItem );
+	    }
+
+	    timezone = (string)UI::QueryWidget( `id(`timezone ), `CurrentItem );
+
+	    if (timezone == nil || size(timezone) == 0)
+	    {
+	        // popup text
+		Popup::Error( _("Select a valid time zone.") );
+		ret = `again;
+		timezone = timezone_old;
+	    }
+	    y2milestone ("timezone %1 ret %2", timezone, ret);
+
+	    if (timezone != timezone_old || hwclock_s != hwclock_s_old || ret == `next)
+	    {
+		if (timezone != timezone_old)
+		{
+		    changed_time = true;
+		}
+		timezone_old	= timezone;
+		hwclock_s_old	= hwclock_s;
+		SetTimezone (hwclock_s, timezone, ret==`next, changed_time);
+	    }
+
+	    if (ret == `next)
+	    {
+		// User wants to keep his changes.
+		// Set user_decision flag in timezone module.
+		//
+		Timezone::user_decision	= true;
+		Timezone::user_hwclock	= true;
+	    }
+	}
+    } until ( ret == `next || ret == `back || ret == `cancel );
+
+    if (ret != `next)
+    {
+	Timezone::PopVal();
+    }
+    return ret;
+  }
+}

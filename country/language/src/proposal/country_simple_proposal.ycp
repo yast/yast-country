@@ -1,0 +1,60 @@
+/**
+ * File:		country_simple_proposal.ycp
+ * Author:		Jiri Suchomel <jsuchome@suse.cz>
+ * Purpose:		Proposal for both language and keyboard layout settings.
+ *
+ * $Id$
+ */
+{
+    textdomain "country";
+
+    import "HTML";
+    import "Keyboard";
+    import "Language";
+
+    string func  = (string) WFM::Args(0);
+    map    param = (map) WFM::Args(1);
+    map    ret   = $[];
+
+    if ( func == "MakeProposal" )
+    {
+	boolean force_reset      = param["force_reset"     ]:false;
+	boolean language_changed = param["language_changed"]:false;
+	ret = $[
+	    "preformatted_proposal"	:
+		Language::MakeSimpleProposal () +
+		// summary label
+		HTML::List ([ sformat (_("Keyboard Layout: %1"),
+		    Keyboard::MakeProposal (force_reset, language_changed))
+		]),
+	    "language_changed"	: false,
+	    "links"	: [ "country--language", "country--keyboard" ]
+	];
+    }
+    else if ( func == "Description" )
+    {
+	ret	= $[
+	    "rich_text_raw_title"	:
+		// rich text label (<%1>-<%3> are HTML tags, leave untouched)
+		sformat (_("<%1>Language<%2> and <%3>Keyboard Layout<%2>"),
+		    "a href=\"country--language\"", "/a",
+		    "a href=\"country--keyboard\""
+		),
+	    "menu_titles"		: [
+		// menu button label
+		$[ "id"	: "country--language", "title" : _("&Language") ],
+		// menu button label
+		$[ "id"	: "country--keyboard", "title" : _("&Keyboard Layout") ]
+	    ],
+	    "id"			: "country",
+	];
+    }
+    else if (func == "AskUser")
+    {
+	if (param["chosen_id"]:"" == "country--keyboard")
+	    ret = (map) WFM::CallFunction ("keyboard_proposal", [func, param]);
+	else
+	    ret = (map) WFM::CallFunction ("language_proposal", [func, param]);
+    }
+    return ret;
+}

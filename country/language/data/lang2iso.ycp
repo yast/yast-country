@@ -1,0 +1,31 @@
+/*
+ * Summary:
+ *      Since Rel. 8.0 we are using the ISO-codes for language identification.
+ *      In case of an update from an older system we have to translate the old
+ *      coding into the new one. The following map is used for this in the
+ *      Language module.
+ *
+ * Maintainer:
+ *      Thomas Fehr <fehr@suse.de>
+ *
+ * $Id$
+ */
+
+      $[
+	"english"	: "en_US",
+	"german"	: "de_DE",
+	"french"	: "fr_FR",
+	"italian"	: "it_IT",
+	"spanish"	: "es_ES",
+	"dutch"		: "nl_NL",
+	"portuguese"	: "pt_PT",
+	"brazilian"	: "pt_BR",
+	"hungarian"	: "hu_HU",
+	"polish"	: "pl_PL",
+	"greek"		: "el_GR",
+	"turkish"	: "tr_TR",
+	"russian"	: "ru_RU",
+	"czech"		: "cs_CZ",
+	"japanese"	: "ja_JP",
+	"korean"	: "ko_KR"
+      ]

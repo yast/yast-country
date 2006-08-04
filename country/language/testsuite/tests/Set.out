@@ -1,0 +1,7 @@
+Read	.target.size "/etc/sysconfig/language" 1
+Return	en_US.UTF-8
+Execute	.target.bash_output "/usr/bin/locale -a" $[]
+Return	nil
+Return	de_DE.UTF-8
+Return	nil
+Return	de_DE@euro

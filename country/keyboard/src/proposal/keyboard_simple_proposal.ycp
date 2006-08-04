@@ -1,0 +1,15 @@
+/**
+ * File:	keyboard_simple_proposal.ycp
+ * Author:	Jiri Suchomel <jsuchome@suse.cz>
+ * Purpose:	Simple keyboard proposal (for overview tab)
+ * $Id$
+ */
+{
+    textdomain "country";
+
+
+    string func  = (string)WFM::Args(0);
+    map    param = (map)WFM::Args(1);
+    map    ret   = (map) WFM::CallFunction ("keyboard_proposal", [func, param]);
+    return ret;
+}

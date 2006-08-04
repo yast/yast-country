@@ -1,0 +1,83 @@
+/**
+ * Autoinstallation client for keyboard setting
+ * Author	: Jiri Suchomel <jsuchome@suse.cz>
+ *
+ * $Id$
+ */
+{
+    import "Arch";
+    import "Keyboard";
+    import "Wizard";
+
+    include "keyboard/dialogs.ycp";
+
+    any ret = nil;
+    string func = "";
+    map<string,any> param = $[];
+
+    if(size(WFM::Args()) > 0 && is(WFM::Args(0), string)) {
+    func = (string) WFM::Args(0);
+    if(size(WFM::Args()) > 1 && is(WFM::Args(1), map))
+	param = (map<string,any>)WFM::Args(1);
+    }
+
+    y2debug ("func=%1", func);
+    y2debug ("param=%1", param);
+
+    if (func == "Change" && !Arch::s390 ()) {
+
+	Wizard::CreateDialog();
+	Wizard::HideAbortButton();
+
+	ret = KeyboardDialog ($[]);
+
+	Wizard::CloseDialog ();
+    }
+    else if(func == "Import") {
+	ret = Keyboard::Import (param);
+    }
+    else if(func == "Summary") {
+	ret = Keyboard::Summary();
+    }
+    else if (func == "Reset") {
+	Keyboard::Import ($[
+	    "keymap"		: Keyboard::keyboard_on_entry,
+	    "keyboard_values"	: Keyboard::expert_on_entry,
+	]);
+	Keyboard::ExpertSettingsChanged	= false;
+	ret =  $[];
+    }
+    else if (func == "Read") {
+	// If we would need reading from system in Mode::config, Restore is necessary
+	if (Mode::config ())
+	    Keyboard::Restore ();
+	ret = Keyboard::Read();
+    }
+    else if (func == "Export") {
+	ret = Keyboard::Export ();
+    }
+    else if (func == "Write") {
+	ret = Keyboard::Save (true);
+    }
+    /**
+     * Return if configuration  was changed
+     * return boolean
+     */
+    else if (func == "GetModified") {
+	ret = Keyboard::Modified ();
+    }
+    /**
+     * Set all modified flags
+     * return boolean
+     */
+    else if (func == "SetModified") {
+	Keyboard::ExpertSettingsChanged	= true;// hook (no general 'modified' variable)
+	ret = true;
+    }
+
+    y2debug("ret=%1", ret);
+    y2milestone("keyboard auto finished");
+    y2milestone("----------------------------------------");
+
+    return ret;
+}

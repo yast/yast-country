@@ -1,0 +1,15 @@
+/**
+ * Client for initial language setting (part of installation sequence)
+ * Author:	Jiri Suchomel <jsuchome@suse.cz>
+ * $Id$
+ */
+{
+    import "GetInstArgs";
+
+    map args = GetInstArgs::argmap();
+
+    if (args["first_run"]:"yes" != "no")
+	args["first_run"]  = "yes";
+
+    return WFM::CallFunction ("select_language", [args]);
+}

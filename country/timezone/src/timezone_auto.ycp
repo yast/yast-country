@@ -1,0 +1,76 @@
+/**
+ * Autoinstallation client for timezone setting
+ * Author	: Jiri Suchomel <jsuchome@suse.cz>
+ *
+ * $Id$
+ */
+{
+    import "Mode";
+    import "Timezone";
+
+    include "timezone/dialogs.ycp";
+
+    any ret = nil;
+    string func = "";
+    map<string,any> param = $[];
+
+    if(size(WFM::Args()) > 0 && is(WFM::Args(0), string)) {
+    func = (string) WFM::Args(0);
+    if(size(WFM::Args()) > 1 && is(WFM::Args(1), map))
+	param = (map<string,any>)WFM::Args(1);
+    }
+
+    y2debug ("func=%1", func);
+    y2debug ("param=%1", param);
+
+    if (func == "Change") {
+	Wizard::CreateDialog();
+	Wizard::HideAbortButton();
+
+	ret = TimezoneDialog ($["enable_back" : true, "enable_next" : true ]);
+
+	Wizard::CloseDialog ();
+    }
+    else if(func == "Import") {
+	ret = Timezone::Import (param);
+    }
+    else if(func == "Summary") {
+	ret = Timezone::Summary();
+    }
+    else if (func == "Reset") {
+	Timezone::PopVal ();
+	Timezone::modified	= false;
+	ret =  $[];
+    }
+    else if (func == "Read") {
+	ret = Timezone::Read();
+    }
+    else if (func == "Export") {
+	ret = Timezone::Export ();
+    }
+    else if (func == "Write") {
+	ret = Timezone::Save();
+    }
+    /**
+     * Return if configuration  was changed
+     * return boolean
+     */
+    else if (func == "GetModified") {
+	ret = Timezone::Modified ();
+    }
+    /**
+     * Set all modified flags
+     * return boolean
+     */
+    else if (func == "SetModified") {
+	Timezone::modified	= true;
+	ret = true;
+    }
+
+    y2debug("ret=%1", ret);
+    y2milestone("timezone auto finished");
+    y2milestone("----------------------------------------");
+
+    return ret;
+
+}

@@ -1,0 +1,1423 @@
+-------------------------------------------------------------------
+Fri Aug  4 12:46:56 CEST 2006 - mvidner@suse.cz
+
+- Removed a Perl search path that is added elsewhere already
+  and here just breaks compilation in some cases (#197099).
+- 2.13.29
+
+-------------------------------------------------------------------
+Thu Jul 27 14:29:23 CEST 2006 - jsuchome@suse.cz
+
+- added common Overview proposal for language and keyboard
+- fixed time zone for Vietnamese
+- 2.13.28 
+
+-------------------------------------------------------------------
+Tue Jul 25 09:28:13 CEST 2006 - jsuchome@suse.cz
+
+- added support for Vietnamese language
+- 2.13.27 
+
+-------------------------------------------------------------------
+Mon Jul 10 15:07:54 CEST 2006 - jsuchome@suse.cz
+
+- added support for Catalan language (#190072)
+- mention daylight savings time in the help text (#162948)
+- 2.13.26
+
+-------------------------------------------------------------------
+Mon Jun 26 13:27:03 CEST 2006 - jsuchome@suse.cz
+
+- added some missing time zones (#173019)
+- fixed language name in autoyast (#180633)
+- changed the date format displayed in time zone dialog to
+  YYYY-MM-DD (#62312)
+- 2.13.25 
+
+-------------------------------------------------------------------
+Mon Jun 12 16:07:56 CEST 2006 - jsuchome@suse.cz
+
+- added Canadian (Multilingual) layout (#158951)
+- 2.13.24
+
+-------------------------------------------------------------------
+Fri Apr 21 15:00:14 CEST 2006 - jsuchome@suse.cz
+
+- do not offer non-existent keyboard map (#168276)
+- 2.13.23
+
+-------------------------------------------------------------------
+Tue Apr 11 13:34:11 CEST 2006 - jsuchome@suse.cz
+
+- Khmer keyboard map added (#164381)
+- 2.13.22 
+
+-------------------------------------------------------------------
+Fri Apr  7 09:08:36 CEST 2006 - jsuchome@suse.cz
+
+- US/Eastern is the default time zone for en_US (#163018)
+- 2.13.21 
+
+-------------------------------------------------------------------
+Mon Apr  3 14:53:26 CEST 2006 - jsuchome@suse.cz
+
+- fixed setting of console font (#153190)
+- fixed Australian/NSW time zone (#162820)
+- 2.13.20
+
+-------------------------------------------------------------------
+Mon Mar 20 16:08:17 CET 2006 - jsuchome@suse.cz
+
+- fixed setting of hwclock in autoinstallaton (#159461)
+- 2.13.19
+
+-------------------------------------------------------------------
+Mon Mar 20 13:27:46 CET 2006 - jsuchome@suse.cz
+
+- get the country for given timezone (#152414)
+- 2.13.18 
+
+-------------------------------------------------------------------
+Wed Mar 15 10:25:32 CET 2006 - jsuchome@suse.cz
+
+- do not call loadkeys on s390 (#158152, #144265)
+- 2.13.17
+
+-------------------------------------------------------------------
+Fri Mar  3 14:56:35 CET 2006 - jsuchome@suse.cz
+
+- correctly set the keymap after it was set in linuxrc (#154717)
+- 2.13.16
+
+-------------------------------------------------------------------
+Mon Feb 27 12:16:35 CET 2006 - jsuchome@suse.cz
+
+- reduced BuildRequires
+- 2.13.15
+
+-------------------------------------------------------------------
+Mon Feb 27 09:27:03 CET 2006 - jsuchome@suse.cz
+
+- fixed XLibAPI (passing parameters)
+- 2.13.14
+
+-------------------------------------------------------------------
+Sat Feb 25 22:40:43 CET 2006 - olh@suse.de
+
+- fix typo in last patch, causing two getty on console (#153555)
+
+-------------------------------------------------------------------
+Tue Feb  7 09:05:43 CET 2006 - jsuchome@suse.cz
+
+- fix the wrongly applied patch
+- 2.13.13
+
+-------------------------------------------------------------------
+Mon Feb  6 17:13:04 CET 2006 - jsuchome@suse.cz
+
+- included patch from Olaf Hering for inittab modification (#41623)
+- 2.13.12
+
+-------------------------------------------------------------------
+Mon Jan 23 13:54:12 CET 2006 - jsuchome@suse.cz
+
+- correct check if X keyboard configuration is needed (#144394)
+- 2.13.11
+
+-------------------------------------------------------------------
+Wed Jan  4 15:04:50 CET 2006 - jsuchome@suse.cz
+
+- fixed setting keyboard during update (CheckKeyboardDuringUpdate)
+- 2.13.10
+
+-------------------------------------------------------------------
+Tue Jan  3 18:02:18 CET 2006 - jsuchome@suse.cz
+
+- added support for Hindi and Khmer languages
+- retranslate language dialog only after `next or if it is the first
+  dialog in installation sequence
+- show list of primary languages translated to current primary
+  language if we're not in the first dialog of installation (F #300408)
+- use new libsax API for X11 Keyboard configuration
+  (XLibAPI wrapper added)
+
+-------------------------------------------------------------------
+Fri Dec 16 15:40:59 CET 2005 - jsuchome@suse.cz
+
+- updated to recent changes in yast2-bootloader: using GfxMenu module
+- 2.13.9
+
+-------------------------------------------------------------------
+Tue Nov 29 08:33:51 CET 2005 - jsuchome@suse.cz
+
+- adapted to correct tointeger behaviour (#115560), added tests
+- 2.13.8 
+
+-------------------------------------------------------------------
+Mon Nov  7 11:15:52 CET 2005 - jsuchome@suse.cz
+
+- adapted to standard autoyast API (#131745)
+- install language-dependent packages during autoinstallation
+- 2.13.7
+
+-------------------------------------------------------------------
+Wed Nov  2 12:29:08 CET 2005 - jsuchome@suse.cz
+
+- support for secondary languages in command-line mode (#131746)
+- function for checking and setting keyboard layout during update (#71069)
+- 2.13.6
+
+-------------------------------------------------------------------
+Thu Oct 20 14:05:02 CEST 2005 - jsuchome@suse.cz
+
+- added support for Croatian (#115341)
+- preserve the list of secondary languages during update (#71935)
+- 2.13.5
+
+-------------------------------------------------------------------
+Fri Oct  7 11:17:46 CEST 2005 - jsuchome@suse.cz
+
+- timezone: added Russia region and rest of russian time zones (#120618)
+- 2.13.4
+
+-------------------------------------------------------------------
+Wed Oct  5 16:14:41 CEST 2005 - jsuchome@suse.cz
+
+- code cleanup: split the clients for one tasks only, use include files,
+  create autoinstallation clients (#104372)
+- 2.13.3
+
+-------------------------------------------------------------------
+Tue Oct  4 14:29:39 CEST 2005 - jsuchome@suse.cz
+
+- "dutch" keyboard layout should be really dutch - nl.map.gz (#119639)
+- 2.13.2
+
+-------------------------------------------------------------------
+Mon Oct  3 11:42:19 CEST 2005 - jsuchome@suse.cz
+
+- added a possibility to skip initial language selection
+  (originaly part of installation.ycp)
+- 2.13.1 
+
+-------------------------------------------------------------------
+Fri Sep 30 15:00:45 CEST 2005 - jsuchome@suse.cz
+
+- do not ignore the keyboard layout set in linuxrc (#118571)
+- 2.13.0
+
+-------------------------------------------------------------------
+Tue Sep 13 13:55:34 CEST 2005 - jsuchome@suse.cz
+
+- new languages supported: Serbian, Bosnian (#116724)
+- 2.12.17
+
+-------------------------------------------------------------------
+Mon Sep 12 07:23:43 CEST 2005 - jsuchome@suse.cz
+
+- fixed testsuite causing package not to build
+- 2.12.16 
+
+-------------------------------------------------------------------
+Fri Sep  9 17:33:15 CEST 2005 - jsuchome@suse.cz
+
+- fixed loadkeys command for some keyboards (#116143)
+- set the keyboard in constructor if language was preselected (#113664)
+- 2.12.15
+
+-------------------------------------------------------------------
+Thu Aug 25 17:37:41 CEST 2005 - jsuchome@suse.cz
+
+- fixed time initialization during installation (#112900)
+- 2.12.14 
+
+-------------------------------------------------------------------
+Mon Aug 22 10:30:53 CEST 2005 - jsuchome@suse.cz
+
+- earlier check for possible local time during installation (#104868)
+- 2.12.13 
+
+-------------------------------------------------------------------
+Wed Aug 17 17:25:54 CEST 2005 - jsuchome@suse.cz
+
+- better solution for CJK languages during installation (#102958)
+- fixed the icon names (#105157, #105163)
+- 2.12.12 
+
+-------------------------------------------------------------------
+Mon Aug 15 10:13:45 CEST 2005 - jsuchome@suse.cz
+
+- added support for Finnish language
+- 2.12.11
+
+-------------------------------------------------------------------
+Fri Aug 12 15:46:20 CEST 2005 - jsuchome@suse.cz
+
+- check for CJK language during installation (#102958)
+- 2.12.10
+
+-------------------------------------------------------------------
+Thu Aug 11 17:18:03 CEST 2005 - jsuchome@suse.cz
+
+- fixed texts and shortcuts (check_ycp)
+- 2.12.9
+
+-------------------------------------------------------------------
+Thu Jul 28 10:58:37 CEST 2005 - jsuchome@suse.cz
+
+- updated desktop files
+- 2.12.8
+
+-------------------------------------------------------------------
+Wed Jul 27 11:21:24 CEST 2005 - jsuchome@suse.cz
+
+- fixed path to xkbctrl (#98838)
+- run sax2 for configuring keyboard in graphical mode (feature 100115)
+- introduced Langage::Modified () function
+- help text for locale feature
+
+-------------------------------------------------------------------
+Mon Jul 25 17:28:22 CEST 2005 - jsuchome@suse.cz
+
+- allow setting of locale (feature 100175)
+- do not show primary language in the list of secondary languages
+- 2.12.7 
+
+-------------------------------------------------------------------
+Mon Jul 25 11:22:01 CEST 2005 - jsuchome@suse.cz
+
+- fixed name for Welsh ("Cymraeg", #97958) 
+
+-------------------------------------------------------------------
+Thu Jul 14 13:56:11 CEST 2005 - jsuchome@suse.cz
+
+- enable usage of inst_timezone in installation sequence
+- added client for different language proposal (language_simple_proposal)
+- proposal for selecting locale (feature 100175)
+- 2.12.6
+
+-------------------------------------------------------------------
+Mon Jul 11 11:16:18 CEST 2005 - jsuchome@suse.cz
+
+- modified UI for timezone and initial langauge dialogs
+- timezone: used specialized `Date and `Time widgets in Qt
+- some help text fixes (check_ycp)
+- 2.12.5
+
+-------------------------------------------------------------------
+Fri Jul  8 15:27:58 CEST 2005 - jsuchome@suse.cz
+
+- text fixes from rwalter 
+- 2.12.4
+
+-------------------------------------------------------------------
+Wed Jun 22 18:03:41 CEST 2005 - jsuchome@suse.cz
+
+- use Linuxrc module for accessing /etc/install.inf 
+
+-------------------------------------------------------------------
+Tue Jun 14 17:09:56 CEST 2005 - jsuchome@suse.cz
+
+- added writing progress dialog (#73044)
+- added support for installing language packages with CLI "set" command
+- 2.12.3 
+
+-------------------------------------------------------------------
+Fri Apr 29 17:08:58 CEST 2005 - jsuchome@suse.cz
+
+- added support for Bulgarian font on the console (#63083)
+- 2.12.2 
+
+-------------------------------------------------------------------
+Mon Apr 18 16:25:56 CEST 2005 - jsuchome@suse.cz
+
+- updated for new interface of ProductFeatures.ycp
+- 2.12.1 
+
+-------------------------------------------------------------------
+Tue Mar 29 14:07:46 CET 2005 - jsuchome@suse.cz
+
+- updated testsuite
+- 2.12.0
+
+-------------------------------------------------------------------
+Tue Mar 22 17:06:25 CET 2005 - jsuchome@suse.cz
+
+- removed `immediate option from keyboard SelectionBox (#73610) 
+- language: retranslate before opening first dialog (#73070)
+- time config: show correct time after manual change (#70971)
+
+-------------------------------------------------------------------
+Tue Mar 22 15:07:48 CET 2005 - jsuchome@suse.cz
+
+- fixed Taiwan name (#74193)
+
+-------------------------------------------------------------------
+Mon Mar 14 16:06:34 CET 2005 - jsuchome@suse.cz
+
+- sort list of secondary languages accoring to locale (#71767)
+
+-------------------------------------------------------------------
+Mon Mar  7 15:24:16 CET 2005 - jsuchome@suse.cz
+
+- require yast2-trans-stats, so we can new about translation status
+
+-------------------------------------------------------------------
+Wed Mar  2 16:45:23 CET 2005 - jsuchome@suse.cz
+
+- added pt_PT (portugese) again
+
+-------------------------------------------------------------------
+Wed Mar  2 14:43:55 CET 2005 - jsuchome@suse.cz
+
+- show correct time when switching time zones (#66458, #56944)
+
+-------------------------------------------------------------------
+Wed Mar  2 08:56:20 CET 2005 - jsuchome@suse.cz
+
+- merged texts from proofreading
+- set "basic" as default value for XkbVariant (#66546) 
+
+-------------------------------------------------------------------
+Mon Feb 28 08:29:35 CET 2005 - jsuchome@suse.cz
+
+- changed welcome text (#66617)
+
+-------------------------------------------------------------------
+Fri Feb 25 13:13:02 CET 2005 - jsuchome@suse.cz
+
+- fixed help text for (un)installation of language packages (#66599)
+- warning for incomplete translation shown after Accept (#66544)
+- fixed translation of 'romanian' (#66574)
+
+-------------------------------------------------------------------
+Thu Feb 24 15:03:24 CET 2005 - jsuchome@suse.cz
+
+- do not re-sort list of languages (#66287)
+
+-------------------------------------------------------------------
+Tue Feb 22 15:27:26 CET 2005 - jsuchome@suse.cz
+
+- added new language: Punjabi
+- do not exclude primary language from package installation (#65959)
+- 2.11.15 
+
+-------------------------------------------------------------------
+Mon Feb 21 16:58:28 CET 2005 - jsuchome@suse.cz
+
+- use client with a data for languages (workaround for #50815)
+- check disk space before installing new packages (#50745)
+- check for completeness of translations (feature #100197)
+- 2.11.14
+
+-------------------------------------------------------------------
+Thu Feb 10 09:00:57 CET 2005 - jsuchome@suse.cz
+
+- show region in Timezone adaptation proposal
+- fix saving INSTALLED_LANGUAGES on running system
+- 2.11.13
+
+-------------------------------------------------------------------
+Wed Feb  9 14:06:02 CET 2005 - jsuchome@suse.cz
+
+- installation proposal always mentions primary language (#50620)
+
+-------------------------------------------------------------------
+Tue Feb  8 13:25:44 CET 2005 - jsuchome@suse.cz
+
+- proposal text fixes (capitalization)
+
+-------------------------------------------------------------------
+Mon Feb  7 14:27:14 CET 2005 - jsuchome@suse.cz
+
+- added support for Ukrainian 
+- merged texts from proofreading
+- 2.11.12 
+
+-------------------------------------------------------------------
+Fri Feb  4 13:49:59 CET 2005 - jsuchome@suse.cz
+
+- language: drop "Install packages" checkbox (#50344)
+- translate all langauge names (new languages_db textdomain)
+- add list of additional languages to the installation summary
+- 2.11.11
+
+-------------------------------------------------------------------
+Thu Feb  3 16:57:47 CET 2005 - jsuchome@suse.cz
+
+- fixed keyboard & timezone adaptation from the 1st screen (#50426)
+- console: do not touch UI in constructor
+- show product name in first dialog during installation
+- 2.11.10
+
+-------------------------------------------------------------------
+Mon Jan 31 14:23:11 CET 2005 - jsuchome@suse.cz
+
+- fixed adapting timezone/keyboard to new langauge
+- remove unnecessary message
+- do not use locale format of date during installation
+- fixed support for croatian keyboard map
+- fixed call of .xf86config agent
+- 2.11.9
+
+-------------------------------------------------------------------
+Mon Jan 24 19:28:25 CET 2005 - nashif@suse.de
+
+- Adapted arguments to new installation workflow  interface 
+- 2.11.8
+
+-------------------------------------------------------------------
+Thu Jan 20 16:20:09 CET 2005 - jsuchome@suse.cz
+
+- timezone: new SetTimezoneForLanguage function
+- Asia/Tel_Aviv is "Tel Aviv" in english, not "Tel_Aviv"
+- language: added 'Adapt Keyboard' and 'Adapt Timezone' checkboxes
+- language dependent packages are installed on demand (checkbox)
+- 2.11.7
+
+-------------------------------------------------------------------
+Mon Jan 17 13:09:56 CET 2005 - jsuchome@suse.cz
+
+- use INSTALLED_LANGUAGES in /etc/sysconfig/language to save list of
+  languages
+- added support for lithuanian keyboard
+
+-------------------------------------------------------------------
+Tue Jan 11 11:16:40 CET 2005 - jsuchome@suse.cz
+
+- do not save language settings from update proposal (#46708) 
+
+-------------------------------------------------------------------
+Fri Dec 17 11:25:26 CET 2004 - jsuchome@suse.cz
+
+- fixed yast-language.desktop file
+- added help text for multiple languages
+- removed remaining lookup's and select's
+- 2.11.6
+
+-------------------------------------------------------------------
+Wed Dec 15 14:24:58 CET 2004 - jsuchome@suse.cz
+
+- command line support
+- 2.11.5
+
+-------------------------------------------------------------------
+Wed Nov  3 13:39:28 CET 2004 - jsuchome@suse.cz
+
+- removed yast2-installation and yast2-storage from needforbuild
+- 2.11.4
+
+-------------------------------------------------------------------
+Wed Nov  3 09:07:41 CET 2004 - jsuchome@suse.cz
+
+- do not show duplicate australian timezones (#47472)
+
+-------------------------------------------------------------------
+Wed Nov  3 09:05:33 CET 2004 - jsuchome@suse.cz
+
+- do not call loadkeys on iseries (#39025)
+
+-------------------------------------------------------------------
+Wed Oct 27 09:44:25 CEST 2004 - jsuchome@suse.cz
+
+- adapted for new Mode:: interface
+- 2.11.3 
+
+-------------------------------------------------------------------
+Tue Oct 26 14:38:45 CEST 2004 - jsuchome@suse.cz
+
+- timezone: show time formated by locale settings (#34633) 
+- set correct keyboard map for czech-qwerty (#46829)
+
+-------------------------------------------------------------------
+Mon Oct 11 15:21:45 CEST 2004 - jsrain@suse.cz
+
+- adapted to new Arch:: interface
+- 2.11.2
+
+-------------------------------------------------------------------
+Wed Oct  6 17:50:46 CEST 2004 - fehr@suse.de
+
+- change country names (#46909)
+
+-------------------------------------------------------------------
+Tue Oct  5 14:17:56 CEST 2004 - fehr@suse.de
+
+- add support for icelandic keyboard (#46823)
+
+-------------------------------------------------------------------
+Wed Sep 29 15:01:20 CEST 2004 - fehr@suse.de
+
+- fix keymap loading sequence for unicode (#44223)
+- 2.10.15
+
+-------------------------------------------------------------------
+Mon Sep 27 17:02:27 CEST 2004 - fehr@suse.de
+
+- fix wrong time displayed when switching local time -> UTC (#46130)
+- 2.10.14
+
+-------------------------------------------------------------------
+Thu Sep 23 15:14:05 CEST 2004 - mfabian@suse.de
+
+- fix entry for Hebrew
+- use correct strings for zh_TW and zh_HK
+- 2.10.13
+
+-------------------------------------------------------------------
+Wed Sep 22 13:41:15 CEST 2004 - fehr@suse.de
+
+- place calls to SetDesktopIcon where they work (#45714)
+- 2.10.12
+
+-------------------------------------------------------------------
+Tue Sep 14 12:26:35 CEST 2004 - fehr@suse.de
+
+- add "Traditional Chinese HongKong" to language list (#45239)
+- 2.10.11
+
+-------------------------------------------------------------------
+Wed Sep  8 14:53:56 CEST 2004 - fehr@suse.de
+
+- Change desktop files (#44824)
+- 2.10.10
+
+-------------------------------------------------------------------
+Tue Aug 31 09:50:42 CEST 2004 - arvin@suse.de
+
+- fixed path for fvwmrc (bug #44467)
+
+-------------------------------------------------------------------
+Tue Aug 24 12:08:51 CEST 2004 - fehr@suse.de
+
+- Add Hebrew to language and timezone
+- 2.10.8
+
+-------------------------------------------------------------------
+Thu Aug 19 15:12:23 CEST 2004 - fehr@suse.de
+
+- fix keyboard handling for 64 bit Macs (#43955)
+- 2.10.7
+
+-------------------------------------------------------------------
+Wed Aug 18 19:39:02 CEST 2004 - nashif@suse.de
+
+- Bug fixed: If you select change timezone, the accept button will
+  start directly the installation.
+- 2.10.6
+
+-------------------------------------------------------------------
+Wed Aug 18 11:21:22 CEST 2004 - fehr@suse.de
+
+- Add Bengali/Bangladesh to language, country, timezone etc.
+- 2.10.5
+
+-------------------------------------------------------------------
+Thu Aug 12 00:26:01 CEST 2004 - nashif@suse.de
+
+- Adapted timezone client for firstboot
+- Dont write yast.inf in test mode
+- 2.10.4
+
+-------------------------------------------------------------------
+Tue Aug 10 09:54:58 CEST 2004 - fehr@suse.de
+
+- patch proofread texts back into ycp
+- 2.10.3
+
+-------------------------------------------------------------------
+Tue Aug  3 18:19:13 CEST 2004 - fehr@suse.de
+
+- fix problem when changing timezone/time/hwclock settings (#41944)
+- 2.10.2
+
+-------------------------------------------------------------------
+Thu Jul 29 11:40:09 CEST 2004 - fehr@suse.de
+
+- refuse installation when time is in the past (#42458)
+
+-------------------------------------------------------------------
+Thu Jul 15 10:36:34 CEST 2004 - fehr@suse.de
+
+- merged SuSE-Linux-9_1-Branch
+- 2.10.1
+
+-------------------------------------------------------------------
+Tue Jul 13 09:36:47 CEST 2004 - fehr@suse.de
+
+- call Booloader::UpdateGfxMenu() if languge is changed (#35835)
+
+-------------------------------------------------------------------
+Mon Jul 12 16:44:06 CEST 2004 - fehr@suse.de
+
+- fix handling of hvsi0 in inittab (#42801)
+
+-------------------------------------------------------------------
+Mon Jun  7 11:41:40 CEST 2004 - fehr@suse.de
+
+- removed duplicated entry Turkey from timezone_raw.ycp (#41609)
+
+-------------------------------------------------------------------
+Mon May 24 16:29:34 CEST 2004 - fehr@suse.de
+
+- add entry for polish language
+- fix bug with weird time setting when hwclock set to localtime (#41080)
+- 2.9.24
+
+-------------------------------------------------------------------
+Tue May 18 15:42:12 CEST 2004 - fehr@suse.de
+
+- fix problem when changing timezone and system time in one step
+  (#40502)
+- check for valid timezone in timezone selection (#40794)
+- 2.9.23
+
+-------------------------------------------------------------------
+Mon May  3 14:32:45 CEST 2004 - fehr@suse.de
+
+- added Japan to country.ycp (#39717)
+- 2.9.22
+
+-------------------------------------------------------------------
+Mon Apr 26 12:53:59 CEST 2004 - fehr@suse.de
+
+- change handling of /etc/inittab to fix #39381
+- 2.9.21
+
+-------------------------------------------------------------------
+Mon Apr 19 12:40:00 CEST 2004 - fehr@suse.de
+
+- patch proofreaded text back into ycp
+
+-------------------------------------------------------------------
+Tue Apr 13 12:00:52 CEST 2004 - fehr@suse.de
+
+- call SuSEconfig also when expert settings changed (#38715)
+- 2.9.20
+
+-------------------------------------------------------------------
+Fri Apr 02 15:59:59 CEST 2004 - arvin@suse.de
+
+- finally changed license to GPL for good
+
+-------------------------------------------------------------------
+Tue Mar 30 14:14:15 CEST 2004 - fehr@suse.de
+
+- use iso09.16 as turkish console font (#37247)
+- 2.9.18
+
+-------------------------------------------------------------------
+Mon Mar 29 15:04:31 CEST 2004 - fehr@suse.de
+
+- add call to UI::SetLanguage
+- 2.9.17
+
+-------------------------------------------------------------------
+Thu Mar 25 18:48:55 CET 2004 - fehr@suse.de
+
+- do not return silently if Mode::serial_console is true (#36932)
+
+-------------------------------------------------------------------
+Mon Mar 22 17:37:30 CET 2004 - fehr@suse.de
+
+- add new languages from Karl Eichwalder
+- 2.9.16
+
+-------------------------------------------------------------------
+Mon Mar 22 13:10:55 CET 2004 - fehr@suse.de
+
+- Fix problem with untranslated timezone strings (#36484)
+- Set language sooner so that keyboard question is already in
+  new language (#36687)
+- 2.9.15
+
+-------------------------------------------------------------------
+Sun Mar 21 19:49:54 CET 2004 - nashif@suse.de
+
+- Use settings from product feature module if available
+
+-------------------------------------------------------------------
+Sun Mar 20 22:49:11 CEST 2004 - adrian@suse.de
+
+- rename language.desktop to yast-language.desktop
+  (fixes a name clash with a KDE CC modul)
+
+-------------------------------------------------------------------
+Wed Mar 17 19:12:48 CET 2004 - fehr@suse.de
+
+- inform Encoding module about Utf8 setting
+- reset correctly to initial keyboard setting (#35789)
+- 2.9.14
+
+-------------------------------------------------------------------
+Tue Mar 16 11:36:07 CET 2004 - fehr@suse.de
+
+- adapt testsuite
+- 2.9.13
+
+-------------------------------------------------------------------
+Mon Mar 15 16:06:05 CET 2004 - fehr@suse.de
+
+- set language value in Encoding module (needed to fix bug #34559)
+- 2.9.12
+
+-------------------------------------------------------------------
+Wed Mar 10 10:58:37 CET 2004 - sh@suse.de
+
+- do not check for existance of widget with id(`abort) any more
+- 2.9.11
+
+-------------------------------------------------------------------
+Wed Mar 10 01:28:17 CET 2004 - sh@suse.de
+
+- 2.9.10
+- Migration to new wizard
+
+-------------------------------------------------------------------
+Mon Mar  8 17:46:18 CET 2004 - fehr@suse.de
+
+- add calls to Wizard::SetDesktopIcon(...);
+- 2.9.9
+
+-------------------------------------------------------------------
+Mon Mar  1 16:55:20 CET 2004 - kkaempf@suse.de
+
+- add more type information
+- 2.9.8
+
+-------------------------------------------------------------------
+Mon Mar  1 13:30:59 CET 2004 - fehr@suse.de
+
+- patch proofreaded texts back into ycp
+- make sorting of keyboard entries locale dependent again
+- 2.9.7
+
+-------------------------------------------------------------------
+Thu Feb 26 20:29:54 CET 2004 - nashif@suse.de
+
+- Changed proposal file name proposal_* to *_proposal
+
+-------------------------------------------------------------------
+Thu Feb 26 11:59:47 CET 2004 - fehr@suse.de
+
+- fix crash while sorting keyboard lists (#35062)
+
+-------------------------------------------------------------------
+Tue Feb 24 15:26:39 CET 2004 - fehr@suse.de
+
+- fix wrong default for usage of UTF8
+- 2.9.6
+
+-------------------------------------------------------------------
+Mon Feb 23 15:40:00 CET 2004 - fehr@suse.de
+
+- remove some warnings by new interpreter
+- 2.9.5
+
+-------------------------------------------------------------------
+Fri Feb 20 11:19:46 CET 2004 - fehr@suse.de
+
+- changes to adapt to new sort function semantics
+- 2.9.4
+
+-------------------------------------------------------------------
+Sat Feb  7 19:06:52 CET 2004 - msvec@suse.cz
+
+- again enabled the language testsuite
+- dropped config files
+- 2.9.3
+
+-------------------------------------------------------------------
+Mon Feb  2 18:00:56 CET 2004  - fehr@suse.de
+
+- default enconding is now UTF-8
+- version 2.9.2
+
+-------------------------------------------------------------------
+Fri Jan 30 16:22:20 CET 2004  - fehr@suse.de
+
+- some additional changes for new interpreter
+- version 2.9.1
+
+-------------------------------------------------------------------
+Fri Jan 23 10:38:27 CET 2004  - fehr@suse.de
+
+- first version suitable for new interpreter
+- version 2.9.0
+
+-------------------------------------------------------------------
+Wed Jan 14 12:18:51 CET 2004 - fehr@suse.de
+
+- fix name of swedish keyboard map (#33944)
+
+-------------------------------------------------------------------
+Mon Dec 15 16:04:34 CET 2003 - jsrain@suse.de
+
+- Console::encoding handling moved to Encoding.ycp in yast2 package
+
+-------------------------------------------------------------------
+Thu Oct  9 15:49:33 CEST 2003 - fehr@suse.de
+
+- fix description texts for timezone module (#32165)
+
+-------------------------------------------------------------------
+Mon Sep 29 15:53:03 CEST 2003 - fehr@suse.de
+
+- translate some untranslated texts (#31237)
+
+-------------------------------------------------------------------
+Thu Sep 25 10:37:42 CEST 2003 - fehr@suse.de
+
+- use ja_JP.eucJP as default encoding for Japanese (#31737)
+
+-------------------------------------------------------------------
+Tue Sep 23 11:21:49 CEST 2003 - fehr@suse.de
+
+- disabled languages Bosnian and Russion on request of ke (#30351)
+- 2.8.19
+
+-------------------------------------------------------------------
+Fri Sep 19 14:06:25 CEST 2003 - fehr@suse.de
+
+- Initialize Console::encoding in the running system to the
+  output of "locale -k charmap" (#31351)
+- finally fix time display problem (#31263)
+- 2.8.18
+
+-------------------------------------------------------------------
+Thu Sep 18 14:58:31 CEST 2003 - gs@suse.de
+
+- Console::Restore(): read RC_LANG (bug #31206)
+- fix wrong switch from UTC/local time (#31263)
+- 2.8.17
+
+-------------------------------------------------------------------
+Wed Sep 17 13:07:30 CEST 2003 - fehr@suse.de
+
+- fix saving numlock state (#30915)
+- 2.8.16
+
+-------------------------------------------------------------------
+Sun Sep 14 21:01:10 CEST 2003 - adrian@suse.de
+
+- make it working in kcontrol
+
+-------------------------------------------------------------------
+Thu Sep 11 16:33:08 CEST 2003 - fehr@suse.de
+
+- fix bug writing wrong console font (#30514)
+- use another console font for lithuanian (#30172)
+
+-------------------------------------------------------------------
+Wed Sep 10 12:21:23 CEST 2003 - fehr@suse.de
+
+- fix bug with wrong default language (#30351)
+- fix endless loop in language dialog (#30353)
+- 2.8.14
+
+-------------------------------------------------------------------
+Mon Sep  8 13:05:03 CEST 2003 - fehr@suse.de
+
+- fix bug with default values for /etc/sysconfig/keyboard (#30030)
+- 2.8.13
+
+-------------------------------------------------------------------
+Thu Sep  4 15:30:22 CEST 2003 - fehr@suse.de
+
+- fix bug with wrong default timezone (#29968)
+- forget temporary changes when aborting timzone dialog (#29974)
+- fix saving changed language details in running system (#30054)
+- do not use use utf-8 as default for locale any more
+- 2.8.12
+
+-------------------------------------------------------------------
+Mon Sep 01 10:04:35 CEST 2003 - arvin@suse.de
+
+- use Popup::ConfirmAbort
+- use utf-8 as default for locale
+- 2.8.11
+
+-------------------------------------------------------------------
+Wed Aug 27 14:29:33 CEST 2003 - fehr@suse.de
+
+- make sorting of keyboard entries locale dependent (#21856)
+
+-------------------------------------------------------------------
+Mon Aug 25 17:39:31 CEST 2003 - fehr@suse.de
+
+- fix wrong locale for non-utf8 case (#29318)
+- fix wrong keyboard in update dialog in running system (#29319)
+- 2.8.10
+
+-------------------------------------------------------------------
+Tue Aug 19 15:06:39 CEST 2003 - fehr@suse.de
+
+- remove include of obsolete common_functions.ycp
+- 2.8.9
+
+-------------------------------------------------------------------
+Thu Aug 14 15:17:30 CEST 2003 - fehr@suse.de
+
+- add german keyboard entry for nodeadkey (#29071)
+
+-------------------------------------------------------------------
+Thu Aug 14 15:17:30 CEST 2003 - fehr@suse.de
+
+- add button for selection of UTF-8 encoding to language details
+- use ascii test for language display in textmode
+
+-------------------------------------------------------------------
+Fri Aug  8 17:19:59 CEST 2003 - fehr@suse.de
+
+- patch proofread texts back into sources
+- version 2.8.8
+
+-------------------------------------------------------------------
+Thu Aug  7 09:12:15 CEST 2003 - fehr@suse.de
+
+- Fix wrong function call in inst_timezone.ycp (#28551)
+
+-------------------------------------------------------------------
+Tue Aug  5 14:40:18 CEST 2003 - fehr@suse.de
+
+- add changes by Gabi for better UTF handling on ncurses
+- version 2.8.7
+
+-------------------------------------------------------------------
+Mon Aug  4 09:09:56 CEST 2003 - fehr@suse.de
+
+- fix wrong return code handling of Read(.target.size, ) in
+  Language.ycp
+- version 2.8.6
+
+-------------------------------------------------------------------
+Sat Aug 02 20:41:06 CEST 2003 - arvin@suse.de
+
+- added desktop files
+
+-------------------------------------------------------------------
+Fri Aug  1 16:08:24 CEST 2003 - fehr@suse.de
+
+- add expert dialog to language dialog (#27570)
+- set console into unicode mode after loadiny the mayboadr map
+- version 2.8.5
+
+-------------------------------------------------------------------
+Mon Jul 28 13:29:27 CEST 2003 - fehr@suse.de
+
+- changed consolefonts back to previouly used fonts
+- version 2.8.4
+
+-------------------------------------------------------------------
+Thu Jul 24 12:22:36 CEST 2003 - fehr@suse.de
+
+- remove MapName from XF86Keyboard.ycp
+- version 2.8.3
+
+-------------------------------------------------------------------
+Tue Jul 15 15:14:18 CEST 2003 - fehr@suse.de
+
+- really change timezone only when pressing next not when clicking
+  into scroll list (#26173)
+- fix lang entries for Chinese in language.ycp
+
+-------------------------------------------------------------------
+Wed Jul 10 14:33:20 CEST 2003 - fehr@suse.de
+
+- add two spanish keyboard layouts for latin america (#25474)
+
+-------------------------------------------------------------------
+Wed Jul  9 14:33:20 CEST 2003 - fehr@suse.de
+
+- fix bug caused by leading zeros in time/date fields (#26171)
+- make sorting of timezone entries locale dependent (#23850)
+- remove Mode::language, now handled in Laguage module (#27115)
+- change the default locales to UTF-8 (#27142)
+- version 2.8.2
+
+-------------------------------------------------------------------
+Tue Jun 10 14:36:04 CEST 2003 - fehr@suse.de
+
+- Use new Modules Label and Popup wherever possible
+
+-------------------------------------------------------------------
+Thu Jun  5 16:47:56 CEST 2003 - fehr@suse.de
+
+- make it build under new rules (unpackaged files)
+- 2.8.1
+
+-------------------------------------------------------------------
+Thu Apr 24 10:43:02 CEST 2003 - fehr@suse.de
+
+- use alpha instead of axp in the raw database
+
+-------------------------------------------------------------------
+Thu Apr 10 16:41:31 CEST 2003 - fehr@suse.de
+
+- some changes necessary becuase of changed Sax2 kbd handling
+
+-------------------------------------------------------------------
+Tue Mar 18 12:27:18 CET 2003 - kkaempf@suse.de
+
+- Use locale el_GR.ISO-8859-7, consolefont lat7a-14.psfu for
+  greek (#25567)
+- 2.7.14
+
+-------------------------------------------------------------------
+Mon Mar 17 13:37:36 CET 2003 - fehr@suse.de
+
+- add timezone entry for Uruguay (#25473)
+- 2.7.13
+
+-------------------------------------------------------------------
+Wed Mar 12 13:13:42 CET 2003 - fehr@suse.de
+
+- fix possible unwanted abort dialog after langauge change (#25147)
+- 2.7.12
+
+-------------------------------------------------------------------
+Mon Mar 10 13:12:11 CET 2003 - kkaempf@suse.de
+
+- fix console_encoding (#24689)
+- 2.7.11
+
+-------------------------------------------------------------------
+Fri Mar  7 15:59:50 CET 2003  - fehr@suse.de
+
+- activate russian language
+- version 2.7.10
+
+-------------------------------------------------------------------
+Thu Mar  6 10:31:41 CET 2003  - fehr@suse.de
+
+- fix bug that lead to broken timezone entries (#24711)
+
+-------------------------------------------------------------------
+Tue Mar  4 17:07:52 CET 2003  - fehr@suse.de
+
+- fix writing of keytable into yast.inf
+
+-------------------------------------------------------------------
+Mon Mar  3 15:53:25 CET 2003  - fehr@suse.de
+
+- patch proofreaded text back into ycp
+- update languages data
+- version 2.7.9
+
+-------------------------------------------------------------------
+Mon Feb 24 17:13:59 CET 2003  - fehr@suse.de
+
+- undo change explict focus change for #23941 on Thu Feb 20 (#23848)
+- version 2.7.8
+
+-------------------------------------------------------------------
+Thu Feb 20 15:08:52 CET 2003  - fehr@suse.de
+
+- use sentence style capitalisation in y2cc files (#23848)
+- set focus to timezone list after selection of region in ncurses
+  ui (#23941)
+
+-------------------------------------------------------------------
+Wed Feb 19 17:10:02 CET 2003 - fehr@suse.de
+
+- add comments to texts for translators (#23774)
+- fix wrong timezone proposal (#23818)
+
+-------------------------------------------------------------------
+Tue Feb 18 17:33:51 CET 2003 - fehr@suse.de
+
+- make the keyboard expert module better understandable (#23759)
+
+-------------------------------------------------------------------
+Wed Feb 12 12:40:20 CET 2003 - fehr@suse.de
+
+- allow language setting with two char locale (#19431)
+- write intermediary yast.inf with lang and keyboard settings (#16263)
+- make proposal suggest local time for machines with win (#23575)
+- version 2.7.7
+
+-------------------------------------------------------------------
+Tue Feb 11 10:50:47 CET 2003 - fehr@suse.de
+
+- removed language testsuite, second time in two weeks it caused
+  a failed build of the package due to completely unrelated changes
+  in Mode module
+- version 2.7.6
+
+-------------------------------------------------------------------
+Fri Feb  7 16:13:31 CET 2003 - jsuchome@suse.de
+
+- inst_language: added check for aborting when Mode::repair is true
+
+-------------------------------------------------------------------
+Fri Feb  7 13:04:47 CET 2003 - kkaempf@suse.de
+
+- drop fixed encoding in consolefonts table, glibc can tell
+  this value now (#23348)
+
+-------------------------------------------------------------------
+Thu Feb  6 22:11:28 CET 2003 - nashif@suse.de
+
+- adapted timezone, mouse and keyboard for use with autoyast
+
+-------------------------------------------------------------------
+Mon Feb  3 17:36:22 CET 2003  - fehr@suse.de
+
+- pot file now in source tarball
+- set focus to list in keyboard and timezone module (#23349, #23356)
+
+-------------------------------------------------------------------
+Wed Jan 29 12:23:25 CET 2003  - fehr@suse.de
+
+- patch proofreaded texts back into ycp
+- version 2.7.4
+
+-------------------------------------------------------------------
+Tue Jan 28 11:00:40 CET 2003  - fehr@suse.de
+
+- change testsuite output to match again
+- 2.7.3
+
+-------------------------------------------------------------------
+Wed Jan 15 13:20:53 CET 2003  - fehr@suse.de
+
+- add dialog with expert settings to keyboard dialog
+- do not automatically adapt keyboard settings when changing
+  language in installation system, add popup instead (#20807)
+- ask if keyboard setting should be adapted to changed language
+  when changing language proposal during installation
+- sort keyboard selection after translated texts (#20488)
+- add french canadian keyboard to keyboard list (#21167)
+- 2.7.2
+
+-------------------------------------------------------------------
+Wed Dec  4 14:49:44 CET 2002  - fehr@suse.de
+
+- add dialog to set time/date
+- timezone selection is now hierarchical
+- 2.7.1
+
+-------------------------------------------------------------------
+Wed Nov 20 16:22:58 CET 2002  - fehr@suse.de
+
+- merged up to version 2.6.35 of 8.1 branch
+- 2.7.0
+
+-------------------------------------------------------------------
+Tue Sep 10 13:10:44 CEST 2002 - arvin@suse.de
+
+- for serial console set default baud rate to 9600
+
+-------------------------------------------------------------------
+Fri Sep  6 16:38:01 CEST 2002 - fehr@suse.de
+
+- add some Provides/Obsoletes
+- version 2.6.24
+
+-------------------------------------------------------------------
+Thu Sep  5 13:39:37 CEST 2002 - fehr@suse.de
+
+- fix missing retranslation after langauge change (#18924)
+- version 2.6.23
+
+-------------------------------------------------------------------
+Mon Sep  2 16:28:38 CEST 2002 - fehr@suse.de
+
+- do not call xkbset when installing over ssh or serial console (#18578)
+- use option `opt(`immediate) to keyboard selection box
+- version 2.6.22
+
+-------------------------------------------------------------------
+Wed Aug 28 10:08:19 CEST 2002 - fehr@suse.de
+
+- add new keyboard map "Brazil with US accents (#18385)
+- version 2.6.21
+
+-------------------------------------------------------------------
+Tue Aug 27 20:00:00 CEST 2002 - jsuchome@suse.cz
+
+- provide/obsolete old translation packages
+
+-------------------------------------------------------------------
+Mon Aug 26 10:27:00 CEST 2002 - fehr@suse.de
+
+- add timezone for Israel (#17669)
+- remove testsuite again
+- remove noarch entry in spec file so that #ifnarch works
+- 2.6.20
+
+-------------------------------------------------------------------
+Thu Aug 22 17:55:18 CEST 2002 - msvec@suse.cz
+
+- again enabled the language testsuite
+- please teach Thomas Fehr what are testsuites good for
+- fixed Philippines spelling (#18097)
+- 2.6.19
+
+-------------------------------------------------------------------
+Fri Aug 16 09:40:34 CEST 2002 - fehr@suse.de
+
+- set default for hardware clock to local time for Mac (#17778)
+- add Simplified Chines to language selection
+- version 2.6.18
+
+-------------------------------------------------------------------
+Thu Aug 15 14:20:51 CEST 2002 - fehr@suse.de
+
+- fix bug ignoring the linuxrc keyboard setting (#15373)
+- version 2.6.17
+
+-------------------------------------------------------------------
+Thu Aug 15 10:41:58 CEST 2002 - kkaempf@suse.de
+
+- Default timezone for "pt_BR" is "Brazil/East" (#17757)
+
+-------------------------------------------------------------------
+Wed Aug 14 15:34:04 CEST 2002 - fehr@suse.de
+
+- fix to use DEFAULT_LANGUAG if RC_LANG is empty
+  (needed after update from YaST1 installed systems)
+
+-------------------------------------------------------------------
+Wed Aug 14 10:23:03 CEST 2002 - kkaempf@suse.de
+
+- filter ^S0 line from inittab when switching to serial console
+- it's "Portuguese" (#17687)
+
+-------------------------------------------------------------------
+Tue Aug 13 09:54:43 CEST 2002 - fehr@suse.de
+
+- fix text in timezone proposal (#14101)
+- fix help text in language dialog (#14585)
+- version 2.6.14
+
+-------------------------------------------------------------------
+Tue Aug 13 09:54:43 CEST 2002 - fehr@suse.de
+
+- add scr files again that I removed inadvertently yesterday
+
+-------------------------------------------------------------------
+Mon Aug 12 21:14:55 CEST 2002 - arvin@suse.de
+
+- fixed file list
+
+-------------------------------------------------------------------
+Mon Aug 12 17:29:14 CEST 2002 - fehr@suse.de
+
+- remove keyboard config for s390 (#17630)
+- add Bosnian to languages
+- version 2.6.12
+
+-------------------------------------------------------------------
+Tue Aug  6 10:47:27 CEST 2002 - fehr@suse.de
+
+- removed access to variable DEFAULT_LANGUAGE
+  (RC_LANG is unsed instead)
+
+-------------------------------------------------------------------
+Tue Aug  6 10:47:27 CEST 2002 - fehr@suse.de
+
+- removed testsuite from language to make the package build again
+  (and if anyone adds that crap again, I will personally kill him)
+- version 2.6.11
+
+-------------------------------------------------------------------
+Mon Aug  5 17:34:23 CEST 2002 - fehr@suse.de
+
+- write language and model to YAST_KEYBOARD in /etc/sysconfig/keyboard
+- version 2.6.10
+
+-------------------------------------------------------------------
+Mon Aug 05 14:19:29 CEST 2002 - arvin@suse.de
+
+- adaption for new /etc/install.inf agent
+
+-------------------------------------------------------------------
+Mon Aug  5 13:16:41 CEST 2002 - kkaempf@suse.de
+
+- drop /etc/sysconfig/UTC, use /etc/sysconfig/HWCLOCK to allow
+  for all three values (unchange,utc,localtime).
+
+-------------------------------------------------------------------
+Fri Aug  2 14:41:32 CEST 2002 - fehr@suse.de
+
+- fix typo "X11SetLaguange" --> "X11SetLanguage"
+
+-------------------------------------------------------------------
+Thu Aug  1 16:01:31 CEST 2002 - fehr@suse.de
+
+- add keyboard entries for x86_64 (#17334)
+
+-------------------------------------------------------------------
+Wed Jul 31 16:31:20 CEST 2002 - kkaempf@suse.de
+
+- /etc/sysconfig/UTC is boolean, not hwclock parameter.
+- call /sbin/hwclock instead of /sbin/hwclock_wrapper.
+
+-------------------------------------------------------------------
+Mon Jul 29 10:21:23 CEST 2002 - fehr@suse.de
+
+- rename GMT to UTC in /etc/sysconfig/clock (#17265)
+
+-------------------------------------------------------------------
+Fri Jul 26 10:11:33 CEST 2002 - kkaempf@suse.de
+
+- honor 'Console' from /etc/install.inf properly (#17233)
+
+-------------------------------------------------------------------
+Tue Jul 23 13:43:14 CEST 2002 - fehr@suse.de
+
+- add eval() around assignment of locale to string
+- fix wrong data srtructure in keyboard_raw.ycp
+
+-------------------------------------------------------------------
+Tue Jul 23 12:13:07 CEST 2002 - fehr@suse.de
+
+- change it so that the _db.ycp files are not needed any more
+- version 2.6.5
+
+-------------------------------------------------------------------
+Tue Jul 23 11:10:29 CEST 2002 - fehr@suse.de
+
+- put the timzeone descriptions into separate timezone_db.pot
+
+-------------------------------------------------------------------
+Tue Jul 23 09:39:13 CEST 2002 - fehr@suse.de
+
+- regenerated potfile with new entries from {timezone,keyboard}_raw.ycp
+
+-------------------------------------------------------------------
+Mon Jul 22 17:02:42 CEST 2002 - msvec@suse.cz
+
+- merged yast2-db-country
+- again added the language testsuite
+- 2.6.4
+
+-------------------------------------------------------------------
+Mon Jul 15 16:17:39 CEST 2002 - fehr@suse.de
+
+- fix namespace lookup
+- version 2.6.3
+
+-------------------------------------------------------------------
+Fri Jul 12 11:17:43 CEST 2002 - kkaempf@suse.de
+
+- fix agent definitions to use proper namespace (#16776)
+
+-------------------------------------------------------------------
+Tue Jul  9 13:51:25 CEST 2002 - mvidner@suse.cz
+
+- Provide/Obsolete yast2-db-{country,keyboard,timezone}
+
+-------------------------------------------------------------------
+Fri Jun 28 14:38:44 CEST 2002 - fehr@suse.de
+
+- version 2.6.1
+- minor fixes (typo, superfluous textdomain) in keyboard subdir
+- adapt to new naming scheme for potfiles
+
+-------------------------------------------------------------------
+Mon Jun 24 10:38:11 CEST 2002 - kkaempf@suse.de
+
+- Initial version, merge console, keyboard, language, and timezone.
+

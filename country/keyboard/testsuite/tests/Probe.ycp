@@ -1,0 +1,72 @@
+/**
+ * Test for Keyboard.ycp constructor behaviour in "installation"
+ * Simulate that "dk" keyboard was set in linuxrc: see bug #118571
+ *
+ * Author:	Jiri Suchomel <jsuchome@suse.cz>
+ * $Id$
+ */
+{
+    // testedfiles: Keyboard.ycp
+
+    import "Testsuite";
+
+    map READ = $[
+	"sysconfig" : $[
+	    "keyboard" : $[
+		"YAST_KEYBOARD"	: "czech-qwerty,pc104",
+	    ],
+	],
+	"target" : $[
+	    "size"		: 1,
+	    "yast2"		: $[
+		"czech-qwerty"	: [
+		    "Czech (qwerty)",
+		    $[
+			"i386" : $[
+			    "pc104": $[
+				"ncurses": "cz-lat2-us.map.gz",
+				"compose" : "latin2"
+			    ]
+			],
+		    ]
+		],
+		"danish"	: [
+		    "Danish",
+		    $[
+			"i386"	: $[
+			    "pc104"	: $[
+				"ncurses": "dk-latin1.map.gz"
+			    ],
+			],
+		    ],
+		],
+	    ],
+	    "tmpdir"		: "/tmp",
+	    "ycp"		: $[
+		"XkbLayout"	: "cz_qwerty,us",
+	    ],
+	    "string"		: "",
+	],
+	"probe"	: $[
+	    "architecture"	: "i386"
+	],
+	"etc"	: $[
+	    "install_inf": $[
+		"Keytable"	: "dk",
+	    ],
+	],
+    ];
+    map EXECUTE	= $[
+	"target" : $[
+	    "bash_output"	: $[],
+	],
+    ];
+
+    Testsuite::Init([READ,$[],EXECUTE], nil);
+
+    import "Stage";
+
+    Stage::Set ("initial");
+
+    import "Keyboard";
+}

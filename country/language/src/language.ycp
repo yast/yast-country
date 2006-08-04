@@ -1,0 +1,256 @@
+/**
+ *
+ * Module:		yast2-country
+ *
+ * Authors:		Klaus Kaempf (kkaempf@suse.de)
+ *			Jiri Suchomel (jsuchome@suse.cz)
+ *
+ * Purpose:		client for language configuration in running system
+ *
+ * $Id$
+ */
+
+{
+
+textdomain "country";
+
+import "CommandLine";
+import "Console";
+import "GfxMenu";
+import "Language";
+import "Mode";
+import "Popup";
+import "Progress";
+import "Wizard";
+
+/**
+ * read language settings
+ */
+define boolean LanguageRead () {
+
+    return Language::Read (false);
+}
+
+/**
+ * write language settings
+ */
+define boolean LanguageWrite () {
+
+    y2milestone ("Language changed --> saving");
+
+    integer steps	= 3;
+
+    // progress title
+    Progress::New (_("Saving Language Configuration"), " ", steps, [
+	// progress stage
+	_("Save language and console settings"),
+	// progress stage
+	_("Install and uninstall affected packages"),
+	// progress stage
+	_("Update translations in boot loader menu"),
+	], [
+	// progress step
+	_("Saving language and console settings..."),
+	// progress step
+	_("Installing and uninstalling affected packages..."),
+	// progress step
+	_("Updating translations in boot loader menu..."),
+	// last progress step
+	_("Starting SuSEconfig...")
+	], ""
+    );
+
+    Progress::NextStage ();
+
+    Language::Save ();
+    Console::Save ();
+
+    Progress::NextStage ();
+
+    boolean enough_space	= true;
+    if (Mode::commandline ())
+    {
+	// if not commandline, packages were already initialized in inst_ client
+	enough_space = Language::PackagesInit (
+	    splitstring (Language::languages, ","));
+    }
+    if (enough_space)
+    {
+	Language::PackagesCommit ();
+    }
+
+    Progress::NextStage ();
+
+    GfxMenu::Update();
+
+    Progress::NextStage ();
+
+    WFM::CallFunction ("inst_suseconfig", [ false, false ]);
+
+    return true;
+}
+
+/**
+ * the language configuration sequence
+ */
+define any LanguageSequence () {
+
+    LanguageRead ();
+
+    Console::Init ();
+
+    Wizard::CreateDialog();
+
+    // set the language accoring to Language.ycp initialization
+    Language::WfmSetLanguage ();
+    Wizard::OpenAcceptDialog();
+
+    // Params are:				`back `next  set_default
+    map args = $[];
+    args["enable_back"] = true;
+    args["enable_next"] = true;
+
+    any result = WFM::CallFunction ("select_language", [args]);
+
+    Wizard::CloseDialog();
+
+    y2debug ("result '%1'", result);
+
+    if (result == `cancel || result == `back)
+    {
+	// Back to original values...
+	y2milestone ("canceled -> restoring: %1", Language::language_on_entry);
+	Language::Set (Language::language_on_entry);
+    }
+    else
+    {
+	if (Language::Modified ())
+	{
+	    // help for write dialog
+	    Wizard::RestoreHelp (_("<p><b>Saving Configuration</b><br>Please wait...</p>"));
+	    Console::SelectFont (Language::language);
+	    LanguageWrite ();
+	}
+	else
+	{
+	    y2milestone( "Language not changed --> doing nothing" );
+	}
+    }
+    UI::CloseDialog();
+    return result;
+}
+
+/**
+ * Handler for language summary
+ */
+define boolean LanguageSummaryHandler (map options) {
+
+    map<string,list> selection	= Language::Selection();
+    // summary label
+    CommandLine::Print (sformat (_("Current Language: %1 (%2)"),
+	Language::language, selection[Language::language,1]:""));
+
+    string languages	= Language::languages;
+    if (languages != "")
+    {
+	list<string> langs	= filter (string lang_code,
+	    splitstring (languages, ","), ``(lang_code != Language::language));
+	if (size (langs) > 0)
+	{
+	    CommandLine::Print (sformat (_("Additional Languages: %1"),
+		mergestring (langs,",")));
+	}
+    }
+    return false;
+}
+
+/**
+ * Handler for listing available languages
+ */
+define boolean LanguageListHandler (map options) {
+
+    foreach (string lang_code, list lang_info, Language::Selection(), {
+	CommandLine::Print (sformat ("%1 (%2)", lang_code, lang_info[1]:""));
+    });
+    return false;
+}
+
+
+/**
+ * Handler for changing language settings
+ */
+define boolean LanguageSetHandler (map options) {
+
+    string language	= options["lang"]:Language::language;
+    string languages	= options["languages"]:"";
+
+    if (!haskey(Language::Selection(), language))
+    {
+	// error message (%1 is given layout); do not translate 'list'
+	CommandLine::Print (sformat (_("%1 is not a valid language. Use the list command to see possible values."), language));
+	return false;
+    }
+    list<string> llanguages       = splitstring (languages, ",");
+    if (!contains (llanguages, language))
+	llanguages       = add (llanguages, language);
+
+    Language::languages	= mergestring (llanguages, ",");
+
+    if (language != Language::language)
+    {
+	Language::Set (language);
+	Console::SelectFont (language);
+    }
+
+    return (Language::Modified ());
+}
+
+
+/* -- the command line description map -------------------------------------- */
+map cmdline = $[
+    "id"		: "language",
+    // translators: command line help text for language module
+    "help"		: _("Language configuration"),
+    "guihandler"	: LanguageSequence,
+    "initialize"	: LanguageRead,
+    "finish"		: LanguageWrite,
+    "actions"		: $[
+	"summary" :$[
+	    "handler"	: LanguageSummaryHandler,
+	    // command line help text for 'summary' action
+	    "help"	: _("Language configuration summary"),
+	],
+	"set" :$[
+	    "handler"	: LanguageSetHandler,
+	    // command line help text for 'set' action
+	    "help"	: _("Set new values for language"),
+	],
+	"list": $[
+	    "handler"	: LanguageListHandler,
+	    // command line help text for 'list' action
+	    "help"	: _("List all available languages.")
+	],
+    ],
+    "options"		: $[
+	"lang"		: $[
+	    // command line help text for 'set lang' option
+	    "help"	: _("New language value"),
+	    "type"	: "string"
+	],
+	"languages"	: $[
+	    // command line help text for 'set languages' option
+	    "help"	: _("List of secondary languages (separated by commas)"),
+	    "type"	: "string"
+	],
+    ],
+    "mappings"		: $[
+	"summary"	: [],
+	"set"		: [ "lang", "languages" ],
+	"list"		: [],
+    ]
+];
+
+CommandLine::Run (cmdline);
+return true;
+
+}

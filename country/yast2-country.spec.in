@@ -1,0 +1,69 @@
+@HEADER-COMMENT@
+
+@HEADER@
+BuildRequires:	perl-XML-Writer update-desktop-files yast2-devtools yast2-testsuite yast2 yast2-perl-bindings
+Requires:	yast2 yast2-trans-stats yast2-perl-bindings
+# common proposal (rich_text_raw_title)
+Requires:       yast2-installation >= 2.13.139
+
+Provides:	yast2-config-environment
+Provides:	yast2-config-keyboard
+Provides:	yast2-config-language
+Provides:	yast2-config-timezone
+Obsoletes:	yast2-config-environment
+Obsoletes:	yast2-config-keyboard
+Obsoletes:	yast2-config-language
+Obsoletes:	yast2-config-timezone
+Provides:	yast2-db-country yast2-db-keyboard yast2-db-timezone
+Obsoletes:	yast2-db-country yast2-db-keyboard yast2-db-timezone
+Provides:	yast2-trans-inst-keyboard
+Obsoletes:	yast2-trans-inst-keyboard
+Provides:	yast2-trans-inst-language
+Obsoletes:	yast2-trans-inst-language
+Provides:	yast2-trans-inst-timezone
+Obsoletes:	yast2-trans-inst-timezone
+Provides:	yast2-trans-inst-environment
+Obsoletes:	yast2-trans-inst-environment
+Provides:	y2d_inst-keyboard
+Obsoletes:	y2d_inst-keyboard
+Provides:	y2d_inst-timezone
+Obsoletes:	y2d_inst-timezone
+Provides:	y2t_inst-language
+Obsoletes:	y2t_inst-language
+Provides:	y2t_inst-environment
+Obsoletes:	y2t_inst-environment
+
+Summary:	Setting the keyboard, language and time zone
+
+%description
+-
+
+@PREP@
+
+@BUILD@
+
+@INSTALL@
+
+%ifarch s390 s390x
+rm -f $RPM_BUILD_ROOT@configdir@/keyboard.y2cc
+rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
+%endif
+
+@CLEAN@
+
+# common
+%files
+%defattr(-,root,root)
+%doc @docdir@
+@moduledir@/*
+@clientdir@/*.ycp
+@ydatadir@/*.ycp
+@yncludedir@/keyboard/
+@yncludedir@/timezone/
+@scrconfdir@/*.scr
+@agentdir@/*
+%ifnarch s390 s390x
+@desktopdir@/keyboard.desktop
+%endif
+@desktopdir@/yast-language.desktop
+@desktopdir@/timezone.desktop

@@ -1,0 +1,81 @@
+/**
+ * File:
+ *   keyboard_raw.ycp
+ *
+ * Authors:
+ *   Thomas Roelz <tom@suse.de>
+ *   (original authors unknown; now maintained by tom)
+ *
+ * Summary:
+ * Maps language codes (locales) to YaST2-keyboard-codes.
+ *
+ * The YaST2-keyboard-codes are used for looking up a keyboard description in
+ * the YaST2-keyboard-database (see keyboard_raw.ycp).
+ *
+ * Do NOT use this map for looking up YaST2-keyboard-codes from xkblayout-codes.
+ * The xkblayout-codes may or may not resemble a locale code, therefore
+ * an extra conversion map is necessary (see xkblayout2keyboard.ycp).
+ *
+ * $Id$
+ *
+ * *****************************************************************
+ * In case of changes please keep the following three files in sync:
+ * lang2keyboard.ycp, xkblayout2keyboard.ycp, keyboard_raw.ycp
+ * *****************************************************************
+ */
+
+      $[
+	"ar_eg"		: "english-us",
+	"be_BY"		: "belgian",
+	"bs_BA"		: "english-us",
+	"br_FR"		: "french",
+	"ca_ES"		: "spanish",
+	"cs_CZ"		: "czech",
+	"da_DK"		: "danish",
+	"de"		: "german",
+	"de_DE"		: "german",
+	"de_CH"		: "german-ch",
+	"el_GR"		: "greek",
+	"en"		: "english-us",
+	"en_US"		: "english-us",
+	"en_GB"		: "english-uk",
+	"es"		: "spanish",
+	"es_ES"		: "spanish",
+	"fi_FI"		: "finnish",
+	"fr_BE"		: "french",
+	"fr_CA"		: "cn-latin1",
+	"fr_LU"		: "french",
+	"fr_FR"		: "french",
+	"fr_CH"		: "french-ch",
+	"hi_IN"		: "english-us",
+	"hr_HR"		: "croatian",
+	"hu_HU"		: "hungarian",
+	"is_IS"         : "icelandic",
+	"it_IT"		: "italian",
+	"it_CH"		: "italian",
+	"ja_JP"		: "japanese",
+	"km_KH"		: "khmer",
+	"ko_KR"		: "english-us",
+	"lt_LT"		: "lithuanian",
+	"nb_NO"		: "norwegian",
+	"no_NO"		: "norwegian",
+	"nn_NO"		: "norwegian",
+	"nl_NL"		: "english-us",
+	"nl_BE"		: "english-us",
+	"pa_IN"		: "english-us",
+	"pl_PL"		: "polish",
+	"pt_BR"		: "portugese-br",
+	"pt_PT"		: "portugese",
+	"ru"		: "russian",
+	"ru_RU"		: "russian",
+	"ru_RU.KOI8-R"	: "russian",
+	"sk_SK"		: "slovak",
+	"sl_SI"		: "slovene",
+	"sr_CS"		: "serbian",
+	"sr_YU"		: "serbian",
+	"sv_SE"		: "swedish",
+	"tr_TR"		: "turkish",
+	"vi_VN"		: "english-us",
+	"zh_CN"		: "english-us",
+	"zh_TW"		: "english-us",
+      ]

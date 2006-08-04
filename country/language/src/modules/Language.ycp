@@ -1,0 +1,775 @@
+/**
+ * File:	modules/Language.ycp
+ * Module:	Language
+ * Summary:	This module does all language related stuff:
+ * Authors:	Klaus Kaempf <kkaempf@suse.de>
+ *		Thomas Roelz <tom@suse.de>
+ * Maintainer:  Jiri Suchomel <jsuchome@suse.cz>
+ *
+ * $Id$
+ */
+
+{
+
+module "Language";
+textdomain "country";
+
+
+import "AsciiFile";
+import "Encoding";
+import "FileUtils";
+import "Linuxrc";
+import "Misc";
+import "Mode";
+import "PackageCallbacksInit";
+import "PackageSystem";
+import "ProductFeatures";
+import "Stage";
+
+
+/**
+ * currently selected language
+ */
+global string language = "en_US";
+
+/**
+ * original language
+ */
+global string language_on_entry = "en_US";
+
+/**
+ * language preselected in /etc/install.inf
+ */
+global string preselected	= "en_US";
+
+/**
+ * user readable description of language
+ */
+string name = "English (US)";
+
+boolean linuxrc_language_set = false;
+
+/**
+ * Default language to be restored with MakeProposal.
+ */
+string default_language = "en_US";
+
+
+/**
+ * Default settings for ROOT_USES_LANG in /etc/sysconfig/language
+ */
+string rootlang = "ctype";
+
+
+/**
+ * Default settings for INSTALLED_LANGUAGES in /etc/sysconfig/language
+ */
+global string languages		= "";
+
+/**
+ * Original value of INSTALLED_LANGUAGES
+ */
+global string languages_on_entry	= "";
+
+/**
+ * Use utf8 in locale
+ */
+boolean use_utf8 = true;
+
+/**
+ * ncurses mode
+ */
+boolean text_mode	= nil;
+
+global boolean ExpertSettingsChanged = false;
+
+/**
+ * level of translation completeness
+ */
+map<string,integer> translation_status	= $[];
+
+// map (locale: 1) of available locales
+map<string,integer> locales	= $[];
+
+// map with all languages (cached - needs to be reread for retranslation)
+map<string, list> languages_map = $[];
+
+// languages that cannot be correctly shown in text mode
+list cjk_languages	= [ "ja", "ko", "zh", "hi", "km", "pa", "bn" ];
+
+/**
+ * Check if the language is "CJK"
+ * (and thus could not be shown in text mode - see bug #102958)
+ */
+global define boolean CJKLanguage (string lang) {
+
+    string l = substring (lang, 0, 2);
+    return contains (cjk_languages, l);
+}
+
+
+/**
+ * return the value of text_mode (true for ncurses)
+ */
+global define boolean GetTextMode () {
+
+    if (text_mode== nil)
+    {
+	map display_info	= UI::GetDisplayInfo ();
+	text_mode		= display_info["TextMode"]:false;
+    }
+    return text_mode;
+}
+
+/**
+ * Read language DB: translatable strings will be translated to current language
+ */
+define void read_languages_map() {
+
+    languages_map = (map<string, list>) WFM::CallFunction ("languages", []);
+
+    if (languages_map == nil) languages_map = $[];
+}
+
+/**
+ * return the map of all supported countries and language codes
+ */
+global define map<string,integer> GetLocales () {
+
+    if (locales == nil || locales == $[])
+    {
+	map out = (map)SCR::Execute (.target.bash_output, "/usr/bin/locale -a");
+	foreach (string l, splitstring (out["stdout"]:"", "\n"), {
+	    integer pos = findfirstof (l, ".@");
+
+	    if (pos != nil && pos >= 0)
+		l = substring (l, 0, pos);
+
+	    locales [l]	= 1;
+	});
+    }
+
+    return locales;
+}
+
+
+/**
+ * Set module to selected language.
+ * @param lang language string ISO code of language
+ */
+global define void Set (string lang) {
+
+    y2milestone ("original language: %1; setting to lang:%2", language, lang);
+
+    if (language != lang)	// Do it only if different
+    {
+	if (size (languages_map) == 0)
+	    read_languages_map();
+
+	if (size (locales) == 0)
+	    GetLocales ();
+
+	if (locales[lang]:0 != 1 && size(lang) > 0)
+	{
+	    lang = substring (lang, 0, 2);
+	    boolean found = false;
+	    foreach (string k, list dummy, languages_map,
+	    {
+		if (!found && substring (k, 0, 2) ==lang)
+		{
+		    found = true;
+		    lang = k;
+		}
+	    });
+	}
+	name		= languages_map[lang, 0]:lang;
+	if (Mode::config ())
+	    name	= languages_map[lang, 4]:lang;
+	language	= lang;
+	Encoding::SetEncLang (language);
+    }
+
+    if (Stage::initial () && !Mode::test ())
+    {
+	map yinf = $[];
+	AsciiFile::SetDelimiter (yinf, " ");
+	AsciiFile::ReadFile (yinf, "/etc/yast.inf");
+	list lines = AsciiFile::FindLineField (yinf, 0, "Language:");
+	if (size(lines) > 0)
+	{
+	    AsciiFile::ChangeLineField (yinf, lines[0]:-1, 1, language);
+	}
+	else
+	{
+	    AsciiFile::AppendLine (yinf, ["Language:", language] );
+	}
+	AsciiFile::RewriteFile (yinf, "/etc/yast.inf");
+
+	// update "name" for proposal when it cannot be shown correctly
+	if (GetTextMode () && CJKLanguage (lang) && !CJKLanguage (preselected))
+	{
+	    name	= languages_map[lang, 1]:lang;
+	}
+    }
+}
+
+global define boolean LinuxrcLangSet() {
+
+    return linuxrc_language_set;
+}
+
+/**
+ * generate the whole locale string for given language according to DB
+ * (e.g. de_DE -> de_DE.UTF-8)
+ */
+global define string GetLocaleString (string lang) {
+
+    if (size (languages_map) == 0)
+	read_languages_map();
+
+    list language_info = languages_map[lang]:[];
+    if (!haskey (languages_map, lang))
+	language_info	= [ lang, lang, ".UTF-8" ];
+
+    // full language code
+    string val = language;
+    if( use_utf8 )
+	val = val + language_info[2]:"";
+    else
+	val = val + language_info[3]:"";
+
+    y2milestone( "locale %1", val );
+    return val;
+}
+
+
+/**
+ * Store current language as default language.
+ */
+global define void SetDefault() {
+    y2milestone("Setting default language: %1", language);
+    default_language = language;
+    return;
+}
+
+/**
+ * Read the RC_LANG value from sysconfig and exctract language from it
+ * @return language
+ */
+global define string ReadSysconfigLanguage () {
+
+    string local_lang = Misc::SysconfigRead (.sysconfig.language.RC_LANG, language);
+
+    integer pos = findfirstof (local_lang, ".@");
+
+    if (pos != nil && pos >= 0)
+    {
+	local_lang = substring (local_lang, 0, pos);
+    }
+
+    y2milestone ("language from sysconfig: %1", local_lang);
+    return local_lang;
+}
+
+/**
+ * Read the rest of language values from sysconfig
+ */
+global define void ReadSysconfigValues () {
+
+    rootlang = Misc::SysconfigRead (.sysconfig.language.ROOT_USES_LANG, rootlang);
+    if (!Stage::initial ())
+    {
+	string val = toupper (Misc::SysconfigRead (.sysconfig.language.RC_LANG, ""));
+	use_utf8 = find (val, ".UTF-8") > 0;
+    }
+    else
+    {
+	use_utf8 = true;
+    }
+    languages = Misc::SysconfigRead (.sysconfig.language.INSTALLED_LANGUAGES, "");
+}
+
+/**
+ * Constructor
+ *
+ * Initializes module either from /etc/install.inf
+ * or from /etc/sysconfig/language
+ */
+global define void Language() {
+
+    if (Mode::config ())
+    {
+	// read the translated name: bug #180633
+	read_languages_map();
+	name	= languages_map[language, 4]:language;
+	return;
+    }
+
+    if (Stage::initial ())
+    {
+	string lang = (string)SCR::Read (.content.LANGUAGE);
+	y2milestone ("content LANGUAGE %1", lang);
+
+	preselected = Linuxrc::InstallInf ("Locale");
+	y2milestone ("install_inf Locale %1", preselected);
+	if (preselected != nil && preselected != "")
+	{
+	    lang = preselected;
+	    if (lang != "en_US")
+	    {
+		linuxrc_language_set = true;
+	    }
+	}
+	else
+	    preselected	= "en_US";
+
+	if (lang == nil)
+	    lang = "";
+	y2milestone ("lang after checking /etc/install.inf: %1", lang );
+	if (lang == "")
+	{
+	    lang = Pkg::GetLocale();
+	    y2milestone ("setting lang to default language: %1", lang);
+	}
+        // Ignore any previous settings and take language from control file.
+	string l = ProductFeatures::GetStringFeature ("globals","language");
+        if (l != nil && l != "")
+        {
+            lang = l;
+	    y2milestone ("setting lang to ProductFeatures::language: %1", lang);
+        }
+	Set (lang);		// coming from /etc/install.inf
+	SetDefault ();		// also default
+    }
+    else
+    {
+	string local_lang = ReadSysconfigLanguage ();
+
+	Set (local_lang);
+	SetDefault();		// also default
+    }
+    if (SCR::Read (.target.size, "/etc/sysconfig/language") > 0)
+    {
+	ReadSysconfigValues ();
+    }
+    Encoding::SetUtf8Lang (use_utf8);
+}
+
+/**
+ * Store the inital values; in normal mode, read from system was done in constructor
+ * @param really: also read the values from the system
+ */
+global define boolean Read (boolean really) {
+
+    if (really)
+    {
+	Set (ReadSysconfigLanguage ());
+	ReadSysconfigValues ();
+    }
+
+    language_on_entry	= language;
+    languages_on_entry	= languages;
+
+    y2milestone ("language: %1, languages: %2", language_on_entry, languages_on_entry);
+
+    ExpertSettingsChanged	= false;
+
+    return true;
+}
+
+/**
+ * was anything modified?
+ */
+global define boolean Modified () {
+
+    return (language != language_on_entry			||
+	    ExpertSettingsChanged				||
+	    sort (splitstring (languages, ",")) !=
+	    sort (splitstring (languages_on_entry, ","))
+    );
+}
+
+/**
+ * GetExpertValues()
+ *
+ * Return the values for the various expert settings in a map
+ *
+ * @param       -
+ *
+ * @return  map with values filled in
+ *
+ */
+global define map GetExpertValues () {
+
+    return $[
+	"rootlang"		: rootlang,
+        "use_utf8"		: use_utf8,
+    ];
+}
+
+/**
+ * SetExpertValues()
+ *
+ * Set the values of the various expert setting
+ *
+ * @param       val     map with new values of expert settings
+ *
+ * @return  void
+ *
+ */
+global define void SetExpertValues (map val) {
+
+    if (haskey (val,"rootlang") && size (val["rootlang"]:"") >0)
+    {
+        rootlang = val["rootlang"]:"";
+    }
+    if (haskey (val,"use_utf8"))
+    {
+        use_utf8 = val["use_utf8"]:false;
+	Encoding::SetUtf8Lang (use_utf8);
+    }
+}
+
+/**
+ * WfmSetLanguag()
+ *
+ * Set the given language in WFM and UI
+ *
+ * @param       language (could be different from current in CJK case)
+ *
+ * @return      -
+ */
+global define void WfmSetGivenLanguage (string lang) {
+
+    if (Mode::config ())
+	return;
+
+    string encoding	= (use_utf8) ? "UTF-8" : Encoding::console;
+
+    y2milestone ( "language %1 enc %2 utf8:%3", lang, encoding, use_utf8 );
+
+    UI::SetLanguage (lang, encoding);
+
+    if (use_utf8)
+    {
+	WFM::SetLanguage(lang, "UTF-8");
+    }
+    else
+    {
+	WFM::SetLanguage(lang);
+    }
+    if (Stage::initial () && !GetTextMode ())
+    {
+	// update font for windowmanager windows
+	SCR::Write (.FvwmCommand.lang, lang);
+    }
+}
+
+
+/**
+ * WfmSetLanguag()
+ *
+ * Set the current language in WFM and UI
+ *
+ * @param       -
+ *
+ * @return      -
+ */
+global define void WfmSetLanguage () {
+
+    WfmSetGivenLanguage (language);
+}
+
+
+/**
+ * Return proposal string.
+ *
+ * @return	string	user readable description.
+ *		If force_reset is true reset the module to the language
+ *		stored in default_language.
+ */
+global define list<string> MakeProposal (boolean force_reset,boolean language_changed)
+{
+    y2milestone("force_reset: %1", force_reset);
+    y2milestone("language_changed: %1", language_changed);
+
+    if (force_reset)
+    {
+	Set (default_language);	// reset
+    }
+    list<string> ret =  [
+	// summary label
+	sformat (_("Primary Language: %1"), name)
+    ];
+    if (languages != "" && languages != language)
+    {
+	read_languages_map();
+	list<string> langs	= [];
+	foreach (string lang, splitstring (languages, ","), {
+	    if (lang != language)
+	    {
+		string l = languages_map[lang,4]:languages_map[lang,0]:"";
+		if (l != "")
+		    langs = add (langs, l);
+	    }
+	});
+	if (size (langs) > 0)
+	{
+	    // summary label
+	    ret = add (ret, sformat (_("Additional Languages: %1"),
+		mergestring (langs,", ")));
+	}
+    }
+    return ret;
+}
+
+/**
+ * Return 'simple' proposal string.
+ * @return string preformated description.
+ */
+global define string MakeSimpleProposal ()
+{
+    import "HTML";
+
+    list<string> ret =  [
+	// summary label
+	sformat (_("Primary Language: %1"), name)
+    ];
+    if (languages != "" && languages != language)
+    {
+	list<string> langs	= [];
+	foreach (string lang, splitstring (languages, ","), {
+	    if (lang != language)
+	    {
+		string l = languages_map[lang,4]:languages_map[lang,0]:"";
+		if (l != "")
+		    langs = add (langs, l);
+	    }
+	});
+	if (size (langs) > 0)
+	{
+	    // summary label
+	    ret = add (ret, sformat (_("Additional Languages: %1"),
+		HTML::List (langs)));
+	}
+    }
+    return HTML::List (ret);
+}
+
+/**
+ * return user readable description of language
+ */
+global define string GetName () {
+
+    return name;
+}
+
+/**
+ * Return a map of ids and names to build up a selection list
+ * for the user. The key is used later in the Set function
+ * to select this language. The name is a translated string.
+ *
+ * @return map of $[ language : [ utf8-name, ascii-name] ...]
+ *			for all known languages
+ *			'language' is the (2 or 5 char)  ISO language code.
+ *			'utf8-name' is a user-readable (UTF-8 encoded !) string.
+ *			'ascii-name' is an english (ascii encoded !) string.
+ * @see Set
+ */
+global define map<string, list> Selection() {
+
+    read_languages_map();
+
+    return mapmap (string code, list data, languages_map,
+	``($[code: [data[0]:"", data[1]:"", data[4]:data[0]:""]]));
+}
+
+
+/**
+ * Save state to target.
+ */
+global define void Save() {
+
+    string loc = GetLocaleString (language);
+
+    SCR::Write (.sysconfig.language.RC_LANG, loc);
+
+    if (find (loc, "zh_HK") == 0)
+    {
+	SCR::Write(.sysconfig.language.RC_LC_MESSAGES,"zh_TW"+substring(loc,5));
+    }
+    else
+    {
+	// FIXME ugly hack: see bug #47711
+	string lc_mess = (string)SCR::Read(.sysconfig.language.RC_LC_MESSAGES);
+	if (find (lc_mess, "zh_TW") == 0)
+	{
+	    SCR::Write (.sysconfig.language.RC_LC_MESSAGES, "");
+	}
+    }
+
+    SCR::Write (.sysconfig.language.ROOT_USES_LANG, rootlang);
+    SCR::Write (.sysconfig.language.INSTALLED_LANGUAGES, languages);
+    SCR::Write (.sysconfig.language, nil);
+
+    y2milestone ("Saved data for language: <%1>", loc);
+}
+
+/**
+ * Initializes source and target,
+ * computes the packages necessary to install and uninstall,
+ * checks for disk space (#50745)
+ * @return false when there is not enough disk space for new packages
+ */
+global define boolean PackagesInit (list<string> selected_languages) {
+
+    PackageSystem::EnsureSourceInit ();
+    PackageSystem::EnsureTargetInit ();
+
+    Pkg::SetAdditionalLocales (selected_languages);
+    Pkg::PkgSolve (true);
+
+    boolean ok	= true;
+    foreach (string mountpoint, list<integer> usage, Pkg::TargetGetDU (), {
+	if (usage[2]:0 > usage[0]:0)
+	{
+	    ok = false;
+	}
+    });
+    return ok;;
+}
+
+/**
+ * Install and uninstall packages selected by Pkg::SetAdditionalLocales
+ */
+global define boolean PackagesCommit () {
+
+    PackageCallbacksInit::InitPackageCallbacks ();
+    Pkg::PkgCommit (0);
+    return true;
+}
+
+/**
+ * de_DE@UTF-8 -> "DE"
+ * @return country part of language
+ */
+global define string GetGivenLanguageCountry (string lang) {
+
+    string country	= lang;
+
+    if (country == nil || country == "")
+        country = default_language;
+    if (country != nil && country != "")
+    {
+        if (find (country, "@") != -1)
+            country = splitstring (country, "@") [0]:"";
+    }
+    if (country != nil && country != "")
+    {
+        if (find(country, "_") != -1)
+            country = splitstring (country, "_") [1]:"";
+	else
+	    country = toupper(country);
+    }
+
+    y2debug("country=%1",country);
+    return country;
+}
+
+
+/**
+ * de_DE@UTF-8 -> "DE"
+ * @return country part of language
+ */
+global define string GetLanguageCountry() {
+
+    return GetGivenLanguageCountry (language);
+}
+
+
+/**
+ * Returns true if translation for given language is not complete
+ */
+global define boolean IncompleteTranslation (string lang) {
+
+    if (!haskey (translation_status,lang))
+    {
+	string file	= "/usr/lib/YaST2/trans/" + lang + ".status";
+	if (!FileUtils::Exists (file))
+	{
+	    string ll	= splitstring (lang, "_") [0]:"";
+	    if (ll != "")
+		file	= "/usr/lib/YaST2/trans/" + ll + ".status";
+	}
+
+	string status	= (string) SCR::Read (.target.string, file);
+
+	if (status != nil && status != "")
+	{
+	    integer to_i		= tointeger (status);
+	    translation_status[lang]	= (to_i != nil) ? to_i : 0;
+	}
+	else
+	    translation_status[lang]	= 100;
+    }
+    integer treshold = tointeger (ProductFeatures::GetStringFeature (
+	"globals", "incomplete_translation_treshold"));
+    if (treshold == nil) treshold = 95;
+
+    return translation_status[lang]:0 < treshold;
+}
+
+/**
+ * AutoYaST interface function: Get the Language configuration from a map.
+ * @param settings imported map
+ * @return success
+ */
+global define boolean Import (map settings) {
+
+    if (languages_on_entry == "")
+	Read (false); // only save original values
+
+    Set (settings["language"]:language);
+    languages	= settings["languages"]:languages;
+
+    list<string> llanguages = splitstring (languages, ",");
+    if (!contains (llanguages, language))
+    {
+	llanguages	= add (llanguages, language);
+	languages	= mergestring (llanguages, ",");
+    }
+    // set the language dependent packages to install
+    if (Mode::autoinst ())
+    {
+	Pkg::SetLocale (language);
+	Pkg::SetAdditionalLocales (splitstring (languages, ","));
+    }
+
+    return true;
+}
+
+/**
+ * AutoYaST interface function: Return the Language configuration as a map.
+ * @return map with the settings
+ */
+global define map Export () {
+
+    map ret = $[
+	"language"	: language,
+	"languages"	: languages
+    ];
+    return ret;
+}
+
+/**
+ * AutoYaST interface function: Return the summary of Language configuration as a map.
+ * @return summary string
+ */
+global define string Summary () {
+
+    return MakeSimpleProposal ();
+}
+
+
+/* EOF */
+}

@@ -1,0 +1,23 @@
+/**
+ * File:
+ *   fvwm2_setlang.scr
+ * Summary:
+ *   SCR Agent for setting the font according to language and area code on
+ *   remote fvwm2 window manager.
+ * Access:
+ *   write-only
+ * Authors:
+ *   Olaf Dabrunz <od@suse.de>
+ * See:
+ *   anyagent
+ *   libscr
+ * Example:
+ *   Write(.FvwmCommand.lang, lang-area)
+ *
+ * $Id$
+ *
+ * Sets the fvwm2 font according to language and area code.
+ */
+.FvwmCommand
+
+`ag_fvwm2_setlang ()

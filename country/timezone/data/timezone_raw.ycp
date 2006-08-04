@@ -1,0 +1,397 @@
+/**
+ * File:	data/timezone_raw.ycp
+ * Authors:	Thomas Roelz <tom@suse.de>
+ * Summary:	The untranslated timezone database.
+ *
+ * $Id$
+ *
+ * *****************************************************************
+ * In case of changes please keep the following files in sync:
+ * lang2tz.ycp, timezone_raw.ycp
+ * System timezones can be found in /usr/share/zoneinfo/zone.tab
+ * *****************************************************************
+ *
+ */
+
+{
+textdomain "timezone_db";
+
+// list < map < string, any> >
+return ([
+
+$[ "name" : _("Europe"),
+   "entries" : $[
+	"Europe/Amsterdam" : _("Netherlands"),
+	"Europe/Athens" : _("Greece"),
+	"Europe/Belfast" : _("Northern Ireland"),
+	"Europe/Belgrade" : _("Yugoslavia"),
+	"Europe/Berlin" : _("Germany"),
+	"Europe/Bratislava" : _("Slovakia"),
+	"Europe/Brussels" : _("Belgium"),
+	"Europe/Bucharest" : _("Romania"),
+	"Europe/Budapest" : _("Hungary"),
+	"Europe/Chisinau" : _("Moldova"),
+	"Europe/Copenhagen" : _("Denmark"),
+	"Europe/Dublin" : _("Ireland"),
+	"Europe/Gibraltar" : _("Gibraltar"),
+	"Europe/Helsinki" : _("Finland"),
+	"Europe/Istanbul" : _("Turkey"),
+	// time zone
+	"Europe/Kaliningrad"	: _("Russia (Kaliningrad)"),
+	"Europe/Kiev" : _("Ukraine"),
+	"Europe/Lisbon" : _("Portugal"),
+	"Europe/Ljubljana" : _("Slovenia"),
+	"Europe/London" : _("United Kingdom"),
+	"Europe/Luxembourg" : _("Luxembourg"),
+	"Europe/Madrid" : _("Spain"),
+	"Europe/Malta" : _("Malta"),
+	"Europe/Monaco" : _("Monaco"),
+	// time zone
+	"Europe/Moscow"		: _("Russia (Moscow)"),
+	"Europe/Oslo" : _("Norway"),
+	"Europe/Paris" : _("France"),
+	"Europe/Prague" : _("Czech Republic"),
+	"Europe/Riga" : _("Latvia"),
+	"Europe/Rome" : _("Italy"),
+	// time zone
+	"Europe/San_Marino"	: _("San Marino"),
+	// time zone
+	"Europe/Samara"		: _("Russia (Samara)"),
+	"Europe/Sarajevo" : _("Bosnia & Herzegovina"),
+	"Europe/Skopje" : _("Macedonia"),
+	"Europe/Sofia" : _("Bulgaria"),
+	"Europe/Stockholm" : _("Sweden"),
+	"Europe/Tallinn" : _("Estonia"),
+	"Europe/Tirane" : _("Albania"),
+	"Europe/Vaduz" : _("Liechtenstein"),
+	"Europe/Vatican" : _("Vatican"),
+	"Europe/Vienna" : _("Austria"),
+	"Europe/Vilnius" : _("Lithuania"),
+	"Europe/Warsaw" : _("Poland"),
+	"Europe/Zagreb" : _("Croatia"),
+	"Iceland" : _("Iceland"),
+	"Atlantic/Azores" : _("Azores"),
+	"Europe/Zurich" : _("Switzerland") ] ],
+
+$[ "name" : _("USA"),
+   "entries" : $[
+	"US/Alaska" : _("Alaska"),
+	"US/Aleutian" : _("Aleutian"),
+	"US/Arizona" : _("Arizona"),
+	"US/Central" : _("Central"),
+	"US/East-Indiana" : _("East Indiana"),
+	"US/Hawaii" : _("Hawaii"),
+	"US/Indiana-Starke" : _("Indiana Starke"),
+	"US/Michigan" : _("Michigan"),
+	"US/Mountain" : _("Mountain"),
+	"US/Pacific" : _("Pacific"),
+	"US/Samoa" : _("Samoa"),
+	"US/Eastern" : _("Eastern") ] ],
+
+$[ "name" : _("Canada"),
+   "entries" : $[
+	"Canada/Atlantic" : _("Atlantic"),
+	"Canada/Central" : _("Central"),
+	"Canada/Eastern" : _("Eastern"),
+	"Canada/Mountain" : _("Mountain"),
+	"Canada/Newfoundland" : _("Newfoundland"),
+	"Canada/Pacific" : _("Pacific"),
+	"Canada/Saskatchewan" : _("Saskatchewan"),
+	"Canada/East-Saskatchewan" : _("East Saskatchewan"),
+	"Canada/Yukon" : _("Yukon") ] ],
+
+$[ "name" : _("Central and South America"),
+   "entries" : $[
+	// time zone
+	"Brazil/Acre" : _("Brazil Acre"),
+	"Brazil/East" : _("Brazil East"),
+	"Brazil/West" : _("Brazil West"),
+	"Chile/Continental" : _("Chile Continental"),
+	"Chile/EasterIsland" : _("Chile EasterIsland"),
+	"Jamaica" : _("Jamaica"),
+	"Atlantic/Bermuda" : _("Bermuda"),
+	"Mexico/BajaNorte" : _("Mexico BajaNorte"),
+	"Mexico/BajaSur" : _("Mexico BajaSur"),
+	"America/Asuncion" : _("Asuncion"),
+	"America/Barbados" : _("Barbados"),
+	"America/Bogota" : _("Bogota"),
+	"America/Buenos_Aires" : _("Buenos Aires"),
+	// time zone
+	"America/Cayenne" : _("Cayenne"),
+	"America/Caracas" : _("Caracas"),
+	"America/Costa_Rica" : _("Costa Rica"),
+	"America/Dominica" : _("Dominica"),
+	"America/El_Salvador" : _("El Salvador"),
+	"America/Grenada" : _("Grenada"),
+	"America/Guadeloupe" : _("Guadeloupe"),
+	"America/Guatemala" : _("Guatemala"),
+	// time zone
+	"America/Guyana" : _("Guyana"),
+	"America/Lima" : _("Lima"),
+	"America/Managua" : _("Managua"),
+	"America/Martinique" : _("Martinique"),
+	"America/Panama" : _("Panama"),
+	"America/Puerto_Rico" : _("Puerto Rico"),
+	"America/Montevideo" : _("Uruguay"),
+	// time zone
+	"America/Virgin" : _("Virgin Islands"),
+	"Mexico/General" : _("Mexico General") ] ],
+
+$[
+    // name of region
+    "name"	: _("Russia"),
+    "entries"	: $[
+	// time zone
+	"Europe/Kaliningrad"	: _("Kaliningrad"),
+	// time zone
+	"Europe/Moscow"		: _("Moscow"),
+	// time zone
+	"Europe/Samara"		: _("Samara"),
+	// time zone
+	"Asia/Anadyr"		: _("Anadyr"),
+	// time zone
+	"Asia/Irkutsk"		: _("Irkutsk"),
+	// time zone
+	"Asia/Kamchatka"	: _("Kamchatka"),
+	// time zone
+	"Asia/Krasnoyarsk"	: _("Krasnoyarsk"),
+	// time zone
+	"Asia/Magadan"		: _("Magadan"),
+	// time zone
+	"Asia/Novosibirsk"	: _("Novosibirsk"),
+	// time zone
+	"Asia/Omsk"		: _("Omsk"),
+	// time zone
+	"Asia/Sakhalin"		: _("Sakhalin"),
+	// time zone
+	"Asia/Vladivostok"	: _("Vladivostok"),
+	// time zone
+	"Asia/Yakutsk"		: _("Yakutsk"),
+	// time zone
+	"Asia/Yekaterinburg"	: _("Yekaterinburg"),
+    ]
+],
+
+$[ "name" : _("Asia"),
+   "entries" : $[
+	// time zone
+	"Japan"			: _("Japan"),
+	// time zone
+	"PRC"			: _("China"),
+	// time zone
+	"ROK"			: _("Korea"),
+	// time zone
+	"Hongkong"		: _("Hongkong"),
+	// time zone
+	"Asia/Kabul"		: _("Afghanistan"),
+	// time zone
+	"Asia/Anadyr"		: _("Anadyr"),
+	// time zone
+	"Asia/Baghdad"		: _("Baghdad"),
+	// time zone
+	"Asia/Bahrain"		: _("Bahrain"),
+	// time zone
+	"Asia/Bangkok"		: _("Bangkok"),
+	// time zone
+	"Asia/Beirut"		: _("Beirut"),
+	// time zone
+	"Asia/Brunei"		: _("Brunei"),
+	// time zone
+	"Asia/Calcutta"		: _("Calcutta"),
+	// time zone
+	"Asia/Colombo"		: _("Colombo"),
+	// time zone
+	"Asia/Damascus"		: _("Damascus"),
+	// time zone
+	"Asia/Dhaka"		: _("Dhaka"),
+	// time zone
+	"Asia/Dubai"		: _("Dubai"),
+	// time zone
+	"Asia/Gaza"		: _("Gaza"),
+	// time zone
+	"Asia/Irkutsk"		: _("Irkutsk"),
+	// time zone
+	"Asia/Jakarta"		: _("Jakarta"),
+	// time zone
+	"Asia/Kamchatka"	: _("Kamchatka"),
+	// time zone
+	"Asia/Katmandu"		: _("Katmandu"),
+	// time zone
+	"Asia/Krasnoyarsk"	: _("Krasnoyarsk"),
+	// time zone
+	"Asia/Kuala_Lumpur"	: _("Kuala Lumpur"),
+	// time zone
+	"Asia/Kuwait"		: _("Kuwait"),
+	// time zone
+	"Asia/Macao"		: _("Macao"),
+	// time zone
+	"Asia/Magadan"		: _("Magadan"),
+	// time zone
+	"Asia/Manila"		: _("Manila"),
+	// time zone
+	"Asia/Novosibirsk"	: _("Novosibirsk"),
+	// time zone
+	"Asia/Omsk"		: _("Omsk"),
+	// time zone
+	"Asia/Phnom_Penh"	: _("Phnom Penh"),
+	// time zone
+	"Asia/Qatar"		: _("Qatar"),
+	// time zone
+	"Asia/Saigon"		: _("Saigon"),
+	// time zone
+	"Asia/Sakhalin"		: _("Sakhalin"),
+	// time zone
+	"Asia/Samarkand"	: _("Samarkand"),
+	// time zone
+	"Asia/Tashkent"		: _("Tashkent"),
+	// time zone
+	"Asia/Tel_Aviv"		: _("Tel Aviv"),
+	// time zone
+	"Asia/Vladivostok"	: _("Vladivostok"),
+	// time zone
+	"Asia/Yekaterinburg"	: _("Yekaterinburg"),
+	// time zone
+	"Asia/Tokyo"		: _("Tokyo"),
+	// time zone
+	"Asia/Shanghai"		: _("Shanghai"),
+	// time zone
+	"Asia/Taipei"		: _("Taipei"),
+	// time zone
+	"Asia/Seoul"		: _("Seoul"),
+	// time zone
+	"Israel"		: _("Israel"),
+	// time zone
+	"Mideast/Riyadh87"	: _("Mideast Riyadh87"),
+	// time zone
+	"Mideast/Riyadh88"	: _("Mideast Riyadh88"),
+	// time zone
+	"Mideast/Riyadh89"	: _("Mideast Riyadh89"),
+	// time zone
+	"Asia/Singapore"	: _("Singapore"),
+	// time zone
+	"Asia/Yakutsk"		: _("Yakutsk"),
+    ]
+],
+
+$[ "name" : _("Australia"),
+   "entries" : $[
+	"Australia/North"	: _("Northern Territory--Darwin"),
+	"Australia/Queensland"	: _("Queensland--Brisbane"),
+	"Australia/South"	: _("South Australia--Adelaide"),
+	"Australia/NSW"		: _("New South Wales--Sydney"),
+	"Australia/ACT"		: _("Australian Capital Territory--Canberra"),
+	"Australia/Tasmania"	: _("Tasmania--Hobart"),
+	"Australia/Victoria"	: _("Victoria--Melbourne"),
+	"Australia/West"	: _("Western Australia--Perth"),
+    ]
+],
+
+$[ "name" : _("Africa"),
+   "entries" : $[
+	"Africa/Algiers" : _("Algiers"),
+	"Africa/Brazzaville" : _("Brazzaville"),
+	"Africa/Casablanca" : _("Casablanca"),
+	"Africa/Ceuta" : _("Ceuta"),
+	"Africa/Dakar" : _("Dakar"),
+	"Africa/Dar_es_Salaam" : _("Dar es Salaam"),
+	"Africa/Djibouti" : _("Djibouti"),
+	"Africa/Freetown" : _("Freetown"),
+	"Africa/Johannesburg" : _("Johannesburg"),
+	"Africa/Libreville" : _("Libreville"),
+	"Africa/Monrovia" : _("Monrovia"),
+	"Africa/Nairobi" : _("Nairobi"),
+	"Africa/Timbuktu" : _("Timbuktu"),
+	"Africa/Tunis" : _("Tunis"),
+	"Africa/Windhoek" : _("Windhoek"),
+	"Africa/Cairo" : _("Cairo"),
+	"Egypt" : _("Egypt"),
+	"Africa/Tripoli" : _("Tripoli") ] ],
+
+$[ "name" : _("Pacific"),
+   "entries" : $[
+	"Pacific/Auckland" : _("New Zealand"),
+	"Pacific/Fiji" : _("Fiji"),
+	"Pacific/Galapagos" : _("Galapagos"),
+	"Pacific/Guadalcanal" : _("Guadalcanal"),
+	"Pacific/Guam" : _("Guam"),
+	"Pacific/Midway" : _("Midway"),
+	"Pacific/Nauru" : _("Nauru"),
+	"Pacific/Palau" : _("Palau"),
+	"Pacific/Pitcairn" : _("Pitcairn"),
+	"Pacific/Tahiti" : _("Tahiti"),
+	"Pacific/Samoa" : _("Samoa") ] ],
+
+$[ "name" : _("Global"),
+   "entries" : $[
+	"Antarctica/South_Pole" : _("South Pole"),
+	"Arctic/Longyearbyen" : _("Arctic Longyearbyen"),
+	"CET" : _("CET"),
+	"CST6CDT" : _("CST6CDT"),
+	"EET" : _("EET"),
+	"EST" : _("EST"),
+	"EST5EDT" : _("EST5EDT"),
+	"GMT" : _("GMT"),
+	"GMT+0" : _("GMT+0"),
+	"GMT-0" : _("GMT-0"),
+	"GMT0" : _("GMT0"),
+	"Greenwich" : _("Greenwich"),
+	"HST" : _("HST"),
+	"MET" : _("MET"),
+	"MST" : _("MST"),
+	"MST7MDT" : _("MST7MDT"),
+	"NZ" : _("NZ"),
+	"NZ-CHAT" : _("NZ-CHAT"),
+	"Navajo" : _("Navajo"),
+	"PST8PDT" : _("PST8PDT"),
+	"UCT" : _("UCT"),
+	"UTC" : _("UTC"),
+	"Universal" : _("Universal"),
+	"W-SU" : _("W-SU"),
+	"WET" : _("WET"),
+	"Zulu" : _("Zulu") ] ],
+
+$[ "name" : _("Etc"),
+   "entries" : $[
+	"Etc/GMT+1" : _("GMT+1"),
+	"Etc/GMT+10" : _("GMT+10"),
+	"Etc/GMT+11" : _("GMT+11"),
+	"Etc/GMT+12" : _("GMT+12"),
+	"Etc/GMT+2" : _("GMT+2"),
+	"Etc/GMT+3" : _("GMT+3"),
+	"Etc/GMT+4" : _("GMT+4"),
+	"Etc/GMT+5" : _("GMT+5"),
+	"Etc/GMT+6" : _("GMT+6"),
+	"Etc/GMT+7" : _("GMT+7"),
+	"Etc/GMT+8" : _("GMT+8"),
+	"Etc/GMT+9" : _("GMT+9"),
+	"Etc/GMT-1" : _("GMT-1"),
+	"Etc/GMT-10" : _("GMT-10"),
+	"Etc/GMT-11" : _("GMT-11"),
+	"Etc/GMT-12" : _("GMT-12"),
+	"Etc/GMT-13" : _("GMT-13"),
+	"Etc/GMT-14" : _("GMT-14"),
+	"Etc/GMT-2" : _("GMT-2"),
+	"Etc/GMT-3" : _("GMT-3"),
+	"Etc/GMT-4" : _("GMT-4"),
+	"Etc/GMT-5" : _("GMT-5"),
+	"Etc/GMT-6" : _("GMT-6"),
+	"Etc/GMT-7" : _("GMT-7"),
+	"Etc/GMT-8" : _("GMT-8"),
+	"Etc/GMT-9" : _("GMT-9"),
+	"Etc/GMT" : _("GMT"),
+	"Etc/GMT+0" : _("GMT+0"),
+	"Etc/GMT-0" : _("GMT-0"),
+	"Etc/GMT0" : _("GMT0"),
+	"Etc/Greenwich" : _("Greenwich"),
+	"Etc/UCT" : _("UCT"),
+	"Etc/UTC" : _("UTC"),
+	"Etc/Universal" : _("Universal"),
+	"Etc/Zulu" : _("Zulu") ] ],
+
+] );
+
+
+
+/* EOF */
+
+}

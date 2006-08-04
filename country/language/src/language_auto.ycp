@@ -1,0 +1,80 @@
+/**
+ * Autoinstallation client for language setting
+ * Author	: Jiri Suchomel <jsuchome@suse.cz>
+ *
+ * $Id$
+ */
+{
+    import "Language";
+    import "Console";
+    import "Wizard";
+
+    any ret = nil;
+    string func = "";
+    map<string,any> param = $[];
+
+    if(size(WFM::Args()) > 0 && is(WFM::Args(0), string)) {
+    func = (string) WFM::Args(0);
+    if(size(WFM::Args()) > 1 && is(WFM::Args(1), map))
+	param = (map<string,any>)WFM::Args(1);
+    }
+
+    y2debug ("func=%1", func);
+    y2debug ("param=%1", param);
+
+    if (func == "Change") {
+	Wizard::CreateDialog();
+	Wizard::HideAbortButton();
+
+	ret = WFM::CallFunction ("select_language", [
+	    $["enable_back" : true, "enable_next" : true ]]);
+
+	Wizard::CloseDialog ();
+    }
+    else if(func == "Import") {
+	ret = Language::Import (param);
+    }
+    else if(func == "Summary") {
+	ret = Language::Summary();
+    }
+    else if (func == "Reset") {
+	Language::Import($[
+	    "language"	: Language::language_on_entry,
+	    "languages"	: Language::languages_on_entry,
+	]);
+	Language::ExpertSettingsChanged	= false;
+	ret =  $[];
+    }
+    else if (func == "Read") {
+	ret = Language::Read(true);
+    }
+    else if (func == "Export") {
+	ret = Language::Export ();
+    }
+    else if (func == "Write") {
+	Console::SelectFont (Language::language);
+	Console::Save ();
+	ret = Language::Save();
+    }
+    /**
+     * Return if configuration  was changed
+     * return boolean
+     */
+    else if (func == "GetModified") {
+	ret = Language::Modified ();
+    }
+    /**
+     * Set all modified flags
+     * return boolean
+     */
+    else if (func == "SetModified") {
+	Language::ExpertSettingsChanged	= true;// hook (no general 'modified' variable)
+	ret = true;
+    }
+
+    y2debug("ret=%1", ret);
+    y2milestone("language auto finished");
+    y2milestone("----------------------------------------");
+
+    return ret;
+}

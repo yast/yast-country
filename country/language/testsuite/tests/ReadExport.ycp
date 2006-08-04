@@ -1,0 +1,45 @@
+/**
+ * tests for Language.ycp autoyast functions: prepare for cloning
+ * Author:	jsuchome@suse.cz
+ * $Id$
+ */
+{
+    // testedfiles: Language.ycp
+
+    import "Testsuite";
+
+    map READ = $[
+	"sysconfig" : $[
+	    "language" : $[
+		"RC_LANG"		: "de_DE.UTF-8",
+		"INSTALLED_LANGUAGES"	: "en_US,de_DE",
+	    ],
+	],
+	"target" : $[
+	    "size"		: 1,
+	    "yast2"		: $[],
+	],
+    ];
+
+    map E	= $[
+	"target" : $[
+	    "bash_output"	: $[],
+	],
+    ];
+
+    import "Mode";
+    Mode::SetMode ("autoinst_config");
+
+    Testsuite::Init ([READ,$[],E], nil);
+
+    import "Language";
+
+    Testsuite::Test (``(Language::Read (true)), [READ,$[],E], nil);
+
+    Testsuite::Test (``(Language::Export ()), [], nil);
+
+    Testsuite::Test (``(Language::Summary ()), [], nil);
+
+    Testsuite::Test (``(Language::Modified ()), [], nil);
+
+}
