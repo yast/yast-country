@@ -20,13 +20,21 @@
     {
 	boolean force_reset      = param["force_reset"     ]:false;
 	boolean language_changed = param["language_changed"]:false;
+	// summary label <%1>-<%2> are HTML tags, leave untouched
+	string kbd_proposal	= sformat (_("<%1>Keyboard Layout<%2>: %3"),
+			"a href=\"country--keyboard\"", "/a",
+			Keyboard::MakeProposal (force_reset, language_changed)
+	);
+	list<string> proposal	=
+	    Language::MakeProposal (force_reset, language_changed);
+	// summary label <%1>-<%2> are HTML tags, leave untouched
+	proposal[0]	= sformat (_("<%1>Language<%2>: %3"),
+			 "a href=\"country--language\"", "/a",
+			 Language::GetName ()
+	);
+
 	ret = $[
-	    "preformatted_proposal"	:
-		Language::MakeSimpleProposal () +
-		// summary label
-		HTML::List ([ sformat (_("Keyboard Layout: %1"),
-		    Keyboard::MakeProposal (force_reset, language_changed))
-		]),
+	    "preformatted_proposal" : HTML::List (add (proposal, kbd_proposal)),
 	    "language_changed"	: false,
 	    "links"	: [ "country--language", "country--keyboard" ]
 	];
@@ -34,12 +42,8 @@
     else if ( func == "Description" )
     {
 	ret	= $[
-	    "rich_text_raw_title"	:
-		// rich text label (<%1>-<%3> are HTML tags, leave untouched)
-		sformat (_("<%1>Language<%2> and <%3>Keyboard Layout<%2>"),
-		    "a href=\"country--language\"", "/a",
-		    "a href=\"country--keyboard\""
-		),
+	    // rich text label
+	    "rich_text_title"	:	_("Locale settings"),
 	    "menu_titles"		: [
 		// menu button label
 		$[ "id"	: "country--language", "title" : _("&Language") ],
