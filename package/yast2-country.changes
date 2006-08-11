@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Aug  9 12:34:45 CEST 2006 - jsrain@suse.cz
+
+- fixed path of fvwm stuff (X11 version change)
+- 2.13.31
+
+-------------------------------------------------------------------
 Mon Aug  7 13:48:31 CEST 2006 - jsuchome@suse.cz
 
 - better Locale proposal for Overview tab
