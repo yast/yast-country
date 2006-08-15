@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Aug 14 16:06:50 CEST 2006 - jsuchome@suse.cz
+
+- fixed path of setxkbmap (X11 version change)
+- 2.13.32 
+
+-------------------------------------------------------------------
 Wed Aug  9 12:34:45 CEST 2006 - jsrain@suse.cz
 
 - fixed path of fvwm stuff (X11 version change)

@@ -88,6 +88,7 @@
     import "ProductFeatures";
     import "Stage";
     import "XLibAPI";
+    import "XVersion";
 
     // ------------------------------------------------------------------------
     // START: Globally defined data to be accessed via Keyboard::<variable>
@@ -601,7 +602,7 @@ global define boolean SetLanguage (string keyboard) {
 	// do not try to run this with remote X display
 	if (size (Apply) >0 && x11_setup_needed ())
 	{
-	    xkb_cmd = "/usr/X11R6/bin/setxkbmap " + Apply;
+	    xkb_cmd = XVersion::binPath () + "/setxkbmap " + Apply;
 	}
 	else
 	{
