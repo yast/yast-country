@@ -4,7 +4,6 @@
 
 ydata_DATA =			\
 	country_long.ycp	\
-	lang2iso.ycp		\
 	country.ycp
 
 client_DATA =			\
