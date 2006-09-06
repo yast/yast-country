@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Wed Sep  6 11:26:02 CEST 2006 - jsuchome@suse.cz
+
+- fixed help text in language selection (#203807)
+- fixed help text for time adjustment (#203810)
+- unified naming scheme for keyboard layouts (#203812)
+- changed "Canada" layout name to "Canadian (Multilingual)" (#158951)
+- removed obsolete file lang2iso.ycp
+- 2.13.33
+
+-------------------------------------------------------------------
 Mon Aug 14 16:06:50 CEST 2006 - jsuchome@suse.cz
 
 - fixed path of setxkbmap (X11 version change)
