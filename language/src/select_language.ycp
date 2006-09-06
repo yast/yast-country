@@ -376,7 +376,7 @@ the installed system.
 
 	// help text, continued
 	help_text = help_text + _("<p>
-Click <b>Accept</b> to proceed to the next dialog.
+Click <b>Next</b> to proceed to the next dialog.
 </p>
 ");
 
