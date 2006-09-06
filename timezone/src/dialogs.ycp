@@ -361,7 +361,7 @@ to daylight saving time and back automatically.
 
     // general help trailer
     help_text = help_text + _("<p>
-If the current time is not correct, use <b>Change Time or Date</b> to adjust it.
+If the current time is not correct, use <b>Change</b> to adjust it.
 </p>");
 
     // Screen title for timezone screen
