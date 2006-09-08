@@ -1,15 +1,18 @@
 /**
- * File:
- *   lang2tz.ycp
+ * File:	lang2tz.ycp
  *
- * Authors:
- *   Thomas Roelz <tom@suse.de>
- *   (original authors unknown)
+ * Authors:	Thomas Roelz <tom@suse.de> (original authors unknown)
+ *
+ * Maintainer:	Jiri Suchomel <jsuchome@suse.cz>
  *
  *
  * Summary:  map language code to default timezone
  *
  * $Id$
+*
+ * This map does not need to contain the entries for languages directly
+ * supported by YaST - for such languages the default time zone mappings are
+ * present in their language_LANGCODE.ycp description files. See language/data.
  *
  * *****************************************************************
  * In case of changes please keep the following files in sync:
@@ -17,33 +20,24 @@
  * *****************************************************************
  */
 
-// map<string, string>
-
 $[
   "ar_eg"		: "Africa/Cairo",
-  "bg_BG"		: "Europe/Sofia",
-  "bn_BD"		: "Asia/Dhaka",
+
   "br_FR"		: "Europe/Paris",
-  "bs_BA"		: "Europe/Sarajevo",
-  "ca_ES"		: "Europe/Madrid",
-  "cs_CZ"		: "Europe/Prague",
-  "cy_GB"		: "Europe/London",
-  "da_DK"		: "Europe/Copenhagen",
+
   "de"			: "Europe/Berlin",
   "de_AT"		: "Europe/Vienna",
   "de_CH"		: "Europe/Zurich",
-  "de_DE"		: "Europe/Berlin",
   "de_LU"		: "Europe/Luxembourg",
   "de_BE"		: "Europe/Brussels",
-  "el_GR"		: "Europe/Athens",
+
   "en"			: "US/Eastern",
   "en_AU"		: "Australia/Sydney",
   "en_CA"		: "Canada/Eastern",
-  "en_GB"		: "Europe/London",
   "en_IE"		: "Europe/Belfast",
-  "en_US"		: "US/Eastern",
   "en_NZ"		: "Pacific/Auckland",
   "en_IN"		: "Asia/Calcutta",
+
   "es_AR"		: "America/Buenos_Aires",
   "es_CL"		: "Chile/Continental",
   "es_CO"		: "America/Bogota",
@@ -52,46 +46,24 @@ $[
   "es_PY"		: "America/Asuncion",
   "es_UY"		: "America/Montevideo",
   "es_VE"		: "America/Caracas",
-  "es_ES"		: "Europe/Madrid",
-  "fi_FI"		: "Europe/Helsinki",
+
   "fr"			: "Europe/Paris",
   "fr_BE"		: "Europe/Brussels",
   "fr_CA"		: "Canada/Eastern",
   "fr_CH"		: "Europe/Zurich",
-  "fr_FR"		: "Europe/Paris",
   "fr_LU"		: "Europe/Luxembourg",
-  "hi_IN"		: "Asia/Calcutta",
-  "hu_HU"		: "Europe/Budapest",
-  "he_IL"		: "Asia/Tel_Aviv",
-  "hr_HR"		: "Europe/Zagreb",
-  "it_IT"		: "Europe/Rome",
+
   "it_CH"		: "Europe/Zurich",
-  "ja_JP"		: "Asia/Tokyo",
+
   "km"			: "Asia/Phnom_Penh",
-  "km_KH"		: "Asia/Phnom_Penh",
-  "ko_KR"		: "Asia/Seoul",
-  "lt_LT"		: "Europe/Vilnius",
-  "nl_NL"		: "Europe/Amsterdam",
+
   "nl_BE"		: "Europe/Brussels",
+
   "no_NO"		: "Europe/Oslo",
-  "nb_NO"		: "Europe/Oslo",
-  "pa_IN"		: "Asia/Calcutta",
-  "pl_PL"		: "Europe/Warsaw",
-  "pt_BR"		: "Brazil/East",
-  "pt_PT"		: "Europe/Lisbon",
-  "ro_RO"		: "Europe/Bucharest",
+
   "ru"			: "Europe/Moscow",
-  "ru_RU"		: "Europe/Moscow",
   "ru_RU.KOI8-R"	: "Europe/Moscow",
   "ru_UA"		: "Europe/Kiev",
-  "sk_SK"		: "Europe/Bratislava",
-  "sl_SI"		: "Europe/Ljubljana",
+
   "sr_YU"		: "Europe/Belgrade",
-  "sr_CS"		: "Europe/Belgrade",
-  "sv_SE"		: "Europe/Stockholm",
-  "tr_TR"		: "Europe/Istanbul",
-  "uk_UA"		: "Europe/Kiev",
-  "vi_VN"		: "Asia/Saigon",
-  "zh_CN"		: "Asia/Shanghai",
-  "zh_TW"		: "Asia/Taipei",
 ]

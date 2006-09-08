@@ -72,6 +72,8 @@ map push = $[];
 string name = "";
 
 list < map < string, any> > zonemap = [];
+
+// 'language --> default timezone' conversion map
 map<string, string> lang2tz = $[];
 
 // ------------------------------------------------------------------
@@ -83,51 +85,51 @@ map<string, string> lang2tz = $[];
 // START: Globally defined functions
 // ---------------------------------------------------------------------------------------
 
-/*
+/**
  * get_lang2tz()
  *
  * Get the language --> timezone conversion map.
- *
- * @param	-
  *
  * @return  conversion map
  *
  * @see	get_zonemap()
  */
 
-define map<string, string> get_lang2tz()
-    ``{
-    // language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
-    //
-    if( size(lang2tz)==0 )
-	{
-	lang2tz = (map<string, string>)SCR::Read( .target.yast2, "lang2tz.ycp" );
-	if( lang2tz == nil ) lang2tz = $[];
-	}
-    return( lang2tz );
-    }	// get_lang2tz()
+define map<string, string> get_lang2tz () {
 
-/*
+    if (size (lang2tz) == 0)
+    {
+	map base_lang2tz = (map) SCR::Read (.target.yast2, "lang2tz.ycp");
+	if (base_lang2tz == nil) base_lang2tz = $[];
+
+	lang2tz	= (map<string,string>) union (
+	    base_lang2tz,
+	    Language::GetLang2TimezoneMap ()
+	);
+    }
+    return lang2tz;
+}
+
+/**
  * get_zonemap()
  *
  * Get the timezone database.
- *
- * @param	-
  *
  * @return  timezone DB (map)
  *
  * @see	get_lang2tz()
  */
 
-global define list < map < string, any> > get_zonemap() {
+global define list<map<string,any> > get_zonemap() {
 
-    if( size(zonemap)==0 )
-	{
-	zonemap = (list < map < string, any> >)eval(SCR::Read( .target.yast2, "timezone_raw.ycp" ));
+    if (size(zonemap) == 0)
+    {
+	zonemap = (list<map<string,any> >)
+	    eval (SCR::Read (.target.yast2, "timezone_raw.ycp"));
 	if( zonemap == nil ) zonemap = [];
-	}
-    return( zonemap );
-} // get_zonemap()
+    }
+    return zonemap;
+}
 
 // ------------------------------------------------------------------
 // END: Locally defined functions
@@ -306,7 +308,7 @@ global define void SetTime (string year, string month, string day,
  * @param	System language code, e.g. "en_US".
  *		Default timezone to be returned if nothing found.
  *
- * @return  The timezone for this language, e.g. "english-us"
+ * @return  The timezone for this language, e.g. "US/Eastern"
  *		or the default value if nothing found.
  *
  * @see	-
