@@ -11,6 +11,7 @@
     map READ = $[
 	"target" : $[
 	    "size"		: 1,
+	    "dir"		: [],
 	    "yast2"		: $[],
 	],
     ];

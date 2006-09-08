@@ -451,9 +451,7 @@ global define map GetX11KeyData (string keymap) {
     return( ret );
   }
 
-/*
- * get_lang2keyboard()
- *
+/**
  * Get the system_language --> keyboard_language conversion map.
  *
  * @return  conversion map
@@ -461,16 +459,13 @@ global define map GetX11KeyData (string keymap) {
  * @see	get_xkblayout2keyboard()
  */
 
-define map get_lang2keyboard()
-    ``{
-    // The system_language --> keyboard_language conversion map.
-    //
-    map lang2keyboard = (map)SCR::Read( .target.yast2, "lang2keyboard.ycp" );
+define map get_lang2keyboard() {
 
-    if ( lang2keyboard == nil ) lang2keyboard = $[];
+    map base_lang2keyboard = (map)SCR::Read(.target.yast2, "lang2keyboard.ycp");
+    if (base_lang2keyboard == nil) base_lang2keyboard = $[];
 
-    return( lang2keyboard );
-    }	// get_lang2keyboard()
+    return union (base_lang2keyboard, Language::GetLang2KeyboardMap ());
+}
 
 
 
@@ -489,19 +484,17 @@ define map get_lang2keyboard()
 global define string GetKeyboardForLanguage( string sys_language,
                                              string default_keyboard) {
 
-    // The system_language --> keyboard_language conversion map.
-    //
     map lang2keyboard	= get_lang2keyboard();
-    string lang		= lang2keyboard[sys_language]:"";
+    string kb		= lang2keyboard[sys_language]:"";
 
-    if (lang == "")
+    if (kb == "")
     {
 	sys_language	= substring (sys_language, 0,2);
-	lang		= lang2keyboard[sys_language]:default_keyboard;
+	kb		= lang2keyboard[sys_language]:default_keyboard;
     }
     y2milestone( "GetKeyboardForLanguage lang:%1 def:%2 ret:%3",
-		 sys_language, default_keyboard, lang);
-    return lang;
+		 sys_language, default_keyboard, kb);
+    return kb;
 }
 
 
