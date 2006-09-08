@@ -26,7 +26,24 @@
 
     import "Language";
 
-    TEST(``(Language::GetLocaleString (Language::language)), [], nil);
+    map R	= $[
+	"target" : $[
+	    "dir" : [
+		"language_de_DE.ycp"
+	    ],
+	    "yast2" : $[
+		"de_DE" : [
+		    "Deutsch",
+		    "Deutsch",
+		    ".UTF-8",
+		    "@euro",
+		    "German"
+		],
+	    ],
+	],
+    ];
+
+    TEST(``(Language::GetLocaleString (Language::language)), [R,$[],$[]], nil);
 
     map EX	= $[
 	"target" : $[

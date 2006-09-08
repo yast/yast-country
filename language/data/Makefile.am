@@ -6,7 +6,9 @@ ydata_DATA =			\
 	country_long.ycp	\
 	country.ycp
 
-client_DATA =			\
-	languages.ycp
+languagesdir = @ydatadir@/languages
 
-EXTRA_DIST = $(ydata_DATA) $(client_DATA)
+languages_DATA =		\
+	language_*.ycp
+
+EXTRA_DIST = $(ydata_DATA) $(languages_DATA)

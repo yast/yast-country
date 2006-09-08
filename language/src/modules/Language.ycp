@@ -16,6 +16,7 @@ textdomain "country";
 
 
 import "AsciiFile";
+import "Directory";
 import "Encoding";
 import "FileUtils";
 import "Linuxrc";
@@ -94,6 +95,15 @@ map<string,integer> locales	= $[];
 // map with all languages (cached - needs to be reread for retranslation)
 map<string, list> languages_map = $[];
 
+// mapping of language to its default (proposed) time zone
+map<string,string> lang2timezone	= $[];
+
+// mapping of language to its default (proposed) kbd layout
+map<string,string> lang2keyboard	= $[];
+
+// directory with languages descriptions
+string languages_directory	= nil;
+
 // languages that cannot be correctly shown in text mode
 list cjk_languages	= [ "ja", "ko", "zh", "hi", "km", "pa", "bn" ];
 
@@ -126,9 +136,49 @@ global define boolean GetTextMode () {
  */
 define void read_languages_map() {
 
-    languages_map = (map<string, list>) WFM::CallFunction ("languages", []);
+    if (languages_directory == nil)
+    {
+	languages_directory	= Directory::datadir + "/languages";
+    }
+
+    foreach (string file,
+	(list<string>) SCR::Read (.target.dir, languages_directory, []),
+    {
+	if (!regexpmatch (file, "language_.+\\.ycp$"))
+	    return;
+	map language_map = (map)
+	    eval (SCR::Read (.target.yast2, "languages/" + file));
+	string code	= file;
+	foreach (string key, any val, (map<string,any>) language_map, {
+	    if (is (val, list))
+	    {
+		languages_map[key]	= (list) val;
+		code			= key;
+	    }
+	});
+	if (!haskey (lang2timezone, code))
+	    lang2timezone[code]	= language_map["timezone"]:"US/Eastern";
+	if (!haskey (lang2keyboard, code))
+	    lang2keyboard[code]	= language_map["keyboard"]:"en_US";
+    });
 
     if (languages_map == nil) languages_map = $[];
+}
+
+/**
+ * return the content of lang2timezone map
+ * (mapping of languages to their default (proposed) time zones)
+ */
+global define map<string,string> GetLang2TimezoneMap () {
+    return lang2timezone;
+}
+
+/**
+ * return the content of lang2keyboard map
+ * (mapping of languages to their default (proposed) keyboard layouts)
+ */
+global define map<string,string> GetLang2KeyboardMap () {
+    return lang2keyboard;
 }
 
 /**

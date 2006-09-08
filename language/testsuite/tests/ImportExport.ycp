@@ -14,6 +14,20 @@
 		"DEFAULT_LANGUAGE"	: "en_US",
 	    ],
 	],
+	"target" : $[
+	    "dir" : [
+		"language_de_DE.ycp"
+	    ],
+	    "yast2" : $[
+		"de_DE" : [
+		    "Deutsch",
+		    "Deutsch",
+		    ".UTF-8",
+		    "@euro",
+		    "German"
+		],
+	    ],
+	],
     ];
 
     map E	= $[
@@ -37,7 +51,7 @@
 	"language"	: "de_DE"
     ];
 
-    Testsuite::Test (``(Language::Import (imported)), [$[],$[],E], nil);
+    Testsuite::Test (``(Language::Import (imported)), [READ,$[],E], nil);
 
     Testsuite::Test (``(Language::Modified ()), [], nil);
 
@@ -54,5 +68,6 @@
 
     Testsuite::Test (``(Language::Export ()), [], nil);
 
+    // cs_CZ not shown in summary, as it was not part of READ map
     Testsuite::Test (``(Language::Summary ()), [], nil);
 }
