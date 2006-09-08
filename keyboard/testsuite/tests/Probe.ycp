@@ -18,6 +18,7 @@
 	],
 	"target" : $[
 	    "size"		: 1,
+	    "dir"		: [],
 	    "yast2"		: $[
 		"czech-qwerty"	: [
 		    "Czech (qwerty)",

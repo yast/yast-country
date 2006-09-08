@@ -2,9 +2,11 @@
 
 @HEADER@
 BuildRequires:	perl-XML-Writer update-desktop-files yast2-devtools yast2-testsuite yast2 yast2-perl-bindings
-Requires:	yast2 yast2-trans-stats yast2-perl-bindings
+Requires:	yast2-trans-stats yast2-perl-bindings
 # common proposal (rich_text_raw_title)
 Requires:       yast2-installation >= 2.13.139
+# XVersion.ycp
+Requires:	yast2 >= 2.13.70
 
 Provides:	yast2-config-environment
 Provides:	yast2-config-keyboard
@@ -54,10 +56,12 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 # common
 %files
 %defattr(-,root,root)
+%dir @ydatadir@/languages
 %doc @docdir@
 @moduledir@/*
 @clientdir@/*.ycp
 @ydatadir@/*.ycp
+@ydatadir@/languages/*.ycp
 @yncludedir@/keyboard/
 @yncludedir@/timezone/
 @scrconfdir@/*.scr

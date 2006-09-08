@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Sep  8 10:43:53 CEST 2006 - jsuchome@suse.cz
+
+- moved languages descriptions from one big file to single file
+  for each language (F301031)
+- 2.13.34
+
+-------------------------------------------------------------------
 Wed Sep  6 11:26:02 CEST 2006 - jsuchome@suse.cz
 
 - fixed help text in language selection (#203807)

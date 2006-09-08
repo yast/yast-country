@@ -19,7 +19,18 @@
 	"target" : $[
 	    "bash_output"	: $[],
 	    "size"		: 1,
-	    "yast2"		: $[],
+	    "dir" : [
+		"language_de_DE.ycp"
+	    ],
+	    "yast2" : $[
+		"de_DE" : [
+		    "Deutsch",
+		    "Deutsch",
+		    ".UTF-8",
+		    "@euro",
+		    "German"
+		],
+	    ],
 	],
     ];
 
@@ -27,9 +38,9 @@
 
     import "Language";
 
-    TEST(``(Language::MakeProposal (false, false)), [], []);
+    TEST(``(Language::MakeProposal (false, false)), [READ,$[],$[]], []);
 
     Language::languages	= "en_US";
 
-    TEST(``(Language::MakeProposal (true, false)), [], []);
+    TEST(``(Language::MakeProposal (true, false)), [READ,$[],$[]], []);
 }

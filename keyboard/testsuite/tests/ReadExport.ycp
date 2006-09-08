@@ -16,6 +16,7 @@
 	],
 	"target" : $[
 	    "size"		: 1,
+	    "dir"		: [],
 	    "yast2"		: $[
 		"english-us"	: [
 		    "English (US)",
