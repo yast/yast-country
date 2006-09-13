@@ -166,6 +166,18 @@ define void read_languages_map() {
 }
 
 /**
+ * Return the whole map with language descriptions
+ * @param force force new loading of the map from the files (forces the change
+ * of translations to current language)
+ */
+global map<string, list> GetLanguagesMap (boolean force) {
+
+    if (size (languages_map) == 0 || force)
+	read_languages_map();
+    return languages_map;
+}
+
+/**
  * return the content of lang2timezone map
  * (mapping of languages to their default (proposed) time zones)
  */
