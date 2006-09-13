@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep 13 09:34:12 CEST 2006 - jsuchome@suse.cz
+
+- make the map with languages descriptions public available (#204791)
+- 2.13.35
+
+-------------------------------------------------------------------
 Fri Sep  8 10:43:53 CEST 2006 - jsuchome@suse.cz
 
 - moved languages descriptions from one big file to single file
