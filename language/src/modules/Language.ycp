@@ -148,6 +148,7 @@ define void read_languages_map() {
 	    return;
 	map language_map = (map)
 	    eval (SCR::Read (.target.yast2, "languages/" + file));
+	if (language_map == nil) language_map = $[];
 	string code	= file;
 	foreach (string key, any val, (map<string,any>) language_map, {
 	    if (is (val, list))
@@ -163,6 +164,28 @@ define void read_languages_map() {
     });
 
     if (languages_map == nil) languages_map = $[];
+}
+
+/**
+ * Read only the map of one language
+ * @param language code
+ */
+define map ReadLanguageMap (string lang) {
+
+    map ret	= $[];
+
+    if (languages_directory == nil)
+    {
+	languages_directory	= Directory::datadir + "/languages";
+    }
+    string file	= sformat ("language_%1.ycp", lang);
+    if (FileUtils::Exists (languages_directory + "/" + file))
+    {
+	ret	= (map) eval (SCR::Read (.target.yast2, "languages/" + file));
+	if (ret == nil)
+	    ret	= $[];
+    }
+    return ret;
 }
 
 /**
@@ -272,6 +295,24 @@ global define void Set (string lang) {
 	{
 	    name	= languages_map[lang, 1]:lang;
 	}
+    }
+}
+
+
+/**
+ * Set the language that was read from sysconfig,
+ * read only one needed language file
+ */
+global define void QuickSet (string lang) {
+
+    y2milestone ("original language: %1; setting to lang:%2", language, lang);
+
+    if (language != lang)
+    {
+	map lang_map	= ReadLanguageMap (lang);
+	name		= lang_map[lang, 0]:lang;
+	language	= lang;
+	Encoding::SetEncLang (language);
     }
 }
 
@@ -406,8 +447,7 @@ global define void Language() {
     else
     {
 	string local_lang = ReadSysconfigLanguage ();
-
-	Set (local_lang);
+	QuickSet (local_lang);
 	SetDefault();		// also default
     }
     if (SCR::Read (.target.size, "/etc/sysconfig/language") > 0)
@@ -449,6 +489,18 @@ global define boolean Modified () {
 	    sort (splitstring (languages, ",")) !=
 	    sort (splitstring (languages_on_entry, ","))
     );
+}
+
+/**
+ * Does the modification of language(s) require installation of new packages?
+ * This test compares the list of original languages (primary+secondary) with
+ * the list after user's modifications
+ */
+global define boolean PackagesModified () {
+
+    return
+	sort (union(splitstring(languages, ","), [language])) !=
+	sort (union(splitstring(languages_on_entry, ","), [language_on_entry]));
 }
 
 /**
@@ -565,7 +617,10 @@ global define list<string> MakeProposal (boolean force_reset,boolean language_ch
     ];
     if (languages != "" && languages != language)
     {
-	read_languages_map();
+	if (size (languages_map) == 0 || language_changed)
+	{
+	    read_languages_map();
+	}
 	list<string> langs	= [];
 	foreach (string lang, splitstring (languages, ","), {
 	    if (lang != language)
