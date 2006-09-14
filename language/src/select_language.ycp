@@ -624,7 +624,7 @@ installation, but the selected language will be used for the new system."));
 		    {
 			Pkg::SetAdditionalLocales (selected_languages);
 		    }
-		    else if (Language::Modified () && !Mode::config ())
+		    else if (Language::PackagesModified () && !Mode::config ())
 		    {
 			if (!Language::PackagesInit (selected_languages))
 			{
