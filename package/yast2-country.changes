@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep 14 13:03:30 CEST 2006 - jsuchome@suse.cz
+
+- load only description for current language in constructor
+- better check for changes of possible language packages
+- 2.13.36
+
+-------------------------------------------------------------------
 Wed Sep 13 09:34:12 CEST 2006 - jsuchome@suse.cz
 
 - make the map with languages descriptions public available (#204791)
