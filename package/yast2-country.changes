@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Sep 18 15:22:45 CEST 2006 - jsuchome@suse.cz
+
+- added support for Estonian 
+- 2.13.37
+
+-------------------------------------------------------------------
 Thu Sep 14 13:03:30 CEST 2006 - jsuchome@suse.cz
 
 - load only description for current language in constructor
