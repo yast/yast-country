@@ -505,6 +505,19 @@ Some texts may be displayed in English.
 		    continue;
 		}
 	    }
+	    if (ret == `next && Stage::initial ())
+	    {
+		// check if selected language has support on media (F301238)
+		string linguas = (string) SCR::Read (.content.LINGUAS);
+		y2milestone ("content LINGUAS %1", linguas);
+		list<string> ll	= splitstring (linguas, " ");
+		string l = substring (language, 0, 2);
+		if (!contains (ll, language) && !contains (ll, l))
+		    // popup message
+		    Popup::Message (_("Only minimal support for the selected language is included on the media.
+Add the Language Add-On CD as an installation source to get better support
+for this language."));
+	    }
 
 	    if (language != Language::language)
 	    {
