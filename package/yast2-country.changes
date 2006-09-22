@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Sep 22 10:03:15 CEST 2006 - jsuchome@suse.cz
+
+- check for language support defined at installation medium (F301238)
+- 2.13.38
+
+-------------------------------------------------------------------
 Mon Sep 18 15:22:45 CEST 2006 - jsuchome@suse.cz
 
 - added support for Estonian 
