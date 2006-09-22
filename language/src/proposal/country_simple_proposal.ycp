@@ -43,7 +43,7 @@
     {
 	ret	= $[
 	    // rich text label
-	    "rich_text_title"	:	_("Locale settings"),
+	    "rich_text_title"	:	_("Locale Settings"),
 	    "menu_titles"		: [
 		// menu button label
 		$[ "id"	: "country--language", "title" : _("&Language") ],
