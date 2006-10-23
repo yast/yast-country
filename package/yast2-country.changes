@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Oct 23 13:31:21 CEST 2006 - jsuchome@suse.cz
+
+- added support for Macedonian and Indonesian
+- disable "Adapt checkboxes" when proposed keybaord layout/timezone is
+  the same as current one (#211869) 
+- 2.14.0
+
+-------------------------------------------------------------------
 Mon Sep 25 13:35:27 CEST 2006 - jsuchome@suse.cz
 
 - added support for Arabic
