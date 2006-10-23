@@ -170,6 +170,8 @@ are unset.<br>
 		// check box label (%1 is country name)
 		sformat (_("Adapt &Time Zone to %1"), tmz_name)))
 	));
+	UI::ChangeWidget(`id(`adapt_kbd),`Enabled, kb != Keyboard::current_kbd);
+	UI::ChangeWidget(`id(`adapt_tmz),`Enabled, tz != Timezone::timezone);
     }
 
     // ------------------------------------- main part of the client -----------
