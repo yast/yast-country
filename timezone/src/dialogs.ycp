@@ -55,11 +55,7 @@
   define boolean SetTimeDialog() {
 
     // help text
-    string htext = _("<p>Here, change
-the system time and date.</p>
-");
-    // help text
-    htext = htext + _("<p>The current system time and date are displayed. Change them to the correct values and press 
+    string htext = _("<p>The current system time and date are displayed. Change them to the correct values and press 
 <b>Apply</b>.</p>
 ");
 
