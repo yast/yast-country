@@ -476,7 +476,7 @@ global define string MakeProposal (boolean force_reset,
     if (!user_hwclock || force_reset)
     {
 	hwclock = "-u";
-	if (windows_partition || Arch::board_mac ())
+	if (windows_partition || (Arch::board_mac () && Arch::ppc32 ()))
 	{
 	    // Win partitions present ==> assume local time.
 	    //

@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Mon Oct 30 15:57:46 CET 2006 - jsuchome@suse.cz
+
+- disable "Adapt checkboxes" when proposed keybaord layout/timezone is 
+  the same as current one (#211869)
+- do not propose local time for 64bit Mac (#216059)
+- removed unnecessary part of help text (#203701)
+- check for language support when language was preselected (#215281)
+- added i386 Mac keyboard layouts to database (#213294)
+- reverted new language support from 2.13.39 (not ready)
+- 2.13.40
+
+-------------------------------------------------------------------
 Mon Sep 25 13:35:27 CEST 2006 - jsuchome@suse.cz
 
 - added support for Arabic
