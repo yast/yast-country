@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Oct 30 13:49:06 CET 2006 - jsuchome@suse.cz
+
+- do not propose local time for 64bit Mac (#216059)
+- removed unnecessary part of help text (#203701)
+- check for language support when language was preselected (#215281)
+- added i386 Mac keyboard layouts to database (#213294)
+- 2.14.1
+
+-------------------------------------------------------------------
 Mon Oct 23 13:31:21 CEST 2006 - jsuchome@suse.cz
 
 - added support for Macedonian and Indonesian
