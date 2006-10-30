@@ -153,6 +153,24 @@ are unset.<br>
     };
 
     /**
+     * check if selected language has support on media (F301238)
+     * show a warning when not
+     */
+    define void check_languages_support (string selected_language) {
+
+	string linguas = (string) SCR::Read (.content.LINGUAS);
+	y2milestone ("content LINGUAS %1", linguas);
+	list<string> ll	= splitstring (linguas, " ");
+	string l = substring (selected_language, 0, 2);
+	if (!contains (ll, selected_language) && !contains (ll, l))
+	    // popup message
+	    Popup::Message (_("Only minimal support for the selected language is included on the media.
+Add the Language Add-On CD as an installation source to get better support
+for this language."));
+    }
+
+
+    /**
      * helper function for updating the "adapt terms" to current language
      */
     define void update_adapt_term () {
@@ -192,6 +210,7 @@ are unset.<br>
 	if (ProductFeatures::GetBooleanFeature ("globals", "skip_language_dialog"))
 	{
 	    y2milestone("Skipping language dialog, Language changed to %1",preselected);
+	    check_languages_support (preselected);
 	    return `auto;
 	}
     }
@@ -509,18 +528,8 @@ Some texts may be displayed in English.
 	    }
 	    if (ret == `next && Stage::initial ())
 	    {
-		// check if selected language has support on media (F301238)
-		string linguas = (string) SCR::Read (.content.LINGUAS);
-		y2milestone ("content LINGUAS %1", linguas);
-		list<string> ll	= splitstring (linguas, " ");
-		string l = substring (language, 0, 2);
-		if (!contains (ll, language) && !contains (ll, l))
-		    // popup message
-		    Popup::Message (_("Only minimal support for the selected language is included on the media.
-Add the Language Add-On CD as an installation source to get better support
-for this language."));
+		check_languages_support (language);
 	    }
-
 	    if (language != Language::language)
 	    {
 		y2milestone ("Language changed from %1 to %2", Language::language, language);
