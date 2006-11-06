@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Nov  6 09:47:31 CET 2006 - jsuchome@suse.cz
+
+- adapt time zone dialog for ncurses mode (#215345)
+- 2.14.2
+
+-------------------------------------------------------------------
 Mon Oct 30 13:49:06 CET 2006 - jsuchome@suse.cz
 
 - do not propose local time for 64bit Mac (#216059)

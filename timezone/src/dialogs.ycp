@@ -18,6 +18,7 @@
 
   import "Arch";
   import "Label";
+  import "Language";
   import "Mode";
   import "Popup";
   import "Stage";
@@ -284,18 +285,20 @@ Enter the correct date.
 	settime = `PushButton (`id(`settime), _("Cha&nge..."));
     }
 
+    boolean textmode	= Language::GetTextMode ();
+
     term contents = `MarginBox (
-	`leftMargin (2), `rightMargin (2), `topMargin (0), `bottomMargin (0.5),
+	`leftMargin (2), `rightMargin (2), `topMargin (0), `bottomMargin (0.2),
 	`VBox (
 	    `HBox (
 		region,
 		`HSpacing (),
 		timezonesel
 	    ),
-	    `VSpacing (0.5),
+	    `VSpacing (0.2),
 	    `VSquash (`HBox (
 		`HWeight (1,
-		    utc_only ? `Empty () :
+		    utc_only ? `Empty () : `VBox (
 		    `ComboBox (
 			`id (`hwclock), `opt(`hstretch, `notify),
 			    // combo box label
@@ -309,17 +312,22 @@ Enter the correct date.
 			    `item (`id(`hwclock_utc ), _("UTC"),
 				(hwclock == "-u"))
 			    ]
-		    )
+		    ), textmode ? `Label ("") : `Empty ())
 		),
 		`HSpacing (1),
 		// frame label
 		`HWeight (1, `Frame (_("Time and Date"), `MarginBox (
 		    `leftMargin (1.2), `rightMargin (1),
 		    `topMargin (0.2), `bottomMargin (0.2),
+		    textmode ?
+		    `VBox (
+			`Label (`id(`date), `opt(`outputField,`hstretch), date),
+			`Right (settime)
+		    ) :
 		    `HBox (
 			`Label (`id(`date), `opt(`outputField,`hstretch), date),
 			`HStretch(),
-			settime
+			`Right (settime)
 		    )
 		)))
 	    ))
