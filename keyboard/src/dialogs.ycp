@@ -277,7 +277,7 @@ If unsure, use the default values already selected.
 		Keyboard::keyboard_on_entry, Keyboard::current_kbd, keyboard);
 
 	    // Set it in Keyboard module.
-	    if (Keyboard::keyboard_on_entry != keyboard)
+	    if (Keyboard::current_kbd != keyboard)
 	    {
 		Keyboard::Set( keyboard );
 	    }
