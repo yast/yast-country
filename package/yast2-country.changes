@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov  8 13:35:12 CET 2006 - jsuchome@suse.cz
+
+- change keyboard layout after multiple choices (#218655)
+- 2.13.42 
+
+-------------------------------------------------------------------
 Mon Nov  6 09:50:36 CET 2006 - jsuchome@suse.cz
 
 - adapt time zone dialog for ncurses mode (#215345)
