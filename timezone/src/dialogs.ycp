@@ -233,7 +233,7 @@ Enter the correct date.
 	    y2milestone ("windows partition found: assuming local time");
 	}
 
-	if (Timezone::windows_partition || Arch::board_mac ())
+	if (Timezone::ProposeLocaltime ())
 	{
 	    Timezone::hwclock = "--localtime";
 	}
