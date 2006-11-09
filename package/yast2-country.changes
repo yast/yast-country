@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov  9 12:31:02 CET 2006 - jsuchome@suse.cz
+
+- better fix: do not propose local time for 64bit Mac (#216059)
+- 2.13.43 
+
+-------------------------------------------------------------------
 Wed Nov  8 13:35:12 CET 2006 - jsuchome@suse.cz
 
 - change keyboard layout after multiple choices (#218655)
