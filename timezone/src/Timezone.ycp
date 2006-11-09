@@ -451,6 +451,16 @@ global define void  ResetZonemap()
     }
 
 /**
+ * Return true if localtime should be proposed as default
+ * Based on current hardware configuration:
+ * Win partitions present or 32bit Mac
+ */
+global define boolean ProposeLocaltime () {
+
+    return windows_partition || (Arch::board_mac() && Arch::ppc32());
+}
+
+/**
  * MakeProposal()
  *
  * Return proposal string and set system timezone.
@@ -476,10 +486,8 @@ global define string MakeProposal (boolean force_reset,
     if (!user_hwclock || force_reset)
     {
 	hwclock = "-u";
-	if (windows_partition || (Arch::board_mac () && Arch::ppc32 ()))
+	if (ProposeLocaltime ())
 	{
-	    // Win partitions present ==> assume local time.
-	    //
 	    hwclock = "--localtime";
 	}
     }
