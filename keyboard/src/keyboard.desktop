@@ -16,6 +16,7 @@ X-SuSE-YaST-Geometry=
 X-SuSE-YaST-SortKey=
 X-SuSE-YaST-AutoInstResource=keyboard
 X-SuSE-YaST-AutoInstClonable=true
+X-SuSE-YaST-AutoInstSchema=keyboard.rnc
 
 Icon=yast-keyboard
 Exec=/sbin/yast2 keyboard 

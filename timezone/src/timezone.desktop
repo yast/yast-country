@@ -16,6 +16,7 @@ X-SuSE-YaST-Geometry=
 X-SuSE-YaST-SortKey=
 X-SuSE-YaST-AutoInstResource=timezone
 X-SuSE-YaST-AutoInstClonable=true
+X-SuSE-YaST-AutoInstSchema=timezone.rnc
 
 Icon=yast-timezone
 Exec=/sbin/yast2 timezone 
