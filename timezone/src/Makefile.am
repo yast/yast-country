@@ -4,6 +4,8 @@ SUBDIRS = proposal
 
 yncludedir = @yncludedir@/timezone
 
+rncdir =  $(schemadir)/autoyast/rnc
+
 client_DATA =			\
 	timezone.ycp		\
 	inst_timezone.ycp	\
@@ -18,7 +20,9 @@ module_DATA = 			\
 ynclude_DATA =			\
 	dialogs.ycp
 
-EXTRA_DIST = $(client_DATA) $(module_DATA) $(desktop_DATA) $(ynclude_DATA)
+rnc_DATA = timezone.rnc
+
+EXTRA_DIST = $(client_DATA) $(module_DATA) $(desktop_DATA) $(ynclude_DATA) $(rnc_DATA)
 
 YCPCFLAGS = -M ../../language/src/modules
 

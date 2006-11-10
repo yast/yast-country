@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov 10 08:29:59 CET 2006 - jsuchome@suse.cz
+
+- added RNC schema files for Autoyast profile validation (#219416)
+- 2.14.5
+
+-------------------------------------------------------------------
 Thu Nov  9 12:29:46 CET 2006 - jsuchome@suse.cz
 
 - better fix: do not propose local time for 64bit Mac (#216059)
