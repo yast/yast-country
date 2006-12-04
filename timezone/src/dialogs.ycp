@@ -251,8 +251,7 @@ Enter the correct date.
     timezone		= Timezone::UpdateTimezone (timezone);
 
     // Initially set the current timezone to establish a consistent state.
-    //
-    integer sel = Timezone::Set (timezone, true);
+    integer sel = Timezone::Set (timezone, !Stage::initial ());
 
     boolean utc_only = Timezone::utc_only ();
     y2milestone( "utc_only %1", utc_only );
