@@ -85,6 +85,12 @@ boolean text_mode	= nil;
 global boolean ExpertSettingsChanged = false;
 
 /**
+ * Was the initial language selection skipped? (see bug 223258)
+ * (It can be, if the language was selected in linuxrc)
+ */
+global boolean selection_skipped	= false;
+
+/**
  * level of translation completeness
  */
 map<string,integer> translation_status	= $[];

@@ -35,6 +35,8 @@ Obsoletes:	y2t_inst-language
 Provides:	y2t_inst-environment
 Obsoletes:	y2t_inst-environment
 
+BuildArchitectures:     noarch
+
 Summary:	Setting the keyboard, language and time zone
 
 %description

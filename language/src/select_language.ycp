@@ -211,6 +211,7 @@ for this language."));
 	{
 	    y2milestone("Skipping language dialog, Language changed to %1",preselected);
 	    check_languages_support (preselected);
+	    Language::selection_skipped	= true;
 	    return `auto;
 	}
     }
