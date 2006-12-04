@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Dec  4 14:13:41 CET 2006 - jsuchome@suse.cz
+
+- store the information that language selection was skipped (#223258)
+- do not save hardware clock state to system clock on start (#221758) 
+- 2.13.45
+
+-------------------------------------------------------------------
 Fri Nov 10 08:31:19 CET 2006 - jsuchome@suse.cz
 
 - added RNC schema files for Autoyast profile validation (#219416)
