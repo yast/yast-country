@@ -35,8 +35,6 @@ Obsoletes:	y2t_inst-language
 Provides:	y2t_inst-environment
 Obsoletes:	y2t_inst-environment
 
-BuildArchitectures:     noarch
-
 Summary:	Setting the keyboard, language and time zone
 
 %description
@@ -49,7 +47,6 @@ Summary:	Setting the keyboard, language and time zone
 @INSTALL@
 
 %ifarch s390 s390x
-rm -f $RPM_BUILD_ROOT@configdir@/keyboard.y2cc
 rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 %endif
 

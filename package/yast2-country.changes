@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Dec 11 09:50:18 CET 2006 - jsuchome@suse.cz
+
+- add runlevel 4 to serial line config in inittab (#223983)
+- reverted change to noarch, so excluding desktop file can work on s390
+- 2.15.2 
+
+-------------------------------------------------------------------
 Tue Dec  5 08:32:43 CET 2006 - jsuchome@suse.cz
 
 - correct fix: sync hardware to system clock during installation (#221758)
