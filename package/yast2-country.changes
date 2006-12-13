@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Dec 13 10:34:50 CET 2006 - jsuchome@suse.cz
+
+- added missing time zone for Belarus (#228042)
+- 2.13.48 
+
+-------------------------------------------------------------------
 Mon Dec 11 08:51:36 CET 2006 - jsuchome@suse.cz
 
 - add runlevel 4 to serial line config in inittab (#223983)

@@ -45,6 +45,8 @@ $[ "name" : _("Europe"),
 	"Europe/Luxembourg" : _("Luxembourg"),
 	"Europe/Madrid" : _("Spain"),
 	"Europe/Malta" : _("Malta"),
+	// time zone
+	"Europe/Minsk" : _("Belarus"),
 	"Europe/Monaco" : _("Monaco"),
 	// time zone
 	"Europe/Moscow"		: _("Russia (Moscow)"),
