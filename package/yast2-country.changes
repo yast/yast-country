@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Dec 15 11:09:10 CET 2006 - jsuchome@suse.cz
+
+- added support for Marathi language
+- 2.15.4
+
+-------------------------------------------------------------------
 Wed Dec 13 10:22:02 CET 2006 - jsuchome@suse.cz
 
 - added missing time zone for Belarus (#228042)
