@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan  4 08:38:07 CET 2007 - jsuchome@suse.cz
+
+- added missing Asian timezones (#231305)
+- 2.15.5 
+
+-------------------------------------------------------------------
 Fri Dec 15 11:09:10 CET 2006 - jsuchome@suse.cz
 
 - added support for Marathi language
