@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan  4 08:39:43 CET 2007 - jsuchome@suse.cz
+
+- added missing Asian timezones (#231305)
+- 2.13.49 
+
+-------------------------------------------------------------------
 Wed Dec 13 10:34:50 CET 2006 - jsuchome@suse.cz
 
 - added missing time zone for Belarus (#228042)
