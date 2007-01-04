@@ -197,6 +197,8 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Asia/Beirut"		: _("Beirut"),
 	// time zone
+	"Asia/Bishkek"		: _("Bishkek"),
+	// time zone
 	"Asia/Brunei"		: _("Brunei"),
 	// time zone
 	"Asia/Calcutta"		: _("Calcutta"),
@@ -239,6 +241,8 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Asia/Qatar"		: _("Qatar"),
 	// time zone
+	"Asia/Rangoon"		: _("Rangoon"),
+	// time zone
 	"Asia/Saigon"		: _("Saigon"),
 	// time zone
 	"Asia/Sakhalin"		: _("Sakhalin"),
@@ -248,6 +252,8 @@ $[ "name" : _("Asia"),
 	"Asia/Tashkent"		: _("Tashkent"),
 	// time zone
 	"Asia/Tel_Aviv"		: _("Tel Aviv"),
+	// time zone
+	"Asia/Thimphu"		: _("Thimphu"),
 	// time zone
 	"Asia/Vladivostok"	: _("Vladivostok"),
 	// time zone
