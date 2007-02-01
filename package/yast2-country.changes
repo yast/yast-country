@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jan 31 16:10:48 CET 2007 - jsuchome@suse.cz
+
+- added support for new languages:
+    af_ZA, xh_ZA, zu_ZA, gu_IN, ta_IN (F301933, #237367)
+- 2.15.6
+
+-------------------------------------------------------------------
 Thu Jan  4 08:38:07 CET 2007 - jsuchome@suse.cz
 
 - added missing Asian timezones (#231305)
