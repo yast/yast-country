@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Tue Feb 13 09:55:27 CET 2007 - jsuchome@suse.cz
+
+- fixed failing testsuites (Mode::test now works correctly) 
+- 2.15.7
+
+-------------------------------------------------------------------
+Fri Feb  2 15:24:28 CET 2007 - jsuchome@suse.cz
+
+- added missing time zones
+
+-------------------------------------------------------------------
 Wed Jan 31 16:10:48 CET 2007 - jsuchome@suse.cz
 
 - added support for new languages:

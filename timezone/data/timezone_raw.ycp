@@ -241,7 +241,7 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Asia/Qatar"		: _("Qatar"),
 	// time zone
-	"Asia/Rangoon"		: _("Rangoon"),
+	"Asia/Rangoon"		: _("Myanmar"),
 	// time zone
 	"Asia/Saigon"		: _("Saigon"),
 	// time zone
@@ -250,6 +250,8 @@ $[ "name" : _("Asia"),
 	"Asia/Samarkand"	: _("Samarkand"),
 	// time zone
 	"Asia/Tashkent"		: _("Tashkent"),
+	// time zone
+	"Asia/Tehran"		: _("Tehran"),
 	// time zone
 	"Asia/Tel_Aviv"		: _("Tel Aviv"),
 	// time zone
