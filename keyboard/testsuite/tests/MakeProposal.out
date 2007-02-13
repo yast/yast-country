@@ -3,9 +3,4 @@ Read	.target.size "/usr/sbin/xkbctrl" 1
 Execute	.target.bash "/usr/sbin/xkbctrl cz-lat2-us.map.gz > /tmp/xkbctrl.out" 0
 Read	.target.ycp "/tmp/xkbctrl.out" $[]
 Dump	-----------------------------------
-Read	.target.yast2 "keyboard_raw.ycp" $["czech-qwerty":["Czech (qwerty)", $["i386":$["pc104":$["ncurses":"cz-lat2-us.map.gz"]]]]]
-Read	.target.size "/usr/sbin/xkbctrl" []
-Execute	.target.bash "/usr/sbin/xkbctrl cz-lat2-us.map.gz > /tmp/xkbctrl.out" 0
-Read	.target.ycp "/tmp/xkbctrl.out" $["XkbLayout":"cz_qwerty,us"]
-Execute	.target.bash "/bin/loadkeys cz-lat2-us.map.gz ; dumpkeys -c iso-8859-2  | loadkeys -u" 0
 Return	Czech (qwerty)
