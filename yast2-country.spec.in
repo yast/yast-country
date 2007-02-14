@@ -7,6 +7,8 @@ Requires:	yast2-trans-stats yast2-perl-bindings
 Requires:       yast2-installation >= 2.13.139
 # XVersion.ycp
 Requires:	yast2 >= 2.13.70
+# Pkg::SetPackageLocale, Pkg::GetTextLocale
+Requires:       yast2-pkg-bindings >= 2.15.3
 
 Provides:	yast2-config-environment
 Provides:	yast2-config-keyboard

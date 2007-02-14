@@ -389,7 +389,7 @@ global define void ReadSysconfigValues () {
     if (!Stage::initial ())
     {
 	string val = toupper (Misc::SysconfigRead (.sysconfig.language.RC_LANG, ""));
-	use_utf8 = find (val, ".UTF-8") > 0;
+	use_utf8 = search (val, ".UTF-8") != nil;
     }
     else
     {
@@ -437,7 +437,7 @@ global define void Language() {
 	y2milestone ("lang after checking /etc/install.inf: %1", lang );
 	if (lang == "")
 	{
-	    lang = Pkg::GetLocale();
+	    lang = Pkg::GetTextLocale();
 	    y2milestone ("setting lang to default language: %1", lang);
 	}
         // Ignore any previous settings and take language from control file.
@@ -864,7 +864,7 @@ global define boolean Import (map settings) {
     // set the language dependent packages to install
     if (Mode::autoinst ())
     {
-	Pkg::SetLocale (language);
+	Pkg::SetPackageLocale (language);
 	Pkg::SetAdditionalLocales (splitstring (languages, ","));
     }
 
