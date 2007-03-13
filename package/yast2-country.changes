@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Mar 12 12:19:09 CET 2007 - jsuchome@suse.cz
+
+- adapt language changes also in firstboot stage (#252780)
+- 2.13.51
+
+-------------------------------------------------------------------
 Wed Jan 31 16:22:40 CET 2007 - jsuchome@suse.cz
 
 - added support for new languages:
