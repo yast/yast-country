@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Mar 13 08:15:35 CET 2007 - jsuchome@suse.cz
+
+- adapt language changes also in firstboot stage (#252780)
+- do not require yast2-installation (#252905)
+- 2.15.9 
+
+-------------------------------------------------------------------
 Wed Feb 14 14:43:01 CET 2007 - jsuchome@suse.cz
 
 - replaced obsoleted builtins and bindings

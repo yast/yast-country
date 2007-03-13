@@ -559,7 +559,7 @@ Some texts may be displayed in English.
 		    update_adapt_term ();
 	    }
 
-	    if (Stage::initial ())
+	    if (Stage::initial () || Stage::firstboot ())
 	    {
 		if ((set_default && ret == `language ||
 			(!set_default && ret == `next)) &&
@@ -658,6 +658,10 @@ installation, but the selected language will be used for the new system."));
 Remove some languages from the selection."));
 			    ret = `not_next;
 			    continue;
+			}
+			if (Stage::firstboot ()) // install language packages now
+			{
+			    Language::PackagesCommit ();
 			}
 		    }
 		}
