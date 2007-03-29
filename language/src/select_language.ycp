@@ -160,6 +160,7 @@ are unset.<br>
 
 	string linguas = (string) SCR::Read (.content.LINGUAS);
 	y2milestone ("content LINGUAS %1", linguas);
+	if (linguas == nil) return;
 	list<string> ll	= splitstring (linguas, " ");
 	string l = substring (selected_language, 0, 2);
 	if (!contains (ll, selected_language) && !contains (ll, l))
