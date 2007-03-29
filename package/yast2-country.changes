@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Mar 29 10:20:47 CEST 2007 - jsuchome@suse.cz
+
+- timezone package (with 'zic') is required (#255784)
+- check for nil value of LINGUAS entry in content file (#256427)
+- 2.15.10
+
+-------------------------------------------------------------------
 Tue Mar 13 08:15:35 CET 2007 - jsuchome@suse.cz
 
 - adapt language changes also in firstboot stage (#252780)
