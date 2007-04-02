@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Apr  2 08:24:47 CEST 2007 - jsuchome@suse.cz
+
+- Arabic added again (#258795)
+- 2.13.52
+
+-------------------------------------------------------------------
 Mon Mar 12 12:19:09 CET 2007 - jsuchome@suse.cz
 
 - adapt language changes also in firstboot stage (#252780)
