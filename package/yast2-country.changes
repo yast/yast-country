@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Apr  4 17:00:53 CEST 2007 - jsuchome@suse.cz
+
+- added support for Walloon language
+- 2.15.11 
+
+-------------------------------------------------------------------
 Thu Mar 29 10:20:47 CEST 2007 - jsuchome@suse.cz
 
 - timezone package (with 'zic') is required (#255784)
