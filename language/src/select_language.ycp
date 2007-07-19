@@ -166,7 +166,7 @@ are unset.<br>
 	if (!contains (ll, selected_language) && !contains (ll, l))
 	    // popup message
 	    Popup::Message (_("Only minimal support for the selected language is included on the media.
-Add the Language Add-On CD as an installation source to get better support
+Add the Language Add-On CD as an additional repository to get better support
 for this language."));
     }
 
