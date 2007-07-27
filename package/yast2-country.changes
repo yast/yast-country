@@ -1,4 +1,15 @@
 -------------------------------------------------------------------
+Fri Jul 27 10:10:58 CEST 2007 - jsuchome@suse.cz
+
+- timezone dialog offers synchronization with NTP (F302192)
+- 2.15.13 
+
+-------------------------------------------------------------------
+Thu Jul 19 13:59:15 CEST 2007 - jsuchome@suse.cz
+
+- "installation source" changed to "repository" 
+
+-------------------------------------------------------------------
 Mon Jul  9 09:01:23 CEST 2007 - jsuchome@suse.cz
 
 - added support for Sinhala language (si_LK)
