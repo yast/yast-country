@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jul 27 13:24:50 CEST 2007 - jsuchome@suse.cz
+
+- do not call the ntp-client directly to prevent segfault (#294773)
+- 2.15.14 
+
+-------------------------------------------------------------------
 Fri Jul 27 10:10:58 CEST 2007 - jsuchome@suse.cz
 
 - timezone dialog offers synchronization with NTP (F302192)
