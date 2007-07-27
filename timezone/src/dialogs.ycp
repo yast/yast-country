@@ -139,7 +139,23 @@
     }
 
     /**
-     * read the settings of ntp client (we only need current list of servers)
+     * get the list of ntp servers from current ntp-client instance
+     */
+    list get_current_ntp_settings () {
+
+	list ret	= [];
+	map ex = (map)WFM::CallFunction ("ntp-client_auto", ["Export"]);
+	if (ex == nil) return ret;
+	foreach (map peer, ex["peers"]:[], {
+	    if (peer["type"]:"" == "server")
+		  ret = add (ret, peer["address"]:"");
+	});
+	return ret;
+    }
+
+    /**
+     * read current NTP settings (using yast2-ntp-client)
+     * and fill the list of servers
      */
     boolean read_ntp_settings () {
 
@@ -153,11 +169,7 @@
 	}
 	else
 	{
-	    map ex = (map)WFM::CallFunction ("ntp-client_auto", ["Export"]);
-	    foreach (map peer, ex["peers"]:[], {
-		if (peer["type"]:"" == "server")
-		    ntp_items = add (ntp_items, peer["address"]:"");
-	    });
+	    ntp_items	= get_current_ntp_settings ();
 	}
 	if (ntp_used && ntp_items == [])
 	    ntp_items	= ntp_items_proposal ();
@@ -273,15 +285,10 @@
 	}
 	if (ret == `ntp_configure)
 	{
-	    if (WFM::CallFunction ("ntp-client", []) != true)
+	    if (WFM::CallFunction ("ntp-client_auto", ["Change"]) != `next)
 		continue;
 	    // read current settings again
-	    if (!read_ntp_settings ())
-	    {
-		UI::ChangeWidget (`id (`manual), `Value, true);
-		UI::ChangeWidget (`id (`ntp), `Value, false);
-		continue;
-	    }
+	    ntp_items = get_current_ntp_settings ();
 	    UI::ChangeWidget (`id (`ntp_address), `Items, ntp_items);
 	    // adapt current time after the attempt to synchronize
 	    val = Timezone::GetDateTimeMap();
