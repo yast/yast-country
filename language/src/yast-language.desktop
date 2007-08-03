@@ -19,7 +19,7 @@ X-SuSE-YaST-AutoInstClient=language_auto
 X-SuSE-YaST-AutoInstClonable=true
 X-SuSE-YaST-AutoInstSchema=language.rnc
 
-Icon=yast-yast-language
+Icon=yast-language
 Exec=/sbin/yast2 language 
 
 Name=Language

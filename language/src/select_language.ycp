@@ -461,7 +461,7 @@ In the selection box, specify additional languages to use on your system.
 
     // No .desktop files in inst-sys - use icon explicitly
     if (Stage::initial () || Stage::firstboot ())
-	Wizard::SetTitleIcon ("yast-yast-language");
+	Wizard::SetTitleIcon ("yast-language");
 
     if (adapt_term)
 	update_adapt_term ();
