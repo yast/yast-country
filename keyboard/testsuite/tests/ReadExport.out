@@ -1,4 +1,4 @@
-Read	.target.yast2 "keyboard_raw.ycp" $["english-us":["English (US)", $["i386":$["pc104":$["ncurses":"us.map.gz"]]]]]
+Read	.target.yast2 "keyboard_raw.ycp" $["english-us":["English (US)", $["pc104":$["ncurses":"us.map.gz"]]]]
 Return	true
 Return	true
 Return	$["keymap":"english-us"]
