@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Aug  3 13:21:03 CEST 2007 - jsuchome@suse.cz
+
+- disable DPMS while adapting time (#294292)
+- keyboard layout map: remove architecture, rely on model (#257434)
+- new icon names
+- 2.15.15
+
+-------------------------------------------------------------------
 Fri Jul 27 13:24:50 CEST 2007 - jsuchome@suse.cz
 
 - do not call the ntp-client directly to prevent segfault (#294773)

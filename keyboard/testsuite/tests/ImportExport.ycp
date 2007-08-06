@@ -16,11 +16,9 @@
 		"czech-qwerty"	: [
 		    "Czech (qwerty)",
 		    $[
-			"i386" : $[
-			    "pc104": $[
-				"ncurses": "cz-lat2-us.map.gz",
-				"compose" : "latin2"
-			    ]
+			"pc104": $[
+			    "ncurses": "cz-lat2-us.map.gz",
+			    "compose" : "latin2"
 			],
 		    ]
 		],

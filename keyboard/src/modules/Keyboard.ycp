@@ -314,31 +314,15 @@ define map<string,list> get_reduced_keyboard_db() {
     // The new reduced map of keyboard data.
     //
     map<string,list> keyboards = $[];
-    string arch = Arch::architecture ();
-    if( arch == "ppc64" )
-    {
-	arch = "ppc";
-    }
-    y2milestone( "get_reduced_keyboard_db: Arch::architecture () %1 used %2",
-                 Arch::architecture (), arch );
-
+    y2milestone ("keyboard model used: %1", kb_model);
     // loop over all languages
     foreach (string kb_lang, list description, all_keyboards, {
 
 	if (size (description) == 2)
 	{
-	    // Skip langage specific naming of keyboard languages.
-	    // Select the keyboard data.
+	    // Get the data for the current kb_model
 	    //
-	    map keyboards_archi = description[1]:$[];		// all architectures
-
-	    // Select current architecture.
-	    //
-	    map keyboard_archi = keyboards_archi[arch]:$[];
-
-	    // Get the data for the current kb_model in the current architecture.
-	    //
-	    map keyboard_model = keyboard_archi[kb_model]:$[];
+	    map keyboard_model = description[1,kb_model]:$[];
 
 	    if( size( keyboard_model ) > 0 )	// found an entry
 		{
