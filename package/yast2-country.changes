@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Aug  9 15:20:35 CEST 2007 - jsuchome@suse.cz
+
+- during live installation config, do not automatically adapt
+  keyboard layout to the language (#298792)
+- 2.15.17
+
+-------------------------------------------------------------------
 Fri Aug  3 13:21:03 CEST 2007 - jsuchome@suse.cz
 
 - disable DPMS while adapting time (#294292)

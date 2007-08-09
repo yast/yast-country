@@ -617,7 +617,7 @@ global define boolean Restore () {
     restore_called	= true;
     GetKbdSysconfig();
 
-    if (!Stage::initial ())
+    if (!Stage::initial () || Mode::live_installation ())
     {
 	// Read YaST2 keyboard var.
 	//
@@ -849,7 +849,7 @@ global define void Keyboard() {
 
     // If not in initial mode try to restore from sysconfig.
     //
-    if (!Stage::initial ())
+    if (!Stage::initial () || Mode::live_installation ())
     {
 	success = Restore();
 
@@ -880,8 +880,7 @@ global define void Keyboard() {
     }
 
     // In initial mode or if restoring failed do probe.
-    //
-    if( Stage::initial () || !success )	// initial mode or no restore success
+    if(!success || (Stage::initial () && !Mode::live_installation ()))
     {
 	// On module entry probe the hardware and set all those data
 	// needed for public access.
@@ -1154,7 +1153,7 @@ global define string SetX11 (string keyboard) {
 	// Actually do it only if we are in graphical mode.
 	//
 	boolean textmode	= Linuxrc::text ();
-	if (!Stage::initial ())
+	if (!Stage::initial () || Mode::live_installation ())
 	{
 	    map display_info    = UI::GetDisplayInfo ();
 	    textmode		= display_info["TextMode"]:false;
@@ -1200,7 +1199,7 @@ global define void Set (string keyboard) {
 
     SetConsole (keyboard);
     SetX11 (keyboard);
-    if (Stage::initial ())
+    if (Stage::initial () && !Mode::live_installation ())
     {
         map yinf = $[];
         AsciiFile::SetDelimiter( yinf, " " );
@@ -1252,7 +1251,7 @@ global define string MakeProposal (boolean force_reset,boolean language_changed)
 	// set from outside the module.
 	if (user_decision ||
 	    (Mode::update () && !Stage::initial ()) ||
-	    Mode::autoinst () ||
+	    Mode::autoinst () || Mode::live_installation () ||
 	    ProductFeatures::GetStringFeature ("globals", "keyboard") != "")
 	{
 	    if (language_changed)
