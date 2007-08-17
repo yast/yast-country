@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Aug 17 14:34:32 CEST 2007 - jsuchome@suse.cz
+
+- when non-listed locale is selected, add it to the list of
+  primary languages (#301019)
+- add autoyast support for use_utf8 and rootlang values (#289546)
+- 2.15.18
+
+-------------------------------------------------------------------
 Thu Aug  9 15:20:35 CEST 2007 - jsuchome@suse.cz
 
 - during live installation config, do not automatically adapt
