@@ -855,6 +855,8 @@ global define boolean Import (map settings) {
     Set (settings["language"]:language);
     languages	= settings["languages"]:languages;
 
+    SetExpertValues (settings);
+
     list<string> llanguages = splitstring (languages, ",");
     if (!contains (llanguages, language))
     {
@@ -881,6 +883,10 @@ global define map Export () {
 	"language"	: language,
 	"languages"	: languages
     ];
+    if (rootlang != "ctype")
+	ret["rootlang"]	= rootlang;
+    if (!use_utf8)
+	ret["use_utf8"]	= use_utf8;
     return ret;
 }
 

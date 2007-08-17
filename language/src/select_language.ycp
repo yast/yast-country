@@ -260,11 +260,6 @@ for this language."));
 	show_expert	= false;
 	more_languages	= false;
     }
-    if (Mode::config ())
-    {
-	show_expert	= false;
-    }
-
 
     // sort language by ASCII with help of a map
     // $[ "ascii-name" : [ "user-readable-string", "code" ], ...]
@@ -319,10 +314,10 @@ for this language."));
     // if checkboxes for adapting keyboard and timezone should be shown
     boolean adapt_term = more_languages && !Mode::config ();
 
+    list<term> primary_items	= [];
     if (more_languages)
     {
 	boolean primary_included= false;
-	list primary_items	= [];
 
 	term languages_term = `MultiSelectionBox (`id(`languages),
 	    // multiselection box label
@@ -497,6 +492,21 @@ In the selection box, specify additional languages to use on your system.
 	if (ret == `help)
 	{
 	    Wizard::ShowHelp( help_text );
+	}
+
+	if (ret == `changed_locale)
+	{
+	    boolean primary_included	= false;
+	    if (nil == find (term i, primary_items,``(i[0,0]:nil == language)))
+	    {
+		primary_items = add (primary_items,
+		    `item (`id (language), language, true));
+		UI::ChangeWidget (`id(`language), `Items, primary_items);
+	    };
+	    if (Mode::config ())
+	    {
+		Language::Set (language);
+	    }
 	}
 
 	if (ret == `next ||
