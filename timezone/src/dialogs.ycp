@@ -121,67 +121,28 @@
 	);
 	dt_widgets	= true;
     }
-    list ntp_items	= [];
-    boolean ntp_used	= Service::Enabled ("ntp") && Package::Installed ("yast2-ntp-client");
 
-    // list of servers based on the language (got from ntp-client module)
-    list ntp_items_proposed	= nil;
-    list ntp_items_proposal () {
-	if (ntp_items_proposed == nil)
-	{
-	    list servers = (list) WFM::CallFunction ("ntp-client_auto", [
-		"GetNtpServersByCountry",
-		$[ "country" : Language::GetLanguageCountry () ]
-	    ]);
-	    ntp_items_proposed	= (servers == nil) ? [] : servers;
-	}
-	return ntp_items_proposed;
-    }
-
-    /**
-     * get the list of ntp servers from current ntp-client instance
-     */
-    list get_current_ntp_settings () {
-
-	list ret	= [];
-	map ex = (map)WFM::CallFunction ("ntp-client_auto", ["Export"]);
-	if (ex == nil) return ret;
-	foreach (map peer, ex["peers"]:[], {
-	    if (peer["type"]:"" == "server")
-		  ret = add (ret, peer["address"]:"");
-	});
-	return ret;
-    }
-
-    /**
-     * read current NTP settings (using yast2-ntp-client)
-     * and fill the list of servers
-     */
-    boolean read_ntp_settings () {
-
-	// busy popup
-	Popup::ShowFeedback ("", _("Reading NTP configuration..."));
-	any read	= WFM::CallFunction ("ntp-client_auto", ["Read"]);
-	if (read == false)
-	{
-	    ntp_used	= false;
-	    ntp_items	= [];
-	}
-	else
-	{
-	    ntp_items	= get_current_ntp_settings ();
-	}
-	if (ntp_used && ntp_items == [])
-	    ntp_items	= ntp_items_proposal ();
-	Popup::ClearFeedback ();
-	return ntp_used;
+    void enable_disable_widgets ( boolean ntp_used) {
+       if (!dt_widgets)
+       {
+           foreach (symbol widget, [`hour, `minute, `second, `day, `month, `year],{
+               UI::ChangeWidget (`id (widget), `Enabled, !ntp_used);
+           });
+       }
+       else
+       {
+           UI::ChangeWidget (`id (`date), `Enabled, !ntp_used);
+           UI::ChangeWidget (`id (`time), `Enabled, !ntp_used);
+       }
+       UI::ChangeWidget (`id (`ntp_address), `Enabled, ntp_used);
+       UI::ChangeWidget (`id (`ntp_configure), `Enabled, ntp_used);
     }
 
     term cont	= `HBox (
 	`RadioButtonGroup (`id (`rb), `HCenter (`VBox (
 	    `Left (`VBox (
 		// radio button label (= how to setup time)
-		`Left (`RadioButton (`id (`manual), `opt (`notify), _("Manually"), !ntp_used)),
+		`Left (`RadioButton (`id (`manual), `opt (`notify), _("Manually"), true)),
 		`VSpacing (0.5),
 		`HBox (
 		    `HSpacing (3),
@@ -190,35 +151,17 @@
 			`VSpacing(),
 			`Left (dateterm)
 		    )
-		)
-	    )),
-	    `VSpacing (1),
-	    `Left (`VBox (
-		`Left (`RadioButton (`id (`ntp), `opt (`notify),
-		    // radio button label
-		    _("Synchronize with NTP Server"), ntp_used)
 		),
-		`VSpacing (0.5),
-		`HBox (
-		    `HSpacing (3),
-		    `MinWidth (38,
-			`ComboBox (`id (`ntp_address), `opt (`editable),
-			    // combo box label
-			    _("NTP Server Address"), ntp_items
-			)
-		    ),
-		    `VBox (
-			`Label (""),
-			// push button label
-			`PushButton (`id (`ntp_configure), _("Configure..."))
-		    )
-		)
+	        `VSpacing (1),
+	        `ReplacePoint(`id(`rp), `Empty())
 	    ))
-	)))
-    );
+    ))));
 
     Wizard::OpenAcceptDialog ();
     Wizard::SetContents (_("Change Date and Time"), cont, htext, true, true);
+    Wizard::SetDesktopIcon("timezone");
+    WFM::CallFunction("ntp-client_proposal", ["CreateUI"]);
+    enable_disable_widgets(false);
 
     if (!dt_widgets)
     {
@@ -229,38 +172,17 @@
 	});
     }
 
-    if (ntp_used)
-    {
-	read_ntp_settings ();
-	UI::ChangeWidget (`id (`ntp_address), `Items, ntp_items);
-    }
+    boolean ntp_installed = false;
+    boolean ntp_used = false;
 
-    void enable_disable_widgets () {
-	if (!dt_widgets)
-	{
-	    foreach (symbol widget, [`hour, `minute, `second, `day, `month, `year],{
-		UI::ChangeWidget (`id (widget), `Enabled, !ntp_used);
-	    });
-	}
-	else
-	{
-	    UI::ChangeWidget (`id (`date), `Enabled, !ntp_used);
-	    UI::ChangeWidget (`id (`time), `Enabled, !ntp_used);
-	}
-	UI::ChangeWidget (`id (`ntp_address), `Enabled, ntp_used);
-	UI::ChangeWidget (`id (`ntp_configure), `Enabled, ntp_used);
-    }
-
-    enable_disable_widgets ();
-    any ret = `cancel;
-    boolean ntp_installed	= false;
+    any ret = nil;
     repeat
     {
 	ret = UI::UserInput();
 	y2debug ("UserInput ret:%1", ret );
 	if (ret == `ntp || ret == `manual)
-	{
-	    ntp_used	= (ret == `ntp);
+	{ 
+	    ntp_used = (ret == `ntp);
 	    if (ntp_used && !Stage::initial () && !ntp_installed)
 	    {
 		ntp_installed	= Package::Install ("yast2-ntp-client");
@@ -271,49 +193,17 @@
 		    UI::ChangeWidget (`id (`ntp), `Value, false);
 		}
 	    }
-	    if (ntp_used && ntp_items == [])
+	    if (ntp_used )
 	    {
-		if (!read_ntp_settings ())
-		{
-		    UI::ChangeWidget (`id (`manual), `Value, true);
-		    UI::ChangeWidget (`id (`ntp), `Value, false);
-		    continue;
-		}
-		UI::ChangeWidget (`id (`ntp_address), `Items, ntp_items);
+		WFM::CallFunction("ntp-client_proposal", [ "MakeProposal", 
+				   $[ "country" : Language::GetLanguageCountry() ] ]);
 	    }
-	    enable_disable_widgets ();
+	    enable_disable_widgets (ntp_used);
 	}
 	if (ret == `ntp_configure)
 	{
-	    if (WFM::CallFunction ("ntp-client_auto", ["Change"]) != `next)
+	    if (WFM::CallFunction ("ntp-client_proposal", ["AskUser"]) != `next)
 		continue;
-	    // read current settings again
-	    ntp_items = get_current_ntp_settings ();
-	    UI::ChangeWidget (`id (`ntp_address), `Items, ntp_items);
-	    // adapt current time after the attempt to synchronize
-	    val = Timezone::GetDateTimeMap();
-	    hour	= val["hour"]:"";
-	    minute	= val["minute"]:"";
-	    second	= val["second"]:"";
-	    day		= val["day"]:"";
-	    month	= val["month"]:"";
-	    year	= val["year"]:"";
-	    if (dt_widgets)
-	    {
-		UI::ChangeWidget (`id (`date), `Value,
-		    sformat ("%1-%2-%3", year, month, day));
-		UI::ChangeWidget (`id (`time), `Value,
-		    sformat ("%1:%2:%3", hour, minute, second));
-	    }
-	    else
-	    {
-		UI::ChangeWidget (`id (`hour), `Value, hour);
-		UI::ChangeWidget (`id (`minute), `Value, minute);
-		UI::ChangeWidget (`id (`second), `Value, second);
-		UI::ChangeWidget (`id (`day), `Value, day);
-		UI::ChangeWidget (`id (`month), `Value, month);
-		UI::ChangeWidget (`id (`year), `Value, year);
-	    }
 	}
 	if (ret == `accept && !ntp_used)
 	{
@@ -366,24 +256,22 @@ Enter the correct date.
 	}
 	if (ret == `accept && ntp_used)
 	{
-	    // check the address validity, call ntp-client API etc.
-	    map ex = (map)WFM::CallFunction ("ntp-client_auto", ["Export"]);
-	    list peers	= add (ex["peers"]:[], $[
-		    "address"	: UI::QueryWidget (`id (`ntp_address), `Value),
-		    "comment"	: "",
-		    "options"	: "",
-		    "type"	: "server",
-		    "initial_sync"	: true,
-		]
-	    );
-	    map import_map	= $[
-		"peers"		: peers,
-		"start_at_boot"	: true,
-	    ];
-	    WFM::CallFunction ("ntp-client_auto", ["Import", import_map]);
-	    WFM::CallFunction ("ntp-client_auto", ["Write", $[
-		"restart_services": true
-	    ]]);
+	    symbol rv = (symbol) WFM::CallFunction("ntp-client_proposal", ["Write"]);
+
+	    string server = (string) UI::QueryWidget(`id(`ntp_address), `Value);
+
+	    if (rv == `invalid_hostname) 
+	    {
+		Popup::Error( sformat("Invalid NTP server hostname %1", server) );
+		ret = `retry;
+		continue;
+	    }
+	    else if ( rv == `ntpdate_failed)
+	    {
+		if (Popup::YesNo( sformat("'ntpdate %1' failed. Revisit NTP server configuration?", server) ))
+		    ret = `retry;
+		    continue;
+	    }
 	}
     }
     until( ret==`accept || ret==`cancel );
