@@ -2,7 +2,7 @@
 Fri Aug 31 17:26:12 CEST 2007 - kmachalkova@suse.cz
 
 - Timezone dialog adjusted to use new ntp installation clients
-  (FaTE #302192, bugzilla #(#299238,#299557,#302389) 
+  (FaTE #302192, bugzilla #299238,#299557,#302389)
 
 -------------------------------------------------------------------
 Fri Aug 17 14:34:32 CEST 2007 - jsuchome@suse.cz
