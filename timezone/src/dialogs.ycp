@@ -138,6 +138,10 @@
        UI::ChangeWidget (`id (`ntp_configure), `Enabled, ntp_used);
     }
 
+    void handle_invalid_hostname( string server ) {
+	Popup::Error( sformat("Invalid NTP server hostname %1", server) );
+    }
+
     term cont	= `HBox (
 	`RadioButtonGroup (`id (`rb), `HCenter (`VBox (
 	    `Left (`VBox (
@@ -181,7 +185,7 @@
 	ret = UI::UserInput();
 	y2debug ("UserInput ret:%1", ret );
 	if (ret == `ntp || ret == `manual)
-	{ 
+	{
 	    ntp_used = (ret == `ntp);
 	    if (ntp_used && !Stage::initial () && !ntp_installed)
 	    {
@@ -202,7 +206,15 @@
 	}
 	if (ret == `ntp_configure)
 	{
-	    if (WFM::CallFunction ("ntp-client_proposal", ["AskUser"]) != `next)
+	    symbol rv = (symbol) WFM::CallFunction ("ntp-client_proposal", ["AskUser"]);
+
+	    if( rv == `invalid_hostname)
+	    {
+		handle_invalid_hostname( (string) UI::QueryWidget(`id(`ntp_server), `Value) );
+		ret = `retry;
+		continue;
+	    }
+	    if (rv != `next)
 		continue;
 	}
 	if (ret == `accept && !ntp_used)
@@ -262,7 +274,7 @@ Enter the correct date.
 
 	    if (rv == `invalid_hostname) 
 	    {
-		Popup::Error( sformat("Invalid NTP server hostname %1", server) );
+		handle_invalid_hostname( server );
 		ret = `retry;
 		continue;
 	    }
