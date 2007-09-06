@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep  6 18:29:27 CEST 2007 - kmachalkova@suse.cz
+
+- Accept also IP as a valid NTP server address (handle receiving 
+  `invalid_hostname from ntp-client) (#308265)    	
+
+-------------------------------------------------------------------
 Fri Aug 31 17:26:12 CEST 2007 - kmachalkova@suse.cz
 
 - Timezone dialog adjusted to use new ntp installation clients
