@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 11 21:21:01 CEST 2007 - jsuchome@suse.cz
+
+- do not call xset in text mode (#309438)
+- 2.15.19
+
+-------------------------------------------------------------------
 Thu Sep  6 18:29:27 CEST 2007 - kmachalkova@suse.cz
 
 - Accept also IP as a valid NTP server address (handle receiving 
