@@ -142,11 +142,25 @@
 	Popup::Error( sformat("Invalid NTP server hostname %1", server) );
     }
 
+    boolean ntp_used = false;
+
+    void CreateUI() {
+        WFM::CallFunction("ntp-client_proposal", ["CreateUI"]);
+
+        ntp_used = (boolean) WFM::CallFunction("ntp-client_proposal", ["GetUseNTP"]);
+
+        if ( UI::WidgetExists(`id(`ntp_content)) )
+        {
+            UI::ChangeWidget(`id(`rb), `CurrentButton, (ntp_used ? `ntp : `manual));
+            enable_disable_widgets(ntp_used);
+        }
+    }
+
     term cont	= `HBox (
 	`RadioButtonGroup (`id (`rb), `HCenter (`VBox (
 	    `Left (`VBox (
 		// radio button label (= how to setup time)
-		`Left (`RadioButton (`id (`manual), `opt (`notify), _("Manually"), true)),
+		`Left (`RadioButton (`id (`manual), `opt (`notify), _("Manually"))),
 		`VSpacing (0.5),
 		`HBox (
 		    `HSpacing (3),
@@ -157,15 +171,26 @@
 		    )
 		),
 	        `VSpacing (1),
-	        `ReplacePoint(`id(`rp), `Empty())
+                `Left (`VBox ( `id(`ntp_content),
+                    `Left (`RadioButton (`id (`ntp), `opt (`notify),
+                    // radio button label
+                    _("Synchronize with NTP Server"), false)),
+		   `ReplacePoint(`id(`rp), `Empty())
+		   )
+		)
 	    ))
-    ))));
+	))));
+
 
     Wizard::OpenAcceptDialog ();
     Wizard::SetContents (_("Change Date and Time"), cont, htext, true, true);
     Wizard::SetDesktopIcon("timezone");
-    WFM::CallFunction("ntp-client_proposal", ["CreateUI"]);
-    enable_disable_widgets(false);
+
+    boolean ntp_installed = (Stage::initial() || Package::Installed ("yast2-ntp-client"));
+
+    if (ntp_installed) {
+	CreateUI();
+    }
 
     if (!dt_widgets)
     {
@@ -176,8 +201,6 @@
 	});
     }
 
-    boolean ntp_installed = false;
-    boolean ntp_used = false;
 
     any ret = nil;
     repeat
@@ -192,10 +215,12 @@
 		ntp_installed	= Package::Install ("yast2-ntp-client");
 		if (!ntp_installed)
 		{
-		    ntp_used	= false;
+		    ntp_used = false;
 		    UI::ChangeWidget (`id (`manual), `Value, true);
 		    UI::ChangeWidget (`id (`ntp), `Value, false);
 		}
+		else
+		    CreateUI();
 	    }
 	    if (ntp_used )
 	    {
@@ -287,6 +312,7 @@ Enter the correct date.
 	}
     }
     until( ret==`accept || ret==`cancel );
+    WFM::CallFunction("ntp-client_proposal", [ "SetUseNTP", $["ntp_used" : ntp_used] ]);
     Wizard::CloseDialog ();
     return (ret == `accept);
   };
