@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Sep 13 18:26:15 CEST 2007 - kmachalkova@suse.cz
+
+- In 'change date and time' dialog, remember whether synchronization 
+  with NTP server has been selected (#308238)
+- On running system, do not call ntp-client functions before making 
+  sure package yast2-ntp-client gets installed
+
+-------------------------------------------------------------------
 Tue Sep 11 21:21:01 CEST 2007 - jsuchome@suse.cz
 
 - do not call xset in text mode (#309438)
