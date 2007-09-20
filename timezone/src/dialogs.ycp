@@ -190,6 +190,9 @@
 
     if (ntp_installed) {
 	CreateUI();
+	if (ntp_used)
+	    WFM::CallFunction ("ntp-client_proposal", [ "MakeProposal",
+		$[ "country" : Language::GetLanguageCountry() ] ]);
     }
 
     if (!dt_widgets)
@@ -309,10 +312,18 @@ Enter the correct date.
 		    ret = `retry;
 		    continue;
 	    }
+	    else
+	    {
+		// new system time from ntpdate must be saved to hw clock
+		Timezone::SystemTime2HWClock ();
+	    }
 	}
     }
     until( ret==`accept || ret==`cancel );
-    WFM::CallFunction("ntp-client_proposal", [ "SetUseNTP", $["ntp_used" : ntp_used] ]);
+
+    if (ntp_installed) {
+	WFM::CallFunction("ntp-client_proposal", [ "SetUseNTP", $["ntp_used" : ntp_used] ]);
+    }
     Wizard::CloseDialog ();
     return (ret == `accept);
   };

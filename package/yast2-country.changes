@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep 19 12:42:10 CEST 2007 - jsuchome@suse.cz
+
+- save correct system time from ntpdate to HW clock (#309583")
+- 2.15.20
+
+-------------------------------------------------------------------
 Thu Sep 13 18:26:15 CEST 2007 - kmachalkova@suse.cz
 
 - In 'change date and time' dialog, remember whether synchronization 
