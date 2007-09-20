@@ -306,6 +306,24 @@ global define void SetTime (string year, string month, string day,
 };
 
 /**
+ * Set the Hardware Clock to the current System Time.
+ */
+global define void SystemTime2HWClock () {
+
+    if (!Arch::s390 ())
+    {
+	string cmd = "";
+	if (size (timezone) >0 && hwclock != "--localtime")
+	{
+	    cmd = "TZ=" + timezone + " ";
+	}
+	cmd = "/sbin/hwclock --systohc " + hwclock;
+	y2milestone ("cmd %1", cmd);
+	SCR::Execute(.target.bash, cmd);
+    }
+}
+
+/**
  * GetTimezoneForLanguage()
  *
  * Get the timezone for the given system language.
