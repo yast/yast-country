@@ -206,7 +206,7 @@ for this language."));
 
     string preselected = Language::preselected;
 
-    if (Stage::initial () && preselected != "en_US" && set_default)
+    if (preselected != "en_US" && set_default)
     {
 	if (ProductFeatures::GetBooleanFeature ("globals", "skip_language_dialog"))
 	{
@@ -244,7 +244,7 @@ for this language."));
     // heading text
     string heading_text = _("Languages");
 
-    if (Stage::initial () && set_default && !Mode::repair ())
+    if (set_default && !Mode::repair ())
     {
 	// heading text
 	heading_text = _("Language");
@@ -255,7 +255,7 @@ for this language."));
 	heading_text = _("Welcome to System Repair");
     }
 
-    if (Stage::initial () && set_default)
+    if (set_default)
     {
 	show_expert	= false;
 	more_languages	= false;
@@ -294,6 +294,14 @@ for this language."));
 		``(`item(`id(codelist[1]:""), codelist[0]:"",
 			  (language == codelist[1]:""))))
     );
+
+    if (Stage::firstboot ())
+	languagesel = `SelectionBox (`id(`language), `opt(`notify), "",
+	    maplist (string trans_lang, lsort (lang_list), {
+		string code	= lang2code [trans_lang]:"";
+		return `item (`id (code), trans_lang, language == code);
+	    })
+	);
 
     // this type of contents will be shown only for initial installation dialog
     term contents = `HVCenter (
@@ -468,9 +476,9 @@ In the selection box, specify additional languages to use on your system.
     UI::SetFocus(`id(`language));
 
     // adapt keyboard for language?
-    boolean kbd_adapt = (Stage::initial () && set_default && !Mode::config ());
+    boolean kbd_adapt = (set_default && !Mode::config ());
     // adapt timezone for language?
-    boolean tmz_adapt = (Stage::initial () && set_default && !Mode::config ());
+    boolean tmz_adapt = (set_default && !Mode::config ());
 
 
     repeat
@@ -558,7 +566,7 @@ Some texts may be displayed in English.
 		}
 
 
-		if (Stage::initial () && set_default)
+		if (set_default)
 		{
 		    Timezone::ResetZonemap ();
 		}
@@ -621,7 +629,7 @@ installation, but the selected language will be used for the new system."));
 		if (kbd_adapt)
 		{
 		    Keyboard::SetKeyboardForLanguage (language);
-		    if (Stage::initial () && set_default)
+		    if (set_default)
 		    {
 			Keyboard::SetKeyboardDefault();
 		    }

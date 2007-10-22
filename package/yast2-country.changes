@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Oct 22 11:58:15 CEST 2007 - jsuchome@suse.cz
+
+- in firstboot, do not show list with secondary languages (F302520) 
+- correct console font for Hungarian (#335246)
+- 2.16.0
+
+-------------------------------------------------------------------
 Wed Sep 19 12:42:10 CEST 2007 - jsuchome@suse.cz
 
 - save correct system time from ntpdate to HW clock (#309583")
