@@ -73,6 +73,8 @@ $[ "name" : _("Europe"),
 	"Europe/Zagreb" : _("Croatia"),
 	"Iceland" : _("Iceland"),
 	"Atlantic/Azores" : _("Azores"),
+	// time zone
+	"Atlantic/Canary" : _("Canary Islands"),
 	"Europe/Zurich" : _("Switzerland") ] ],
 
 $[ "name" : _("USA"),
