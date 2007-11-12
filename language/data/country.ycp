@@ -61,6 +61,7 @@ return $[
     "JP" : _("Japan"),
     "KW" : _("Kuwait"),
     "LB" : _("Lebanon"),
+    "LI" : _("Liechtenstein"),
     "LT" : _("Lithuania"),
     "LU" : _("Luxemburg"),
     "LV" : _("Latvia"),

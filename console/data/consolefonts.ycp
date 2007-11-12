@@ -80,9 +80,9 @@ $[
       "sk"		: [ "lat2-16.psfu",	"",	"trivial",	"(K" ],
       "sk_SK.UTF-8"     : [ "lat2-16.psfu",	"",	"trivial",	"(K" ],
 
-      "hu_HU"		: [ "lat2a-16.psfu",	"",	"trivial",	"(K" ],
-      "hu"		: [ "lat2a-16.psfu",	"",	"trivial",	"(K" ],
-      "hu_HU.UTF-8"     : [ "lat2a-16.psfu",	"",	"trivial",	"(K" ],
+      "hu_HU"		: [ "lat2-16.psfu",	"",	"trivial",	"(K" ],
+      "hu"		: [ "lat2-16.psfu",	"",	"trivial",	"(K" ],
+      "hu_HU.UTF-8"     : [ "lat2-16.psfu",	"",	"trivial",	"(K" ],
 
       "lt_LT"		: [ "lat7a-16.psf", 	"",	"trivial",	"(K" ],
       "lt"		: [ "lat7a-16.psf", 	"",	"trivial",	"(K" ],
