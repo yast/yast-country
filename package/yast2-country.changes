@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Nov 12 15:55:00 CET 2007 - jsuchome@suse.cz
+
+- reverted console font for Hungarian (#335246)
+- added Liechtenstein to the list of countries (#230491)
+- 2.16.2 
+
+-------------------------------------------------------------------
 Mon Nov  5 13:27:16 CET 2007 - jsuchome@suse.cz
 
 - added Atlantic/Canary timezone (#303710)
