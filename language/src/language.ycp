@@ -68,15 +68,19 @@ define boolean LanguageWrite () {
     Progress::NextStage ();
 
     boolean enough_space	= true;
-    if (Mode::commandline ())
+    if (Language::PackagesModified ())
     {
-	// if not commandline, packages were already initialized in inst_ client
-	enough_space = Language::PackagesInit (
-	    splitstring (Language::languages, ","));
-    }
-    if (enough_space)
-    {
-	Language::PackagesCommit ();
+	if (Mode::commandline ())
+	{
+	    // if not commandline, packages were already initialized in
+	    // select_language
+	    enough_space = Language::PackagesInit (
+		splitstring (Language::languages, ","));
+	}
+	if (enough_space)
+	{
+	    Language::PackagesCommit ();
+	}
     }
 
     Progress::NextStage ();
