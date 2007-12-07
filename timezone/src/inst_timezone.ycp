@@ -6,6 +6,7 @@
 {
     import "GetInstArgs";
     import "Mode";
+    import "Storage";
     import "Wizard";
 
     include "timezone/dialogs.ycp";
@@ -17,6 +18,13 @@
 
     if (Mode::mode () == "firstboot")
 	Wizard::HideAbortButton();
+
+    if (Stage::initial () &&
+	size (Storage::GetWinPrimPartitions(Storage::GetTargetMap()))>0)
+    {
+	Timezone::windows_partition = true;
+	y2milestone ("windows partition found: assuming local time");
+    }
 
     return TimezoneDialog (args);
 }
