@@ -8,6 +8,8 @@ Requires:	yast2 >= 2.13.70
 # Pkg::SetPackageLocale, Pkg::GetTextLocale
 Requires:       yast2-pkg-bindings >= 2.15.3
 
+Requires:	yast2-country-data
+
 Provides:	yast2-config-environment
 Provides:	yast2-config-keyboard
 Provides:	yast2-config-language
@@ -55,12 +57,13 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 # common
 %files
 %defattr(-,root,root)
-%dir @ydatadir@/languages
 %doc @docdir@
-@moduledir@/*
+@moduledir@/Console.y*
+@moduledir@/Keyboard.y*
+@moduledir@/Timezone.y*
+@moduledir@/XLibAPI.pm
 @clientdir@/*.ycp
 @ydatadir@/*.ycp
-@ydatadir@/languages/*.ycp
 @yncludedir@/keyboard/
 @yncludedir@/timezone/
 @scrconfdir@/*.scr
@@ -71,3 +74,16 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 %endif
 @desktopdir@/yast-language.desktop
 @desktopdir@/timezone.desktop
+
+%package data
+Summary:	Data files for country-related settings
+Group:          System/YaST
+
+%description data
+Data files for yast2-country together with the most often used API functions (Language module)
+
+%files data
+%defattr(-,root,root)
+%dir @ydatadir@/languages
+@ydatadir@/languages/*.ycp
+@moduledir@/Language.y*
