@@ -338,13 +338,6 @@ Enter the correct date.
     // inst_timezone as a part of installation sequence
     if (first_run && Stage::initial ())
     {
-	import "Storage";
-	if (size (Storage::GetWinPrimPartitions(Storage::GetTargetMap()))>0)
-	{
-	    Timezone::windows_partition = true;
-	    y2milestone ("windows partition found: assuming local time");
-	}
-
 	if (Timezone::ProposeLocaltime ())
 	{
 	    Timezone::hwclock = "--localtime";

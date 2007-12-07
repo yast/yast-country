@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Dec  7 15:53:26 CET 2007 - jsuchome@suse.cz
+
+- Storage is required only during installation -> usage moved to
+  the inst_timezone client 
+- 2.16.4
+
+-------------------------------------------------------------------
 Fri Dec  7 11:46:14 CET 2007 - jsuchome@suse.cz
 
 - new package yast2-country-data with Language.ycp (containing
