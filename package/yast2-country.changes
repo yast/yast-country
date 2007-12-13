@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Dec 13 14:22:19 CET 2007 - jsuchome@suse.cz
+
+- disable DPMS while adapting time (#348348)
+- 2.13.54 
+
+-------------------------------------------------------------------
 Thu Aug 23 14:51:46 CEST 2007 - jsuchome@suse.cz
 
 - in firstboot, do not show list with secondary languages (F302520)
