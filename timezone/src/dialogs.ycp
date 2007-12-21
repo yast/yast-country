@@ -9,7 +9,7 @@
  *	Jiri Suchomel <jsuchome@suse.cz>
  *
  * Summary:
- *	Dialogs for timezone and time configuration.
+ *	Dialogs for timeone and time configuration.
  *
  * $Id$
  */
@@ -17,6 +17,7 @@
   textdomain "country";
 
   import "Arch";
+  import "Directory";
   import "Label";
   import "Language";
   import "Mode";
@@ -391,40 +392,80 @@ Enter the correct date.
 
     boolean textmode	= Language::GetTextMode ();
 
-    boolean ntp		= false;
-    term ntp_term	= `Frame (_("NTP Synchronization"), `VBox (`HBox (
-	`HSpacing (0.5),
-	`Label (`id(`ntp), _("NTP is not configured")),
-	// button label
-	`Right (`PushButton (`id (`ntp_configure), _("Change..."))),
-	`HSpacing (1)
-    ), `VSpacing (0.2)));
-    term contents = `MarginBox (
+    term timezoneterm = `HBox (
+	region,
+	`HSpacing (),
+	timezonesel
+    );
+    boolean timezone_selector	= false;
+
+    list<map> zonemap	= Timezone::get_zonemap ();
+
+    // map of zones conversions
+    map<string,string> yast2zonetab	= Timezone::yast2zonetab;
+
+    // map of timezone -> translated label to be passed to TimezoneSelector
+    map zones	= $[];
+
+    // cache the zonemap with the order sorted according to current locale
+    list sorted_zonemap	= maplist (map region, zonemap, {
+	list trl = maplist (
+	    string key, string name, (map<string,string>)region["entries"]:$[],
+	{
+		zones[yast2zonetab[key]:key]	= name;
+		return [ name, key ];
+	});
+	trl	= sort (list a, list b, (list<list>) trl, {
+	    list lsorted	= lsort ([a[0]:"", b[0]:""]);
+	    return (lsorted[0]:"" == a[0]:"" && a[0]:"" != b[0]:"");
+	});
+	return $[
+	    "name"	: region["name"]:"",
+	    "entries"	: trl,
+	];
+    });
+
+    if (UI::HasSpecialWidget(`TimezoneSelector))
+    {
+	timezone_selector	= true;
+	string worldmap	= Directory::themedir + "/current/worldmap/GLOBALeb10colshade.jpg";
+	timezoneterm	= `VBox (
+	    `TimezoneSelector (`id(`timezonemap), `opt(`notify), worldmap,
+		zones),
+	    `HBox (
+		`HWeight (1,
+		    `ComboBox (`id(`region), `opt(`notify),
+			// label text
+			_("&Region"),Timezone::Region())
+		),
+		`HSpacing (),
+		`HWeight (1, `ReplacePoint (`id(`tzsel),
+		    // title for combo box 'timezone'
+		    `ComboBox (`id (`timezone), `opt(`notify), _("Time &Zone"))
+		))
+	    )
+	);
+    }
+    term hwclock_term	= `VBox (
+	`ComboBox (`id (`hwclock), `opt(`hstretch, `notify),
+	    // combo box label
+	    _("&Hardware Clock Set To"), [
+	    // ComboBox entry: clock set to local time
+	    `item (`id (`hwclock_localtime), _("Local Time"),
+		(hwclock == "--localtime")),
+	    // ComboBox entry: clock set UTC
+	    `item (`id(`hwclock_utc ), _("UTC"), (hwclock == "-u")),
+	]),
+	textmode ? `Label ("") : `Empty ()
+    );
+    term contents	= `MarginBox (
 	`leftMargin (2), `rightMargin (2), `topMargin (0), `bottomMargin (0.2),
 	`VBox (
-	    `HBox (
-		region,
-		`HSpacing (),
-		timezonesel
-	    ),
+	    timezoneterm,
 	    `VSpacing (0.2),
 	    `VSquash (`HBox (
 		`HWeight (1,
-		    utc_only ? `Empty () : `VBox (
-		    `ComboBox (
-			`id (`hwclock), `opt(`hstretch, `notify),
-			    // combo box label
-			    _("&Hardware Clock Set To"),
-			    [
-			    // ComboBox entry: clock set to local time
-			    `item (`id (`hwclock_localtime), _("Local Time"),
-				(hwclock == "--localtime")),
-
-			    // ComboBox entry: clock set UTC
-			    `item (`id(`hwclock_utc ), _("UTC"),
-				(hwclock == "-u"))
-			    ]
-		    ), textmode ? `Label ("") : `Empty ())
+		    utc_only ? `Empty () : hwclock_term
 		),
 		`HSpacing (1),
 		// frame label
@@ -445,6 +486,59 @@ Enter the correct date.
 	    ))
 	)
     );
+    // cache for lists with timezone items
+    map timezones_for_region	= $[];
+    list get_timezones_for_region (integer region, string zone) {
+
+	return maplist (list entry, sorted_zonemap[region,"entries"]:[],
+	{
+	    return `item (`id(entry[1]:""), entry[0]:"", entry[1]:"" == zone);
+	});
+    }
+    // region was seleced: show the correct list of timezones
+    void show_selected_region (integer sel, string zone) {
+
+	if (timezone_selector)
+	    UI::ChangeWidget (`id(`region), `Value, sel);
+	else
+	    UI::ChangeWidget (`id(`region), `CurrentItem, sel);
+
+	UI::ReplaceWidget (`id(`tzsel), timezone_selector ?
+	    `ComboBox (`id(`timezone), `opt(`notify),
+		// label text
+		_("Time &Zone"), get_timezones_for_region (sel, zone)
+	    ) :
+	    `SelectionBox ( `id(`timezone), `opt(`notify),
+		// label text
+		_("Time &Zone"), get_timezones_for_region (sel, zone)
+	    )
+	);
+    }
+    // which region is selected?
+    integer selected_region () {
+	return timezone_selector ?
+	    (integer)UI::QueryWidget (`id(`region), `Value) :
+	    (integer)UI::QueryWidget (`id(`region), `CurrentItem);
+    }
+    // which timezone is selected?
+    string selected_timezone () {
+	return timezone_selector ?
+	    (string) UI::QueryWidget(`id(`timezone), `Value) :
+	    (string) UI::QueryWidget(`id(`timezone), `CurrentItem);
+    }
+
+    // for given timezone (selected in map), find out to which region it belongs
+    integer get_region_for_timezone (string zone) {
+	integer reg	= 0;
+	foreach (map region, zonemap, {
+	    if (haskey (region["entries"]:$[], zone))
+	    {
+		break;
+	    }
+	    reg	= reg + 1;
+	});
+	return reg;
+    }
 
     // help for timezone screen
     string help_text = _("
@@ -494,13 +588,12 @@ If the current time is not correct, use <b>Change</b> to adjust it.
     symbol hwclock_s_old = hwclock_s;
     hwclock_s_initial = hwclock_s;
 
-    UI::ChangeWidget (`id(`region), `CurrentItem, sel);
-    UI::ReplaceWidget (`id(`tzsel),
-	`SelectionBox ( `id(`timezone), `opt(`notify),
-	    // label text
-	    _("Time &Zone"), Timezone::Selection (sel))
-    );
-    UI::ChangeWidget (`id(`timezone), `CurrentItem, Timezone::timezone);
+    show_selected_region (sel, timezone);
+    if (timezone_selector)
+    {
+	UI::ChangeWidget (`id(`timezonemap), `CurrentItem,
+	    yast2zonetab[timezone]:timezone);
+    }
 
     UI::SetFocus (`id(`region));
 
@@ -518,17 +611,9 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 	}
 	if (ret == `region)
 	{
-	    integer num = (integer)UI::QueryWidget( `id(`region), `CurrentItem);
-	    y2milestone ("selected region %1", num);
-	    UI::ReplaceWidget (`id(`tzsel),
-		`SelectionBox ( `id(`timezone), `opt(`notify),
-		    // label text
-		    _("Time &Zone"), Timezone::Selection (num))
-	    );
-	    if (num == sel)
-	    {
-		UI::ChangeWidget (`id(`timezone), `CurrentItem, timezone);
-	    }
+	    integer num = selected_region ();
+	    show_selected_region (num, timezone);
+// FIXME zoom the map (select something in the center of region)
 	}
 	else if (ret == `settime)
 	{
@@ -540,7 +625,8 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 		changed_time = true;
 	    }
 	}
-	else if (ret == `next || ret == `timezone || ret == `hwclock)
+	else if (ret == `next || ret == `timezone || ret == `timezonemap ||
+		 ret == `hwclock)
 	{
 	    // Get current settings.
 	    // UTC vs. localtime, only if needed
@@ -550,12 +636,28 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 	    {
 		hwclock_s = (symbol)UI::QueryWidget( `id(`hwclock), `Value );
 	    }
+	    if (ret == `timezonemap)
+	    {
+		timezone = (string) UI::QueryWidget(`id(`timezonemap),`Value);
+
+		integer reg	= get_region_for_timezone (timezone);
+		if (reg == sel)
+		    UI::ChangeWidget (`id(`timezone), `Value, timezone);
+		else
+		{
+		    sel	= reg;
+		    show_selected_region (sel, timezone);
+		}
+	    }
+	    else
+		timezone = selected_timezone ();
 	    if (ret == `timezone)
 	    {
-		sel = (integer)UI::QueryWidget( `id(`region), `CurrentItem );
+		sel = selected_region ();
+		if (timezone_selector)
+		    UI::ChangeWidget (`id(`timezonemap), `Value,
+			yast2zonetab[timezone]:timezone);
 	    }
-
-	    timezone = (string)UI::QueryWidget( `id(`timezone ), `CurrentItem );
 
 	    if (timezone == nil || size(timezone) == 0)
 	    {
