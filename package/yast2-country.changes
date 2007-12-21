@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Dec 21 15:51:25 CET 2007 - jsuchome@suse.cz
+
+- added support for TimezoneSelector widget
+- updated list of timezones (added new ones, many old ones converted
+  to the format used by zone.tab)
+- 2.16.5
+
+-------------------------------------------------------------------
 Fri Dec  7 15:53:26 CET 2007 - jsuchome@suse.cz
 
 - Storage is required only during installation -> usage moved to

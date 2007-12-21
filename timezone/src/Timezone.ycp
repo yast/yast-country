@@ -56,9 +56,73 @@ global boolean modified		= false;
  */
 global boolean windows_partition	= false;
 
-// internal map used to store initial data
-map push = $[];
 
+// translation of correct timezone to the one that could be shown in map widget
+global map <string,string> yast2zonetab	= $[
+	"Mideast/Riyadh87"	: "Asia/Riyadh",
+	"Mideast/Riyadh88"	: "Asia/Riyadh",
+	"Mideast/Riyadh89"	: "Asia/Riyadh",
+];
+
+// on init, translate these to correct ones
+global map<string,string> obsoleted_zones	= $[
+	"Iceland"		: "Atlantic/Reykjavik",
+	"Europe/Belfast"	: "Europe/London",
+
+	"Australia/South"	: "Australia/Adelaide",
+	"Australia/North"	: "Australia/Darwin",
+	"Australia/NSW"		: "Australia/Sydney",
+	"Australia/ACT"		: "Australia/Canberra",
+	"Australia/Queensland"	: "Australia/Brisbane",
+	"Australia/Tasmania"	: "Australia/Hobart",
+	"Australia/Victoria"	: "Australia/Melbourne",
+	"Australia/West"	: "Australia/Perth",
+
+	"US/Alaska"		: "America/Anchorage",
+	"US/Aleutian"		: "America/Adak",
+	"US/Arizona"		: "America/Phoenix",
+	"US/Central"		: "America/Chicago",
+	"US/East-Indiana"	: "America/Indiana/Indianapolis",
+	"US/Hawaii"		: "Pacific/Honolulu",
+	"US/Indiana-Starke"	: "America/Indiana/Knox",
+	"US/Michigan"		: "America/Detroit",
+	"US/Mountain"		: "America/Denver",
+	"US/Pacific"		: "America/Los_Angeles",
+	"US/Samoa"		: "Pacific/Pago_Pago",
+	"US/Eastern"		: "America/New_York",
+
+	"Canada/Atlantic"	: "America/Halifax",
+	"Canada/Central"	: "America/Winnipeg",
+	"Canada/Eastern"	: "America/Toronto",
+	"Canada/Saskatchewan"	: "America/Regina",
+	"Canada/East-Saskatchewan" : "America/Regina",
+	"Canada/Mountain"	: "America/Edmonton",
+	"Canada/Newfoundland"	: "America/St_Johns",
+	"Canada/Pacific"	: "America/Vancouver",
+	"Canada/Yukon"		: "America/Whitehorse",
+
+	"America/Buenos_Aires"	: "America/Argentina/Buenos_Aires",
+	"America/Virgin"	: "America/St_Thomas",
+	"Brazil/Acre"		: "America/Rio_Branco",
+	"Brazil/East"		: "America/Sao_Paulo",
+	"Brazil/West"		: "America/Manaus",
+	"Chile/Continental"	: "America/Santiago",
+	"Chile/EasterIsland"	: "Pacific/Easter",
+	"Mexico/BajaNorte"	: "America/Tijuana",
+	"Mexico/BajaSur"	: "America/Mazatlan",
+	"Mexico/General"	: "America/Mexico_City",
+	"Jamaica"		: "America/Jamaica",
+
+	"Asia/Macao"		: "Asia/Macau",
+	"Israel"		: "Asia/Jerusalem",
+	"Asia/Tel_Aviv"		: "Asia/Jerusalem",
+	"Hongkong"		: "Asia/Hong_Kong",
+	"Japan"			: "Asia/Tokyo",
+	"ROK"			: "Asia/Seoul",
+
+	"Africa/Timbuktu"	: "Africa/Bamako",
+	"Egypt"			: "Africa/Cairo",
+];
 // ------------------------------------------------------------------
 // END: Globally defined data to be accessed via Timezone::<variable>
 // ------------------------------------------------------------------
@@ -68,6 +132,10 @@ map push = $[];
 // ------------------------------------------------------------------
 // START: Locally defined data
 // ------------------------------------------------------------------
+
+// internal map used to store initial data
+map push = $[];
+
 
 string name = "";
 
@@ -163,8 +231,9 @@ global define integer Set (string zone, boolean really) {
     //
     if (!Mode::config () && really )
     {
+	boolean inst = Stage::initial () || Stage::cont() || Stage::firstboot();
 	boolean textmode	= Language::GetTextMode ();
-	if ((Stage::initial () || Stage::cont ()) && !textmode)
+	if (inst && !textmode)
 	    SCR::Execute ( .target.bash, "/usr/bin/xset -dpms");
 	string cmd = "/usr/sbin/zic -l " + timezone;
 	y2milestone( "Set cmd %1", cmd );
@@ -175,7 +244,7 @@ global define integer Set (string zone, boolean really) {
 	    y2milestone( "Set cmd %1", cmd );
 	    y2milestone( "Set ret %1", SCR::Execute(.target.bash_output, cmd ));
 	}
-	if ((Stage::initial () || Stage::cont ()) && !textmode)
+	if (inst && !textmode)
 	    SCR::Execute ( .target.bash, "/usr/bin/xset +dpms");
     }
 
@@ -200,21 +269,9 @@ global define string UpdateTimezone (string tmz) {
 
     string updated_tmz	= tmz;
 
-    map tmz_duplicates	= $[
-	"Australia/Adelaide"	: "Australia/South",
-	"Australia/Darwin"	: "Australia/North",
-	"Australia/Sydney"	: "Australia/NSW",
-	"Australia/Canberra"	: "Australia/ACT",
-	"Australia/Brisbane"	: "Australia/Queensland",
-	"Australia/Hobart"	: "Australia/Tasmania",
-	"Australia/Perth"	: "Australia/West",
-	// etc.
-	"America/Los_Angeles"	: "US/Pacific",
-    ];
-
-    if (haskey (tmz_duplicates, tmz))
+    if (haskey (obsoleted_zones, tmz))
     {
-	updated_tmz	= tmz_duplicates[tmz]:tmz;
+	updated_tmz	= obsoleted_zones[tmz]:tmz;
 	y2milestone ("updating timezone from %1 to %2", tmz, updated_tmz);
 	// TODO if still not present, search file in /usr/share/zoneinfo
     }

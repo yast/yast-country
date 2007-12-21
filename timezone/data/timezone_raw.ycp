@@ -12,7 +12,6 @@
  * *****************************************************************
  *
  */
-
 {
 textdomain "timezone_db";
 
@@ -22,9 +21,11 @@ return ([
 $[ "name" : _("Europe"),
    "entries" : $[
 	"Europe/Amsterdam" : _("Netherlands"),
+	// time zone
+	"Europe/Andorra"	: _("Andorra"),
 	"Europe/Athens" : _("Greece"),
-	"Europe/Belfast" : _("Northern Ireland"),
-	"Europe/Belgrade" : _("Yugoslavia"),
+	// time zone
+	"Europe/Belgrade" : _("Serbia"),
 	"Europe/Berlin" : _("Germany"),
 	"Europe/Bratislava" : _("Slovakia"),
 	"Europe/Brussels" : _("Belgium"),
@@ -52,6 +53,8 @@ $[ "name" : _("Europe"),
 	"Europe/Moscow"		: _("Russia (Moscow)"),
 	"Europe/Oslo" : _("Norway"),
 	"Europe/Paris" : _("France"),
+	// time zone
+	"Europe/Podgorica"	: _("Montenegro"),
 	"Europe/Prague" : _("Czech Republic"),
 	"Europe/Riga" : _("Latvia"),
 	"Europe/Rome" : _("Italy"),
@@ -71,75 +74,150 @@ $[ "name" : _("Europe"),
 	"Europe/Vilnius" : _("Lithuania"),
 	"Europe/Warsaw" : _("Poland"),
 	"Europe/Zagreb" : _("Croatia"),
-	"Iceland" : _("Iceland"),
+	// time zone
+	"Atlantic/Reykjavik"	: _("Iceland"),
 	"Atlantic/Azores" : _("Azores"),
 	// time zone
 	"Atlantic/Canary" : _("Canary Islands"),
-	"Europe/Zurich" : _("Switzerland") ] ],
+	"Europe/Zurich" : _("Switzerland"),
+	// time zone
+	"America/Godthab"	: _("Greenland--Nuuk"),
+    ]
+],
 
 $[ "name" : _("USA"),
    "entries" : $[
-	"US/Alaska" : _("Alaska"),
-	"US/Aleutian" : _("Aleutian"),
-	"US/Arizona" : _("Arizona"),
-	"US/Central" : _("Central"),
-	"US/East-Indiana" : _("East Indiana"),
-	"US/Hawaii" : _("Hawaii"),
-	"US/Indiana-Starke" : _("Indiana Starke"),
-	"US/Michigan" : _("Michigan"),
-	"US/Mountain" : _("Mountain"),
-	"US/Pacific" : _("Pacific"),
-	"US/Samoa" : _("Samoa"),
-	"US/Eastern" : _("Eastern") ] ],
-
-$[ "name" : _("Canada"),
-   "entries" : $[
-	"Canada/Atlantic" : _("Atlantic"),
-	"Canada/Central" : _("Central"),
-	"Canada/Eastern" : _("Eastern"),
-	"Canada/Mountain" : _("Mountain"),
-	"Canada/Newfoundland" : _("Newfoundland"),
-	"Canada/Pacific" : _("Pacific"),
-	"Canada/Saskatchewan" : _("Saskatchewan"),
-	"Canada/East-Saskatchewan" : _("East Saskatchewan"),
-	"Canada/Yukon" : _("Yukon") ] ],
-
-$[ "name" : _("Central and South America"),
-   "entries" : $[
 	// time zone
-	"Brazil/Acre" : _("Brazil Acre"),
-	"Brazil/East" : _("Brazil East"),
-	"Brazil/West" : _("Brazil West"),
-	"Chile/Continental" : _("Chile Continental"),
-	"Chile/EasterIsland" : _("Chile EasterIsland"),
-	"Jamaica" : _("Jamaica"),
-	"Atlantic/Bermuda" : _("Bermuda"),
-	"Mexico/BajaNorte" : _("Mexico BajaNorte"),
-	"Mexico/BajaSur" : _("Mexico BajaSur"),
+	"America/Anchorage"	: _("Alaska"),
+	// time zone
+	"America/Adak"		: _("Aleutian"),
+	// time zone
+	"America/Phoenix"	: _("Arizona"),
+	// time zone
+	"America/Chicago"	: _("Central"),
+	// time zone
+	"America/Indiana/Indianapolis" : _("East Indiana"),
+	// time zone
+	"Pacific/Honolulu"	: _("Hawaii"),
+	// time zone
+	"America/Indiana/Knox"	: _("Indiana Starke"),
+	// time zone
+	"America/Detroit"	: _("Michigan"),
+	// time zone
+	"America/Denver"	: _("Mountain"),
+	// time zone
+	"America/Los_Angeles"	: _("Pacific"),
+	// time zone
+	"Pacific/Pago_Pago"	: _("Samoa"),
+	// time zone
+	"America/New_York"	: _("Eastern"),
+	// time zone
+	"America/St_Thomas"	: _("Virgin Islands"),
+	// time zone
+	"America/Puerto_Rico"	: _("Puerto Rico"),
+    ]
+],
+
+$[
+    // time zone region
+    "name" : _("Canada"),
+    "entries" : $[
+	// time zone
+	"America/Halifax"	: _("Atlantic"),
+	// time zone
+	"America/Winnipeg"	: _("Central"),
+	// time zone
+	"America/Toronto"	: _("Eastern"),
+	// time zone
+	"America/Edmonton"	: _("Mountain"),
+	// time zone
+	"America/St_Johns"	: _("Newfoundland"),
+	// time zone
+	"America/Vancouver"	: _("Pacific"),
+	// time zone
+	"America/Regina"	: _("Saskatchewan"),
+	// time zone
+	"America/Whitehorse"	: _("Yukon")
+    ]
+],
+
+
+$[
+    // time zone region
+    "name" : _("Central and South America"),
+    "entries" : $[
+	// time zone
+	"America/Havana"	: _("Havana"),
+	// time zone
+	"Pacific/Galapagos"	: _("Galapagos"),
+	// time zone
+	"America/Guayaquil"	: _("Guayaquil"),
+	// time zone
+	"America/Rio_Branco"	: _("Brazil Acre"),
+	// time zone
+	"America/Sao_Paulo"	: _("Brazil East"),
+	// time zone
+	"America/Manaus"	: _("Brazil West"),
+	// time zone
+	"America/Noronha"	: _("Brazil de Noronha"),
+	// time zone
+	"America/Santiago"	: _("Chile Continental"),
+	// time zone
+	"Pacific/Easter"	: _("Chile Easter Island"),
+	// time zone
+	"America/Jamaica"	: _("Jamaica"),
+	// time zone
+	"Atlantic/Bermuda"	: _("Bermuda"),
+	// time zone
+	"America/Tijuana"	: _("Mexico Baja Norte"),
+	// time zone
+	"America/Mazatlan"	: _("Mexico Baja Sur"),
+	// time zone
+	"America/Mexico_City"	: _("Mexico General--Mexico City"),
+	// time zone
 	"America/Asuncion" : _("Asuncion"),
+	// time zone
 	"America/Barbados" : _("Barbados"),
+	// time zone
 	"America/Bogota" : _("Bogota"),
-	"America/Buenos_Aires" : _("Buenos Aires"),
+	// time zone
+	"America/Argentina/Buenos_Aires" : _("Buenos Aires"),
 	// time zone
 	"America/Cayenne" : _("Cayenne"),
+	// time zone
 	"America/Caracas" : _("Caracas"),
+	// time zone
 	"America/Costa_Rica" : _("Costa Rica"),
+	// time zone
 	"America/Dominica" : _("Dominica"),
+	// time zone
 	"America/El_Salvador" : _("El Salvador"),
+	// time zone
 	"America/Grenada" : _("Grenada"),
+	// time zone
 	"America/Guadeloupe" : _("Guadeloupe"),
+	// time zone
 	"America/Guatemala" : _("Guatemala"),
 	// time zone
 	"America/Guyana" : _("Guyana"),
+	// time zone
 	"America/Lima" : _("Lima"),
+	// time zone
 	"America/Managua" : _("Managua"),
+	// time zone
 	"America/Martinique" : _("Martinique"),
+	// time zone
 	"America/Panama" : _("Panama"),
+	// time zone
 	"America/Puerto_Rico" : _("Puerto Rico"),
+	// time zone
 	"America/Montevideo" : _("Uruguay"),
 	// time zone
-	"America/Virgin" : _("Virgin Islands"),
-	"Mexico/General" : _("Mexico General") ] ],
+	"America/St_Thomas"	: _("Virgin Islands"),
+	// time zone
+	"Atlantic/Stanley"	: _("Stanley"),
+    ]
+],
 
 $[
     // name of region
@@ -176,24 +254,22 @@ $[
     ]
 ],
 
-$[ "name" : _("Asia"),
-   "entries" : $[
+$[
+    // name of region
+    "name" : _("Asia"),
+    "entries" : $[
 	// time zone
-	"Japan"			: _("Japan"),
+	"Asia/Almaty"		: _("Almaty"),
 	// time zone
-	"PRC"			: _("China"),
-	// time zone
-	"ROK"			: _("Korea"),
-	// time zone
-	"Hongkong"		: _("Hongkong"),
-	// time zone
-	"Asia/Kabul"		: _("Afghanistan"),
+	"Asia/Ashgabat"		: _("Ashgabat"),
 	// time zone
 	"Asia/Anadyr"		: _("Anadyr"),
 	// time zone
 	"Asia/Baghdad"		: _("Baghdad"),
 	// time zone
 	"Asia/Bahrain"		: _("Bahrain"),
+	// time zone
+	"Asia/Baku"		: _("Baku"),
 	// time zone
 	"Asia/Bangkok"		: _("Bangkok"),
 	// time zone
@@ -215,9 +291,17 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Asia/Gaza"		: _("Gaza"),
 	// time zone
+	"Asia/Hong_Kong"	: _("Hongkong"),
+	// time zone
 	"Asia/Irkutsk"		: _("Irkutsk"),
 	// time zone
 	"Asia/Jakarta"		: _("Jakarta"),
+	// time zone
+	"Asia/Jerusalem"	: _("Israel"),
+	// time zone
+	"Asia/Kabul"		: _("Afghanistan"),
+	// time zone
+	"Asia/Karachi"		: _("Karachi"),
 	// time zone
 	"Asia/Kamchatka"	: _("Kamchatka"),
 	// time zone
@@ -229,17 +313,21 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Asia/Kuwait"		: _("Kuwait"),
 	// time zone
-	"Asia/Macao"		: _("Macao"),
+	"Asia/Macau"		: _("Macao"),
 	// time zone
 	"Asia/Magadan"		: _("Magadan"),
 	// time zone
 	"Asia/Manila"		: _("Manila"),
+	// time zone
+	"Asia/Nicosia"		: _("Nicosia"),
 	// time zone
 	"Asia/Novosibirsk"	: _("Novosibirsk"),
 	// time zone
 	"Asia/Omsk"		: _("Omsk"),
 	// time zone
 	"Asia/Phnom_Penh"	: _("Phnom Penh"),
+	// time zone
+	"Asia/Pyongyang"	: _("Pyongyang"),
 	// time zone
 	"Asia/Qatar"		: _("Qatar"),
 	// time zone
@@ -255,8 +343,6 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Asia/Tehran"		: _("Tehran"),
 	// time zone
-	"Asia/Tel_Aviv"		: _("Tel Aviv"),
-	// time zone
 	"Asia/Thimphu"		: _("Thimphu"),
 	// time zone
 	"Asia/Vladivostok"	: _("Vladivostok"),
@@ -267,11 +353,13 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Asia/Shanghai"		: _("Shanghai"),
 	// time zone
+	"Asia/Beijing"		: _("Beijing"),
+	// time zone
 	"Asia/Taipei"		: _("Taipei"),
 	// time zone
 	"Asia/Seoul"		: _("Seoul"),
 	// time zone
-	"Israel"		: _("Israel"),
+	"Asia/Riyadh"		: _("Riyadh"),
 	// time zone
 	"Mideast/Riyadh87"	: _("Mideast Riyadh87"),
 	// time zone
@@ -281,25 +369,53 @@ $[ "name" : _("Asia"),
 	// time zone
 	"Asia/Singapore"	: _("Singapore"),
 	// time zone
+	"Asia/Tbilisi"		: _("Tbilisi"),
+	// time zone
+	"Asia/Tokyo"		: _("Japan"),
+	// time zone
+	"Asia/Ulaanbaatar"	: _("Ulan Bator"),
+	// time zone
+	"Asia/Vientiane"	: _("Vientiane"),
+	// time zone
 	"Asia/Yakutsk"		: _("Yakutsk"),
+	// time zone
+	"Asia/Yerevan"		: _("Yerevan"),
     ]
 ],
 
 $[ "name" : _("Australia"),
    "entries" : $[
-	"Australia/North"	: _("Northern Territory--Darwin"),
-	"Australia/Queensland"	: _("Queensland--Brisbane"),
-	"Australia/South"	: _("South Australia--Adelaide"),
-	"Australia/NSW"		: _("New South Wales--Sydney"),
-	"Australia/ACT"		: _("Australian Capital Territory--Canberra"),
-	"Australia/Tasmania"	: _("Tasmania--Hobart"),
-	"Australia/Victoria"	: _("Victoria--Melbourne"),
-	"Australia/West"	: _("Western Australia--Perth"),
+	// time zone
+	"Australia/Lord_Howe"	: _("Lord Howe Island"),
+	// time zone
+	"Australia/Darwin"	: _("Northern Territory--Darwin"),
+	// time zone
+	"Australia/Brisbane"	: _("Queensland--Brisbane"),
+	// time zone
+	"Australia/Adelaide"	: _("South Australia--Adelaide"),
+	// time zone
+	"Australia/Sydney"	: _("New South Wales--Sydney"),
+	// time zone
+	"Australia/Broken_Hill"	: _("New South Wales--Broken Hill"),
+	// time zone
+//	"Australia/Canberra"	: _("Australian Capital Territory--Canberra"),
+	// time zone
+	"Australia/Hobart"	: _("Tasmania--Hobart"),
+	// time zone
+	"Australia/Currie"	: _("Tasmania--Currie"),
+	// time zone
+	"Australia/Melbourne"	: _("Victoria--Melbourne"),
+	// time zone
+	"Australia/Perth"	: _("Western Australia--Perth"),
     ]
 ],
 
 $[ "name" : _("Africa"),
    "entries" : $[
+	// time zone
+	"Indian/Antananarivo"	: _("Antananarivo"),
+	// time zone
+	"Africa/Addis_Ababa"	: _("Addis Ababa"),
 	"Africa/Algiers" : _("Algiers"),
 	"Africa/Brazzaville" : _("Brazzaville"),
 	"Africa/Casablanca" : _("Casablanca"),
@@ -309,21 +425,35 @@ $[ "name" : _("Africa"),
 	"Africa/Djibouti" : _("Djibouti"),
 	"Africa/Freetown" : _("Freetown"),
 	"Africa/Johannesburg" : _("Johannesburg"),
+	// time zone
+	"Africa/Kampala"	: _("Kampala"),
+	// time zone
+	"Africa/Khartoum"	: _("Khartoum"),
+	// time zone
+	"Africa/Kinshasa"	: _("Kinshasa"),
+	// time zone
+	"Africa/Kigali"		: _("Kigali"),
+	// time zone
+	"Africa/Lusaka"		: _("Lusaka"),
 	"Africa/Libreville" : _("Libreville"),
+	// time zone
+	"Africa/Maputo"		: _("Maputo"),
+	// time zone
+	"Africa/Mogadishu"	: _("Mogadishu"),
 	"Africa/Monrovia" : _("Monrovia"),
 	"Africa/Nairobi" : _("Nairobi"),
-	"Africa/Timbuktu" : _("Timbuktu"),
+	// time zone
+	"Africa/Bamako" : _("Bamako"),
 	"Africa/Tunis" : _("Tunis"),
 	"Africa/Windhoek" : _("Windhoek"),
 	"Africa/Cairo" : _("Cairo"),
-	"Egypt" : _("Egypt"),
-	"Africa/Tripoli" : _("Tripoli") ] ],
+	"Africa/Tripoli" : _("Tripoli") ]
+],
 
 $[ "name" : _("Pacific"),
    "entries" : $[
 	"Pacific/Auckland" : _("New Zealand"),
 	"Pacific/Fiji" : _("Fiji"),
-	"Pacific/Galapagos" : _("Galapagos"),
 	"Pacific/Guadalcanal" : _("Guadalcanal"),
 	"Pacific/Guam" : _("Guam"),
 	"Pacific/Midway" : _("Midway"),
@@ -331,12 +461,22 @@ $[ "name" : _("Pacific"),
 	"Pacific/Palau" : _("Palau"),
 	"Pacific/Pitcairn" : _("Pitcairn"),
 	"Pacific/Tahiti" : _("Tahiti"),
-	"Pacific/Samoa" : _("Samoa") ] ],
+	"Pacific/Pago_Pago"	: _("Samoa"),
+	// time zone
+	"Pacific/Port_Moresby"	: _("Port_Moresby"),
+	// time zone
+	"Pacific/Dili"	: _("Dili"),
+    ]
+],
 
 $[ "name" : _("Global"),
    "entries" : $[
+	// time zone
 	"Antarctica/South_Pole" : _("South Pole"),
-	"Arctic/Longyearbyen" : _("Arctic Longyearbyen"),
+	// time zone
+	"Arctic/Longyearbyen"	: _("Arctic Longyearbyen"),
+	// time zone
+	"America/Godthab"	: _("Greenland--Nuuk"),
 	"CET" : _("CET"),
 	"CST6CDT" : _("CST6CDT"),
 	"EET" : _("EET"),
