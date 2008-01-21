@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan 21 12:28:57 CET 2008 - jsuchome@suse.cz
+
+- fixed selecting non-listed locale (#344105)
+- 2.13.55
+
+-------------------------------------------------------------------
 Thu Dec 13 14:22:19 CET 2007 - jsuchome@suse.cz
 
 - disable DPMS while adapting time (#348348)
