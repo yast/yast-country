@@ -66,4 +66,7 @@ $[
   "ru_UA"		: "Europe/Kiev",
 
   "sr_YU"		: "Europe/Belgrade",
+
+  "zh_CN"		: "Asia/Shanghai",
+  "zh_TW"		: "Asia/Taipei",
 ]
