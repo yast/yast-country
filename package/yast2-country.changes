@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Jan 22 14:03:56 CET 2008 - jsuchome@suse.cz
+
+- added all time zones from /usr/share/zoneinfo/zone.tab
+- show "central" time zone in the map when region is changed to
+  focus the region
+- 2.16.6 
+
+-------------------------------------------------------------------
 Fri Dec 21 15:51:25 CET 2007 - jsuchome@suse.cz
 
 - added support for TimezoneSelector widget

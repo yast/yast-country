@@ -401,6 +401,24 @@ Enter the correct date.
 
     list<map> zonemap	= Timezone::get_zonemap ();
 
+    // map regions to the zone approximatelly in the center, for selector widget
+    list central_zone	= [
+	"Europe/Prague",
+	"America/Chicago",
+	"America/Winnipeg",
+	"America/Argentina/Buenos_Aires",
+	"America/Sao_Paulo",
+	"America/La_Paz",
+	"Asia/Novosibirsk",
+	"Asia/Calcutta",
+	"Australia/Sydney",
+	"Africa/Kampala",
+	"Pacific/Tahiti",
+	"Atlantic/Madeira",
+	"Indian/Maldives",
+	"America/Godthab",
+    ];
+
     // map of zones conversions
     map<string,string> yast2zonetab	= Timezone::yast2zonetab;
 
@@ -425,7 +443,7 @@ Enter the correct date.
 	];
     });
 
-    if (UI::HasSpecialWidget(`TimezoneSelector))
+    if (UI::HasSpecialWidget (`TimezoneSelector) == true)
     {
 	timezone_selector	= true;
 	string worldmap	= Directory::themedir + "/current/worldmap/GLOBALeb10colshade.jpg";
@@ -528,7 +546,10 @@ Enter the correct date.
     }
 
     // for given timezone (selected in map), find out to which region it belongs
-    integer get_region_for_timezone (string zone) {
+    integer get_region_for_timezone (integer current, string zone) {
+	// first check if it is not in current region
+	if (haskey (zonemap[current,"entries"]:$[], zone))
+	    return current;
 	integer reg	= 0;
 	foreach (map region, zonemap, {
 	    if (haskey (region["entries"]:$[], zone))
@@ -612,8 +633,18 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 	if (ret == `region)
 	{
 	    integer num = selected_region ();
+	    /* FIXME zoom the map to the "central place" */
+	    string central	= central_zone[num]:timezone;
+	    if (central != timezone)
+	    {
+		timezone	= central;
+		if (timezone != timezone_old)
+		    changed_time = true;
+		timezone_old	= timezone;
+		SetTimezone (hwclock_s, timezone, false, changed_time);
+	    }
 	    show_selected_region (num, timezone);
-// FIXME zoom the map (select something in the center of region)
+	    UI::ChangeWidget (`id(`timezonemap), `CurrentItem, timezone);
 	}
 	else if (ret == `settime)
 	{
@@ -640,7 +671,7 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 	    {
 		timezone = (string) UI::QueryWidget(`id(`timezonemap),`Value);
 
-		integer reg	= get_region_for_timezone (timezone);
+		integer reg	= get_region_for_timezone (sel, timezone);
 		if (reg == sel)
 		    UI::ChangeWidget (`id(`timezone), `Value, timezone);
 		else
