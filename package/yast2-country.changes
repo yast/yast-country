@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jan 23 13:09:24 CET 2008 - jsuchome@suse.cz
+
+- correct path to the worldmap image
+- 2.16.7
+
+-------------------------------------------------------------------
 Tue Jan 22 14:03:56 CET 2008 - jsuchome@suse.cz
 
 - added all time zones from /usr/share/zoneinfo/zone.tab

@@ -446,7 +446,7 @@ Enter the correct date.
     if (UI::HasSpecialWidget (`TimezoneSelector) == true)
     {
 	timezone_selector	= true;
-	string worldmap	= Directory::themedir + "/current/worldmap/GLOBALeb10colshade.jpg";
+	string worldmap	= Directory::themedir +"/current/worldmap/worldmap.jpg";
 	timezoneterm	= `VBox (
 	    `TimezoneSelector (`id(`timezonemap), `opt(`notify), worldmap,
 		zones),
