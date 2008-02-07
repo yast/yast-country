@@ -139,6 +139,7 @@ map push = $[];
 
 string name = "";
 
+// list with maps, each map provides time zone information about one region
 list < map < string, any> > zonemap = [];
 
 // 'language --> default timezone' conversion map
@@ -149,9 +150,9 @@ map<string, string> lang2tz = $[];
 // ------------------------------------------------------------------
 
 
-// ---------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // START: Globally defined functions
-// ---------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 /**
  * get_lang2tz()
@@ -192,9 +193,15 @@ global define list<map<string,any> > get_zonemap() {
 
     if (size(zonemap) == 0)
     {
-	zonemap = (list<map<string,any> >)
+	list<map<string,any> > zmap = (list<map<string,any> >)
 	    eval (SCR::Read (.target.yast2, "timezone_raw.ycp"));
-	if( zonemap == nil ) zonemap = [];
+	if (zmap == nil) zmap = [];
+
+	zonemap = sort (map<string,any> a, map<string,any> b, zmap, {
+	    // [ "USA", "Canada" ] -> [ "Canada", "USA" ]
+	    list lsorted	= lsort ([a["name"]:"", b["name"]:""]);
+	    return (lsorted[0]:"" == a["name"]:"" && a["name"]:"" != b["name"]:"");
+	});
     }
     return zonemap;
 }
@@ -273,7 +280,6 @@ global define string UpdateTimezone (string tmz) {
     {
 	updated_tmz	= obsoleted_zones[tmz]:tmz;
 	y2milestone ("updating timezone from %1 to %2", tmz, updated_tmz);
-	// TODO if still not present, search file in /usr/share/zoneinfo
     }
 
     return updated_tmz;
@@ -475,7 +481,6 @@ global define string GetTimezoneCountry (string zone) {
  *
  * @return  The string output.
  *
- * @see	-
  */
 global define string GetDateTime (boolean real_time, boolean locale_format) {
 
@@ -525,10 +530,13 @@ global define string GetDateTime (boolean real_time, boolean locale_format) {
     return( local_date );
     }
 
-global define void  ResetZonemap()
-    ``{
+/**
+ * Clear the internal map with timezones, so the timezone data could be
+ * retranslated next time when they are needed
+ */
+global define void  ResetZonemap() {
     zonemap = [];
-    }
+}
 
 /**
  * Return true if localtime should be proposed as default
@@ -690,10 +698,6 @@ global define list Region() {
  * Save()
  *
  * Save timezone to target sysconfig.
- *
- * @param	-
- *
- * @return	-
  */
 global define void Save() {
 

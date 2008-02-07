@@ -68,7 +68,6 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 @yncludedir@/timezone/
 @scrconfdir@/*.scr
 @schemadir@/autoyast/rnc/*.rnc
-@agentdir@/*
 %ifnarch s390 s390x
 @desktopdir@/keyboard.desktop
 %endif
