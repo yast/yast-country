@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Feb  7 10:56:54 CET 2008 - jsuchome@suse.cz
+
+- the agent for adapting fvwm2 font not needed anymore (bnc#359183)
+- timezone regions sorted according to current locale (bnc#359192)
+- 2.16.8
+
+-------------------------------------------------------------------
 Wed Jan 23 13:09:24 CET 2008 - jsuchome@suse.cz
 
 - correct path to the worldmap image

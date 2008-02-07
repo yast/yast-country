@@ -578,11 +578,6 @@ global define void WfmSetGivenLanguage (string lang) {
     {
 	WFM::SetLanguage(lang);
     }
-    if (Stage::initial () && !GetTextMode ())
-    {
-	// update font for windowmanager windows
-	SCR::Write (.FvwmCommand.lang, lang);
-    }
 }
 
 

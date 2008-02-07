@@ -30,6 +30,8 @@
 
   symbol hwclock_s_initial = `none;
 
+  // helper function for seting the time related stuff in module and possibly
+  // adapting current time according to it
   define void SetTimezone (symbol hwclock, string timezone, boolean really,
 			   boolean changed_time)
   {
