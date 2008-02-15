@@ -7,6 +7,8 @@ Requires:	yast2-trans-stats yast2-perl-bindings timezone
 Requires:	yast2 >= 2.13.70
 # Pkg::SetPackageLocale, Pkg::GetTextLocale
 Requires:       yast2-pkg-bindings >= 2.15.3
+# IconPath support for MultiSelectionBox
+Requires:	yast2-core >= 2.16.28
 
 Requires:	yast2-country-data
 
