@@ -322,24 +322,26 @@ for this language."));
     // if checkboxes for adapting keyboard and timezone should be shown
     boolean adapt_term = more_languages && !Mode::config ();
 
-    list<term> primary_items	= [];
-    if (more_languages)
-    {
-	boolean primary_included= false;
+    boolean primary_included= false;
 
-	term languages_term = `MultiSelectionBox (`id(`languages),
-	    // multiselection box label
-	    _("&Secondary Languages"),
-	    maplist (string trans_lang, lsort (lang_list), {
+    list<term> primary_items	= [];
+    list<term> secondary_items = maplist (string trans_lang, lsort (lang_list), {
 		string code	= lang2code [trans_lang]:"";
 		primary_items = add (primary_items,
-		    `item (`id (code), trans_lang, language == code));
+		    `item (`id (code), `icon(tolower(Language::GetGivenLanguageCountry(code))+"/flag.png"), trans_lang, language == code));
 		if (language == code)
 		    primary_included	= true;
 		return
-		    `item (`id (code), trans_lang, contains (languages, code));
-	    })
+		    `item (`id (code), `icon(tolower(Language::GetGivenLanguageCountry(code))+"/flag.png"), trans_lang, contains (languages, code));
+	    });
+
+    if (more_languages)
+    {
+	term languages_term = `MultiSelectionBox (`id(`languages),
+	    // multiselection box label
+	    _("&Secondary Languages")
 	);
+	
 	if (!primary_included)
 	    primary_items = add (primary_items,
 		`item (`id (language), language, true));
@@ -461,6 +463,13 @@ In the selection box, specify additional languages to use on your system.
 	argmap["enable_back"]:true , argmap["enable_next"]:true);
 
     Wizard::SetDesktopIcon("yast-language");
+    
+    UI::ChangeWidget( `languages, `IconPath, "/usr/share/locale/l10n/" );
+    UI::ChangeWidget( `language, `IconPath, "/usr/share/locale/l10n/" );
+
+    UI::ChangeWidget( `languages, `Items, secondary_items );
+    UI::ChangeWidget( `language, `Items, primary_items );
+    
 
     // No .desktop files in inst-sys - use icon explicitly
     if (Stage::initial () || Stage::firstboot ())
