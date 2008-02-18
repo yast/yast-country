@@ -153,25 +153,6 @@ are unset.<br>
     };
 
     /**
-     * check if selected language has support on media (F301238)
-     * show a warning when not
-     */
-    define void check_languages_support (string selected_language) {
-
-	string linguas = (string) SCR::Read (.content.LINGUAS);
-	y2milestone ("content LINGUAS %1", linguas);
-	if (linguas == nil) return;
-	list<string> ll	= splitstring (linguas, " ");
-	string l = substring (selected_language, 0, 2);
-	if (!contains (ll, selected_language) && !contains (ll, l))
-	    // popup message
-	    Popup::Message (_("Only minimal support for the selected language is included on the media.
-Add the Language Add-On CD as an additional repository to get better support
-for this language."));
-    }
-
-
-    /**
      * helper function for updating the "adapt terms" to current language
      */
     define void update_adapt_term () {
@@ -211,7 +192,7 @@ for this language."));
 	if (ProductFeatures::GetBooleanFeature ("globals", "skip_language_dialog"))
 	{
 	    y2milestone("Skipping language dialog, Language changed to %1",preselected);
-	    check_languages_support (preselected);
+	    Language::CheckLanguagesSupport (preselected);
 	    Language::selection_skipped	= true;
 	    return `auto;
 	}
@@ -235,7 +216,6 @@ for this language."));
 
     // set up selection list with default item
 
-    boolean use_ascii	= Language::GetTextMode ();
     boolean show_expert = true;
 
    /* ----------------------------------------------------------------------
@@ -261,47 +241,15 @@ for this language."));
 	more_languages	= false;
     }
 
-    // sort language by ASCII with help of a map
-    // $[ "ascii-name" : [ "user-readable-string", "code" ], ...]
-    // the "user-readable-string" is either ascii or utf8, depending
-    // on textmode probed above (workaround because there isn't any
-    // usable console font for all languages).
-
-    map<string,list> languageselsort = mapmap (
-	string lang_code, list lang_info, Language::Selection(), {
-	    string key	= lang_info [1]:lang_code;
-	    return $[
-		key		: [
-		    lang_info[use_ascii ? 1 : 0]:"",
-		    lang_code,
-		    lang_info[2]:key
-		]
-	    ];
-	}
-    );
-
-    // mapping of language name (translated) to language code
-    map lang2code		= $[];
-    // list of language names (translated)
-    list<string> lang_list	= [];
-    foreach (any name, list codelist, languageselsort, {
-	lang2code [codelist[2]:""]	= codelist[1]:"";
-	lang_list	= add (lang_list, codelist[2]:"");
-    });
-
-    term languagesel = `SelectionBox (`id(`language), `opt(`notify), "",
-	maplist (any name, list codelist, languageselsort,
-		``(`item(`id(codelist[1]:""), codelist[0]:"",
-			  (language == codelist[1]:""))))
-    );
+    term languagesel = `Empty ();
+    if (Stage::initial ()) // this is actually not reached now...
+	languagesel	= `SelectionBox (`id(`language), `opt(`notify), "",
+	    Language::GetLanguageItems (`first_screen));
 
     if (Stage::firstboot ())
 	languagesel = `SelectionBox (`id(`language), `opt(`notify), "",
-	    maplist (string trans_lang, lsort (lang_list), {
-		string code	= lang2code [trans_lang]:"";
-		return `item (`id (code), trans_lang, language == code);
-	    })
-	);
+	    Language::GetLanguageItems (`first_screen));
+
 
     // this type of contents will be shown only for initial installation dialog
     term contents = `HVCenter (
@@ -319,41 +267,27 @@ for this language."));
 	);
     }
 
+    list<term> primary_items	= [];
+    list<term> secondary_items	= [];
+
     // if checkboxes for adapting keyboard and timezone should be shown
     boolean adapt_term = more_languages && !Mode::config ();
-
-    boolean primary_included= false;
-
-    list<term> primary_items	= [];
-    list<term> secondary_items = maplist (string trans_lang, lsort (lang_list), {
-		string code	= lang2code [trans_lang]:"";
-		primary_items = add (primary_items,
-		    `item (`id (code), `icon(tolower(Language::GetGivenLanguageCountry(code))+"/flag.png"), trans_lang, language == code));
-		if (language == code)
-		    primary_included	= true;
-		return
-		    `item (`id (code), `icon(tolower(Language::GetGivenLanguageCountry(code))+"/flag.png"), trans_lang, contains (languages, code));
-	    });
-
     if (more_languages)
     {
 	term languages_term = `MultiSelectionBox (`id(`languages),
 	    // multiselection box label
 	    _("&Secondary Languages")
 	);
-	
-	if (!primary_included)
-	    primary_items = add (primary_items,
-		`item (`id (language), language, true));
-
-	term primary_language_term = `ComboBox (`id(`language), `opt (`notify),
-	    // combo box label
-	    _("Primary &Language"), primary_items);
-
+	primary_items	= Language::GetLanguageItems (`primary);
+	secondary_items	= Language::GetLanguageItems (`secondary);
 
 	term primary_term = `HBox (
-			`Left (primary_language_term),
-			`Right (expert)
+	    `Left (
+		`ComboBox (`id(`language), `opt (`notify),
+		// combo box label
+		_("Primary &Language"), primary_items)
+	    ),
+	    `Right (expert)
 	);
 
 	if (adapt_term)
@@ -463,13 +397,17 @@ In the selection box, specify additional languages to use on your system.
 	argmap["enable_back"]:true , argmap["enable_next"]:true);
 
     Wizard::SetDesktopIcon("yast-language");
-    
-    UI::ChangeWidget( `languages, `IconPath, "/usr/share/locale/l10n/" );
-    UI::ChangeWidget( `language, `IconPath, "/usr/share/locale/l10n/" );
 
-    UI::ChangeWidget( `languages, `Items, secondary_items );
-    UI::ChangeWidget( `language, `Items, primary_items );
-    
+    if (more_languages)
+    {
+	UI::ChangeWidget( `language, `Items, primary_items );
+	UI::ChangeWidget( `languages, `Items, secondary_items );
+	if (!Stage::initial () && !Stage::firstboot ())
+	{
+	    UI::ChangeWidget( `language, `IconPath, "/usr/share/locale/l10n/" );
+	    UI::ChangeWidget( `languages, `IconPath, "/usr/share/locale/l10n/");
+	}
+    }
 
     // No .desktop files in inst-sys - use icon explicitly
     if (Stage::initial () || Stage::firstboot ())
@@ -544,20 +482,14 @@ In the selection box, specify additional languages to use on your system.
 		tmz_adapt = (boolean) UI::QueryWidget (`id(`adapt_tmz), `Value);
 	    }
 
-	    if (ret == `next && Language::IncompleteTranslation (language))
+	    if (ret == `next && !Language::CheckIncompleteTranslation(language))
 	    {
-		// continue/cancel message
-		if (!Popup::ContinueCancel (_("Translation of the primary language is not complete.
-Some texts may be displayed in English.
-")))
-		{
-		    ret = `not_next;
-		    continue;
-		}
+		ret = `not_next;
+		continue;
 	    }
 	    if (ret == `next && Stage::initial ())
 	    {
-		check_languages_support (language);
+		Language::CheckLanguagesSupport (language);
 	    }
 	    if (language != Language::language)
 	    {

@@ -1,3 +1,10 @@
+-------------------------------------------------------------------
+Mon Feb 18 15:30:45 CET 2008 - jsuchome@suse.cz
+
+- added API for generating Language items (to be used also from
+  inst_complex_welcome client)
+- 2.16.9
+
 --------------------------------------------------------------------
 Fri Feb 15 12:44:54 CET 2008 - visnov@suse.cz
 
