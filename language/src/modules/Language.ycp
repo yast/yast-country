@@ -24,6 +24,7 @@ import "Misc";
 import "Mode";
 import "PackageCallbacksInit";
 import "PackageSystem";
+import "Popup";
 import "ProductFeatures";
 import "Stage";
 
@@ -838,6 +839,22 @@ global define boolean IncompleteTranslation (string lang) {
 }
 
 /**
+ * Checks if translation is complete and displays
+ * Continue/Cancel popup messsage if it is not
+ * return true if translation is OK or user agrees with the warning
+ */
+global boolean CheckIncompleteTranslation (string lang) {
+    if (IncompleteTranslation (language))
+    {
+	// continue/cancel message
+	return Popup::ContinueCancel (_("Translation of the primary language is not complete.
+Some texts may be displayed in English.
+"));
+    }
+    return true;
+}
+
+/**
  * AutoYaST interface function: Get the Language configuration from a map.
  * @param settings imported map
  * @return success
@@ -894,6 +911,123 @@ global define string Summary () {
     return MakeSimpleProposal ();
 }
 
+// list of items for secondary languages term
+list<term> secondary_items	= [];
+
+// kind: `first_screen, `primary, `secondary
+global list<term> GetLanguageItems (symbol kind) {
+
+    list<term> ret	= [];
+
+    // already generated in previous run with `primary
+    if (kind == `secondary && secondary_items != [])
+    {
+	return secondary_items;
+    }
+    secondary_items	= [];
+
+    boolean use_ascii	= GetTextMode ();
+
+    // sort language by ASCII with help of a map
+    // $[ "ascii-name" : [ "user-readable-string", "code" ], ...]
+    // the "user-readable-string" is either ascii or utf8, depending
+    // on textmode probed above (workaround because there isn't any
+    // usable console font for all languages).
+
+    map<string,list> languageselsort = mapmap (
+	string lang_code, list lang_info, Selection(), {
+	    string key	= lang_info [1]:lang_code;
+	    return $[
+		key		: [
+		    lang_info[use_ascii ? 1 : 0]:"",
+		    lang_code,
+		    lang_info[2]:key
+		]
+	    ];
+	}
+    );
+
+    // mapping of language name (translated) to language code
+    map lang2code		= $[];
+    // list of language names (translated)
+    list<string> lang_list	= [];
+    foreach (any name, list codelist, languageselsort, {
+	lang2code [codelist[2]:""]	= codelist[1]:"";
+	lang_list	= add (lang_list, codelist[2]:"");
+    });
+
+
+    if (kind == `first_screen)
+    {
+	// FIXME fate 301789
+	ret	= maplist (any name, list codelist, languageselsort, {
+		return `item (`id (codelist[1]:""), codelist[0]:"");
+	});
+    }
+    if (Stage::firstboot ())
+    {
+	ret	= maplist (string trans_lang, lsort (lang_list), {
+		string code	= lang2code [trans_lang]:"";
+		return `item (`id (code), trans_lang, language == code);
+	});
+    }
+    boolean primary_included	= false;
+
+    if (kind == `primary || kind == `secondary)
+    {
+	list<string>languages_l	= splitstring (languages, ",");
+	// filter the primary language from the list of secondary ones:
+        languages_l	= filter (string l, languages_l, ``(l != language));
+
+	boolean	icons	= !(Stage::initial () || Stage::firstboot ());
+	list<term> primary_items	= [];
+	secondary_items = maplist (string trans_lang, lsort (lang_list),
+	{
+	    string code		= lang2code [trans_lang]:"";
+	    primary_items	= add (primary_items, icons ?
+		`item (`id (code), `icon(tolower(Language::GetGivenLanguageCountry(code))+"/flag.png"), trans_lang, language == code) :
+		`item (`id (code), trans_lang, language == code));
+	    if (language == code)
+		primary_included	= true;
+	    return icons ?
+		`item (`id (code), `icon(tolower(Language::GetGivenLanguageCountry(code))+"/flag.png"), trans_lang, contains (languages_l, code)) :
+		`item (`id (code), trans_lang, contains (languages_l, code));
+	});
+	if (!primary_included)
+	    primary_items = add (primary_items,
+		`item (`id (language), language, true));
+	ret = (kind == `primary) ?  primary_items : secondary_items;
+    }
+    return ret;
+}
+
+/**
+ * check if selected language has support on media (F301238)
+ * show a warning when not
+ */
+global void CheckLanguagesSupport (string selected_language) {
+
+    string linguas = (string) SCR::Read (.content.LINGUAS);
+
+    if (linguas == nil) {
+	y2warning ("No LINGUAS tag defined in content file");
+	return;
+    }
+
+    y2milestone ("content LINGUAS %1", linguas);
+    list <string> all_linguas = splitstring (linguas, " ");
+    string language_short = splitstring (selected_language, "_")[0]:"";
+
+    if (!contains (all_linguas, selected_language) &&
+	!contains (all_linguas, language_short))
+    {
+	y2milestone ("Language %1 is not fully supported", selected_language);
+	    // popup message
+	Popup::Message (_("Only minimal support for the selected language is included on the media.
+Add the Language Add-On CD as an additional repository to get better support
+for this language."));
+    }
+}
 
 /* EOF */
 }
