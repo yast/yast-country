@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Feb 21 15:41:58 CET 2008 - jsuchome@suse.cz
+
+- language list in the first screen: show English name and native
+  form, sort according to English names (F#301789)
+
+-------------------------------------------------------------------
 Mon Feb 18 15:30:45 CET 2008 - jsuchome@suse.cz
 
 - added API for generating Language items (to be used also from
