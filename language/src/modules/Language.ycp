@@ -147,7 +147,6 @@ define void read_languages_map() {
     {
 	languages_directory	= Directory::datadir + "/languages";
     }
-
     foreach (string file,
 	(list<string>) SCR::Read (.target.dir, languages_directory, []),
     {
@@ -206,6 +205,48 @@ global map<string, list> GetLanguagesMap (boolean force) {
 	read_languages_map();
     return languages_map;
 }
+
+// list of items for secondary languages term
+list<term> secondary_items	= [];
+
+map english_names	= $[];
+
+/**
+ * Return English translation of given language (Fate 301789)
+ */
+string EnglishName (string code, string backup) {
+
+    if (english_names[code]:"" == "")
+    {
+	if (language == "en_US")
+	    english_names[code]	= backup;
+	else
+	    y2warning ("nothing in english_names...");
+    }
+    return english_names[code]:backup;
+}
+
+/**
+ * Fill the map with English names of languages
+ */
+void FillEnglishNames (string lang) {
+
+    if (lang == "en_US")
+	return; // will be filled in on first start
+    if (use_utf8)
+	WFM::SetLanguage ("en_US", "UTF-8");
+    else
+	WFM::SetLanguage ("en_US");
+    foreach (string code, list info, GetLanguagesMap (true),
+    {
+	english_names[code]	= info[4]:"";
+    });
+    if (use_utf8)
+	WFM::SetLanguage (lang, "UTF-8");
+    else
+	WFM::SetLanguage (lang);
+}
+
 
 /**
  * return the content of lang2timezone map
@@ -415,7 +456,7 @@ global define void Language() {
 	return;
     }
 
-    if (Stage::initial ())
+    if (Stage::initial () || true)
     {
 	string lang = (string)SCR::Read (.content.LANGUAGE);
 	y2milestone ("content LANGUAGE %1", lang);
@@ -448,6 +489,7 @@ global define void Language() {
             lang = l;
 	    y2milestone ("setting lang to ProductFeatures::language: %1", lang);
         }
+	FillEnglishNames (lang);
 	Set (lang);		// coming from /etc/install.inf
 	SetDefault ();		// also default
     }
@@ -911,9 +953,6 @@ global define string Summary () {
     return MakeSimpleProposal ();
 }
 
-// list of items for secondary languages term
-list<term> secondary_items	= [];
-
 // kind: `first_screen, `primary, `secondary
 global list<term> GetLanguageItems (symbol kind) {
 
@@ -928,6 +967,28 @@ global list<term> GetLanguageItems (symbol kind) {
 
     boolean use_ascii	= GetTextMode ();
 
+    if (kind == `first_screen)
+    {
+	map<string,list> en_name_sort =
+	    mapmap (string code, list info, Selection(), {
+		string english	= EnglishName (code, info[2]:code);
+		return $[
+		    english : [
+			info[use_ascii ? 1 : 0]:"",
+			code,
+		    ]
+		];
+	});
+	// fate 301789
+	// English name of language (translated language).
+	// e.g. German (Deutsch)
+	ret	= maplist (string name, list codelist, en_name_sort, {
+	    string label = substring (codelist[1]:"", 0, 2) == "en" ?
+		codelist[0]:"" : sformat ("%1 - %2", name, codelist[0]:"");
+	    return `item (`id (codelist[1]:""), label);
+	});
+	return ret;
+    }
     // sort language by ASCII with help of a map
     // $[ "ascii-name" : [ "user-readable-string", "code" ], ...]
     // the "user-readable-string" is either ascii or utf8, depending
@@ -957,19 +1018,13 @@ global list<term> GetLanguageItems (symbol kind) {
     });
 
 
-    if (kind == `first_screen)
-    {
-	// FIXME fate 301789
-	ret	= maplist (any name, list codelist, languageselsort, {
-		return `item (`id (codelist[1]:""), codelist[0]:"");
-	});
-    }
     if (Stage::firstboot ())
     {
 	ret	= maplist (string trans_lang, lsort (lang_list), {
-		string code	= lang2code [trans_lang]:"";
-		return `item (`id (code), trans_lang, language == code);
+	    string code	= lang2code [trans_lang]:"";
+	    return `item (`id (code), trans_lang, language == code);
 	});
+	return ret;
     }
     boolean primary_included	= false;
 
