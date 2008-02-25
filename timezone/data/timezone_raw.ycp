@@ -299,6 +299,30 @@ $[
 
 $[
     // time zone region
+    "name" : _("Mexico"),
+
+    "entries" : $[
+	// time zone
+	"America/Cancun"	: _("Cancun"),	// MX
+	// time zone
+	"America/Chihuahua"	: _("Chihuahua"),	// MX
+	// time zone
+	"America/Hermosillo"	: _("Hermosillo"),	// MX
+	// time zone
+	"America/Mazatlan"	: _("Mazatlan"),
+	// time zone
+	"America/Mexico_City"	: _("Mexico City"),
+	// time zone
+	"America/Merida"	: _("Merida"),	// MX
+	// time zone
+	"America/Monterrey"	: _("Monterrey"),	// MX
+	// time zone
+	"America/Tijuana"	: _("Tijuana"),
+    ]
+],
+
+$[
+    // time zone region
     "name" : _("Central and South America"),
     "entries" : $[
 	// time zone
@@ -316,15 +340,11 @@ $[
 	// time zone
 	"America/Bogota"	: _("Bogota"),
 	// time zone
-	"America/Cancun"	: _("Cancun"),	// MX
-	// time zone
 	"America/Caracas"	: _("Caracas"),
 	// time zone
 	"America/Cayenne"	: _("Cayenne"),
 	// time zone
 	"America/Cayman"	: _("Cayman Islands"),	// KY
-	// time zone
-	"America/Chihuahua"	: _("Chihuahua"),	// MX
 	// time zone
 	"America/Costa_Rica"	: _("Costa Rica"),
 	// time zone
@@ -348,8 +368,6 @@ $[
 	// time zone
 	"America/Havana"	: _("Havana"),
 	// time zone
-	"America/Hermosillo"	: _("Hermosillo"),	// MX
-	// time zone
 	"America/Jamaica"	: _("Jamaica"),
 	// time zone
 	"America/La_Paz"	: _("La Paz"),
@@ -359,14 +377,6 @@ $[
 	"America/Managua"	: _("Managua"),
 	// time zone
 	"America/Martinique"	: _("Martinique"),
-	// time zone
-	"America/Mazatlan"	: _("Mexico Baja Sur (Mazatlan)"),
-	// time zone
-	"America/Mexico_City"	: _("Mexico General (Mexico City)"),
-	// time zone
-	"America/Merida"	: _("Merida"),	// MX
-	// time zone
-	"America/Monterrey"	: _("Monterrey"),	// MX
 	// time zone
 	"America/Montserrat"	: _("Montserrat"),	// MS
 	// time zone
@@ -397,8 +407,6 @@ $[
 	"America/St_Vincent"	: _("St Vincent"),	// VC
 	// time zone
 	"America/Tegucigalpa"	: _("Tegucigalpa"),	// HN
-	// time zone
-	"America/Tijuana"	: _("Mexico Baja Norte (Tijuana)"),
 	// time zone
 	"America/Tortola"	: _("Tortola"),		// VG
 

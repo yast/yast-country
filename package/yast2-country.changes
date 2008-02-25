@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 25 08:28:30 CET 2008 - jsuchome@suse.cz
+
+- Mexico as standalone timezone region (bnc#358352)
+- 2.16.10
+
+-------------------------------------------------------------------
 Thu Feb 21 15:41:58 CET 2008 - jsuchome@suse.cz
 
 - language list in the first screen: show English name and native
