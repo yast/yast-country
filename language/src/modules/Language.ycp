@@ -456,7 +456,7 @@ global define void Language() {
 	return;
     }
 
-    if (Stage::initial () || true)
+    if (Stage::initial ())
     {
 	string lang = (string)SCR::Read (.content.LANGUAGE);
 	y2milestone ("content LANGUAGE %1", lang);
