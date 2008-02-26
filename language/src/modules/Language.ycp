@@ -19,6 +19,7 @@ import "AsciiFile";
 import "Directory";
 import "Encoding";
 import "FileUtils";
+import "InstExtensionImage";
 import "Linuxrc";
 import "Misc";
 import "Mode";
@@ -113,6 +114,11 @@ string languages_directory	= nil;
 
 // languages that cannot be correctly shown in text mode
 list cjk_languages	= [ "ja", "ko", "zh", "hi", "km", "pa", "bn" ];
+
+// FATE #302955: Split translations out of installation system
+// [ "en_US", "en_GB", "de", "cs" ]
+global list <string> available_lang_filenames = nil;
+
 
 /**
  * Check if the language is "CJK"
@@ -285,6 +291,52 @@ global define map<string,integer> GetLocales () {
     return locales;
 }
 
+/**
+ * For given language, return the file name of language extension (image)
+ * to be downloaded to the inst-sys
+ * (FATE #302955: Split translations out of installation system)
+ */
+string GetLanguageExtensionFilename (string language) {
+
+    if (available_lang_filenames == nil) {
+	map<string,integer> lang_numbers	= $[];
+	foreach (string code, list data, GetLanguagesMap (false), {
+	    string short	= splitstring (code, "_")[0]:"";
+	    if (lang_numbers[short]:0 == 0)
+		lang_numbers[short]	= 1;
+	    else
+		lang_numbers[short]	= lang_numbers[short]:0 + 1;
+	});
+	available_lang_filenames = maplist (string code, list data,
+	    GetLanguagesMap (false), {
+	    string short	= splitstring (code, "_")[0]:"";
+	    if (lang_numbers[short]:0 > 1)
+		return code;
+	    else
+		return short;
+	});
+    }
+
+    list <string> check_for_languages = [language];
+
+    // 'en_US' ? add also 'en'
+    if (size (language) > 2) {
+	check_for_languages = add (check_for_languages, splitstring (language, "_")[0]:"");
+    }
+
+    // Default fallback
+    string filename = "root.en_US";
+
+    foreach (string one_language, check_for_languages, {
+	if (contains (available_lang_filenames, one_language)) {
+	    filename = sformat ("root.%1", one_language);
+	    break;
+	}
+    });
+    y2milestone ("Using %1 for %2", filename, language);
+    return filename;
+}
+
 
 /**
  * Set module to selected language.
@@ -296,6 +348,15 @@ global define void Set (string lang) {
 
     if (language != lang)	// Do it only if different
     {
+	if (Stage::initial ())
+	{
+	    y2milestone ("integrating translation extension...");
+	    // busy message
+	    Popup::ShowFeedback ("",_("Downloading installation system language extension..."));
+	    InstExtensionImage::DownloadAndIntegrateExtension (GetLanguageExtensionFilename (lang));
+	    Popup::ClearFeedback ();
+	    y2milestone ("integrating translation extension... done");
+	}
 	if (size (languages_map) == 0)
 	    read_languages_map();
 
