@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 26 12:35:24 CET 2008 - jsuchome@suse.cz
+
+- download translation image to inst-sys when language was changed
+  (F#302955): was in inst_complex_welcome, now part of Language::Set
+- 2.16.11
+
+-------------------------------------------------------------------
 Mon Feb 25 08:28:30 CET 2008 - jsuchome@suse.cz
 
 - Mexico as standalone timezone region (bnc#358352)
