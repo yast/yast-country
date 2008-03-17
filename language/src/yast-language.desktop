@@ -25,3 +25,4 @@ Exec=/sbin/yast2 language
 Name=Language
 GenericName=Change the language and install additional languages
 X-KDE-SubstituteUID=true
+StartupNotify=true

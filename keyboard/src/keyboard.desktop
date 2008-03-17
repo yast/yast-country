@@ -24,3 +24,4 @@ Exec=/sbin/yast2 keyboard
 Name=Keyboard Layout
 GenericName=Select the keyboard layout
 X-KDE-SubstituteUID=true
+StartupNotify=true

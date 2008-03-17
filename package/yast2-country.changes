@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Mar 17 12:43:32 CET 2008 - jsrain@suse.cz
+
+- added 'StartupNotify=true' to the desktop file (bnc #304964)
+
+-------------------------------------------------------------------
 Tue Feb 26 12:35:24 CET 2008 - jsuchome@suse.cz
 
 - download translation image to inst-sys when language was changed
