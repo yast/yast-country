@@ -285,7 +285,7 @@ $[
 	// time zone
 	"America/Manaus"	: _("Manaus"),//_("Brazil West"),
 	// time zone
-	"America/Noronha"	: _("Noronha"),//_("Brazil de Noronha"),
+	"America/Noronha"	: _("Fernando de Noronha"),
 	// time zone
 	"America/Porto_Velho"	: _("Porto Velho"),
 	// time zone
