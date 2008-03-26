@@ -432,7 +432,9 @@ Enter the correct date.
 	list trl = maplist (
 	    string key, string name, (map<string,string>)region["entries"]:$[],
 	{
-		zones[yast2zonetab[key]:key]	= name;
+		// Vatican cannot be shown in the map, Rome would be missing...
+		if (key != "Europe/Vatican")
+		    zones[yast2zonetab[key]:key]	= name;
 		return [ name, key ];
 	});
 	trl	= sort (list a, list b, (list<list>) trl, {
