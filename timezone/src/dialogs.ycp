@@ -61,10 +61,10 @@
   define boolean SetTimeDialog() {
 
     // help text for set time dialog
-    string htext = _("<p>The current system time and date are displayed. Change them to the correct values manually or select a NTP server to adapt your time automatically. Use <b>Configure</b> to run NTP client configuration.</p>") +
+    string htext = _("<p>The current system time and date are displayed. Change them to the correct values manually, or select a NTP server to adapt your time automatically. Use <b>Configure</b> to run the NTP client configuration.</p>") +
 
     // help text, cont.
-    _("<p>Changes are written after pressing <b>Accept</b>. Synchronization with NTP server can be done only when the network is configured.</p>");
+    _("<p>Press <b>Accept</b> to save your changes. Synchronization with the NTP server can be done only when the network is configured.</p>");
 
     map val = Timezone::GetDateTimeMap();
 

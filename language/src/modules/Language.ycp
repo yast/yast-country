@@ -1140,8 +1140,9 @@ global void CheckLanguagesSupport (string selected_language) {
 	y2milestone ("Language %1 is not fully supported", selected_language);
 	    // popup message
 	Popup::Message (_("Only minimal support for the selected language is included on the media.
-Add the Language Add-On CD as an additional repository to get better support
-for this language."));
+Add the Language add-on CD as an additional repository in order to get appropriate support
+for this language.
+"));
     }
 }
 
