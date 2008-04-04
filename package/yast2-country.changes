@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Fri Apr  4 16:13:27 CEST 2008 - jsuchome@suse.cz
+
+- added support for Thai language (th_TH)
+- changed names of language images loaded in the first stage: they
+  are rpm's now (bnc#376870)
+- reworked NTP client usage for fate#302917: show current time
+  after ntpdate was called, check initial service status
+- 2.16.14
+
+-------------------------------------------------------------------
 Fri Apr  4 15:59:00 CEST 2008 - jsrain@suse.cz
 
 - avoid calling PackageCallbacksInit::InitPackageCallbacks () to

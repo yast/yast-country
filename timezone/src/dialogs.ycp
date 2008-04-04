@@ -66,14 +66,44 @@
     // help text, cont.
     _("<p>Press <b>Accept</b> to save your changes. Synchronization with the NTP server can be done only when the network is configured.</p>");
 
-    map val = Timezone::GetDateTimeMap();
+    boolean dt_widgets = false;
 
-    string hour		= val["hour"]:"";
-    string minute	= val["minute"]:"";
-    string second	= val["second"]:"";
-    string day		= val["day"]:"";
-    string month	= val["month"]:"";
-    string year		= val["year"]:"";
+    string hour		= "";
+    string minute	= "";
+    string second	= "";
+    string day		= "";
+    string month	= "";
+    string year		= "";
+
+    // check current time and show it in the time widgets
+    void show_current_time () {
+
+	map val = Timezone::GetDateTimeMap();
+	hour	= val["hour"]:"";
+	minute	= val["minute"]:"";
+	second	= val["second"]:"";
+	day	= val["day"]:"";
+	month	= val["month"]:"";
+	year	= val["year"]:"";
+
+	if (dt_widgets)
+	{
+	    UI::ChangeWidget (`id (`date), `Value,
+		sformat ("%1-%2-%3", year, month, day));
+	    UI::ChangeWidget (`id (`time), `Value,
+		sformat ("%1:%2:%3", hour, minute, second)
+	    );
+	}
+	else
+	{
+	    UI::ChangeWidget (`id(`hour), `Value, hour);
+	    UI::ChangeWidget (`id(`minute), `Value, minute);
+	    UI::ChangeWidget (`id(`second), `Value, second);
+	    UI::ChangeWidget (`id(`day), `Value, day);
+	    UI::ChangeWidget (`id(`month), `Value, month);
+	    UI::ChangeWidget (`id(`year), `Value, year);
+	}
+    }
 
     term dateterm	= `VBox (
 	`HBox (
@@ -83,11 +113,11 @@
 	),
 	`HBox (
 	    `HSpacing(10),
-	    `TextEntry( `id(`day), `opt(`shrinkable), "", day),
+	    `TextEntry( `id(`day), `opt(`shrinkable), ""),
 	    `HSpacing (),
-	    `TextEntry( `id(`month), `opt(`shrinkable), "", month),
+	    `TextEntry( `id(`month), `opt(`shrinkable), ""),
 	    `HSpacing (),
-	    `TextEntry( `id(`year), `opt(`shrinkable), "", year),
+	    `TextEntry( `id(`year), `opt(`shrinkable), ""),
 	    `HSpacing(30)
 	)
     );
@@ -99,33 +129,32 @@
 	),
 	`HBox (
 	    `HSpacing(10),
-	    `TextEntry (`id(`hour), `opt(`shrinkable), "", hour),
+	    `TextEntry (`id(`hour), `opt(`shrinkable), ""),
 	    `HSpacing (),
-	    `TextEntry (`id(`minute), `opt(`shrinkable), "", minute),
+	    `TextEntry (`id(`minute), `opt(`shrinkable), ""),
 	    `HSpacing (),
-	    `TextEntry (`id(`second), `opt(`shrinkable), "", second),
+	    `TextEntry (`id(`second), `opt(`shrinkable), ""),
 	    `HSpacing(30)
 	)
     );
-    boolean dt_widgets = false;
     if (UI::HasSpecialWidget (`Date) && UI::HasSpecialWidget (`Time))
     {
 	dateterm	= `HBox (
 	    // label text
-	    `Date (`id(`date), _("Current Date"),
-		sformat ("%1-%2-%3", year, month, day)
-	    )
+	    `Date (`id(`date), _("Current Date"), "")
 	);
 	timeterm = `HBox (
 	    // label text
-	    `Time (`id(`time), _("Current Time"),
-		sformat ("%1:%2:%3", hour, minute, second)
-	    )
+	    `Time (`id(`time), _("Current Time"), "")
 	);
 	dt_widgets	= true;
     }
 
-    void enable_disable_widgets ( boolean ntp_used) {
+    boolean ntp_used		= false;
+    boolean ntp_was_used	= false;
+
+    void enable_disable_widgets () {
+       /*
        if (!dt_widgets)
        {
            foreach (symbol widget, [`hour, `minute, `second, `day, `month, `year],{
@@ -137,62 +166,73 @@
            UI::ChangeWidget (`id (`date), `Enabled, !ntp_used);
            UI::ChangeWidget (`id (`time), `Enabled, !ntp_used);
        }
+       */
        UI::ChangeWidget (`id (`ntp_address), `Enabled, ntp_used);
        UI::ChangeWidget (`id (`ntp_configure), `Enabled, ntp_used);
+       UI::ChangeWidget (`id (`ntp_now), `Enabled, ntp_used);
+       UI::ChangeWidget (`id (`ntp_save), `Enabled, ntp_used);
     }
 
     void handle_invalid_hostname( string server ) {
 	Popup::Error( sformat("Invalid NTP server hostname %1", server) );
     }
 
-    boolean ntp_used = false;
-
-    void CreateUI() {
+    // param: when asking for first time, we check if service is running
+    void CreateUI (boolean first_time) {
         WFM::CallFunction("ntp-client_proposal", ["CreateUI"]);
 
-        ntp_used = (boolean) WFM::CallFunction("ntp-client_proposal", ["GetUseNTP"]);
+	if (first_time && !Stage::initial ())
+	    ntp_used	= (boolean)
+		WFM::CallFunction("ntp-client_proposal", ["GetNTPEnabled"]);
+	else
+	    ntp_used = (boolean)
+		WFM::CallFunction("ntp-client_proposal", ["GetUseNTP"]);
 
         if ( UI::WidgetExists(`id(`ntp_content)) )
         {
             UI::ChangeWidget(`id(`rb), `CurrentButton, (ntp_used ? `ntp : `manual));
-            enable_disable_widgets(ntp_used);
+            enable_disable_widgets ();
+	    if (first_time)
+		// ntp_used with first_time means that ntp service is enabled
+		UI::ChangeWidget (`id(`ntp_save), `Value, ntp_used);
         }
     }
 
     term cont	= `HBox (
-	`RadioButtonGroup (`id (`rb), `HCenter (`VBox (
-	    `Left (`VBox (
-		// radio button label (= how to setup time)
-		`Left (`RadioButton (`id (`manual), `opt (`notify), _("Manually"))),
-		`VSpacing (0.5),
-		`HBox (
-		    `HSpacing (3),
-		    `VBox (
-			`Left (timeterm),
-			`VSpacing(),
-			`Left (dateterm)
-		    )
-		),
-	        `VSpacing (1),
-                `Left (`VBox ( `id(`ntp_content),
-                    `Left (`RadioButton (`id (`ntp), `opt (`notify),
-                    // radio button label
-                    _("Synchronize with NTP Server"), false)),
-		   `ReplacePoint(`id(`rp), `Empty())
-		   )
+	`HWeight (1, `VBox ()),
+	`HWeight (4, `RadioButtonGroup (`id (`rb), `VBox (
+	    // radio button label (= how to setup time)
+	    `Left (`RadioButton (`id (`manual), `opt (`notify), _("Manually"))),
+	    `VSpacing (0.5),
+	    `HBox (
+		`HSpacing (3),
+		`VBox (
+		    `Left (timeterm),
+		    `VSpacing(),
+		    `Left (dateterm)
 		)
-	    ))
-	))));
-
+	    ),
+	    `VSpacing (1),
+            `VBox (`id(`ntp_content),
+		`Left (`RadioButton (`id (`ntp), `opt (`notify),
+                    // radio button label
+                    _("Synchronize with NTP Server"), false)
+		),
+		`ReplacePoint(`id(`rp), `Empty())
+	    )
+	))),
+	`HWeight (1, `VBox ())
+    );
 
     Wizard::OpenAcceptDialog ();
     Wizard::SetContents (_("Change Date and Time"), cont, htext, true, true);
     Wizard::SetDesktopIcon("timezone");
 
+    show_current_time ();
     boolean ntp_installed = (Stage::initial() || Package::Installed ("yast2-ntp-client"));
-
     if (ntp_installed) {
-	CreateUI();
+	CreateUI (true);
+	ntp_was_used	= ntp_used;
 	if (ntp_used)
 	    WFM::CallFunction ("ntp-client_proposal", [ "MakeProposal",
 		$[ "country" : Language::GetLanguageCountry() ] ]);
@@ -226,19 +266,18 @@
 		    UI::ChangeWidget (`id (`ntp), `Value, false);
 		}
 		else
-		    CreateUI();
+		    CreateUI (false);
 	    }
 	    if (ntp_used )
 	    {
 		WFM::CallFunction("ntp-client_proposal", [ "MakeProposal", 
 				   $[ "country" : Language::GetLanguageCountry() ] ]);
 	    }
-	    enable_disable_widgets (ntp_used);
+	    enable_disable_widgets ();
 	}
 	if (ret == `ntp_configure)
 	{
 	    symbol rv = (symbol) WFM::CallFunction ("ntp-client_proposal", ["AskUser"]);
-
 	    if( rv == `invalid_hostname)
 	    {
 		handle_invalid_hostname( (string) UI::QueryWidget(`id(`ntp_server), `Value) );
@@ -247,6 +286,31 @@
 	    }
 	    if (rv != `next)
 		continue;
+	    else if (!Stage::initial ())
+	    {
+		// show the 'save' status after configuration
+		boolean enabled	= (boolean)
+		    WFM::CallFunction("ntp-client_proposal", ["GetNTPEnabled"]);
+		UI::ChangeWidget (`id(`ntp_save), `Value, enabled);
+	    }
+	}
+	if (ret == `ntp_now)
+	{
+	    map argmap	= $[
+		"ntpdate_only"	: true
+	    ];
+	    symbol rv = (symbol) WFM::CallFunction ("ntp-client_proposal",
+		["Write", argmap]);
+	    if( rv == `invalid_hostname)
+	    {
+		handle_invalid_hostname( (string) UI::QueryWidget(`id(`ntp_server), `Value) );
+		ret = `retry;
+		continue;
+	    }
+	    if (rv == `success)
+	    {
+		show_current_time ();
+	    }
 	}
 	if (ret == `accept && !ntp_used)
 	{
@@ -296,14 +360,19 @@ Enter the correct date.
 	    {
 		Timezone::SetTime( year, month, day, hour, minute, second );
 	    }
+//	    if (ntp_was_used) FIXME remove NTP config now?
 	}
 	if (ret == `accept && ntp_used)
 	{
-	    symbol rv = (symbol) WFM::CallFunction("ntp-client_proposal", ["Write"]);
+	    map argmap	= $[];
+	    if (UI::QueryWidget (`id (`ntp_save), `Value) == false)
+		argmap["ntpdate_only"]	= true;
+	    symbol rv = (symbol) WFM::CallFunction ("ntp-client_proposal",
+		["Write", argmap]);
 
 	    string server = (string) UI::QueryWidget(`id(`ntp_address), `Value);
 
-	    if (rv == `invalid_hostname) 
+	    if (rv == `invalid_hostname)
 	    {
 		handle_invalid_hostname( server );
 		ret = `retry;
@@ -410,6 +479,7 @@ Enter the correct date.
 	"America/Winnipeg",
 	"America/Argentina/Buenos_Aires",
 	"America/Sao_Paulo",
+	"America/Mexico_City",
 	"America/La_Paz",
 	"Asia/Novosibirsk",
 	"Asia/Calcutta",

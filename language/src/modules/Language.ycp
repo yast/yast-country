@@ -325,11 +325,11 @@ string GetLanguageExtensionFilename (string language) {
     }
 
     // Default fallback
-    string filename = "root.en_US";
+    string filename = "yast2-trans-en_US.rpm";
 
     foreach (string one_language, check_for_languages, {
 	if (contains (available_lang_filenames, one_language)) {
-	    filename = sformat ("root.%1", one_language);
+	    filename = sformat ("yast2-trans-%1.rpm", one_language);
 	    break;
 	}
     });
