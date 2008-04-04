@@ -23,7 +23,7 @@ import "InstExtensionImage";
 import "Linuxrc";
 import "Misc";
 import "Mode";
-import "PackageCallbacksInit";
+import "PackageCallbacks";
 import "PackageSystem";
 import "Popup";
 import "ProductFeatures";
@@ -866,7 +866,7 @@ global define boolean PackagesInit (list<string> selected_languages) {
  */
 global define boolean PackagesCommit () {
 
-    PackageCallbacksInit::InitPackageCallbacks ();
+    PackageCallbacks::InitPackageCallbacks ();
     Pkg::PkgCommit (0);
     return true;
 }
