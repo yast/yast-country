@@ -63,6 +63,8 @@
     // help text for set time dialog
     string htext = _("<p>The current system time and date are displayed. Change them to the correct values manually, or select a NTP server to adapt your time automatically. Use <b>Configure</b> to run the NTP client configuration.</p>") +
 
+// FIXME adapt for current state...
+
     // help text, cont.
     _("<p>Press <b>Accept</b> to save your changes. Synchronization with the NTP server can be done only when the network is configured.</p>");
 
@@ -154,19 +156,6 @@
     boolean ntp_was_used	= false;
 
     void enable_disable_widgets () {
-       /*
-       if (!dt_widgets)
-       {
-           foreach (symbol widget, [`hour, `minute, `second, `day, `month, `year],{
-               UI::ChangeWidget (`id (widget), `Enabled, !ntp_used);
-           });
-       }
-       else
-       {
-           UI::ChangeWidget (`id (`date), `Enabled, !ntp_used);
-           UI::ChangeWidget (`id (`time), `Enabled, !ntp_used);
-       }
-       */
        UI::ChangeWidget (`id (`ntp_address), `Enabled, ntp_used);
        UI::ChangeWidget (`id (`ntp_configure), `Enabled, ntp_used);
        UI::ChangeWidget (`id (`ntp_now), `Enabled, ntp_used);
