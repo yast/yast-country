@@ -348,7 +348,7 @@ global define void Set (string lang) {
 
     if (language != lang)	// Do it only if different
     {
-	if (Stage::initial ())
+	if (Stage::initial () && !Mode::test ())
 	{
 	    y2milestone ("integrating translation extension...");
 	    // busy message
