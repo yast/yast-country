@@ -888,6 +888,11 @@ global define string GetGivenLanguageCountry (string lang) {
     }
     if (country != nil && country != "")
     {
+        if (find (country, ".") != -1)
+            country = splitstring (country, ".") [0]:"";
+    }
+    if (country != nil && country != "")
+    {
         if (find(country, "_") != -1)
             country = splitstring (country, "_") [1]:"";
 	else
