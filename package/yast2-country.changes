@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr 10 08:12:48 CEST 2008 - jsuchome@suse.cz
+
+- time zone names updated to correct country names (bnc#377513)
+- 2.16.16 
+
+-------------------------------------------------------------------
 Mon Apr  7 13:56:08 CEST 2008 - jsuchome@suse.cz
 
 - fixed build: do not call integration code in testsuite

@@ -490,7 +490,7 @@ $[
 	// time zone
 	"Asia/Brunei"		: _("Brunei"),
 	// time zone
-	"Asia/Calcutta"		: _("Calcutta"),
+	"Asia/Calcutta"		: _("Kolkata"),
 	// time zone
 	"Asia/Choibalsan"	: _("Choibalsan"),	// MN
 	// time zone
@@ -804,9 +804,9 @@ $[
 	// time zone
 	"Pacific/Rarotonga"	: _("Rarotonga"),	// CK
 	// time zone
-	"Pacific/Truk"		: _("Truk"),	// FM
+	"Pacific/Truk"		: _("Chuuk"),	// FM
 	// time zone
-	"Pacific/Ponape"	: _("Ponape"),	// FM
+	"Pacific/Ponape"	: _("Pohnpei"),	// FM
 	// time zone
 	"Pacific/Kosrae"	: _("Kosrae"),	// FM
 	// time zone
