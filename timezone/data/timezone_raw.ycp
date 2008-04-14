@@ -101,7 +101,9 @@ $[
 
 	// time zone
 	"America/Miquelon"	: _("Miquelon"),	// PM
-    ]
+    ],
+    // helper for time zone map selector
+    "central"		: "Europe/Prague",
 ],
 
 $[
@@ -169,7 +171,8 @@ $[
 	"Pacific/Honolulu"	: _("Hawaii (Honolulu)"),
 	// time zone
 	"Pacific/Pago_Pago"	: _("Samoa (Pago Pago)"),
-    ]
+    ],
+    "central"		: "America/Chicago",
 ],
 
 $[
@@ -230,7 +233,9 @@ $[
 	"America/Dawson_Creek"	: _("Dawson Creek"),
 	// time zone
 	"America/Dawson"	: _("Dawson"),
-    ]
+    ],
+    // helper for time zone map selector
+    "central"	: "America/Winnipeg",
 ],
 
 $[
@@ -257,7 +262,8 @@ $[
 	"America/Argentina/Tucuman"	: _("Tucuman"),
 	// time zone
 	"America/Argentina/Ushuaia"	: _("Ushuaia"),
-    ]
+    ],
+    "central"		: "America/Argentina/Buenos_Aires",
 ],
 
 $[
@@ -295,6 +301,7 @@ $[
 	// time zone
 	"America/Sao_Paulo"	: _("Sao Paulo"),//_("Brazil East"),
     ],
+    "central"		: "America/Sao_Paulo",
 ],
 
 $[
@@ -318,7 +325,8 @@ $[
 	"America/Monterrey"	: _("Monterrey"),	// MX
 	// time zone
 	"America/Tijuana"	: _("Tijuana"),
-    ]
+    ],
+    "central"			: "America/Mexico_City",
 ],
 
 $[
@@ -417,7 +425,8 @@ $[
 	"Pacific/Easter"	: _("Easter Island"),
 	// time zone
 	"Pacific/Galapagos"	: _("Galapagos"),
-    ]
+    ],
+    "central"			: "America/La_Paz",
 ],
 
 $[
@@ -454,7 +463,8 @@ $[
 	"Asia/Yakutsk"		: _("Yakutsk"),
 	// time zone
 	"Asia/Yekaterinburg"	: _("Yekaterinburg"),
-    ]
+    ],
+    "central"			: "Asia/Novosibirsk",
 ],
 
 $[
@@ -490,7 +500,7 @@ $[
 	// time zone
 	"Asia/Brunei"		: _("Brunei"),
 	// time zone
-	"Asia/Calcutta"		: _("Kolkata"),
+	"Asia/Kolkata"		: _("Kolkata"),
 	// time zone
 	"Asia/Choibalsan"	: _("Choibalsan"),	// MN
 	// time zone
@@ -623,7 +633,8 @@ $[
 	// time zone
 	"Mideast/Riyadh89"	: _("Mideast Riyadh89"),
 
-    ]
+    ],
+    "central"			: "Asia/Kolkata",
 ],
 
 $[
@@ -655,7 +666,8 @@ $[
 	// time zone
 	"Australia/Perth"	: _("Western Australia (Perth)"),
 
-    ]
+    ],
+    "central"			: "Australia/Sydney",
 ],
 
 $[
@@ -770,7 +782,8 @@ $[
 	"Indian/Antananarivo"	: _("Antananarivo"), // Madagascar
 	// time zone
 	"Indian/Reunion"	: _("Reunion"),	// RE
-    ]
+    ],
+    "central"			: "Africa/Kampala",
 ],
 
 $[
@@ -849,7 +862,8 @@ $[
 	"Pacific/Wallis"	: _("Wallis"),	// WF
 	// time zone
 	"Pacific/Apia"		: _("Apia"),	// WS
-    ]
+    ],
+    "central"			: "Pacific/Tahiti",
 ],
 
 $[
@@ -892,6 +906,7 @@ $[
 	"America/Miquelon"	: _("Miquelon"),	// PM
 
     ],
+    "central"			: "Atlantic/Madeira",
 ],
 
 $[
@@ -920,6 +935,7 @@ $[
 	// time zone
 	"Indian/Mayotte"	: _("Mayotte"),	// YT
     ],
+    "central"			: "Indian/Maldives",
 ],
 
 $[
@@ -983,7 +999,8 @@ $[
 	"W-SU" : _("W-SU"),
 	"WET" : _("WET"),
 	"Zulu" : _("Zulu")
-    ]
+    ],
+    "central"			: "America/Godthab",
 ],
 
 $[ "name" : _("Etc"),
@@ -1022,7 +1039,10 @@ $[ "name" : _("Etc"),
 	"Etc/UCT" : _("UCT"),
 	"Etc/UTC" : _("UTC"),
 	"Etc/Universal" : _("Universal"),
-	"Etc/Zulu" : _("Zulu") ] ],
+	"Etc/Zulu" : _("Zulu")
+    ],
+    "central"		: "Etc/GMT"
+],
 
 ] );
 
