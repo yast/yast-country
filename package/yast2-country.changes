@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Apr 14 13:00:37 CEST 2008 - jsuchome@suse.cz
+
+- fixed selecting time zone regions, "central zone" moved to DB
+- use CheckBox instead of ComboBox for HW clock term (bnc#359112)
+- 2.16.17
+
+-------------------------------------------------------------------
 Thu Apr 10 08:12:48 CEST 2008 - jsuchome@suse.cz
 
 - time zone names updated to correct country names (bnc#377513)
