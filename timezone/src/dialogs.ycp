@@ -461,25 +461,6 @@ Enter the correct date.
 
     list<map> zonemap	= Timezone::get_zonemap ();
 
-    // map regions to the zone approximatelly in the center, for selector widget
-    list central_zone	= [
-	"Europe/Prague",
-	"America/Chicago",
-	"America/Winnipeg",
-	"America/Argentina/Buenos_Aires",
-	"America/Sao_Paulo",
-	"America/Mexico_City",
-	"America/La_Paz",
-	"Asia/Novosibirsk",
-	"Asia/Calcutta",
-	"Australia/Sydney",
-	"Africa/Kampala",
-	"Pacific/Tahiti",
-	"Atlantic/Madeira",
-	"Indian/Maldives",
-	"America/Godthab",
-    ];
-
     // map of zones conversions
     map<string,string> yast2zonetab	= Timezone::yast2zonetab;
 
@@ -528,17 +509,13 @@ Enter the correct date.
 	);
     }
     term hwclock_term	= `VBox (
-	`ComboBox (`id (`hwclock), `opt(`hstretch, `notify),
-	    // combo box label
-	    _("&Hardware Clock Set To"), [
-	    // ComboBox entry: clock set to local time
-	    `item (`id (`hwclock_localtime), _("Local Time"),
-		(hwclock == "--localtime")),
-	    // ComboBox entry: clock set UTC
-	    `item (`id(`hwclock_utc ), _("UTC"), (hwclock == "-u")),
-	]),
+	`CheckBox (`id (`hwclock), `opt(`hstretch, `notify),
+	    // check box label
+	    _("&Hardware Clock Set To UTC"), hwclock == "-u"
+	),
 	textmode ? `Label ("") : `Empty ()
     );
+
     term contents	= `MarginBox (
 	`leftMargin (2), `rightMargin (2), `topMargin (0), `bottomMargin (0.2),
 	`VBox (
@@ -552,7 +529,7 @@ Enter the correct date.
 		// frame label
 		`HWeight (1, `Frame (_("Time and Date"), `MarginBox (
 		    `leftMargin (1.2), `rightMargin (1),
-		    `topMargin (0.2), `bottomMargin (0.2),
+		    `topMargin (0), `bottomMargin (0),
 		    textmode ?
 		    `VBox (
 			`Label (`id(`date), `opt(`outputField,`hstretch), date),
@@ -696,8 +673,7 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 	if (ret == `region)
 	{
 	    integer num = selected_region ();
-	    /* FIXME zoom the map to the "central place" */
-	    string central	= central_zone[num]:timezone;
+	    string central	= zonemap[num,"central"]:timezone;
 	    if (central != timezone)
 	    {
 		timezone	= central;
@@ -728,7 +704,8 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 	    hwclock_s = `hwclock_utc;
 	    if (!utc_only)
 	    {
-		hwclock_s = (symbol)UI::QueryWidget( `id(`hwclock), `Value );
+		hwclock_s = ((boolean)UI::QueryWidget( `id(`hwclock), `Value))?
+		    `hwclock_utc : `hwclock_localtime;
 	    }
 	    if (ret == `timezonemap)
 	    {
