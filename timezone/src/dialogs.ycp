@@ -673,17 +673,20 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 	if (ret == `region)
 	{
 	    integer num = selected_region ();
-	    string central	= zonemap[num,"central"]:timezone;
-	    if (central != timezone)
+	    if (num == sel)
+		continue;
+	    show_selected_region (num, "");
+	    string tz		= selected_timezone ();
+	    if (tz != timezone)
 	    {
-		timezone	= central;
+		timezone	= tz;
 		if (timezone != timezone_old)
-		    changed_time = true;
+		    changed_time	= true;
 		timezone_old	= timezone;
 		SetTimezone (hwclock_s, timezone, false, changed_time);
 	    }
-	    show_selected_region (num, timezone);
 	    UI::ChangeWidget (`id(`timezonemap), `CurrentItem, timezone);
+	    sel		= num;
 	}
 	else if (ret == `settime)
 	{
