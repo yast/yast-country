@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Apr 21 11:05:40 CEST 2008 - jsuchome@suse.cz
+
+- removed the feature with selecting region's "central zone" 
+  (bnc#380753)
+- 2.16.18
+
+-------------------------------------------------------------------
 Mon Apr 14 13:00:37 CEST 2008 - jsuchome@suse.cz
 
 - fixed selecting time zone regions, "central zone" moved to DB
