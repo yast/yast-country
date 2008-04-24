@@ -259,6 +259,8 @@ $[
 	// time zone
 	"America/Argentina/San_Juan"	: _("San Juan"),
 	// time zone
+	"America/Argentina/San_Luis"	: _("San Luis"),
+	// time zone
 	"America/Argentina/Tucuman"	: _("Tucuman"),
 	// time zone
 	"America/Argentina/Ushuaia"	: _("Ushuaia"),
@@ -582,7 +584,7 @@ $[
 	// time zone
 	"Asia/Rangoon"		: _("Myanmar"),
 	// time zone
-	"Asia/Saigon"		: _("Saigon"),
+	"Asia/Ho_Chi_Minh"	: _("Saigon"),
 	// time zone
 	"Asia/Sakhalin"		: _("Sakhalin"),
 	// time zone
