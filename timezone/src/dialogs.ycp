@@ -61,12 +61,16 @@
   define boolean SetTimeDialog() {
 
     // help text for set time dialog
-    string htext = _("<p>The current system time and date are displayed. Change them to the correct values manually, or select a NTP server to adapt your time automatically. Use <b>Configure</b> to run the NTP client configuration.</p>") +
-
-// FIXME adapt for current state...
+    string htext = _("<p>The current system time and date are displayed. Change them to the correct values manually, or use Network Time Protocol (NTP).</p>") +
 
     // help text, cont.
-    _("<p>Press <b>Accept</b> to save your changes. Synchronization with the NTP server can be done only when the network is configured.</p>");
+    _("<p>Press <b>Synchronize Now</b>, to get your system time set correctly using selected NTP server. If you want to make use of NTP permanently, enable <b>Save NTP Configuration</b>.</p>") +
+
+    // help text, cont.
+    _("<p>With the <b>Configure</b> button, open the advanced NTP configuration. Press <b>Accept</b> to save your changes.</p>") +
+
+    // help text, cont.
+    _("<p>Synchronization with the NTP server can be done only when the network is configured.</p>");
 
     boolean dt_widgets = false;
 
