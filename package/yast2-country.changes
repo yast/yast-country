@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May  6 13:26:08 CEST 2008 - jsuchome@suse.cz
+
+- load correct language image for pt_PT (bnc#386298)
+- 2.16.21
+
+-------------------------------------------------------------------
 Fri Apr 25 08:20:13 CEST 2008 - jsuchome@suse.cz
 
 - new help text for current "change time" dialog (bnc#383377)
