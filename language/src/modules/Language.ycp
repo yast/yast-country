@@ -333,6 +333,10 @@ string GetLanguageExtensionFilename (string language) {
 	    break;
 	}
     });
+    // yast2-trans-pt.rpm doesn't fit into the algorithm above, see bnc#386298
+    if (language == "pt_PT")
+	return "yast2-trans-pt.rpm";
+
     y2milestone ("Using %1 for %2", filename, language);
     return filename;
 }
