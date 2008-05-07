@@ -352,7 +352,7 @@ global define void Set (string lang) {
 
     if (language != lang)	// Do it only if different
     {
-	if (Stage::initial () && !Mode::test ())
+	if (Stage::initial () && !Mode::test () && !Mode::live_installation ())
 	{
 	    y2milestone ("integrating translation extension...");
 	    // busy message
@@ -493,7 +493,8 @@ global define string ReadSysconfigLanguage () {
 global define void ReadSysconfigValues () {
 
     rootlang = Misc::SysconfigRead (.sysconfig.language.ROOT_USES_LANG, rootlang);
-    if (!Stage::initial ())
+    // during live installation, we have sysconfig.language.RC_LANG available
+    if (!Stage::initial () || Mode::live_installation ())
     {
 	string val = toupper (Misc::SysconfigRead (.sysconfig.language.RC_LANG, ""));
 	use_utf8 = search (val, ".UTF-8") != nil;
@@ -521,7 +522,7 @@ global define void Language() {
 	return;
     }
 
-    if (Stage::initial ())
+    if (Stage::initial () && !Mode::live_installation ())
     {
 	string lang = (string)SCR::Read (.content.LANGUAGE);
 	y2milestone ("content LANGUAGE %1", lang);
@@ -563,6 +564,10 @@ global define void Language() {
 	string local_lang = ReadSysconfigLanguage ();
 	QuickSet (local_lang);
 	SetDefault();		// also default
+	if (Mode::live_installation ())
+	{
+	    FillEnglishNames (local_lang);
+	}
     }
     if (SCR::Read (.target.size, "/etc/sysconfig/language") > 0)
     {
