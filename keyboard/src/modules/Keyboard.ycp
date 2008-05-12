@@ -448,7 +448,7 @@ define map get_lang2keyboard() {
     map base_lang2keyboard = (map)SCR::Read(.target.yast2, "lang2keyboard.ycp");
     if (base_lang2keyboard == nil) base_lang2keyboard = $[];
 
-    return union (base_lang2keyboard, Language::GetLang2KeyboardMap ());
+    return union (base_lang2keyboard, Language::GetLang2KeyboardMap (true));
 }
 
 

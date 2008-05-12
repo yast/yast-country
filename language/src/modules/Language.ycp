@@ -258,7 +258,9 @@ void FillEnglishNames (string lang) {
  * return the content of lang2timezone map
  * (mapping of languages to their default (proposed) time zones)
  */
-global define map<string,string> GetLang2TimezoneMap () {
+global define map<string,string> GetLang2TimezoneMap (boolean force) {
+    if (size (languages_map) == 0 && force)
+	read_languages_map();
     return lang2timezone;
 }
 
@@ -266,7 +268,9 @@ global define map<string,string> GetLang2TimezoneMap () {
  * return the content of lang2keyboard map
  * (mapping of languages to their default (proposed) keyboard layouts)
  */
-global define map<string,string> GetLang2KeyboardMap () {
+global define map<string,string> GetLang2KeyboardMap (boolean force) {
+    if (size (languages_map) == 0 && force)
+	read_languages_map();
     return lang2keyboard;
 }
 

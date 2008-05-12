@@ -173,7 +173,7 @@ define map<string, string> get_lang2tz () {
 
 	lang2tz	= (map<string,string>) union (
 	    base_lang2tz,
-	    Language::GetLang2TimezoneMap ()
+	    Language::GetLang2TimezoneMap (true)
 	);
     }
     return lang2tz;

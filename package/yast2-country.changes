@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon May 12 13:27:42 CEST 2008 - jsuchome@suse.cz
+
+- force reading timezone/keyboard DB when it is empty (bnc#386298)
+- 2.16.23 
+
+-------------------------------------------------------------------
 Wed May  7 12:21:03 CEST 2008 - jsuchome@suse.cz
 
 - during live-install, do not behave like in 1st stage (bnc#381415)
