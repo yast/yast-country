@@ -38,6 +38,6 @@
 	// 2. what time zone propose for this language
 	"timezone"	: "Asia/Seoul",
 	// 3. which keyboard layout propose for this language
-	"keyboard"	: "english-us",
+	"keyboard"	: "korean",
     ];
 }
