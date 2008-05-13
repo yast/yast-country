@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May 13 10:28:58 CEST 2008 - jsuchome@suse.cz
+
+- added Korean keyboard layout (bnc#388057)
+- 2.16.24 
+
+-------------------------------------------------------------------
 Mon May 12 13:27:42 CEST 2008 - jsuchome@suse.cz
 
 - force reading timezone/keyboard DB when it is empty (bnc#386298)
