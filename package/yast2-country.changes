@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu May 15 10:30:58 CEST 2008 - jsuchome@suse.cz
+
+- sort keyboard list according to translated items (bnc#390610)
+- 2.16.25
+
+-------------------------------------------------------------------
 Tue May 13 10:28:58 CEST 2008 - jsuchome@suse.cz
 
 - added Korean keyboard layout (bnc#388057)
