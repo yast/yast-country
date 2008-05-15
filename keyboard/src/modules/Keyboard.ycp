@@ -1317,6 +1317,19 @@ global define boolean CalledRestore() {
 	});
   }
 
+  /**
+   * Return item list of keyboard items, sorted according to current language
+   */
+  global define list<term> GetKeyboardItems () {
+
+    list<term> ret = maplist (string code, string name, Selection(), ``(
+	`item (`id(code), name, current_kbd == code)
+    ));
+    return sort (term a, term b, ret, {
+	list lsorted	= lsort ([a[1]:"", b[1]:""]);
+	return (lsorted[0]:"" == a[1]:"" && a[1]:"" != b[1]:"");
+    });
+  }
 
 
   /**

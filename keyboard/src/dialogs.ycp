@@ -167,27 +167,12 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
    */
   define symbol KeyboardDialog (map args) {
 
-    term keyboardsel = `dummy();
     string keyboard = "";
 
-    // Create keyboard selection box with the default selection.
-    // First build a map sorted by translations.
-    //
-    list<term> keyboardlist_by_translation = maplist (
-	string code, string name, Keyboard::Selection(), ``(
-	    `item (`id(code), name, Keyboard::current_kbd == code)
-	));
-
-    keyboardlist_by_translation = sort (
-	term a, term b, keyboardlist_by_translation, {
-	    list lsorted	= lsort ([a[1]:"", b[1]:""]);
-	    return (lsorted[0]:"" == a[1]:"" && a[1]:"" != b[1]:"");
-	});
-
-    keyboardsel = `SelectionBox( `id( `keyboard ), `opt(`notify),
+    term keyboardsel = `SelectionBox (`id (`keyboard), `opt(`notify),
 		// title for selection box 'keyboard layout'
 		_("&Keyboard Layout"),
-		keyboardlist_by_translation);
+		Keyboard::GetKeyboardItems ());
 
     // title for input field to test the keyboard setting
     // (no more than about 25 characters!)
