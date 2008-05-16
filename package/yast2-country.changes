@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri May 16 16:40:22 CEST 2008 - jsrain@suse.cz
+
+- added categories Settings and System into desktop file
+  (bnc #382778)
+
+-------------------------------------------------------------------
 Thu May 15 10:30:58 CEST 2008 - jsuchome@suse.cz
 
 - sort keyboard list according to translated items (bnc#390610)
