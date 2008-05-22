@@ -481,10 +481,14 @@ Enter the correct date.
 		    zones[yast2zonetab[key]:key]	= name;
 		return [ name, key ];
 	});
-	trl	= sort (list a, list b, (list<list>) trl, {
-	    list lsorted	= lsort ([a[0]:"", b[0]:""]);
-	    return (lsorted[0]:"" == a[0]:"" && a[0]:"" != b[0]:"");
-	});
+	// prevent the crash in installation (workaround for bnc#385172)
+	if (Language::language != "ko_KR")
+	{
+	    trl	= sort (list a, list b, (list<list>) trl, {
+		list lsorted	= lsort ([a[0]:"", b[0]:""]);
+		return (lsorted[0]:"" == a[0]:"" && a[0]:"" != b[0]:"");
+	    });
+	}
 	return $[
 	    "name"	: region["name"]:"",
 	    "entries"	: trl,

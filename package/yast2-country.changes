@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 22 14:29:24 CEST 2008 - jsuchome@suse.cz
+
+- do not sort timezones with ko_KR locale: workaround preventing
+  the crash in installation (bnc#385172)
+- 2.16.26
+
+-------------------------------------------------------------------
 Fri May 16 16:40:22 CEST 2008 - jsrain@suse.cz
 
 - added categories Settings and System into desktop file
