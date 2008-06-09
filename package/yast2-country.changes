@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jun  9 14:58:01 CEST 2008 - jsuchome@suse.cz
+
+- use InputField instead of TextEntry
+- 2.17.0
+
+-------------------------------------------------------------------
 Thu May 22 14:29:24 CEST 2008 - jsuchome@suse.cz
 
 - do not sort timezones with ko_KR locale: workaround preventing

@@ -119,11 +119,11 @@
 	),
 	`HBox (
 	    `HSpacing(10),
-	    `TextEntry( `id(`day), `opt(`shrinkable), ""),
+	    `InputField( `id(`day), `opt(`shrinkable), ""),
 	    `HSpacing (),
-	    `TextEntry( `id(`month), `opt(`shrinkable), ""),
+	    `InputField( `id(`month), `opt(`shrinkable), ""),
 	    `HSpacing (),
-	    `TextEntry( `id(`year), `opt(`shrinkable), ""),
+	    `InputField( `id(`year), `opt(`shrinkable), ""),
 	    `HSpacing(30)
 	)
     );
@@ -135,11 +135,11 @@
 	),
 	`HBox (
 	    `HSpacing(10),
-	    `TextEntry (`id(`hour), `opt(`shrinkable), ""),
+	    `InputField (`id(`hour), `opt(`shrinkable), ""),
 	    `HSpacing (),
-	    `TextEntry (`id(`minute), `opt(`shrinkable), ""),
+	    `InputField (`id(`minute), `opt(`shrinkable), ""),
 	    `HSpacing (),
-	    `TextEntry (`id(`second), `opt(`shrinkable), ""),
+	    `InputField (`id(`second), `opt(`shrinkable), ""),
 	    `HSpacing(30)
 	)
     );

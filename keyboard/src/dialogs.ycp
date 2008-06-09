@@ -57,12 +57,12 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
 		    // heading text
 		    `Heading (_("Expert Keyboard Settings")),
 		    `VSpacing(`opt(`vstretch), 1),
-		    `Left (
+		    `Left (`InputField (`id(`rate), `opt (`hstretch),
 			// label text
-			`TextEntry( `id(`rate), _("Repeat &Rate"))
+			_("Repeat &Rate"))
 		    ),
 		    `Left (
-			`TextEntry(`id(`delay),
+			`InputField (`id(`delay), `opt (`hstretch),
 			// label text
 			_("De&lay before Repetition Starts"))
 		    ),
@@ -98,8 +98,10 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
 		    ),
 		    `VSpacing(`opt(`vstretch), 1),
 		    `Left (
-			// textentry label
-			`TextEntry (`id(`tty), _("&Devices for Lock"))
+			`InputField (`id(`tty), `opt (`hstretch),
+			    // textentry label
+			    _("&Devices for Lock")
+			)
 		    ),
 		    `VSpacing(`opt(`vstretch), 1),
 		    `Left (
@@ -176,7 +178,7 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
 
     // title for input field to test the keyboard setting
     // (no more than about 25 characters!)
-    term test = `TextEntry( _("&Test") );
+    term test = `InputField (`opt (`hstretch), _("&Test"));
     if (Mode::config ())
 	test = `Empty();
 
