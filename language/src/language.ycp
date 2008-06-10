@@ -21,7 +21,20 @@ import "Language";
 import "Mode";
 import "Popup";
 import "Progress";
+import "SlideShow";
 import "Wizard";
+
+/**
+ * Install and uninstall packages selected by Pkg::SetAdditionalLocales
+ */
+define boolean PackagesCommit () {
+
+    SlideShow::OpenSlideShowDialog ();
+    SlideShow::InitPkgData (false);
+    Pkg::PkgCommit (0);
+    SlideShow::CloseSlideShowDialog();
+    return true;
+}
 
 /**
  * read language settings
@@ -79,7 +92,7 @@ define boolean LanguageWrite () {
 	}
 	if (enough_space)
 	{
-	    Language::PackagesCommit ();
+	    PackagesCommit ();
 	}
     }
 
