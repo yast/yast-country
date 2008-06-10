@@ -30,11 +30,23 @@
     import "Popup";
     import "ProductFeatures";
     import "Report";
+    import "SlideShow";
     import "Stage";
     import "Timezone";
     import "Wizard";
 
     string language		= Language::language;
+
+    /**
+     * Install and uninstall packages selected by Pkg::SetAdditionalLocales
+     */
+    define boolean PackagesCommit () {
+	SlideShow::OpenSlideShowDialog ();
+	SlideShow::InitPkgData (false);
+        Pkg::PkgCommit (0);
+        SlideShow::CloseSlideShowDialog();
+        return true;
+    }
 
     /**
      * Popup for setting expert language values
@@ -619,9 +631,9 @@ Remove some languages from the selection."));
 			    ret = `not_next;
 			    continue;
 			}
-			if (Stage::firstboot ()) // install language packages now
+			if (Stage::firstboot ())// install language packages now
 			{
-			    Language::PackagesCommit ();
+			    PackagesCommit ();
 			}
 		    }
 		}

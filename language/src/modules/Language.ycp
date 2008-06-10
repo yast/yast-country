@@ -733,13 +733,49 @@ global define list<string> MakeProposal (boolean force_reset,boolean language_ch
 	// summary label
 	sformat (_("Primary Language: %1"), name)
     ];
+    if (size (languages_map) == 0 || language_changed)
+    {
+	read_languages_map();
+    }
+    // maybe additional languages were selected in package selector (bnc#393007)
+    list<string> langs		= splitstring (languages, ",");
+    list<string> missing	= [];
+    foreach (string additional, Pkg::GetAdditionalLocales (), {
+	// add the language for both kind of values ("cs" vs. "pt_PT")
+	if (!contains (langs, additional))
+	{
+	    if (additional == "en")
+		additional	= "en_US";
+	    if (additional == "pt")
+		additional	= "pt_PT";
+	    if (haskey (languages_map, additional))
+	    {
+		missing	= add (missing, additional);
+		return;
+	    }
+	    if (contains (langs, additional)) //en_US or pt_PT already installed
+		return;
+	    // now, let's hope there's only one full entry for the short one
+	    // (e.g. cs_CZ for cs)
+	    foreach (string k, list dummy, languages_map,
+	    {
+		if (substring (k, 0, 2) == additional)
+		{
+		    missing = add (missing, k);
+		    break;
+		}
+	    });
+	}
+    });
+    if (size (missing) > 0)
+    {
+	langs		= (list<string>) union (langs, missing);
+	languages	= mergestring (langs,",");
+    }
+    // now, generate the summary strings
     if (languages != "" && languages != language)
     {
-	if (size (languages_map) == 0 || language_changed)
-	{
-	    read_languages_map();
-	}
-	list<string> langs	= [];
+	langs	= [];
 	foreach (string lang, splitstring (languages, ","), {
 	    if (lang != language)
 	    {
@@ -876,13 +912,15 @@ global define boolean PackagesInit (list<string> selected_languages) {
 
 /**
  * Install and uninstall packages selected by Pkg::SetAdditionalLocales
- */
+ *
 global define boolean PackagesCommit () {
 
-    PackageCallbacks::InitPackageCallbacks ();
+    SlideShow::OpenSlideShowDialog ();
     Pkg::PkgCommit (0);
+    SlideShow::CloseSlideShowDialog();
     return true;
 }
+*/
 
 /**
  * de_DE@UTF-8 -> "DE"

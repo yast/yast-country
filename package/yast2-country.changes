@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Jun 10 13:09:03 CEST 2008 - jsuchome@suse.cz
+
+- open slide show dialog when installing packages (bnc#395838)
+- adapt list of secondary languages according to ones coming
+  from package selector (bnc#393007)
+- 2.17.1
+
+-------------------------------------------------------------------
 Mon Jun  9 14:58:01 CEST 2008 - jsuchome@suse.cz
 
 - use InputField instead of TextEntry
