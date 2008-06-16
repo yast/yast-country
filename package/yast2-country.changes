@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jun 16 11:50:02 CEST 2008 - jsuchome@suse.cz
+
+- do not sort timezones with ja_JP locale: (bnc#385172)
+- 2.16.27
+
+-------------------------------------------------------------------
 Thu May 22 14:29:24 CEST 2008 - jsuchome@suse.cz
 
 - do not sort timezones with ko_KR locale: workaround preventing

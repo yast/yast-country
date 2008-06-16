@@ -482,7 +482,7 @@ Enter the correct date.
 		return [ name, key ];
 	});
 	// prevent the crash in installation (workaround for bnc#385172)
-	if (Language::language != "ko_KR")
+	if (Language::language != "ko_KR" && Language::language != "ja_JP")
 	{
 	    trl	= sort (list a, list b, (list<list>) trl, {
 		list lsorted	= lsort ([a[0]:"", b[0]:""]);
