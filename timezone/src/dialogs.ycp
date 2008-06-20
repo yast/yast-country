@@ -30,8 +30,10 @@
 
   symbol hwclock_s_initial = `none;
 
-  // helper function for seting the time related stuff in module and possibly
-  // adapting current time according to it
+  /**
+   * helper function for seting the time related stuff in module and possibly
+   * adapting current time according to it
+   */
   define void SetTimezone (symbol hwclock, string timezone, boolean really,
 			   boolean changed_time)
   {
@@ -57,6 +59,7 @@
 
   /**
    * Dialog for setinge system date and time
+   * @return true if user changed the time (dialog accepted)
    */
   define boolean SetTimeDialog() {
 
@@ -410,7 +413,6 @@ Enter the correct date.
     }
 
     // get current timezone and clock setting
-    //
     boolean changed_time = false;
     string timezone	= Timezone::timezone;
     string timezone_old = timezone;
@@ -428,23 +430,10 @@ Enter the correct date.
 
     Timezone::PushVal();
 
-    /* ----------------------------------------------------------------------
-     * Build dialog
-     * ----------------------------------------------------------------------*/
-
     // Assign system date and time.
     //
     string date = Timezone::GetDateTime(true, false);
 
-    // build up timezone selection box
-    //
-    term timezonesel = `ReplacePoint (`id(`tzsel),
-	// title for selection box 'timezone'
-	`SelectionBox (`id (`timezone), `opt(`notify), _("Time &Zone")));
-
-    term region = `SelectionBox (
-	// label text
-	`id(`region),`opt(`notify,`immediate), _("&Region"),Timezone::Region());
 
     term settime = `Empty();
 
@@ -456,11 +445,6 @@ Enter the correct date.
 
     boolean textmode	= Language::GetTextMode ();
 
-    term timezoneterm = `HBox (
-	region,
-	`HSpacing (),
-	timezonesel
-    );
     boolean timezone_selector	= false;
 
     list<map> zonemap	= Timezone::get_zonemap ();
@@ -469,31 +453,19 @@ Enter the correct date.
     map<string,string> yast2zonetab	= Timezone::yast2zonetab;
 
     // map of timezone -> translated label to be passed to TimezoneSelector
-    map zones	= $[];
+    map zones		= $[];
 
     // cache the zonemap with the order sorted according to current locale
-    list sorted_zonemap	= maplist (map region, zonemap, {
-	list trl = maplist (
-	    string key, string name, (map<string,string>)region["entries"]:$[],
-	{
-		// Vatican cannot be shown in the map, Rome would be missing...
-		if (key != "Europe/Vatican")
-		    zones[yast2zonetab[key]:key]	= name;
-		return [ name, key ];
+    map sorted_zonemap  = $[];
+
+    foreach (map region, zonemap, {
+	foreach (string key, string name, region["entries"]:$[], {
+	    if (key != "Europe/Vatican")
+		zones[yast2zonetab[key]:key]    = name;
 	});
-	// prevent the crash in installation (workaround for bnc#385172)
-	if (Language::language != "ko_KR")
-	{
-	    trl	= sort (list a, list b, (list<list>) trl, {
-		list lsorted	= lsort ([a[0]:"", b[0]:""]);
-		return (lsorted[0]:"" == a[0]:"" && a[0]:"" != b[0]:"");
-	    });
-	}
-	return $[
-	    "name"	: region["name"]:"",
-	    "entries"	: trl,
-	];
     });
+
+    term timezoneterm = `HBox ();
 
     if (UI::HasSpecialWidget (`TimezoneSelector) == true)
     {
@@ -513,6 +485,20 @@ Enter the correct date.
 		    // title for combo box 'timezone'
 		    `ComboBox (`id (`timezone), `opt(`notify), _("Time &Zone"))
 		))
+	    )
+	);
+    }
+    else
+    {
+	timezoneterm = `HBox (
+	    `SelectionBox (`id(`region),`opt(`notify,`immediate),
+		// label text
+		_("&Region"), Timezone::Region()
+	    ),
+	    `HSpacing (),
+	    `ReplacePoint (`id(`tzsel),
+		// title for selection box 'timezone'
+		`SelectionBox (`id (`timezone), `opt(`notify), _("Time &Zone"))
 	    )
 	);
     }
@@ -556,7 +542,23 @@ Enter the correct date.
     map timezones_for_region	= $[];
     list get_timezones_for_region (integer region, string zone) {
 
-	return maplist (list entry, sorted_zonemap[region,"entries"]:[],
+	if (!haskey (sorted_zonemap, region))
+	{
+	    list reg_list =
+		maplist (string key, string name, zonemap[region,"entries"]:$[],
+	    ``([ name, key ]));
+
+	    // prevent the crash in installation (workaround for bnc#385172)
+	    if (Language::language != "ko_KR" && Language::language != "ja_JP")
+	    {
+		reg_list	= sort (list a, list b, (list<list>) reg_list, {
+		    list lsorted	= lsort ([a[0]:"", b[0]:""]);
+		    return (lsorted[0]:"" == a[0]:"" && a[0]:"" != b[0]:"");
+		});
+	    }
+	    sorted_zonemap[region]      = reg_list;
+	}
+	return maplist (list entry, sorted_zonemap[region]:[],
 	{
 	    return `item (`id(entry[1]:""), entry[0]:"", entry[1]:"" == zone);
 	});
