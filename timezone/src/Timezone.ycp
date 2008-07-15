@@ -240,8 +240,6 @@ global define integer Set (string zone, boolean really) {
     {
 	boolean inst = Stage::initial () || Stage::cont() || Stage::firstboot();
 	boolean textmode	= Language::GetTextMode ();
-	if (inst && !textmode)
-	    SCR::Execute ( .target.bash, "/usr/bin/xset -dpms");
 	string cmd = "/usr/sbin/zic -l " + timezone;
 	y2milestone( "Set cmd %1", cmd );
 	y2milestone( "Set ret %1", SCR::Execute( .target.bash_output, cmd ));
@@ -251,8 +249,6 @@ global define integer Set (string zone, boolean really) {
 	    y2milestone( "Set cmd %1", cmd );
 	    y2milestone( "Set ret %1", SCR::Execute(.target.bash_output, cmd ));
 	}
-	if (inst && !textmode)
-	    SCR::Execute ( .target.bash, "/usr/bin/xset +dpms");
     }
 
     // On first assignment store default timezone.
