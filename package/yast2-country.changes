@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Tue Jul 15 07:52:04 CEST 2008 - jsuchome@suse.cz
+
+- optimize sorting of time zone entries (bnc#395816) 
+- adapted list of languages not showing correctly in ncurses
+- DPMS don't need to be disabled in timezone, it is disabled during
+  entire installation (fate#304395)
+- 2.17.2
+
+-------------------------------------------------------------------
 Tue Jun 10 13:09:03 CEST 2008 - jsuchome@suse.cz
 
 - open slide show dialog when installing packages (bnc#395838)

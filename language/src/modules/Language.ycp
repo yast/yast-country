@@ -113,7 +113,10 @@ map<string,string> lang2keyboard	= $[];
 string languages_directory	= nil;
 
 // languages that cannot be correctly shown in text mode
-list cjk_languages	= [ "ja", "ko", "zh", "hi", "km", "pa", "bn" ];
+list cjk_languages	= [
+    "ja", "ko", "zh", "hi", "km", "pa", "bn", "gu", "mr", "si", "ta", "vi"
+
+];
 
 // FATE #302955: Split translations out of installation system
 // [ "en_US", "en_GB", "de", "cs" ]
