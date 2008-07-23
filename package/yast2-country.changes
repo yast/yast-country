@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Jul 23 16:48:12 CEST 2008 - mvidner@suse.cz
+
+- Marked strings for some error cases for translation (bnc#400376).
+
+-------------------------------------------------------------------
 Wed Jul 23 15:28:35 CEST 2008 - jsuchome@suse.cz
 
 - fixed language selection in firstboot stage (bnc#404450)

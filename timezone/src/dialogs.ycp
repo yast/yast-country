@@ -170,7 +170,8 @@
     }
 
     void handle_invalid_hostname( string server ) {
-	Popup::Error( sformat("Invalid NTP server hostname %1", server) );
+	// translators: error popup
+	Popup::Error( sformat(_("Invalid NTP server hostname %1"), server) );
     }
 
     // param: when asking for first time, we check if service is running
@@ -376,7 +377,9 @@ Enter the correct date.
 	    }
 	    else if ( rv == `ntpdate_failed)
 	    {
-		if (Popup::YesNo( sformat("'ntpdate %1' failed. Revisit NTP server configuration?", server) ))
+		// Translators: yes-no popup,
+		// ntpdate is a command, %1 is the server address
+		if (Popup::YesNo( sformat(_("'ntpdate %1' failed. Revisit NTP server configuration?"), server) ))
 		    ret = `retry;
 		    continue;
 	    }
