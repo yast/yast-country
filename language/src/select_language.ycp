@@ -260,14 +260,13 @@ are unset.<br>
 
     if (Stage::firstboot ())
 	languagesel = `SelectionBox (`id(`language), `opt(`notify), "",
-	    Language::GetLanguageItems (`first_screen));
+	    Language::GetLanguageItems (`primary));
 
-
-    // this type of contents will be shown only for initial installation dialog
-    term contents = `HVCenter (
-	`BackgroundPixmap ("wallpapers/welcome.jpg"),
-	`MinSize (25, 12, languagesel)
-    );
+    term contents = `VBox (`VSpacing (), `HBox (
+	`HWeight (1, `HSpacing ()),
+	`HWeight (3, languagesel),
+	`HWeight (1, `HSpacing ())
+   ), `VSpacing ());
 
     term expert = `HStretch();
     if (show_expert)
@@ -389,7 +388,7 @@ Choose the new <b>Primary Language</b> for your system.
 	// help text for 'adapt keyboard checkbox'
 	help_text	= help_text + _("<p>
 Check <b>Adapt Keyboard Layout</b> to adapt the keyboard layout to the primary language.
-Check <b>Adapt Time Zone</b> to change the current time zone according to the primary language.
+Check <b>Adapt Time Zone</b> to change the current time zone according to the primary language. If the keyboard layout or time zone is already adapted to the default language setting, the respective option is disabled.
 </p>
 ");
 

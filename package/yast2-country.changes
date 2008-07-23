@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Jul 23 15:28:35 CEST 2008 - jsuchome@suse.cz
+
+- fixed language selection in firstboot stage (bnc#404450)
+- 2.17.3
+
+-------------------------------------------------------------------
 Tue Jul 15 07:52:04 CEST 2008 - jsuchome@suse.cz
 
 - optimize sorting of time zone entries (bnc#395816) 
