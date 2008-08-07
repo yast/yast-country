@@ -61,7 +61,7 @@ define boolean TimezoneWrite () {
 define any TimezoneSequence () {
 
     // create the wizard dialog
-    Wizard::OpenAcceptDialog();
+    Wizard::OpenOKDialog();
 
     any result = TimezoneDialog ($[]);
 

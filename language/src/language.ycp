@@ -120,7 +120,7 @@ define any LanguageSequence () {
 
     // set the language accoring to Language.ycp initialization
     Language::WfmSetLanguage ();
-    Wizard::OpenAcceptDialog();
+    Wizard::OpenOKDialog();
 
     // Params are:				`back `next  set_default
     map args = $[];

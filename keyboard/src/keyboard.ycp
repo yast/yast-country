@@ -82,7 +82,7 @@ define any KeyboardSequence () {
 
     KeyboardRead ();
 
-    Wizard::OpenAcceptDialog();
+    Wizard::OpenOKDialog();
 
     symbol result = KeyboardDialog ($[]);
 
