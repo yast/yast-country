@@ -21,6 +21,7 @@
   import "Label";
   import "Language";
   import "Mode";
+  import "NetworkService";
   import "Package";
   import "Popup";
   import "Service";
@@ -29,6 +30,12 @@
   import "Wizard";
 
   symbol hwclock_s_initial = `none;
+
+  // if system clock is configured to sync with NTP
+  boolean ntp_used		= false;
+
+  // if packages for NTP configuration are installed
+  boolean ntp_installed		= false;
 
   /**
    * helper function for seting the time related stuff in module and possibly
@@ -159,7 +166,6 @@
 	dt_widgets	= true;
     }
 
-    boolean ntp_used		= false;
     boolean ntp_was_used	= false;
 
     void enable_disable_widgets () {
@@ -226,7 +232,6 @@
     Wizard::SetDesktopIcon("timezone");
 
     show_current_time ();
-    boolean ntp_installed = (Stage::initial() || Package::Installed ("yast2-ntp-client"));
     if (ntp_installed) {
 	CreateUI (true);
 	ntp_was_used	= ntp_used;
@@ -267,8 +272,9 @@
 	    }
 	    if (ntp_used )
 	    {
-		WFM::CallFunction("ntp-client_proposal", [ "MakeProposal", 
-				   $[ "country" : Language::GetLanguageCountry() ] ]);
+		WFM::CallFunction("ntp-client_proposal", [ "MakeProposal", $[
+		    "country" : Language::GetLanguageCountry() ] ]
+		);
 	    }
 	    enable_disable_widgets ();
 	}
@@ -380,8 +386,12 @@ Enter the correct date.
 		// Translators: yes-no popup,
 		// ntpdate is a command, %1 is the server address
 		if (Popup::YesNo( sformat(_("'ntpdate %1' failed. Revisit NTP server configuration?"), server) ))
+		{
 		    ret = `retry;
 		    continue;
+		}
+		else
+		    ntp_used	= false;
 	    }
 	    else
 	    {
@@ -415,6 +425,7 @@ Enter the correct date.
 	}
     }
 
+
     // get current timezone and clock setting
     boolean changed_time = false;
     string timezone	= Timezone::timezone;
@@ -432,10 +443,6 @@ Enter the correct date.
     y2milestone( "utc_only %1", utc_only );
 
     Timezone::PushVal();
-
-    // Assign system date and time.
-    //
-    string date = Timezone::GetDateTime(true, false);
 
 
     term settime = `Empty();
@@ -467,6 +474,56 @@ Enter the correct date.
 		zones[yast2zonetab[key]:key]    = name;
 	});
     });
+
+    ntp_installed	=
+	(Stage::initial() || Package::Installed ("yast2-ntp-client"));
+
+
+    // read NTP status
+    // FIXME without network, disable at all, or enable off-line configuration?
+    if (Stage::initial () && NetworkService::isNetworkRunning())
+    {
+	// true by default (fate#303520)
+	ntp_used	= true;
+	// configure NTP client
+	srandom ();
+	string server	= sformat ("%1.opensuse.pool.ntp.org", random (4));
+	map argmap	= $[
+	    "server"	: server,
+	    // FIXME ntp-client_proposal doesn't understand 'servers' yet
+	    "servers"	: [
+		"0.opensuse.pool.ntp.org",
+		"1.opensuse.pool.ntp.org",
+		"2.opensuse.pool.ntp.org",
+		"3.opensuse.pool.ntp.org",
+	    ],
+	];
+	symbol rv = (symbol)
+	    WFM::CallFunction ("ntp-client_proposal", ["Write", argmap]);
+	if (rv == `invalid_hostname)
+	{
+	    y2warning ("Invalid NTP server hostname %1", server);
+	    ntp_used	= false;
+	}
+	else
+	{
+	    y2milestone ("proposing NTP server %1", server);
+	    WFM::CallFunction ("ntp-client_proposal",
+		[ "SetUseNTP", $["ntp_used" : ntp_used] ]);
+	}
+    }
+    else if (ntp_installed)
+	ntp_used	= (boolean)
+	    WFM::CallFunction ("ntp-client_proposal", ["GetNTPEnabled"]);
+
+    string time_frame_label	=
+	// frame label
+	ntp_used ? _("Time and Date (NTP is configured)") :
+	// frame label
+	_("Time and Date");
+
+    // Read system date and time.
+    string date = Timezone::GetDateTime(true, false);
 
     term timezoneterm = `HBox ();
 
@@ -524,7 +581,7 @@ Enter the correct date.
 		),
 		`HSpacing (1),
 		// frame label
-		`HWeight (1, `Frame (_("Time and Date"), `MarginBox (
+		`HWeight (1, `Frame (time_frame_label, `MarginBox (
 		    `leftMargin (1.2), `rightMargin (1),
 		    `topMargin (0), `bottomMargin (0),
 		    textmode ?
@@ -533,7 +590,7 @@ Enter the correct date.
 			`Right (settime)
 		    ) :
 		    `HBox (
-			`Label (`id(`date), `opt(`outputField,`hstretch), date),
+			`Label (`id(`date), date),
 			`HStretch(),
 			`Right (settime)
 		    )
@@ -698,7 +755,8 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 		timezone_old	= timezone;
 		SetTimezone (hwclock_s, timezone, false, changed_time);
 	    }
-	    UI::ChangeWidget (`id(`timezonemap), `CurrentItem, timezone);
+	    if (timezone_selector)
+		UI::ChangeWidget (`id(`timezonemap), `CurrentItem, timezone);
 	    sel		= num;
 	}
 	else if (ret == `settime)
