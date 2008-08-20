@@ -80,29 +80,16 @@ define boolean LanguageWrite () {
 
     Progress::NextStage ();
 
-    boolean enough_space	= true;
-    if (Language::PackagesModified ())
-    {
-	if (Mode::commandline ())
-	{
-	    // if not commandline, packages were already initialized in
-	    // select_language
-	    enough_space = Language::PackagesInit (
-		splitstring (Language::languages, ","));
-	}
-	if (enough_space)
-	{
-	    PackagesCommit ();
-	}
-    }
+    if (Language::PackagesModified () && !Mode::commandline ())
+	PackagesCommit ();
 
     Progress::NextStage ();
 
     GfxMenu::Update();
 
     Progress::NextStage ();
-
-    WFM::CallFunction ("inst_suseconfig", [ false, false ]);
+    if (!Mode::commandline ())
+	WFM::CallFunction ("inst_suseconfig", [ false, false ]);
 
     return true;
 }
