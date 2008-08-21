@@ -29,10 +29,16 @@ import "Wizard";
  */
 define boolean PackagesCommit () {
 
-    SlideShow::OpenSlideShowDialog ();
-    SlideShow::InitPkgData (false);
+    if (!Mode::commandline ())
+    {
+	SlideShow::OpenSlideShowDialog ();
+	SlideShow::InitPkgData (false);
+    }
     Pkg::PkgCommit (0);
-    SlideShow::CloseSlideShowDialog();
+    if (!Mode::commandline ())
+    {
+	SlideShow::CloseSlideShowDialog();
+    }
     return true;
 }
 
@@ -80,16 +86,29 @@ define boolean LanguageWrite () {
 
     Progress::NextStage ();
 
-    if (Language::PackagesModified () && !Mode::commandline ())
-	PackagesCommit ();
+    boolean enough_space	= true;
+    if (Language::PackagesModified ())
+    {
+	if (Mode::commandline ())
+	{
+	    // if not commandline, packages were already initialized in
+	    // select_language
+	    enough_space = Language::PackagesInit (
+		splitstring (Language::languages, ","));
+	}
+	if (enough_space)
+	{
+	    PackagesCommit ();
+	}
+    }
 
     Progress::NextStage ();
 
     GfxMenu::Update();
 
     Progress::NextStage ();
-    if (!Mode::commandline ())
-	WFM::CallFunction ("inst_suseconfig", [ false, false ]);
+
+    WFM::CallFunction ("inst_suseconfig", [ false, false ]);
 
     return true;
 }
