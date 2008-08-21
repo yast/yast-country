@@ -101,9 +101,8 @@
 	    {
 		SCR::Execute (.target.bash, "/usr/bin/setfont");
 	    }
-	    else
+	    else if (!Mode::commandline ())
 	    {
-		//UI::SetConsoleFont (magic, font, screenMap, unicodeMap, encoding);
 		UI::SetConsoleFont (magic, font, screenMap, unicodeMap, language);	
 	    }
 	}
