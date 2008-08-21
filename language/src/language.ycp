@@ -24,6 +24,9 @@ import "Progress";
 import "SlideShow";
 import "Wizard";
 
+// if packages should be installed after language change
+boolean no_packages	= false;
+
 /**
  * Install and uninstall packages selected by Pkg::SetAdditionalLocales
  */
@@ -87,7 +90,7 @@ define boolean LanguageWrite () {
     Progress::NextStage ();
 
     boolean enough_space	= true;
-    if (Language::PackagesModified ())
+    if (Language::PackagesModified () && !no_packages)
     {
 	if (Mode::commandline ())
 	{
@@ -224,6 +227,7 @@ define boolean LanguageSetHandler (map options) {
 	Language::Set (language);
 	Console::SelectFont (language);
     }
+    no_packages		= haskey (options, "no_packages");
 
     return (Language::Modified ());
 }
@@ -265,10 +269,14 @@ map cmdline = $[
 	    "help"	: _("List of secondary languages (separated by commas)"),
 	    "type"	: "string"
 	],
+	"no_packages"	: $[
+	    // command line help text for 'set no_packages' option
+	    "help"	: _("Do not install langauge specific packages"),
+	],
     ],
     "mappings"		: $[
 	"summary"	: [],
-	"set"		: [ "lang", "languages" ],
+	"set"		: [ "lang", "languages", "no_packages" ],
 	"list"		: [],
     ]
 ];

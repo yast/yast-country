@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug 21 13:37:20 CEST 2008 - jsuchome@suse.cz
+
+- added CLI option to avoid package installation
+- 2.17.7 
+
+-------------------------------------------------------------------
 Thu Aug 21 12:41:59 CEST 2008 - jsuchome@suse.cz
 
 - do not try to open UI in command line mode (bnc#419132) 
