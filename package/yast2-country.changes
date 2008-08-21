@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Aug 21 12:41:59 CEST 2008 - jsuchome@suse.cz
+
+- do not try to open UI in command line mode (bnc#419132) 
+- in keyboard dialog, check for `ok button return value (#419111) 
+- 2.17.6
+
+-------------------------------------------------------------------
 Fri Aug 15 14:10:58 CEST 2008 - jsuchome@suse.cz
 
 - propose NTP by default during installation (fate#303520)
