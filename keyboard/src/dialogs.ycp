@@ -248,6 +248,8 @@ If unsure, use the default values already selected.
 	{
 	    return `abort;
 	}
+	if (ret == `ok)
+	    ret	= `next;
 
 	if( ret==`expert )
 	    {
