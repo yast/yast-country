@@ -391,7 +391,10 @@ Enter the correct date.
 		    continue;
 		}
 		else
+		{
 		    ntp_used	= false;
+		    UI::ChangeWidget (`id(`rb), `CurrentButton, `manual);
+		}
 	    }
 	    else
 	    {
@@ -402,7 +405,10 @@ Enter the correct date.
     }
     until( ret==`accept || ret==`cancel );
 
-    if (ntp_installed) {
+    if (ret == `accept && ntp_installed)
+    {
+	ntp_used	= (UI::QueryWidget (`id(`rb), `Value) == `ntp) &&
+			  (UI::QueryWidget (`id(`ntp_save), `Value) == true);
 	WFM::CallFunction("ntp-client_proposal", [ "SetUseNTP", $["ntp_used" : ntp_used] ]);
     }
     Wizard::CloseDialog ();
@@ -480,8 +486,7 @@ Enter the correct date.
 
 
     // read NTP status
-    // FIXME without network, disable at all, or enable off-line configuration?
-    if (Stage::initial () && NetworkService::isNetworkRunning())
+    if (first_run && NetworkService::isNetworkRunning())
     {
 	// true by default (fate#303520)
 	ntp_used	= true;
@@ -511,6 +516,11 @@ Enter the correct date.
 	    WFM::CallFunction ("ntp-client_proposal",
 		[ "SetUseNTP", $["ntp_used" : ntp_used] ]);
 	}
+    }
+    else if (Stage::initial ())
+    {
+	// from installation summaru
+	ntp_used	= Timezone::ntp_used;
     }
     else if (ntp_installed)
 	ntp_used	= (boolean)
@@ -581,9 +591,10 @@ Enter the correct date.
 		),
 		`HSpacing (1),
 		// frame label
-		`HWeight (1, `Frame (time_frame_label, `MarginBox (
-		    `leftMargin (1.2), `rightMargin (1),
-		    `topMargin (0), `bottomMargin (0),
+		`HWeight (1, `Frame (`id (`time_fr), time_frame_label,
+		    `MarginBox (
+			`leftMargin (1.2), `rightMargin (1),
+			`topMargin (0), `bottomMargin (0),
 		    textmode ?
 		    `VBox (
 			`Label (`id(`date), `opt(`outputField,`hstretch), date),
@@ -767,6 +778,13 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 		UI::ChangeWidget(`id(`date), `Value,
 		    Timezone::GetDateTime (false, false));
 		changed_time = true;
+		// adapt frame label, NTP status may be changed
+		time_frame_label	=
+		    // frame label
+		    ntp_used ? _("Time and Date (NTP is configured)") :
+		    // frame label
+		    _("Time and Date");
+		UI::ChangeWidget (`id (`time_fr), `Label, time_frame_label);
 	    }
 	}
 	else if (ret == `next || ret == `timezone || ret == `timezonemap ||
@@ -831,6 +849,7 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 		//
 		Timezone::user_decision	= true;
 		Timezone::user_hwclock	= true;
+		Timezone::ntp_used	= ntp_used;
 	    }
 	}
     } until ( ret == `next || ret == `back || ret == `cancel );

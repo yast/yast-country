@@ -44,6 +44,9 @@ global string default_timezone = "";
 global boolean user_decision = false;
 global boolean user_hwclock = false;
 
+// If NTP is configured
+global boolean ntp_used		= false;
+
 global integer diff = 0;
 
 /**
@@ -545,19 +548,17 @@ global define boolean ProposeLocaltime () {
 }
 
 /**
- * MakeProposal()
- *
- * Return proposal string and set system timezone.
+ * Return proposal list of strings.
  *
  * @param	boolean force_reset
  *		boolean language_changed
  *
- * @return	string	user readable description.
- *		If force_reset is true reset the module to the timezone
- *		stored in default_timezone.
+ * @return	list user readable description.
+ *
+ * If force_reset is true reset the module to the timezone
+ * stored in default_timezone.
  */
-
-global define string MakeProposal (boolean force_reset,
+global define list<string> MakeProposal (boolean force_reset,
                                    boolean language_changed )
 {
     y2milestone ("force_reset: %1", force_reset);
@@ -642,7 +643,11 @@ global define string MakeProposal (boolean force_reset,
 
     y2milestone( "MakeProposal hwclock %1", hwclock );
 
-    return name + " - " + clock_setting + " " + date;
+    list<string> ret = [ name + " - " + clock_setting + " " + date ];
+    if (ntp_used)
+	// summary label
+	ret	= add (ret, _("NTP configured"));
+    return ret;
 }
 
 /**
