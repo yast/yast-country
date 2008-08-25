@@ -50,8 +50,8 @@ Set a correct time before starting installation."), m["stdout"]:"" );
 
 	    // Fill return map
 	    ret = $[
-		"raw_proposal"		: [
-		    Timezone::MakeProposal (force_reset, language_changed) ],
+		"raw_proposal"		:
+		    Timezone::MakeProposal (force_reset, language_changed),
 		"language_changed"	: false
 	    ];
 	}
