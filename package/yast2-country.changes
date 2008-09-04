@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Sep  4 15:43:17 CEST 2008 - visnov@suse.cz
+
+- Adapt to SlideShow API changes 
+
+-------------------------------------------------------------------
 Mon Aug 25 09:40:03 CEST 2008 - jsuchome@suse.cz
 
 - show NTP configuration status in installation summary

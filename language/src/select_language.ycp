@@ -27,6 +27,7 @@
     import "Label";
     import "Language";
     import "Mode";
+    import "PackageSlideShow";
     import "Popup";
     import "ProductFeatures";
     import "Report";
@@ -41,10 +42,10 @@
      * Install and uninstall packages selected by Pkg::SetAdditionalLocales
      */
     define boolean PackagesCommit () {
-	SlideShow::OpenSlideShowDialog ();
-	SlideShow::InitPkgData (false);
+	SlideShow::OpenDialog ();
+	PackageSlideShow::InitPkgData (false);
         Pkg::PkgCommit (0);
-        SlideShow::CloseSlideShowDialog();
+        SlideShow::CloseDialog ();
         return true;
     }
 
