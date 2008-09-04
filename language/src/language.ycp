@@ -19,6 +19,7 @@ import "Console";
 import "GfxMenu";
 import "Language";
 import "Mode";
+import "PackageSlideShow";
 import "Popup";
 import "Progress";
 import "SlideShow";
@@ -34,13 +35,13 @@ define boolean PackagesCommit () {
 
     if (!Mode::commandline ())
     {
-	SlideShow::OpenSlideShowDialog ();
-	SlideShow::InitPkgData (false);
+	SlideShow::OpenDialog ();
+	PackageSlideShow::InitPkgData (false);
     }
     Pkg::PkgCommit (0);
     if (!Mode::commandline ())
     {
-	SlideShow::CloseSlideShowDialog();
+	SlideShow::CloseDialog();
     }
     return true;
 }
