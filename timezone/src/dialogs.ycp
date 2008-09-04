@@ -747,6 +747,9 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 
 	y2debug( "ret %1", ret );
 
+	if (ret == `ok)
+	    ret	= `next;
+
 	if (!Mode::config () && ret == `abort && Popup::ConfirmAbort(`painless))
 	{
 	    break;
