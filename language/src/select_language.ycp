@@ -445,6 +445,9 @@ In the selection box, specify additional languages to use on your system.
 	ret = Wizard::UserInput();
 	y2debug ("UserInput() returned %1", ret);
 
+	if (ret == `ok)
+	    ret = `next;
+
 	if (ret == `abort && Popup::ConfirmAbort (`painless))
 	{
 	    Wizard::RestoreNextButton();
