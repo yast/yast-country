@@ -35,8 +35,18 @@ define boolean PackagesCommit () {
 
     if (!Mode::commandline ())
     {
-	SlideShow::OpenDialog ();
-	PackageSlideShow::InitPkgData (false);
+	    PackageSlideShow::InitPkgData (false);
+	    SlideShow::Setup([$[
+              "name" : "packages",
+              "description" : _("Installing Packages..."),
+              "value" : PackageSlideShow::total_size_to_install / 1024 , // kilobytes
+              "units" : `kb,
+            ]]);
+
+	    SlideShow::ShowTable();
+
+	    SlideShow::OpenDialog ();
+	    SlideShow::MoveToStage( "packages" );
     }
     Pkg::PkgCommit (0);
     if (!Mode::commandline ())
