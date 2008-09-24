@@ -212,27 +212,6 @@
 
     list keyboardprobelist = [];	// List of all probed keyboards
 
-    // parameters for dumpkeys command - see bug #116143
-    map charsets	= $[
-	"Pl02.map.gz"			: "iso-8859-2",
-	"br-abnt2.map.gz"		: "iso-8859-15",
-	"cz-us-qwertz.map.gz"		: "iso-8859-2",
-	"cz-lat2-us.map.gz"		: "iso-8859-2",
-	"de-lat1-nd.map.gz"		: "iso-8859-15",
-	"de-latin1-nodeadkeys.map.gz"	: "iso-8859-15",
-	"es.map.gz"			: "iso-8859-15",
-	"fr-latin1.map.gz"		: "iso-8859-15",
-	"gr.map.gz"			: "iso-8859-7",
-	"hu.map.gz"			: "iso-8859-2",
-	"it.map.gz"			: "iso-8859-15",
-	"no-latin1.map.gz"		: "iso-8859-15",
-	"pt-latin1.map.gz"		: "iso-8859-15",
-	"ru1.map.gz"			: "koi8-r",
-	"sk-qwertz.map.gz"		: "iso-8859-2",
-	"sk-qwerty.map.gz"		: "iso-8859-2",
-	"slovene.map.gz"		: "iso-8859-2"
-    ];
-
     // ----------------------------------------------------------------------
     // END: Locally defined data
     // ----------------------------------------------------------------------
@@ -565,15 +544,7 @@ global define boolean SetLanguage (string keyboard) {
 	}
 
 	// Console command...
-	//
-	// dumpkeys may need -c parameter (see #116143)
-	string dumpkeys = " ; dumpkeys";
-	if (haskey (charsets, keymap))
-	{
-	    dumpkeys = sformat ("%1 -c %2 ", dumpkeys, charsets[keymap]:"");
-	}
-	ckb_cmd = "/bin/loadkeys " + keymap + dumpkeys + " | loadkeys -u";
-	// FIXME should be "/bin/loadkeys -u " + keymap (see bug 44223)
+	ckb_cmd = "/bin/loadkeys " + keymap;
 
 	// X11 command...
 	// do not try to run this with remote X display

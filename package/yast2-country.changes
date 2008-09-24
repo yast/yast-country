@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Sep 24 14:19:52 CEST 2008 - jsuchome@suse.cz
+
+- do not use dumpkeys after the loadkeys call (bnc#116143)
+- adapt CONSOLE_SCREENMAP values in consolefonts.ycp (bnc#367801)
+- restart kbd from if language module changed keyboard (bnc#429515)
+- 2.17.12 
+
+-------------------------------------------------------------------
 Tue Sep  9 11:11:43 CEST 2008 - jsuchome@suse.cz
 
 - merged proofread texts 
