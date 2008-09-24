@@ -17,11 +17,13 @@ textdomain "country";
 import "CommandLine";
 import "Console";
 import "GfxMenu";
+import "Keyboard";
 import "Language";
 import "Mode";
 import "PackageSlideShow";
 import "Popup";
 import "Progress";
+import "Service";
 import "SlideShow";
 import "Wizard";
 
@@ -120,6 +122,11 @@ define boolean LanguageWrite () {
 
     GfxMenu::Update();
 
+    if (Keyboard::Modified ())
+    {
+	// restart kbd now (after console settings is written) bnc#429515
+	Service::Restart ("kbd");
+    }
     Progress::NextStage ();
 
     WFM::CallFunction ("inst_suseconfig", [ false, false ]);
@@ -133,6 +140,8 @@ define boolean LanguageWrite () {
 define any LanguageSequence () {
 
     LanguageRead ();
+
+    Keyboard::Read ();
 
     Console::Init ();
 
