@@ -27,7 +27,7 @@
  *	XkbLayout
  *	unique_key
  *
- * Set after having called SetLanguage( keyboard ).
+ * Set after having called SetKeyboard( keyboard ).
  *
  *	XkbModel
  *	XkbVariant
@@ -58,7 +58,7 @@
  *
  *	Restore()			- Load module data from /var/lib/YaST2/Keyboard_data.ycp
  *
- *	SetLanguage()			- Set public data to values corresponding to the given language.
+ *	SetKeyboard()			- Set public data to values corresponding to the given language.
  *
  *	GetKeyboardForLanguage()	- Get the keyboard language for a given language code.
  *
@@ -229,8 +229,8 @@
  * Restore the the non-keyboard values from sysconfig.
  */
 
-define void GetKbdSysconfig()
-    ``{
+define void GetKbdSysconfig() {
+
     // Read the the variables not touched by the module to be able to
     // store them again on Save().
     //
@@ -251,7 +251,7 @@ define void GetKbdSysconfig()
 		 kbd_rate, kbd_delay, kbd_numlock, kbd_capslock,
 		 kbd_scrlock, kbd_disable_capslock );
     y2milestone( "tty:%1", kbd_tty );
-    }
+}
 
 /*
  * get_reduced_keyboard_db()
@@ -422,7 +422,7 @@ global define map GetX11KeyData (string keymap) {
  * @see	get_xkblayout2keyboard()
  */
 
-define map get_lang2keyboard() {
+global define map get_lang2keyboard() {
 
     map base_lang2keyboard = (map)SCR::Read(.target.yast2, "lang2keyboard.ycp");
     if (base_lang2keyboard == nil) base_lang2keyboard = $[];
@@ -475,18 +475,18 @@ define boolean x11_setup_needed () {
 }
 
 /**
- * SetLanguage()
+ * SetKeyboard()
  *
- * Set language specific module data to reflect the given language.
+ * Set language specific module data to reflect the given keyboard layout.
  *
- * @param	Keyboard language e.g.  "english-us"
+ * @param	Keyboard layout e.g.  "english-us"
  *
  * @return  true	- Success. Language set in public data.
  *		false	- Error. Language not set.
  *
  */
 
-global define boolean SetLanguage (string keyboard) {
+global define boolean SetKeyboard (string keyboard) {
 
 	y2milestone ("Setting keyboard to: <%1>", keyboard );
 
@@ -569,12 +569,10 @@ global define boolean SetLanguage (string keyboard) {
 	}
 
 	return true;	// OK
-} // SetLanguage()
+} // SetKeyboard()
 
 
 /**
- * Restore()
- *
  * Restore the the data from sysconfig.
  *
  * @return  true	- Data could be restored
@@ -612,15 +610,15 @@ global define boolean Restore () {
 	    {
 		// Restore module data.
 		//
-		SetLanguage( current_kbd );
-		y2milestone("Restored data (sysconfig) for keyboard: <%1>",current_kbd);
+		SetKeyboard( current_kbd );
+		y2milestone("Restored data (sysconfig) for keyboard: <%1>",
+		    current_kbd);
 	    }
 	    else
 	    {
 		// for cloning, to be shown in Summary
 		name	= GetKeyboardName (current_kbd);
 	    }
-
 	    ret = true;
 	}
     }
@@ -760,7 +758,7 @@ global define void Probe() {
 
     // Set the module state.
     //
-    SetLanguage( default_keyboard );
+    SetKeyboard( default_keyboard );
 
     if (Stage::initial ())
     {
@@ -810,22 +808,21 @@ global define void Keyboard() {
 
     // We have three possible sources of information:
     //
-    // Newly probed data:	- installation initial mode --> probing
-    // sysconfig:		- installation continue mode or normal mode
-    // XF86Config:		- restoring from sysconfig failed and running system
+    // probed data:	- installation initial mode --> probing
+    // sysconfig:	- installation continue mode or normal mode
+    // XF86Config:	- restoring from sysconfig failed and running system
     //
-    y2milestone( "Keyboard::Keyboard init:%1 update:%2", Stage::initial (),
+    y2milestone ("Keyboard::Keyboard init:%1 update:%2", Stage::initial (),
 		 Mode::update () );
     boolean success = false;
 
     // If not in initial mode try to restore from sysconfig.
-    //
     if (!Stage::initial () || Mode::live_installation ())
     {
 	success = Restore();
 
-	// If this failed and we are in a running system try to restore from XF86Config.
-	//
+	// If this failed and we are in a running system try to restore from
+	// X11 Config.
 	if (!success && Mode::normal () && x11_setup_needed ())
 	{
 	    // Get the current layout from XF86Config and
@@ -836,14 +833,14 @@ global define void Keyboard() {
 	    y2milestone("keyboard layout YaST2: %1", current_layout );
 
 	    // Set the keyboard variables to this value if possible.
-	    //
 	    if ( current_layout != "" )
-		{
-		SetLanguage( current_layout );
-		y2milestone("Restored data (XF86Config) for keyboard: <%1>", current_kbd );
+	    {
+		SetKeyboard (current_layout);
+		y2milestone ("Restored data (XF86Config) for keyboard: <%1>",
+		    current_kbd);
 		success = true;
-		}
 	    }
+	}
     }
     else
     {
@@ -1092,7 +1089,7 @@ global define string SetConsole (string keyboard) {
     }
     else
     {
-	SetLanguage (keyboard);	// (retranslation)
+	SetKeyboard (keyboard);
 
 	y2milestone("Setting console keyboard to: <%1>", current_kbd );
 	y2milestone("loadkeys command: <%1>", ckb_cmd );
@@ -1135,7 +1132,7 @@ global define string SetX11 (string keyboard) {
 	}
 	else if (size (xkb_cmd)>0)
 	{
-	    SetLanguage (keyboard);	// (retranslation)
+	    SetKeyboard (keyboard);
 	    y2milestone ("Setting X11 keyboard to: <%1>", current_kbd );
 	    y2milestone ("Setting X11 keyboard:\n %1", xkb_cmd );
 	    SCR::Execute (.target.bash, xkb_cmd);
