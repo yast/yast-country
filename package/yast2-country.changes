@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Sep 26 16:26:37 CEST 2008 - jsuchome@suse.cz
+
+- added Georgian language support
+- 2.17.13
+
+-------------------------------------------------------------------
 Wed Sep 24 14:19:52 CEST 2008 - jsuchome@suse.cz
 
 - do not use dumpkeys after the loadkeys call (bnc#116143)
