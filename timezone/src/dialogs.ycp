@@ -486,7 +486,8 @@ Enter the correct date.
 
 
     // read NTP status
-    if (first_run && NetworkService::isNetworkRunning())
+    if (first_run && NetworkService::isNetworkRunning() &&
+	!GetInstArgs::going_back())
     {
 	// true by default (fate#303520)
 	ntp_used	= true;
@@ -512,6 +513,7 @@ Enter the correct date.
 	}
 	else
 	{
+	    Timezone::SystemTime2HWClock ();
 	    y2milestone ("proposing NTP server %1", server);
 	    WFM::CallFunction ("ntp-client_proposal",
 		[ "SetUseNTP", $["ntp_used" : ntp_used] ]);
