@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Oct  1 15:40:41 CEST 2008 - jsuchome@suse.cz
+
+- added minimal support for Nynorsk (bnc#426124) 
+- default NTP configuration based on control file value (bnc#431259)
+- 2.17.17
+
+-------------------------------------------------------------------
 Mon Sep 29 21:57:55 CEST 2008 - jsuchome@suse.cz
 
 - added Galician language support
