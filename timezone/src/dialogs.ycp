@@ -24,6 +24,7 @@
   import "NetworkService";
   import "Package";
   import "Popup";
+  import "ProductFeatures";
   import "Service";
   import "Stage";
   import "Timezone";
@@ -487,7 +488,8 @@ Enter the correct date.
 
     // read NTP status
     if (first_run && NetworkService::isNetworkRunning() &&
-	!GetInstArgs::going_back())
+	!GetInstArgs::going_back() &&
+	ProductFeatures::GetBooleanFeature("globals","default_ntp_setup")==true)
     {
 	// true by default (fate#303520)
 	ntp_used	= true;
