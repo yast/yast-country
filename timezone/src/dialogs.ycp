@@ -18,6 +18,7 @@
 
   import "Arch";
   import "Directory";
+  import "GetInstArgs";
   import "Label";
   import "Language";
   import "Mode";
