@@ -406,7 +406,9 @@ return ($[
 	// keyboard layout
 	_("Russian"),
 	$[
-	    "pc104"	: $[ "ncurses": "ru1.map.gz"],
+	    "pc104"	: $[
+		    "ncurses": "ruwin_alt-UTF-8.map.gz",
+	    ],
 	    "macintosh" : $[ "ncurses": "mac-us.map.gz"],
 	    "type4"	: $[ "ncurses": "sunkeymap.map.gz"],
 	    "type5"	: $[ "ncurses": "sunt5-ru.map.gz" ],
