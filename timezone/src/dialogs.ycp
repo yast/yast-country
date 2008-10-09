@@ -76,7 +76,7 @@
     string htext = _("<p>The current system time and date are displayed. If required change them to the correct values manually, or use Network Time Protocol (NTP).</p>") +
 
     // help text, cont.
-    _("<p>Press <b>Synchronize Now</b>, to get your system time set correctly using the selected NTP server. If you want to make use of NTP permanently, enable the <b>Save NTP Configuration</b>.option</p>") +
+    _("<p>Press <b>Synchronize Now</b>, to get your system time set correctly using the selected NTP server. If you want to make use of NTP permanently, enable the <b>Save NTP Configuration</b> option</p>") +
 
     // help text, cont.
     _("<p>Using the <b>Configure</b> button, open the advanced NTP configuration. Press <b>Accept</b> to save your changes.</p>") +
