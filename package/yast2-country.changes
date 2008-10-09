@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct  9 12:53:37 CEST 2008 - jsuchome@suse.cz
+
+- fixed help text typo (bnc#433731)
+- 2.17.21 
+
+-------------------------------------------------------------------
 Wed Oct  8 15:02:15 CEST 2008 - jsuchome@suse.cz
 
 - updated russian console keymap to ruwin_alt-UTF-8 (bnc#432862)
