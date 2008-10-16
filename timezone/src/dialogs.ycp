@@ -624,14 +624,13 @@ Enter the correct date.
 		maplist (string key, string name, zonemap[region,"entries"]:$[],
 	    ``([ name, key ]));
 
-	    // prevent the crash in installation (workaround for bnc#385172)
-	    if (Language::language != "ko_KR" && Language::language != "ja_JP")
-	    {
-		reg_list	= sort (list a, list b, (list<list>) reg_list, {
+	    reg_list = sort (list a, list b, (list<list>) reg_list, {
+		    // bnc#385172: must use < instead of <=, the following means:
+		    // strcoll(x) <= strcoll(y) && strcoll(x) != strcoll(y)
 		    list lsorted	= lsort ([a[0]:"", b[0]:""]);
-		    return (lsorted[0]:"" == a[0]:"" && a[0]:"" != b[0]:"");
-		});
-	    }
+		    list lsorted_r	= lsort ([b[0]:"", a[0]:""]);
+		    return lsorted[0]:"" == a[0]:"" && lsorted == lsorted_r;
+	    });
 	    sorted_zonemap[region]      = reg_list;
 	}
 	return maplist (list entry, sorted_zonemap[region]:[],
