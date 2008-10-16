@@ -1294,8 +1294,11 @@ global define boolean CalledRestore() {
 	`item (`id(code), name, current_kbd == code)
     ));
     return sort (term a, term b, ret, {
+	// bnc#385172: must use < instead of <=, the following means:
+	// strcoll(x) <= strcoll(y) && strcoll(x) != strcoll(y)
 	list lsorted	= lsort ([a[1]:"", b[1]:""]);
-	return (lsorted[0]:"" == a[1]:"" && a[1]:"" != b[1]:"");
+	list lsorted_r	= lsort ([b[1]:"", a[1]:""]);
+	return (lsorted[0]:"" == a[1]:"" && lsorted == lsorted_r);
     });
   }
 

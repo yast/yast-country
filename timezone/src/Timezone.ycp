@@ -202,8 +202,11 @@ global define list<map<string,any> > get_zonemap() {
 
 	zonemap = sort (map<string,any> a, map<string,any> b, zmap, {
 	    // [ "USA", "Canada" ] -> [ "Canada", "USA" ]
+	    // bnc#385172: must use < instead of <=, the following means:
+	    // strcoll(x) <= strcoll(y) && strcoll(x) != strcoll(y)
 	    list lsorted	= lsort ([a["name"]:"", b["name"]:""]);
-	    return (lsorted[0]:"" == a["name"]:"" && a["name"]:"" != b["name"]:"");
+	    list lsorted_r	= lsort ([b["name"]:"", a["name"]:""]);
+	    return lsorted[0]:"" == a["name"]:"" && lsorted == lsorted_r;
 	});
     }
     return zonemap;
@@ -674,8 +677,11 @@ global define list Selection (integer num) {
 	string key, string name, zmap[num,"entries"]:$[], ``([ name, key ]));
 
     trl	= sort (list<string> a, list<string> b, trl, {
+	// bnc#385172: must use < instead of <=, the following means:
+	// strcoll(x) <= strcoll(y) && strcoll(x) != strcoll(y)
 	list lsorted	= lsort ([a[0]:"", b[0]:""]);
-	return (lsorted[0]:"" == a[0]:"" && a[0]:"" != b[0]:"");
+	list lsorted_r	= lsort ([b[0]:"", a[0]:""]);
+	return (lsorted[0]:"" == a[0]:"" && lsorted == lsorted_r);
     });
     y2debug ("trl = %1", trl);
 
