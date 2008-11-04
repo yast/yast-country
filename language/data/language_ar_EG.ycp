@@ -39,6 +39,6 @@
 	// 2. what time zone propose for this language
 	"timezone"	: "Africa/Cairo",
 	// 3. which keyboard layout propose for this language
-	"keyboard"	: "english-us",
+	"keyboard"	: "arabic",
     ];
 }
