@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov  4 14:15:58 CET 2008 - jsuchome@suse.cz
+
+- added Arabic keyboard layout (bnc#441432)
+- 2.17.23 
+
+-------------------------------------------------------------------
 Thu Oct 16 19:49:04 CEST 2008 - mvidner@suse.cz
 
 - Fixed localized sorting to emulate < instead of <=,
