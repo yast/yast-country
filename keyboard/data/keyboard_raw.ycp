@@ -599,6 +599,28 @@ return ($[
 	    ],
 	 ]
     ],
+
+    "arabic": [
+	// keyboard layout
+	_("Arabic"),
+	$[
+	    "pc104"	: $[
+		    "ncurses"	: "arabic.map.gz",
+	    ],
+	    "macintosh" : $[
+		    "ncurses"	: "mac-us.map.gz"
+	    ],
+	    "type4"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+	    ],
+	    "type5"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+	    ],
+	    "type5_euro": $[
+		    "ncurses"	: "sunkeymap.map.gz"
+	    ],
+	 ]
+    ],
 ]);
 
 }
