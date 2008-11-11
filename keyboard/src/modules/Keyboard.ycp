@@ -1136,6 +1136,12 @@ global define string SetX11 (string keyboard) {
 	    y2milestone ("Setting X11 keyboard to: <%1>", current_kbd );
 	    y2milestone ("Setting X11 keyboard:\n %1", xkb_cmd );
 	    SCR::Execute (.target.bash, xkb_cmd);
+	    if (Stage::initial () || !Mode::live_installation ())
+	    {
+		string cmd	= "xset r rate 660 25";
+		y2milestone ("calling xset to fix autorepeat problem: %1", cmd);
+		SCR::Execute (.target.bash, cmd);
+	    }
 	}
     }
     return xkb_cmd;

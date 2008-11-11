@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov 11 09:34:52 CET 2008 - jsuchome@suse.cz
+
+- workaround for autorepeat problem (bnc#371756)
+- 2.17.24 
+
+-------------------------------------------------------------------
 Tue Nov  4 14:15:58 CET 2008 - jsuchome@suse.cz
 
 - added Arabic keyboard layout (bnc#441432)
