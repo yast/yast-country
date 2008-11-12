@@ -212,6 +212,9 @@
 
     list keyboardprobelist = [];	// List of all probed keyboards
 
+    // running in XEN?
+    boolean xen_is_running	= nil;
+
     // ----------------------------------------------------------------------
     // END: Locally defined data
     // ----------------------------------------------------------------------
@@ -460,6 +463,13 @@ global define string GetKeyboardForLanguage( string sys_language,
     return kb;
 }
 
+// check if we are running in XEN (autorepeat functionality not supported)
+// seem bnc#376945, #371756
+boolean xen_running () {
+    if (xen_is_running == nil)
+	xen_is_running	= (boolean) SCR::Read (.probe.xen);
+    return (xen_is_running == true);
+}
 
 
 /**
@@ -1136,7 +1146,8 @@ global define string SetX11 (string keyboard) {
 	    y2milestone ("Setting X11 keyboard to: <%1>", current_kbd );
 	    y2milestone ("Setting X11 keyboard:\n %1", xkb_cmd );
 	    SCR::Execute (.target.bash, xkb_cmd);
-	    if (Stage::initial () || !Mode::live_installation ())
+	    if (Stage::initial () && !Mode::live_installation () &&
+		!xen_running ())
 	    {
 		string cmd	= "xset r rate 660 25";
 		y2milestone ("calling xset to fix autorepeat problem: %1", cmd);
