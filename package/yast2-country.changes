@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov 13 12:22:56 CET 2008 - jsuchome@suse.cz
+
+- no html tags in popup text (bnc#444518)
+- 2.17.16 
+
+-------------------------------------------------------------------
 Wed Nov 12 07:38:13 CET 2008 - jsuchome@suse.cz
 
 - disabled autorepeat in XEN (bnc#371756, bnc#376945)
