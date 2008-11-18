@@ -1,8 +1,14 @@
 -------------------------------------------------------------------
+Tue Nov 18 15:48:09 CET 2008 - jsuchome@suse.cz
+
+- do not set the time on start during live installation(bnc#442599)
+- 2.17.27
+
+-------------------------------------------------------------------
 Thu Nov 13 12:22:56 CET 2008 - jsuchome@suse.cz
 
 - no html tags in popup text (bnc#444518)
-- 2.17.16 
+- 2.17.26 
 
 -------------------------------------------------------------------
 Wed Nov 12 07:38:13 CET 2008 - jsuchome@suse.cz
