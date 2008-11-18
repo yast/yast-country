@@ -244,7 +244,6 @@ global define integer Set (string zone, boolean really) {
     //
     if (!Mode::config () && really )
     {
-	boolean inst = Stage::initial () || Stage::cont() || Stage::firstboot();
 	boolean textmode	= Language::GetTextMode ();
 	string cmd = "/usr/sbin/zic -l " + timezone;
 	y2milestone( "Set cmd %1", cmd );
@@ -327,7 +326,7 @@ global define void Timezone() {
     // Set default values.
     //
     hwclock = "-u";
-    if (Stage::initial ())
+    if (Stage::initial () && !Mode::live_installation ())
     {
 	// language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
 	map<string, string> lang2tz = get_lang2tz();

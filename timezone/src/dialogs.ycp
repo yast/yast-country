@@ -445,7 +445,8 @@ Enter the correct date.
     timezone		= Timezone::UpdateTimezone (timezone);
 
     // Initially set the current timezone to establish a consistent state.
-    integer sel = Timezone::Set (timezone, Stage::initial ());
+    integer sel = Timezone::Set (timezone,
+	Stage::initial () && !Mode::live_installation ());
 
     boolean utc_only = Timezone::utc_only ();
     y2milestone( "utc_only %1", utc_only );
@@ -489,6 +490,7 @@ Enter the correct date.
 
     // read NTP status
     if (first_run && NetworkService::isNetworkRunning() &&
+	!Mode::live_installation () &&
 	!GetInstArgs::going_back() &&
 	ProductFeatures::GetBooleanFeature("globals","default_ntp_setup")==true)
     {
