@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Dec 16 20:02:03 CET 2008 - jsuchome@suse.cz
+
+- even more space for French texts (bnc#446460)
+- 2.18.0
+
+-------------------------------------------------------------------
 Fri Nov 28 12:44:25 CET 2008 - jsuchome@suse.cz
 
 - help text: do not refer to hidden parts (bnc#449070)
