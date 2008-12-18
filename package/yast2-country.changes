@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Dec 18 11:10:10 CET 2008 - jsuchome@suse.cz
+
+- call xset to prevent black screen during firstboot (bnc#455771)
+- 2.18.1 
+
+-------------------------------------------------------------------
 Tue Dec 16 20:02:03 CET 2008 - jsuchome@suse.cz
 
 - even more space for French texts (bnc#446460)
