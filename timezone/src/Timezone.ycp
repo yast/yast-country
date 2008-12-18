@@ -244,7 +244,15 @@ global define integer Set (string zone, boolean really) {
     //
     if (!Mode::config () && really )
     {
-	boolean textmode	= Language::GetTextMode ();
+	boolean textmode        = Language::GetTextMode ();
+	// turn off the screensaver when clock can change radically (bnc#455771)
+	// (in non-firstboot cases, installation process handles it)
+	if (Stage::firstboot() && !textmode)
+	{
+	    SCR::Execute ( .target.bash, "/usr/X11R6/bin/xset -dpms");
+	    SCR::Execute ( .target.bash, "/usr/X11R6/bin/xset s reset");
+	    SCR::Execute ( .target.bash, "/usr/X11R6/bin/xset s off");
+	}
 	string cmd = "/usr/sbin/zic -l " + timezone;
 	y2milestone( "Set cmd %1", cmd );
 	y2milestone( "Set ret %1", SCR::Execute( .target.bash_output, cmd ));
@@ -253,6 +261,11 @@ global define integer Set (string zone, boolean really) {
 	    cmd = "/sbin/hwclock --hctosys " + hwclock;
 	    y2milestone( "Set cmd %1", cmd );
 	    y2milestone( "Set ret %1", SCR::Execute(.target.bash_output, cmd ));
+	}
+	if (Stage::firstboot() && !textmode)
+	{
+	    SCR::Execute (.target.bash, "/usr/X11R6/bin/xset s on");
+	    SCR::Execute ( .target.bash, "/usr/X11R6/bin/xset +dpms");
 	}
     }
 

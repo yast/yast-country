@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Dec 18 09:53:57 CET 2008 - jsuchome@suse.cz
+
+- call xset to prevent black screen during firstboot (bnc#455771)
+- 2.17.30 
+
+-------------------------------------------------------------------
 Fri Nov 28 12:44:25 CET 2008 - jsuchome@suse.cz
 
 - help text: do not refer to hidden parts (bnc#449070)
