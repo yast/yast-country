@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jan  6 20:28:15 CET 2009 - jsuchome@suse.cz
+
+- correct widget name from NTP proposal (bnc#463796)
+
+-------------------------------------------------------------------
 Tue Jan  6 07:48:30 CET 2009 - jsuchome@suse.cz
 
 - fixed tranformation in keyboard layout table (bnc#458623)
