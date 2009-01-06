@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan  6 07:48:30 CET 2009 - jsuchome@suse.cz
+
+- fixed tranformation in keyboard layout table (bnc#458623)
+- 2.18.2
+
+-------------------------------------------------------------------
 Thu Dec 18 11:10:10 CET 2008 - jsuchome@suse.cz
 
 - call xset to prevent black screen during firstboot (bnc#455771)
