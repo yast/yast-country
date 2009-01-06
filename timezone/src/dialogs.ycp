@@ -285,7 +285,8 @@
 	    symbol rv = (symbol) WFM::CallFunction ("ntp-client_proposal", ["AskUser"]);
 	    if( rv == `invalid_hostname)
 	    {
-		handle_invalid_hostname( (string) UI::QueryWidget(`id(`ntp_server), `Value) );
+		handle_invalid_hostname (
+		    (string) UI::QueryWidget (`id (`ntp_address), `Value));
 		ret = `retry;
 		continue;
 	    }
@@ -308,7 +309,8 @@
 		["Write", argmap]);
 	    if( rv == `invalid_hostname)
 	    {
-		handle_invalid_hostname( (string) UI::QueryWidget(`id(`ntp_server), `Value) );
+		handle_invalid_hostname (
+		    (string) UI::QueryWidget (`id (`ntp_address), `Value));
 		ret = `retry;
 		continue;
 	    }
@@ -375,7 +377,7 @@ Enter the correct date.
 	    symbol rv = (symbol) WFM::CallFunction ("ntp-client_proposal",
 		["Write", argmap]);
 
-	    string server = (string) UI::QueryWidget(`id(`ntp_address), `Value);
+	    string server = (string) UI::QueryWidget (`id(`ntp_address),`Value);
 
 	    if (rv == `invalid_hostname)
 	    {
