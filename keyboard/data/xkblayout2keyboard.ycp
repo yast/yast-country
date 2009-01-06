@@ -47,10 +47,10 @@ $[
 	"dk"        : "danish",
 
 	"cz"		: "czech",
-	"cz_querty"	: "czech-qwerty",
+	"cz_qwerty"	: "czech-qwerty",
 	"si"		: "slovene",
 	"sk"		: "slovak",
-	"sk_querty"	: "slovak-qwerty",
+	"sk_qwerty"	: "slovak-qwerty",
 
 	"hu"        : "hungarian",
 
