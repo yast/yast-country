@@ -537,9 +537,9 @@ Enter the correct date.
 
     string time_frame_label	=
 	// frame label
-	ntp_used ? _("Time and Date (NTP is configured)") :
+	ntp_used ? _("Date and Time (NTP is configured)") :
 	// frame label
-	_("Time and Date");
+	_("Date and Time");
 
     // Read system date and time.
     string date = Timezone::GetDateTime(true, false);
@@ -792,9 +792,9 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 		// adapt frame label, NTP status may be changed
 		time_frame_label	=
 		    // frame label
-		    ntp_used ? _("Time and Date (NTP is configured)") :
+		    ntp_used ? _("Date and Time (NTP is configured)") :
 		    // frame label
-		    _("Time and Date");
+		    _("Date and Time");
 		UI::ChangeWidget (`id (`time_fr), `Label, time_frame_label);
 	    }
 	}

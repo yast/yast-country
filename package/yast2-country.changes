@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Feb 11 07:45:37 CET 2009 - jsuchome@suse.cz
+
+- changed order of Date and Time strings (date first, bnc#445670)
+
+-------------------------------------------------------------------
 Tue Jan  6 20:28:15 CET 2009 - jsuchome@suse.cz
 
 - correct widget name from NTP proposal (bnc#463796)
