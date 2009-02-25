@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Feb 25 14:34:18 CET 2009 - jsuchome@suse.cz
+
+- install language dependent packages in firstboot (bnc#479553)
+- 2.17.32 
+
+-------------------------------------------------------------------
 Tue Jan  6 07:53:44 CET 2009 - jsuchome@suse.cz
 
 - fixed tranformation in keyboard layout table (bnc#458623)

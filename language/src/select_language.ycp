@@ -626,9 +626,10 @@ installation, but the selected language will be used for the new system."));
 		y2milestone ("Language: '%1', system encoding '%2'", language,
 		             WFM::GetEncoding());
 
-		if (more_languages)
+		if (more_languages || Stage::firstboot ())
 		{
-		    list<string> selected_languages = (list<string>)
+		    list<string> selected_languages =
+			Stage::firstboot () ? [ language ] : (list<string>)
 			UI::QueryWidget (`id(`languages),`SelectedItems);
 
 		    if (!contains (selected_languages, language))
