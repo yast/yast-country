@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Mar 31 16:52:04 CEST 2009 - mvidner@suse.cz
+
+- Moved more code dealing with NTP setup from yast2-country
+  to yast2-ntp-client to make the API less fragile (bnc#483787).
+- 2.18.3
+
+-------------------------------------------------------------------
 Wed Feb 25 19:22:48 CET 2009 - jsuchome@suse.cz
 
 - install language dependent packages in firstboot (bnc#479553)
