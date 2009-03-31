@@ -66,23 +66,51 @@
     UI::ChangeWidget(`id(`date), `Value, Timezone::GetDateTime (really, false));
   };
 
+
+  // handles the complication that the package yast2-ntp-client may not be present
+  any ntp_call(string acall, map<string,any> args) {
+      if (!ntp_installed) {
+	  // replace "replace_point" by the widgets
+	  if (acall == "ui_init")
+	      return false;	// deselect the RB
+	  // the help text
+	  else if (acall == "ui_help_text")
+	      return ""; // or say "will install"? TODO recompute help text
+	  // save settings, return false if dialog should not exit
+	  else if (acall == "ui_try_save")
+	      return true;	// success, exit loop
+	  // Service::Enabled. FIXME too smart?
+	  else if (acall == "GetNTPEnabled")
+	      return false;
+
+	  // default: do nothing
+	  return nil;
+	  /*
+	    other API for completeness:
+	  // before UserInput
+	  else if (acall == "ui_enable_disable_widgets")
+	  else if (acall == "SetUseNTP")
+	  else if (acall == "Write")
+	  */
+      }
+
+      any ret = WFM::CallFunction ("ntp-client_proposal", [ acall, args ]);
+      return ret;
+  }
+
   /**
    * Dialog for setinge system date and time
    * @return true if user changed the time (dialog accepted)
    */
   define boolean SetTimeDialog() {
 
+    string ntp_help_text = (string) ntp_call("ui_help_text", $[]);
     // help text for set time dialog
     string htext = _("<p>The current system time and date are displayed. If required change them to the correct values manually, or use Network Time Protocol (NTP).</p>") +
+	// help text, cont.
+	_("<p>Press <b>Accept</b> to save your changes.</p>") +
 
-    // help text, cont.
-    _("<p>Press <b>Synchronize Now</b>, to get your system time set correctly using the selected NTP server. If you want to make use of NTP permanently, enable the <b>Save NTP Configuration</b> option</p>") +
-
-    // help text, cont.
-    _("<p>Using the <b>Configure</b> button, open the advanced NTP configuration. Press <b>Accept</b> to save your changes.</p>") +
-
-    // help text, cont.
-    _("<p>Synchronization with the NTP server can be done only when the network is configured.</p>");
+	ntp_help_text;
 
     boolean dt_widgets = false;
 
@@ -168,40 +196,8 @@
 	dt_widgets	= true;
     }
 
-    boolean ntp_was_used	= false;
 
-    void enable_disable_widgets () {
-       UI::ChangeWidget (`id (`ntp_address), `Enabled, ntp_used);
-       UI::ChangeWidget (`id (`ntp_configure), `Enabled, ntp_used);
-       UI::ChangeWidget (`id (`ntp_now), `Enabled, ntp_used);
-       UI::ChangeWidget (`id (`ntp_save), `Enabled, ntp_used);
-    }
 
-    void handle_invalid_hostname( string server ) {
-	// translators: error popup
-	Popup::Error( sformat(_("Invalid NTP server hostname %1"), server) );
-    }
-
-    // param: when asking for first time, we check if service is running
-    void CreateUI (boolean first_time) {
-        WFM::CallFunction("ntp-client_proposal", ["CreateUI"]);
-
-	if (first_time && !Stage::initial ())
-	    ntp_used	= (boolean)
-		WFM::CallFunction("ntp-client_proposal", ["GetNTPEnabled"]);
-	else
-	    ntp_used = (boolean)
-		WFM::CallFunction("ntp-client_proposal", ["GetUseNTP"]);
-
-        if ( UI::WidgetExists(`id(`ntp_content)) )
-        {
-            UI::ChangeWidget(`id(`rb), `CurrentButton, (ntp_used ? `ntp : `manual));
-            enable_disable_widgets ();
-	    if (first_time)
-		// ntp_used with first_time means that ntp service is enabled
-		UI::ChangeWidget (`id(`ntp_save), `Value, ntp_used);
-        }
-    }
 
     term cont	= `HBox (
 	`HWeight (1, `VBox ()),
@@ -218,29 +214,28 @@
 		)
 	    ),
 	    `VSpacing (1),
-            `VBox (`id(`ntp_content),
-		`Left (`RadioButton (`id (`ntp), `opt (`notify),
-                    // radio button label
-                    _("Synchronize with NTP Server"), false)
-		),
-		`ReplacePoint(`id(`rp), `Empty())
-	    )
+	    `Left (`RadioButton (`id (`ntp), `opt (`notify),
+		// radio button label
+		_("Synchronize with NTP Server"), false)
+	    ),
+	    `ReplacePoint(`id(`rp), `Empty())
 	))),
 	`HWeight (1, `VBox ())
     );
 
     Wizard::OpenAcceptDialog ();
+    // TODO replace help text after ntp_installed, is.
     Wizard::SetContents (_("Change Date and Time"), cont, htext, true, true);
     Wizard::SetDesktopIcon("timezone");
 
     show_current_time ();
-    if (ntp_installed) {
-	CreateUI (true);
-	ntp_was_used	= ntp_used;
-	if (ntp_used)
-	    WFM::CallFunction ("ntp-client_proposal", [ "MakeProposal",
-		$[ "country" : Language::GetLanguageCountry() ] ]);
-    }
+
+    boolean ntp_rb = false;
+    ntp_rb = (boolean) ntp_call ("ui_init", $[
+				     "replace_point": `id (`rp),
+				     "country" : Language::GetLanguageCountry(),
+				     /*WTF*/"first_time" : true ]);
+    UI::ChangeWidget(`id(`rb), `CurrentButton, (ntp_rb ? `ntp : `manual));
 
     if (!dt_widgets)
     {
@@ -255,71 +250,50 @@
     any ret = nil;
     repeat
     {
+	ntp_call ("ui_enable_disable_widgets", $["enabled": ntp_rb]);
+
 	ret = UI::UserInput();
 	y2debug ("UserInput ret:%1", ret );
+
+	symbol ntp_handled = (symbol) ntp_call ("ui_handle", $["ui": ret]);
+	if (ntp_handled != nil) {
+	    ret = ntp_handled;
+	}
+	if (ret == `redraw)
+	    show_current_time ();
+
 	if (ret == `ntp || ret == `manual)
 	{
-	    ntp_used = (ret == `ntp);
-	    if (ntp_used && !Stage::initial () && !ntp_installed)
+	    ntp_rb = (ret == `ntp);
+	    // need to install it first?
+	    if (ntp_rb && !Stage::initial () && !ntp_installed)
 	    {
 		ntp_installed	= Package::Install ("yast2-ntp-client");
+		// succeeded? create UI, otherwise revert the click
 		if (!ntp_installed)
 		{
-		    ntp_used = false;
-		    UI::ChangeWidget (`id (`manual), `Value, true);
-		    UI::ChangeWidget (`id (`ntp), `Value, false);
+		    ntp_rb = false;
+		    UI::ChangeWidget (`id(`rb), `CurrentButton, `manual);
 		}
 		else
-		    CreateUI (false);
+		{
+		    // ignore retval, user clicked to use ntp
+		    ntp_call ("ui_init", $[
+				  "replace_point": `id (`rp),
+				  "country" : Language::GetLanguageCountry(),
+				  "first_time" : false ]);
+		}
 	    }
-	    if (ntp_used )
-	    {
-		WFM::CallFunction("ntp-client_proposal", [ "MakeProposal", $[
-		    "country" : Language::GetLanguageCountry() ] ]
-		);
-	    }
-	    enable_disable_widgets ();
 	}
-	if (ret == `ntp_configure)
+
+	if (ret == `accept && ntp_rb)
 	{
-	    symbol rv = (symbol) WFM::CallFunction ("ntp-client_proposal", ["AskUser"]);
-	    if( rv == `invalid_hostname)
-	    {
-		handle_invalid_hostname (
-		    (string) UI::QueryWidget (`id (`ntp_address), `Value));
-		ret = `retry;
-		continue;
-	    }
-	    if (rv != `next)
-		continue;
-	    else if (!Stage::initial ())
-	    {
-		// show the 'save' status after configuration
-		boolean enabled	= (boolean)
-		    WFM::CallFunction("ntp-client_proposal", ["GetNTPEnabled"]);
-		UI::ChangeWidget (`id(`ntp_save), `Value, enabled);
-	    }
+	    // true: go on, exit; false: loop on
+	    boolean ntp_handled = (boolean) ntp_call ("ui_try_save", $[]);
+	    if (!ntp_handled)
+		ret = `retry;	// loop on
 	}
-	if (ret == `ntp_now)
-	{
-	    map argmap	= $[
-		"ntpdate_only"	: true
-	    ];
-	    symbol rv = (symbol) WFM::CallFunction ("ntp-client_proposal",
-		["Write", argmap]);
-	    if( rv == `invalid_hostname)
-	    {
-		handle_invalid_hostname (
-		    (string) UI::QueryWidget (`id (`ntp_address), `Value));
-		ret = `retry;
-		continue;
-	    }
-	    if (rv == `success)
-	    {
-		show_current_time ();
-	    }
-	}
-	if (ret == `accept && !ntp_used)
+	if (ret == `accept && !ntp_rb)
 	{
 	    if (dt_widgets)
 	    {
@@ -367,54 +341,18 @@ Enter the correct date.
 	    {
 		Timezone::SetTime( year, month, day, hour, minute, second );
 	    }
-//	    if (ntp_was_used) FIXME remove NTP config now?
-	}
-	if (ret == `accept && ntp_used)
-	{
-	    map argmap	= $[];
-	    if (UI::QueryWidget (`id (`ntp_save), `Value) == false)
-		argmap["ntpdate_only"]	= true;
-	    symbol rv = (symbol) WFM::CallFunction ("ntp-client_proposal",
-		["Write", argmap]);
-
-	    string server = (string) UI::QueryWidget (`id(`ntp_address),`Value);
-
-	    if (rv == `invalid_hostname)
-	    {
-		handle_invalid_hostname( server );
-		ret = `retry;
-		continue;
-	    }
-	    else if ( rv == `ntpdate_failed)
-	    {
-		// Translators: yes-no popup,
-		// ntpdate is a command, %1 is the server address
-		if (Popup::YesNo( sformat(_("'ntpdate %1' failed. Revisit NTP server configuration?"), server) ))
-		{
-		    ret = `retry;
-		    continue;
-		}
-		else
-		{
-		    ntp_used	= false;
-		    UI::ChangeWidget (`id(`rb), `CurrentButton, `manual);
-		}
-	    }
-	    else
-	    {
-		// new system time from ntpdate must be saved to hw clock
-		Timezone::SystemTime2HWClock ();
-	    }
 	}
     }
     until( ret==`accept || ret==`cancel );
 
-    if (ret == `accept && ntp_installed)
+    if (ret == `accept)
     {
-	ntp_used	= (UI::QueryWidget (`id(`rb), `Value) == `ntp) &&
-			  (UI::QueryWidget (`id(`ntp_save), `Value) == true);
-	WFM::CallFunction("ntp-client_proposal", [ "SetUseNTP", $["ntp_used" : ntp_used] ]);
+	// new system time from ntpdate must be saved to hw clock
+	Timezone::SystemTime2HWClock ();
+	// remember ui
+	ntp_call ("SetUseNTP", $["ntp_used" : ntp_rb]);
     }
+
     Wizard::CloseDialog ();
     return (ret == `accept);
   };
@@ -501,7 +439,7 @@ Enter the correct date.
 	// configure NTP client
 	srandom ();
 	string server	= sformat ("%1.opensuse.pool.ntp.org", random (4));
-	map argmap	= $[
+	map<string, any> argmap = $[
 	    "server"	: server,
 	    // FIXME ntp-client_proposal doesn't understand 'servers' yet
 	    "servers"	: [
@@ -511,8 +449,7 @@ Enter the correct date.
 		"3.opensuse.pool.ntp.org",
 	    ],
 	];
-	symbol rv = (symbol)
-	    WFM::CallFunction ("ntp-client_proposal", ["Write", argmap]);
+	symbol rv = (symbol) ntp_call ("Write", argmap);
 	if (rv == `invalid_hostname)
 	{
 	    y2warning ("Invalid NTP server hostname %1", server);
@@ -522,8 +459,7 @@ Enter the correct date.
 	{
 	    Timezone::SystemTime2HWClock ();
 	    y2milestone ("proposing NTP server %1", server);
-	    WFM::CallFunction ("ntp-client_proposal",
-		[ "SetUseNTP", $["ntp_used" : ntp_used] ]);
+	    ntp_call ("SetUseNTP", $["ntp_used" : ntp_used]);
 	}
     }
     else if (Stage::initial ())
@@ -531,9 +467,10 @@ Enter the correct date.
 	// from installation summaru
 	ntp_used	= Timezone::ntp_used;
     }
-    else if (ntp_installed)
-	ntp_used	= (boolean)
-	    WFM::CallFunction ("ntp-client_proposal", ["GetNTPEnabled"]);
+    else if (ntp_installed) {
+	ntp_used = (boolean) ntp_call ("GetNTPEnabled", $[]);
+	ntp_used = ntp_used == true; // nil->false, just in case of parse error
+    }
 
     string time_frame_label	=
 	// frame label
