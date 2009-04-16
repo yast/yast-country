@@ -1,2 +1,2 @@
-Execute	.target.bash_output "TZ=Europe/Prague /bin/date \"+%H:%M:%S - %Y-%m-%d\" \"--date=now 0sec\"" $["stdout":"23:59:59 - 0000-12-24"]
+Execute	.target.bash_output "TZ=Europe/Prague /bin/date \"+%Y-%m-%d - %H:%M:%S\" \"--date=now 0sec\"" $["stdout":"23:59:59 - 0000-12-24"]
 Return	$["day":"24", "hour":"23", "minute":"59", "month":"12", "second":"59", "year":"0000"]

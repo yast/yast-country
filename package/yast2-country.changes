@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Apr 16 10:53:38 CEST 2009 - jsuchome@suse.cz
+
+- adapted testsuite for date call change (bnc#445670)
+- call 'xset r on' to enable autorepeat (bnc#371756)
+- 2.18.4 
+
+-------------------------------------------------------------------
 Tue Mar 31 16:52:04 CEST 2009 - mvidner@suse.cz
 
 - Moved more code dealing with NTP setup from yast2-country
