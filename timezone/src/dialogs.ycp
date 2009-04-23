@@ -124,7 +124,7 @@
     // check current time and show it in the time widgets
     void show_current_time () {
 
-	map val = Timezone::GetDateTimeMap();
+	map val = Timezone::GetDateTimeMap ();
 	hour	= val["hour"]:"";
 	minute	= val["minute"]:"";
 	second	= val["second"]:"";
@@ -288,10 +288,17 @@
 
 	if (ret == `accept && ntp_rb)
 	{
+	    // before the sync, save the time zone (bnc#467318)
+	    Timezone::Set (Timezone::timezone, Stage::initial () && !Mode::live_installation ());
 	    // true: go on, exit; false: loop on
 	    boolean ntp_handled = (boolean) ntp_call ("ui_try_save", $[]);
 	    if (!ntp_handled)
 		ret = `retry;	// loop on
+	    else
+	    {
+		// after sync, show real time in the widget
+		Timezone::diff	= 0;
+	    }
 	}
 	if (ret == `accept && !ntp_rb)
 	{

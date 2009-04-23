@@ -120,6 +120,10 @@ define boolean LanguageWrite () {
 
     Progress::NextStage ();
 
+    // switch the UI to new language (after packages installation), so
+    // the texts in GfxMenu can be translated (bnc#446982)
+    Language::WfmSetLanguage ();
+
     GfxMenu::Update();
 
     if (Keyboard::Modified ())
@@ -147,7 +151,7 @@ define any LanguageSequence () {
 
     Wizard::CreateDialog();
 
-    // set the language accoring to Language.ycp initialization
+    // set the language according to Language.ycp initialization
     Language::WfmSetLanguage ();
     Wizard::OpenOKDialog();
 

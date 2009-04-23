@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Apr 23 08:46:45 CEST 2009 - jsuchome@suse.cz
+
+- before NTP sync, save the current time zone (bnc#467318)
+- before updating boot menu, switch the UI language (bnc#446982)
+- 2.18.5
+
+-------------------------------------------------------------------
 Thu Apr 16 10:53:38 CEST 2009 - jsuchome@suse.cz
 
 - adapted testsuite for date call change (bnc#445670)
