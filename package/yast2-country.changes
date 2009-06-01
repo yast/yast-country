@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jun  1 13:20:05 CEST 2009 - jsuchome@suse.cz
+
+- show also native language forms in firstboot (bnc#492812)
+- fixed string for Traditional Chinese (bnc#492812) 
+- 2.18.6
+
+-------------------------------------------------------------------
 Thu Apr 23 08:46:45 CEST 2009 - jsuchome@suse.cz
 
 - before NTP sync, save the current time zone (bnc#467318)
