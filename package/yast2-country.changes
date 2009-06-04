@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 28 08:59:14 CEST 2009 - jsuchome@suse.cz
+
+- show also native language forms in firstboot (bnc#492812)
+- fixed string for Traditional Chinese (bnc#492812)
+- 2.17.33
+
+-------------------------------------------------------------------
 Wed Feb 25 14:34:18 CET 2009 - jsuchome@suse.cz
 
 - install language dependent packages in firstboot (bnc#479553)

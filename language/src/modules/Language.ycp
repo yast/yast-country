@@ -1087,9 +1087,7 @@ global list<term> GetLanguageItems (symbol kind) {
 
     boolean use_ascii	= GetTextMode ();
 
-    if (kind == `first_screen)
-    {
-	map<string,list> en_name_sort =
+    map<string,list> en_name_sort =
 	    mapmap (string code, list info, Selection(), {
 		string english	= EnglishName (code, info[2]:code);
 		return $[
@@ -1098,7 +1096,9 @@ global list<term> GetLanguageItems (symbol kind) {
 			code,
 		    ]
 		];
-	});
+    });
+    if (kind == `first_screen)
+    {
 	// fate 301789
 	// English name of language (translated language).
 	// e.g. German (Deutsch)
@@ -1140,9 +1140,12 @@ global list<term> GetLanguageItems (symbol kind) {
 
     if (Stage::firstboot ())
     {
-	ret	= maplist (string trans_lang, lsort (lang_list), {
-	    string code	= lang2code [trans_lang]:"";
-	    return `item (`id (code), trans_lang, language == code);
+	// show also native forms in firstboot (bnc#492812)
+	ret	= maplist (string name, list codelist, en_name_sort, {
+	    string code	= codelist[1]:"";
+	    string label = substring (code, 0, 2) == "en" ?
+		codelist[0]:"" : sformat ("%1 - %2", name, codelist[0]:"");
+	    return `item (`id (code), label, language == code);
 	});
 	return ret;
     }
