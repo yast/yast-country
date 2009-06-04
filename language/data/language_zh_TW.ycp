@@ -28,8 +28,8 @@
 	//	<translated Language-to-display-UTF8-coded> ]
 	//
 	"zh_TW"	: [
-		    "繁體中文 (台灣)",
-		    "Traditional Chinese (Taiwan)",
+		    "繁體中文",
+		    "Traditional Chinese",
 		    ".UTF-8",
 		    "",
 		    // language name
