@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jun 11 16:32:19 CEST 2009 - jreidinger@suse.cz
+
+- Add YaPI for language to support webyast language module
+- 2.18.7 
+
+-------------------------------------------------------------------
 Mon Jun  1 13:20:05 CEST 2009 - jsuchome@suse.cz
 
 - show also native language forms in firstboot (bnc#492812)
