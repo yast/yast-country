@@ -1,7 +1,7 @@
 package YaPI::LANGUAGE;
 
 use strict;
-use YaST::YCP qw(:LOGGING);
+use YaST::YCP qw(Boolean);
 use YaPI;
 
 textdomain("language");
@@ -38,7 +38,10 @@ BEGIN{$TYPEINFO{SetCurrentLanguage} = ["function",
     "boolean","string"];
 }
 sub SetCurrentLanguage {
-#TODO
+  my $self = shift;
+  my $value = shift;
+  Language->QuickSet($value);
+  Language->Save();
   return 1;
 }
 
@@ -46,14 +49,18 @@ BEGIN{$TYPEINFO{IsUTF8} = ["function",
     "boolean"];
 }
 sub IsUTF8 {
-  return Language->use_utf8;
+  return Language->GetExpertValues->{"use_utf8"};
 }
 
 BEGIN{$TYPEINFO{SetUTF8} = ["function",
     "boolean","boolean"];
 }
 sub SetUTF8 {
-#TODO
+  my $self = shift;
+  my $value = shift;
+  my $arg = { "use_utf8" => YaST::YCP::Boolean($value) };
+  Language->SetExpertValues($arg);
+  Language->Save();
   return 1;
 }
 
@@ -61,14 +68,18 @@ BEGIN{$TYPEINFO{GetRootLang} = ["function",
     "string"];
 }
 sub GetRootLang {
-  return Language->rootlang;
+  return Language->GetExpertValues->{"rootlang"};
 }
 
 BEGIN{$TYPEINFO{SetRootLang} = ["function",
     "boolean","string"];
 }
 sub SetRootLang {
-#TODO
+  my $self = shift;
+  my $value = shift;
+  my $arg = { "rootlang" => $value };
+  Language->SetExpertValues($arg);
+  Language->Save();
   return 1;
 }
 
