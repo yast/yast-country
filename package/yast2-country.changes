@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Tue Jun 16 16:05:38 CEST 2009 - mvidner@suse.cz
+
+- Using autodocs-ycp.ami, which contains a fix for automake 1.11.
+
+-------------------------------------------------------------------
 Tue Jun 16 07:58:51 CEST 2009 - jsuchome@suse.cz
 
 - package YaPI files
