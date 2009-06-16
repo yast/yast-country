@@ -66,6 +66,9 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 @moduledir@/Keyboard.y*
 @moduledir@/Timezone.y*
 @moduledir@/XLibAPI.pm
+%dir @moduledir@/YaPI
+@moduledir@/YaPI/TIME.pm
+@moduledir@/YaPI/LANGUAGE.pm
 @clientdir@/*.ycp
 @ydatadir@/*.ycp
 @yncludedir@/keyboard/
