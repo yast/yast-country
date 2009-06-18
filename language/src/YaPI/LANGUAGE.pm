@@ -14,71 +14,48 @@ our $VERSION            = '1.0.0';
 our @CAPABILITIES       = ('SLES9');
 our %TYPEINFO;
 
-BEGIN{$TYPEINFO{GetLanguages} = ["function",
-    ["list","string"]];
-#    "string"];
+
+BEGIN{$TYPEINFO{GetSettings} = ["function",
+    ["map","string","any"]
+,["map","string","string"]];
 }
-sub GetLanguages {
-  my $ret = [];
-  my $languages = Language->GetLanguagesMap(0);
-  while  ( my ($key, $value) = each (%$languages)){
-    push @$ret, "$key---".$value->[0];
+sub GetSettings {
+  my $self = shift;
+  my $values = shift;
+  my $ret = {};
+  if ($values->{"languages"} eq "true"){
+    my $languages = Language->GetLanguagesMap(0);
+  }
+  if ($values->{"current"} eq "true"){
+    $ret->{"current"} = Language->language;
+  }
+  my $expr = Language->GetExpertValues();
+  if ($values->{"utf8"} eq "true"){
+    $ret->{"utf8"} = $expr->{"use_utf8"}?"true":"false";
+  }
+  if ($values->{"rootlang"} eq "true"){
+    $ret->{"rootlang"} = $expr->{"rootlang"};
   }
   return $ret;
 }
 
-BEGIN{$TYPEINFO{GetCurrentLanguage} = ["function",
-    "string"];
+BEGIN{$TYPEINFO{SetSettings} = ["function",
+    "boolean",["map","string","string"]];
 }
-sub GetCurrentLanguage {
-  return Language->language;
-}
-
-BEGIN{$TYPEINFO{SetCurrentLanguage} = ["function",
-    "boolean","string"];
-}
-sub SetCurrentLanguage {
+sub SetSettings {
   my $self = shift;
-  my $value = shift;
-  Language->QuickSet($value);
-  Language->Save();
-  return 1;
-}
-
-BEGIN{$TYPEINFO{IsUTF8} = ["function",
-    "boolean"];
-}
-sub IsUTF8 {
-  return Language->GetExpertValues->{"use_utf8"};
-}
-
-BEGIN{$TYPEINFO{SetUTF8} = ["function",
-    "boolean","boolean"];
-}
-sub SetUTF8 {
-  my $self = shift;
-  my $value = shift;
-  my $arg = { "use_utf8" => YaST::YCP::Boolean($value) };
-  Language->SetExpertValues($arg);
-  Language->Save();
-  return 1;
-}
-
-BEGIN{$TYPEINFO{GetRootLang} = ["function",
-    "string"];
-}
-sub GetRootLang {
-  return Language->GetExpertValues->{"rootlang"};
-}
-
-BEGIN{$TYPEINFO{SetRootLang} = ["function",
-    "boolean","string"];
-}
-sub SetRootLang {
-  my $self = shift;
-  my $value = shift;
-  my $arg = { "rootlang" => $value };
-  Language->SetExpertValues($arg);
+  my $values = shift;
+  if ( defined $values->{"current"}){
+    Language->QuickSet($values->{"current"});
+  }
+  my $expr = {};
+  if (defined $values->{"utf8"}){
+    $expr->{"use_utf8"} = YaST::YCP::Boolean($values->{"utf8"} eq "true");
+  }
+  if (defined $values->{"rootlang"}){
+    $expr->{"rootlang"} = $values->{"rootlang"};
+  }
+  Language->SetExpertValues($expr);
   Language->Save();
   return 1;
 }
