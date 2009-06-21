@@ -44,7 +44,8 @@ Obsoletes:	y2t_inst-environment
 Summary:	YaST2 - Country Settings (Language, Keyboard, and Timezone)
 
 %description
--
+Country specific data and configuration modules (language, keyboard,
+timezone) for yast2.
 
 @PREP@
 
@@ -86,7 +87,8 @@ Summary:	YaST2 - Data files for Country settings
 Group:          System/YaST
 
 %description data
-Data files for yast2-country together with the most often used API functions (Language module)
+Data files for yast2-country together with the most often used API
+functions (Language module)
 
 %files data
 %defattr(-,root,root)
