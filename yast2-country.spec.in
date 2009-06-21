@@ -41,7 +41,7 @@ Obsoletes:	y2t_inst-language
 Provides:	y2t_inst-environment
 Obsoletes:	y2t_inst-environment
 
-Summary:	Setting the keyboard, language and time zone
+Summary:	YaST2 - Country Settings (Language, Keyboard, and Timezone)
 
 %description
 -
@@ -82,7 +82,7 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 @desktopdir@/timezone.desktop
 
 %package data
-Summary:	Data files for country-related settings
+Summary:	YaST2 - Data files for Country settings
 Group:          System/YaST
 
 %description data
