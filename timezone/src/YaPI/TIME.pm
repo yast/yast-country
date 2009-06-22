@@ -20,10 +20,11 @@ BEGIN{$TYPEINFO{Read} = ["function",
 sub Read {
   my $self = shift;
   my $args = shift;
-  my $ret = [];
+  my $ret = {};
+  Timezone->Read();
   if ($args->{"zones"} eq "true")
   {
-    $ret->{"zone"} = Timezone->get_zonemap();
+    $ret->{"zones"} = Timezone->get_zonemap();
   }
   if ($args->{"utcstatus"} eq "true"){
     if (Timezone->utc_only()){
@@ -36,6 +37,9 @@ sub Read {
   }
   if ($args->{"currenttime"} eq "true"){
     $ret->{"time"} = Timezone->GetDateTime(YaST::YCP::Boolean(1),YaST::YCP::Boolean(0));
+  }
+  if ($args->{"timezone"} eq "true"){
+    $ret->{"timezone"} = Timezone->timezone;
   }
   return $ret;
 }
