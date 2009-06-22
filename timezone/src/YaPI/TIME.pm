@@ -14,38 +14,30 @@ our $VERSION            = '1.0.0';
 our @CAPABILITIES       = ('SLES9');
 our %TYPEINFO;
 
-BEGIN{$TYPEINFO{GetZoneMap} = ["function",
-    ["list",["map","string","string"]]];
+BEGIN{$TYPEINFO{Read} = ["function",
+    ["map","string","any"],["map","string","string"]];
 }
-sub GetZoneMap {
+sub Read {
+  my $self = shift;
+  my $args = shift;
   my $ret = [];
-  my $zones = Timezone->get_zonemap();
-#code entries to one string for dbus limitation
-  foreach my $zone (@$zones){
-    my $finalstring = "";
-    while  ( my ($key, $value) = each (%{$zone->{"entries"}})){
-      $finalstring = "$finalstring;$key->$value";
-    }
-    $zone->{"entries"} = $finalstring;
+  if ($args->{"zones"} eq "true")
+  {
+    $ret->{"zone"} = Timezone->get_zonemap();
   }
-  return $zones;
+  if ($args->{"utcstatus"} eq "true"){
+    if (Timezone->utc_only()){
+      $ret->{"utcstatus"} = "UTConly";
+    } elsif (Timezone->hwclock eq "-u") {
+      $ret->{"utcstatus"} = "UTC";
+    } else {
+      $ret->{"utcstatus"} = "local";
+    }
+  }
+  if ($args->{"currenttime"} eq "true"){
+    $ret->{"time"} = Timezone->GetDateTime(YaST::YCP::Boolean(1),YaST::YCP::Boolean(0));
+  }
+  return $ret;
 }
-
-BEGIN{$TYPEINFO{UTCStatus} = ["function",
-    "string"];
-}
-sub UTCStatus {
-  return "UTConly" if (Timezone->utc_only());
-  return "UTC" if (Timezone->hwclock eq "-u");
-  return "local";
-}
-
-BEGIN{$TYPEINFO{GetTime} = ["function",
-    "string"];
-}
-sub GetTime {
-  return Timezone->GetDateTime(YaST::YCP::Boolean(1),YaST::YCP::Boolean(0));
-}
-
 
 1;
