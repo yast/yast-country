@@ -15,16 +15,16 @@ our @CAPABILITIES       = ('SLES9');
 our %TYPEINFO;
 
 
-BEGIN{$TYPEINFO{GetSettings} = ["function",
+BEGIN{$TYPEINFO{Read} = ["function",
     ["map","string","any"]
 ,["map","string","string"]];
 }
-sub GetSettings {
+sub Read {
   my $self = shift;
   my $values = shift;
   my $ret = {};
   if ($values->{"languages"} eq "true"){
-    my $languages = Language->GetLanguagesMap(0);
+    $ret->{"languages"} = Language->GetLanguagesMap(0);
   }
   if ($values->{"current"} eq "true"){
     $ret->{"current"} = Language->language;
@@ -39,10 +39,10 @@ sub GetSettings {
   return $ret;
 }
 
-BEGIN{$TYPEINFO{SetSettings} = ["function",
+BEGIN{$TYPEINFO{Write} = ["function",
     "boolean",["map","string","string"]];
 }
-sub SetSettings {
+sub Write {
   my $self = shift;
   my $values = shift;
   if ( defined $values->{"current"}){
