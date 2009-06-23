@@ -3,6 +3,9 @@
 @HEADER@
 Group:	System/YaST
 License: GPL v2 or later
+#policy files for YaPI dbus interface
+Source1:        org.opensuse.yast.modules.yapi.time.policy
+Source2:        org.opensuse.yast.modules.yapi.language.policy
 BuildRequires:	perl-XML-Writer update-desktop-files yast2-devtools yast2-testsuite yast2 yast2-perl-bindings
 Requires:	yast2-trans-stats yast2-perl-bindings timezone
 # XVersion.ycp
@@ -59,6 +62,11 @@ timezone) for yast2.
 rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 %endif
 
+# Policies
+mkdir -p $RPM_BUILD_ROOT/usr/share/PolicyKit/policy
+install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/usr/share/PolicyKit/policy/
+install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/PolicyKit/policy/
+
 @CLEAN@
 
 # common
@@ -97,3 +105,4 @@ functions (Language module)
 %dir @ydatadir@/languages
 @ydatadir@/languages/*.ycp
 @moduledir@/Language.y*
+%attr(644,root,root) %config /usr/share/PolicyKit/policy/org.opensuse.yast.modules.yapi.*.policy
