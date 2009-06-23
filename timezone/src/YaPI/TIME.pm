@@ -45,9 +45,9 @@ sub Read {
 }
 
 BEGIN{$TYPEINFO{Write} = ["function",
-    ["boolean"],["map","string","string"]];
+    "boolean",["map","string","string"]];
 }
-sub Read {
+sub Write {
   my $self = shift;
   my $args = shift;
   Timezone->Read();
@@ -55,9 +55,9 @@ sub Read {
     if (Timezone->utc_only()){
       #do nothink as utc cannot be change
     } elsif ($args->{"utcstatus"} eq "UTC") {
-      Timezone->hwclock = "-u";
+      Timezone->hwclock = ("-u");
     } else {
-      Timezone->hwclock = "--localtime";
+      Timezone->hwclock("--localtime");
     }
   }
   if (defined $args->{"timezone"}){
