@@ -91,6 +91,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/PolicyKit/policy/
 %endif
 @desktopdir@/yast-language.desktop
 @desktopdir@/timezone.desktop
+%attr(644,root,root) %config /usr/share/PolicyKit/policy/org.opensuse.yast.modules.yapi.*.policy
 
 %package data
 Summary:	YaST2 - Data files for Country settings
@@ -105,4 +106,3 @@ functions (Language module)
 %dir @ydatadir@/languages
 @ydatadir@/languages/*.ycp
 @moduledir@/Language.y*
-%attr(644,root,root) %config /usr/share/PolicyKit/policy/org.opensuse.yast.modules.yapi.*.policy
