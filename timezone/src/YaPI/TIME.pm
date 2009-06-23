@@ -55,7 +55,7 @@ sub Write {
     if (Timezone->utc_only()){
       #do nothink as utc cannot be change
     } elsif ($args->{"utcstatus"} eq "UTC") {
-      Timezone->hwclock = ("-u");
+      Timezone->hwclock("-u");
     } else {
       Timezone->hwclock("--localtime");
     }
