@@ -44,4 +44,27 @@ sub Read {
   return $ret;
 }
 
+BEGIN{$TYPEINFO{Write} = ["function",
+    ["boolean"],["map","string","string"]];
+}
+sub Read {
+  my $self = shift;
+  my $args = shift;
+  Timezone->Read();
+  if (defined $args->{"utcstatus"}){
+    if (Timezone->utc_only()){
+      #do nothink as utc cannot be change
+    } elsif ($args->{"utcstatus"} eq "UTC") {
+      Timezone->hwclock = "-u";
+    } else {
+      Timezone->hwclock = "--localtime";
+    }
+  }
+  if (defined $args->{"timezone"}){
+    Timezone->Set($args->{"timezone"},YaST::YCP::Boolean(1));
+  }
+  Timezone->Save();
+  return 1;
+}
+
 1;
