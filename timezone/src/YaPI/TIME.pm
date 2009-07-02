@@ -63,6 +63,14 @@ sub Write {
   if (defined $args->{"timezone"}){
     Timezone->Set($args->{"timezone"},YaST::YCP::Boolean(1));
   }
+  if (defined $args->{"currenttime"}){
+#format yyyy-dd-mm - hh:mm:ss
+    if ($args->{"currenttime"} =~ m/(\d+)-(\d+)-(\d+) - (\d+):(\d+):(\d+)/)
+    {
+      Timezone->SetTime(int($1),int($3),int($2),int($4),int($5),int($6));
+    }
+  }
+
   Timezone->Save();
   return 1;
 }
