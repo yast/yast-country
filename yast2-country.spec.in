@@ -1,8 +1,6 @@
 @HEADER-COMMENT@
 
 @HEADER@
-Group:	System/YaST
-License: GPL v2 or later
 #policy files for YaPI dbus interface
 Source1:        org.opensuse.yast.modules.yapi.time.policy
 Source2:        org.opensuse.yast.modules.yapi.language.policy
