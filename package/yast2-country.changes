@@ -2,6 +2,7 @@
 Thu Jul  9 10:12:41 CEST 2009 - jreidinger@suse.cz
 
 - fix spec file problem for 2.18.10 ( by coolo )
+- revert coolo fix and properly generate spec by new yast devtools
 
 -------------------------------------------------------------------
 Thu Jul  2 14:21:39 CEST 2009 - jreidinger@suse.cz
