@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Thu Jul  9 10:12:41 CEST 2009 - jreidinger@suse.cz
+
+- fix spec file problem for 2.18.10 ( by coolo )
+
+-------------------------------------------------------------------
 Thu Jul  2 14:21:39 CEST 2009 - jreidinger@suse.cz
 
 - add to YaPI setter for manual time settings
