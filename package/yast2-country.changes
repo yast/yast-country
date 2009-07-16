@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Jul 16 12:50:43 CEST 2009 - jsuchome@suse.cz
+
+- correct path to xset binary (bnc#522615)
+- make PackagesCommit available for outside
+- load english names for languages in firstboot stage
+- 2.18.11
+
+-------------------------------------------------------------------
 Thu Jul  9 10:12:41 CEST 2009 - jreidinger@suse.cz
 
 - fix spec file problem for 2.18.10 ( by coolo )

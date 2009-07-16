@@ -24,9 +24,11 @@ import "Linuxrc";
 import "Misc";
 import "Mode";
 import "PackageCallbacks";
+import "PackageSlideShow";
 import "PackageSystem";
 import "Popup";
 import "ProductFeatures";
+import "SlideShow";
 import "Stage";
 
 
@@ -571,7 +573,7 @@ global define void Language() {
 	string local_lang = ReadSysconfigLanguage ();
 	QuickSet (local_lang);
 	SetDefault();		// also default
-	if (Mode::live_installation ())
+	if (Mode::live_installation () || Stage::firstboot ())
 	{
 	    FillEnglishNames (local_lang);
 	}
@@ -915,15 +917,31 @@ global define boolean PackagesInit (list<string> selected_languages) {
 
 /**
  * Install and uninstall packages selected by Pkg::SetAdditionalLocales
- *
-global define boolean PackagesCommit () {
+ */
+global boolean PackagesCommit () {
 
-    SlideShow::OpenSlideShowDialog ();
+    if (!Mode::commandline ())
+    {
+	PackageSlideShow::InitPkgData (false);
+	SlideShow::Setup([$[
+              "name" : "packages",
+              "description" : _("Installing Packages..."),
+              "value" : PackageSlideShow::total_size_to_install / 1024 , // kilobytes
+              "units" : `kb,
+        ]]);
+
+	SlideShow::ShowTable();
+
+	SlideShow::OpenDialog ();
+	SlideShow::MoveToStage( "packages" );
+    }
     Pkg::PkgCommit (0);
-    SlideShow::CloseSlideShowDialog();
+    if (!Mode::commandline ())
+    {
+	SlideShow::CloseDialog();
+    }
     return true;
 }
-*/
 
 /**
  * de_DE@UTF-8 -> "DE"
