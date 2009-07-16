@@ -20,43 +20,14 @@ import "GfxMenu";
 import "Keyboard";
 import "Language";
 import "Mode";
-import "PackageSlideShow";
 import "Popup";
 import "Progress";
 import "Service";
-import "SlideShow";
 import "Wizard";
 
 // if packages should be installed after language change
 boolean no_packages	= false;
 
-/**
- * Install and uninstall packages selected by Pkg::SetAdditionalLocales
- */
-define boolean PackagesCommit () {
-
-    if (!Mode::commandline ())
-    {
-	    PackageSlideShow::InitPkgData (false);
-	    SlideShow::Setup([$[
-              "name" : "packages",
-              "description" : _("Installing Packages..."),
-              "value" : PackageSlideShow::total_size_to_install / 1024 , // kilobytes
-              "units" : `kb,
-            ]]);
-
-	    SlideShow::ShowTable();
-
-	    SlideShow::OpenDialog ();
-	    SlideShow::MoveToStage( "packages" );
-    }
-    Pkg::PkgCommit (0);
-    if (!Mode::commandline ())
-    {
-	SlideShow::CloseDialog();
-    }
-    return true;
-}
 
 /**
  * read language settings
@@ -114,7 +85,7 @@ define boolean LanguageWrite () {
 	}
 	if (enough_space)
 	{
-	    PackagesCommit ();
+	    Language::PackagesCommit ();
 	}
     }
 
