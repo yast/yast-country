@@ -6,8 +6,8 @@ License: GPL v2 or later
 #policy files for YaPI dbus interface
 Source1:        org.opensuse.yast.modules.yapi.time.policy
 Source2:        org.opensuse.yast.modules.yapi.language.policy
-BuildRequires:	perl-XML-Writer update-desktop-files yast2-devtools yast2-testsuite yast2 yast2-perl-bindings
-Requires:	yast2-trans-stats yast2-perl-bindings timezone
+BuildRequires:	perl-XML-Writer update-desktop-files yast2-devtools yast2-testsuite yast2 yast2-perl-bindings yast2-packager
+Requires:	yast2-trans-stats yast2-perl-bindings timezone yast2-packager
 # XVersion.ycp
 Requires:	yast2 >= 2.13.70
 # Pkg::SetPackageLocale, Pkg::GetTextLocale
