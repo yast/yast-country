@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jul 17 11:19:02 CEST 2009 - jsuchome@suse.cz
+
+- correct path to xset binary (bnc#522615)
+- 2.17.34 
+
+-------------------------------------------------------------------
 Thu May 28 08:59:14 CEST 2009 - jsuchome@suse.cz
 
 - show also native language forms in firstboot (bnc#492812)
