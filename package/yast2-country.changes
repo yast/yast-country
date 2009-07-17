@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jul 17 13:47:26 CEST 2009 - jsuchome@suse.cz
+
+- yast2-packager required for PackageSlideShow.ycp 
+- 2.18.12
+
+-------------------------------------------------------------------
 Thu Jul 16 12:50:43 CEST 2009 - jsuchome@suse.cz
 
 - correct path to xset binary (bnc#522615)
