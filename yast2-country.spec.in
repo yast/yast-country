@@ -40,6 +40,7 @@ Provides:	y2t_inst-environment
 Obsoletes:	y2t_inst-environment
 
 Summary:	Setting the keyboard, language and time zone
+Group:          System/YaST
 
 %description
 -
