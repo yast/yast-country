@@ -24,7 +24,6 @@ import "Linuxrc";
 import "Misc";
 import "Mode";
 import "PackageCallbacks";
-import "PackageSlideShow";
 import "PackageSystem";
 import "Popup";
 import "ProductFeatures";
@@ -922,11 +921,21 @@ global boolean PackagesCommit () {
 
     if (!Mode::commandline ())
     {
-	PackageSlideShow::InitPkgData (false);
+/* work-around for following in order not to depend on yast2-packager
+       PackageSlideShow::InitPkgData (false);
+              "value" : PackageSlideShow::total_size_to_install / 1024 , // kilobytes
+*/
+        list<list<integer> > total_sizes_per_cd_per_src = Pkg::PkgMediaSizes();
+	integer total_size_to_install = 0;
+	foreach (integer item, flatten (total_sizes_per_cd_per_src), {
+	    if (item != -1)
+		total_size_to_install = total_size_to_install + item;
+	});
+
 	SlideShow::Setup([$[
               "name" : "packages",
               "description" : _("Installing Packages..."),
-              "value" : PackageSlideShow::total_size_to_install / 1024 , // kilobytes
+              "value" : total_size_to_install / 1024 , // kilobytes
               "units" : `kb,
         ]]);
 
