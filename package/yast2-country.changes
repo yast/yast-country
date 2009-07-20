@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jul 20 16:51:26 CEST 2009 - jsrain@suse.cz
+
+- removed the circular build dependency on yast2-packager
+- 2.18.13
+
+-------------------------------------------------------------------
 Fri Jul 17 13:47:26 CEST 2009 - jsuchome@suse.cz
 
 - yast2-packager required for PackageSlideShow.ycp 
