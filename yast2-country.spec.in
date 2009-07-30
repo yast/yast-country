@@ -76,7 +76,6 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/PolicyKit/policy/
 @moduledir@/Console.y*
 @moduledir@/Keyboard.y*
 @moduledir@/Timezone.y*
-@moduledir@/XLibAPI.pm
 %dir @moduledir@/YaPI
 @moduledir@/YaPI/TIME.pm
 @moduledir@/YaPI/LANGUAGE.pm

@@ -54,7 +54,7 @@ define boolean KeyboardRead () {
  */
 define boolean KeyboardWrite () {
 
-    Keyboard::Save (false);
+    Keyboard::Save ();
     Service::Restart ("kbd");
     return true;
 }
