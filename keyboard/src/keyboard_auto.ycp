@@ -57,7 +57,7 @@
 	ret = Keyboard::Export ();
     }
     else if (func == "Write") {
-	ret = Keyboard::Save (true);
+	ret = Keyboard::Save ();
     }
     /**
      * Return if configuration  was changed

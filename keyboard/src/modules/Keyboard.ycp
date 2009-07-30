@@ -87,7 +87,6 @@
     import "Package";
     import "ProductFeatures";
     import "Stage";
-    import "XLibAPI";
     import "XVersion";
 
     // ------------------------------------------------------------------------
@@ -479,9 +478,8 @@ define boolean x11_setup_needed () {
 
     return
 	Arch::x11_setup_needed () &&
-	! (Linuxrc::serial_console() || Linuxrc::vnc() || Linuxrc::usessh()) &&
-	((Stage::initial () && !Linuxrc::text ()) ||
-	 Package::Installed ("yast2-x11"));
+	(Stage::initial () || Stage::firstboot ()) &&
+	! (Linuxrc::serial_console() || Linuxrc::vnc() || Linuxrc::usessh() || Linuxrc::text ());
 }
 
 /**
@@ -611,7 +609,9 @@ global define boolean Restore () {
 	y2milestone ("current_kbd %1 model %2", current_kbd, kb_model);
 	if (current_kbd == "")
 	{
-	    y2milestone("Restoring data failed");
+	    y2milestone("Restoring data failed, returning defaults");
+	    current_kbd	= "english-us";
+	    kb_model	= "pc104";
 	    ret = false;
 	}
 	else
@@ -816,41 +816,19 @@ global define void Keyboard() {
     if (Mode::config ())
 	return;
 
-    // We have three possible sources of information:
+    // We have these possible sources of information:
     //
     // probed data:	- installation initial mode --> probing
     // sysconfig:	- installation continue mode or normal mode
-    // XF86Config:	- restoring from sysconfig failed and running system
     //
-    y2milestone ("Keyboard::Keyboard init:%1 update:%2", Stage::initial (),
-		 Mode::update () );
+    y2milestone ("initial :%1, update:%2", Stage::initial (), Mode::update ());
+
     boolean success = false;
 
     // If not in initial mode try to restore from sysconfig.
     if (!Stage::initial () || Mode::live_installation ())
     {
 	success = Restore();
-
-	// If this failed and we are in a running system try to restore from
-	// X11 Config.
-	if (!success && Mode::normal () && x11_setup_needed ())
-	{
-	    // Get the current layout from XF86Config and
-	    // set keyboard module accordingly.
-
-	    string current_layout = XLibAPI::getXkbLayout ();
-
-	    y2milestone("keyboard layout YaST2: %1", current_layout );
-
-	    // Set the keyboard variables to this value if possible.
-	    if ( current_layout != "" )
-	    {
-		SetKeyboard (current_layout);
-		y2milestone ("Restored data (XF86Config) for keyboard: <%1>",
-		    current_kbd);
-		success = true;
-	    }
-	}
     }
     else
     {
@@ -858,11 +836,10 @@ global define void Keyboard() {
     }
 
     // In initial mode or if restoring failed do probe.
-    if(!success || (Stage::initial () && !Mode::live_installation ()))
+    if (!success)
     {
 	// On module entry probe the hardware and set all those data
 	// needed for public access.
-	//
 	Probe();
     }
 
@@ -890,44 +867,10 @@ global define boolean Modified () {
 
 
 /**
- * Updates the X11 keyboard settings (using SaX library)
- * @return boolean - success
- */
-
-global define boolean xf86_update() {
-
-    y2milestone ("Storing current keyboard settings into X11 config file...");
-
-    map xkbctrl2SaX	= $[
-	"ModeShift"	: "SaX::XKB_MAP_MODESHIFT",
-	"Compose"	: "SaX::XKB_MAP_COMPOSE",
-	"ModeLock"	: "SaX::XKB_MAP_MODELOCK",
-	"ScrollLock"	: "SaX::XKB_MAP_SCROLLLOCK",
-	"Meta"		: "SaX::XKB_MAP_META",
-	"Control"	: "SaX::XKB_MAP_CONTROL"
-    ];
-
-    XLibAPI::setXkbLayout (XkbLayout);
-    XLibAPI::setXkbModel (XkbModel);
-    XLibAPI::setXkbVariant (XkbLayout, XkbVariant);
-    XLibAPI::setXkbMappings ($[
-	"SaX::XKB_LEFT_ALT"	: xkbctrl2SaX[LeftAlt]:LeftAlt,
-	"SaX::XKB_RIGHT_ALT"	: xkbctrl2SaX[RightAlt]:RightAlt,
-	"SaX::XKB_SCROLL_LOCK"	: xkbctrl2SaX[ScrollLock]:ScrollLock,
-	"SaX::XKB_RIGHT_CTL"	: xkbctrl2SaX[RightCtl]:RightCtl
-    ]);
-    if (XkbOptions != "")
-	XLibAPI::setXkbOptions (splitstring (XkbOptions, ","));
-    return XLibAPI::Write ();
-}
-
-
-/**
  * Save the current data into a file to be read after a reboot.
  *
- * @param	boolean update_x11: true if X11 config should be updated
  */
-global define void Save (boolean update_x11) {
+global define void Save () {
 
     if (Mode::update ())
     {
@@ -1056,12 +999,6 @@ global define void Save (boolean update_x11) {
 	{
 	y2milestone("NOT marking keyboard as configured (no unique_key)");
 	}
-
-    // Adapt the X11 config file content to match the current settings
-    if (x11_setup_needed() && update_x11 &&(Mode::normal() || Stage::reprobe()))
-    {
-	xf86_update();
-    }
 
     y2milestone("Saved data for keyboard: <%1>", current_kbd );
 
