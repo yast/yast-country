@@ -58,10 +58,6 @@ timezone) for yast2.
 
 @INSTALL@
 
-%ifarch s390 s390x
-rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
-%endif
-
 # Policies
 mkdir -p $RPM_BUILD_ROOT/usr/share/PolicyKit/policy
 install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/usr/share/PolicyKit/policy/
@@ -85,9 +81,6 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/PolicyKit/policy/
 @yncludedir@/timezone/
 @scrconfdir@/*.scr
 @schemadir@/autoyast/rnc/*.rnc
-%ifnarch s390 s390x
-@desktopdir@/keyboard.desktop
-%endif
 @desktopdir@/yast-language.desktop
 @desktopdir@/timezone.desktop
 %attr(644,root,root) %config /usr/share/PolicyKit/policy/org.opensuse.yast.modules.yapi.*.policy
