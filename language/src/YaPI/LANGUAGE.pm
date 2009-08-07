@@ -23,17 +23,17 @@ sub Read {
   my $self = shift;
   my $values = shift;
   my $ret = {};
-  if ($values->{"languages"} eq "true"){
+  if (($values->{"languages"} || "false") eq "true"){
     $ret->{"languages"} = Language->GetLanguagesMap(0);
   }
-  if ($values->{"current"} eq "true"){
+  if (($values->{"current"} || "false") eq "true"){
     $ret->{"current"} = Language->language;
   }
   my $expr = Language->GetExpertValues();
-  if ($values->{"utf8"} eq "true"){
+  if (($values->{"utf8"} || "false") eq "true"){
     $ret->{"utf8"} = $expr->{"use_utf8"}?"true":"false";
   }
-  if ($values->{"rootlang"} eq "true"){
+  if (($values->{"rootlang"} || "false") eq "true"){
     $ret->{"rootlang"} = $expr->{"rootlang"};
   }
   return $ret;
