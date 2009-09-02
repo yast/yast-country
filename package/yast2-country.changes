@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Sep  2 14:43:54 CEST 2009 - jsuchome@suse.cz
+
+- correctly parse the output of date command (bnc#530495)
+- show a message that X11 keyboard layout switch is not possible
+- added keywords to desktop files for searching
+- 2.18.16
+
+-------------------------------------------------------------------
 Fri Jul 31 08:13:11 CEST 2009 - jsuchome@suse.cz
 
 - removed keyboard.desktop file (bnc#441404)

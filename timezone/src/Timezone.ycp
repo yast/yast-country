@@ -746,12 +746,13 @@ global define map GetDateTimeMap() {
     list dparts = filter (
 	string v,splitstring (GetDateTime (false,false), " -:" ),``(size(v)>0));
 
-    ret["hour"]		= dparts[0]:"";
-    ret["minute"]	= dparts[1]:"";
-    ret["second"]	= dparts[2]:"";
-    ret["year"]		= dparts[3]:"";
-    ret["month"]	= dparts[4]:"";
-    ret["day"]		= deletechars (dparts[5]:"", "\n");
+    ret["year"]		= dparts[0]:"";
+    ret["month"]	= dparts[1]:"";
+    ret["day"]		= dparts[2]:"";
+    ret["hour"]		= dparts[3]:"";
+    ret["minute"]	= dparts[4]:"";
+    ret["second"]	= dparts[5]:"";
+
     y2milestone( "GetDateTimeMap dparts %1 ret %2", dparts, ret );
     return( ret );
 }
