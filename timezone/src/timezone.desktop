@@ -17,6 +17,7 @@ X-SuSE-YaST-SortKey=
 X-SuSE-YaST-AutoInstResource=timezone
 X-SuSE-YaST-AutoInstClonable=true
 X-SuSE-YaST-AutoInstSchema=timezone.rnc
+X-SuSE-YaST-Keywords=time,timezone,clock
 
 Icon=yast-timezone
 Exec=/sbin/yast2 timezone 

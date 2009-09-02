@@ -18,6 +18,7 @@ X-SuSE-YaST-AutoInstResource=language
 X-SuSE-YaST-AutoInstClient=language_auto
 X-SuSE-YaST-AutoInstClonable=true
 X-SuSE-YaST-AutoInstSchema=language.rnc
+X-SuSE-YaST-Keywords=language,locale,country
 
 Icon=yast-language
 Exec=/sbin/yast2 language 

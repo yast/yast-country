@@ -22,6 +22,7 @@ import "Arch";
 import "CommandLine";
 import "Confirm";
 import "Keyboard";
+import "Popup";
 import "Service";
 import "Stage";
 import "Wizard";
@@ -71,12 +72,9 @@ define any KeyboardSequence () {
     map display_info	= (map) UI::GetDisplayInfo ();
     if (!display_info["TextMode"]:true)
     {
-	if (Confirm::MustBeRoot ())
-	{
-	    // call sax
-	    SCR::Execute (.target.bash, "/usr/sbin/sax2 -O Keyboard");
-	    return `finish;
-	}
+	// sax2 does not configure keyboard
+	Popup::Message (_("YaST can no longer be used for changing X11 keyboard layout.
+Use the application provided for your desktop."));
 	return `cancel;
     }
 
