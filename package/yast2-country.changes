@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Sep  4 11:16:28 CEST 2009 - jsuchome@suse.cz
+
+- fixed testsuite after latest changes (date output)
+- added support for Tajik language
+- set console fonts for Ukrainian and Tajik
+- 2.18.17 
+
+-------------------------------------------------------------------
 Wed Sep  2 14:43:54 CEST 2009 - jsuchome@suse.cz
 
 - correctly parse the output of date command (bnc#530495)

@@ -96,6 +96,12 @@ $[
       "sr"		: [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
       "sr_RS.UTF-8"     : [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
 
+      "uk"		: [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
+      "uk_UA.UTF-8"     : [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
+
+      "tg"		: [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
+      "tg_TJ.UTF-8"     : [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
+
       "bg_BG"		: [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
       "bg"		: [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
       "bg_BG.UTF-8"     : [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],

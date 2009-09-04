@@ -621,6 +621,20 @@ return ($[
 	    ],
 	 ]
     ],
+    "tajik": [
+	// keyboard layout
+	_("Tajik"),
+	$[
+	    "pc104"	: $[
+		    // currently just a symlink to russian layout
+		    "ncurses": "tj.map.gz",
+	    ],
+	    "macintosh" : $[ "ncurses": "mac-us.map.gz"],
+	    "type4"	: $[ "ncurses": "sunkeymap.map.gz"],
+	    "type5"	: $[ "ncurses": "sunt5-ru.map.gz" ],
+	    "type5_euro": $[ "ncurses": "sunt5-ru.map.gz" ],
+	]
+    ],
 ]);
 
 }
