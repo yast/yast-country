@@ -27,17 +27,17 @@
 	//	<LANG modifier used when no UTF-8 enconding is selected>
 	//	<translated Language-to-display-UTF8-coded> ]
 	//
-	"uk_UA"	: [
-		    "Українська",
-		    "Ukrainian",
+	"tg_TJ"	: [
+		    "тоҷикӣ"
+		    "Tadjik"
 		    ".UTF-8",
 		    "",
 		    // language name
-		    _("Ukrainian")
+		    _("Tajik")
 	],
 	// 2. what time zone propose for this language
-	"timezone"	: "Europe/Kiev",
+	"timezone"	: "Asia/Dushanbe",
 	// 3. which keyboard layout propose for this language
-	"keyboard"	: "ukrainian",
+	"keyboard"	: "tajik",
     ];
 }
