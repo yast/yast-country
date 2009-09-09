@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep  9 15:52:21 CEST 2009 - jsuchome@suse.cz
+
+- fixed syntax errors in language_tg_TJ.ycp
+- 2.18.18 
+
+-------------------------------------------------------------------
 Fri Sep  4 11:16:28 CEST 2009 - jsuchome@suse.cz
 
 - fixed testsuite after latest changes (date output)
