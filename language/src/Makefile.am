@@ -15,6 +15,12 @@ desktop_DATA =			\
 
 rnc_DATA =	language.rnc
 
-EXTRA_DIST = $(client_DATA) $(desktop_DATA) $(rnc_DATA)
+YaPI_perldir = @moduledir@/YaPI
+
+YaPI_perl_DATA = \
+    YaPI/LANGUAGE.pm
+
+
+EXTRA_DIST = $(client_DATA) $(desktop_DATA) $(YaPI_perl_DATA) $(rnc_DATA)
 
 include $(top_srcdir)/Makefile.am.common
