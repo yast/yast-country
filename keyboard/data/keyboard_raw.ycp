@@ -626,8 +626,7 @@ return ($[
 	_("Tajik"),
 	$[
 	    "pc104"	: $[
-		    // currently just a symlink to russian layout
-		    "ncurses": "tj.map.gz",
+		    "ncurses": "tj_alt-UTF8.map.gz",
 	    ],
 	    "macintosh" : $[ "ncurses": "mac-us.map.gz"],
 	    "type4"	: $[ "ncurses": "sunkeymap.map.gz"],
