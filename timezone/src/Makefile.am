@@ -22,7 +22,12 @@ ynclude_DATA =			\
 
 rnc_DATA = timezone.rnc
 
-EXTRA_DIST = $(client_DATA) $(module_DATA) $(desktop_DATA) $(ynclude_DATA) $(rnc_DATA)
+YaPI_perldir = @moduledir@/YaPI
+
+YaPI_perl_DATA = \
+    YaPI/TIME.pm
+
+EXTRA_DIST = $(client_DATA) $(module_DATA) $(desktop_DATA) $(ynclude_DATA) $(YaPI_perl_DATA) $(rnc_DATA)
 
 YCPCFLAGS = -M ../../language/src/modules
 
