@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct  1 23:22:55 CEST 2009 - jsuchome@suse.cz
+
+- fixed typo (bnc#532083)
+- 2.18.19
+
+-------------------------------------------------------------------
 Wed Sep  9 15:52:21 CEST 2009 - jsuchome@suse.cz
 
 - fixed syntax errors in language_tg_TJ.ycp

@@ -266,7 +266,7 @@ map cmdline = $[
 	],
 	"no_packages"	: $[
 	    // command line help text for 'set no_packages' option
-	    "help"	: _("Do not install langauge specific packages"),
+	    "help"	: _("Do not install language specific packages"),
 	],
     ],
     "mappings"		: $[
