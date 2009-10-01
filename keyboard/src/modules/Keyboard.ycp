@@ -478,7 +478,6 @@ define boolean x11_setup_needed () {
 
     return
 	Arch::x11_setup_needed () &&
-	(Stage::initial () || Stage::firstboot ()) &&
 	! (Linuxrc::serial_console() || Linuxrc::vnc() || Linuxrc::usessh() || Linuxrc::text ());
 }
 

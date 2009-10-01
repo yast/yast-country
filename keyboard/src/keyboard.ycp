@@ -69,15 +69,6 @@ define any KeyboardSequence () {
     if (Arch::s390 ())
 	return `next;
 
-    map display_info	= (map) UI::GetDisplayInfo ();
-    if (!display_info["TextMode"]:true)
-    {
-	// sax2 does not configure keyboard
-	Popup::Message (_("YaST can no longer be used for changing X11 keyboard layout.
-Use the application provided for your desktop."));
-	return `cancel;
-    }
-
     KeyboardRead ();
 
     Wizard::OpenOKDialog();
