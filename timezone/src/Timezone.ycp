@@ -265,7 +265,7 @@ global define integer Set (string zone, boolean really) {
 	if (Stage::firstboot() && !textmode)
 	{
 	    SCR::Execute (.target.bash, "/usr/bin/xset s on");
-	    SCR::Execute ( .target.bash, "/usr/bin/xset +dpms"); // FIXME correct path!
+	    SCR::Execute ( .target.bash, "/usr/bin/xset +dpms");
 	}
     }
 
@@ -501,7 +501,7 @@ global define string GetDateTime (boolean real_time, boolean locale_format) {
     string cmd = "";
 
     string date_format = (locale_format && Mode::normal ())
-	? "+%c" : "+%H:%M:%S - %Y-%m-%d";
+	? "+%c" : "+%Y-%m-%d - %H:%M:%S";
 
     y2milestone( "GetDateTime hwclock %1 real:%2", hwclock, real_time );
     if (!real_time && !Mode::config ())
@@ -746,12 +746,13 @@ global define map GetDateTimeMap() {
     list dparts = filter (
 	string v,splitstring (GetDateTime (false,false), " -:" ),``(size(v)>0));
 
-    ret["hour"]		= dparts[0]:"";
-    ret["minute"]	= dparts[1]:"";
-    ret["second"]	= dparts[2]:"";
-    ret["year"]		= dparts[3]:"";
-    ret["month"]	= dparts[4]:"";
-    ret["day"]		= deletechars (dparts[5]:"", "\n");
+    ret["year"]		= dparts[0]:"";
+    ret["month"]	= dparts[1]:"";
+    ret["day"]		= dparts[2]:"";
+    ret["hour"]		= dparts[3]:"";
+    ret["minute"]	= dparts[4]:"";
+    ret["second"]	= dparts[5]:"";
+
     y2milestone( "GetDateTimeMap dparts %1 ret %2", dparts, ret );
     return( ret );
 }
