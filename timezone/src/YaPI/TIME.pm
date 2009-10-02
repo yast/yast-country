@@ -22,11 +22,11 @@ sub Read {
   my $args = shift;
   my $ret = {};
   Timezone->Read();
-  if ($args->{"zones"} eq "true")
+  if (($args->{"zones"} || "") eq "true")
   {
     $ret->{"zones"} = Timezone->get_zonemap();
   }
-  if ($args->{"utcstatus"} eq "true"){
+  if (($args->{"utcstatus"} || "") eq "true"){
     if (Timezone->utc_only()){
       $ret->{"utcstatus"} = "UTConly";
     } elsif (Timezone->hwclock eq "-u") {
@@ -35,10 +35,10 @@ sub Read {
       $ret->{"utcstatus"} = "local";
     }
   }
-  if ($args->{"currenttime"} eq "true"){
+  if (($args->{"currenttime"} || "") eq "true"){
     $ret->{"time"} = Timezone->GetDateTime(YaST::YCP::Boolean(1),YaST::YCP::Boolean(0));
   }
-  if ($args->{"timezone"} eq "true"){
+  if (($args->{"timezone"} || "") eq "true"){
     $ret->{"timezone"} = Timezone->timezone;
   }
   return $ret;
