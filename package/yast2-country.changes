@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 27 13:58:30 CET 2009 - jsuchome@suse.cz
+
+- make PackagesCommit available for outside
+- load english names for languages in firstboot stage
+- 2.17.37
+
+-------------------------------------------------------------------
 Fri Oct  2 09:07:51 CEST 2009 - jsuchome@suse.cz
 
 - YaPI: check keys in args map

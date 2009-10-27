@@ -27,6 +27,7 @@ import "PackageCallbacks";
 import "PackageSystem";
 import "Popup";
 import "ProductFeatures";
+import "SlideShow";
 import "Stage";
 
 
@@ -571,7 +572,7 @@ global define void Language() {
 	string local_lang = ReadSysconfigLanguage ();
 	QuickSet (local_lang);
 	SetDefault();		// also default
-	if (Mode::live_installation ())
+	if (Mode::live_installation () || Stage::firstboot ())
 	{
 	    FillEnglishNames (local_lang);
 	}
@@ -915,15 +916,41 @@ global define boolean PackagesInit (list<string> selected_languages) {
 
 /**
  * Install and uninstall packages selected by Pkg::SetAdditionalLocales
- *
-global define boolean PackagesCommit () {
+ */
+global boolean PackagesCommit () {
 
-    SlideShow::OpenSlideShowDialog ();
+    if (!Mode::commandline ())
+    {
+/* work-around for following in order not to depend on yast2-packager
+       PackageSlideShow::InitPkgData (false);
+              "value" : PackageSlideShow::total_size_to_install / 1024 , // kilobytes
+*/
+        list<list<integer> > total_sizes_per_cd_per_src = Pkg::PkgMediaSizes();
+	integer total_size_to_install = 0;
+	foreach (integer item, flatten (total_sizes_per_cd_per_src), {
+	    if (item != -1)
+		total_size_to_install = total_size_to_install + item;
+	});
+
+	SlideShow::Setup([$[
+              "name" : "packages",
+              "description" : _("Installing Packages..."),
+              "value" : total_size_to_install / 1024 , // kilobytes
+              "units" : `kb,
+        ]]);
+
+	SlideShow::ShowTable();
+
+	SlideShow::OpenDialog ();
+	SlideShow::MoveToStage( "packages" );
+    }
     Pkg::PkgCommit (0);
-    SlideShow::CloseSlideShowDialog();
+    if (!Mode::commandline ())
+    {
+	SlideShow::CloseDialog();
+    }
     return true;
 }
-*/
 
 /**
  * de_DE@UTF-8 -> "DE"
