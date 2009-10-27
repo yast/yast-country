@@ -39,27 +39,6 @@
     string language		= Language::language;
 
     /**
-     * Install and uninstall packages selected by Pkg::SetAdditionalLocales
-     */
-    define boolean PackagesCommit () {
-	SlideShow::OpenDialog ();
-	PackageSlideShow::InitPkgData (false);
-        SlideShow::Setup([$[
-            "name" : "packages",
-            "description" : _("Installing Packages..."),
-            "value" : PackageSlideShow::total_size_to_install / 1024 , // kilobytes
-            "units" : `kb,
-        ]]);
-
-        SlideShow::ShowTable();
-
-	SlideShow::MoveToStage( "packages" );
-        Pkg::PkgCommit (0);
-        SlideShow::CloseDialog ();
-        return true;
-    }
-
-    /**
      * Popup for setting expert language values
      */
     define symbol LanguageExpertDialog() {
@@ -657,7 +636,7 @@ Remove some languages from the selection."));
 			}
 			if (Stage::firstboot ())// install language packages now
 			{
-			    PackagesCommit ();
+			    Language::PackagesCommit ();
 			}
 		    }
 		}
