@@ -1,6 +1,6 @@
 /**
  * File:
- *   cfg_console.scr
+ *   sysconfig_console.scr
  * Summary:
  *   SCR Agent for reading/writing /etc/sysconfig/console
  *   using the sysconfig-agent

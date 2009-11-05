@@ -1,6 +1,6 @@
 /**
  * File:
- *   cfg_keyboard.scr
+ *   sysconfig_keyboard.scr
  * Summary:
  *   SCR Agent for reading/writing /etc/sysconfig/keyboard
  *   using the sysconfig-agent
