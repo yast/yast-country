@@ -1,6 +1,6 @@
 /**
  * File:
- *   cfg_lang.scr
+ *   sysconfig_lang.scr
  * Summary:
  *   SCR Agent for reading/writing /etc/sysconfig/language
  *   using the sysconfig-agent

@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov 05 18:47:28 CET 2009 - aschnell@suse.de
+
+- follow naming convention for sysconfig agents
+- 2.19.0
+
+-------------------------------------------------------------------
 Fri Oct  2 09:15:17 CEST 2009 - jsuchome@suse.cz
 
 - YaPI: check keys in args map 

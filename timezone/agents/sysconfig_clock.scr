@@ -1,6 +1,6 @@
 /**
  * File:
- *   cfg_clock.scr
+ *   sysconfig_clock.scr
  * Summary:
  *   SCR Agent for reading/writing /etc/sysconfig/clock
  *   using the sysconfig-agent
