@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov 10 10:41:20 CET 2009 - jsuchome@suse.cz
+
+- added YaPI files TIME and LANGUAGE for webYaST (fate#307143)
+- 2.17.34.1
+
+-------------------------------------------------------------------
 Fri Jul 17 11:19:02 CEST 2009 - jsuchome@suse.cz
 
 - correct path to xset binary (bnc#522615)

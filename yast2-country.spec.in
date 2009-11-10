@@ -1,6 +1,12 @@
 @HEADER-COMMENT@
 
 @HEADER@
+Group:          System/YaST
+License: 	GPL v2 or later
+#policy files for YaPI dbus interface
+Source1:        org.opensuse.yast.modules.yapi.time.policy
+Source2:        org.opensuse.yast.modules.yapi.language.policy
+
 BuildRequires:	perl-XML-Writer update-desktop-files yast2-devtools yast2-testsuite yast2 yast2-perl-bindings
 Requires:	yast2-trans-stats yast2-perl-bindings timezone
 # XVersion.ycp
@@ -39,10 +45,12 @@ Obsoletes:	y2t_inst-language
 Provides:	y2t_inst-environment
 Obsoletes:	y2t_inst-environment
 
-Summary:	Setting the keyboard, language and time zone
-Group:          System/YaST
+Summary:	YaST2 - Country Settings (Language, Keyboard, and Timezone)
 
 %description
+Country specific data and configuration modules (language, keyboard,
+timezone) for yast2.
+
 -
 
 @PREP@
@@ -55,6 +63,11 @@ Group:          System/YaST
 rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 %endif
 
+# Policies
+mkdir -p $RPM_BUILD_ROOT/usr/share/PolicyKit/policy
+install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/usr/share/PolicyKit/policy/
+install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/PolicyKit/policy/
+
 @CLEAN@
 
 # common
@@ -65,6 +78,9 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 @moduledir@/Keyboard.y*
 @moduledir@/Timezone.y*
 @moduledir@/XLibAPI.pm
+%dir @moduledir@/YaPI
+@moduledir@/YaPI/TIME.pm
+@moduledir@/YaPI/LANGUAGE.pm
 @clientdir@/*.ycp
 @ydatadir@/*.ycp
 @yncludedir@/keyboard/
@@ -76,9 +92,10 @@ rm -f $RPM_BUILD_ROOT@desktopdir@/keyboard.desktop
 %endif
 @desktopdir@/yast-language.desktop
 @desktopdir@/timezone.desktop
+%attr(644,root,root) %config /usr/share/PolicyKit/policy/org.opensuse.yast.modules.yapi.*.policy
 
 %package data
-Summary:	Data files for country-related settings
+Summary:	YaST2 - Data files for Country settings
 Group:          System/YaST
 
 %description data
