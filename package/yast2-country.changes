@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov 13 13:24:18 CET 2009 - jsuchome@suse.cz
+
+- changed order of Date and Time strings (date first, bnc#445670) 
+- 2.17.34.2
+
+-------------------------------------------------------------------
 Tue Nov 10 10:41:20 CET 2009 - jsuchome@suse.cz
 
 - added YaPI files TIME and LANGUAGE for webYaST (fate#307143)
