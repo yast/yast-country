@@ -403,6 +403,8 @@ Enter the correct date.
 
     term settime = `Empty();
 
+    // "On a mainframe it is impossible for the user to change the hardware clock.
+    // So you can only specify the timezone." (ihno)
     if (!Arch::s390 () && !Mode::config ())
     {
 	// button text
