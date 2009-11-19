@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Nov 19 12:47:43 CET 2009 - jsuchome@suse.cz
+
+- during installation set the system time based on time zone and
+  not on hardware clock (bnc#540638)
+- 2.19.2
+
+-------------------------------------------------------------------
 Thu Nov 19 09:48:22 CET 2009 - jsuchome@suse.cz
 
 - show native language form also on installed system (bnc#555531) 
