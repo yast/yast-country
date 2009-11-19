@@ -259,6 +259,10 @@ global define integer Set (string zone, boolean really) {
 	if (!Arch::s390 ())
 	{
 	    cmd = "/sbin/hwclock --hctosys " + hwclock;
+	    if (Stage::initial () && hwclock == "--localtime")
+	    {
+		cmd = "/sbin/hwclock --systz --localtime --noadjfile && touch /dev/shm/warpclock";
+	    }
 	    y2milestone( "Set cmd %1", cmd );
 	    y2milestone( "Set ret %1", SCR::Execute(.target.bash_output, cmd ));
 	}
