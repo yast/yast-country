@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov 19 09:49:11 CET 2009 - jsuchome@suse.cz
+
+- show native language form also on installed system (bnc#555531) 
+- 2.17.38
+
+-------------------------------------------------------------------
 Tue Oct 27 13:58:30 CET 2009 - jsuchome@suse.cz
 
 - make PackagesCommit available for outside
