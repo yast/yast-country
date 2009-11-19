@@ -1157,11 +1157,14 @@ global list<term> GetLanguageItems (symbol kind) {
 
     // mapping of language name (translated) to language code
     map lang2code		= $[];
+    // mapping language code to native form
+    map code2native		= $[];
     // list of language names (translated)
     list<string> lang_list	= [];
     foreach (any name, list codelist, languageselsort, {
 	lang2code [codelist[2]:""]	= codelist[1]:"";
 	lang_list	= add (lang_list, codelist[2]:"");
+	code2native[codelist[1]:""]	= codelist[0]:"";
     });
 
 
@@ -1189,8 +1192,9 @@ global list<term> GetLanguageItems (symbol kind) {
 	secondary_items = maplist (string trans_lang, lsort (lang_list),
 	{
 	    string code		= lang2code [trans_lang]:"";
+	    string show_lang	= language == code ? trans_lang : sformat ("%1 - %2", trans_lang, code2native[code]:"");
 	    primary_items	= add (primary_items, icons ?
-		`item (`id (code), `icon(tolower(Language::GetGivenLanguageCountry(code))+"/flag.png"), trans_lang, language == code) :
+		`item (`id (code), `icon(tolower(Language::GetGivenLanguageCountry(code))+"/flag.png"), show_lang, language == code) :
 		`item (`id (code), trans_lang, language == code));
 	    if (language == code)
 		primary_included	= true;

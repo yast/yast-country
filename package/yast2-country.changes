@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov 19 09:48:22 CET 2009 - jsuchome@suse.cz
+
+- show native language form also on installed system (bnc#555531) 
+- 2.19.1
+
+-------------------------------------------------------------------
 Thu Nov 05 18:47:28 CET 2009 - aschnell@suse.de
 
 - follow naming convention for sysconfig agents
