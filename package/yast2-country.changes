@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Dec  4 14:12:20 CET 2009 - jsuchome@suse.cz
+
+- install ntp together with yast2-ntp-client (bnc#560732)
+- 2.17.39 
+
+-------------------------------------------------------------------
 Thu Nov 19 09:49:11 CET 2009 - jsuchome@suse.cz
 
 - show native language form also on installed system (bnc#555531) 

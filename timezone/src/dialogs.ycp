@@ -262,7 +262,7 @@
 	    ntp_used = (ret == `ntp);
 	    if (ntp_used && !Stage::initial () && !ntp_installed)
 	    {
-		ntp_installed	= Package::Install ("yast2-ntp-client");
+		ntp_installed	= Package::InstallAll (["yast2-ntp-client", "ntp"]);
 		if (!ntp_installed)
 		{
 		    ntp_used = false;
