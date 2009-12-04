@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Dec  4 14:11:30 CET 2009 - jsuchome@suse.cz
+
+- install ntp together with yast2-ntp-client (bnc#560732)
+- 2.19.3 
+
+-------------------------------------------------------------------
 Thu Nov 19 12:47:43 CET 2009 - jsuchome@suse.cz
 
 - during installation set the system time based on time zone and
