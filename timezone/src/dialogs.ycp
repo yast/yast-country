@@ -268,7 +268,7 @@
 	    // need to install it first?
 	    if (ntp_rb && !Stage::initial () && !ntp_installed)
 	    {
-		ntp_installed	= Package::Install ("yast2-ntp-client");
+		ntp_installed	= Package::InstallAll (["yast2-ntp-client", "ntp"]);
 		// succeeded? create UI, otherwise revert the click
 		if (!ntp_installed)
 		{
