@@ -208,24 +208,36 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
 
     // help text for keyboard screen (header)
     string help_text = _("
-<p><big><b>Keyboard Configuration</b></big></p>") +
+<p><big><b>Keyboard Configuration</b></big></p>");
 
-    // help text for keyboard screen
-    _("<p>
+    if (Stage::initial () || Stage::firstboot ())
+    {
+
+	help_text	= help_text +
+	// help text for keyboard screen (installation)
+	_("<p>
 Choose the <b>Keyboard Layout</b> to use for
 installation and in the installed system.  
 Test the layout in <b>Test</b>.
 For advanced options, such as repeat rate and delay, select <b>Expert Settings</b>.
 </p>
 ");
-
-    // general help trailer
-    help_text = help_text + _("<p>
+	// general help trailer
+	help_text = help_text + _("<p>
 If unsure, use the default values already selected.
 </p>");
+    }
+    else
+	help_text	= help_text +
+	// help text for keyboard screen (installation)
+	_("<p>
+Choose the <b>Keyboard Layout</b> to use in the system.
+For advanced options, such as repeat rate and delay, select <b>Expert Settings</b>.</p>
+<p>Find more options as well as more layouts in the keyboard layout tool of your desktop environment.</p>
+");
 
     // Screen title for keyboard screen
-    Wizard::SetContents ( _("Keyboard Configuration"), contents, help_text,
+    Wizard::SetContents ( _("System Keyboard Configuration"), contents, help_text,
 	args["enable_back"]:true, args["enable_next"]:true);
 
     Wizard::SetDesktopIcon("keyboard");
