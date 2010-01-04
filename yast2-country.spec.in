@@ -83,6 +83,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/PolicyKit/policy/
 @schemadir@/autoyast/rnc/*.rnc
 @desktopdir@/yast-language.desktop
 @desktopdir@/timezone.desktop
+@desktopdir@/keyboard.desktop
 %attr(644,root,root) %config /usr/share/PolicyKit/policy/org.opensuse.yast.modules.yapi.*.policy
 
 %package data
