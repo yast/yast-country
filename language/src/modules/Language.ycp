@@ -134,7 +134,6 @@ global define boolean CJKLanguage (string lang) {
     return contains (cjk_languages, l);
 }
 
-
 /**
  * return the value of text_mode (true for ncurses)
  */
@@ -1238,6 +1237,41 @@ for this language.
 "));
     }
 }
+
+/**
+ * Set current YaST language to English if method for showing text in
+ * current language is not supported (usually for CJK languages)
+ * See http://bugzilla.novell.com/show_bug.cgi?id=479529 for discussion
+ * @boolean show_popup if information popup about the change should be shown
+ * @return true if UI language was changed
+ */
+global boolean SwitchToEnglishIfNeeded (boolean show_popup) {
+
+    if (Stage::normal ())
+    {
+	y2milestone ("no language switching in normal stage");
+	return false;
+    }
+    if (GetTextMode () &&
+	// current language is CJK
+	CJKLanguage (language) &&
+	// fbiterm is not running
+	getenv ("TERM") != "iterm")
+    {
+	if (show_popup)
+	{
+	    // popup message (user selected CJK language in text mode)
+	    Popup::Message (_("The selected language cannot be used in text mode. English is used for
+installation, but the selected language will be used for the new system."));
+	}
+	WfmSetGivenLanguage ("en_US");
+	return true;
+    }
+    return false;
+}
+
+
+
 
 /* EOF */
 }

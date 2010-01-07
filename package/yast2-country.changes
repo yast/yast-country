@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Jan  7 14:45:07 CET 2010 - jsuchome@suse.cz
+
+- added Language::SwitchToEnglishIfNeeded to be called when it might
+  be necessary to use English in UI, due to possible displaying
+  problems with another language (bnc#479529)
+- 2.17.40
+
+-------------------------------------------------------------------
 Fri Dec  4 14:12:20 CET 2009 - jsuchome@suse.cz
 
 - install ntp together with yast2-ntp-client (bnc#560732)
