@@ -528,17 +528,10 @@ In the selection box, specify additional languages to use on your system.
 
 	    if (Stage::initial () || Stage::firstboot ())
 	    {
-		if ((set_default && ret == `language ||
-			(!set_default && ret == `next)) &&
-		    Language::CJKLanguage (language) &&
-		    !Language::CJKLanguage (preselected) &&
-		    Language::GetTextMode ())
+		if ((set_default && ret == `language || (!set_default && ret == `next)) &&
+		    Language::SwitchToEnglishIfNeeded (true))
 		{
-		    // popup message (user selected CJK language in text mode)
-		    Popup::Message (_("The selected language cannot be used in text mode. English is used for
-installation, but the selected language will be used for the new system."));
-
-		    Language::WfmSetGivenLanguage ("en_US");
+		    y2debug ("UI switched to en_US");
 		}
 		else if (ret == `next || (set_default && ret == `language))
 		{
