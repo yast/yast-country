@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jan  8 10:09:52 CET 2010 - jsuchome@suse.cz
+
+- package keyboard desktop file
+- 2.19.6 
+
+-------------------------------------------------------------------
 Thu Jan  7 14:40:33 CET 2010 - jsuchome@suse.cz
 
 - added Language::SwitchToEnglishIfNeeded to be called when it might
