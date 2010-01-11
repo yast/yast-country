@@ -1072,9 +1072,15 @@ global define string SetX11 (string keyboard) {
 	    map display_info    = UI::GetDisplayInfo ();
 	    textmode		= display_info["TextMode"]:false;
 	}
+	string display      = getenv ("DISPLAY");
 	if (textmode)
 	{
 	    y2milestone("Not setting X keyboard due to text mode");
+	}
+	// check if we are running over ssh: bnc#539218,c4
+	else if (tointeger (splitstring (display, ":")[1]:"0") >= 10)
+	{
+	    y2milestone("Not setting X keyboard: running over ssh");
 	}
 	else if (size (xkb_cmd)>0)
 	{
