@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan 11 15:27:15 CET 2010 - jsuchome@suse.cz
+
+- do not call setxkbmap if running over ssh (bnc#539218)
+- 2.19.7
+
+-------------------------------------------------------------------
 Fri Jan  8 10:09:52 CET 2010 - jsuchome@suse.cz
 
 - package keyboard desktop file
