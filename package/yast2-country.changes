@@ -418,12 +418,12 @@ Mon Feb 18 15:30:45 CET 2008 - jsuchome@suse.cz
   inst_complex_welcome client)
 - 2.16.9
 
---------------------------------------------------------------------
+-------------------------------------------------------------------
 Fri Feb 15 12:44:54 CET 2008 - visnov@suse.cz
 
 - show icons for languages
 
-------------------------------------------------------------------
+-------------------------------------------------------------------
 Thu Feb  7 10:56:54 CET 2008 - jsuchome@suse.cz
 
 - the agent for adapting fvwm2 font not needed anymore (bnc#359183)
