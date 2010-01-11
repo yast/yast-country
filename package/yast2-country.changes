@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Jan 11 15:29:12 CET 2010 - jsuchome@suse.cz
+
+- do not call setxkbmap if running over ssh (bnc#539218)
+- 2.17.41 
+
+-------------------------------------------------------------------
 Thu Jan  7 14:45:07 CET 2010 - jsuchome@suse.cz
 
 - added Language::SwitchToEnglishIfNeeded to be called when it might
