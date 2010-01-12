@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan 12 09:19:24 CET 2010 - jsuchome@suse.cz
+
+- added support for Asturian language (bnc#562202)
+- 2.19.8
+
+-------------------------------------------------------------------
 Mon Jan 11 15:27:15 CET 2010 - jsuchome@suse.cz
 
 - do not call setxkbmap if running over ssh (bnc#539218)
