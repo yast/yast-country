@@ -21,9 +21,8 @@ X-SuSE-YaST-AutoInstSchema=language.rnc
 X-SuSE-YaST-Keywords=language,locale,country
 
 Icon=yast-language
-Exec=/sbin/yast2 language 
+Exec=xdg-su -c "/sbin/yast2 language"
 
 Name=Language
 GenericName=Change the language and install additional languages
-X-KDE-SubstituteUID=true
 StartupNotify=true

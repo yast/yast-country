@@ -20,9 +20,8 @@ X-SuSE-YaST-AutoInstSchema=keyboard.rnc
 X-SuSE-YaST-Keywords=keyboard
 
 Icon=yast-keyboard
-Exec=/sbin/yast2 keyboard 
+Exec=xdg-su -c "/sbin/yast2 keyboard"
 
 Name=System Keyboard Layout
 GenericName=Select the system keyboard
-X-KDE-SubstituteUID=true
 StartupNotify=true
