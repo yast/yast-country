@@ -20,9 +20,8 @@ X-SuSE-YaST-AutoInstSchema=timezone.rnc
 X-SuSE-YaST-Keywords=time,timezone,clock
 
 Icon=yast-timezone
-Exec=/sbin/yast2 timezone 
+Exec=xdg-su -c "/sbin/yast2 timezone"
 
 Name=Date and Time
 GenericName=Control time zone, date, and system time
-X-KDE-SubstituteUID=true
 StartupNotify=true
