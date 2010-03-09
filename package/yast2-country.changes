@@ -1,3 +1,9 @@
+-------------------------------------------------------------------
+Tue Mar  9 13:45:51 CET 2010 - jsuchome@suse.cz
+
+- YaPI/TIME.pm : enable returning timezone for language (bnc#558364)
+- 2.19.9 
+
 ------------------------------------------------------------------
 Wed Jan 13 18:56:03 CET 2010 - kmachalkova@suse.cz
 
