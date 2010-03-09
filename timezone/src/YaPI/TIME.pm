@@ -41,6 +41,9 @@ sub Read {
   if (($args->{"timezone"} || "") eq "true"){
     $ret->{"timezone"} = Timezone->timezone;
   }
+  if (($args->{"language"} || "") ne "") {
+    $ret->{"timezone_for_language"}	= Timezone->GetTimezoneForLanguage ($args->{"language"} || "", "");
+  }
   return $ret;
 }
 
