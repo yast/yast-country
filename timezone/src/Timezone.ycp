@@ -148,6 +148,9 @@ list < map < string, any> > zonemap = [];
 // 'language --> default timezone' conversion map
 map<string, string> lang2tz = $[];
 
+// remember if /sbin/hwclock --hctosys was called, it can be done only once (bnc#584484)
+boolean systz_called	= false;
+
 // ------------------------------------------------------------------
 // END: Locally defined data
 // ------------------------------------------------------------------
@@ -261,7 +264,11 @@ global define integer Set (string zone, boolean really) {
 	    cmd = "/sbin/hwclock --hctosys " + hwclock;
 	    if (Stage::initial () && hwclock == "--localtime")
 	    {
-		cmd = "/sbin/hwclock --systz --localtime --noadjfile && touch /dev/shm/warpclock";
+		if (!systz_called)
+		{
+		    cmd = "/sbin/hwclock --systz --localtime --noadjfile && touch /dev/shm/warpclock";
+		    systz_called	= true;
+		}
 	    }
 	    y2milestone( "Set cmd %1", cmd );
 	    y2milestone( "Set ret %1", SCR::Execute(.target.bash_output, cmd ));
