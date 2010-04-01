@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Apr  1 13:22:33 CEST 2010 - jsuchome@suse.cz
+
+- '/sbin/hwclock --systz' can be called only once (bnc#584484)
+- 2.17.44
+
+-------------------------------------------------------------------
 Wed Mar 10 12:20:28 CET 2010 - jsuchome@suse.cz
 
 - call /sbin/hwclock --systz in case of local time (bnc#550697,
