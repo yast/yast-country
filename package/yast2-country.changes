@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr  2 08:38:51 CEST 2010 - jsuchome@suse.cz
+
+- CONSOLE_SCREENMAP="8859-13" for Lithuanian (bnc#566283)
+- 2.19.11
+
+-------------------------------------------------------------------
 Thu Apr  1 13:23:21 CEST 2010 - jsuchome@suse.cz
 
 - '/sbin/hwclock --systz' can be called only once (bnc#584484)
