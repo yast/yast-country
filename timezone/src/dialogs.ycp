@@ -36,6 +36,9 @@
   // if system clock is configured to sync with NTP
   boolean ntp_used		= false;
 
+  // ntp server configured to sync with
+  string ntp_server		= "";
+
   // if packages for NTP configuration are installed
   boolean ntp_installed		= false;
 
@@ -151,6 +154,28 @@
 	}
     }
 
+    void enable_disable_time_widgets (boolean enable) {
+
+	UI::ChangeWidget (`id (`change_now), `Enabled, enable);
+
+	enable	= enable && (boolean) UI::QueryWidget (`id (`change_now), `Value);
+
+	if (dt_widgets)
+	{
+	    UI::ChangeWidget (`id (`date), `Enabled, enable);
+	    UI::ChangeWidget (`id (`time), `Enabled, enable);
+	}
+	else
+	{
+	    UI::ChangeWidget (`id(`hour), `Enabled, enable);
+	    UI::ChangeWidget (`id(`minute), `Enabled, enable);
+	    UI::ChangeWidget (`id(`second), `Enabled, enable);
+	    UI::ChangeWidget (`id(`day), `Enabled, enable);
+	    UI::ChangeWidget (`id(`month), `Enabled, enable);
+	    UI::ChangeWidget (`id(`year), `Enabled, enable);
+	}
+    }
+
     term dateterm	= `VBox (
 	`HBox (
 	    `HSpacing(1),
@@ -210,7 +235,12 @@
 		`VBox (
 		    `Left (timeterm),
 		    `VSpacing(),
-		    `Left (dateterm)
+		    `Left (dateterm),
+		    `VSpacing (),
+		    `HBox (`HSpacing (0.5), `Left (
+			// check box label
+			`CheckBox (`id (`change_now), `opt (`notify), _("Change the Time Now"), true))
+		    )
 		)
 	    ),
 	    `VSpacing (1),
@@ -246,11 +276,11 @@
 	});
     }
 
-
     any ret = nil;
     repeat
     {
 	ntp_call ("ui_enable_disable_widgets", $["enabled": ntp_rb]);
+	enable_disable_time_widgets (!ntp_rb);
 
 	ret = UI::UserInput();
 	y2debug ("UserInput ret:%1", ret );
@@ -291,16 +321,18 @@
 	    // before the sync, save the time zone (bnc#467318)
 	    Timezone::Set (Timezone::timezone, Stage::initial () && !Mode::live_installation ());
 	    // true: go on, exit; false: loop on
-	    boolean ntp_handled = (boolean) ntp_call ("ui_try_save", $[]);
+	    boolean ntp_handled = (boolean) ntp_call ("ui_try_save", $[ "ntpdate_only" : true]);
 	    if (!ntp_handled)
 		ret = `retry;	// loop on
 	    else
 	    {
+		// `ntp_address is constructed by ntp-client_proposal.ycp... :-(
+		ntp_server      = (string) UI::QueryWidget(`id(`ntp_address), `Value);
 		// after sync, show real time in the widget
 		Timezone::diff	= 0;
 	    }
 	}
-	if (ret == `accept && !ntp_rb)
+	if (ret == `accept && !ntp_rb && UI::QueryWidget (`id (`change_now), `Value) == true)
 	{
 	    if (dt_widgets)
 	    {
@@ -355,9 +387,13 @@ Enter the correct date.
     if (ret == `accept)
     {
 	// new system time from ntpdate must be saved to hw clock
-	Timezone::SystemTime2HWClock ();
+	if (ntp_rb)
+	{
+	    Timezone::SystemTime2HWClock ();
+	}
 	// remember ui
 	ntp_call ("SetUseNTP", $["ntp_used" : ntp_rb]);
+	ntp_used	= ntp_rb;
     }
 
     Wizard::CloseDialog ();
@@ -447,9 +483,9 @@ Enter the correct date.
 	ntp_used	= true;
 	// configure NTP client
 	srandom ();
-	string server	= sformat ("%1.opensuse.pool.ntp.org", random (4));
+	ntp_server	= sformat ("%1.opensuse.pool.ntp.org", random (4));
 	map<string, any> argmap = $[
-	    "server"	: server,
+	    "server"	: ntp_server,
 	    // FIXME ntp-client_proposal doesn't understand 'servers' yet
 	    "servers"	: [
 		"0.opensuse.pool.ntp.org",
@@ -457,17 +493,18 @@ Enter the correct date.
 		"2.opensuse.pool.ntp.org",
 		"3.opensuse.pool.ntp.org",
 	    ],
+	    "ntpdate_only"	: true
 	];
 	symbol rv = (symbol) ntp_call ("Write", argmap);
 	if (rv == `invalid_hostname)
 	{
-	    y2warning ("Invalid NTP server hostname %1", server);
+	    y2warning ("Invalid NTP server hostname %1", ntp_server);
 	    ntp_used	= false;
 	}
 	else
 	{
 	    Timezone::SystemTime2HWClock ();
-	    y2milestone ("proposing NTP server %1", server);
+	    y2milestone ("proposing NTP server %1", ntp_server);
 	    ntp_call ("SetUseNTP", $["ntp_used" : ntp_used]);
 	}
     }
@@ -807,6 +844,15 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 		Timezone::user_decision	= true;
 		Timezone::user_hwclock	= true;
 		Timezone::ntp_used	= ntp_used;
+
+		if (ntp_used && ntp_server != "")
+		{
+		    // save NTP client settings now
+		    ntp_call ("Write", $[
+			"server"	: ntp_server,
+			"write_only": true
+		    ]);
+		}
 	    }
 	}
     } until ( ret == `next || ret == `back || ret == `cancel );

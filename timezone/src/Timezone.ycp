@@ -390,6 +390,8 @@ global define void SetTime (string year, string month, string day,
 	cmd = "/sbin/hwclock --hctosys " + hwclock;
 	y2milestone( "SetTime cmd %1", cmd );
 	SCR::Execute(.target.bash, cmd );
+	// actually, it was probably not called, but do not let it change the time again after manual change
+	systz_called	= true;
     }
 };
 
