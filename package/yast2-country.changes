@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr  6 13:57:12 CEST 2010 - jsuchome@suse.cz
+
+- enable switching off NTP (bnc#589296)
+- 2.19.12 
+
+-------------------------------------------------------------------
 Fri Apr  2 08:38:51 CEST 2010 - jsuchome@suse.cz
 
 - CONSOLE_SCREENMAP="8859-13" for Lithuanian (bnc#566283)
