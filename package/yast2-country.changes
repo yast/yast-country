@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Apr 14 11:40:01 CEST 2010 - jsuchome@suse.cz
+
+- TIMEZONE.pm: search for language only when full locale was
+  not given (preparation for bnc#558364)
+- 2.17.45 
+
+-------------------------------------------------------------------
 Thu Apr  1 13:22:33 CEST 2010 - jsuchome@suse.cz
 
 - '/sbin/hwclock --systz' can be called only once (bnc#584484)
