@@ -7,6 +7,7 @@ use YaPI;
 textdomain("time");
 
 # ------------------- imported modules
+YaST::YCP::Import ("Language");
 YaST::YCP::Import ("Timezone");
 # -------------------------------------
 
@@ -42,7 +43,19 @@ sub Read {
     $ret->{"timezone"} = Timezone->timezone;
   }
   if (($args->{"language"} || "") ne "") {
-    $ret->{"timezone_for_language"}	= Timezone->GetTimezoneForLanguage ($args->{"language"} || "", "");
+    my $language	= $args->{"language"} || "";
+    my $timezone_for_language = Timezone->GetTimezoneForLanguage ($language, "");
+    # no timezone for this locale, try guessing only by language
+    unless ($timezone_for_language) {
+	my $lang_map	= Language->GetLanguagesMap(0);
+	foreach my $lang (keys %$lang_map) {
+	    if (substr ($lang, 0, 2) eq $language) {
+		$timezone_for_language = Timezone->GetTimezoneForLanguage ($lang, "");
+		last;
+	    }
+	}
+    }
+    $ret->{"timezone_for_language"}	= $timezone_for_language;
   }
   return $ret;
 }
