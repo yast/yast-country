@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Apr 14 11:49:53 CEST 2010 - jsuchome@suse.cz
+
+- TIMEZONE.pm: search for language only when full locale was
+  not given (preparation for bnc#558364) 
+- 2.19.13
+
+-------------------------------------------------------------------
 Tue Apr  6 13:57:12 CEST 2010 - jsuchome@suse.cz
 
 - enable switching off NTP (bnc#589296)
