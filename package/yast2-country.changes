@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Apr 21 13:30:37 UTC 2010 - coolo@novell.com
+
+- Buildrequire PolicyKit-devel to fix build
+
+-------------------------------------------------------------------
 Wed Apr 14 11:49:53 CEST 2010 - jsuchome@suse.cz
 
 - TIMEZONE.pm: search for language only when full locale was
