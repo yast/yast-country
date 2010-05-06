@@ -30,6 +30,7 @@
 {
     module "Console";
 
+    import "Kernel";
     import "Mode";
     import "Language";
     import "Linuxrc";
@@ -137,7 +138,17 @@
 		 * upgrade: disable old entries for serial console
 		 */
 		 SCR::Execute (.target.bash,"sed -i '/^\\(hvc\\|hvsi\\|S[0-9]\\)/s@^.*@#&@' /etc/inittab");
-		 SCR::Execute (.target.bash,"grep -E '^cons:' /etc/inittab || /bin/echo 'cons:12345:respawn:/sbin/smart_agetty -L 42 console' >> /etc/inittab");
+
+		 // find out if the baud rate is not present on kernel line (bnc#602743)
+		 string rate	= "42";
+		 foreach (string part, splitstring (Kernel::GetCmdLine (), "\t "), {
+		    if (substring (part, 0, 8) == "console=" && issubstring (part, ","))
+		    {
+			rate = splitstring (part, ",")[1]:rate;
+		    }
+		 });
+
+		 SCR::Execute (.target.bash, sformat ("grep -E '^cons:' /etc/inittab || /bin/echo 'cons:12345:respawn:/sbin/smart_agetty -L %1 console' >> /etc/inittab", rate));
 		 SCR::Execute (.target.bash,"grep -Ew ^console /etc/securetty || /bin/echo console >> /etc/securetty");
 	}
     }
