@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu May  6 12:51:05 CEST 2010 - jsuchome@suse.cz
+
+- Console.ycp: find out if the baud rate was not given (bnc#602743)
+- 2.19.14 
+
+-------------------------------------------------------------------
 Wed Apr 21 13:30:37 UTC 2010 - coolo@novell.com
 
 - Buildrequire PolicyKit-devel to fix build
