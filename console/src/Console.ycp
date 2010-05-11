@@ -142,7 +142,7 @@
 		 // find out if the baud rate is not present on command line (bnc#602743)
 		 string rate	= "42";
 		 foreach (string part, splitstring (Kernel::GetCmdLine (), "\t "), {
-		    if (substring (part, 0, 8) == "console=" && issubstring (part, ","))
+		    if (substring (part, 0, 11) == "console=tty" && issubstring (part, ","))
 		    {
 			rate = splitstring (part, ",")[1]:rate;
 		    }
