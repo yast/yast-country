@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue May 11 13:49:03 CEST 2010 - jsuchome@suse.cz
+
+- previous fix works only when console=tty* (bnc#604699)
+- 2.17.48
+
+-------------------------------------------------------------------
 Thu May  6 11:40:31 CEST 2010 - jsuchome@suse.cz
 
 - Console.ycp: find out if the baud rate was not given (bnc#602743)
