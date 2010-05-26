@@ -621,6 +621,50 @@ return ($[
 	    ],
 	 ]
     ],
+
+    "taiwanese": [
+	// keyboard layout
+	_("Traditional Chinese"),
+	$[
+	    "pc104"	: $[
+		    "ncurses"	: "taiwanese.map.gz",
+	    ],
+	    "macintosh" : $[
+		    "ncurses"	: "mac-us.map.gz"
+	    ],
+	    "type4"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+	    ],
+	    "type5"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+	    ],
+	    "type5_euro": $[
+		    "ncurses"	: "sunkeymap.map.gz"
+	    ],
+	 ]
+    ],
+
+    "chinese": [
+	// keyboard layout
+	_("Simplified Chinese"),
+	$[
+	    "pc104"	: $[
+		    "ncurses"	: "chinese.map.gz",
+	    ],
+	    "macintosh" : $[
+		    "ncurses"	: "mac-us.map.gz"
+	    ],
+	    "type4"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+	    ],
+	    "type5"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+	    ],
+	    "type5_euro": $[
+		    "ncurses"	: "sunkeymap.map.gz"
+	    ],
+	 ]
+    ],
 ]);
 
 }
