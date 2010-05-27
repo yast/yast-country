@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 27 08:28:48 CEST 2010 - jsuchome@suse.cz
+
+- use Dutch keyboard layout as a default for Dutch (bnc#603955)
+- added keyboard entry for China and Taiwan (bnc#603950)
+- 2.19.16
+
+-------------------------------------------------------------------
 Tue May 11 14:18:53 CEST 2010 - jsuchome@suse.cz
 
 - previous fix works only when console=tty* (bnc#604699)
