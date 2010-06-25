@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jun 25 10:47:20 CEST 2010 - jsuchome@suse.cz
+
+- Console.ycp: correct parsing of the kernel line (bnc#604699)
+- 2.19.17
+
+-------------------------------------------------------------------
 Thu May 27 08:28:48 CEST 2010 - jsuchome@suse.cz
 
 - use Dutch keyboard layout as a default for Dutch (bnc#603955)

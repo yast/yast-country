@@ -140,14 +140,15 @@
 		 SCR::Execute (.target.bash,"sed -i '/^\\(hvc\\|hvsi\\|S[0-9]\\)/s@^.*@#&@' /etc/inittab");
 
 		 // find out if the baud rate is not present on command line (bnc#602743)
-		 string rate	= "42";
+		 integer rate	= 42;
 		 foreach (string part, splitstring (Kernel::GetCmdLine (), "\t "), {
 		    if (substring (part, 0, 11) == "console=tty" && issubstring (part, ","))
 		    {
-			rate = splitstring (part, ",")[1]:rate;
+			string srate = splitstring (part, ",")[1]:"42";
+			rate = tointeger (srate); // "bbbbpnf" -> bbbb, where 'b' is number and 'p' character
 		    }
 		 });
-
+		 if (rate == nil) rate = 42;
 		 SCR::Execute (.target.bash, sformat ("grep -E '^cons:' /etc/inittab || /bin/echo 'cons:12345:respawn:/sbin/smart_agetty -L %1 console' >> /etc/inittab", rate));
 		 SCR::Execute (.target.bash,"grep -Ew ^console /etc/securetty || /bin/echo console >> /etc/securetty");
 	}
