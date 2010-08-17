@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Aug 12 09:05:38 CEST 2010 - jsuchome@suse.cz
+
+- mkinitrd call is needed after time change with localtime
+  (bnc#627116)
+- remember if NTP was set; save NTP settings (bnc#627818)
+- 2.20.0
+
+-------------------------------------------------------------------
 Tue Aug  3 15:26:11 CEST 2010 - jsuchome@suse.cz
 
 - in text mode, set the timezone when leaving dialog (bnc#617861)
