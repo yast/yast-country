@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Aug  3 15:26:11 CEST 2010 - jsuchome@suse.cz
+
+- in text mode, set the timezone when leaving dialog (bnc#617861)
+- 2.19.18
+
+-------------------------------------------------------------------
 Fri Jun 25 10:47:20 CEST 2010 - jsuchome@suse.cz
 
 - Console.ycp: correct parsing of the kernel line (bnc#604699)
