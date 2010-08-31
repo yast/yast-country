@@ -370,6 +370,14 @@ global define void Timezone() {
     return;
 }
 
+global boolean CallMkinitrd () {
+
+    y2milestone ("calling mkinitrd...");
+    SCR::Execute (.target.bash, "/sbin/mkinitrd >> /var/log/YaST2/y2logmkinitrd 2>> /var/log/YaST2/y2logmkinitrd");
+    y2milestone ("... done");
+    return true;
+}
+
 /**
  * Set the new time and date given by user
  */
