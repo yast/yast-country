@@ -42,6 +42,9 @@
   // if packages for NTP configuration are installed
   boolean ntp_installed		= false;
 
+  // when checking for NTP status for first time, check the service status
+  boolean ntp_first_time	= true;
+
   /**
    * helper function for seting the time related stuff in module and possibly
    * adapting current time according to it
@@ -264,7 +267,8 @@
     ntp_rb = (boolean) ntp_call ("ui_init", $[
 				     "replace_point": `id (`rp),
 				     "country" : Language::GetLanguageCountry(),
-				     /*WTF*/"first_time" : true ]);
+				     "first_time" : ntp_first_time ]);
+    ntp_first_time	= false;
     UI::ChangeWidget(`id(`rb), `CurrentButton, (ntp_rb ? `ntp : `manual));
 
     if (!dt_widgets)
@@ -321,7 +325,7 @@
 	    // before the sync, save the time zone (bnc#467318)
 	    Timezone::Set (Timezone::timezone, Stage::initial () && !Mode::live_installation ());
 	    // true: go on, exit; false: loop on
-	    boolean ntp_handled = (boolean) ntp_call ("ui_try_save", $[ "ntpdate_only" : true]);
+	    boolean ntp_handled = (boolean) ntp_call ("ui_try_save", $[]);
 	    if (!ntp_handled)
 		ret = `retry;	// loop on
 	    else
@@ -378,7 +382,21 @@ Enter the correct date.
 	    }
 	    else
 	    {
+		// in case of local time, we need to call mkinitrd (after setting timezone)
+		if (Timezone::hwclock == "--localtime" && !Stage::initial ())
+		{
+		    Timezone::Set (Timezone::timezone, true);
+		}
+
 		Timezone::SetTime( year, month, day, hour, minute, second );
+
+		if (Timezone::hwclock == "--localtime" && !Stage::initial ())
+		{
+		    // busy message
+		    Popup::ShowFeedback ("", _("Updating initrd..."));
+		    Timezone::CallMkinitrd ();
+		    Popup::ClearFeedback ();
+		}
 	    }
 	}
     }
