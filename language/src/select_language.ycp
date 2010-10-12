@@ -404,13 +404,13 @@ In the selection box, specify additional languages to use on your system.
 
     if (more_languages)
     {
-	UI::ChangeWidget( `language, `Items, primary_items );
-	UI::ChangeWidget( `languages, `Items, secondary_items );
 	if (!Stage::initial () && !Stage::firstboot ())
 	{
 	    UI::ChangeWidget( `language, `IconPath, "/usr/share/locale/l10n/" );
 	    UI::ChangeWidget( `languages, `IconPath, "/usr/share/locale/l10n/");
 	}
+	UI::ChangeWidget( `language, `Items, primary_items );
+	UI::ChangeWidget( `languages, `Items, secondary_items );
     }
 
     // No .desktop files in inst-sys - use icon explicitly

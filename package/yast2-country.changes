@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct 12 15:27:39 CEST 2010 - jsuchome@suse.cz
+
+- show icons in language lists
+- 2.20.1 
+
+-------------------------------------------------------------------
 Thu Aug 12 09:05:38 CEST 2010 - jsuchome@suse.cz
 
 - mkinitrd call is needed after time change with localtime
