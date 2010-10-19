@@ -864,6 +864,8 @@ $[
 	"Pacific/Wallis"	: _("Wallis"),	// WF
 	// time zone
 	"Pacific/Apia"		: _("Apia"),	// WS
+	// time zone
+	"Pacific/Easter"	: _("Easter Island"),
     ],
     "central"			: "Pacific/Tahiti",
 ],
