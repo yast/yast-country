@@ -35,6 +35,7 @@
     import "Stage";
     import "Timezone";
     import "Wizard";
+    import "PackagesUI";
 
     string language		= Language::language;
 
@@ -619,7 +620,22 @@ In the selection box, specify additional languages to use on your system.
 		    }
 		    else if (Language::PackagesModified () && !Mode::config ())
 		    {
-			if (!Language::PackagesInit (selected_languages))
+			if (!Language::PackagesInit(selected_languages))
+			{
+			    // error message - package solver failed
+			    Report::Error (_("There are unresolved package dependencies."));
+
+			    // run the package selector
+
+			    // disable repomanagement during installation
+			    boolean repomgmt = !Mode::installation();
+			    // start the package selector
+			    PackagesUI::RunPackageSelector($[ "enable_repo_mgr" : repomgmt, "mode" : `summaryMode ]);
+
+			    ret = `not_next;
+			    continue;
+			}
+			if (!Language::EnoughSpace())
 			{
 			    // error message
 			    Report::Error (_("There is not enough space to install all additional packages.

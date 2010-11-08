@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Nov  8 14:24:53 UTC 2010 - lslezak@suse.cz
+
+- don't install recommended packages for already installed packages
+  when adding a new language (bnc#439373)
+- start the package manager when there are unresolved dependencies
+- 2.20.3
+
+-------------------------------------------------------------------
 Tue Oct 19 14:41:32 CEST 2010 - jsuchome@suse.cz
 
 - Easter Island is in Pacific (bnc#647562)

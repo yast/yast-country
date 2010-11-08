@@ -74,16 +74,20 @@ define boolean LanguageWrite () {
     Progress::NextStage ();
 
     boolean enough_space	= true;
+    boolean solved = true;
     if (Language::PackagesModified () && !no_packages)
     {
 	if (Mode::commandline ())
 	{
 	    // if not commandline, packages were already initialized in
 	    // select_language
-	    enough_space = Language::PackagesInit (
+	    solved = Language::PackagesInit (
 		splitstring (Language::languages, ","));
+	    enough_space = Language::EnoughSpace();
+
+	    y2milestone("Packages solved: %1, enough space; %2", solved, enough_space);
 	}
-	if (enough_space)
+	if (enough_space && solved)
 	{
 	    Language::PackagesCommit ();
 	}

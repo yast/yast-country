@@ -889,20 +889,68 @@ global define void Save() {
     y2milestone ("Saved data for language: <%1>", loc);
 }
 
+boolean reset_recommended = true;
+
+// unselect all selected packages (bnc#439373)
+//
+// this is a workaround for installing recommened packages for already
+// installed packages - we cannot simply set the solver flag
+// as the laguage packages are also recommended, this would cause that
+// no language package would be installed
+//
+// do this just once at the beginning
+void ResetRecommendedPackaged()
+{
+    if (!reset_recommended)
+    {
+	return;
+    }
+
+    Pkg::PkgSolve(true);
+
+    list<map> selected_packages = Pkg::ResolvableProperties("", `package, "");
+
+    y2milestone("Unselecting already recommended packages");
+
+    // unselect them
+    foreach(map package, selected_packages,
+	{
+	    if (package["status"]:`unknown == `selected)
+	    {
+		y2milestone("Unselecting package: %1", package["name"]:"");
+		Pkg::PkgNeutral(package["name"]:"");
+	    }
+	}
+    );
+
+    reset_recommended = false;
+}
+
 /**
  * Initializes source and target,
  * computes the packages necessary to install and uninstall,
- * checks for disk space (#50745)
- * @return false when there is not enough disk space for new packages
+ * @return false if the solver failed (unresolved dependencies)
  */
 global define boolean PackagesInit (list<string> selected_languages) {
 
     PackageSystem::EnsureSourceInit ();
     PackageSystem::EnsureTargetInit ();
 
-    Pkg::SetAdditionalLocales (selected_languages);
-    Pkg::PkgSolve (true);
+    ResetRecommendedPackaged();
 
+    Pkg::SetAdditionalLocales (selected_languages);
+
+    boolean solved = Pkg::PkgSolve (true);
+
+    return solved;
+}
+
+/*
+ * checks for disk space (#50745)
+ * @return false when there is not enough disk space for new packages
+ */
+global define boolean EnoughSpace()
+{
     boolean ok	= true;
     foreach (string mountpoint, list<integer> usage, Pkg::TargetGetDU (), {
 	if (usage[2]:0 > usage[0]:0)
