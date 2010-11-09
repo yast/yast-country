@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov  9 15:19:22 CET 2010 - jsuchome@suse.cz
+
+- call mkinitrd also when hwclock changes (bnc#638128, bnc#638185)
+- 2.20.4
+
+-------------------------------------------------------------------
 Mon Nov  8 14:24:53 UTC 2010 - lslezak@suse.cz
 
 - don't install recommended packages for already installed packages
