@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 10 07:56:37 CET 2010 - jsuchome@suse.cz
+
+- fixed broken build
+- 2.20.5 
+
+-------------------------------------------------------------------
 Tue Nov  9 15:19:22 CET 2010 - jsuchome@suse.cz
 
 - call mkinitrd also when hwclock changes (bnc#638128, bnc#638185)
