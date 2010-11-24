@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 24 10:06:31 CET 2010 - jsuchome@suse.cz
+
+- call mkinitrd also when hwclock changes (bnc#638128, bnc#638185)
+- 2.19.20 
+
+-------------------------------------------------------------------
 Tue Aug 31 11:43:09 CEST 2010 - jsuchome@suse.cz
 
 - mkinitrd call is needed after time change with localtime

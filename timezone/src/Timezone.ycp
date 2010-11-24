@@ -59,6 +59,8 @@ global boolean modified		= false;
  */
 global boolean windows_partition	= false;
 
+// if mkinitrd should be called at the end
+global boolean call_mkinitrd		= false;
 
 // translation of correct timezone to the one that could be shown in map widget
 global map <string,string> yast2zonetab	= $[
@@ -753,6 +755,11 @@ global define void Save() {
     SCR::Write(.sysconfig.clock, nil);	// flush
 
     y2milestone( "Save Saved data for timezone: <%1>", timezone );
+
+    if (call_mkinitrd && !Stage::initial ())
+    {
+	CallMkinitrd ();
+    }
 
     return;
 }
