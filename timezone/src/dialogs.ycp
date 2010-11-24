@@ -346,6 +346,13 @@ Enter the correct date.
 	    }
 	    else
 	    {
+		// in case of local time, we need to call mkinitrd (after setting timezone)
+		if (Timezone::hwclock == "--localtime" && !Stage::initial ())
+		{
+		    Timezone::Set (Timezone::timezone, true);
+		    Timezone::call_mkinitrd	= true;
+		}
+
 		Timezone::SetTime( year, month, day, hour, minute, second );
 	    }
 	}
@@ -385,6 +392,7 @@ Enter the correct date.
     boolean changed_time = false;
     string timezone	= Timezone::timezone;
     string timezone_old = timezone;
+    string timezone_initial	= timezone;
     string hwclock	= Timezone::hwclock;
 
     y2milestone ( "timezone_old %1", timezone_old );
@@ -805,6 +813,12 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 		Timezone::user_decision	= true;
 		Timezone::user_hwclock	= true;
 		Timezone::ntp_used	= ntp_used;
+		// See bnc#638185c5: refresh_initrd should be called if HWCLOCK is changed (--localtime <-> --utc) and/or
+		// if --localtime is set and TIMEZONE will be changed.
+		if (hwclock_s != hwclock_s_initial || (hwclock_s == `hwclock_localtime && timezone != timezone_initial))
+		{
+		    Timezone::call_mkinitrd	= true;
+		}
 	    }
 	}
     } until ( ret == `next || ret == `back || ret == `cancel );

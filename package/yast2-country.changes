@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Nov 24 10:07:09 CET 2010 - jsuchome@suse.cz
+
+- call mkinitrd also when hwclock changes (bnc#638128, bnc#638185)
+- 2.18.21 
+
+-------------------------------------------------------------------
 Fri Oct  2 09:15:17 CEST 2009 - jsuchome@suse.cz
 
 - YaPI: check keys in args map 
