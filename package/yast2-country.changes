@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Nov  9 15:18:23 CET 2010 - jsuchome@suse.cz
+
+- call mkinitrd on hwclock changes (bnc#638128)
+- 2.17.50
+
+-------------------------------------------------------------------
 Thu May 13 13:30:04 CEST 2010 - jsuchome@suse.cz
 
 - use Dutch keyboard layout as a default for Dutch (bnc#603955)
