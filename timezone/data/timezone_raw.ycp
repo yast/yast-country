@@ -177,14 +177,6 @@ $[
 $[ "name" : _("Asia"),
    "entries" : $[
 	// time zone
-	"Japan"			: _("Japan"),
-	// time zone
-	"PRC"			: _("China"),
-	// time zone
-	"ROK"			: _("Korea"),
-	// time zone
-	"Hongkong"		: _("Hongkong"),
-	// time zone
 	"Asia/Kabul"		: _("Afghanistan"),
 	// time zone
 	"Asia/Anadyr"		: _("Anadyr"),
@@ -262,6 +254,10 @@ $[ "name" : _("Asia"),
 	"Asia/Tokyo"		: _("Tokyo"),
 	// time zone
 	"Asia/Shanghai"		: _("Shanghai"),
+        // time zone
+        "Asia/Beijing"          : _("Beijing"),
+        // time zone
+        "Asia/Hong_Kong"        : _("Hongkong"),
 	// time zone
 	"Asia/Taipei"		: _("Taipei"),
 	// time zone

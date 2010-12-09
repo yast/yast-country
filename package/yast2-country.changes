@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov 25 14:07:12 CET 2010 - jsuchome@suse.cz
+
+- update of timezones: use cities, not countries (bnc#652896) 
+- 2.13.58
+
+-------------------------------------------------------------------
 Wed Dec 17 11:43:35 CET 2008 - jsuchome@suse.cz
 
 - more commands to xset to prevent black screen (bnc#455771)
