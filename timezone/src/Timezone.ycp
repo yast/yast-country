@@ -67,6 +67,7 @@ global map <string,string> yast2zonetab	= $[
 	"Mideast/Riyadh87"	: "Asia/Riyadh",
 	"Mideast/Riyadh88"	: "Asia/Riyadh",
 	"Mideast/Riyadh89"	: "Asia/Riyadh",
+	"Europe/Vatican"	: "Europe/Rome",
 ];
 
 // on init, translate these to correct ones
