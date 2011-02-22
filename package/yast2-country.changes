@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Feb 22 10:27:40 CET 2011 - jsuchome@suse.cz
+
+- more time zones (bnc#673425)
+- do not show time zones that conflict with others
+- 2.20.6 
+
+-------------------------------------------------------------------
 Wed Nov 10 07:56:37 CET 2010 - jsuchome@suse.cz
 
 - fixed broken build

@@ -544,7 +544,7 @@ $[
 	// time zone
 	"Asia/Kashgar"		: _("Kashgar"),	// CN
 	// time zone
-	"Asia/Katmandu"		: _("Katmandu"),
+	"Asia/Kathmandu"	: _("Katmandu"),
 	// time zone
 	"Asia/Krasnoyarsk"	: _("Krasnoyarsk"),
 	// time zone
@@ -815,13 +815,11 @@ $[
 	// time zone
 	"Pacific/Port_Moresby"	: _("Port_Moresby"),
 	// time zone
-	"Pacific/Dili"		: _("Dili"),
-	// time zone
 	"Pacific/Rarotonga"	: _("Rarotonga"),	// CK
 	// time zone
-	"Pacific/Truk"		: _("Chuuk"),	// FM
+	"Pacific/Chuuk"		: _("Chuuk"),	// FM
 	// time zone
-	"Pacific/Ponape"	: _("Pohnpei"),	// FM
+	"Pacific/Pohnpei"	: _("Pohnpei"),	// FM
 	// time zone
 	"Pacific/Kosrae"	: _("Kosrae"),	// FM
 	// time zone

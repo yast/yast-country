@@ -386,14 +386,10 @@ Enter the correct date.
 		if (Timezone::hwclock == "--localtime" && !Stage::initial ())
 		{
 		    Timezone::Set (Timezone::timezone, true);
+		    Timezone::call_mkinitrd	= true;
 		}
 
 		Timezone::SetTime( year, month, day, hour, minute, second );
-
-		if (Timezone::hwclock == "--localtime" && !Stage::initial ())
-		{
-		    Timezone::call_mkinitrd	= true;
-		}
 	    }
 	}
     }
@@ -480,7 +476,7 @@ Enter the correct date.
 
     foreach (map region, zonemap, {
 	foreach (string key, string name, region["entries"]:$[], {
-	    if (key != "Europe/Vatican")
+	    if (!haskey (yast2zonetab, key))
 		zones[yast2zonetab[key]:key]    = name;
 	});
     });
