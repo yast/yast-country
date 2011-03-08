@@ -5,7 +5,7 @@
 <policyconfig>
 
   <vendor>YaST Webservice Project</vendor>
-  <vendor_url>http://en.opensuse.org/YAST</vendor_url>
+  <vendor_url>http://en.opensuse.org/Portal:YaST</vendor_url>
 
 <!--
 Rights for system.time
