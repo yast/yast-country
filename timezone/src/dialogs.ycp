@@ -714,10 +714,13 @@ to daylight saving time and back automatically.
     }
 
 
-    // general help trailer
-    help_text = help_text + _("<p>
+    if (!Arch::s390 () && !Mode::config ())
+    {
+        // general help trailer
+	help_text = help_text + _("<p>
 If the current time is not correct, use <b>Change</b> to adjust it.
 </p>");
+    }
 
     // Screen title for timezone screen
     Wizard::SetContents (_("Clock and Time Zone"), contents,
