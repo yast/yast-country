@@ -133,7 +133,7 @@ define boolean TimezoneSetHandler (map options) {
     }
     if (hwclock != "" && !Timezone::utc_only ())
     {
-	Timezone::hwclock	= hwclock == "utc" ? "-u" : "--localtime";
+	Timezone::hwclock	= tolower (hwclock) == "utc" ? "-u" : "--localtime";
     }
     return (Timezone::Modified ());
 }
@@ -174,7 +174,7 @@ map cmdline = $[
 	    // command line help text for 'set hwclock' option
 	    "help"	: _("New value for hardware clock"),
 	    "type"	: "enum",
-	    "typespec"	: [ "local", "utc" ],
+	    "typespec"	: [ "local", "utc", "UTC" ],
 	],
     ],
     "mappings"		: $[
