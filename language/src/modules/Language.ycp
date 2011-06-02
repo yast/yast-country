@@ -291,7 +291,8 @@ global define map<string,integer> GetLocales () {
 	    if (pos != nil && pos >= 0)
 		l = substring (l, 0, pos);
 
-	    locales [l]	= 1;
+	    if (l != "")
+		locales [l]	= 1;
 	});
     }
 
