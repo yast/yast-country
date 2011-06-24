@@ -110,7 +110,7 @@ For <b>Devices for Lock</b>, enter a space-separated list of devices to which to
 		    ),
 		    `VSpacing (1),
 		    `VStretch(),
-		    `HBox (
+		    `ButtonBox (
 			`PushButton (`id(`ok),`opt(`default),Label::OKButton()),
 			`PushButton (`id(`cancel), Label::CancelButton())
 		    ),

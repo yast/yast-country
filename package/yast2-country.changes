@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jun 24 10:17:00 CEST 2011 - jsuchome@suse.cz
+
+- use ButtonBox when appropriate (bnc#701260)
+- 2.21.1 
+
+-------------------------------------------------------------------
 Thu Jun  2 10:35:17 CEST 2011 - jsuchome@suse.cz
 
 - accept UTC as a value in 'set' command (bnc#697520)
