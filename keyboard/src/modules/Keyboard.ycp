@@ -1372,7 +1372,7 @@ Select the layout to use during update:"))),
 		    `Left (`RadioButton (`id (`target), target_name, true))
 		)),
 		`VSpacing(0.5),
-		`HBox(
+		`ButtonBox (
 		    `PushButton(`id(`ok),`opt(`default,`key_F10), Label::OKButton()),
 		    `PushButton(`id(`cancel), `opt(`key_F9), Label::CancelButton())
 		),

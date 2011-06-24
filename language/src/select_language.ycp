@@ -117,7 +117,7 @@ are unset.<br>
 		    locales_list)
 	    ),
 	    `VSpacing (`opt(`vstretch), 7),
-	    `HBox (
+	    `ButtonBox (
 		`PushButton(`id(`ok), `opt(`default), Label::OKButton()),
 		`PushButton(`id(`cancel),`opt (`key_F9), Label::CancelButton())
 	    ),
