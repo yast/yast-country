@@ -1401,6 +1401,12 @@ global define boolean CalledRestore() {
    */
   global define void CheckKeyboardDuringUpdate (string destdir) {
 
+    // autoupgrade is not interactive, therefore skip this check and use data
+    // from profile directly
+    if (Mode::autoupgrade()) {
+	return;
+    }
+
     string target_kbd	= Misc::CustomSysconfigRead (
 	"YAST_KEYBOARD", current_kbd, destdir + "/etc/sysconfig/keyboard");
     integer pos = find (target_kbd, ",");

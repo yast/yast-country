@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jul  8 09:20:31 CEST 2011 - jsrain@suse.cz
+
+- avoid a pop-up during unattended upgrade (bnc#704078)
+- 2.17.51
+
+-------------------------------------------------------------------
 Tue Nov  9 15:18:23 CET 2010 - jsuchome@suse.cz
 
 - call mkinitrd on hwclock changes (bnc#638128)
