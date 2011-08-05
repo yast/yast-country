@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Aug  5 12:31:18 CEST 2011 - tgoettlicher@suse.de
+
+- fixed .desktop file (bnc #681249)
+
+-------------------------------------------------------------------
 Mon Jul 11 16:39:42 CEST 2011 - jsuchome@suse.cz
 
 - avoid a pop-up during unattended upgrade (bnc#704078)
