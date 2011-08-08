@@ -678,6 +678,28 @@ return ($[
 	    ],
 	 ]
     ],
+
+    "romanian": [
+	// keyboard layout
+	_("Romanian"),
+	$[
+	    "pc104"	: $[
+		    "ncurses"	: "ro.map.gz",
+	    ],
+	    "macintosh" : $[
+		    "ncurses"	: "mac-us.map.gz"
+	    ],
+	    "type4"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+	    ],
+	    "type5"	: $[
+		    "ncurses"	: "sunkeymap.map.gz"
+	    ],
+	    "type5_euro": $[
+		    "ncurses"	: "sunkeymap.map.gz"
+	    ],
+	 ]
+    ],
 ]);
 
 }
