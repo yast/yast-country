@@ -63,6 +63,8 @@ map push = $[];
 // END: Globally defined data to be accessed via Timezone::<variable>
 // ------------------------------------------------------------------
 
+// if mkinitrd should be called at the end
+global boolean call_mkinitrd		= false;
 
 
 // ------------------------------------------------------------------
@@ -288,6 +290,14 @@ global define void Timezone() {
 	Read ();
     }
     return;
+}
+
+global boolean CallMkinitrd () {
+
+    y2milestone ("calling mkinitrd...");
+    SCR::Execute (.target.bash, "/sbin/mkinitrd >> /var/log/YaST2/y2logmkinitrd 2>> /var/log/YaST2/y2logmkinitrd");
+    y2milestone ("... done");
+    return true;
 }
 
 /**
@@ -642,6 +652,11 @@ global define void Save() {
     SCR::Write(.sysconfig.clock, nil);	// flush
 
     y2milestone( "Save Saved data for timezone: <%1>", timezone );
+
+    if (call_mkinitrd && !Stage::initial ())
+    {
+	CallMkinitrd ();
+    }
 
     return;
 }
