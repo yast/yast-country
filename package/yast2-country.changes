@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug 11 16:30:36 CEST 2011 - jsuchome@suse.cz
+
+- call mkinitrd on hwclock changes (bnc#689095)
+- 2.13.59 
+
+-------------------------------------------------------------------
 Thu Nov 25 14:07:12 CET 2010 - jsuchome@suse.cz
 
 - update of timezones: use cities, not countries (bnc#652896) 
