@@ -10,7 +10,8 @@ BuildRequires:	perl-XML-Writer update-desktop-files yast2-devtools yast2-testsui
 BuildRequires:  PolicyKit-devel
 Requires:	yast2-trans-stats yast2-perl-bindings timezone yast2-packager
 # XVersion.ycp
-Requires:	yast2 >= 2.13.70
+# Wizard::SetDesktopTitleAndIcon
+Requires:	yast2 >= 2.21.22
 # Pkg::SetPackageLocale, Pkg::GetTextLocale
 Requires:       yast2-pkg-bindings >= 2.15.3
 # IconPath support for MultiSelectionBox

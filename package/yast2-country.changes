@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep 21 10:37:45 CEST 2011 - visnov@suse.cz
+
+- Set dialog title (Wizard::SetDesktopTitleAndIcon)
+- 2.21.4 
+
+-------------------------------------------------------------------
 Mon Aug  8 15:06:20 CEST 2011 - jsuchome@suse.cz
 
 - added Romanian keyboard layout (bnc#709443)

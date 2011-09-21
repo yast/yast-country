@@ -240,7 +240,7 @@ For advanced options, such as repeat rate and delay, select <b>Expert Settings</
     Wizard::SetContents ( _("System Keyboard Configuration"), contents, help_text,
 	args["enable_back"]:true, args["enable_next"]:true);
 
-    Wizard::SetDesktopIcon("keyboard");
+    Wizard::SetDesktopTitleAndIcon("keyboard");
     if (Stage::initial () || Stage::firstboot ())
 	Wizard::SetTitleIcon ("yast-keyboard");
 

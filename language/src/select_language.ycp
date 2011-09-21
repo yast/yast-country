@@ -401,7 +401,7 @@ In the selection box, specify additional languages to use on your system.
     Wizard::SetContents (heading_text, contents, help_text,
 	argmap["enable_back"]:true , argmap["enable_next"]:true);
 
-    Wizard::SetDesktopIcon("yast-language");
+    Wizard::SetDesktopTitleAndIcon("yast-language");
 
     if (more_languages)
     {
