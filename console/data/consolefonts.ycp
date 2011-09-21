@@ -88,23 +88,23 @@ $[
       "lt"		: [ "lat4a-16.psfu",	"",	"8859-13",	"(K" ],
       "lt_LT.UTF-8"     : [ "lat4a-16.psfu",	"",	"8859-13",	"(K" ],
 
-      "ru_RU.KOI8-R"	: [ "Cyr_a8x16.psfu",	"",	"koi2alt",	"(K" ],
-      "ru"		: [ "Cyr_a8x16.psfu",	"",	"koi2alt",	"(K" ],
-      "ru_RU.UTF-8"     : [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
+      "ru_RU.KOI8-R"	: [ "UniCyr_8x16.psf",	"",	"koi2alt",	"(K" ],
+      "ru"		: [ "UniCyr_8x16.psf",	"",	"koi2alt",	"(K" ],
+      "ru_RU.UTF-8"     : [ "UniCyr_8x16.psf",	"",	"none",		"(K" ],
 
       "sr_RS@latin"	: [ "lat2-16.psfu",	"",	"8859-2",	"(K" ],
-      "sr"		: [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
-      "sr_RS.UTF-8"     : [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
+      "sr"		: [ "UniCyr_8x16.psf",	"",	"trivial",	"(K" ],
+      "sr_RS.UTF-8"     : [ "UniCyr_8x16.psf",	"",	"none",		"(K" ],
 
-      "uk"		: [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
-      "uk_UA.UTF-8"     : [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
+      "uk"		: [ "UniCyr_8x16.psf",	"",	"trivial",	"(K" ],
+      "uk_UA.UTF-8"     : [ "UniCyr_8x16.psf",	"",	"none",		"(K" ],
 
-      "tg"		: [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
-      "tg_TJ.UTF-8"     : [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
+      "tg"		: [ "UniCyr_8x16.psf",	"",	"trivial",	"(K" ],
+      "tg_TJ.UTF-8"     : [ "UniCyr_8x16.psf",	"",	"none",		"(K" ],
 
-      "bg_BG"		: [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
-      "bg"		: [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
-      "bg_BG.UTF-8"     : [ "Cyr_a8x16.psfu",	"",	"trivial",	"(K" ],
+      "bg_BG"		: [ "UniCyr_8x16.psf",	"",	"trivial",	"(K" ],
+      "bg"		: [ "UniCyr_8x16.psf",	"",	"trivial",	"(K" ],
+      "bg_BG.UTF-8"     : [ "UniCyr_8x16.psf",	"",	"none",		"(K" ],
 
       "ja_JP.sjis"	: [ "lat9w-16.psfu",	"",	"trivial",	"(K" ],
       "ja"		: [ "lat1-16.psfu",	"",	"none",		"(K" ],

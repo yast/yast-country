@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Sep 21 12:19:29 CEST 2011 - jsuchome@suse.cz
+
+- use better cyrillic font for relevant languages (bnc#713332)
+- 2.21.5
+
+-------------------------------------------------------------------
 Wed Sep 21 10:37:45 CEST 2011 - visnov@suse.cz
 
 - Set dialog title (Wizard::SetDesktopTitleAndIcon)
