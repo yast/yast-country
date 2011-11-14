@@ -900,7 +900,7 @@ boolean reset_recommended = true;
 // no language package would be installed
 //
 // do this just once at the beginning
-void ResetRecommendedPackaged()
+void ResetRecommendedPackages()
 {
     if (!reset_recommended)
     {
@@ -937,11 +937,18 @@ global define boolean PackagesInit (list<string> selected_languages) {
     PackageSystem::EnsureSourceInit ();
     PackageSystem::EnsureTargetInit ();
 
-    ResetRecommendedPackaged();
+    map<string,any> solver_flags_backup   = Pkg::GetSolverFlags ();
+    // first, do not ignore recommended (= also language) packages
+    Pkg::SetSolverFlags ($[ "ignoreAlreadyRecommended" : false ]);
+    // ... but skip non-language recommended packages
+    ResetRecommendedPackages();
 
     Pkg::SetAdditionalLocales (selected_languages);
 
+    // now, add only recommended language packages (other recommended are PkgNeutral-ized)
     boolean solved = Pkg::PkgSolve (true);
+
+    Pkg::SetSolverFlags (solver_flags_backup);
 
     return solved;
 }
