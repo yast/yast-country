@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Nov 14 12:15:40 CET 2011 - jsuchome@suse.cz
+
+- force installing recommended language packages (bnc#722739)
+- use "us" keyboard layout for Dutch (bnc#728547)
+- 2.21.6
+
+-------------------------------------------------------------------
 Wed Sep 21 12:19:29 CEST 2011 - jsuchome@suse.cz
 
 - use better cyrillic font for relevant languages (bnc#713332)
