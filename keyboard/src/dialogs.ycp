@@ -245,8 +245,11 @@ For advanced options, such as repeat rate and delay, select <b>Expert Settings</
 	Wizard::SetTitleIcon ("yast-keyboard");
 
     // Initially set the current keyboard to establish a consistent state.
-    //
-    Keyboard::Set (Keyboard::current_kbd);
+    // Not on installed system, where it might clash with layout set different way
+    if (Mode::installation ())
+    {
+	Keyboard::Set (Keyboard::current_kbd);
+    }
 
     UI::SetFocus( `id(`keyboard ));
 

@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Nov 21 16:02:30 CET 2011 - jsuchome@suse.cz
+
+- do not set keyboard layout on module start, when not in
+  installation (bnc#725470)
+- 2.22.0
+
+-------------------------------------------------------------------
 Mon Nov 14 12:15:40 CET 2011 - jsuchome@suse.cz
 
 - force installing recommended language packages (bnc#722739)
