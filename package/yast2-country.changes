@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Nov 25 14:52:31 CET 2011 - jsuchome@suse.cz
+
+- correctly set the window title during installation (bnc#730650)
+- 2.22.1
+
+-------------------------------------------------------------------
 Mon Nov 21 16:02:30 CET 2011 - jsuchome@suse.cz
 
 - do not set keyboard layout on module start, when not in

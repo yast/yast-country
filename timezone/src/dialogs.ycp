@@ -259,7 +259,9 @@
     Wizard::OpenAcceptDialog ();
     // TODO replace help text after ntp_installed, is.
     Wizard::SetContents (_("Change Date and Time"), cont, htext, true, true);
-    Wizard::SetDesktopTitleAndIcon("timezone");
+
+    if( Mode::normal() )
+	Wizard::SetDesktopTitleAndIcon("timezone");
 
     show_current_time ();
 
@@ -726,10 +728,13 @@ If the current time is not correct, use <b>Change</b> to adjust it.
     Wizard::SetContents (_("Clock and Time Zone"), contents,
 	help_text, args["enable_back"]:true, args["enable_next"]:true);
 
-    Wizard::SetDesktopTitleAndIcon ("timezone");
     if ( Stage::initial () || Stage::firstboot ())
     {
 	Wizard::SetTitleIcon ("yast-timezone");
+    }
+    else
+    {
+        Wizard::SetDesktopTitleAndIcon ("timezone");
     }
 
     symbol hwclock_s = (hwclock=="-u") ? `hwclock_utc : `hwclock_localtime;
