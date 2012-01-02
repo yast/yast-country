@@ -7,7 +7,7 @@ License: GPL-2.0+
 Source1:        org.opensuse.yast.modules.yapi.time.policy
 Source2:        org.opensuse.yast.modules.yapi.language.policy
 BuildRequires:	perl-XML-Writer update-desktop-files yast2-devtools yast2-testsuite yast2 yast2-perl-bindings
-BuildRequires:  PolicyKit-devel
+BuildRequires:  polkit-devel
 Requires:	yast2-trans-stats yast2-perl-bindings timezone yast2-packager
 # XVersion.ycp
 # Wizard::SetDesktopTitleAndIcon
@@ -61,9 +61,9 @@ timezone) for yast2.
 @INSTALL@
 
 # Policies
-mkdir -p $RPM_BUILD_ROOT/usr/share/PolicyKit/policy
-install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/usr/share/PolicyKit/policy/
-install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/PolicyKit/policy/
+mkdir -p $RPM_BUILD_ROOT/usr/share/polkit-1/actions
+install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
+install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 
 @CLEAN@
 
@@ -86,7 +86,9 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/PolicyKit/policy/
 @desktopdir@/yast-language.desktop
 @desktopdir@/timezone.desktop
 @desktopdir@/keyboard.desktop
-%attr(644,root,root) %config /usr/share/PolicyKit/policy/org.opensuse.yast.modules.yapi.*.policy
+%dir /usr/share/polkit-1
+%dir /usr/share/polkit-1/actions
+%attr(644,root,root) %config /usr/share/polkit-1/actions/org.opensuse.yast.modules.yapi.*.policy
 
 %package data
 Summary:	YaST2 - Data files for Country settings
