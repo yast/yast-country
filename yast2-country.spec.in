@@ -2,7 +2,7 @@
 
 @HEADER@
 Group:  System/YaST
-License: GPL-2.0+
+License:        GPL-2.0
 #policy files for YaPI dbus interface
 Source1:        org.opensuse.yast.modules.yapi.time.policy
 Source2:        org.opensuse.yast.modules.yapi.language.policy
@@ -71,6 +71,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %files
 %defattr(-,root,root)
 %doc @docdir@
+%doc COPYING
 @moduledir@/Console.y*
 @moduledir@/Keyboard.y*
 @moduledir@/Timezone.y*
