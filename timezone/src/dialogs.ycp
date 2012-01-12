@@ -733,6 +733,15 @@ If the hardware clock is set to UTC, your system can switch from standard time
 to daylight saving time and back automatically.
 </p>
 ");
+
+        // help text: extra note about localtim
+        help_text = help_text + _("<p>
+Note: The internal system clock as used by the Linux kernel must
+always be in UTC, because this is the reference for the correct localtime
+in user space. If you are choosing localtime for CMOS clock,
+check the user manual for background information about side effects.
+</p>");
+
     }
 
 
@@ -845,6 +854,26 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 	    {
 		hwclock_s = ((boolean)UI::QueryWidget( `id(`hwclock), `Value))?
 		    `hwclock_utc : `hwclock_localtime;
+
+                if (ret == `next && !Timezone::windows_partition && hwclock_s == `hwclock_localtime)
+                {
+                    // warning popup, in case local time is selected (bnc#732769)
+                    if (!Popup::ContinueCancel (_("
+You selected local time, but only Linux  seems to be installed on your system.
+In such case, it is strongly recommended to use UTC, and to click Cancel.
+
+If you want to keep local time, you must adjust the CMOS clock twice the year
+because of Day Light Saving switches. If you miss to adjust the clock, backups may fail,
+your mail system may drop mail messages, etc.
+
+If you use UTC, the Linux will adjust the time automatically.
+
+Do you want to continue with your selection (local time)?")))
+                    {
+                        ret = `not_next;
+                        continue;
+                    }
+                }
 	    }
 	    if (ret == `timezonemap)
 	    {
