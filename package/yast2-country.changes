@@ -1,6 +1,8 @@
 -------------------------------------------------------------------
-Thu Jan 12 15:22:08 CET 2012 - jsuchome@suse.cz
+Fri Jan 13 11:35:23 CET 2012 - jsuchome@suse.cz
 
+- call GfxMenu::Update from client, so we do not have to require
+  yast2-bootloader package dependency (bnc#730391)
 - expanded texts about UTC/localtime to convice user for using UTC
   (bnc#732769)
 - 2.22.4
