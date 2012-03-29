@@ -375,7 +375,7 @@ all your settings in the last installation dialog.
 	{
 	    // help text, continued
 	    help_text = help_text + _("<p>
-You can select <b>Abort Installation</b> at any time to abort the
+You can select <b>Abort</b> at any time to abort the
 installation process.
 </p>
 ");
