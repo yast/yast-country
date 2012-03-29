@@ -120,9 +120,9 @@
 	ret =
 	    $[
 	      // label text
-	      "rich_text_title"	:	_( "Language"  ),
+	      "rich_text_title"	:	_("Language"),
 	      // menue label text
-	      "menu_title"	:	_( "&Language" ),
+	      "menu_title"	:	_("&Language"),
 	      "id"		:	"language_stuff"
 	    ];
     }

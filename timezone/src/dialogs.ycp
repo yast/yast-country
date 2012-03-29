@@ -132,7 +132,7 @@
 
     string ntp_help_text = (string) ntp_call("ui_help_text", $[]);
     // help text for set time dialog
-    string htext = _("<p>The current system time and date are displayed. If required change them to the correct values manually, or use Network Time Protocol (NTP).</p>") +
+    string htext = _("<p>The current system time and date are displayed. If required, change them to the correct values manually or use Network Time Protocol (NTP).</p>") +
 	// help text, cont.
 	_("<p>Press <b>Accept</b> to save your changes.</p>") +
 
@@ -601,7 +601,7 @@ Enter the correct date.
     term hwclock_term	= `VBox (
 	`CheckBox (`id (`hwclock), `opt(`hstretch, `notify),
 	    // check box label
-	    _("&Hardware Clock Set To UTC"), hwclock == "-u"
+	    _("&Hardware Clock Set to UTC"), hwclock == "-u"
 	),
 	textmode ? `Label ("") : `Empty ()
     );
