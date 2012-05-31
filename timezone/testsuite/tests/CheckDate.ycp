@@ -20,6 +20,12 @@
 	    "size"		: 1,
 	    "yast2"		: $[],
 	],
+        "etc"   : $[
+            "adjtime"           : [
+"0",
+"0",
+"UTC" ]
+        ],
     ];
     map EXECUTE	= $[
 	"target" : $[

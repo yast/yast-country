@@ -1,3 +1,4 @@
+Read	.etc.adjtime ["0", "0", "UTC"]
 Return	America/Los_Angeles
 Return	Australia/Adelaide
 Return	Australia/Adelaide

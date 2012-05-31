@@ -1,0 +1,19 @@
+/**
+ * File:
+ *   etc_adjtime.scr
+ * Summary:
+ *   SCR Agent for reading /etc/adjtime
+ */
+.etc.adjtime
+
+`ag_anyagent(
+  `Description (
+	(`File("/etc/adjtime")),     // real file name
+	"#\n",                    // Comment
+	false,                    // read-only
+	(`List (
+            `String("^\n"),
+            "\n"
+	))
+  )
+)
