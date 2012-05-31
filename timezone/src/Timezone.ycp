@@ -338,10 +338,19 @@ global define string UpdateTimezone (string tmz) {
    */
   global define void Read () {
 
-    hwclock		= Misc::SysconfigRead(.sysconfig.clock.HWCLOCK, hwclock);
     timezone		= Misc::SysconfigRead (.sysconfig.clock.TIMEZONE, timezone);
     default_timezone	=
 	Misc::SysconfigRead(.sysconfig.clock.DEFAULT_TIMEZONE, default_timezone);
+
+    list<string> adjtime= (list<string>) SCR::Read (.etc.adjtime);
+    if (size (adjtime) == 3)
+    {
+      if (adjtime[2]:"" == "LOCAL")
+        hwclock         = "--localtime";
+      else if (adjtime[2]:"" == "UTC")
+        hwclock         = "-u";
+      y2milestone ("content of /etc/adjtime: %1", adjtime);
+    }
 
     // get name for cloning purposes
     if (Mode::config ())
@@ -770,11 +779,22 @@ global define void Save() {
 
     SCR::Write(.sysconfig.clock.TIMEZONE, timezone);
     SCR::Write(.sysconfig.clock.DEFAULT_TIMEZONE, default_timezone);
-    SCR::Write(.sysconfig.clock.HWCLOCK, hwclock);
 
     SCR::Write(.sysconfig.clock, nil);	// flush
 
     y2milestone( "Save Saved data for timezone: <%1>", timezone );
+
+    list<string> adjtime = (list<string>) SCR::Read (.etc.adjtime);
+    if (size (adjtime) == 3)
+    {
+        list<string> new = adjtime;
+        new[2]      = hwclock == "-u" ? "UTC" : "LOCAL";
+        if (new[2]:"" != adjtime[2]:"")
+        {
+          SCR::Write (.etc.adjtime, new);
+          y2milestone ("Saved /etc/adjtime with '%1'", new[2]:"");
+        }
+    }
 
     if (call_mkinitrd && !Stage::initial ())
     {
