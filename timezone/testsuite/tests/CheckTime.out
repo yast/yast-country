@@ -1,4 +1,4 @@
-Read	.etc.adjtime nil
+Read	.etc.adjtime ["0", "0", "UTC"]
 Return	true
 Return	false
 Return	false

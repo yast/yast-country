@@ -1,1 +1,1 @@
-Read	.etc.adjtime nil
+Read	.etc.adjtime ["0", "0", "UTC"]
