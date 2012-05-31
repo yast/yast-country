@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 31 08:13:42 CEST 2012 - jsuchome@suse.cz
+
+- save HW clock status to /etc/adjtime instead of sysconfig/clock
+  (bnc#764690)
+- 2.22.6 
+
+-------------------------------------------------------------------
 Thu Mar 29 14:24:10 CEST 2012 - jsuchome@suse.cz
 
 - merged proofed texts

@@ -1,3 +1,4 @@
+Read	.etc.adjtime nil
 Return	true
 Return	false
 Return	false
