@@ -1,3 +1,4 @@
+Read	.etc.adjtime ["0", "0", "UTC"]
 Return	true
 Return	true
 Return	false

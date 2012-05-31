@@ -1,3 +1,4 @@
+Read	.etc.adjtime ["0", "0", "UTC"]
 Read	.target.yast2 "timezone_raw.ycp" [$["entries":$["Europe/Berlin":"Germany", "Europe/Prague":"Czech Republic"], "name":"Europe"], $["entries":$["US/Mountain":"Mountain"], "name":"USA"]]
 Return	[`item (`id ("US/Mountain"), "Mountain", false)]
 Return	0
