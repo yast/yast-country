@@ -1,7 +1,5 @@
 # Makefile.am for country/timezone/src
 
-SUBDIRS = proposal
-
 yncludedir = @yncludedir@/timezone
 
 rncdir =  $(schemadir)/autoyast/rnc
@@ -9,7 +7,8 @@ rncdir =  $(schemadir)/autoyast/rnc
 client_DATA =			\
 	timezone.ycp		\
 	inst_timezone.ycp	\
-	timezone_auto.ycp
+	timezone_auto.ycp       \
+        timezone_proposal.ycp
 
 desktop_DATA =			\
 	timezone.desktop
