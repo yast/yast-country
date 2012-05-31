@@ -332,6 +332,23 @@ global define string UpdateTimezone (string tmz) {
     return updated_tmz;
 }
 
+  /**
+   * Read the content of /etc/adjtime
+   */
+  list<string> ReadAdjTime () {
+
+    list<string> cont   = (list<string>) SCR::Read (.etc.adjtime);
+    if (cont == nil)
+    {
+      y2warning ("/etc/adjtime not available or not readable");
+    }
+    if (size (cont) != 3)
+    {
+      y2warning ("/etc/adjtime has wrong number of lines: %1", cont);
+    }
+    return cont;
+  }
+
 
   /**
    * Read timezone settings from sysconfig
@@ -342,8 +359,8 @@ global define string UpdateTimezone (string tmz) {
     default_timezone	=
 	Misc::SysconfigRead(.sysconfig.clock.DEFAULT_TIMEZONE, default_timezone);
 
-    list<string> adjtime= (list<string>) SCR::Read (.etc.adjtime);
-    if (adjtime != nil && size (adjtime) == 3)
+    list<string> adjtime= ReadAdjTime ();
+    if (size (adjtime) == 3)
     {
       if (adjtime[2]:"" == "LOCAL")
         hwclock         = "--localtime";
@@ -353,7 +370,8 @@ global define string UpdateTimezone (string tmz) {
     }
     else
     {
-      y2warning ("/etc/adjtime not available or has wrong number of lines: %1", adjtime);
+      // use sysconfig value as a backup (if available)
+      hwclock   = Misc::SysconfigRead (.sysconfig.clock.HWCLOCK, hwclock);
     }
 
     // get name for cloning purposes
@@ -788,20 +806,16 @@ global define void Save() {
 
     y2milestone( "Save Saved data for timezone: <%1>", timezone );
 
-    list<string> adjtime = (list<string>) SCR::Read (.etc.adjtime);
-    if (adjtime != nil && size (adjtime) == 3)
+    list<string> adjtime = ReadAdjTime ();
+    if (size (adjtime) == 3 || adjtime == nil)
     {
-        list<string> new = adjtime;
-        new[2]      = hwclock == "-u" ? "UTC" : "LOCAL";
+        list<string> new = (adjtime == nil) ? [ "0.0 0 0.0", "0" ] : adjtime;
+        new[2]  = hwclock == "-u" ? "UTC" : "LOCAL";
         if (new[2]:"" != adjtime[2]:"")
         {
           SCR::Write (.etc.adjtime, new);
           y2milestone ("Saved /etc/adjtime with '%1'", new[2]:"");
         }
-    }
-    else
-    {
-      y2warning ("/etc/adjtime not available or has wrong number of lines: %1", adjtime);
     }
 
     if (call_mkinitrd && !Stage::initial ())
