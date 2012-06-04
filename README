@@ -1,2 +1,2 @@
-yast2-config-XXpkgXX is part of YaST2
-See the file COPYRIGHT.english for license terms
+Country specific data and configuration modules (language, keyboard,
+timezone) for YaST2.
