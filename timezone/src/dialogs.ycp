@@ -866,7 +866,7 @@ If you want to keep local time, you must adjust the CMOS clock twice the year
 because of Day Light Saving switches. If you miss to adjust the clock, backups may fail,
 your mail system may drop mail messages, etc.
 
-If you use UTC, the Linux will adjust the time automatically.
+If you use UTC, Linux will adjust the time automatically.
 
 Do you want to continue with your selection (local time)?")))
                     {
