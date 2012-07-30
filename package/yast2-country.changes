@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jul 30 12:46:24 CEST 2012 - jsuchome@suse.cz
+
+- in text mode, set the timezone when leaving dialog (
+  bnc#758134 = backport of bnc#617861) 
+- 2.17.50.1
+
+-------------------------------------------------------------------
 Tue Nov  9 15:18:23 CET 2010 - jsuchome@suse.cz
 
 - call mkinitrd on hwclock changes (bnc#638128)
