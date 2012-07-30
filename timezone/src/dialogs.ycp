@@ -11,7 +11,7 @@
  * Summary:
  *	Dialogs for timeone and time configuration.
  *
- * $Id$
+ * $Id: dialogs.ycp 62948 2010-12-06 13:38:41Z jsuchome $
  */
 {
   textdomain "country";
@@ -793,6 +793,19 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 	}
 	else if (ret == `settime)
 	{
+	    // timezone was not adapted in ncurses (bnc#617861)
+	    if (textmode)
+	    {
+		string tz		= selected_timezone ();
+		if (tz != timezone)
+		{
+		    timezone	= tz;
+		    if (timezone != timezone_old)
+			changed_time	= true;
+		    timezone_old	= timezone;
+		    SetTimezone (hwclock_s, timezone, false, changed_time);
+		}
+	    }
 	    if (SetTimeDialog())
 	    {
 		Timezone::diff = 0;
