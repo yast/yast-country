@@ -345,6 +345,7 @@ global define string UpdateTimezone (string tmz) {
     if (size (cont) != 3)
     {
       y2warning ("/etc/adjtime has wrong number of lines: %1", cont);
+      cont      = nil;
     }
     return cont;
   }

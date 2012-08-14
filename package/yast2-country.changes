@@ -1,4 +1,16 @@
 -------------------------------------------------------------------
+Tue Aug 14 11:39:44 CEST 2012 - jsuchome@suse.cz
+
+- added "US International" keyboard layout, make it default for
+  NL (bnc#774918)
+- 2.22.7 
+
+-------------------------------------------------------------------
+Tue Aug 14 09:23:26 CEST 2012 - jsuchome@suse.cz
+
+- consistent return value when /etc/adjtime does not exist 
+
+-------------------------------------------------------------------
 Thu May 31 08:13:42 CEST 2012 - jsuchome@suse.cz
 
 - save HW clock status to /etc/adjtime instead of sysconfig/clock
