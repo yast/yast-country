@@ -33,6 +33,7 @@ module "Timezone";
 textdomain "country";
 
 import "Arch";
+import "FileUtils";
 import "Language";
 import "Misc";
 import "Mode";
@@ -359,6 +360,17 @@ global define string UpdateTimezone (string tmz) {
     timezone		= Misc::SysconfigRead (.sysconfig.clock.TIMEZONE, timezone);
     default_timezone	=
 	Misc::SysconfigRead(.sysconfig.clock.DEFAULT_TIMEZONE, default_timezone);
+
+    // /etc/localtime has priority over sysconfig value of timezone
+    if (FileUtils::IsLink ("/etc/localtime"))
+    {
+      string tz_file    = (string) SCR::Read (.target.symlink, "/etc/localtime");
+      if (tz_file != nil && substring (tz_file, 0, 20) == "/usr/share/zoneinfo/")
+      {
+        timezone        = substring (tz_file, 20);
+        y2milestone ("time zone read from /etc/localtime: %1", timezone);
+      }
+    }
 
     list<string> adjtime= ReadAdjTime ();
     if (size (adjtime) == 3)
