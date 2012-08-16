@@ -1,0 +1,3 @@
+Read	.target.symlink "/etc/localtime" "/usr/share/zoneinfo/Europe/Berlin"
+Read	.etc.adjtime ["0", "0", "UTC"]
+Return	$["hwclock":"UTC", "timezone":"Europe/Berlin"]
