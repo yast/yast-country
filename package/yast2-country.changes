@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug 16 10:41:41 CEST 2012 - jsuchome@suse.cz
+
+- use timezone data from /etc/localtime if available (bnc#773491)
+- 2.22.8
+
+-------------------------------------------------------------------
 Tue Aug 14 11:39:44 CEST 2012 - jsuchome@suse.cz
 
 - added "US International" keyboard layout, make it default for
