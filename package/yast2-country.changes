@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Aug 21 14:21:06 CEST 2012 - jsuchome@suse.cz
+
+- try to restart systemd-timedated service to let it know that
+  /etc/localtime has been updated (bnc#773491)
+- 2.22.9
+
+-------------------------------------------------------------------
 Thu Aug 16 10:41:41 CEST 2012 - jsuchome@suse.cz
 
 - use timezone data from /etc/localtime if available (bnc#773491)
