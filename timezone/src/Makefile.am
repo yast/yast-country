@@ -28,6 +28,6 @@ YaPI_perl_DATA = \
 
 EXTRA_DIST = $(client_DATA) $(module_DATA) $(desktop_DATA) $(ynclude_DATA) $(YaPI_perl_DATA) $(rnc_DATA)
 
-YCPCFLAGS = -M ../../language/src/modules
+YCPCFLAGS = -M ../../language/src
 
 include $(top_srcdir)/Makefile.am.common

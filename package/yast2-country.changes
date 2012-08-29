@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Aug 29 08:38:29 CEST 2012 - jsuchome@suse.cz
+
+- Makefiles adapted to changed structure
+- 2.22.10 
+
+-------------------------------------------------------------------
 Tue Aug 21 14:21:06 CEST 2012 - jsuchome@suse.cz
 
 - try to restart systemd-timedated service to let it know that
