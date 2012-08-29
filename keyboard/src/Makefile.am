@@ -23,4 +23,6 @@ module_DATA = 				\
 
 EXTRA_DIST = $(module_DATA) $(client_DATA) $(ynclude_DATA) $(rnc_DATA) $(desktop_DATA)
 
+YCPCFLAGS = -M ../../language/src
+
 include $(top_srcdir)/Makefile.am.common
