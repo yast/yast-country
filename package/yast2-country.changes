@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 25 13:40:12 CEST 2012 - jsuchome@suse.cz
+
+- remove calls to obsolete inst_suseconfig
+- 2.23.0
+
+-------------------------------------------------------------------
 Wed Aug 29 08:38:29 CEST 2012 - jsuchome@suse.cz
 
 - Makefiles adapted to changed structure

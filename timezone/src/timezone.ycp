@@ -64,7 +64,6 @@ define boolean TimezoneWrite () {
 	    Timezone::timezone, Timezone::hwclock);
 
 	Timezone::Save ();
-	WFM::CallFunction( "inst_suseconfig", [ false, false ] );
     }
     else
     {
