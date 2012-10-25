@@ -80,8 +80,6 @@ define boolean LanguageWrite () {
 	_("Installing and uninstalling affected packages..."),
 	// progress step
 	_("Updating translations in boot loader menu..."),
-	// last progress step
-	_("Starting SuSEconfig...")
 	], ""
     );
 
@@ -125,9 +123,6 @@ define boolean LanguageWrite () {
 	// restart kbd now (after console settings is written) bnc#429515
 	Service::Restart ("kbd");
     }
-    Progress::NextStage ();
-
-    WFM::CallFunction ("inst_suseconfig", [ false, false ]);
 
     return true;
 }
