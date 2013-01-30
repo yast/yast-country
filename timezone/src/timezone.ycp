@@ -81,6 +81,18 @@ define any TimezoneSequence () {
     // create the wizard dialog
     Wizard::OpenOKDialog();
 
+    // wrapper for storage calls, returns nil of yast2-storage is not installed
+    map<string, map> targets = (map<string, map>)WFM::call("wrapper_storage", ["GetTargetMap"]);
+    if (targets != nil)
+    {
+      list<map> partitions = (list<map>)WFM::call("wrapper_storage", ["GetWinPrimPartitions", [targets]]);
+      if (partitions != nil && size (partitions) > 0)
+      {
+        Timezone::windows_partition = true;
+        y2milestone ("windows partition found");
+      }
+    }
+
     any result = TimezoneDialog ($[]);
 
     if ( result == `next )
