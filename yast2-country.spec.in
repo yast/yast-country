@@ -18,6 +18,8 @@ Requires:       yast2-pkg-bindings >= 2.15.3
 Requires:	yast2-core >= 2.16.28
 # new API of ntp-client_proposal.ycp
 Conflicts:	yast2-ntp-client < 2.18.0
+# check for Windows partition
+Requires:       yast2-storage
 
 Requires:	yast2-country-data
 

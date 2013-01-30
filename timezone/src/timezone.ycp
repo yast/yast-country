@@ -38,6 +38,7 @@
 textdomain "country";
 
 import "CommandLine";
+import "Storage";
 import "Timezone";
 import "Wizard";
 
@@ -80,6 +81,12 @@ define any TimezoneSequence () {
 
     // create the wizard dialog
     Wizard::OpenOKDialog();
+
+    if (size (Storage::GetWinPrimPartitions(Storage::GetTargetMap()))>0)
+    {
+	Timezone::windows_partition = true;
+	y2milestone ("windows partition found");
+    }
 
     any result = TimezoneDialog ($[]);
 
