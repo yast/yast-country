@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jan 30 08:20:02 CET 2013 - jsuchome@suse.cz
+
+- timezone: check for Windows partition also on running system
+  (bnc#797665)
+- 2.23.1 
+
+-------------------------------------------------------------------
 Thu Oct 25 13:40:12 CEST 2012 - jsuchome@suse.cz
 
 - remove calls to obsolete inst_suseconfig
