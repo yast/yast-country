@@ -8,7 +8,7 @@ Source1:        org.opensuse.yast.modules.yapi.time.policy
 Source2:        org.opensuse.yast.modules.yapi.language.policy
 BuildRequires:	perl-XML-Writer update-desktop-files yast2-devtools yast2-testsuite yast2 yast2-perl-bindings
 BuildRequires:  polkit-devel
-Requires:	yast2-trans-stats yast2-perl-bindings timezone yast2-packager
+Requires:	yast2-trans-stats yast2-perl-bindings timezone
 # XVersion.ycp
 # Wizard::SetDesktopTitleAndIcon
 Requires:	yast2 >= 2.21.22
@@ -18,8 +18,8 @@ Requires:       yast2-pkg-bindings >= 2.15.3
 Requires:	yast2-core >= 2.16.28
 # new API of ntp-client_proposal.ycp
 Conflicts:	yast2-ntp-client < 2.18.0
-# check for Windows partition
-Requires:       yast2-storage
+# wrapper_storage.ycp
+Requires:       yast2-packager >= 2.23.3
 
 Requires:	yast2-country-data
 
