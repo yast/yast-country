@@ -38,7 +38,6 @@
 textdomain "country";
 
 import "CommandLine";
-import "Storage";
 import "Timezone";
 import "Wizard";
 
