@@ -810,8 +810,9 @@ global define list Region() {
  */
 global define void Save() {
 
-    if ( Mode::update () )
+    if (Mode::mode () == "update")
     {
+	y2milestone ("not saving in update mode...");
 	return;
     }
 
