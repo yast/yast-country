@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Feb 26 10:07:15 CET 2013 - jsuchome@suse.cz
+
+- write Timezone settings during autoupgrade (bnc#804335)
+- 2.17.53 
+
+-------------------------------------------------------------------
 Mon Jul 30 13:07:55 CEST 2012 - jsuchome@suse.cz
 
 - in text mode, set the timezone when leaving dialog
