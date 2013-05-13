@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon May 13 09:36:46 CEST 2013 - jsuchome@suse.cz
+
+- do not use non-UTF encoding fallback when nothing is configured 
+  (bnc#815265)
+- 2.24.1
+
+-------------------------------------------------------------------
 Tue Apr 23 07:55:24 CEST 2013 - jsuchome@suse.cz
 
 - write Timezone settings during autoupgrade (bnc#804335)
