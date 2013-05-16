@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 16 13:26:12 CEST 2013 - jsuchome@suse.cz
+
+- do not use non-UTF encoding fallback when nothing is configured 
+  (bnc#815265)
+- 2.13.2 
+
+-------------------------------------------------------------------
 Wed Jan 30 08:20:02 CET 2013 - jsuchome@suse.cz
 
 - timezone: check for Windows partition also on running system
