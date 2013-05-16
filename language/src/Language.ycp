@@ -525,7 +525,10 @@ global define void ReadSysconfigValues () {
     if (!Stage::initial () || Mode::live_installation ())
     {
 	string val = toupper (Misc::SysconfigRead (.sysconfig.language.RC_LANG, ""));
-	use_utf8 = search (val, ".UTF-8") != nil;
+        if (val != "")
+        {
+          use_utf8 = search (val, ".UTF-8") != nil;
+        }
     }
     else
     {
