@@ -231,15 +231,15 @@
 	    `HSpacing(30)
 	)
     );
-    if (UI::HasSpecialWidget (`Date) && UI::HasSpecialWidget (`Time))
+    if (UI::HasSpecialWidget (`DateField) && UI::HasSpecialWidget (`TimeField))
     {
 	dateterm	= `HBox (
 	    // label text
-	    `Date (`id(`date), _("Current Date"), "")
+	    `DateField (`id(`date), _("Current Date"), "")
 	);
 	timeterm = `HBox (
 	    // label text
-	    `Time (`id(`time), _("Current Time"), "")
+	    `TimeField (`id(`time), _("Current Time"), "")
 	);
 	dt_widgets	= true;
     }
