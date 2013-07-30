@@ -1,4 +1,4 @@
 #
 # Makefile.am for country/language
-SUBDIRS = agents data doc src testsuite
+SUBDIRS = doc src testsuite
 

@@ -50,6 +50,8 @@ Obsoletes:	y2t_inst-language
 Provides:	y2t_inst-environment
 Obsoletes:	y2t_inst-environment
 
+Requires:       yast2-ruby-bindings >= 1.0.0
+
 Summary:	YaST2 - Country Settings (Language, Keyboard, and Timezone)
 
 %description
@@ -74,13 +76,13 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %defattr(-,root,root)
 %doc @docdir@
 %doc COPYING
-@moduledir@/Console.y*
-@moduledir@/Keyboard.y*
-@moduledir@/Timezone.y*
+@moduledir@/Console.rb
+@moduledir@/Keyboard.rb
+@moduledir@/Timezone.rb
 %dir @moduledir@/YaPI
 @moduledir@/YaPI/TIME.pm
 @moduledir@/YaPI/LANGUAGE.pm
-@clientdir@/*.ycp
+@clientdir@/*.rb
 @ydatadir@/*.ycp
 @yncludedir@/keyboard/
 @yncludedir@/timezone/
@@ -94,6 +96,8 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %attr(644,root,root) %config /usr/share/polkit-1/actions/org.opensuse.yast.modules.yapi.*.policy
 
 %package data
+Requires:       yast2-ruby-bindings >= 1.0.0
+
 Summary:	YaST2 - Data files for Country settings
 Group:          System/YaST
 
@@ -105,4 +109,4 @@ functions (Language module)
 %defattr(-,root,root)
 %dir @ydatadir@/languages
 @ydatadir@/languages/*.ycp
-@moduledir@/Language.y*
+@moduledir@/Language.rb

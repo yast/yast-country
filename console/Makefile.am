@@ -1,3 +1,3 @@
 #
 # Makefile.am for country/console
-SUBDIRS = agents data src
+SUBDIRS = src

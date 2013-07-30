@@ -1,4 +1,4 @@
 #
 # Makefile.am for country/keyboard
-SUBDIRS = agents data doc src testsuite
+SUBDIRS = doc src testsuite
 
