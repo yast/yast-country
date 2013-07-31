@@ -1,33 +1,37 @@
-# Makefile.am for country/timezone/src
+# Sources for country
+
+module_DATA = \
+  modules/Timezone.rb
+
+module1dir = @moduledir@/YaPI
+module1_DATA = \
+  modules/YaPI/TIME.pm
+
+client_DATA = \
+  clients/inst_timezone.rb \
+  clients/timezone_auto.rb \
+  clients/timezone.rb \
+  clients/timezone_proposal.rb
 
 yncludedir = @yncludedir@/timezone
+ynclude_DATA = \
+  include/timezone/dialogs.rb
 
-rncdir =  $(schemadir)/autoyast/rnc
+scrconf_DATA = \
+  scrconf/sysconfig_clock.scr \
+  scrconf/etc_adjtime.scr
 
-client_DATA =			\
-	timezone.ycp		\
-	inst_timezone.ycp	\
-	timezone_auto.ycp       \
-        timezone_proposal.ycp
+schemafilesdir = $(schemadir)/autoyast/rnc
+schemafiles_DATA = \
+  autoyast-rnc/timezone.rnc
 
-desktop_DATA =			\
-	timezone.desktop
+ydata_DATA = \
+  data/lang2tz.ycp \
+  data/timezone_raw.ycp
 
-module_DATA = 			\
-	Timezone.ycp
+desktop_DATA = \
+  desktop/timezone.desktop
 
-ynclude_DATA =			\
-	dialogs.ycp
-
-rnc_DATA = timezone.rnc
-
-YaPI_perldir = @moduledir@/YaPI
-
-YaPI_perl_DATA = \
-    YaPI/TIME.pm
-
-EXTRA_DIST = $(client_DATA) $(module_DATA) $(desktop_DATA) $(ynclude_DATA) $(YaPI_perl_DATA) $(rnc_DATA)
-
-YCPCFLAGS = -M ../../language/src
+EXTRA_DIST = $(module_DATA) $(module1_DATA) $(client_DATA) $(ynclude_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA)
 
 include $(top_srcdir)/Makefile.am.common

@@ -1,28 +1,33 @@
-# Makefile.am for country/keyboard/src
+# Sources for country
+
+module_DATA = \
+  modules/Keyboard.rb
+
+client_DATA = \
+  clients/keyboard_auto.rb \
+  clients/keyboard_proposal.rb \
+  clients/keyboard_simple_proposal.rb \
+  clients/keyboard.rb
 
 yncludedir = @yncludedir@/keyboard
+ynclude_DATA = \
+  include/keyboard/dialogs.rb
 
-rncdir =  $(schemadir)/autoyast/rnc
+scrconf_DATA = \
+  scrconf/sysconfig_keyboard.scr
 
-client_DATA =				\
-	keyboard.ycp			\
-	keyboard_auto.ycp               \
-        keyboard_proposal.ycp           \
-        keyboard_simple_proposal.ycp
+schemafilesdir = $(schemadir)/autoyast/rnc
+schemafiles_DATA = \
+  autoyast-rnc/keyboard.rnc
 
-ynclude_DATA =				\
-	dialogs.ycp
+ydata_DATA = \
+  data/keyboard_raw.ycp \
+  data/xkblayout2keyboard.ycp \
+  data/lang2keyboard.ycp
 
-rnc_DATA = keyboard.rnc
+desktop_DATA = \
+  desktop/keyboard.desktop
 
-desktop_DATA =                  \
-        keyboard.desktop
-
-module_DATA = 				\
-	Keyboard.ycp
-
-EXTRA_DIST = $(module_DATA) $(client_DATA) $(ynclude_DATA) $(rnc_DATA) $(desktop_DATA)
-
-YCPCFLAGS = -M ../../language/src
+EXTRA_DIST = $(module_DATA) $(client_DATA) $(ynclude_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA)
 
 include $(top_srcdir)/Makefile.am.common

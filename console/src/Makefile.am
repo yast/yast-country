@@ -1,8 +1,14 @@
-# Makefile.am for country/console/src
+# Sources for country
 
-module_DATA = Console.ycp
-EXTRA_DIST = $(module_DATA)
+module_DATA = \
+  modules/Console.rb
 
-YCPCFLAGS = -M ../../language/src
+scrconf_DATA = \
+  scrconf/sysconfig_console.scr
+
+ydata_DATA = \
+  data/consolefonts.ycp
+
+EXTRA_DIST = $(module_DATA) $(scrconf_DATA) $(ydata_DATA)
 
 include $(top_srcdir)/Makefile.am.common
