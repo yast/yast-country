@@ -386,17 +386,6 @@ module Yast
 
         GetLocales() if Builtins.size(@locales) == 0
 
-        if Ops.get(@locales, lang, 0) != 1 &&
-            Ops.greater_than(Builtins.size(lang), 0)
-          lang = Builtins.substring(lang, 0, 2)
-          found = false
-          Builtins.foreach(@languages_map) do |k, dummy|
-            if !found && Builtins.substring(k, 0, 2) == lang
-              found = true
-              lang = k
-            end
-          end
-        end
         @name = Ops.get_string(@languages_map, [lang, 0], lang)
         @name = Ops.get_string(@languages_map, [lang, 4], lang) if Mode.config
         @language = lang
@@ -466,6 +455,10 @@ module Yast
     # generate the whole locale string for given language according to DB
     # (e.g. de_DE -> de_DE.UTF-8)
     def GetLocaleString(lang)
+
+      # if the suffix is already there, do nothing
+      return lang if lang.index(/[\.@]/)
+
       read_languages_map if Builtins.size(@languages_map) == 0
 
       language_info = Ops.get(@languages_map, lang, [])
@@ -1094,7 +1087,7 @@ module Yast
 
       llanguages = Builtins.splitstring(@languages, ",")
       if !Builtins.contains(llanguages, @language)
-        llanguages = Builtins.add(llanguages, @language)
+        llanguages = Builtins.add(llanguages, @language[/[a-zA-Z_]+/])
         @languages = Builtins.mergestring(llanguages, ",")
       end
       # set the language dependent packages to install
