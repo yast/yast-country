@@ -457,7 +457,7 @@ module Yast
     def GetLocaleString(lang)
 
       # if the suffix is already there, do nothing
-      return lang if lang.index(/[\.@]/)
+      return lang if lang.count(".@") > 0
 
       read_languages_map if Builtins.size(@languages_map) == 0
 
