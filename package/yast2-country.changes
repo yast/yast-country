@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep 12 11:24:12 CEST 2013 - jsuchome@suse.cz
+
+- support using any string as RC_LANG value during autoinstallation
+  (fate#305165)
+- 3.0.1 
+
+-------------------------------------------------------------------
 Wed Jul 31 08:27:55 UTC 2013 - yast-devel@opensuse.org
 
 - converted from YCP to Ruby by YCP Killer

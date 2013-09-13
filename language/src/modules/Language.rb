@@ -140,6 +140,11 @@ module Yast
       Language()
     end
 
+    #remove the suffix, if there's any (en_US.UTF-8 -> en_US)
+    def RemoveSuffix(lang)
+      return lang[/[a-zA-Z_]+/]
+    end
+
     # Check if the language is "CJK"
     # (and thus could not be shown in text mode - see bug #102958)
     def CJKLanguage(lang)
@@ -386,17 +391,6 @@ module Yast
 
         GetLocales() if Builtins.size(@locales) == 0
 
-        if Ops.get(@locales, lang, 0) != 1 &&
-            Ops.greater_than(Builtins.size(lang), 0)
-          lang = Builtins.substring(lang, 0, 2)
-          found = false
-          Builtins.foreach(@languages_map) do |k, dummy|
-            if !found && Builtins.substring(k, 0, 2) == lang
-              found = true
-              lang = k
-            end
-          end
-        end
         @name = Ops.get_string(@languages_map, [lang, 0], lang)
         @name = Ops.get_string(@languages_map, [lang, 4], lang) if Mode.config
         @language = lang
@@ -466,6 +460,10 @@ module Yast
     # generate the whole locale string for given language according to DB
     # (e.g. de_DE -> de_DE.UTF-8)
     def GetLocaleString(lang)
+
+      # if the suffix is already there, do nothing
+      return lang if lang.count(".@") > 0
+
       read_languages_map if Builtins.size(@languages_map) == 0
 
       language_info = Ops.get(@languages_map, lang, [])
@@ -1094,7 +1092,7 @@ module Yast
 
       llanguages = Builtins.splitstring(@languages, ",")
       if !Builtins.contains(llanguages, @language)
-        llanguages = Builtins.add(llanguages, @language)
+        llanguages = Builtins.add(llanguages, RemoveSuffix(@language))
         @languages = Builtins.mergestring(llanguages, ",")
       end
       # set the language dependent packages to install
@@ -1334,6 +1332,7 @@ module Yast
     publish :variable => :ExpertSettingsChanged, :type => "boolean"
     publish :variable => :selection_skipped, :type => "boolean"
     publish :variable => :available_lang_filenames, :type => "list <string>"
+    publish :function => :RemoveSuffix, :type => "string (string)"
     publish :function => :CJKLanguage, :type => "boolean (string)"
     publish :function => :GetTextMode, :type => "boolean ()"
     publish :function => :GetLanguagesMap, :type => "map <string, list> (boolean)"
