@@ -511,7 +511,7 @@ module Yast
               if !Builtins.contains(@selected_languages, @language)
                 @selected_languages = Builtins.add(
                   @selected_languages,
-                  @language[/[a-zA-Z_]+/] #remove the suffix (if there's any)
+                  Language.RemoveSuffix(@language)
                 )
               end
               Builtins.y2milestone(
