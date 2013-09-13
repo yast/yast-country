@@ -1092,7 +1092,7 @@ module Yast
 
       llanguages = Builtins.splitstring(@languages, ",")
       if !Builtins.contains(llanguages, @language)
-        llanguages = Builtins.add(llanguages, RemoveSuffix(@language)
+        llanguages = Builtins.add(llanguages, RemoveSuffix(@language))
         @languages = Builtins.mergestring(llanguages, ",")
       end
       # set the language dependent packages to install
