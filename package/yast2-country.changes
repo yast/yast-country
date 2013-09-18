@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Sep 18 14:46:53 UTC 2013 - lslezak@suse.cz
+
+- do not use *.spec.in template, use *.spec file with RPM macros
+  instead
+- 3.0.2
+
+-------------------------------------------------------------------
 Thu Sep 12 11:24:12 CEST 2013 - jsuchome@suse.cz
 
 - support using any string as RC_LANG value during autoinstallation
