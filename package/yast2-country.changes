@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Oct  1 13:44:53 CEST 2013 - jsuchome@suse.cz
+
+- fixed check for old value during saving /etc/adjtime (#841859) 
+- 3.0.2
+
+-------------------------------------------------------------------
 Thu Sep 12 11:24:12 CEST 2013 - jsuchome@suse.cz
 
 - support using any string as RC_LANG value during autoinstallation
