@@ -817,7 +817,7 @@ module Yast
       Builtins.y2milestone("Save Saved data for timezone: <%1>", @timezone)
 
       adjtime = ReadAdjTime()
-      if adjtime.size == 3 || adjtime.nil?
+      if adjtime.nil? || adjtime.size == 3
         new     = adjtime.nil? ? ["0.0 0 0.0", "0"] : adjtime.dup
         new[2]  = @hwclock == "-u" ? "UTC" : "LOCAL"
         if new[2] != adjtime[2]
