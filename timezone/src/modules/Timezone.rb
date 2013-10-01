@@ -817,15 +817,12 @@ module Yast
       Builtins.y2milestone("Save Saved data for timezone: <%1>", @timezone)
 
       adjtime = ReadAdjTime()
-      if Builtins.size(adjtime) == 3 || adjtime == nil
-        new = adjtime == nil ? ["0.0 0 0.0", "0"] : adjtime
-        Ops.set(new, 2, @hwclock == "-u" ? "UTC" : "LOCAL")
-        if Ops.get(new, 2, "") != Ops.get(adjtime, 2, "")
+      if adjtime.nil? || adjtime.size == 3
+        new     = adjtime.nil? ? ["0.0 0 0.0", "0"] : adjtime.dup
+        new[2]  = @hwclock == "-u" ? "UTC" : "LOCAL"
+        if new[2] != adjtime[2]
           SCR.Write(path(".etc.adjtime"), new)
-          Builtins.y2milestone(
-            "Saved /etc/adjtime with '%1'",
-            Ops.get(new, 2, "")
-          )
+          Builtins.y2milestone("Saved /etc/adjtime with '%1'", new[2])
         end
       end
 
