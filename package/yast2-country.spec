@@ -100,7 +100,6 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %files
 %defattr(-,root,root)
 %doc %{yast_docdir}
-%doc COPYING
 %{yast_moduledir}/Console.rb
 %{yast_moduledir}/Keyboard.rb
 %{yast_moduledir}/Timezone.rb
