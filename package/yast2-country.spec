@@ -1,12 +1,35 @@
-@HEADER-COMMENT@
+#
+# spec file for package yast2-country
+#
+# Copyright (c) 2013 SUSE LINUX Products GmbH, Nuernberg, Germany.
+#
+# All modifications and additions to the file contributed by third parties
+# remain the property of their copyright owners, unless otherwise agreed
+# upon. The license for this file, and modifications and additions to the
+# file, is the same license as for the pristine package itself (unless the
+# license for the pristine package is not an Open Source License, in which
+# case the license is the MIT License). An "Open Source License" is a
+# license that conforms to the Open Source Definition (Version 1.9)
+# published by the Open Source Initiative.
 
-@HEADER@
-Group:  System/YaST
+# Please submit bugfixes or comments via http://bugs.opensuse.org/
+#
+
+
+Name:           yast2-country
+Version:        3.1.0
+Release:        0
+
+BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+Source0:        %{name}-%{version}.tar.bz2
+
+Group:          System/YaST
 License:        GPL-2.0
 #policy files for YaPI dbus interface
 Source1:        org.opensuse.yast.modules.yapi.time.policy
 Source2:        org.opensuse.yast.modules.yapi.language.policy
-BuildRequires:	perl-XML-Writer update-desktop-files yast2-devtools yast2-testsuite yast2 yast2-perl-bindings
+BuildRequires:	perl-XML-Writer update-desktop-files yast2-testsuite yast2 yast2-perl-bindings
+BuildRequires:  yast2-devtools >= 3.0.6
 BuildRequires:  polkit-devel
 Requires:	yast2-trans-stats yast2-perl-bindings timezone
 # XVersion.ycp
@@ -58,39 +81,41 @@ Summary:	YaST2 - Country Settings (Language, Keyboard, and Timezone)
 Country specific data and configuration modules (language, keyboard,
 timezone) for yast2.
 
-@PREP@
+%prep
+%setup -n %{name}-%{version}
 
-@BUILD@
+%build
+%yast_build
 
-@INSTALL@
+%install
+%yast_install
 
 # Policies
 mkdir -p $RPM_BUILD_ROOT/usr/share/polkit-1/actions
 install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 
-@CLEAN@
 
 # common
 %files
 %defattr(-,root,root)
-%doc @docdir@
+%doc %{yast_docdir}
 %doc COPYING
-@moduledir@/Console.rb
-@moduledir@/Keyboard.rb
-@moduledir@/Timezone.rb
-%dir @moduledir@/YaPI
-@moduledir@/YaPI/TIME.pm
-@moduledir@/YaPI/LANGUAGE.pm
-@clientdir@/*.rb
-@ydatadir@/*.ycp
-@yncludedir@/keyboard/
-@yncludedir@/timezone/
-@scrconfdir@/*.scr
-@schemadir@/autoyast/rnc/*.rnc
-@desktopdir@/yast-language.desktop
-@desktopdir@/timezone.desktop
-@desktopdir@/keyboard.desktop
+%{yast_moduledir}/Console.rb
+%{yast_moduledir}/Keyboard.rb
+%{yast_moduledir}/Timezone.rb
+%dir %{yast_moduledir}/YaPI
+%{yast_moduledir}/YaPI/TIME.pm
+%{yast_moduledir}/YaPI/LANGUAGE.pm
+%{yast_clientdir}/*.rb
+%{yast_ydatadir}/*.ycp
+%{yast_yncludedir}/keyboard/
+%{yast_yncludedir}/timezone/
+%{yast_scrconfdir}/*.scr
+%{yast_schemadir}/autoyast/rnc/*.rnc
+%{yast_desktopdir}/yast-language.desktop
+%{yast_desktopdir}/timezone.desktop
+%{yast_desktopdir}/keyboard.desktop
 %dir /usr/share/polkit-1
 %dir /usr/share/polkit-1/actions
 %attr(644,root,root) %config /usr/share/polkit-1/actions/org.opensuse.yast.modules.yapi.*.policy
@@ -107,6 +132,7 @@ functions (Language module)
 
 %files data
 %defattr(-,root,root)
-%dir @ydatadir@/languages
-@ydatadir@/languages/*.ycp
-@moduledir@/Language.rb
+%dir %{yast_ydatadir}/languages
+%{yast_ydatadir}/languages/*.ycp
+%{yast_moduledir}/Language.rb
+

@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Oct  2 14:46:53 UTC 2013 - lslezak@suse.cz
+
+- do not use *.spec.in template, use *.spec file with RPM macros
+  instead
+- 3.1.0
+
+-------------------------------------------------------------------
 Tue Oct  1 08:58:23 CEST 2013 - jsuchome@suse.cz
 
 - fixed check for old value during saving /etc/adjtime (#841859)
