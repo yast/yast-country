@@ -152,9 +152,7 @@ module Yast
       if !utc_only
         # help for time calculation basis:
         # hardware clock references local time or UTC?
-        htext = Ops.add(
-          htext,
-          _(
+        htext = htext + _(
             "<p>\n" +
               "Specify whether your machine is set to local time or UTC in <b>Hardware Clock Set To</b>.\n" +
               "Most PCs that also have other operating systems installed (such as Microsoft\n" +
@@ -164,20 +162,16 @@ module Yast
               "If the hardware clock is set to UTC, your system can switch from standard time\n" +
               "to daylight saving time and back automatically.\n" +
               "</p>\n"
-          )
         )
 
         # help text: extra note about localtim
-        htext = Ops.add(
-          htext,
-          _(
+        htext = htext + _(
             "<p>\n" +
               "Note: The internal system clock as used by the Linux kernel must\n" +
               "always be in UTC, because this is the reference for the correct localtime\n" +
               "in user space. If you are choosing localtime for CMOS clock,\n" +
               "check the user manual for background information about side effects.\n" +
               "</p>"
-          )
         )
       end
 
@@ -425,9 +419,7 @@ module Yast
           #
           @hwclock_s = :hwclock_utc
           if !utc_only
-            @hwclock_s = Convert.to_boolean(UI.QueryWidget(Id(:hwclock), :Value)) ?
-              :hwclock_utc :
-              :hwclock_localtime
+            @hwclock_s = UI.QueryWidget(Id(:hwclock), :Value) ? :hwclock_utc : :hwclock_localtime
 
             if !Timezone.windows_partition && @hwclock_s == :hwclock_localtime
               # warning popup, in case local time is selected (bnc#732769)
