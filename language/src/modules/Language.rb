@@ -1253,7 +1253,9 @@ module Yast
             Item(Id(@language), @language, true)
           )
         end
-        ret = kind == :primary ? primary_items : @secondary_items
+        ret = kind == :primary ?
+          deep_copy(primary_items) :
+          deep_copy(@secondary_items)
       end
       deep_copy(ret)
     end
