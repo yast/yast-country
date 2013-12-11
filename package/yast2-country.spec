@@ -29,7 +29,7 @@ License:        GPL-2.0
 Source1:        org.opensuse.yast.modules.yapi.time.policy
 Source2:        org.opensuse.yast.modules.yapi.language.policy
 BuildRequires:	perl-XML-Writer update-desktop-files yast2-testsuite yast2 yast2-perl-bindings
-BuildRequires:  yast2-devtools >= 3.0.6
+BuildRequires:  yast2-devtools >= 3.1.10
 BuildRequires:  polkit-devel
 Requires:	yast2-trans-stats yast2-perl-bindings timezone
 # XVersion.ycp
