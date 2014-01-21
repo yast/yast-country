@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan 21 09:16:47 UTC 2014 - jsrain@suse.cz
+
+- fixed timezone dialog layout (fate#314695)
+- 3.1.1
+
+-------------------------------------------------------------------
 Wed Oct  2 14:46:53 UTC 2013 - lslezak@suse.cz
 
 - do not use *.spec.in template, use *.spec file with RPM macros
