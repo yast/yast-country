@@ -676,8 +676,8 @@ module Yast
             ),
             HSpacing(),
             HWeight(1, VBox(
-              Label(_("Date and Time")),
-              Label(Id(:date), date))
+              Left(Label(_("Date and Time"))),
+              Left(Label(Id(:date), date)))
             ),
             HSpacing(),
             VBox(
