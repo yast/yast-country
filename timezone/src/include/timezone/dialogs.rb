@@ -53,7 +53,7 @@ module Yast
       Yast.import "Timezone"
       Yast.import "Wizard"
 
-      @hwclock_s_initial = :none
+      @hwclock_s = @hwclock_s_initial = :none
 
       # if system clock is configured to sync with NTP
       @ntp_used = false
@@ -135,6 +135,10 @@ module Yast
     # @return true if user changed the time (dialog accepted)
     def SetTimeDialog
       ntp_help_text = Convert.to_string(ntp_call("ui_help_text", {}))
+
+      utc_only = Timezone.utc_only
+      textmode = Language.GetTextMode
+
       # help text for set time dialog
       htext = Ops.add(
         _(
@@ -144,6 +148,32 @@ module Yast
           _("<p>Press <b>Accept</b> to save your changes.</p>"),
         ntp_help_text
       )
+
+      if !utc_only
+        # help for time calculation basis:
+        # hardware clock references local time or UTC?
+        htext = htext + _(
+            "<p>\n" +
+              "Specify whether your machine is set to local time or UTC in <b>Hardware Clock Set To</b>.\n" +
+              "Most PCs that also have other operating systems installed (such as Microsoft\n" +
+              "Windows) use local time.\n" +
+              "Machines that have only Linux installed are usually\n" +
+              "set to Universal Time Coordinated (UTC).\n" +
+              "If the hardware clock is set to UTC, your system can switch from standard time\n" +
+              "to daylight saving time and back automatically.\n" +
+              "</p>\n"
+        )
+
+        # help text: extra note about localtim
+        htext = htext + _(
+            "<p>\n" +
+              "Note: The internal system clock as used by the Linux kernel must\n" +
+              "always be in UTC, because this is the reference for the correct localtime\n" +
+              "in user space. If you are choosing localtime for CMOS clock,\n" +
+              "check the user manual for background information about side effects.\n" +
+              "</p>"
+        )
+      end
 
       dt_widgets = false
 
@@ -252,55 +282,71 @@ module Yast
         dt_widgets = true
       end
 
+      hwclock_term = VBox(
+        CheckBox(
+          Id(:hwclock),
+          Opt(:hstretch, :notify),
+          # check box label
+          _("&Hardware Clock Set to UTC"),
+          @hwclock_s == :hwclock_utc
+        ),
+        textmode ? Label("") : Empty()
+      )
 
-
-
-      cont = HBox(
-        HWeight(1, VBox()),
-        HWeight(
-          6,
-          RadioButtonGroup(
-            Id(:rb),
-            VBox(
-              # radio button label (= how to setup time)
-              Left(RadioButton(Id(:manual), Opt(:notify), _("Manually"))),
-              VSpacing(0.5),
-              HBox(
-                HSpacing(3),
-                VBox(
-                  Left(timeterm),
-                  VSpacing(),
-                  Left(dateterm),
-                  VSpacing(),
-                  HBox(
-                    HSpacing(0.5),
-                    Left(
-                      # check box label
-                      CheckBox(
-                        Id(:change_now),
-                        Opt(:notify),
-                        _("Change the Time Now"),
-                        true
+      cont = VBox(
+          HBox(
+          HWeight(1, VBox()),
+          HWeight(
+            6,
+            RadioButtonGroup(
+              Id(:rb),
+              VBox(
+                # radio button label (= how to setup time)
+                Left(RadioButton(Id(:manual), Opt(:notify), _("Manually"))),
+                VSpacing(0.5),
+                HBox(
+                  HSpacing(3),
+                  VBox(
+                    Left(timeterm),
+                    VSpacing(),
+                    Left(dateterm),
+                    VSpacing(),
+                    HBox(
+                      HSpacing(0.5),
+                      Left(
+                        # check box label
+                        CheckBox(
+                          Id(:change_now),
+                          Opt(:notify),
+                          _("Change the Time Now"),
+                          true
+                        )
                       )
                     )
                   )
-                )
-              ),
-              VSpacing(1),
-              Left(
-                RadioButton(
-                  Id(:ntp),
-                  Opt(:notify),
-                  # radio button label
-                  _("Synchronize with NTP Server"),
-                  false
-                )
-              ),
-              ReplacePoint(Id(:rp), Empty())
+                ),
+                VSpacing(1),
+                Left(
+                  RadioButton(
+                    Id(:ntp),
+                    Opt(:notify),
+                    # radio button label
+                    _("Synchronize with NTP Server"),
+                    false
+                  )
+                ),
+                ReplacePoint(Id(:rp), Empty())
+              )
             )
-          )
+          ),
+          HWeight(1, VBox())
         ),
-        HWeight(1, VBox())
+        VSpacing(2),
+        HBox(
+          HWeight(1, VBox()),
+          HWeight(6, utc_only ? Empty() : hwclock_term),
+          HWeight(1, VBox())
+        )
       )
 
       Wizard.OpenAcceptDialog
@@ -363,6 +409,38 @@ module Yast
                   "first_time"    => false
                 }
               )
+            end
+          end
+        end
+
+        if ret == :accept
+          # Get current settings.
+          # UTC vs. localtime, only if needed
+          #
+          @hwclock_s = :hwclock_utc
+          if !utc_only
+            @hwclock_s = UI.QueryWidget(Id(:hwclock), :Value) ? :hwclock_utc : :hwclock_localtime
+
+            if !Timezone.windows_partition && @hwclock_s == :hwclock_localtime
+              # warning popup, in case local time is selected (bnc#732769)
+              if !Popup.ContinueCancel(
+                  _(
+                    "\n" +
+                      "You selected local time, but only Linux  seems to be installed on your system.\n" +
+                      "In such case, it is strongly recommended to use UTC, and to click Cancel.\n" +
+                      "\n" +
+                      "If you want to keep local time, you must adjust the CMOS clock twice the year\n" +
+                      "because of Day Light Saving switches. If you miss to adjust the clock, backups may fail,\n" +
+                      "your mail system may drop mail messages, etc.\n" +
+                      "\n" +
+                      "If you use UTC, Linux will adjust the time automatically.\n" +
+                      "\n" +
+                      "Do you want to continue with your selection (local time)?"
+                  )
+                )
+                ret = :not_next
+                next
+              end
             end
           end
         end
@@ -490,7 +568,7 @@ module Yast
       # So you can only specify the timezone." (ihno)
       if !Arch.s390 && !Mode.config
         # button text
-        settime = PushButton(Id(:settime), _("Cha&nge..."))
+        settime = PushButton(Id(:settime), _("Other &Settings..."))
       end
 
       textmode = Language.GetTextMode
@@ -595,72 +673,58 @@ module Yast
                 # title for combo box 'timezone'
                 ComboBox(Id(:timezone), Opt(:notify), _("Time &Zone"))
               )
+            ),
+            HSpacing(),
+            HWeight(1, VBox(
+              Left(Label(_("Date and Time"))),
+              Left(Label(Id(:date), date)))
+            ),
+            HSpacing(),
+            VBox(
+              Label(" "),
+              settime
             )
           )
         )
       else
-        timezoneterm = HBox(
-          SelectionBox(
-            Id(:region),
-            Opt(:notify, :immediate),
-            # label text
-            _("&Region"),
-            Timezone.Region
+        timezoneterm = VBox(
+          HBox(
+            SelectionBox(
+              Id(:region),
+              Opt(:notify, :immediate),
+              # label text
+              _("&Region"),
+              Timezone.Region
+            ),
+            HSpacing(),
+            ReplacePoint(
+              Id(:tzsel),
+              # title for selection box 'timezone'
+              SelectionBox(Id(:timezone), Opt(:notify), _("Time &Zone"))
+            )
           ),
-          HSpacing(),
-          ReplacePoint(
-            Id(:tzsel),
-            # title for selection box 'timezone'
-            SelectionBox(Id(:timezone), Opt(:notify), _("Time &Zone"))
+          HBox(
+            HSpacing(),
+            VBox(
+              Left(Label(_("Date and Time"))),
+              Left(Label(Id(:date), date))
+            ),
+            HSpacing(),
+            VBox(
+              Label(" "),
+              settime
+            ),
+            HSpacing()
           )
         )
       end
-      hwclock_term = VBox(
-        CheckBox(
-          Id(:hwclock),
-          Opt(:hstretch, :notify),
-          # check box label
-          _("&Hardware Clock Set to UTC"),
-          hwclock == "-u"
-        ),
-        textmode ? Label("") : Empty()
-      )
 
       contents = MarginBox(
         term(:leftMargin, 2),
         term(:rightMargin, 2),
         term(:topMargin, 0),
         term(:bottomMargin, 0.2),
-        VBox(
-          timezoneterm,
-          VSpacing(0.2),
-          VSquash(
-            HBox(
-              HWeight(1, utc_only ? Empty() : hwclock_term),
-              HSpacing(1),
-              # frame label
-              HWeight(
-                1,
-                Frame(
-                  Id(:time_fr),
-                  time_frame_label,
-                  MarginBox(
-                    term(:leftMargin, 1.2),
-                    term(:rightMargin, 1),
-                    term(:topMargin, 0),
-                    term(:bottomMargin, 0),
-                    textmode ?
-                      VBox(
-                        Label(Id(:date), Opt(:outputField, :hstretch), date),
-                        Right(settime)
-                      ) :
-                      HBox(Label(Id(:date), date), HStretch(), Right(settime))
-                  )
-                )
-              )
-            )
-          )
-        )
+        timezoneterm
       )
       # cache for lists with timezone items
       timezones_for_region = {}
@@ -763,37 +827,6 @@ module Yast
             "</p>\n"
         )
 
-      if !utc_only
-        # help for time calculation basis:
-        # hardware clock references local time or UTC?
-        help_text = Ops.add(
-          help_text,
-          _(
-            "<p>\n" +
-              "Specify whether your machine is set to local time or UTC in <b>Hardware Clock Set To</b>.\n" +
-              "Most PCs that also have other operating systems installed (such as Microsoft\n" +
-              "Windows) use local time.\n" +
-              "Machines that have only Linux installed are usually\n" +
-              "set to Universal Time Coordinated (UTC).\n" +
-              "If the hardware clock is set to UTC, your system can switch from standard time\n" +
-              "to daylight saving time and back automatically.\n" +
-              "</p>\n"
-          )
-        )
-
-        # help text: extra note about localtim
-        help_text = Ops.add(
-          help_text,
-          _(
-            "<p>\n" +
-              "Note: The internal system clock as used by the Linux kernel must\n" +
-              "always be in UTC, because this is the reference for the correct localtime\n" +
-              "in user space. If you are choosing localtime for CMOS clock,\n" +
-              "check the user manual for background information about side effects.\n" +
-              "</p>"
-          )
-        )
-      end
 
 
       if !Arch.s390 && !Mode.config
@@ -823,9 +856,9 @@ module Yast
         Wizard.SetDesktopTitleAndIcon("timezone")
       end
 
-      hwclock_s = hwclock == "-u" ? :hwclock_utc : :hwclock_localtime
-      hwclock_s_old = hwclock_s
-      @hwclock_s_initial = hwclock_s
+      @hwclock_s = hwclock == "-u" ? :hwclock_utc : :hwclock_localtime
+      hwclock_s_old = @hwclock_s
+      @hwclock_s_initial = @hwclock_s
 
       show_selected_region.call(sel, timezone)
       if timezone_selector
@@ -856,7 +889,7 @@ module Yast
             timezone = tz
             changed_time = true if timezone != timezone_old
             timezone_old = timezone
-            SetTimezone(hwclock_s, timezone, false, changed_time)
+            SetTimezone(@hwclock_s, timezone, false, changed_time)
           end
           if timezone_selector
             UI.ChangeWidget(Id(:timezonemap), :CurrentItem, timezone)
@@ -870,7 +903,7 @@ module Yast
               timezone = tz
               changed_time = true if timezone != timezone_old
               timezone_old = timezone
-              SetTimezone(hwclock_s, timezone, false, changed_time)
+              SetTimezone(@hwclock_s, timezone, false, changed_time)
             end
           end
           if SetTimeDialog()
@@ -892,38 +925,6 @@ module Yast
           end
         elsif ret == :next || ret == :timezone || ret == :timezonemap ||
             ret == :hwclock
-          # Get current settings.
-          # UTC vs. localtime, only if needed
-          #
-          hwclock_s = :hwclock_utc
-          if !utc_only
-            hwclock_s = Convert.to_boolean(UI.QueryWidget(Id(:hwclock), :Value)) ?
-              :hwclock_utc :
-              :hwclock_localtime
-
-            if ret == :next && !Timezone.windows_partition &&
-                hwclock_s == :hwclock_localtime
-              # warning popup, in case local time is selected (bnc#732769)
-              if !Popup.ContinueCancel(
-                  _(
-                    "\n" +
-                      "You selected local time, but only Linux  seems to be installed on your system.\n" +
-                      "In such case, it is strongly recommended to use UTC, and to click Cancel.\n" +
-                      "\n" +
-                      "If you want to keep local time, you must adjust the CMOS clock twice the year\n" +
-                      "because of Day Light Saving switches. If you miss to adjust the clock, backups may fail,\n" +
-                      "your mail system may drop mail messages, etc.\n" +
-                      "\n" +
-                      "If you use UTC, Linux will adjust the time automatically.\n" +
-                      "\n" +
-                      "Do you want to continue with your selection (local time)?"
-                  )
-                )
-                ret = :not_next
-                next
-              end
-            end
-          end
           if ret == :timezonemap
             timezone = Convert.to_string(
               UI.QueryWidget(Id(:timezonemap), :Value)
@@ -958,12 +959,12 @@ module Yast
           end
           Builtins.y2milestone("timezone %1 ret %2", timezone, ret)
 
-          if timezone != timezone_old || hwclock_s != hwclock_s_old ||
+          if timezone != timezone_old || @hwclock_s != hwclock_s_old ||
               ret == :next
             changed_time = true if timezone != timezone_old
             timezone_old = timezone
-            hwclock_s_old = hwclock_s
-            SetTimezone(hwclock_s, timezone, ret == :next, changed_time)
+            hwclock_s_old = @hwclock_s
+            SetTimezone(@hwclock_s, timezone, ret == :next, changed_time)
           end
 
           if ret == :next
@@ -975,8 +976,8 @@ module Yast
             Timezone.ntp_used = @ntp_used
             # See bnc#638185c5: refresh_initrd should be called if HWCLOCK is changed (--localtime <-> --utc) and/or
             # if --localtime is set and TIMEZONE will be changed.
-            if hwclock_s != @hwclock_s_initial ||
-                hwclock_s == :hwclock_localtime && timezone != timezone_initial
+            if @hwclock_s != @hwclock_s_initial ||
+                @hwclock_s == :hwclock_localtime && timezone != timezone_initial
               Timezone.call_mkinitrd = true
             end
 
