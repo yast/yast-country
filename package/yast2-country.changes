@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Mon Feb 10 17:07:10 CET 2014 - jsuchome@suse.cz
+
+- check for nil value of adjtime (bnc#862626)
+
+-------------------------------------------------------------------
 Tue Jan 21 09:16:47 UTC 2014 - jsrain@suse.cz
 
 - adjusted timezone dialog layout (fate#314695)
