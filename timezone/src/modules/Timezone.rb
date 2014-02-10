@@ -278,11 +278,13 @@ module Yast
           "Set ret %1",
           SCR.Execute(path(".target.bash_output"), cmd)
         )
-        cmd = "/bin/systemctl try-restart systemd-timedated.service"
-        Builtins.y2milestone(
-          "restarting timedated service: %1",
-          SCR.Execute(path(".target.bash_output"), cmd)
-        )
+        unless Stage.initial
+          cmd = "/bin/systemctl try-restart systemd-timedated.service"
+          Builtins.y2milestone(
+            "restarting timedated service: %1",
+            SCR.Execute(path(".target.bash_output"), cmd)
+          )
+        end
         if !Arch.s390
           cmd = Ops.add("/sbin/hwclock --hctosys ", @hwclock)
           if Stage.initial && @hwclock == "--localtime"
