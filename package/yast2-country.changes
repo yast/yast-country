@@ -1,7 +1,9 @@
 -------------------------------------------------------------------
-Mon Feb 10 17:07:10 CET 2014 - jsuchome@suse.cz
+Mon Feb 10 17:13:06 CET 2014 - jsuchome@suse.cz
 
 - check for nil value of adjtime (bnc#862626)
+- do not call systemctl during installation (bnc#861571)
+- 3.1.2
 
 -------------------------------------------------------------------
 Tue Jan 21 09:16:47 UTC 2014 - jsrain@suse.cz
