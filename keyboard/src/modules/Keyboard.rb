@@ -217,13 +217,9 @@ module Yast
       #
       @kbd_descr = []
 
-      @kbd_tty = "tty1 tty2 tty3 tty4 tty5 tty6 tty8 tty9 tty10 tty11 tty12 tty13 tty14 tty15 tty16 tty17 tty18 tty19 tty20"
-
       @kbd_rate = ""
       @kbd_delay = ""
       @kbd_numlock = ""
-      @kbd_capslock = ""
-      @kbd_scrlock = ""
       @kbd_disable_capslock = ""
 
       @keyboardprobelist = [] # List of all probed keyboards
@@ -245,10 +241,6 @@ module Yast
       # Read the the variables not touched by the module to be able to
       # store them again on Save().
       #
-      @kbd_tty = Misc.SysconfigRead(
-        path(".sysconfig.keyboard.KBD_TTY"),
-        @kbd_tty
-      )
       @kbd_rate = Misc.SysconfigRead(
         path(".sysconfig.keyboard.KBD_RATE"),
         @kbd_rate
@@ -261,29 +253,18 @@ module Yast
         path(".sysconfig.keyboard.KBD_NUMLOCK"),
         @kbd_numlock
       )
-      @kbd_capslock = Misc.SysconfigRead(
-        path(".sysconfig.keyboard.KBD_CAPSLOCK"),
-        @kbd_capslock
-      )
-      @kbd_scrlock = Misc.SysconfigRead(
-        path(".sysconfig.keyboard.KBD_SCRLOCK"),
-        @kbd_scrlock
-      )
       @kbd_disable_capslock = Misc.SysconfigRead(
         path(".sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK"),
         @kbd_disable_capslock
       )
 
       Builtins.y2milestone(
-        "rate:%1 delay:%2 numlock:%3 capslock:%4 scrlock:%5 disclock:%6",
+        "rate:%1 delay:%2 numlock:%3 disclock:%4",
         @kbd_rate,
         @kbd_delay,
         @kbd_numlock,
-        @kbd_capslock,
-        @kbd_scrlock,
         @kbd_disable_capslock
       )
-      Builtins.y2milestone("tty:%1", @kbd_tty)
 
       nil
     end
@@ -430,9 +411,6 @@ module Yast
         "rate"     => @kbd_rate,
         "delay"    => @kbd_delay,
         "numlock"  => @kbd_numlock,
-        "capslock" => @kbd_capslock == "yes" ? true : false,
-        "scrlock"  => @kbd_scrlock == "yes" ? true : false,
-        "tty"      => @kbd_tty,
         "discaps"  => @kbd_disable_capslock == "yes" ? true : false
       }
       deep_copy(ret)
@@ -895,12 +873,9 @@ module Yast
 
       SCR.Write(path(".sysconfig.keyboard.KEYTABLE"), @keymap)
       SCR.Write(path(".sysconfig.keyboard.COMPOSETABLE"), @compose_table)
-      SCR.Write(path(".sysconfig.keyboard.KBD_TTY"), @kbd_tty)
       SCR.Write(path(".sysconfig.keyboard.KBD_RATE"), @kbd_rate)
       SCR.Write(path(".sysconfig.keyboard.KBD_DELAY"), @kbd_delay)
       SCR.Write(path(".sysconfig.keyboard.KBD_NUMLOCK"), @kbd_numlock)
-      SCR.Write(path(".sysconfig.keyboard.KBD_CAPSLOCK"), @kbd_capslock)
-      SCR.Write(path(".sysconfig.keyboard.KBD_SCRLOCK"), @kbd_scrlock)
       SCR.Write(
         path(".sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK"),
         @kbd_disable_capslock
@@ -1260,16 +1235,6 @@ module Yast
       end
       if Builtins.haskey(val, "numlock")
         @kbd_numlock = Ops.get_string(val, "numlock", "")
-      end
-      if Builtins.haskey(val, "capslock")
-        @kbd_capslock = Ops.get_boolean(val, "capslock", false) ? "yes" : "no"
-      end
-      if Builtins.haskey(val, "scrlock")
-        @kbd_scrlock = Ops.get_boolean(val, "scrlock", false) ? "yes" : "no"
-      end
-      if Builtins.haskey(val, "tty") &&
-          Ops.greater_than(Builtins.size(Ops.get_string(val, "tty", "")), 0)
-        @kbd_tty = Ops.get_string(val, "tty", "")
       end
       if Builtins.haskey(val, "discaps")
         @kbd_disable_capslock = Ops.get_boolean(val, "discaps", false) ? "yes" : "no"
