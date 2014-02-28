@@ -15,7 +15,7 @@ ynclude_DATA = \
 
 scrconf_DATA = \
   scrconf/sysconfig_keyboard.scr \
-  scrconf/etc_vconsole.scr
+  scrconf/etc_vconsole_conf.scr
 
 schemafilesdir = $(schemadir)/autoyast/rnc
 schemafiles_DATA = \
