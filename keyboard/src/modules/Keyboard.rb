@@ -242,26 +242,22 @@ module Yast
       # Read the the variables not touched by the module to be able to
       # store them again on Save().
       #
-
-      if FileUtils.Exists("/etc/vconsole.conf")
-
-        @kbd_rate = Misc.SysconfigRead(
-          path(".etc.vconsole_conf.KBD_RATE"),
-          @kbd_rate
-        )
-        @kbd_delay = Misc.SysconfigRead(
-          path(".etc.vconsole_conf.KBD_DELAY"),
-          @kbd_delay
-        )
-        @kbd_numlock = Misc.SysconfigRead(
-          path(".etc.vconsole_conf.KBD_NUMLOCK"),
-          @kbd_numlock
-        )
-        @kbd_disable_capslock = Misc.SysconfigRead(
-          path(".etc.vconsole_conf.KBD_DISABLE_CAPS_LOCK"),
-          @kbd_disable_capslock
-        )
-      end
+      @kbd_rate = Misc.SysconfigRead(
+        path(".sysconfig.keyboard.KBD_RATE"),
+        @kbd_rate
+      )
+      @kbd_delay = Misc.SysconfigRead(
+        path(".sysconfig.keyboard.KBD_DELAY"),
+        @kbd_delay
+      )
+      @kbd_numlock = Misc.SysconfigRead(
+        path(".sysconfig.keyboard.KBD_NUMLOCK"),
+        @kbd_numlock
+      )
+      @kbd_disable_capslock = Misc.SysconfigRead(
+        path(".sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK"),
+        @kbd_disable_capslock
+      )
 
       Builtins.y2milestone(
         "rate:%1 delay:%2 numlock:%3 disclock:%4",
@@ -870,17 +866,18 @@ module Yast
           "# The YaST-internal identifier of the attached keyboard.\n" +
           "#\n"
       )
+
+      SCR.Write(path(".sysconfig.keyboard.COMPOSETABLE"), @compose_table)
+      SCR.Write(path(".sysconfig.keyboard.KBD_RATE"), @kbd_rate)
+      SCR.Write(path(".sysconfig.keyboard.KBD_DELAY"), @kbd_delay)
+      SCR.Write(path(".sysconfig.keyboard.KBD_NUMLOCK"), @kbd_numlock)
+      SCR.Write(
+        path(".sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK"),
+        @kbd_disable_capslock
+      )
       SCR.Write(path(".sysconfig.keyboard"), nil) # flush
 
       SCR.Write(path(".etc.vconsole_conf.KEYMAP"), @keymap.gsub(/(.*)\.map\.gz/, '\1'))
-      SCR.Write(path(".etc.vconsole_conf.COMPOSETABLE"), @compose_table)
-      SCR.Write(path(".etc.vconsole_conf.KBD_RATE"), @kbd_rate)
-      SCR.Write(path(".etc.vconsole_conf.KBD_DELAY"), @kbd_delay)
-      SCR.Write(path(".etc.vconsole_conf.KBD_NUMLOCK"), @kbd_numlock)
-      SCR.Write(
-        path(".etc.vconsole_conf.KBD_DISABLE_CAPS_LOCK"),
-        @kbd_disable_capslock
-      )
       SCR.Write(path(".etc.vconsole_conf"), nil) # flush
 
       # As a preliminary step mark all keyboards except the one to be configured
