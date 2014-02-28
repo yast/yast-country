@@ -100,6 +100,7 @@ module Yast
       Yast.import "Arch"
       Yast.import "AsciiFile"
       Yast.import "Directory"
+      Yast.import "FileUtils"
       Yast.import "Label"
       Yast.import "Language"
       Yast.import "Linuxrc"
@@ -241,22 +242,26 @@ module Yast
       # Read the the variables not touched by the module to be able to
       # store them again on Save().
       #
-      @kbd_rate = Misc.SysconfigRead(
-        path(".sysconfig.keyboard.KBD_RATE"),
-        @kbd_rate
-      )
-      @kbd_delay = Misc.SysconfigRead(
-        path(".sysconfig.keyboard.KBD_DELAY"),
-        @kbd_delay
-      )
-      @kbd_numlock = Misc.SysconfigRead(
-        path(".sysconfig.keyboard.KBD_NUMLOCK"),
-        @kbd_numlock
-      )
-      @kbd_disable_capslock = Misc.SysconfigRead(
-        path(".sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK"),
-        @kbd_disable_capslock
-      )
+
+      if FileUtils.Exists("/etc/vconsole.conf")
+
+        @kbd_rate = Misc.SysconfigRead(
+          path(".etc.vconsole_conf.KBD_RATE"),
+          @kbd_rate
+        )
+        @kbd_delay = Misc.SysconfigRead(
+          path(".etc.vconsole_conf.KBD_DELAY"),
+          @kbd_delay
+        )
+        @kbd_numlock = Misc.SysconfigRead(
+          path(".etc.vconsole_conf.KBD_NUMLOCK"),
+          @kbd_numlock
+        )
+        @kbd_disable_capslock = Misc.SysconfigRead(
+          path(".etc.vconsole_conf.KBD_DISABLE_CAPS_LOCK"),
+          @kbd_disable_capslock
+        )
+      end
 
       Builtins.y2milestone(
         "rate:%1 delay:%2 numlock:%3 disclock:%4",
@@ -830,19 +835,14 @@ module Yast
     def Save
       if Mode.update
         kbd = Misc.SysconfigRead(path(".sysconfig.keyboard.YAST_KEYBOARD"), "")
-        if Builtins.size(kbd) == 0
-          kmap = Misc.SysconfigRead(path(".sysconfig.keyboard.KEYTABLE"), "")
-          if Ops.greater_than(Builtins.size(kmap), 0)
+        if kbd.empty?
+          kmap = Misc.SysconfigRead(path(".etc.vconsole_conf.KEYMAP"), "")
+          # if still nothing found, lets check the obsolete config option:
+          kmap = Misc.SysconfigRead(path(".sysconfig.keyboard.KEYTABLE"), "") if kmap.empty?
+          if kmap.size > 0
             data = GetX11KeyData(kmap)
-            if Ops.greater_than(
-                Builtins.size(Ops.get_string(data, "XkbLayout", "")),
-                0
-              )
-              kbd = XkblayoutToKeyboard(Ops.get_string(data, "XkbLayout", ""))
-              kbd = Ops.add(
-                Ops.add(kbd, ","),
-                Ops.get_string(data, "XkbModel", "pc104")
-              )
+            if (data["XkbLayout"] || "").size > 0
+              kbd = XkblayoutToKeyboard(data["XkbLayout"]) + "," + (data["XkbModel"] || "pc104")
               SCR.Write(path(".sysconfig.keyboard.YAST_KEYBOARD"), kbd)
               SCR.Write(
                 path(".sysconfig.keyboard.YAST_KEYBOARD.comment"),
@@ -870,17 +870,18 @@ module Yast
           "# The YaST-internal identifier of the attached keyboard.\n" +
           "#\n"
       )
+      SCR.Write(path(".sysconfig.keyboard"), nil) # flush
 
-      SCR.Write(path(".sysconfig.keyboard.KEYTABLE"), @keymap)
-      SCR.Write(path(".sysconfig.keyboard.COMPOSETABLE"), @compose_table)
-      SCR.Write(path(".sysconfig.keyboard.KBD_RATE"), @kbd_rate)
-      SCR.Write(path(".sysconfig.keyboard.KBD_DELAY"), @kbd_delay)
-      SCR.Write(path(".sysconfig.keyboard.KBD_NUMLOCK"), @kbd_numlock)
+      SCR.Write(path(".etc.vconsole_conf.KEYMAP"), @keymap.gsub(/(.*)\.map\.gz/, '\1'))
+      SCR.Write(path(".etc.vconsole_conf.COMPOSETABLE"), @compose_table)
+      SCR.Write(path(".etc.vconsole_conf.KBD_RATE"), @kbd_rate)
+      SCR.Write(path(".etc.vconsole_conf.KBD_DELAY"), @kbd_delay)
+      SCR.Write(path(".etc.vconsole_conf.KBD_NUMLOCK"), @kbd_numlock)
       SCR.Write(
-        path(".sysconfig.keyboard.KBD_DISABLE_CAPS_LOCK"),
+        path(".etc.vconsole_conf.KBD_DISABLE_CAPS_LOCK"),
         @kbd_disable_capslock
       )
-      SCR.Write(path(".sysconfig.keyboard"), nil) # flush
+      SCR.Write(path(".etc.vconsole_conf"), nil) # flush
 
       # As a preliminary step mark all keyboards except the one to be configured
       # as configured = no and needed = no. Afterwards this one keyboard will be
