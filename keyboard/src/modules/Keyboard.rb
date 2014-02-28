@@ -839,7 +839,7 @@ module Yast
           kmap = Misc.SysconfigRead(path(".etc.vconsole_conf.KEYMAP"), "")
           # if still nothing found, lets check the obsolete config option:
           kmap = Misc.SysconfigRead(path(".sysconfig.keyboard.KEYTABLE"), "") if kmap.empty?
-          if kmap.size > 0
+          if !kmap.empty?
             data = GetX11KeyData(kmap)
             if (data["XkbLayout"] || "").size > 0
               kbd = XkblayoutToKeyboard(data["XkbLayout"]) + "," + (data["XkbModel"] || "pc104")
