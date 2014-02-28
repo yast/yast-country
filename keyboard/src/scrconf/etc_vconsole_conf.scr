@@ -1,0 +1,13 @@
+.etc.vconsole_conf
+
+`ag_ini(
+    `IniAgent( "/etc/vconsole.conf",
+	$[
+	    "options" : [ "global_values", "flat" ],
+	    "comments" : [ "^#.*", "^[ \t]*$", ],
+	    "params" : [
+                $[ "match" : [ "^[ \t]*([^=]*[^ \t=])[ \t]*=[ \t]*(.*[^ \t]|)[ \t]*$" , "%s=%s"] ]
+	    ]
+	]
+    )
+)
