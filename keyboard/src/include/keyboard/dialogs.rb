@@ -58,7 +58,7 @@ module Yast
       ) +
         # help text for keyboard expert screen cont.
         _(
-          "<p>Settings made here apply only to the console keyboard.  Configure the keyboard for the graphical user interface with another tool, such as SaX.</p>\n"
+          "<p>Settings made here apply only to the console keyboard. Configure the keyboard for the graphical user interface with another tool.</p>\n"
         )
 
 
