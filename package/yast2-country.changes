@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Apr  1 09:39:40 CEST 2014 - jsuchome@suse.cz
+
+- do not package keyboard.desktop file for s390 (bnc#870953)
+- 3.1.6
+
+-------------------------------------------------------------------
 Wed Mar 26 11:26:33 CET 2014 - locilka@suse.com
 
 - Reference to obsoleted Sax removed from help text (bnc#869397)
