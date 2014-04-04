@@ -58,18 +58,9 @@ module Yast
       ) +
         # help text for keyboard expert screen cont.
         _(
-          "<p>Settings made here apply only to the console keyboard.  Configure the keyboard for the graphical user interface with another tool, such as SaX.</p>\n"
+          "<p>Settings made here apply only to the console keyboard. Configure the keyboard for the graphical user interface with another tool.</p>\n"
         )
 
-      # general help trailer
-      help_text = Ops.add(
-        help_text,
-        _(
-          "<p>\n" +
-            "For <b>Devices for Lock</b>, enter a space-separated list of devices to which to apply the Scroll Lock, Num Lock, and Caps Lock settings.\n" +
-            "</p>"
-        )
-      )
 
       # label text
 
@@ -124,26 +115,10 @@ module Yast
                       ]
                     )
                   ),
-                  VSpacing(Opt(:vstretch), 1),
-                  Left(
-                    # checkbox label
-                    CheckBox(Id(:capslock), _("Ca&ps Lock On"))
-                  ),
-                  Left(
-                    # checkbox label
-                    CheckBox(Id(:scrlock), _("&Scroll Lock On"))
-                  )
+                  VSpacing(Opt(:vstretch), 1)
                 )
               ),
               VSpacing(Opt(:vstretch), 1),
-              Left(
-                InputField(
-                  Id(:tty),
-                  Opt(:hstretch),
-                  # textentry label
-                  _("&Devices for Lock")
-                )
-              ),
               VSpacing(Opt(:vstretch), 1),
               Left(
                 # label text
@@ -157,7 +132,8 @@ module Yast
               ),
               VSpacing(0.5)
             )
-          )
+          ),
+          HSpacing(1)
         )
       )
       val = Keyboard.GetExpertValues
@@ -170,17 +146,6 @@ module Yast
       tmp = Ops.get_string(val, "numlock", "")
       tmp = "untouched" if tmp == ""
       UI.ChangeWidget(Id(:numlock), :Value, tmp)
-      UI.ChangeWidget(
-        Id(:capslock),
-        :Value,
-        Ops.get_boolean(val, "capslock", false)
-      )
-      UI.ChangeWidget(
-        Id(:scrlock),
-        :Value,
-        Ops.get_boolean(val, "scrlock", false)
-      )
-      UI.ChangeWidget(Id(:tty), :Value, Ops.get_string(val, "tty", ""))
       UI.ChangeWidget(
         Id(:discaps),
         :Value,
@@ -198,9 +163,6 @@ module Yast
           if Builtins.contains(["bios", "yes", "no"], tmp)
             Ops.set(val, "numlock", tmp)
           end
-          Ops.set(val, "capslock", UI.QueryWidget(Id(:capslock), :Value))
-          Ops.set(val, "scrlock", UI.QueryWidget(Id(:scrlock), :Value))
-          Ops.set(val, "tty", UI.QueryWidget(Id(:tty), :Value))
           Ops.set(val, "discaps", UI.QueryWidget(Id(:discaps), :Value))
           Builtins.y2milestone("map ok %1", val)
           Keyboard.SetExpertValues(val)

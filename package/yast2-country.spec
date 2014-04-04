@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        3.1.1
+Version:        3.1.6
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -90,6 +90,10 @@ timezone) for yast2.
 %install
 %yast_install
 
+%ifarch s390 s390x
+rm -f $RPM_BUILD_ROOT%{yast_desktopdir}/keyboard.desktop
+%endif
+
 # Policies
 mkdir -p $RPM_BUILD_ROOT/usr/share/polkit-1/actions
 install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
@@ -115,7 +119,9 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %{yast_schemadir}/autoyast/rnc/*.rnc
 %{yast_desktopdir}/yast-language.desktop
 %{yast_desktopdir}/timezone.desktop
+%ifnarch s390 s390x
 %{yast_desktopdir}/keyboard.desktop
+%endif
 %dir /usr/share/polkit-1
 %dir /usr/share/polkit-1/actions
 %attr(644,root,root) %config /usr/share/polkit-1/actions/org.opensuse.yast.modules.yapi.*.policy
