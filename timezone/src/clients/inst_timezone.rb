@@ -38,8 +38,6 @@ module Yast
         Ops.set(@args, "first_run", "yes")
       end
 
-      Wizard.HideAbortButton if Mode.mode == "firstboot"
-
       if Stage.initial &&
           Ops.greater_than(
             Builtins.size(Storage.GetWinPrimPartitions(Storage.GetTargetMap)),
@@ -49,7 +47,22 @@ module Yast
         Builtins.y2milestone("windows partition found: assuming local time")
       end
 
+      full_size_timezone_dialog
+    end
+
+    # While the rest of the installation dialogs have enough room
+    # to have the title on the left (bnc#868859), this one needs the space
+    # for the world map.
+    # Disable the left-title by requesting space for Steps, but shrink
+    # it by not adding any steps :-)
+    def full_size_timezone_dialog
+      Wizard.OpenNextBackStepsDialog
+
+      Wizard.HideAbortButton if Mode.mode == "firstboot"
+
       TimezoneDialog(@args)
+    ensure
+      Wizard.CloseDialog
     end
   end
 end
