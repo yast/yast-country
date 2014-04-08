@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Apr  8 15:15:23 UTC 2014 - mvidner@suse.com
+
+- Ensure that the title stays on top during the installation
+  (bnc#868859).
+- 3.1.7
+
+-------------------------------------------------------------------
 Tue Apr  1 09:39:40 CEST 2014 - jsuchome@suse.cz
 
 - do not package keyboard.desktop file for s390 (bnc#870953)
