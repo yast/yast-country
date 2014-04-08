@@ -33,10 +33,7 @@ module Yast
       Yast.include self, "timezone/dialogs.rb"
 
       @args = GetInstArgs.argmap
-
-      if Ops.get_string(@args, "first_run", "yes") != "no"
-        Ops.set(@args, "first_run", "yes")
-      end
+      @args["first_run"] = "yes" unless @args["first_run"] == "no"
 
       if Stage.initial &&
           Ops.greater_than(
