@@ -3,6 +3,7 @@ Tue Apr  8 15:15:23 UTC 2014 - mvidner@suse.com
 
 - Ensure that the title stays on top during the installation
   (bnc#868859).
+- Really disable Abort for firstboot (gh#yast/yast-country#36).
 - 3.1.7
 
 -------------------------------------------------------------------

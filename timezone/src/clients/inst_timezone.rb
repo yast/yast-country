@@ -26,7 +26,7 @@ module Yast
     def main
       Yast.import "UI"
       Yast.import "GetInstArgs"
-      Yast.import "Mode"
+      Yast.import "Stage"
       Yast.import "Storage"
       Yast.import "Wizard"
 
@@ -55,7 +55,7 @@ module Yast
     def full_size_timezone_dialog
       Wizard.OpenNextBackStepsDialog
 
-      Wizard.HideAbortButton if Mode.mode == "firstboot"
+      Wizard.HideAbortButton if Stage.firstboot
 
       TimezoneDialog(@args)
     ensure
