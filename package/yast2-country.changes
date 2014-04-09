@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Apr  9 12:09:55 UTC 2014 - jsrain@suse.cz
+
+- moved "UTC" check-box back to main time zone dialog (bnc#872767)
+- 3.1.7
+
+-------------------------------------------------------------------
 Tue Apr  1 09:39:40 CEST 2014 - jsuchome@suse.cz
 
 - do not package keyboard.desktop file for s390 (bnc#870953)
