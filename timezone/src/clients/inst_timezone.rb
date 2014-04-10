@@ -50,10 +50,9 @@ module Yast
     # While the rest of the installation dialogs have enough room
     # to have the title on the left (bnc#868859), this one needs the space
     # for the world map.
-    # Disable the left-title by requesting space for Steps, but shrink
-    # it by not adding any steps :-)
+    # So use a plain Wizard Dialog without the :titleOnLeft option
     def full_size_timezone_dialog
-      Wizard.OpenNextBackStepsDialog
+      Wizard.OpenNextBackDialog
 
       Wizard.HideAbortButton if Stage.firstboot
 
