@@ -1,9 +1,15 @@
 -------------------------------------------------------------------
-Tue Apr  8 15:15:23 UTC 2014 - mvidner@suse.com
+Thu Apr 10 09:41:15 UTC 2014 - mvidner@suse.com
 
 - Ensure that the title stays on top during the installation
   (bnc#868859).
 - Really disable Abort for firstboot (gh#yast/yast-country#36).
+- 3.1.8
+
+-------------------------------------------------------------------
+Wed Apr  9 12:09:55 UTC 2014 - jsrain@suse.cz
+
+- moved "UTC" check-box back to main time zone dialog (bnc#872767)
 - 3.1.7
 
 -------------------------------------------------------------------
