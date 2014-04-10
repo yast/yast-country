@@ -114,7 +114,7 @@ module Yast
             "</p>\n"
       )
 
-      # help text: extra note about localtim
+      # help text: extra note about localtime
       utc_help = utc_help + _(
           "<p>\n" +
             "Note: The internal system clock as used by the Linux kernel must\n" +
