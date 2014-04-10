@@ -26,19 +26,14 @@ module Yast
     def main
       Yast.import "UI"
       Yast.import "GetInstArgs"
-      Yast.import "Mode"
+      Yast.import "Stage"
       Yast.import "Storage"
       Yast.import "Wizard"
 
       Yast.include self, "timezone/dialogs.rb"
 
       @args = GetInstArgs.argmap
-
-      if Ops.get_string(@args, "first_run", "yes") != "no"
-        Ops.set(@args, "first_run", "yes")
-      end
-
-      Wizard.HideAbortButton if Mode.mode == "firstboot"
+      @args["first_run"] = "yes" unless @args["first_run"] == "no"
 
       if Stage.initial &&
           Ops.greater_than(
@@ -49,7 +44,21 @@ module Yast
         Builtins.y2milestone("windows partition found: assuming local time")
       end
 
+      full_size_timezone_dialog
+    end
+
+    # While the rest of the installation dialogs have enough room
+    # to have the title on the left (bnc#868859), this one needs the space
+    # for the world map.
+    # So use a plain Wizard Dialog without the :titleOnLeft option
+    def full_size_timezone_dialog
+      Wizard.OpenNextBackDialog
+
+      Wizard.HideAbortButton if Stage.firstboot
+
       TimezoneDialog(@args)
+    ensure
+      Wizard.CloseDialog
     end
   end
 end
