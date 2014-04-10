@@ -99,6 +99,50 @@ module Yast
       nil
     end
 
+    def utc_helptext
+      # help for time calculation basis:
+      # hardware clock references local time or UTC?
+      utc_help = _(
+          "<p>\n" +
+            "Specify whether your machine is set to local time or UTC in <b>Hardware Clock Set To</b>.\n" +
+            "Most PCs that also have other operating systems installed (such as Microsoft\n" +
+            "Windows) use local time.\n" +
+            "Machines that have only Linux installed are usually\n" +
+            "set to Universal Time Coordinated (UTC).\n" +
+            "If the hardware clock is set to UTC, your system can switch from standard time\n" +
+            "to daylight saving time and back automatically.\n" +
+            "</p>\n"
+      )
+
+      # help text: extra note about localtim
+      utc_help = utc_help + _(
+          "<p>\n" +
+            "Note: The internal system clock as used by the Linux kernel must\n" +
+            "always be in UTC, because this is the reference for the correct localtime\n" +
+            "in user space. If you are choosing localtime for CMOS clock,\n" +
+            "check the user manual for background information about side effects.\n" +
+            "</p>"
+      )
+      utc_help
+    end
+
+    def confirm_local_time
+      # warning popup, in case local time is selected (bnc#732769)
+      Popup.ContinueCancel(_(
+          "\n" +
+            "You selected local time, but only Linux  seems to be installed on your system.\n" +
+            "In such case, it is strongly recommended to use UTC, and to click Cancel.\n" +
+            "\n" +
+            "If you want to keep local time, you must adjust the CMOS clock twice the year\n" +
+            "because of Day Light Saving switches. If you miss to adjust the clock, backups may fail,\n" +
+            "your mail system may drop mail messages, etc.\n" +
+            "\n" +
+            "If you use UTC, Linux will adjust the time automatically.\n" +
+            "\n" +
+            "Do you want to continue with your selection (local time)?"
+        )
+      )
+    end
 
     # handles the complication that the package yast2-ntp-client may not be present
     def ntp_call(acall, args)
@@ -776,29 +820,7 @@ module Yast
         )
 
       if !utc_only
-        # help for time calculation basis:
-        # hardware clock references local time or UTC?
-        help_text = help_text + _(
-            "<p>\n" +
-              "Specify whether your machine is set to local time or UTC in <b>Hardware Clock Set To</b>.\n" +
-              "Most PCs that also have other operating systems installed (such as Microsoft\n" +
-              "Windows) use local time.\n" +
-              "Machines that have only Linux installed are usually\n" +
-              "set to Universal Time Coordinated (UTC).\n" +
-              "If the hardware clock is set to UTC, your system can switch from standard time\n" +
-              "to daylight saving time and back automatically.\n" +
-              "</p>\n"
-        )
-
-        # help text: extra note about localtim
-        help_text = help_text + _(
-            "<p>\n" +
-              "Note: The internal system clock as used by the Linux kernel must\n" +
-              "always be in UTC, because this is the reference for the correct localtime\n" +
-              "in user space. If you are choosing localtime for CMOS clock,\n" +
-              "check the user manual for background information about side effects.\n" +
-              "</p>"
-        )
+        help_text = help_text + utc_helptext
       end
 
 
@@ -859,22 +881,7 @@ module Yast
             @hwclock_s = UI.QueryWidget(Id(:hwclock), :Value) ? :hwclock_utc : :hwclock_localtime
 
             if !Timezone.windows_partition && @hwclock_s == :hwclock_localtime
-              # warning popup, in case local time is selected (bnc#732769)
-              if !Popup.ContinueCancel(
-                  _(
-                    "\n" +
-                      "You selected local time, but only Linux  seems to be installed on your system.\n" +
-                      "In such case, it is strongly recommended to use UTC, and to click Cancel.\n" +
-                      "\n" +
-                      "If you want to keep local time, you must adjust the CMOS clock twice the year\n" +
-                      "because of Day Light Saving switches. If you miss to adjust the clock, backups may fail,\n" +
-                      "your mail system may drop mail messages, etc.\n" +
-                      "\n" +
-                      "If you use UTC, Linux will adjust the time automatically.\n" +
-                      "\n" +
-                      "Do you want to continue with your selection (local time)?"
-                  )
-                )
+              if ! confirm_local_time
                 ret = :not_next
                 next
               end
