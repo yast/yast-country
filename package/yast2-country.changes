@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Apr 23 08:59:09 CEST 2014 - jsuchome@suse.cz
+
+- do not try to save settings when user did not change them
+  (bnc#850571)
+- 3.1.9
+
+-------------------------------------------------------------------
 Thu Apr 10 09:41:15 UTC 2014 - mvidner@suse.com
 
 - Ensure that the title stays on top during the installation
