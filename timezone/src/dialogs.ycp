@@ -873,7 +873,7 @@ If the current time is not correct, use <b>Change</b> to adjust it.
 		}
 		timezone_old	= timezone;
 		hwclock_s_old	= hwclock_s;
-		SetTimezone (hwclock_s, timezone, ret==`next, changed_time);
+		SetTimezone (hwclock_s, timezone, ret==`next && (changed_time || hwclock_s != hwclock_s_initial), changed_time);
 	    }
 
 	    if (ret == `next)
