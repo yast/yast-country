@@ -973,7 +973,7 @@ module Yast
             changed_time = true if timezone != timezone_old
             timezone_old = timezone
             hwclock_s_old = @hwclock_s
-            SetTimezone(@hwclock_s, timezone, ret == :next, changed_time)
+            SetTimezone(@hwclock_s, timezone, ret == :next && (changed_time || @hwclock_s != @hwclock_s_initial), changed_time)
           end
 
           if ret == :next
