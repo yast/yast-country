@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Apr 23 08:05:14 CEST 2014 - jsuchome@suse.cz
+
+- do not try save settings when user did not change them
+  (bnc#850571)
+- 2.17.55
+
+-------------------------------------------------------------------
 Wed May 15 08:53:25 CEST 2013 - jsuchome@suse.cz
 
 - do not use non-UTF encoding fallback when nothing is configured
