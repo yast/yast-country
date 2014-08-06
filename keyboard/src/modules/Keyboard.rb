@@ -93,6 +93,8 @@ require "yast"
 
 module Yast
   class KeyboardClass < Module
+    include Yast::Logger
+
     def main
       Yast.import "UI"
       textdomain "country"
@@ -858,7 +860,7 @@ module Yast
       #
       SCR.Write(
         path(".sysconfig.keyboard.YAST_KEYBOARD"),
-        Ops.add(Ops.add(@current_kbd, ","), @kb_model)
+        "#{@current_kbd},#{@kb_model}"
       )
       SCR.Write(
         path(".sysconfig.keyboard.YAST_KEYBOARD.comment"),
@@ -905,49 +907,27 @@ module Yast
         SCR.Read(path(".probe.keyboard.manual"))
       )
 
-      list_size = Builtins.size(@keyboardprobelist)
+      log.info "No probed keyboards. Not unconfiguring any keyboards" if @keyboardprobelist.empty?
 
-      if Ops.greater_than(list_size, 0)
-        i = 0
-
-        while Ops.less_than(i, list_size)
-          current_keyboard = Ops.get_map(@keyboardprobelist, i, {})
-          current_key = Ops.get_string(current_keyboard, "unique_key", "")
-
-          if current_key != ""
-            # OK, there is a key to mark...
+      @keyboardprobelist.each do |keyboard|
+        key = keyboard["unique_key"] || ""
+        unless key.empty?
+          # OK, there is a key to mark...
+          #
+          if key != @unique_key
+            # OK, this key is _not_ the key of the keyboard to be configured.
+            # If the user selected a keyboard from the database Keyboard::unique_key
+            # has been set to "" there which also applies here.
+            # ==> Mark with "no".
             #
-            if current_key != @unique_key
-              # OK, this key is _not_ the key of the keyboard to be configured.
-              # If the user selected a keyboard from the database Keyboard::unique_key
-              # has been set to "" there which also applies here.
-              # ==> Mark with "no".
-              #
-              SCR.Write(path(".probe.status.configured"), current_key, :no)
-              Builtins.y2milestone(
-                "Marked keyboard <%1> as configured = no",
-                current_key
-              )
-
-              SCR.Write(path(".probe.status.needed"), current_key, :no)
-              Builtins.y2milestone(
-                "Marked keyboard <%1> as needed = no",
-                current_key
-              )
-            else
-              Builtins.y2milestone(
-                "Skipping active key <%1> --> to be configured",
-                current_key
-              )
-            end
+            SCR.Write(path(".probe.status.configured"), key, :no)
+            log.info "Marked keyboard <#{key}> as configured = no"
+            SCR.Write(path(".probe.status.needed"), key, :no)
+            log.info "Marked keyboard <#{key}> as needed = no"
+          else
+            log.info "Skipping active key <#{key}> --> to be configured"
           end
-
-          i = Ops.add(i, 1) # next keyboard
         end
-      else
-        Builtins.y2milestone(
-          "No probed keyboards. Not unconfiguring any keyboards"
-        )
       end
 
       # Only if the keyboard has been probed in this run the unique_key
@@ -958,19 +938,17 @@ module Yast
       #
       if @unique_key != ""
         SCR.Write(path(".probe.status.configured"), @unique_key, :yes)
-        Builtins.y2milestone("Marked keyboard <%1> as configured", @unique_key)
+        log.info "Marked keyboard <#{@unique_key}> as configured"
 
-        if !Linuxrc.serial_console
+        unless Linuxrc.serial_console
           SCR.Write(path(".probe.status.needed"), @unique_key, :yes)
-          Builtins.y2milestone("Marked keyboard <%1> as needed", @unique_key)
+          log.info "Marked keyboard <#{@unique_key}> as needed"
         end
       else
-        Builtins.y2milestone(
-          "NOT marking keyboard as configured (no unique_key)"
-        )
+        log.info "NOT marking keyboard as configured (no unique_key)"
       end
 
-      Builtins.y2milestone("Saved data for keyboard: <%1>", @current_kbd)
+      log.info "Saved data for keyboard: <#{@current_kbd}>"
 
       nil
     end # Save()
