@@ -103,6 +103,7 @@ module Yast
       Yast.import "AsciiFile"
       Yast.import "Directory"
       Yast.import "FileUtils"
+      Yast.import "Initrd"
       Yast.import "Label"
       Yast.import "Language"
       Yast.import "Linuxrc"
@@ -911,22 +912,21 @@ module Yast
 
       @keyboardprobelist.each do |keyboard|
         key = keyboard["unique_key"] || ""
-        unless key.empty?
-          # OK, there is a key to mark...
+        next if key.empty?
+        # OK, there is a key to mark...
+        #
+        if key != @unique_key
+          # OK, this key is _not_ the key of the keyboard to be configured.
+          # If the user selected a keyboard from the database Keyboard::unique_key
+          # has been set to "" there which also applies here.
+          # ==> Mark with "no".
           #
-          if key != @unique_key
-            # OK, this key is _not_ the key of the keyboard to be configured.
-            # If the user selected a keyboard from the database Keyboard::unique_key
-            # has been set to "" there which also applies here.
-            # ==> Mark with "no".
-            #
-            SCR.Write(path(".probe.status.configured"), key, :no)
-            log.info "Marked keyboard <#{key}> as configured = no"
-            SCR.Write(path(".probe.status.needed"), key, :no)
-            log.info "Marked keyboard <#{key}> as needed = no"
-          else
-            log.info "Skipping active key <#{key}> --> to be configured"
-          end
+          SCR.Write(path(".probe.status.configured"), key, :no)
+          log.info "Marked keyboard <#{key}> as configured = no"
+          SCR.Write(path(".probe.status.needed"), key, :no)
+          log.info "Marked keyboard <#{key}> as needed = no"
+        else
+          log.info "Skipping active key <#{key}> --> to be configured"
         end
       end
 
@@ -940,7 +940,7 @@ module Yast
         SCR.Write(path(".probe.status.configured"), @unique_key, :yes)
         log.info "Marked keyboard <#{@unique_key}> as configured"
 
-        unless Linuxrc.serial_console
+        if !Linuxrc.serial_console
           SCR.Write(path(".probe.status.needed"), @unique_key, :yes)
           log.info "Marked keyboard <#{@unique_key}> as needed"
         end
@@ -950,9 +950,21 @@ module Yast
 
       log.info "Saved data for keyboard: <#{@current_kbd}>"
 
+      # Let's force the generation right away if needed
+      regenerate_initrd if needs_new_initrd?
+
       nil
     end # Save()
 
+    # Checks if initrd must be regenerated
+    #
+    # According to bnc#888804, initrd must be regenerated in order for any
+    # configuration change to survive to reboots. That means a regeneration is
+    # needed unless we are installing or updating (in those situations it will
+    # be a initrd generation at some point in the future for sure).
+    def needs_new_initrd?
+      Mode.normal
+    end
 
     # Name()
     # Just return the keyboard name, without setting anything.
@@ -1419,6 +1431,17 @@ module Yast
     publish :function => :Import, :type => "boolean (map)"
     publish :function => :Export, :type => "map ()"
     publish :function => :Summary, :type => "string ()"
+
+  private
+
+    # Enforces the generation of initrd
+    def regenerate_initrd
+      log.info "Regenerating initrd to make the change persistent"
+      # The three steps are necessary with the current Initrd API
+      Initrd.Read
+      Initrd.Update
+      Initrd.Write
+    end
   end
 
   Keyboard = KeyboardClass.new

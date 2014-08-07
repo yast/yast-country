@@ -44,6 +44,7 @@ module Yast
       Yast.import "Confirm"
       Yast.import "Keyboard"
       Yast.import "Popup"
+      Yast.import "Message"
       Yast.import "Service"
       Yast.import "Stage"
       Yast.import "Wizard"
@@ -122,8 +123,12 @@ module Yast
 
     # write keyboard settings
     def KeyboardWrite
+      if Keyboard.needs_new_initrd?
+        Popup.ShowFeedback(Message.updating_configuration, Message.takes_a_while)
+      end
       Keyboard.Save
       Service.Restart("kbd")
+      Popup.ClearFeedback if Keyboard.needs_new_initrd?
       true
     end
 
