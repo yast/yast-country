@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        3.1.9
+Version:        3.1.10
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -33,8 +33,8 @@ BuildRequires:  yast2-devtools >= 3.1.10
 BuildRequires:  polkit-devel
 Requires:	yast2-trans-stats yast2-perl-bindings timezone
 # XVersion.ycp
-# Wizard::SetDesktopTitleAndIcon
-Requires:	yast2 >= 2.21.22
+# Message.updating_configuration, Message.takes_a_while
+Requires:	yast2 >= 3.1.94
 # Pkg::SetPackageLocale, Pkg::GetTextLocale
 Requires:       yast2-pkg-bindings >= 2.15.3
 # IconPath support for MultiSelectionBox
