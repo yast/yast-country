@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Aug 21 13:45:58 UTC 2014 - ancor@suse.com
+
+- Persisted X11 keyboard configuration using localectl (bnc#892303)
+- 3.1.11 
+
+-------------------------------------------------------------------
 Mon Aug 11 12:36:47 UTC 2014 - ancor@suse.com
 
 - Regenerate initrd after configuring keyboard (bnc#888804)
