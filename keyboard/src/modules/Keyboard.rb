@@ -880,8 +880,24 @@ module Yast
       )
       SCR.Write(path(".sysconfig.keyboard"), nil) # flush
 
+      # Write systemd settings for console
       SCR.Write(path(".etc.vconsole_conf.KEYMAP"), @keymap.gsub(/(.*)\.map\.gz/, '\1'))
       SCR.Write(path(".etc.vconsole_conf"), nil) # flush
+
+      # Write systemd settings for X11
+      if x11_setup_needed
+        # According to localectl syntax, if one option is empty then skip
+        # the following ones
+        args = [@XkbLayout, @XkbModel, @XkbVariant, @XkbOptions]
+        blank = args.find_index("")
+        args = args[0, blank] if blank
+        if !args.empty?
+          cmd = "/usr/bin/localectl --no-convert set-x11-keymap #{args.join(' ')}"
+          if SCR.Execute(path(".target.bash"), cmd) != 0
+            log.error "X11 configuration not written. Failed to execute '#{cmd}'"
+          end
+        end
+      end
 
       # As a preliminary step mark all keyboards except the one to be configured
       # as configured = no and needed = no. Afterwards this one keyboard will be
