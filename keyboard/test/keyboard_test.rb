@@ -9,6 +9,7 @@ module Yast
   import "Linuxrc"
   import "Path"
   import "Encoding"
+  import "AsciiFile"
 
   RSpec.configure do |c|
     c.include SCRStub
@@ -29,7 +30,12 @@ module Yast
 
     describe "#Save" do
       before(:each) do
+        stub_presence_of "/usr/sbin/xkbctrl"
+        allow(XVersion).to receive(:binPath).and_return "/usr/bin"
+        # Stub the configuration writing...
         stub_scr_write
+        # ...but allow the dump_xkbctrl helper to use SCR.Write
+        allow(SCR).to receive(:Write).with(SCRStub::STRING_PATH, anything, anything).and_call_original
       end
 
       context "during installation" do
@@ -38,17 +44,27 @@ module Yast
         let(:chroot) { "installing" }
 
         it "writes the configuration" do
+          expect_to_execute(/loadkeys es\.map\.gz/)
+          # Called twice, for SetConsole and SetX11
+          expect_to_execute(/xkbctrl es/).twice do |p, cmd|
+            dump_xkbctrl(:spanish, cmd.split("> ")[1])
+          end
+          expect_to_execute(/setxkbmap .*layout es/)
+          expect_to_execute(/localectl --no-convert set-x11-keymap es microsoftpro basic$/)
+          # SetX11 sets autorepeat during installation
+          expect_to_execute(/xset r on$/)
+          expect(AsciiFile).to receive(:AppendLine).with(anything, ["Keytable:", "es.map.gz"])
+
+          Keyboard.Set("spanish")
           Keyboard.Save
 
-          expect(written_value_for(".sysconfig.keyboard.YAST_KEYBOARD")).to eq("english-us,pc104")
+          expect(written_value_for(".sysconfig.keyboard.YAST_KEYBOARD")).to eq("spanish,pc104")
           expect(written_value_for(".sysconfig.keyboard")).to be_nil
-          expect(written_value_for(".etc.vconsole_conf.KEYMAP")).to eq("us")
+          expect(written_value_for(".etc.vconsole_conf.KEYMAP")).to eq("es")
           expect(written_value_for(".etc.vconsole_conf")).to be_nil
         end
 
         it "doesn't regenerate initrd" do
-          stub_scr_write
-
           expect(Initrd).to_not receive(:Read)
           expect(Initrd).to_not receive(:Update)
           expect(Initrd).to_not receive(:Write)
@@ -64,6 +80,12 @@ module Yast
 
         it "writes the configuration" do
           expect_to_execute(/loadkeys ruwin_alt-UTF-8\.map\.gz/)
+          # Called twice, for SetConsole and SetX11
+          expect_to_execute(/xkbctrl ruwin_alt-UTF-8/).twice do |p, cmd|
+            dump_xkbctrl(:russian, cmd.split("> ")[1])
+          end
+          expect_to_execute(/setxkbmap .*layout us,ru/)
+          expect_to_execute(/localectl --no-convert set-x11-keymap us,ru microsoftpro ,winkeys grp:ctrl_shift_toggle,grp_led:scroll$/)
 
           Keyboard.Set("russian")
           Keyboard.Save

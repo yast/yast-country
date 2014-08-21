@@ -19,6 +19,7 @@ module SCRStub
   YCP_PATH = Yast::Path.new(".target.ycp")
   SIZE_PATH = Yast::Path.new(".target.size")
   BASH_PATH = Yast::Path.new(".target.bash")
+  STRING_PATH = Yast::Path.new(".target.string")
 
   # Ensures that non-stubbed SCR calls still works as expected after including
   # the module in the testsuite
