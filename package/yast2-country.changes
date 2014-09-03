@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Sep  3 16:13:30 UTC 2014 - ancor@suse.com
+
+- Added udev rules to handle layout of keyboards hot-plugged
+  during the installation process (bnc#885271)
+- 3.1.12
+
+-------------------------------------------------------------------
 Thu Aug 21 13:45:58 UTC 2014 - ancor@suse.com
 
 - Persisted X11 keyboard configuration using localectl (bnc#892303)
