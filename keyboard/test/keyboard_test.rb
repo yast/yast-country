@@ -194,5 +194,71 @@ module Yast
         end
       end
     end
+
+    describe "Import" do
+      let(:mode) { "autoinstallation" }
+      let(:stage) { "initial" }
+      let(:chroot) { "installing" }
+      let(:discaps) { Keyboard.GetExpertValues["discaps"] }
+      let(:default) { "english-us" }
+      let(:default_expert_values) {
+        {"rate" => "", "delay" => "", "numlock" => "", "discaps" => false}
+      }
+
+      before do
+        # Let's ensure the initial state
+        Keyboard.SetExpertValues(default_expert_values)
+        allow(AsciiFile).to receive(:AppendLine).once.with(anything, ["Keytable:", "us.map.gz"])
+        Keyboard.Set(default)
+      end
+
+      context "from a <keyboard> section" do
+        let(:map) { {"keymap" => "spanish", "keyboard_values" => {"discaps" => true}} }
+
+        it "sets the layout and the expert values" do
+          expect(Keyboard).to receive(:Set).with("spanish")
+          Keyboard.Import(map, :keyboard)
+          expect(discaps).to eq(true)
+        end
+
+        it "ignores everything if the language section was expected" do
+          expect(Keyboard).to receive(:Set).with(default)
+          Keyboard.Import(map, :language)
+          expect(discaps).to eq(false)
+        end
+      end
+
+      context "from a <language> section" do
+        let(:map) { {"language" => "es_ES"} }
+
+        it "sets the layout and leaves expert values untouched" do
+          expect(Keyboard).to receive(:Set).with("spanish")
+          Keyboard.Import(map, :language)
+          expect(discaps).to eq(false)
+        end
+
+        it "ignores everything if the keyboard section was expected" do
+          expect(Keyboard).to receive(:Set).with(default)
+          Keyboard.Import(map, :keyboard)
+          expect(discaps).to eq(false)
+        end
+      end
+
+      context "from a malformed input mixing <language> and <keyboard>" do
+        let(:map) { {"language" => "es_ES", "keyboard_values" => {"discaps" => true}} }
+
+        it "sets only the corresponding settings if a keyboard section was expected" do
+          expect(Keyboard).to receive(:Set).with(default)
+          Keyboard.Import(map, :keyboard)
+          expect(discaps).to eq(true)
+        end
+
+        it "sets only the corresponding settings if a language section was expected" do
+          expect(Keyboard).to receive(:Set).with("spanish")
+          Keyboard.Import(map, :language)
+          expect(discaps).to eq(false)
+        end
+      end
+    end
   end
 end

@@ -1365,15 +1365,29 @@ module Yast
     end
 
     # AutoYaST interface function: Get the Keyboard configuration from a map.
-    # @param [Hash] settings imported map
+    #
+    # @param settings [Hash] imported map with the content of either the
+    #       'keyboard' or the 'language' section
+    # @param syntax [:keyboard, :language] format of settings: if :language, the
+    #       data for Language.Import
     # @return success
-    def Import(settings)
+    def Import(settings, syntax = :keyboard)
       settings = deep_copy(settings)
       # Read was not called -> do the init
       Read() if @expert_on_entry == {}
 
-      Set(Ops.get_string(settings, "keymap", @current_kbd))
-      SetExpertValues(Ops.get_map(settings, "keyboard_values", {}))
+      keyboard = @current_kbd
+      expert_values = {}
+
+      case syntax
+      when :keyboard
+        keyboard = settings["keymap"] if settings["keymap"]
+        expert_values = settings["keyboard_values"] if settings["keyboard_values"]
+      when :language
+        keyboard = GetKeyboardForLanguage(settings["language"], keyboard)
+      end
+      Set(keyboard)
+      SetExpertValues(expert_values)
       true
     end
 
@@ -1453,7 +1467,7 @@ module Yast
     publish :function => :SetKeyboardForLang, :type => "void (string)"
     publish :function => :SetKeyboardDefault, :type => "void ()"
     publish :function => :CheckKeyboardDuringUpdate, :type => "void (string)"
-    publish :function => :Import, :type => "boolean (map)"
+    publish :function => :Import, :type => "boolean (map, ...)"
     publish :function => :Export, :type => "map ()"
     publish :function => :Summary, :type => "string ()"
 
