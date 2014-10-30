@@ -1,4 +1,7 @@
-# YaST - The basic libraries #
+# YaST - The Basic Libraries #
+
+[![Travis Build](https://travis-ci.org/yast/yast-country.svg?branch=master)](https://travis-ci.org/yast/yast-country)
+[![Jenkins Build](http://img.shields.io/jenkins/s/https/ci.opensuse.org/yast-country-master.svg)](https://ci.opensuse.org/view/Yast/job/yast-country-master/)
 
 Country specific data and configuration modules (language, keyboard,
 timezone) for YaST2.
