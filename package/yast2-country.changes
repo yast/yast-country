@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Nov 20 09:05:36 UTC 2014 - ancor@suse.com
+
+- More intuitive order when navigating with the tab key
+  in the timezone selection screen (bnc#872341).
+
+-------------------------------------------------------------------
 Fri Sep 12 11:07:44 UTC 2014 - ancor@suse.com
 
 - Added support for inferring the missing keyboard layout from the
