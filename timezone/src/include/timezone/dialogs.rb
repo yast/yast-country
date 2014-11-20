@@ -654,11 +654,7 @@ module Yast
             HSpacing(),
             HWeight(
               2,
-              ReplacePoint(
-                Id(:tzsel),
-                # title for combo box 'timezone'
-                ComboBox(Id(:timezone), Opt(:notify), _("Time &Zone"))
-              )
+              ComboBox(Id(:timezone), Opt(:notify), _("Time &Zone"))
             ),
             HSpacing(),
             HWeight(1, HStretch())
@@ -689,11 +685,7 @@ module Yast
               Timezone.Region
             ),
             HSpacing(),
-            ReplacePoint(
-              Id(:tzsel),
-              # title for selection box 'timezone'
-              SelectionBox(Id(:timezone), Opt(:notify), _("Time &Zone"))
-            )
+            SelectionBox(Id(:timezone), Opt(:notify), _("Time &Zone"))
           ),
           HBox(
             HSpacing(),
@@ -758,23 +750,10 @@ module Yast
           UI.ChangeWidget(Id(:region), :CurrentItem, sel2)
         end
 
-        UI.ReplaceWidget(
-          Id(:tzsel),
-          timezone_selector ?
-            ComboBox(
-              Id(:timezone),
-              Opt(:notify),
-              # label text
-              _("Time &Zone"),
-              get_timezones_for_region.call(sel2, zone)
-            ) :
-            SelectionBox(
-              Id(:timezone),
-              Opt(:notify),
-              # label text
-              _("Time &Zone"),
-              get_timezones_for_region.call(sel2, zone)
-            )
+        UI.ChangeWidget(
+          Id(:timezone),
+          :Items,
+          get_timezones_for_region.call(sel2, zone)
         )
 
         nil
