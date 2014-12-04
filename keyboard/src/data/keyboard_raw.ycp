@@ -289,7 +289,7 @@ return ($[
 	// keyboard layout
 	_("Finnish"),
 	$[
-	    "pc104"	: $[ "ncurses": "fi-latin1.map.gz"],
+	    "pc104"	: $[ "ncurses": "fi.map.gz"],
 	    "macintosh" : $[ "ncurses": "mac-fi-latin1.map.gz"],
 	    "type4"	: $[ "ncurses": "sunt4-fi-latin1.map.gz"],
 	    "type5"	: $[ "ncurses": "sunt5-fi-latin1.map.gz" ],
