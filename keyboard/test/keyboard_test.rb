@@ -166,7 +166,8 @@ module Yast
           rule += 'ENV{ID_INPUT_KEYBOARD}=="1", ENV{XKBLAYOUT}="es", ENV{XKBMODEL}="microsoftpro", ENV{XKBVARIANT}="basic"'
           file = "/usr/lib/udev/rules.d/70-installation-keyboard.rules"
           expect(SCR).to receive(:Execute).with(SCRStub::REMOVE_PATH, file)
-          expect(SCR).to receive(:Write).with(SCRStub::STRING_PATH, file, rule)
+          expect(SCR).to receive(:Write).with(SCRStub::STRING_PATH, file, "#{rule}\n")
+          expect(SCR).to receive(:Write).with(SCRStub::STRING_PATH, file, nil)
 
           Keyboard.SetKeyboard("spanish")
           Keyboard.SetX11("spanish")
