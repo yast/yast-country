@@ -1498,7 +1498,8 @@ module Yast
       if !udev_env.empty?
         rule = 'ENV{ID_INPUT_KEYBOARD}=="1", '
         rule << udev_env.map {|key,value| "ENV{#{key}}=\"#{value}\"" }.join(", ")
-        SCR.Write(path(".target.string"), UDEV_FILE, UDEV_COMMENT + rule)
+        SCR.Write(path(".target.string"), UDEV_FILE, UDEV_COMMENT + rule + "\n")
+        SCR.Write(path(".target.string"), UDEV_FILE, nil)
       end
     end
   end
