@@ -186,8 +186,6 @@ module Yast
       # the texts in GfxMenu can be translated (bnc#446982)
       Language.WfmSetLanguage
 
-      WFM.CallFunction("bootloader_proposal", ["UpdateGfxMenu"])
-
       if Keyboard.Modified
         # restart kbd now (after console settings is written) bnc#429515
         Service.Restart("kbd")
