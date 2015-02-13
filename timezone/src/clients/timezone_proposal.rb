@@ -26,7 +26,7 @@ module Yast
         @force_reset = Ops.get_boolean(@param, "force_reset", false)
         @language_changed = Ops.get_boolean(@param, "language_changed", false)
 
-        if Time.now.year < 2015
+        if Time.now < File.stat(__FILE__).mtime
           Ops.set(@ret, "raw_proposal", [])
           @m2 = Convert.to_map(
             SCR.Execute(path(".target.bash_output"), "/bin/date")
