@@ -37,6 +37,7 @@ module Yast
         stub_scr_write
         # ...but allow the dump_xkbctrl helper to use SCR.Write
         allow(SCR).to receive(:Write).with(SCRStub::STRING_PATH, anything, anything).and_call_original
+        allow(SCR).to receive(:Read).with(Yast::Path.new(".probe.keyboard.manual")).and_return([])
       end
 
       context "during installation" do

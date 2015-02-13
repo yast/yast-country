@@ -1,1 +1,4 @@
 *.html
+.yardoc/
+css/
+js/

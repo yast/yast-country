@@ -655,7 +655,8 @@ module Yast
     # Based on current hardware configuration:
     # Win partitions present or 32bit Mac
     def ProposeLocaltime
-      @windows_partition || Arch.board_mac && Arch.ppc32
+      vmware = SCR.Read(path(".probe.is_vmware"))
+      @windows_partition || vmware || (Arch.board_mac && Arch.ppc32)
     end
 
 

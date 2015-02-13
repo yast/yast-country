@@ -1,8 +1,7 @@
-require 'rspec'
+require_relative "../../test/test_helper.rb"
+
 SRC_PATH = File.expand_path("../../src", __FILE__)
 DATA_PATH = File.join(File.expand_path(File.dirname(__FILE__)), "data")
-ENV["Y2DIR"] = SRC_PATH
-require "yast"
 
 # Used to Emulate the behaviour of
 # /usr/sbin/xkbctrl xx.map.gz > /tmp/yy/xkbctrl.out

@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        3.1.18
+Version:        3.1.19
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -43,6 +43,8 @@ Requires:	yast2-core >= 2.16.28
 Conflicts:	yast2-ntp-client < 2.18.0
 # wrapper_storage.ycp
 Requires:       yast2-packager >= 2.23.3
+# VMware detection (.probe.is_vmware)
+Requires:       yast2-hardware-detection >= 3.1.6
 
 Requires:	yast2-country-data
 

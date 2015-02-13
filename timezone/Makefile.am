@@ -1,4 +1,4 @@
 #
 # Makefile.am for country/timezone
-SUBDIRS = doc src testsuite
+SUBDIRS = doc src testsuite test
 
