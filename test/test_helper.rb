@@ -3,6 +3,8 @@ inc_dirs = Dir.glob("#{root_location}/*/src")
 ENV["Y2DIR"] = inc_dirs.join(":")
 
 require "yast"
+require "rspec"
+require "yast/rspec"
 
 if ENV["COVERAGE"]
   require "simplecov"

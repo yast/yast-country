@@ -12,7 +12,7 @@ module Yast
   import "AsciiFile"
   import "XVersion"
 
-  RSpec.configure do |c|
+  ::RSpec.configure do |c|
     c.include SCRStub
   end
 
