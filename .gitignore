@@ -1,5 +1,5 @@
 Makefile
-Makefile.am
+/Makefile.am
 Makefile.in
 aclocal.m4
 autom4te.cache
@@ -12,6 +12,7 @@ config.status
 config.sub
 configure
 configure.ac
+coverage/
 depcomp
 install-sh
 *.pot
@@ -27,4 +28,7 @@ Makefile.am.common
 .dep
 tmp.*
 *.log
+*.trs
 *.ybc
+/nbproject/private/
+test-driver

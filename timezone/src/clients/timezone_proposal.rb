@@ -1,8 +1,6 @@
 # encoding: utf-8
 
-# File:		timezone_proposal.ycp
-#
-# $Id$
+# File:		timezone_proposal.rb
 #
 # Author:		Klaus Kaempf <kkaempf@suse.de>
 #
@@ -28,15 +26,7 @@ module Yast
         @force_reset = Ops.get_boolean(@param, "force_reset", false)
         @language_changed = Ops.get_boolean(@param, "language_changed", false)
 
-        @m = Convert.to_map(
-          SCR.Execute(path(".target.bash_output"), "/bin/date +%Y")
-        )
-        Builtins.y2milestone("date call: %1", @m)
-
-        if Ops.less_than(
-            Builtins.tointeger(Ops.get_string(@m, "stdout", "0")),
-            2004
-          )
+        if Time.now < File.stat(__FILE__).mtime
           Ops.set(@ret, "raw_proposal", [])
           @m2 = Convert.to_map(
             SCR.Execute(path(".target.bash_output"), "/bin/date")

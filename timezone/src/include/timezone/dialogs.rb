@@ -859,7 +859,8 @@ module Yast
           if !utc_only
             @hwclock_s = UI.QueryWidget(Id(:hwclock), :Value) ? :hwclock_utc : :hwclock_localtime
 
-            if !Timezone.windows_partition && @hwclock_s == :hwclock_localtime
+            vmware = SCR.Read(path(".probe.is_vmware"))
+            if !Timezone.windows_partition && !vmware && @hwclock_s == :hwclock_localtime
               if ! confirm_local_time
                 ret = :not_next
                 next

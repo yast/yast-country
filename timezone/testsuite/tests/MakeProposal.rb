@@ -28,7 +28,7 @@ module Yast
       Yast.import "Timezone"
 
       @R = {
-        "probe"  => { "architecture" => "i386" },
+        "probe"  => { "architecture" => "i386", "is_vmware" => false },
         "target" => {
           "yast2" => [
             {

@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        3.1.18
+Version:        3.1.19
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -31,6 +31,13 @@ Source2:        org.opensuse.yast.modules.yapi.language.policy
 BuildRequires:	perl-XML-Writer update-desktop-files yast2-testsuite yast2 yast2-perl-bindings
 BuildRequires:  yast2-devtools >= 3.1.10
 BuildRequires:  polkit-devel
+# For tests
+BuildRequires:  rubygem(rspec)
+# Fix to bnc#891053 (proper reading of ".target.yast2" on chroots)
+BuildRequires:  yast2-core >= 3.1.12
+# RSpec extensions for YaST
+BuildRequires:  yast2-ruby-bindings >= 3.1.26
+
 Requires:	yast2-trans-stats yast2-perl-bindings timezone
 # XVersion.ycp
 # Message.updating_configuration, Message.takes_a_while
@@ -43,6 +50,8 @@ Requires:	yast2-core >= 2.16.28
 Conflicts:	yast2-ntp-client < 2.18.0
 # wrapper_storage.ycp
 Requires:       yast2-packager >= 2.23.3
+# VMware detection (.probe.is_vmware)
+Requires:       yast2-hardware-detection >= 3.1.6
 
 Requires:	yast2-country-data
 
