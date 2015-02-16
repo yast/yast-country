@@ -1,4 +1,5 @@
 require_relative "../../test/test_helper.rb"
+require "fileutils"
 
 SRC_PATH = File.expand_path("../../src", __FILE__)
 DATA_PATH = File.join(File.expand_path(File.dirname(__FILE__)), "data")
@@ -36,13 +37,13 @@ $[
 ]
 END
   end
-  Yast::SCR.Execute(Yast::Path.new(".target.mkdir"), File.dirname(file))
-  Yast::SCR.Write(Yast::Path.new(".target.string"), file, content)
+  Yast::SCR.Execute(path(".target.mkdir"), File.dirname(file))
+  Yast::SCR.Write(path(".target.string"), file, content)
 end
 
 # Closes the SCR instance open by set_root_path and cleans the chroot
 def cleanup_root_path(directory)
-  reset_root_path
+  reset_scr_root
   FileUtils.rmtree(File.join(DATA_PATH, directory, "tmp"))
   FileUtils.rmtree(File.join(DATA_PATH, directory, "data"))
 end
@@ -54,7 +55,7 @@ def init_root_path(directory)
   FileUtils.cp_r(File.join(SRC_PATH, "data"), File.join(DATA_PATH, directory))
   # chroot SCR
   root = File.join(DATA_PATH, directory)
-  set_root_path(root)
+  change_scr_root(root)
   # In its current implementation import cannot be safelly loaded
   # without the previous mocking and chrooting
   import_keyboard
@@ -65,7 +66,8 @@ end
 # In most situations, Yast.import "Keyboard" will call Keyboard:Restore(),
 # which calls xkbctrl and Encoding.Restore, so we need to catch both
 def import_keyboard
-  allow(Yast::SCR).to receive(:Execute).with(SCRStub::BASH_PATH, /xkbctrl es\.map\.gz/)
+  allow(Yast::SCR).to receive(:Execute)
+    .with(path(".target.bash"), /xkbctrl es\.map\.gz/)
   # Just to prevent a not relevant call to 'locale -k"
   allow(Yast::Encoding).to receive(:Restore)
   Yast.import "Keyboard"
