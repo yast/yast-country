@@ -1038,6 +1038,10 @@ module Yast
           log.info "Not setting X keyboard due to text mode"
         # check if we are running over ssh: bnc#539218,c4
         elsif x11_over_ssh?
+          # TODO: the check above could not be enough in some cases
+          # An external X server can be specified via display_ip boot parameter
+          # (see https://en.opensuse.org/SDB:Linuxrc#p_displayip).
+          # I that case, the configuration should probably also be skipped
           log.info "Not setting X keyboard: running over ssh"
         elsif !@xkb_cmd.empty?
           SetKeyboard(keyboard)
@@ -1490,7 +1494,7 @@ module Yast
     display.split(":")[1].to_i >= 10
   end
 
-  # Checks if it's running is text mode (no X11)
+  # Checks if it's running in text mode (no X11)
   def textmode?
     if !Stage.initial || Mode.live_installation
       UI.TextMode
