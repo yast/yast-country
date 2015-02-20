@@ -11,7 +11,7 @@ module Yast
   import "Encoding"
   import "AsciiFile"
   import "XVersion"
-  import "Popup"
+  import "Report"
 
   ::RSpec.configure do |c|
     c.include SCRStub
@@ -188,7 +188,7 @@ module Yast
         it "executes setxkbmap properly" do
           allow(SCR).to execute_bash(/xset r on$/)
           expect(SCR).to execute_bash(/setxkbmap .*layout es/).and_return(0)
-          expect(Popup).not_to receive(:Error)
+          expect(Report).not_to receive(:Error)
 
           subject
         end
@@ -196,7 +196,7 @@ module Yast
         it "alerts user if setxkbmap failed" do
           allow(SCR).to execute_bash(/xset r on$/)
           allow(SCR).to execute_bash(/setxkbmap/).and_return(253)
-          expect(Popup).to receive(:Error)
+          expect(Report).to receive(:Error)
 
           subject
         end
@@ -229,14 +229,14 @@ module Yast
 
         it "executes setxkbmap properly" do
           expect(SCR).to execute_bash(/setxkbmap .*layout tr/).and_return(0)
-          expect(Popup).not_to receive(:Error)
+          expect(Report).not_to receive(:Error)
 
           subject
         end
 
         it "alerts user if setxkbmap failed" do
           allow(SCR).to execute_bash(/setxkbmap/).and_return(253)
-          expect(Popup).to receive(:Error)
+          expect(Report).to receive(:Error)
 
           subject
         end
@@ -256,7 +256,7 @@ module Yast
         let(:new_lang) { "turkish" }
 
         before do
-          allow(Builtins).to receive(:getenv).with("DISPLAY").and_return display
+          ENV["DISPLAY"] = display
         end
 
         context "when DISPLAY is empty" do

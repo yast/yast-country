@@ -120,7 +120,7 @@ module Yast
       Yast.import "ProductFeatures"
       Yast.import "Stage"
       Yast.import "XVersion"
-      Yast.import "Popup"
+      Yast.import "Report"
 
       # ------------------------------------------------------------------------
       # START: Globally defined data to be accessed via Keyboard::<variable>
@@ -1486,29 +1486,27 @@ module Yast
   # Checks if the graphical environment is being executed remotely using
   # "ssh -X"
   def x11_over_ssh?
-    display = Builtins.getenv("DISPLAY") || ""
+    display = ENV["DISPLAY"] || ""
     display.split(":")[1].to_i >= 10
   end
 
   # Checks if it's running is text mode (no X11)
   def textmode?
-    textmode = Linuxrc.text
     if !Stage.initial || Mode.live_installation
-      display_info = UI.GetDisplayInfo
-      textmode = display_info && display_info["TextMode"]
+      UI.TextMode
+    else
+      Linuxrc.text
     end
-    # Ensure it's boolean
-    !!textmode
   end
 
   # Executes the command to set the keyboard in X11, reporting
   # any error to the user
   def execute_xkb_cmd
     log.info "Setting X11 keyboard to: <#{@current_kbd}>"
-    log.info "Setting X11 keyboard:\n #{@xkb_cmd}"
+    log.info "Setting X11 keyboard: #{@xkb_cmd}"
     if SCR.Execute(path(".target.bash"), @xkb_cmd) != 0
       log.error "Failed to execute the command"
-      Popup::Error(_("Failed to set X11 keyboard to '%s'") % @current_kbd)
+      Report::Error(_("Failed to set X11 keyboard to '%s'") % @current_kbd)
     end
   end
 
