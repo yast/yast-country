@@ -11,6 +11,7 @@ module Yast
   import "Encoding"
   import "AsciiFile"
   import "XVersion"
+  import "Popup"
 
   ::RSpec.configure do |c|
     c.include SCRStub
@@ -187,6 +188,15 @@ module Yast
         it "executes setxkbmap properly" do
           allow(SCR).to execute_bash(/xset r on$/)
           expect(SCR).to execute_bash(/setxkbmap .*layout es/).and_return(0)
+          expect(Popup).not_to receive(:Error)
+
+          subject
+        end
+
+        it "alerts user if setxkbmap failed" do
+          allow(SCR).to execute_bash(/xset r on$/)
+          allow(SCR).to execute_bash(/setxkbmap/).and_return(253)
+          expect(Popup).to receive(:Error)
 
           subject
         end
@@ -219,6 +229,14 @@ module Yast
 
         it "executes setxkbmap properly" do
           expect(SCR).to execute_bash(/setxkbmap .*layout tr/).and_return(0)
+          expect(Popup).not_to receive(:Error)
+
+          subject
+        end
+
+        it "alerts user if setxkbmap failed" do
+          allow(SCR).to execute_bash(/setxkbmap/).and_return(253)
+          expect(Popup).to receive(:Error)
 
           subject
         end
