@@ -35,13 +35,11 @@ module SCRStub
       .and_return(256)
   end
 
-  # Defines an expectation about executing commands using SCR.Execute and
-  # .target.bash
+  # Matcher for executing commands using SCR.Execute and .target.bash
   #
-  # @return [MessageExpectation] an expectation (that can be further customized
-  #       with usual RSpec methods)
-  def expect_to_execute(command)
-    expect(Yast::SCR).to(receive(:Execute).with(path(".target.bash"), command))
+  # @return [RSpec::Mocks::Matchers::Receive]
+  def execute_bash(command)
+    receive(:Execute).with(path(".target.bash"), command)
   end
 
   # Stub all calls to SCR.Write storing the value for future comparison

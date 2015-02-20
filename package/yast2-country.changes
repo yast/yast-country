@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Feb 20 15:43:03 UTC 2015 - ancor@suse.com
+
+- Display an error if the keyboard was not changed (bnc#918093)
+- 3.1.20
+
+-------------------------------------------------------------------
 Fri Feb 13 14:40:53 UTC 2015 - lslezak@suse.cz
 
 - Propose local time when running in a VMware VM, do not display

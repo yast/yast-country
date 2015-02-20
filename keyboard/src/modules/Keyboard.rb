@@ -120,6 +120,7 @@ module Yast
       Yast.import "ProductFeatures"
       Yast.import "Stage"
       Yast.import "XVersion"
+      Yast.import "Report"
 
       # ------------------------------------------------------------------------
       # START: Globally defined data to be accessed via Keyboard::<variable>
@@ -1021,7 +1022,6 @@ module Yast
     end # SetConsole()
 
 
-
     # Set the X11 keyboard to the given keyboard language.
     #
     # @param	Keyboard language e.g.  "english-us"
@@ -1030,47 +1030,30 @@ module Yast
     #		(also stored in Keyboard::xkb_cmd)
     def SetX11(keyboard)
       if Mode.test
-        Builtins.y2milestone("Test mode - would have called:\n %1", @xkb_cmd)
+        log.info "Test mode - would have called:\n #{@xkb_cmd}"
       else
         # Actually do it only if we are in graphical mode.
         #
-        textmode = Linuxrc.text
-        if !Stage.initial || Mode.live_installation
-          display_info = UI.GetDisplayInfo
-          textmode = Ops.get_boolean(display_info, "TextMode", false)
-        end
-        display = Builtins.getenv("DISPLAY")
-        if textmode
-          Builtins.y2milestone("Not setting X keyboard due to text mode")
+        if textmode?
+          log.info "Not setting X keyboard due to text mode"
         # check if we are running over ssh: bnc#539218,c4
-        elsif Ops.greater_or_equal(
-            Builtins.tointeger(
-              Ops.get(Builtins.splitstring(display, ":"), 1, "0")
-            ),
-            10
-          )
-          Builtins.y2milestone("Not setting X keyboard: running over ssh")
-        elsif Ops.greater_than(Builtins.size(@xkb_cmd), 0)
+        elsif x11_over_ssh?
+          # TODO: the check above could not be enough in some cases
+          # An external X server can be specified via display_ip boot parameter
+          # (see https://en.opensuse.org/SDB:Linuxrc#p_displayip).
+          # I that case, the configuration should probably also be skipped
+          log.info "Not setting X keyboard: running over ssh"
+        elsif !@xkb_cmd.empty?
           SetKeyboard(keyboard)
-          Builtins.y2milestone("Setting X11 keyboard to: <%1>", @current_kbd)
-          Builtins.y2milestone("Setting X11 keyboard:\n %1", @xkb_cmd)
-          SCR.Execute(path(".target.bash"), @xkb_cmd)
-          # bnc#371756: enable autorepeat
-          if Stage.initial && !Mode.live_installation && !xen_running
-            cmd = "xset r on"
-            Builtins.y2milestone(
-              "calling xset to fix autorepeat problem: %1",
-              cmd
-            )
-            SCR.Execute(path(".target.bash"), cmd)
-          end
+          execute_xkb_cmd
+          # bnc#371756: enable autorepeat if needed
+          enable_autorepeat
           # bnc#885271: set udev rule to handle incoming attached keyboards
           write_udev_rule if Stage.initial
         end
       end
       @xkb_cmd
     end # SetX11()
-
 
 
     # Set()
@@ -1502,6 +1485,41 @@ module Yast
         SCR.Write(path(".target.string"), UDEV_FILE, nil)
       end
     end
+  end
+
+  # Checks if the graphical environment is being executed remotely using
+  # "ssh -X"
+  def x11_over_ssh?
+    display = ENV["DISPLAY"] || ""
+    display.split(":")[1].to_i >= 10
+  end
+
+  # Checks if it's running in text mode (no X11)
+  def textmode?
+    if !Stage.initial || Mode.live_installation
+      UI.TextMode
+    else
+      Linuxrc.text
+    end
+  end
+
+  # Executes the command to set the keyboard in X11, reporting
+  # any error to the user
+  def execute_xkb_cmd
+    log.info "Setting X11 keyboard to: <#{@current_kbd}>"
+    log.info "Setting X11 keyboard: #{@xkb_cmd}"
+    if SCR.Execute(path(".target.bash"), @xkb_cmd) != 0
+      log.error "Failed to execute the command"
+      Report::Error(_("Failed to set X11 keyboard to '%s'") % @current_kbd)
+    end
+  end
+
+  # Enables autorepeat if needed
+  def enable_autorepeat
+    return nil unless Stage.initial && !Mode.live_installation && !xen_running
+    cmd = "xset r on"
+    log.info "calling xset to fix autorepeat problem: #{cmd}"
+    SCR.Execute(path(".target.bash"), cmd)
   end
 
   Keyboard = KeyboardClass.new
