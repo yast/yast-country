@@ -584,7 +584,7 @@ $[
 	// time zone
 	"Asia/Rangoon"		: _("Myanmar"),
 	// time zone
-	"Asia/Ho_Chi_Minh"	: _("Saigon"),
+	"Asia/Ho_Chi_Minh"	: _("Ho Chi Minh City"),
 	// time zone
 	"Asia/Sakhalin"		: _("Sakhalin"),
 	// time zone
