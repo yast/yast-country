@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jun 23 14:21:29 UTC 2015 - ancor@suse.com
+
+- Use Ho Chi Minh instead of Saigon in the user interface and in
+  the Vietnamese proposal (bnc#923506)
+- 3.1.21
+
+-------------------------------------------------------------------
 Fri Feb 20 15:43:03 UTC 2015 - ancor@suse.com
 
 - Display an error if the keyboard was not changed (bnc#918093)
