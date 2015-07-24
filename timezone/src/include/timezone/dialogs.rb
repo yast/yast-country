@@ -144,7 +144,11 @@ module Yast
       )
     end
 
-    # handles the complication that the package yast2-ntp-client may not be present
+    # This proxy handles the complication
+    # that the package yast2-ntp-client may not be present
+    # (on the running system).
+    # The called client has been meanwhile moved to this package but it
+    # does not check for the dependencies itself yet.
     def ntp_call(acall, args)
       args = deep_copy(args)
       if !@ntp_installed
@@ -171,7 +175,7 @@ module Yast
         # else if (acall == "Write")
       end
 
-      ret = WFM.CallFunction("ntp-client_proposal", [acall, args])
+      ret = WFM.CallFunction("timezone_ntp", [acall, args])
       deep_copy(ret)
     end
 
