@@ -55,33 +55,6 @@ Requires:       yast2-hardware-detection >= 3.1.6
 
 Requires:	yast2-country-data
 
-Provides:	yast2-config-environment
-Provides:	yast2-config-keyboard
-Provides:	yast2-config-language
-Provides:	yast2-config-timezone
-Obsoletes:	yast2-config-environment
-Obsoletes:	yast2-config-keyboard
-Obsoletes:	yast2-config-language
-Obsoletes:	yast2-config-timezone
-Provides:	yast2-db-country yast2-db-keyboard yast2-db-timezone
-Obsoletes:	yast2-db-country yast2-db-keyboard yast2-db-timezone
-Provides:	yast2-trans-inst-keyboard
-Obsoletes:	yast2-trans-inst-keyboard
-Provides:	yast2-trans-inst-language
-Obsoletes:	yast2-trans-inst-language
-Provides:	yast2-trans-inst-timezone
-Obsoletes:	yast2-trans-inst-timezone
-Provides:	yast2-trans-inst-environment
-Obsoletes:	yast2-trans-inst-environment
-Provides:	y2d_inst-keyboard
-Obsoletes:	y2d_inst-keyboard
-Provides:	y2d_inst-timezone
-Obsoletes:	y2d_inst-timezone
-Provides:	y2t_inst-language
-Obsoletes:	y2t_inst-language
-Provides:	y2t_inst-environment
-Obsoletes:	y2t_inst-environment
-
 Requires:       yast2-ruby-bindings >= 1.0.0
 
 Summary:	YaST2 - Country Settings (Language, Keyboard, and Timezone)
