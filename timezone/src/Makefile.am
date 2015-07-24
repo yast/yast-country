@@ -35,6 +35,7 @@ desktop_DATA = \
 
 ylibdir = @ylibdir@/timezone
 ylib_DATA = \
+  lib/timezone/ntp.rb \
   lib/timezone/ntp_adapter.rb
 
 EXTRA_DIST = $(module_DATA) $(module1_DATA) $(client_DATA) $(ynclude_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA)
