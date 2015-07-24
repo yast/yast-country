@@ -607,13 +607,6 @@ module Yast
         @ntp_used = @ntp_used == true # nil->false, just in case of parse error
       end
 
-      time_frame_label =
-        # frame label
-        @ntp_used ?
-          _("Date and Time (NTP is configured)") :
-          # frame label
-          _("Date and Time")
-
       # Read system date and time.
       date = Timezone.GetDateTime(true, false)
 
@@ -903,14 +896,6 @@ module Yast
               Timezone.GetDateTime(false, false)
             )
             changed_time = true
-            # adapt frame label, NTP status may be changed
-            time_frame_label =
-              # frame label
-              @ntp_used ?
-                _("Date and Time (NTP is configured)") :
-                # frame label
-                _("Date and Time")
-            UI.ChangeWidget(Id(:time_fr), :Label, time_frame_label)
           end
         elsif ret == :next || ret == :timezone || ret == :timezonemap ||
             ret == :hwclock
