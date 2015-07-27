@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jul 24 14:30:50 UTC 2015 - mvidner@suse.com
+
+- Removed dependencies to packages dropped in 2002.
+- 3.1.22
+
+-------------------------------------------------------------------
 Tue Jun 23 14:21:29 UTC 2015 - ancor@suse.com
 
 - Use Ho Chi Minh instead of Saigon in the user interface and in
