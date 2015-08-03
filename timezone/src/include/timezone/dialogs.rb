@@ -41,18 +41,14 @@ module Yast
       Yast.import "UI"
       textdomain "country"
 
-# FIXME move  imports around
       Yast.import "Arch"
       Yast.import "Directory"
       Yast.import "GetInstArgs"
-      Yast.import "Label"
       Yast.import "Language"
       Yast.import "Mode"
       Yast.import "NetworkService"
-      Yast.import "Package"
       Yast.import "Popup"
       Yast.import "ProductFeatures"
-      Yast.import "Service"
       Yast.import "Stage"
       Yast.import "Timezone"
       Yast.import "Wizard"
@@ -152,7 +148,7 @@ module Yast
         ) +
           # help text, cont.
           _("<p>Press <b>Accept</b> to save your changes.</p>"),
-        ntp.help_text
+        ntp.help
       )
 
       dt_widgets = false
@@ -429,7 +425,7 @@ module Yast
         # new system time from ntpdate must be saved to hw clock
         Timezone.SystemTime2HWClock if ntp_rb
         # remember ui
-        ntp.set_use_ntp(ntp_rb)
+        ntp.used = ntp_rb
       end
 
       Wizard.CloseDialog
@@ -511,7 +507,7 @@ module Yast
         # from installation summary (Is that really used?)
         ntp.used = Timezone.ntp_used
       elsif ntp.installed?
-        ntp.used = ntp.get_ntp_enabled
+        ntp.used = ntp.enabled?
       end
 
       # Read system date and time.

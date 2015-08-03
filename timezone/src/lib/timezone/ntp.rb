@@ -1,35 +1,47 @@
 
 module Yast
-  # Acts as interface of the Timezone package to NTP functionality
-
   # TODO: separate UI and non-UI, figure out a reasonable UI interface
   # (check also CWM)
+
+  # Acts as interface of the Timezone package to NTP functionality
   class TimezoneNtp
     include Yast::UIShortcuts
 
-    # [Boolean] if system clock is configured to sync with NTP
-    attr_accessor :used
+    # @return [Boolean] if system clock is configured to sync with NTP
+    attr_accessor :used         # (Writing it also notifies NtpClient)
 
-    # [String] ntp server configured to sync with
-    # FIXME we use an array, but this is the one to contact now
+    def used=(value)
+      @used = value
+      ntp_call("SetUseNTP", { "ntp_used" => value })
+    end
+
+    # @return [Boolean] used in the installed system
+    def enabled?
+      ntp_call("GetNTPEnabled", {}) == true
+    end
+
+    # @return [String] ntp server configured to sync with
     attr_accessor :server
 
     def initialize
-      self.used = false
-      self.server = ""          # FIXME better nil
+      Yast.import "Language"
+      Yast.import "Package"
+      Yast.import "Stage"
+
+      @used = false
+      self.server = ""
       # when checking for NTP status for first time, check the service status
       @first_time = true
       @installed = Stage.initial || Package.Installed("yast2-ntp-client")
     end
 
     # @return [String] a RichText help
-    def help_text
+    def help
       ntp_call("ui_help_text", {})
     end
 
     # Replace the replace_point with our UI, and return whether it should be
     # selected
-    # FIXME just select it
     # @return [Boolean]
     def ui_init
       ntp_rb = Convert.to_boolean(
@@ -62,8 +74,7 @@ module Yast
       @installed
     end
 
-
-    # return[Boolean] false if failed
+    # @return [Boolean] false if failed
     def ensure_installed
       # need to install it first?
       if !Stage.initial && !@installed
@@ -77,7 +88,7 @@ module Yast
       true
     end
 
-    # @return [Boolean] success
+    # @return [Boolean] success?
     def ui_try_save
       ret = Convert.to_boolean(ntp_call("ui_try_save", {}))
       if ret
@@ -86,15 +97,9 @@ module Yast
       ret
     end
 
-# FIXME rename
-    def set_use_ntp(value)
-      ntp_call("SetUseNTP", { "ntp_used" => value })
-      self.used = value
-    end
-
     # @return [Boolean] success
     def setup_with_opensuse_servers
-      self.used = true
+      @used = true
 
       # configure NTP client
       Builtins.srandom
@@ -115,17 +120,12 @@ module Yast
       rv = Convert.to_symbol(ntp_call("Write", argmap))
       if rv == :invalid_hostname
         Builtins.y2warning("Invalid NTP server hostname %1", server)
-        self.used = false
+        @used = false
       else
         Builtins.y2milestone("proposing NTP server %1", server)
-          ntp_call("SetUseNTP", { "ntp_used" => used })
+          ntp_call("SetUseNTP", { "ntp_used" => @used })
       end
-      used
-    end
-
-# FIXME rename
-    def get_ntp_enabled
-      ntp_call("GetNTPEnabled", {}) == true
+      @used
     end
 
     def save
@@ -154,7 +154,6 @@ module Yast
         # save settings, return false if dialog should not exit
         elsif acall == "ui_try_save"
           return true # success, exit loop
-        # Service::Enabled. FIXME too smart?
         elsif acall == "GetNTPEnabled"
           return false
         end
