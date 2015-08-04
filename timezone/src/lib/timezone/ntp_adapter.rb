@@ -343,6 +343,7 @@ module Yast
     #   servers (intended to use all of opensuse.pool.ntp.org,
     # 	   but I did not have time to make it work)
     #   write_only (bnc#589296)
+    #   run_service (boolean) run a service at boot (otherwise use a cron job)
     #   oneshot (boolean) One-time adjustment without running the ntp daemon
     # return:
     #   :success, :invalid_hostname or :oneshot_failed
@@ -364,17 +365,11 @@ module Yast
       required_package = "ntp"
 
       # In 1st stage, schedule packages for installation
-      # but not in case user wants to set the time only (FATE#302917)
-      # (sntp is in inst-sys so we don't need the package)
-      if Stage.initial && !oneshot
+      if Stage.initial
         Yast.import "Packages"
         Packages.addAdditionalPackage(required_package)
-        # bugzilla #327050
-        # Agent for writing /etc/ntp.conf needs to be installed
-        # to write the settings at the end of the installation
-        Packages.addAdditionalPackage("yast2-ntp-client")
       # Otherwise, prompt user for confirming pkg installation
-      elsif !Stage.initial
+      else
         if !PackageSystem.CheckAndInstallPackages([required_package])
           Report.Error(
             Builtins.sformat(
@@ -405,7 +400,6 @@ module Yast
         Builtins.y2milestone("'sntp %1' returned %2", ntp_server, ret)
         Popup.ClearFeedback
       end
-
 
       return :oneshot_failed if ret != 0
 
