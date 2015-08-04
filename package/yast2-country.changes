@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Aug  4 15:22:24 UTC 2015 - mvidner@suse.com
+
+- If Install Recommended Packages is disabled during system
+  installation, explicitly install ntp.rpm, avoiding error pop-up
+  "Cannot adjust 'NTP' service" (boo#938951).
+- 3.1.23
+
+-------------------------------------------------------------------
 Fri Jul 24 14:30:50 UTC 2015 - mvidner@suse.com
 
 - Removed dependencies to packages dropped in 2002.

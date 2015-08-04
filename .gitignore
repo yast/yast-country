@@ -14,6 +14,7 @@ configure
 configure.ac
 coverage/
 depcomp
+/doc/
 install-sh
 *.pot
 libtool
@@ -32,3 +33,4 @@ tmp.*
 *.ybc
 /nbproject/private/
 test-driver
+/.yardoc/

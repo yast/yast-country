@@ -32,6 +32,9 @@
 #	Dialogs for timeone and time configuration.
 #
 # $Id$
+
+require "timezone/ntp"
+
 module Yast
   module TimezoneDialogsInclude
     def initialize_timezone_dialogs(include_target)
@@ -41,32 +44,21 @@ module Yast
       Yast.import "Arch"
       Yast.import "Directory"
       Yast.import "GetInstArgs"
-      Yast.import "Label"
       Yast.import "Language"
       Yast.import "Mode"
       Yast.import "NetworkService"
-      Yast.import "Package"
       Yast.import "Popup"
       Yast.import "ProductFeatures"
-      Yast.import "Service"
       Yast.import "Stage"
       Yast.import "Timezone"
       Yast.import "Wizard"
 
       @hwclock_s = @hwclock_s_initial = :none
 
-      # if system clock is configured to sync with NTP
-      @ntp_used = false
-
-      # ntp server configured to sync with
-      @ntp_server = ""
-
-      # if packages for NTP configuration are installed
-      @ntp_installed = false
-
-      # when checking for NTP status for first time, check the service status
-      @ntp_first_time = true
+      @ntp = Yast::TimezoneNtp.new
     end
+
+    attr_reader :ntp
 
     # helper function for seting the time related stuff in module and possibly
     # adapting current time according to it
@@ -144,42 +136,9 @@ module Yast
       )
     end
 
-    # handles the complication that the package yast2-ntp-client may not be present
-    def ntp_call(acall, args)
-      args = deep_copy(args)
-      if !@ntp_installed
-        # replace "replace_point" by the widgets
-        if acall == "ui_init"
-          return false # deselect the RB
-        # the help text
-        elsif acall == "ui_help_text"
-          return "" # or say "will install"? TODO recompute help text
-        # save settings, return false if dialog should not exit
-        elsif acall == "ui_try_save"
-          return true # success, exit loop
-        # Service::Enabled. FIXME too smart?
-        elsif acall == "GetNTPEnabled"
-          return false
-        end
-
-        # default: do nothing
-        return nil 
-        #   other API for completeness:
-        # // before UserInput
-        # else if (acall == "ui_enable_disable_widgets")
-        # else if (acall == "SetUseNTP")
-        # else if (acall == "Write")
-      end
-
-      ret = WFM.CallFunction("ntp-client_proposal", [acall, args])
-      deep_copy(ret)
-    end
-
     # Dialog for setinge system date and time
     # @return true if user changed the time (dialog accepted)
     def SetTimeDialog
-      ntp_help_text = Convert.to_string(ntp_call("ui_help_text", {}))
-
       textmode = Language.GetTextMode
 
       # help text for set time dialog
@@ -189,7 +148,7 @@ module Yast
         ) +
           # help text, cont.
           _("<p>Press <b>Accept</b> to save your changes.</p>"),
-        ntp_help_text
+        ntp.help
       )
 
       dt_widgets = false
@@ -359,18 +318,8 @@ module Yast
 
       show_current_time.call
 
-      ntp_rb = false
-      ntp_rb = Convert.to_boolean(
-        ntp_call(
-          "ui_init",
-          {
-            "replace_point" => Id(:rp),
-            "country"       => Language.GetLanguageCountry,
-            "first_time"    => @ntp_first_time
-          }
-        )
-      )
-      @ntp_first_time = false
+      ntp_rb = false            # whether it should be the one selected
+      ntp_rb = ntp.ui_init
       UI.ChangeWidget(Id(:rb), :CurrentButton, ntp_rb ? :ntp : :manual)
 
       if !dt_widgets
@@ -382,36 +331,23 @@ module Yast
 
       ret = nil
       begin
-        ntp_call("ui_enable_disable_widgets", { "enabled" => ntp_rb })
+        ntp.ui_enable_disable_widgets(ntp_rb)
         enable_disable_time_widgets.call(!ntp_rb)
 
         ret = UI.UserInput
         Builtins.y2debug("UserInput ret:%1", ret)
 
-        ntp_handled = Convert.to_symbol(ntp_call("ui_handle", { "ui" => ret }))
+        ntp_handled = ntp.ui_handle(ret)
         ret = ntp_handled if ntp_handled != nil
         show_current_time.call if ret == :redraw
 
         if ret == :ntp || ret == :manual
           ntp_rb = ret == :ntp
-          # need to install it first?
-          if ntp_rb && !Stage.initial && !@ntp_installed
-            @ntp_installed = Package.InstallAll(["yast2-ntp-client", "ntp"])
-            # succeeded? create UI, otherwise revert the click
-            if !@ntp_installed
-              ntp_rb = false
-              UI.ChangeWidget(Id(:rb), :CurrentButton, :manual)
-            else
-              # ignore retval, user clicked to use ntp
-              ntp_call(
-                "ui_init",
-                {
-                  "replace_point" => Id(:rp),
-                  "country"       => Language.GetLanguageCountry,
-                  "first_time"    => false
-                }
-              )
-            end
+        end
+        if ret == :ntp
+          if !ntp.ensure_installed
+            ntp_rb = false
+            UI.ChangeWidget(Id(:rb), :CurrentButton, :manual)
           end
         end
 
@@ -422,14 +358,10 @@ module Yast
             Stage.initial && !Mode.live_installation
           )
           # true: go on, exit; false: loop on
-          ntp_handled2 = Convert.to_boolean(ntp_call("ui_try_save", {}))
+          ntp_handled2 = ntp.ui_try_save
           if !ntp_handled2
             ret = :retry
           else
-            # `ntp_address is constructed by ntp-client_proposal.ycp... :-(
-            @ntp_server = Convert.to_string(
-              UI.QueryWidget(Id(:ntp_address), :Value)
-            )
             # after sync, show real time in the widget
             Timezone.diff = 0
           end
@@ -490,11 +422,10 @@ module Yast
       end until ret == :accept || ret == :cancel
 
       if ret == :accept
-        # new system time from ntpdate must be saved to hw clock
+        # new system time from NTP must be saved to hw clock
         Timezone.SystemTime2HWClock if ntp_rb
         # remember ui
-        ntp_call("SetUseNTP", { "ntp_used" => ntp_rb })
-        @ntp_used = ntp_rb
+        ntp.used = ntp_rb
       end
 
       Wizard.CloseDialog
@@ -564,55 +495,20 @@ module Yast
         end
       end
 
-      @ntp_installed = Stage.initial || Package.Installed("yast2-ntp-client")
-
-
       # read NTP status
       if first_run && NetworkService.isNetworkRunning && !Mode.live_installation &&
           !GetInstArgs.going_back &&
           ProductFeatures.GetBooleanFeature("globals", "default_ntp_setup") == true
         # true by default (fate#303520)
-        @ntp_used = true
-        # configure NTP client
-        Builtins.srandom
-        @ntp_server = Builtins.sformat(
-          "%1.opensuse.pool.ntp.org",
-          Builtins.random(4)
-        )
-        argmap = {
-          "server"       => @ntp_server,
-          # FIXME ntp-client_proposal doesn't understand 'servers' yet
-          "servers"      => [
-            "0.opensuse.pool.ntp.org",
-            "1.opensuse.pool.ntp.org",
-            "2.opensuse.pool.ntp.org",
-            "3.opensuse.pool.ntp.org"
-          ],
-          "ntpdate_only" => true
-        }
-        rv = Convert.to_symbol(ntp_call("Write", argmap))
-        if rv == :invalid_hostname
-          Builtins.y2warning("Invalid NTP server hostname %1", @ntp_server)
-          @ntp_used = false
-        else
+        if ntp.setup_with_opensuse_servers
           Timezone.SystemTime2HWClock
-          Builtins.y2milestone("proposing NTP server %1", @ntp_server)
-          ntp_call("SetUseNTP", { "ntp_used" => @ntp_used })
         end
       elsif Stage.initial
-        # from installation summaru
-        @ntp_used = Timezone.ntp_used
-      elsif @ntp_installed
-        @ntp_used = Convert.to_boolean(ntp_call("GetNTPEnabled", {}))
-        @ntp_used = @ntp_used == true # nil->false, just in case of parse error
+        # from installation summary (Is that really used?)
+        ntp.used = Timezone.ntp_used
+      elsif ntp.installed?
+        ntp.used = ntp.enabled?
       end
-
-      time_frame_label =
-        # frame label
-        @ntp_used ?
-          _("Date and Time (NTP is configured)") :
-          # frame label
-          _("Date and Time")
 
       # Read system date and time.
       date = Timezone.GetDateTime(true, false)
@@ -903,14 +799,6 @@ module Yast
               Timezone.GetDateTime(false, false)
             )
             changed_time = true
-            # adapt frame label, NTP status may be changed
-            time_frame_label =
-              # frame label
-              @ntp_used ?
-                _("Date and Time (NTP is configured)") :
-                # frame label
-                _("Date and Time")
-            UI.ChangeWidget(Id(:time_fr), :Label, time_frame_label)
           end
         elsif ret == :next || ret == :timezone || ret == :timezonemap ||
             ret == :hwclock
@@ -962,7 +850,7 @@ module Yast
             #
             Timezone.user_decision = true
             Timezone.user_hwclock = true
-            Timezone.ntp_used = @ntp_used
+            Timezone.ntp_used = ntp.used
             # See bnc#638185c5: refresh_initrd should be called if HWCLOCK is changed (--localtime <-> --utc) and/or
             # if --localtime is set and TIMEZONE will be changed.
             if @hwclock_s != @hwclock_s_initial ||
@@ -970,13 +858,7 @@ module Yast
               Timezone.call_mkinitrd = true
             end
 
-            if @ntp_used && @ntp_server != ""
-              # save NTP client settings now
-              ntp_call(
-                "Write",
-                { "server" => @ntp_server, "write_only" => true }
-              )
-            end
+            ntp.save
           end
         end
       end until ret == :next || ret == :back || ret == :cancel
