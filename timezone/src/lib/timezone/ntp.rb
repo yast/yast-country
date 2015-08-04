@@ -115,7 +115,7 @@ module Yast
             "2.opensuse.pool.ntp.org",
             "3.opensuse.pool.ntp.org"
           ],
-          "ntpdate_only" => true
+          "oneshot"      => true
         }
       rv = Convert.to_symbol(ntp_call("Write", argmap))
       if rv == :invalid_hostname

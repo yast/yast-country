@@ -422,7 +422,7 @@ module Yast
       end until ret == :accept || ret == :cancel
 
       if ret == :accept
-        # new system time from ntpdate must be saved to hw clock
+        # new system time from NTP must be saved to hw clock
         Timezone.SystemTime2HWClock if ntp_rb
         # remember ui
         ntp.used = ntp_rb

@@ -343,9 +343,9 @@ module Yast
     #   servers (intended to use all of opensuse.pool.ntp.org,
     # 	   but I did not have time to make it work)
     #   write_only (bnc#589296)
-    #   ntpdate_only (TODO rename to onetime)
+    #   oneshot (boolean) One-time adjustment without running the ntp daemon
     # return:
-    #   `success, `invalid_hostname or `ntpdate_failed
+    #   :success, :invalid_hostname or :oneshot_failed
     def Write(param)
       ntp_servers = param["servers"] || []
       ntp_server = param["server"] || ""
@@ -359,23 +359,21 @@ module Yast
       WriteNtpSettings(ntp_servers, ntp_server, run_service)
       return :success if param["write_only"]
 
-      # One-time adjusment without running the ntp daemon
-      # Meanwhile, ntpdate was replaced by sntp
-      ntpdate_only = param["ntpdate_only"]
+      oneshot = param["oneshot"]
 
       required_package = "ntp"
 
-      #In 1st stage, schedule packages for installation
-      #but not in case user wants to set the time only (F#302917)
-      #(ntpdate is in inst-sys so we don't need the package)
-      if Stage.initial && !ntpdate_only
+      # In 1st stage, schedule packages for installation
+      # but not in case user wants to set the time only (FATE#302917)
+      # (sntp is in inst-sys so we don't need the package)
+      if Stage.initial && !oneshot
         Yast.import "Packages"
         Packages.addAdditionalPackage(required_package)
         # bugzilla #327050
         # Agent for writing /etc/ntp.conf needs to be installed
         # to write the settings at the end of the installation
         Packages.addAdditionalPackage("yast2-ntp-client")
-      #Otherwise, prompt user for confirming pkg installation
+      # Otherwise, prompt user for confirming pkg installation
       elsif !Stage.initial
         if !PackageSystem.CheckAndInstallPackages([required_package])
           Report.Error(
@@ -391,7 +389,7 @@ module Yast
 
       ret = 0
       if NetworkService.isNetworkRunning
-        #Only if network is running try to synchronize the ntp server
+        # Only if network is running try to synchronize the ntp server
         Popup.ShowFeedback("", _("Synchronizing with NTP server..."))
 
         Builtins.y2milestone("Running sntp to sync with %1", ntp_server)
@@ -409,10 +407,10 @@ module Yast
       end
 
 
-      return :ntpdate_failed if ret != 0
+      return :oneshot_failed if ret != 0
 
       # User wants to more than running sntp (synchronize on boot)
-      WriteNtpSettings(ntp_servers, ntp_server, run_service) if !ntpdate_only
+      WriteNtpSettings(ntp_servers, ntp_server, run_service) unless oneshot
 
       :success
     end
@@ -432,7 +430,7 @@ module Yast
         end
       end
       if ui == :ntp_now
-        rv = Write({ "ntpdate_only" => true })
+        rv = Write({ "oneshot" => true })
         if rv == :invalid_hostname
           handle_invalid_hostname(UI.QueryWidget(Id(:ntp_address), :Value))
         elsif rv == :success
@@ -446,15 +444,10 @@ module Yast
     end
 
     def ui_try_save
-      argmap = {}
-      Ops.set(argmap, "ntpdate_only", false)
-      Ops.set(argmap, "run_service", false)
-      if UI.QueryWidget(Id(:ntp_save), :Value) == false
-        Ops.set(argmap, "ntpdate_only", true)
-      end
-      if UI.QueryWidget(Id(:run_service), :Value) == true
-        Ops.set(argmap, "run_service", true)
-      end
+      argmap = {
+        "oneshot"     => ! UI.QueryWidget(Id(:ntp_save), :Value),
+        "run_service" =>   UI.QueryWidget(Id(:run_service), :Value)
+      }
 
       rv = Write(argmap)
 
@@ -464,11 +457,10 @@ module Yast
       if rv == :invalid_hostname
         handle_invalid_hostname(server)
         return false # loop on
-      elsif rv == :ntpdate_failed
-        # Translators: yes-no popup,
-        # ntpdate is a command, %1 is the server address
+      elsif rv == :oneshot_failed
         if Popup.YesNo(
             Builtins.sformat(
+              # Translators: yes-no popup, # %1 is the server address
               _(
                 "Test query to server '%1' failed.\n" +
                 "If server is not yet accessible or network is not configured\n"+
@@ -478,12 +470,9 @@ module Yast
             )
           )
           return false # loop on
-        elsif !Ops.get_boolean(argmap, "ntpdate_only", false)
-          WriteNtpSettings(
-            [],
-            server,
-            Ops.get_boolean(argmap, "run_service", false)
-          ) #may be the server is realy not accessable
+        elsif !argmap["oneshot"]
+          # maybe the server is realy not accessible
+          WriteNtpSettings([], server, argmap["run_service"])
         end
       end
       # success, exit
