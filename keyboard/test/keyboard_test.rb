@@ -132,9 +132,9 @@ module Yast
         stub_presence_of "/usr/sbin/xkbctrl"
         allow(XVersion).to receive(:binPath).and_return "/usr/bin"
 
-        expect(SCR).to execute_bash(/loadkeys trq\.map\.gz/)
+        expect(SCR).to execute_bash(/loadkeys tr\.map\.gz/)
         # Called twice, for SetConsole and SetX11
-        expect(SCR).to execute_bash(/xkbctrl trq\.map\.gz/).twice do |p, cmd|
+        expect(SCR).to execute_bash(/xkbctrl tr\.map\.gz/).twice do |p, cmd|
           dump_xkbctrl(:turkish, cmd.split("> ")[1])
         end
         expect(SCR).to execute_bash(/setxkbmap .*layout tr/)
