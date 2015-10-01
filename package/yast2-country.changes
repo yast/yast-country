@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Oct  1 14:59:57 CEST 2015 - locilka@suse.com
+
+- Allocate space for "Other Settings" button proportionally to its
+  translation length (bnc#946955)
+- 3.1.24
+
+-------------------------------------------------------------------
 Tue Aug 18 14:18:52 UTC 2015 - sndirsch@suse.com
 
 - Use xkb converted console keymaps (better systemd support) where

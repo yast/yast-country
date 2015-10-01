@@ -531,15 +531,14 @@ module Yast
 
       Timezone.PushVal
 
-
-      settime = Empty()
+      # TRANSLATORS: Button label
+      other_settings_label = _("Other &Settings...")
 
       # "On a mainframe it is impossible for the user to change the hardware clock.
-      # So you can only specify the timezone." (ihno)
-      if !Arch.s390 && !Mode.config
-        # button text
-        settime = PushButton(Id(:settime), _("Other &Settings..."))
-      end
+      # So you can only specify the timezone." (Ihno)
+      settime = ((!Arch.s390 && !Mode.config) ?
+        PushButton(Id(:settime), other_settings_label) : Empty()
+      )
 
       textmode = Language.GetTextMode
 
@@ -637,12 +636,19 @@ module Yast
       if UI.HasSpecialWidget(:TimezoneSelector) == true
         timezone_selector = true
         worldmap = Ops.add(Directory.themedir, "/current/worldmap/worldmap.jpg")
+
+        # bsc#946955 Translation doesn't fit in some languages
+        # Reserved space needs to be allocated proportionally to the text length
+        other_settings_hweight = other_settings_label.size
+        free_space_hweight = 10
+        entries_hweight = 25
+
         timezoneterm = VBox(
           TimezoneSelector(Id(:timezonemap), Opt(:notify), worldmap, zones),
           HBox(
-            HWeight(1, HStretch()),
+            HWeight(free_space_hweight, HStretch()),
             HWeight(
-              2,
+              entries_hweight,
               ComboBox(
                 Id(:region),
                 Opt(:notify),
@@ -653,25 +659,25 @@ module Yast
             ),
             HSpacing(),
             HWeight(
-              2,
+              entries_hweight,
               ComboBox(Id(:timezone), Opt(:notify), _("Time &Zone"))
             ),
             HSpacing(),
-            HWeight(1, HStretch())
+            HWeight(other_settings_hweight, HStretch())
           ),
           HBox(
-            HWeight(1, HStretch()),
-            HWeight(2, Left(
+            HWeight(free_space_hweight, HStretch()),
+            HWeight(entries_hweight, Left(
               utc_only ? Label(" ") : hwclock_term
             )),
             HSpacing(),
-            HWeight(2, HBox(
+            HWeight(entries_hweight, HBox(
               Label(_("Date and Time:")),
               Label(Id(:date), date),
               HStretch()
             )),
             HSpacing(),
-            HWeight(1, Right(settime))
+            HWeight(other_settings_hweight, Right(settime))
           )
         )
       else
