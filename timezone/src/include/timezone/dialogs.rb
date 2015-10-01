@@ -640,8 +640,8 @@ module Yast
         # bsc#946955 Translation doesn't fit in some languages
         # Reserved space needs to be allocated proportionally to the text length
         other_settings_hweight = other_settings_label.size
-        free_space_hweight = 12
-        entries_hweight = 24
+        free_space_hweight = 10
+        entries_hweight = 25
 
         timezoneterm = VBox(
           TimezoneSelector(Id(:timezonemap), Opt(:notify), worldmap, zones),
