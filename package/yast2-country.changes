@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Oct  1 14:59:57 CEST 2015 - locilka@suse.com
+
+- Allocate space for "Other Settings" button proportionally to its
+  translation length (bnc#946955)
+- 3.1.22.1
+
+-------------------------------------------------------------------
+
 Fri Jul 24 14:30:50 UTC 2015 - mvidner@suse.com
 
 - Removed dependencies to packages dropped in 2002.
