@@ -534,7 +534,7 @@ return ($[
 	_("Ukrainian"),
 	$[
 	    "pc104"	: $[
-		    "ncurses"	: "ua.map.gz",
+		    "ncurses"	: "ua-utf.map.gz",
 	    ],
 	    "macintosh" : $[
 		    "ncurses"	: "mac-us.map.gz"
