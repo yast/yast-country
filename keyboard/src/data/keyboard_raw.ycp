@@ -118,7 +118,7 @@ return ($[
 	// keyboard layout
 	_("French (Canada)"),
 	$[
-	    "pc104"	: $[ "ncurses": "ca-fr-legacy.map.gz"],
+	    "pc104"	: $[ "ncurses": "ca.map.gz"],
 	    "macintosh" : $[ "ncurses": "mac-us.map.gz"],
 	    "type4"	: $[ "ncurses": "sunkeymap.map.gz" ],
 	    "type5"	: $[ "ncurses": "sunt5-fr-latin1.map.gz" ],
