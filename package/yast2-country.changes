@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jan 13 10:47:09 UTC 2016 - sndirsch@suse.com
+
+- Corrected console keyboard mapping for French(Canada) and
+  Ukrainian (bsc#960307, bsc#942899)
+- 3.1.25
+
+-------------------------------------------------------------------
 Thu Oct  1 14:59:57 CEST 2015 - locilka@suse.com
 
 - Allocate space for "Other Settings" button proportionally to its
