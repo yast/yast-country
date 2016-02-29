@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 29 12:46:10 UTC 2016 - sndirsch@suse.com
+
+- Improved macintosh and sun keymaps (boo#968183)
+- 3.1.26
+
+-------------------------------------------------------------------
 Wed Jan 13 10:47:09 UTC 2016 - sndirsch@suse.com
 
 - Corrected console keyboard mapping for French(Canada) and
