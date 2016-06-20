@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jun  7 10:21:35 UTC 2016 - igonzalezsosa@suse.com
+
+- Stop generating autodocs (fate#320356)
+- 3.1.22.2
+
+-------------------------------------------------------------------
 Thu Oct  1 14:59:57 CEST 2015 - locilka@suse.com
 
 - Allocate space for "Other Settings" button proportionally to its
