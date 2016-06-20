@@ -80,35 +80,24 @@ module Yast
     # @return	[String]	encoding	encoding for console i/o
 
     def SelectFont(lang)
-      consolefont = []
-
       consolefonts = Convert.to_map(
         WFM.Read(path(".local.yast2"), "consolefonts.ycp")
       )
-
       fqlanguage = Language.GetLocaleString(lang)
-      consolefont = Ops.get_list(consolefonts, fqlanguage, [])
 
-      if Builtins.size(consolefont) == 0
-        consolefont = Ops.get_list(consolefonts, lang, [])
+      consolefont = consolefonts[fqlanguage] || consolefonts[lang]
+      if consolefont.nil? && lang.size > 2
+        consolefont = consolefonts[lang[0,2]]
       end
+      consolefont ||= []
 
-      if Builtins.size(consolefont) == 0 &&
-          Ops.greater_than(Builtins.size(lang), 2)
-        consolefont = Ops.get_list(
-          consolefonts,
-          Builtins.substring(lang, 0, 2),
-          []
-        )
-      end
-
-      if Ops.greater_than(Builtins.size(consolefont), 0)
+      if !consolefont.empty?
         @language = lang
 
-        @font = Ops.get_string(consolefont, 0, "")
-        @unicodeMap = Ops.get_string(consolefont, 1, "")
-        @screenMap = Ops.get_string(consolefont, 2, "")
-        @magic = Ops.get_string(consolefont, 3, "")
+        @font = consolefont[0] || ""
+        @unicodeMap = consolefont[1] || ""
+        @screenMap = consolefont[2] || ""
+        @magic = consolefont[3] || ""
 
         currentLanguage = WFM.GetLanguage
 
