@@ -27,7 +27,10 @@ module Yast
       Yast.import "UI"
       Yast.import "GetInstArgs"
       Yast.import "Stage"
+      # storage-ng
+=begin
       Yast.import "Storage"
+=end
       Yast.import "Wizard"
 
       Yast.include self, "timezone/dialogs.rb"
@@ -35,6 +38,8 @@ module Yast
       @args = GetInstArgs.argmap
       @args["first_run"] = "yes" unless @args["first_run"] == "no"
 
+      # storage-ng
+=begin
       if Stage.initial &&
           Ops.greater_than(
             Builtins.size(Storage.GetWinPrimPartitions(Storage.GetTargetMap)),
@@ -43,6 +48,7 @@ module Yast
         Timezone.windows_partition = true
         Builtins.y2milestone("windows partition found: assuming local time")
       end
+=end
 
       full_size_timezone_dialog
     end

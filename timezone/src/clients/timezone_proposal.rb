@@ -44,6 +44,8 @@ module Yast
           )
           Ops.set(@ret, "warning_level", :blocker)
         else
+          # storage-ng
+=begin
           Yast.import "Storage"
           if !Timezone.windows_partition &&
               Ops.greater_than(
@@ -55,6 +57,7 @@ module Yast
             Timezone.windows_partition = true
             Builtins.y2milestone("windows partition found: assuming local time")
           end
+=end
 
           # Fill return map
           @ret = {
