@@ -92,7 +92,7 @@ module Yast
           "hwclock"  => {
             # command line help text for 'set hwclock' option
             "help"     => _(
-              "New value for hardware clock"
+              "New value for hardware clock. Can be 'local', 'utc' or 'UTC'."
             ),
             "type"     => "enum",
             "typespec" => ["local", "utc", "UTC"]
