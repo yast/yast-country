@@ -175,6 +175,18 @@ return ($[
 	    "type5_euro": $[ "ncurses": "es-sundeadkeys.map.gz" ],
 	]
     ],
+  "spanish-ast":
+    [
+	// keyboard layout
+	_("Spanish (Asturian variant)"),
+	$[
+	    "pc104"	: $[ "ncurses": "es-ast.map.gz"],
+	    "macintosh" : $[ "ncurses": "es-mac.map.gz"],
+	    "type4"	: $[ "ncurses": "es-sundeadkeys.map.gz"],
+	    "type5"	: $[ "ncurses": "es-sundeadkeys.map.gz" ],
+	    "type5_euro": $[ "ncurses": "es-sundeadkeys.map.gz" ],
+	]
+    ],
   "italian":
     [
 	// keyboard layout
