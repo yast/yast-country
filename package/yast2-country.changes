@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Jul 25 14:55:00 UTC 2016 - ancor@suse.com
+
+- Added support for Asturian variant of Spanish keyboard
+  (bsc#981008)
+- Asturian variant is now the default layout for Asturian language
+- 3.1.28
+
+-------------------------------------------------------------------
 Tue Jun  7 10:21:35 UTC 2016 - igonzalezsosa@suse.com
 
 - Stop generating autodocs (fate#320356)
