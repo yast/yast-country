@@ -7,6 +7,12 @@ Mon Jul 25 14:55:00 UTC 2016 - ancor@suse.com
 - 3.1.28
 
 -------------------------------------------------------------------
+Mon Jun 20 11:55:00 UTC 2016 - ancor@suse.com
+
+- Use the eurlatg font for all languages with latin alphabet
+  and simplify language<->font mapping (bsc#942899, bsc#942896).
+
+-------------------------------------------------------------------
 Tue Jun  7 10:21:35 UTC 2016 - igonzalezsosa@suse.com
 
 - Stop generating autodocs (fate#320356)
