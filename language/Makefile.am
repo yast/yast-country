@@ -1,4 +1,4 @@
 #
 # Makefile.am for country/language
-SUBDIRS = src testsuite
+SUBDIRS = src testsuite test
 
