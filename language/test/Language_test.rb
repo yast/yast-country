@@ -2,9 +2,6 @@
 
 require_relative "test_helper"
 
-Yast.import "Mode"
-Yast::Mode.SetMode("normal")
-
 Yast.import "Language"
 
 describe "Language" do
@@ -67,22 +64,20 @@ describe "Language" do
 
   describe "#correct_language" do
     context "when called with a known, valid language" do
-      it "does nothing with the given language" do
+      it "returns the same unchanged language" do
         allow(subject).to receive(:valid_language?).with("known_language").and_return(true)
 
-        language = "known_language"
-        subject.correct_language(language)
+        language = subject.correct_language("known_language")
         expect(language).to eq("known_language")
       end
     end
 
     context "when called with an unknown language" do
-      it "reports an error and adjusts the given language to a default one" do
+      it "reports an error and returns the default fallback language" do
         allow(subject).to receive(:valid_language?).with("unknown_language").and_return(false)
         expect(Yast::Report).to receive(:Error).with(/unknown_language/)
 
-        language = "unknown_language"
-        subject.correct_language(language)
+        language = subject.correct_language("unknown_language")
         expect(language).to eq(Yast::LanguageClass::DEFAULT_FALLBACK_LANGUAGE)
       end
     end
@@ -133,7 +128,7 @@ describe "Language" do
 
     # This is a special case when we start installer in non-CJK language and then switch
     # to a CJK one (CJK == Chinese, Japanese, and Korean), in that case, needed fonts are
-    # not loaded and the UI just cna't display these CJK characters
+    # not loaded and the UI just can't display these CJK characters
     context "when called in text mode, in first stage, and user wants CJK language" do
       let(:new_language) { "ja_JP" }
 
