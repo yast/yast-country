@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Aug 10 14:27:49 CEST 2016 - locilka@suse.com
+
+- Added check for correct <language /> coming from an AutoYast
+  profile. When erroneous language is detected, then it's reported
+  and corrected to the default 'en_US' (bnc#991001).
+- 3.1.29
+
+-------------------------------------------------------------------
 Mon Jul 25 14:55:00 UTC 2016 - ancor@suse.com
 
 - Added support for Asturian variant of Spanish keyboard
