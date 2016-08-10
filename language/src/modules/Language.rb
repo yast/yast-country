@@ -403,17 +403,16 @@ module Yast
       # TRANSLATORS: Error message. Strings marked %{...} will be replaced
       # with variable content - do not translate them, please.
       Report.Error(
-        _("Language '%{language}' was not found within the list of supported languages
-available at %{directory}.
-
-Fallback language %{fallback} will be used." % {
+        _("Language '%{language}' was not found within the list of supported languages\n" +
+          "available at %{directory}.\n\nFallback language %{fallback} will be used."
+        ) % {
           :language => language,
           :directory => @languages_directory,
           :fallback => DEFAULT_FALLBACK_LANGUAGE
-        })
+        }
       )
 
-      language.replace(DEFAULT_FALLBACK_LANGUAGE)
+      return DEFAULT_FALLBACK_LANGUAGE
     end
 
     # Changes the install.inf in inst-sys according to newly selected language
@@ -462,7 +461,7 @@ Fallback language %{fallback} will be used." % {
       )
 
       if @language != lang
-        correct_language(lang)
+        lang = correct_language(lang)
 
         if Stage.initial && !Mode.test && !Mode.live_installation
           integrate_inst_sys_extension(@language)
@@ -474,7 +473,7 @@ Fallback language %{fallback} will be used." % {
         # In config mode, use language name translated into the current language
         # othewrwise use the language name translated into that selected language
         # because the whole UI will get translated later too
-        @name = Mode.config ? language_def[4] : language_def[0] || lang
+        @name = (Mode.config ? language_def[4] : language_def[0]) || lang
         @language = lang
         Encoding.SetEncLang(@language)
       end
