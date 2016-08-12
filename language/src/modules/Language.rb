@@ -31,6 +31,10 @@ require "yast"
 
 module Yast
   class LanguageClass < Module
+    DEFAULT_FALLBACK_LANGUAGE = "en_US".freeze
+
+    include Yast::Logger
+
     def main
       Yast.import "Pkg"
       Yast.import "UI"
@@ -49,15 +53,19 @@ module Yast
       Yast.import "PackageSystem"
       Yast.import "Popup"
       Yast.import "ProductFeatures"
+      Yast.import "Report"
       Yast.import "SlideShow"
       Yast.import "Stage"
 
+      # directory where all the language definitions are stored
+      # it's a constant, but depends on a dynamic content (Directory)
+      @languages_directory = "#{Directory.datadir}/languages"
 
       # currently selected language
-      @language = "en_US"
+      @language = DEFAULT_FALLBACK_LANGUAGE
 
       # original language
-      @language_on_entry = "en_US"
+      @language_on_entry = DEFAULT_FALLBACK_LANGUAGE
 
       # language preselected in /etc/install.inf
       @preselected = "en_US"
@@ -68,12 +76,11 @@ module Yast
       @linuxrc_language_set = false
 
       # Default language to be restored with MakeProposal.
-      @default_language = "en_US"
+      @default_language = DEFAULT_FALLBACK_LANGUAGE
 
 
       # Default settings for ROOT_USES_LANG in /etc/sysconfig/language
       @rootlang = "ctype"
-
 
       # Default settings for INSTALLED_LANGUAGES in /etc/sysconfig/language
       @languages = ""
@@ -108,10 +115,8 @@ module Yast
       # mapping of language to its default (proposed) kbd layout
       @lang2keyboard = {}
 
-      # directory with languages descriptions
-      @languages_directory = nil
-
       # languages that cannot be correctly shown in text mode
+      # if the system (Linuxrc) does not start with them from the beginning
       @cjk_languages = [
         "ja",
         "ko",
@@ -163,9 +168,6 @@ module Yast
 
     # Read language DB: translatable strings will be translated to current language
     def read_languages_map
-      if @languages_directory == nil
-        @languages_directory = Ops.add(Directory.datadir, "/languages")
-      end
       Builtins.foreach(
         Convert.convert(
           SCR.Read(path(".target.dir"), @languages_directory, []),
@@ -204,7 +206,7 @@ module Yast
           Ops.set(
             @lang2keyboard,
             code,
-            Ops.get_string(language_map, "keyboard", "en_US")
+            Ops.get_string(language_map, "keyboard", DEFAULT_FALLBACK_LANGUAGE)
           )
         end
       end
@@ -219,9 +221,6 @@ module Yast
     def ReadLanguageMap(lang)
       ret = {}
 
-      if @languages_directory == nil
-        @languages_directory = Ops.add(Directory.datadir, "/languages")
-      end
       file = Builtins.sformat("language_%1.ycp", lang)
       if FileUtils.Exists(Ops.add(Ops.add(@languages_directory, "/"), file))
         ret = Convert.to_map(
@@ -363,70 +362,128 @@ module Yast
       filename
     end
 
+    # Downloads inst-sys extension for a given language
+    # including giving a UI feedback to the user
+    #
+    # @param [String] language, e.g. 'de_DE'
+    def integrate_inst_sys_extension(language)
+      log.info "integrating translation extension..."
+
+      # busy message
+      Popup.ShowFeedback(
+        "",
+        _("Downloading installation system language extension...")
+      )
+
+      InstExtensionImage.DownloadAndIntegrateExtension(
+        GetLanguageExtensionFilename(language)
+      )
+
+      Popup.ClearFeedback
+      log.info "integrating translation extension... done"
+    end
+
+    # Returns whether the given language string is supported by this library.
+    #
+    # @param [String] language
+    # @see @languages_directory
+    def valid_language?(language)
+      GetLanguagesMap(false).key?(language)
+    end
+
+    # Checks whether given language is supported by the installer
+    # and changes it to the default language en_US if it isn't.
+    #
+    # @param [String] reference to the new language
+    # @return [String] new (corrected) language
+    def correct_language(language)
+      # No correction needed, this is already a correct language definition
+      return language if valid_language?(language)
+
+      # TRANSLATORS: Error message. Strings marked %{...} will be replaced
+      # with variable content - do not translate them, please.
+      Report.Error(
+        _("Language '%{language}' was not found within the list of supported languages\n" +
+          "available at %{directory}.\n\nFallback language %{fallback} will be used."
+        ) % {
+          :language => language,
+          :directory => @languages_directory,
+          :fallback => DEFAULT_FALLBACK_LANGUAGE
+        }
+      )
+
+      return DEFAULT_FALLBACK_LANGUAGE
+    end
+
+    # Changes the install.inf in inst-sys according to newly selected language
+    #
+    # FIXME: code just moved, refactoring needed
+    def adapt_install_inf
+      yinf = {}
+      yinf_ref = arg_ref(yinf)
+      AsciiFile.SetDelimiter(yinf_ref, " ")
+      yinf = yinf_ref.value
+      yinf_ref = arg_ref(yinf)
+      AsciiFile.ReadFile(yinf_ref, "/etc/yast.inf")
+      yinf = yinf_ref.value
+      lines = AsciiFile.FindLineField(yinf, 0, "Language:")
+
+      if Ops.greater_than(Builtins.size(lines), 0)
+        yinf_ref = arg_ref(yinf)
+        AsciiFile.ChangeLineField(
+          yinf_ref,
+          Ops.get_integer(lines, 0, -1),
+          1,
+          @language
+        )
+        yinf = yinf_ref.value
+      else
+        yinf_ref = arg_ref(yinf)
+        AsciiFile.AppendLine(yinf_ref, ["Language:", @language])
+        yinf = yinf_ref.value
+      end
+
+      yinf_ref = arg_ref(yinf)
+      AsciiFile.RewriteFile(yinf_ref, "/etc/yast.inf")
+      yinf = yinf_ref.value
+    end
 
     # Set module to selected language.
+    #
     # @param [String] lang language string ISO code of language
     def Set(lang)
+      lang = deep_copy(lang)
+
       Builtins.y2milestone(
         "original language: %1; setting to lang:%2",
         @language,
         lang
       )
 
-      if @language != lang # Do it only if different
+      if @language != lang
+        lang = correct_language(lang)
+
         if Stage.initial && !Mode.test && !Mode.live_installation
-          Builtins.y2milestone("integrating translation extension...")
-          # busy message
-          Popup.ShowFeedback(
-            "",
-            _("Downloading installation system language extension...")
-          )
-          InstExtensionImage.DownloadAndIntegrateExtension(
-            GetLanguageExtensionFilename(lang)
-          )
-          Popup.ClearFeedback
-          Builtins.y2milestone("integrating translation extension... done")
+          integrate_inst_sys_extension(@language)
         end
-        read_languages_map if Builtins.size(@languages_map) == 0
 
         GetLocales() if Builtins.size(@locales) == 0
 
-        @name = Ops.get_string(@languages_map, [lang, 0], lang)
-        @name = Ops.get_string(@languages_map, [lang, 4], lang) if Mode.config
+        language_def = GetLanguagesMap(false).fetch(lang, [])
+        # In config mode, use language name translated into the current language
+        # othewrwise use the language name translated into that selected language
+        # because the whole UI will get translated later too
+        @name = (Mode.config ? language_def[4] : language_def[0]) || lang
         @language = lang
         Encoding.SetEncLang(@language)
       end
 
       if Stage.initial && !Mode.test
-        yinf = {}
-        yinf_ref = arg_ref(yinf)
-        AsciiFile.SetDelimiter(yinf_ref, " ")
-        yinf = yinf_ref.value
-        yinf_ref = arg_ref(yinf)
-        AsciiFile.ReadFile(yinf_ref, "/etc/yast.inf")
-        yinf = yinf_ref.value
-        lines = AsciiFile.FindLineField(yinf, 0, "Language:")
-        if Ops.greater_than(Builtins.size(lines), 0)
-          yinf_ref = arg_ref(yinf)
-          AsciiFile.ChangeLineField(
-            yinf_ref,
-            Ops.get_integer(lines, 0, -1),
-            1,
-            @language
-          )
-          yinf = yinf_ref.value
-        else
-          yinf_ref = arg_ref(yinf)
-          AsciiFile.AppendLine(yinf_ref, ["Language:", @language])
-          yinf = yinf_ref.value
-        end
-        yinf_ref = arg_ref(yinf)
-        AsciiFile.RewriteFile(yinf_ref, "/etc/yast.inf")
-        yinf = yinf_ref.value
+        adapt_install_inf
 
         # update "name" for proposal when it cannot be shown correctly
         if GetTextMode() && CJKLanguage(lang) && !CJKLanguage(@preselected)
-          @name = Ops.get_string(@languages_map, [lang, 1], lang)
+          @name = GetLanguagesMap(false).fetch(lang, [])[1] || lang
         end
       end
 
