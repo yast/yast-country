@@ -464,7 +464,7 @@ module Yast
         lang = correct_language(lang)
 
         if Stage.initial && !Mode.test && !Mode.live_installation
-          integrate_inst_sys_extension(@language)
+          integrate_inst_sys_extension(lang)
         end
 
         GetLocales() if Builtins.size(@locales) == 0
