@@ -15,6 +15,13 @@ describe "Language" do
       "@euro",
       "German"
     ],
+    "de_ZU" => [
+      "Zulu Deutsch",
+      "Zulu Deutsch",
+      ".UTF-8",
+      ".deZU",
+      "Zulu German"
+    ],
     "pt_BR" => [
       "Português brasileiro",
       "Portugues brasileiro",
@@ -43,7 +50,9 @@ describe "Language" do
     it "shows UI feedback and extends the inst-sys for selected language" do
       allow(Yast::Popup).to receive(:ShowFeedback)
       allow(Yast::Popup).to receive(:ClearFeedback)
-      expect(Yast::InstExtensionImage).to receive(:DownloadAndIntegrateExtension).with(/yast2-trans-.*/).and_return(true)
+      # There are two or more de_* languages available, so it uses the full language ID
+      # instead of using only "de"
+      expect(Yast::InstExtensionImage).to receive(:DownloadAndIntegrateExtension).with(/yast2-trans-#{new_language}.*/).and_return(true)
       subject.integrate_inst_sys_extension(new_language)
     end
   end
@@ -106,7 +115,7 @@ describe "Language" do
       it "sets the new language, encoding integrates inst-sys extension and adapts install.inf" do
         allow(Yast::Stage).to receive(:initial).and_return(true)
         allow(Yast::Mode).to receive(:mode).and_return("installation")
-        expect(subject).to receive(:integrate_inst_sys_extension).and_return(nil)
+        expect(subject).to receive(:integrate_inst_sys_extension).with(new_language).and_return(nil)
         expect(subject).to receive(:adapt_install_inf).and_return(true)
 
         subject.Set(new_language)

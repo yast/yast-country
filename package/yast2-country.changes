@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Aug 19 14:47:20 CEST 2016 - locilka@suse.com
+
+- Fixed downloading language extensions in the installation
+  (bsc#994577)
+- 3.1.30
+
+-------------------------------------------------------------------
 Wed Aug 10 14:27:49 CEST 2016 - locilka@suse.com
 
 - Added check for correct <language /> coming from an AutoYast
