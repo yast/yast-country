@@ -491,7 +491,7 @@ return ($[
 	// keyboard layout
 	_("Dvorak"),
 	$[
-	    "pc104"	: $[ "ncurses": "dvorak.map.gz" ],
+	    "pc104"	: $[ "ncurses": "us-dvorak.map.gz" ],
 	    "macintosh" : $[ "ncurses": "us-mac.map.gz" ],
 	    "type4"	: $[ "ncurses": "us.map.gz" ],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
