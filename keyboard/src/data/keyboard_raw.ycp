@@ -217,7 +217,7 @@ return ($[
 	_("Portuguese (Brazil)"),
 	$[
 	    "pc104"	: $[ "ncurses": "br-nativo.map.gz"],
-	    "macintosh" : $[ "ncurses": "br-abnt2.map.gz"],
+	    "macintosh" : $[ "ncurses": "us-mac.map.gz"],
 	    "type4"	: $[ "ncurses": "us.map.gz"],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
 	    "type5_euro": $[ "ncurses": "us.map.gz" ],
@@ -313,7 +313,7 @@ return ($[
 	_("Czech"),
 	$[
 	    "pc104"	: $[ "ncurses": "cz.map.gz" ],
-	    "macintosh" : $[ "ncurses": "cz.map.gz" ],
+	    "macintosh" : $[ "ncurses": "us-mac.map.gz" ],
 	    "type4"	: $[ "ncurses": "us.map.gz" ],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
 	    "type5_euro": $[ "ncurses": "us.map.gz" ],
