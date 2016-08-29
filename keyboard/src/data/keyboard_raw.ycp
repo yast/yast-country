@@ -230,7 +230,7 @@ return ($[
 	$[
 	    "pc104"	: $[ "ncurses": "us-intl.map.gz"],
 	    "macintosh" : $[ "ncurses": "us-mac.map.gz"],
-	    "sparc64"	: $[ "type4": $[ "ncurses": "us.map.gz"],
+	    "type4"	: $[ "ncurses": "us.map.gz"],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
 	    "type5_euro": $[ "ncurses": "us.map.gz" ],
 	]
