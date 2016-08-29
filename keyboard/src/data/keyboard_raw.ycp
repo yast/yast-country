@@ -216,7 +216,7 @@ return ($[
 	// keyboard layout
 	_("Portuguese (Brazil)"),
 	$[
-	    "pc104"	: $[ "ncurses": "br-abnt2.map.gz"],
+	    "pc104"	: $[ "ncurses": "br-nativo.map.gz"],
 	    "macintosh" : $[ "ncurses": "br-abnt2.map.gz"],
 	    "type4"	: $[ "ncurses": "us.map.gz"],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
@@ -312,11 +312,8 @@ return ($[
 	// keyboard layout
 	_("Czech"),
 	$[
-	    "pc104"	: $[
-		    "ncurses": "cz-us-qwertz.map.gz",
-		    "compose" : "latin2"
-	    ],
-	    "macintosh" : $[ "ncurses": "cz-us-qwertz.map.gz" ],
+	    "pc104"	: $[ "ncurses": "cz.map.gz" ],
+	    "macintosh" : $[ "ncurses": "cz.map.gz" ],
 	    "type4"	: $[ "ncurses": "us.map.gz" ],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
 	    "type5_euro": $[ "ncurses": "us.map.gz" ],
@@ -327,10 +324,7 @@ return ($[
 	// keyboard layout
 	_("Czech (qwerty)"),
 	$[
-	    "pc104"	: $[
-		    "ncurses": "cz-lat2-us.map.gz",
-		    "compose" : "latin2"
-	    ],
+	    "pc104"	: $[ "ncurses": "cz-qwerty.map.gz" ],
 	    "macintosh" : $[ "ncurses": "us-mac.map.gz"],
 	    "type4"	: $[ "ncurses": "us.map.gz" ],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
@@ -342,10 +336,7 @@ return ($[
 	// keyboard layout
 	_("Slovak"),
 	$[
-	    "pc104"	: $[
-		    "ncurses": "sk-qwertz.map.gz",
-		    "compose" : "latin2"
-	    ],
+	    "pc104"	: $[ "ncurses": "sk.map.gz" ],
 	    "macintosh" : $[ "ncurses": "us-mac.map.gz"],
 	    "type4"	: $[ "ncurses": "us.map.gz" ],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
@@ -357,10 +348,7 @@ return ($[
 	// keyboard layout
 	_("Slovak (qwerty)"),
 	$[
-	    "pc104"	: $[
-		    "ncurses": "sk-qwerty.map.gz",
-		    "compose" : "latin2"
-	    ],
+	    "pc104"	: $[ "ncurses": "sk-qwerty.map.gz" ],
 	    "macintosh" : $[ "ncurses": "us-mac.map.gz" ],
 	    "type4"	: $[ "ncurses": "us.map.gz" ],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
