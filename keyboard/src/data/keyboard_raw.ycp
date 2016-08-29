@@ -360,9 +360,7 @@ return ($[
 	// keyboard layout
 	_("Slovene"),
 	$[
-	    "pc104"	: $[
-		    "ncurses": "si.map.gz"
-	    ],
+	    "pc104"	: $[ "ncurses": "si.map.gz" ],
 	    "macintosh" : $[ "ncurses": "us-mac.map.gz" ],
 	    "type4"	: $[ "ncurses": "us.map.gz" ],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
@@ -374,9 +372,7 @@ return ($[
 	// keyboard layout
 	_("Hungarian"),
 	$[
-	    "pc104"	: $[
-		    "ncurses": "hu.map.gz"
-	    ],
+	    "pc104"	: $[ "ncurses": "hu.map.gz" ],
 	    "macintosh" : $[ "ncurses": "us-mac.map.gz"],
 	    "type4"	: $[ "ncurses": "us.map.gz"],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
@@ -388,9 +384,7 @@ return ($[
 	// keyboard layout
 	_("Polish"),
 	$[
-	    "pc104"	: $[
-		    "ncurses": "pl.map.gz"
-	    ],
+	    "pc104"	: $[ "ncurses": "pl.map.gz" ],
 	    "macintosh" : $[ "ncurses": "us-mac.map.gz"],
 	    "type4"	: $[ "ncurses": "us.map.gz"],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
@@ -402,9 +396,7 @@ return ($[
 	// keyboard layout
 	_("Russian"),
 	$[
-	    "pc104"	: $[
-		    "ncurses": "ruwin_alt-UTF-8.map.gz",
-	    ],
+	    "pc104"	: $[ "ncurses": "ruwin_alt-UTF-8.map.gz" ],
 	    "macintosh" : $[ "ncurses": "us-mac.map.gz"],
 	    "type4"	: $[ "ncurses": "us.map.gz"],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
@@ -463,21 +455,11 @@ return ($[
 	// keyboard layout
 	_("Croatian"),
 	$[
-	    "pc104"	: $[
-		    "ncurses"	: "hr.map.gz"
-	    ],
-	    "macintosh" : $[
-		    "ncurses"   : "us-mac.map.gz"
-	    ],
-	    "type4"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5_euro": $[
-		    "ncurses"	: "us.map.gz"
-	    ],
+	    "pc104"	: $[ "ncurses"	: "hr.map.gz" ],
+	    "macintosh" : $[ "ncurses"  : "us-mac.map.gz" ],
+	    "type4"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5_euro": $[ "ncurses"	: "us.map.gz" ],
 	 ]
     ],
   "japanese":
@@ -533,21 +515,11 @@ return ($[
 	// keyboard layout
 	_("Ukrainian"),
 	$[
-	    "pc104"	: $[
-		    "ncurses"	: "ua-utf.map.gz",
-	    ],
-	    "macintosh" : $[
-		    "ncurses"	: "us-mac.map.gz"
-	    ],
-	    "type4"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5_euro": $[
-		    "ncurses"	: "us.map.gz"
-	    ],
+	    "pc104"	: $[ "ncurses"	: "ua-utf.map.gz" ],
+	    "macintosh" : $[ "ncurses"	: "us-mac.map.gz" ],
+	    "type4"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5_euro": $[ "ncurses"	: "us.map.gz" ],
 	 ]
     ],
 
@@ -555,21 +527,11 @@ return ($[
 	// keyboard layout
 	_("Khmer"),
 	$[
-	    "pc104"	: $[
-		    "ncurses"	: "khmer.map.gz",
-	    ],
-	    "macintosh" : $[
-		    "ncurses"	: "us-mac.map.gz"
-	    ],
-	    "type4"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5_euro": $[
-		    "ncurses"	: "us.map.gz"
-	    ],
+	    "pc104"	: $[ "ncurses"	: "khmer.map.gz" ],
+	    "macintosh" : $[ "ncurses"	: "us-mac.map.gz" ],
+	    "type4"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5_euro": $[ "ncurses"	: "us.map.gz" ],
 	 ]
     ],
 
@@ -577,21 +539,11 @@ return ($[
 	// keyboard layout
 	_("Korean"),
 	$[
-	    "pc104"	: $[
-		    "ncurses"	: "kr.map.gz",
-	    ],
-	    "macintosh" : $[
-		    "ncurses"	: "us-mac.map.gz"
-	    ],
-	    "type4"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5_euro": $[
-		    "ncurses"	: "us.map.gz"
-	    ],
+	    "pc104"	: $[ "ncurses"	: "kr.map.gz" ],
+	    "macintosh" : $[ "ncurses"	: "us-mac.map.gz" ],
+	    "type4"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5_euro": $[ "ncurses"	: "us.map.gz" ],
 	 ]
     ],
 
@@ -599,30 +551,18 @@ return ($[
 	// keyboard layout
 	_("Arabic"),
 	$[
-	    "pc104"	: $[
-		    "ncurses"	: "arabic.map.gz",
-	    ],
-	    "macintosh" : $[
-		    "ncurses"	: "us-mac.map.gz"
-	    ],
-	    "type4"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5_euro": $[
-		    "ncurses"	: "us.map.gz"
-	    ],
+	    "pc104"	: $[ "ncurses"	: "arabic.map.gz" ],
+	    "macintosh" : $[ "ncurses"	: "us-mac.map.gz" ],
+	    "type4"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5_euro": $[ "ncurses"	: "us.map.gz" ],
 	 ]
     ],
     "tajik": [
 	// keyboard layout
 	_("Tajik"),
 	$[
-	    "pc104"	: $[
-		    "ncurses": "tj_alt-UTF8.map.gz",
-	    ],
+	    "pc104"	: $[ "ncurses": "tj_alt-UTF8.map.gz" ],
 	    "macintosh" : $[ "ncurses": "us-mac.map.gz"],
 	    "type4"	: $[ "ncurses": "us.map.gz"],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
@@ -634,21 +574,11 @@ return ($[
 	// keyboard layout
 	_("Traditional Chinese"),
 	$[
-	    "pc104"	: $[
-		    "ncurses"	: "us.map.gz",
-	    ],
-	    "macintosh" : $[
-		    "ncurses"	: "us-mac.map.gz"
-	    ],
-	    "type4"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5_euro": $[
-		    "ncurses"	: "us.map.gz"
-	    ],
+	    "pc104"	: $[ "ncurses"	: "us.map.gz" ],
+	    "macintosh" : $[ "ncurses"	: "us-mac.map.gz" ],
+	    "type4"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5_euro": $[ "ncurses"	: "us.map.gz" ],
 	 ]
     ],
 
@@ -656,21 +586,11 @@ return ($[
 	// keyboard layout
 	_("Simplified Chinese"),
 	$[
-	    "pc104"	: $[
-		    "ncurses"	: "us.map.gz",
-	    ],
-	    "macintosh" : $[
-		    "ncurses"	: "us-mac.map.gz"
-	    ],
-	    "type4"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5_euro": $[
-		    "ncurses"	: "us.map.gz"
-	    ],
+	    "pc104"	: $[ "ncurses"	: "us.map.gz" ],
+	    "macintosh" : $[ "ncurses"	: "us-mac.map.gz" ],
+	    "type4"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5_euro": $[ "ncurses"	: "us.map.gz" ],
 	 ]
     ],
 
@@ -678,42 +598,22 @@ return ($[
 	// keyboard layout
 	_("Romanian"),
 	$[
-	    "pc104"	: $[
-		    "ncurses"	: "ro.map.gz",
-	    ],
-	    "macintosh" : $[
-		    "ncurses"	: "us-mac.map.gz"
-	    ],
-	    "type4"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5_euro": $[
-		    "ncurses"	: "us.map.gz"
-	    ],
+	    "pc104"	: $[ "ncurses"	: "ro.map.gz" ],
+	    "macintosh" : $[ "ncurses"	: "us-mac.map.gz" ],
+	    "type4"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5_euro": $[ "ncurses"	: "us.map.gz" ],
 	 ]
     ],
     "us-int": [
 	// keyboard layout
 	_("US International"),
 	$[
-	    "pc104"	: $[
-		    "ncurses"	: "us-intl.map.gz"
-	    ],
-	    "macintosh" : $[
-		    "ncurses"	: "us-mac.map.gz"
-	    ],
-	    "type4"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5"	: $[
-		    "ncurses"	: "us.map.gz"
-	    ],
-	    "type5_euro": $[
-		    "ncurses"	: "us.map.gz"
-	    ],
+	    "pc104"	: $[ "ncurses"	: "us-intl.map.gz" ],
+	    "macintosh" : $[ "ncurses"	: "us-mac.map.gz" ],
+	    "type4"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5"	: $[ "ncurses"	: "us.map.gz" ],
+	    "type5_euro": $[ "ncurses"	: "us.map.gz" ],
 	 ]
     ],
 ]);
