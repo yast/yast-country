@@ -216,7 +216,7 @@ return ($[
 	// keyboard layout
 	_("Portuguese (Brazil)"),
 	$[
-	    "pc104"	: $[ "ncurses": "br-nativo.map.gz"],
+	    "pc104"	: $[ "ncurses": "br.map.gz"],
 	    "macintosh" : $[ "ncurses": "us-mac.map.gz"],
 	    "type4"	: $[ "ncurses": "us.map.gz"],
 	    "type5"	: $[ "ncurses": "us.map.gz" ],
