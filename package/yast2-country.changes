@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Sep 12 11:51:12 UTC 2016 - opensuse.lietuviu.kalba@gmail.com
+
+- Corrected console keyboard mapping for Portuguese(Brazil),
+  Czech, Slovak and Dvorak (fate#318426, fate#318355, bug#942896)
+- Correct value for PT(BR) contributed by marceloatie@gmail.com
+- 3.1.31
+
+-------------------------------------------------------------------
 Fri Aug 19 14:47:20 CEST 2016 - locilka@suse.com
 
 - Fixed downloading language extensions in the installation
