@@ -235,8 +235,8 @@ return ($[
 	    "type5_euro": $[ "ncurses": "us.map.gz" ],
 	]
     ],
-  ],
-    "greek": [
+  "greek":
+    [
 	// keyboard layout
 	_("Greek"),
 	$[
