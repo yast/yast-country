@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Tue Sep 13 07:19:30 UTC 2016 - opensuse.lietuviu.kalba@gmail.com
 
-- Use the eurlatg font for Turkish (bsc#942896)
+- Use the eurlatgr font for Turkish (bsc#942896)
 - 3.1.32
 
 -------------------------------------------------------------------
@@ -38,7 +38,7 @@ Mon Jul 25 14:55:00 UTC 2016 - ancor@suse.com
 -------------------------------------------------------------------
 Mon Jun 20 11:55:00 UTC 2016 - ancor@suse.com
 
-- Use the eurlatg font for all languages with latin alphabet
+- Use the eurlatgr font for all languages with latin alphabet
   and simplify language<->font mapping (bsc#942899, bsc#942896).
 
 -------------------------------------------------------------------
