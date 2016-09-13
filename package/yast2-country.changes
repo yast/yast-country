@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Sep 13 07:19:30 UTC 2016 - opensuse.lietuviu.kalba@gmail.com
+
+- Use the eurlatg font for Turkish (bsc#942896)
+- 3.1.32
+
+-------------------------------------------------------------------
 Mon Sep 12 11:51:12 UTC 2016 - opensuse.lietuviu.kalba@gmail.com
 
 - Corrected console keyboard mapping for Portuguese(Brazil),
