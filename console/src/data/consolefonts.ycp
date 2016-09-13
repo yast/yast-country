@@ -29,6 +29,7 @@ $[
       "hu"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
       "lt"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
       "ja"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "tr"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
 
       "el_GR"		: [ "iso07u-16.psfu",	"",	"trivial",	"(K" ],
       "el"		: [ "iso07u-16.psfu",	"",	"trivial",	"(K" ],
@@ -50,9 +51,5 @@ $[
 
       "bg_BG"		: [ "UniCyr_8x16.psf",	"",	"trivial",	"(K" ],
       "bg"		: [ "UniCyr_8x16.psf",	"",	"trivial",	"(K" ],
-      "bg_BG.UTF-8"     : [ "UniCyr_8x16.psf",	"",	"none",		"(K" ],
-
-      "tr_TR"		: [ "iso09.f16n",	"",	"none",		"(K" ],
-      "tr"		: [ "iso09.f16n",	"",	"none",		"(K" ],
-      "tr_TR.UTF-8"     : [ "iso09.f16n",	"",	"trivial",	"(K" ]
+      "bg_BG.UTF-8"     : [ "UniCyr_8x16.psf",	"",	"none",		"(K" ]
   ]
