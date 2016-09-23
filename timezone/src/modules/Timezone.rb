@@ -23,8 +23,10 @@
 # Summary:	Timezone related stuff
 # Authors:	Klaus Kaempf <kkaempf@suse.de>
 #		Thomas Roelz <tom@suse.de>
-#
-# $Id$
+
+require "storage"
+require "y2storage"
+
 require "yast"
 
 module Yast
@@ -983,6 +985,23 @@ module Yast
       ]
       HTML.List(ret)
     end
+
+
+    # Checks whether the system has Windows installed on a primary partition with NTFS
+    def system_has_windows?
+      storage = Y2Storage::StorageManager.instance
+      Storage::Ntfs::all(storage.probed).each do |ntfs|
+        ntfs.blk_devices.each do |blk_device|
+          if Storage::partition?(blk_device)
+            if Storage::to_partition(blk_device).type == Storage::PartitionType_PRIMARY
+              return true if ntfs.detect_content_info.windows?
+            end
+          end
+        end
+      end
+      false
+    end
+
 
     publish :variable => :timezone, :type => "string"
     publish :variable => :hwclock, :type => "string"

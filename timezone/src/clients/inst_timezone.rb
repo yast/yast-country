@@ -21,9 +21,6 @@
 # Client for initial timezone setting (part of installation sequence)
 # Author:	Jiri Suchomel <jsuchome@suse.cz>
 
-require "storage"
-require "y2storage"
-
 module Yast
   class InstTimezoneClient < Client
     def main
@@ -31,33 +28,19 @@ module Yast
       Yast.import "GetInstArgs"
       Yast.import "Stage"
       Yast.import "Wizard"
+      Yast.import "Timezone"
 
       Yast.include self, "timezone/dialogs.rb"
 
       @args = GetInstArgs.argmap
       @args["first_run"] = "yes" unless @args["first_run"] == "no"
 
-      if Stage.initial && system_has_windows?
+      if Stage.initial && Timezone.system_has_windows?
         Timezone.windows_partition = true
         Builtins.y2milestone("windows partition found: assuming local time")
       end
 
       full_size_timezone_dialog
-    end
-
-    # Checks whether the system has Windows installed on a primary partition with NTFS
-    def system_has_windows?
-      storage = Y2Storage::StorageManager.instance
-      Storage::Ntfs::all(storage.probed).each do |ntfs|
-        ntfs.blk_devices.each do |blk_device|
-          if Storage::partition?(blk_device)
-            if Storage::to_partition(blk_device).type == Storage::PartitionType_PRIMARY
-              return true if ntfs.detect_content_info.windows?
-            end
-          end
-        end
-      end
-      false
     end
 
     # While the rest of the installation dialogs have enough room
