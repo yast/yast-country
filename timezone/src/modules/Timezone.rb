@@ -24,10 +24,8 @@
 # Authors:	Klaus Kaempf <kkaempf@suse.de>
 #		Thomas Roelz <tom@suse.de>
 
-require "storage"
-require "y2storage"
-
 require "yast"
+require "y2storage"
 
 module Yast
   class TimezoneClass < Module
@@ -986,22 +984,11 @@ module Yast
       HTML.List(ret)
     end
 
-
-    # Checks whether the system has Windows installed on a primary partition with NTFS
+    # Checks whether the system has Windows installed
     def system_has_windows?
-      storage = Y2Storage::StorageManager.instance
-      Storage::Ntfs::all(storage.probed).each do |ntfs|
-        ntfs.blk_devices.each do |blk_device|
-          if Storage::partition?(blk_device)
-            if Storage::to_partition(blk_device).type == Storage::PartitionType_PRIMARY
-              return true if ntfs.detect_content_info.windows?
-            end
-          end
-        end
-      end
-      false
+      win_partitions = disk_analyzer.windows_partitions.values.flatten
+      !win_partitions.empty?
     end
-
 
     publish :variable => :timezone, :type => "string"
     publish :variable => :hwclock, :type => "string"
@@ -1045,6 +1032,15 @@ module Yast
     publish :function => :Import, :type => "boolean (map)"
     publish :function => :Export, :type => "map ()"
     publish :function => :Summary, :type => "string ()"
+
+  protected
+
+    def disk_analyzer
+      @disk_analyzer ||= begin
+        devicegraph = Y2Storage::StorageManager.instance.probed
+        Y2Storage::DiskAnalyzer.new(devicegraph)
+      end
+    end
   end
 
   Timezone = TimezoneClass.new
