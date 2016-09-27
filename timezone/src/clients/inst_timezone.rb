@@ -20,35 +20,25 @@
 # ------------------------------------------------------------------------------
 # Client for initial timezone setting (part of installation sequence)
 # Author:	Jiri Suchomel <jsuchome@suse.cz>
-# $Id$
+
 module Yast
   class InstTimezoneClient < Client
     def main
       Yast.import "UI"
       Yast.import "GetInstArgs"
       Yast.import "Stage"
-      # storage-ng
-=begin
-      Yast.import "Storage"
-=end
       Yast.import "Wizard"
+      Yast.import "Timezone"
 
       Yast.include self, "timezone/dialogs.rb"
 
       @args = GetInstArgs.argmap
       @args["first_run"] = "yes" unless @args["first_run"] == "no"
 
-      # storage-ng
-=begin
-      if Stage.initial &&
-          Ops.greater_than(
-            Builtins.size(Storage.GetWinPrimPartitions(Storage.GetTargetMap)),
-            0
-          )
+      if Stage.initial && Timezone.system_has_windows?
         Timezone.windows_partition = true
         Builtins.y2milestone("windows partition found: assuming local time")
       end
-=end
 
       full_size_timezone_dialog
     end

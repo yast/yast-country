@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Sep 23 10:04:52 CEST 2016 - aschnell@suse.com
+
+- readded check for Windows based on storage-ng
+- 3.2.2
+
+-------------------------------------------------------------------
 Wed Jul 13 11:10:48 UTC 2016 - ancor@suse.com
 
 - storage-ng: commented installation-related code relying on the

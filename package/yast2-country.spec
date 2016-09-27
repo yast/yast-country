@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        3.2.1
+Version:        3.2.2
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -37,6 +37,8 @@ BuildRequires:  rubygem(rspec)
 BuildRequires:  yast2-core >= 3.1.12
 # RSpec extensions for YaST
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
+# New API of Y2Storage::DiskAnalyzer
+BuildRequires:  yast2-storage-ng >= 0.1.2
 
 Requires:	yast2-trans-stats yast2-perl-bindings timezone
 # XVersion.ycp

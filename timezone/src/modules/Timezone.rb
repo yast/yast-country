@@ -23,9 +23,9 @@
 # Summary:	Timezone related stuff
 # Authors:	Klaus Kaempf <kkaempf@suse.de>
 #		Thomas Roelz <tom@suse.de>
-#
-# $Id$
+
 require "yast"
+require "y2storage"
 
 module Yast
   class TimezoneClass < Module
@@ -984,6 +984,12 @@ module Yast
       HTML.List(ret)
     end
 
+    # Checks whether the system has Windows installed
+    def system_has_windows?
+      win_partitions = disk_analyzer.windows_partitions.values.flatten
+      !win_partitions.empty?
+    end
+
     publish :variable => :timezone, :type => "string"
     publish :variable => :hwclock, :type => "string"
     publish :variable => :default_timezone, :type => "string"
@@ -1026,6 +1032,15 @@ module Yast
     publish :function => :Import, :type => "boolean (map)"
     publish :function => :Export, :type => "map ()"
     publish :function => :Summary, :type => "string ()"
+
+  protected
+
+    def disk_analyzer
+      @disk_analyzer ||= begin
+        devicegraph = Y2Storage::StorageManager.instance.probed
+        Y2Storage::DiskAnalyzer.new(devicegraph)
+      end
+    end
   end
 
   Timezone = TimezoneClass.new
