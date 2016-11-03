@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Nov  3 11:43:42 UTC 2016 - jreidinger@suse.com
+
+- language add-on no longer exists, so suggest to enable online
+  repositories for languages only partially available on media
+  (bsc#1008082)
+- 3.2.0
+
+-------------------------------------------------------------------
 Tue Sep 13 07:19:30 UTC 2016 - opensuse.lietuviu.kalba@gmail.com
 
 - Use the eurlatgr font for Turkish (bsc#942896)
