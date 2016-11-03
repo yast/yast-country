@@ -1343,7 +1343,7 @@ module Yast
         Popup.Message(
           _(
             "Only minimal support for the selected language is included on this media.\n" +
-              "Add the Language add-on CD as an additional repository in order to get the appropriate support\n" +
+              "Enable later online repositories later in order to get the appropriate support\n" +
               "for this language.\n"
           )
         )
