@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Nov 21 15:50:47 UTC 2016 - igonzalezsosa@suse.com
+
+- Set keyboard layout properly on installation system (bsc#1010938)
+- 3.2.1
+
+-------------------------------------------------------------------
 Thu Nov  3 11:43:42 UTC 2016 - jreidinger@suse.com
 
 - language add-on no longer exists, so suggest to enable online
