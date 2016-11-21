@@ -120,7 +120,7 @@ module Yast
       let(:chroot) { "spanish" }
 
       it "correctly sets all layout variables" do
-        expect(SCR).to execute_bash(/loadkeys ruwin_alt-UTF-8\.map\.gz/)
+        expect(SCR).to execute_bash(/loadkeys -C \/dev\/tty.+ ruwin_alt-UTF-8\.map\.gz/)
 
         Keyboard.Set("russian")
         expect(Keyboard.current_kbd).to eq("russian")
@@ -132,7 +132,7 @@ module Yast
         stub_presence_of "/usr/sbin/xkbctrl"
         allow(XVersion).to receive(:binPath).and_return "/usr/bin"
 
-        expect(SCR).to execute_bash(/loadkeys tr\.map\.gz/)
+        expect(SCR).to execute_bash(/loadkeys -C \/dev\/tty.+ tr\.map\.gz/)
         # Called twice, for SetConsole and SetX11
         expect(SCR).to execute_bash(/xkbctrl tr\.map\.gz/).twice do |p, cmd|
           dump_xkbctrl(:turkish, cmd.split("> ")[1])
@@ -143,7 +143,7 @@ module Yast
       end
 
       it "does not call setxkbmap if graphical system is not installed" do
-        expect(SCR).to execute_bash(/loadkeys ruwin_alt-UTF-8\.map\.gz/)
+        expect(SCR).to execute_bash(/loadkeys -C \/dev\/tty.+ ruwin_alt-UTF-8\.map\.gz/)
         expect(SCR).to execute_bash(/xkbctrl ruwin_alt-UTF-8.map.gz/).never
         expect(SCR).to execute_bash(/setxkbmap/).never
 
