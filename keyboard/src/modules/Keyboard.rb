@@ -556,8 +556,9 @@ module Yast
         return false # Error
       end
 
-      # Console command...
-      @ckb_cmd = Ops.add("/bin/loadkeys ", @keymap)
+      # Console command. It specifies all tty devices (bsc#1010938)
+      @tty_devices ||= Dir["/dev/tty*"].map { |d| "-C #{d}" }.join(" ")
+      @ckb_cmd = "/bin/loadkeys #{@tty_devices} #{keymap}"
 
       # X11 command...
       # do not try to run this with remote X display
