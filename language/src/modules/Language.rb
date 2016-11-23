@@ -68,7 +68,7 @@ module Yast
       @language_on_entry = DEFAULT_FALLBACK_LANGUAGE
 
       # language preselected in /etc/install.inf
-      @preselected = "en_US"
+      @preselected = DEFAULT_FALLBACK_LANGUAGE
 
       # user readable description of language
       @name = "English (US)"
@@ -244,7 +244,7 @@ module Yast
     # Return English translation of given language (Fate 301789)
     def EnglishName(code, backup)
       if Ops.get_string(@english_names, code, "") == ""
-        if @language == "en_US"
+        if @language == DEFAULT_FALLBACK_LANGUAGE
           Ops.set(@english_names, code, backup)
         else
           Builtins.y2warning("nothing in english_names...")
@@ -255,11 +255,11 @@ module Yast
 
     # Fill the map with English names of languages
     def FillEnglishNames(lang)
-      return if lang == "en_US" # will be filled in on first start
+      return if lang == DEFAULT_FALLBACK_LANGUAGE # will be filled in on first start
       if @use_utf8
-        WFM.SetLanguage("en_US", "UTF-8")
+        WFM.SetLanguage(DEFAULT_FALLBACK_LANGUAGE, "UTF-8")
       else
-        WFM.SetLanguage("en_US")
+        WFM.SetLanguage(DEFAULT_FALLBACK_LANGUAGE)
       end
       Builtins.foreach(GetLanguagesMap(true)) do |code, info|
         Ops.set(@english_names, code, Ops.get_string(info, 4, ""))
@@ -394,9 +394,10 @@ module Yast
     # Checks whether given language is supported by the installer
     # and changes it to the default language en_US if it isn't.
     #
-    # @param [String] reference to the new language
+    # @param language [String] reference to the new language
+    # @param error_report [Boolean] showing an error popup
     # @return [String] new (corrected) language
-    def correct_language(language)
+    def correct_language(language, error_report: true)
       # No correction needed, this is already a correct language definition
       return language if valid_language?(language)
 
@@ -410,7 +411,7 @@ module Yast
           :directory => @languages_directory,
           :fallback => DEFAULT_FALLBACK_LANGUAGE
         }
-      )
+      ) if error_report
 
       return DEFAULT_FALLBACK_LANGUAGE
     end
@@ -609,15 +610,19 @@ module Yast
         Builtins.y2milestone("install_inf Locale %1", @preselected)
         if @preselected != nil && @preselected != ""
           lang = @preselected
-          @linuxrc_language_set = true if lang != "en_US"
+          @linuxrc_language_set = true if lang != DEFAULT_FALLBACK_LANGUAGE
         else
-          @preselected = "en_US"
+          @preselected = DEFAULT_FALLBACK_LANGUAGE
         end
 
-        lang = "" if lang == nil
+        lang ||= ""
         Builtins.y2milestone("lang after checking /etc/install.inf: %1", lang)
         if lang == ""
-          lang = Pkg.GetTextLocale
+          # As language has not been set we are trying to ask libzypp.
+          # But libzypp can also returns languages which we do not support
+          # (e.g. default "en"). So we are checking and changing it to default
+          # if needed (without showing an error (bnc#1009508))
+          lang = correct_language(Pkg.GetTextLocale, error_report: false)
           Builtins.y2milestone("setting lang to default language: %1", lang)
         end
         # Ignore any previous settings and take language from control file.
@@ -802,7 +807,7 @@ module Yast
       Builtins.foreach(Pkg.GetAdditionalLocales) do |additional|
         # add the language for both kind of values ("cs" vs. "pt_PT")
         if !Builtins.contains(langs, additional)
-          additional = "en_US" if additional == "en"
+          additional = DEFAULT_FALLBACK_LANGUAGE if additional == "en"
           additional = "pt_PT" if additional == "pt"
           if Builtins.haskey(@languages_map, additional)
             missing = Builtins.add(missing, additional)
@@ -1375,7 +1380,7 @@ module Yast
             )
           )
         end
-        WfmSetGivenLanguage("en_US")
+        WfmSetGivenLanguage(DEFAULT_FALLBACK_LANGUAGE)
         return true
       end
       false

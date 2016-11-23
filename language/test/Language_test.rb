@@ -1,4 +1,5 @@
 #!/usr/bin/env rspec
+# -*- coding: utf-8 -*-
 
 require_relative "test_helper"
 
@@ -87,6 +88,14 @@ describe "Language" do
         expect(Yast::Report).to receive(:Error).with(/unknown_language/)
 
         language = subject.correct_language("unknown_language")
+        expect(language).to eq(Yast::LanguageClass::DEFAULT_FALLBACK_LANGUAGE)
+      end
+
+      it "returns the default fallback language without reporting an error if it is disabled " do
+        allow(subject).to receive(:valid_language?).with("unknown_language").and_return(false)
+        expect(Yast::Report).to_not receive(:Error)
+
+        language = subject.correct_language("unknown_language", error_report: false)
         expect(language).to eq(Yast::LanguageClass::DEFAULT_FALLBACK_LANGUAGE)
       end
     end
