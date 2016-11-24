@@ -1,4 +1,14 @@
 -------------------------------------------------------------------
+Thu Nov 24 15:23:29 CET 2016 - schubi@suse.de
+
+- Keyboard: Chinese and Taiwanese are using US keyboard layout for
+  a default. That's why e.g. Chinese will be shown for keyboard
+  settings although US will be taken. So we have to set the
+  connection manually (like we have already for DK an DE).
+  (bnc#1009914)
+- 3.2.3
+
+-------------------------------------------------------------------
 Wed Nov 23 13:41:41 CET 2016 - schubi@suse.de
 
 - Language has not been set. Taking language from zypp.

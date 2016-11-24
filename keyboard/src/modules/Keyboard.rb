@@ -757,7 +757,7 @@ module Yast
           Builtins.y2milestone("linuxrc keyboard: %1", keytable)
           map2yast = Builtins.union(
             keymap2yast,
-            { "dk" => "danish", "de-lat1-nd" => "german" }
+            { "dk" => "danish", "de-lat1-nd" => "german", "us" => "english-us" }
           )
           if Builtins.issubstring(keytable, ".map.gz")
             keytable = Builtins.substring(
