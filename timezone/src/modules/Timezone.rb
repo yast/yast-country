@@ -29,6 +29,8 @@ require "yast"
 
 module Yast
   class TimezoneClass < Module
+    include Yast::Logger
+
     def main
       textdomain "country"
 
@@ -163,6 +165,10 @@ module Yast
 
       # remember if /sbin/hwclock --hctosys was called, it can be done only once (bnc#584484)
       @systz_called = false
+
+      # timezone is read-only
+      @readonly_timezone = nil
+
       Timezone()
     end
 
@@ -245,6 +251,12 @@ module Yast
     # @return	the number of the region that contains the timezone
     #
     def Set(zone, really)
+      # Do not update the timezone if it's forced and it was already set
+      if readonly_timezone && !@timezone.empty?
+        log.info "Timezone is read-only and cannot be changed"
+        return -1 # Not sure about this
+      end
+
       zmap = get_zonemap
 
       # Set the new timezone internally
@@ -431,9 +443,14 @@ module Yast
       @hwclock = "-u"
       if Stage.initial && !Mode.live_installation
         # language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
-        lang2tz = get_lang2tz
+        new_timezone =
+          if readonly_timezone
+            "UTC"
+          else
+            lang2tz = get_lang2tz
+            Ops.get(lang2tz, Language.language, "")
+          end
 
-        new_timezone = Ops.get(lang2tz, Language.language, "")
         Builtins.y2milestone("Timezone new_timezone %1", new_timezone)
 
         Set(new_timezone, true) if new_timezone != ""
@@ -1026,6 +1043,11 @@ module Yast
     publish :function => :Import, :type => "boolean (map)"
     publish :function => :Export, :type => "map ()"
     publish :function => :Summary, :type => "string ()"
+
+    def readonly_timezone
+      @readonly_timezone ||= ProductFeatures.GetBooleanFeature("globals", "readonly_timezone")
+    end
+
   end
 
   Timezone = TimezoneClass.new
