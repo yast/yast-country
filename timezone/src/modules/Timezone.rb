@@ -167,7 +167,7 @@ module Yast
       @systz_called = false
 
       # timezone is read-only
-      @readonly_timezone = nil
+      @readonly = nil
 
       Timezone()
     end
@@ -252,7 +252,7 @@ module Yast
     #
     def Set(zone, really)
       # Do not update the timezone if it's forced and it was already set
-      if readonly_timezone && !@timezone.empty?
+      if readonly && !@timezone.empty?
         log.info "Timezone is read-only and cannot be changed"
         return -1
       end
@@ -444,7 +444,7 @@ module Yast
       if Stage.initial && !Mode.live_installation
         # language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
         new_timezone =
-          if readonly_timezone
+          if readonly
             "UTC"
           else
             lang2tz = get_lang2tz
@@ -1004,8 +1004,8 @@ module Yast
     # Determines whether timezone is read-only for the current product
     #
     # @return [Boolean] true if it's read-only; false otherwise.
-    def readonly_timezone
-      @readonly_timezone ||= ProductFeatures.GetBooleanFeature("globals", "readonly_timezone")
+    def readonly
+      @readonly ||= ProductFeatures.GetBooleanFeature("globals", "readonly_timezone")
     end
 
     publish :variable => :timezone, :type => "string"

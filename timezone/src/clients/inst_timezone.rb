@@ -37,7 +37,7 @@ module Yast
       @args = GetInstArgs.argmap
       @args["first_run"] = "yes" unless @args["first_run"] == "no"
 
-      if Timezone.readonly_timezone
+      if Timezone.readonly
         # Do not run if timezone is readonly
         log.info "Timezone is read-only for this product so the inst_timezone client is skipped"
         return GetInstArgs.going_back ? :back : :next

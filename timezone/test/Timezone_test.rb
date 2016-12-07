@@ -82,4 +82,22 @@ describe Yast::Timezone do
       end
     end
   end
+
+  describe "#readonly" do
+    context "when timezone is read-only" do
+      let(:readonly_timezone) { true }
+
+      it "returns true" do
+        expect(subject.readonly).to eq(true)
+      end
+    end
+
+    context "when timezone is not read-only" do
+      let(:readonly_timezone) { false }
+
+      it "returns false" do
+        expect(subject.readonly).to eq(false)
+      end
+    end
+  end
 end
