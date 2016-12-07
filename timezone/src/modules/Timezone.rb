@@ -254,7 +254,7 @@ module Yast
       # Do not update the timezone if it's forced and it was already set
       if readonly_timezone && !@timezone.empty?
         log.info "Timezone is read-only and cannot be changed"
-        return -1 # Not sure about this
+        return -1
       end
 
       zmap = get_zonemap
@@ -1001,6 +1001,13 @@ module Yast
       HTML.List(ret)
     end
 
+    # Determines whether timezone is read-only for the current product
+    #
+    # @return [Boolean] true if it's read-only; false otherwise.
+    def readonly_timezone
+      @readonly_timezone ||= ProductFeatures.GetBooleanFeature("globals", "readonly_timezone")
+    end
+
     publish :variable => :timezone, :type => "string"
     publish :variable => :hwclock, :type => "string"
     publish :variable => :default_timezone, :type => "string"
@@ -1043,11 +1050,6 @@ module Yast
     publish :function => :Import, :type => "boolean (map)"
     publish :function => :Export, :type => "map ()"
     publish :function => :Summary, :type => "string ()"
-
-    def readonly_timezone
-      @readonly_timezone ||= ProductFeatures.GetBooleanFeature("globals", "readonly_timezone")
-    end
-
   end
 
   Timezone = TimezoneClass.new

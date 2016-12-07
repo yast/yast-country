@@ -23,6 +23,8 @@
 # $Id$
 module Yast
   class InstTimezoneClient < Client
+    include Yast::Logger
+
     def main
       Yast.import "UI"
       Yast.import "GetInstArgs"
@@ -34,6 +36,12 @@ module Yast
 
       @args = GetInstArgs.argmap
       @args["first_run"] = "yes" unless @args["first_run"] == "no"
+
+      if Timezone.readonly_timezone
+        # Do not run if timezone is readonly
+        log.info "Timezone is read-only for this product so the inst_timezone client is skipped"
+        return GetInstArgs.going_back ? :back : :next
+      end
 
       if Stage.initial &&
           Ops.greater_than(
