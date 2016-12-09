@@ -113,4 +113,20 @@ describe Yast::Timezone do
       end
     end
   end
+
+  describe "#product_default_timezone" do
+    let(:default_timezone) { "Atlantic/Canary" }
+
+    it "returns the globals/timezone feature" do
+      expect(subject.product_default_timezone).to eq(default_timezone)
+    end
+
+    context "when globals/timezone is not set" do
+      let(:default_timezone) { "" }
+
+      it "returns 'UTC'" do
+        expect(subject.product_default_timezone).to eq("UTC")
+      end
+    end
+  end
 end

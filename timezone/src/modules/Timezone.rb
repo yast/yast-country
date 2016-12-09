@@ -1008,6 +1008,9 @@ module Yast
       @readonly ||= ProductFeatures.GetBooleanFeature("globals", "readonly_timezone")
     end
 
+    # Product's default timezone when it's not defined in the control file.
+    FALLBACK_PRODUCT_DEFAULT_TIMEZONE = "UTC"
+
     # Determines the default timezone for the current product
     #
     # If not timezone is set, "UTC" will be used.
@@ -1015,7 +1018,7 @@ module Yast
     # @return [String] timezone
     def product_default_timezone
       product_timezone = ProductFeatures.GetStringFeature("globals", "timezone")
-      product_timezone.empty? ? "UTC" : product_timezone
+      product_timezone.empty? ? FALLBACK_PRODUCT_DEFAULT_TIMEZONE : product_timezone
     end
 
     publish :variable => :timezone, :type => "string"
