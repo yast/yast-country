@@ -1,0 +1,7 @@
+# common part
+--no-private
+--protected
+--markup markdown
+--files *.md
+# this is unusual, a sub-module level above src
+*/src/**/*.rb
