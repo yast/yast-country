@@ -3,14 +3,18 @@
 require_relative "test_helper"
 
 Yast.import "Timezone"
+Yast.import "ProductFeatures"
 
 describe Yast::Timezone do
   let(:readonly_timezone) { false }
+  let(:default_timezone) { "" }
   let(:initial) { false }
 
   before do
     allow(Yast::ProductFeatures).to receive(:GetBooleanFeature)
       .with("globals", "readonly_timezone").and_return(readonly_timezone)
+    allow(Yast::ProductFeatures).to receive(:GetStringFeature)
+      .with("globals", "timezone").and_return(default_timezone)
     allow(Yast::Stage).to receive(:initial).and_return(initial)
     Yast::Timezone.main
   end
@@ -57,12 +61,21 @@ describe Yast::Timezone do
   end
 
   describe "#timezone" do
+
     context "when timezone is read-only during installation" do
       let(:readonly_timezone) { true }
       let(:initial) { true }
 
       it "returns 'UTC'" do
         expect(subject.timezone).to eq("UTC")
+      end
+
+      context "and default timezone is set" do
+        let(:default_timezone) { "Atlantic/Canary" }
+
+        it "returns the default timezone" do
+          expect(subject.timezone).to eq("Atlantic/Canary")
+        end
       end
     end
   end

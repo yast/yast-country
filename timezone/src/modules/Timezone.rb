@@ -445,7 +445,7 @@ module Yast
         # language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
         new_timezone =
           if readonly
-            "UTC"
+            product_default_timezone
           else
             lang2tz = get_lang2tz
             Ops.get(lang2tz, Language.language, "")
@@ -1006,6 +1006,16 @@ module Yast
     # @return [Boolean] true if it's read-only; false otherwise.
     def readonly
       @readonly ||= ProductFeatures.GetBooleanFeature("globals", "readonly_timezone")
+    end
+
+    # Determines the default timezone for the current product
+    #
+    # If not timezone is set, "UTC" will be used.
+    #
+    # @return [String] timezone
+    def product_default_timezone
+      product_timezone = ProductFeatures.GetStringFeature("globals", "timezone")
+      product_timezone.empty? ? "UTC" : product_timezone
     end
 
     publish :variable => :timezone, :type => "string"
