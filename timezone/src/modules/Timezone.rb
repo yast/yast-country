@@ -29,6 +29,8 @@ require "yast"
 
 module Yast
   class TimezoneClass < Module
+    include Yast::Logger
+
     def main
       textdomain "country"
 
@@ -163,6 +165,10 @@ module Yast
 
       # remember if /sbin/hwclock --hctosys was called, it can be done only once (bnc#584484)
       @systz_called = false
+
+      # timezone is read-only
+      @readonly = nil
+
       Timezone()
     end
 
@@ -245,20 +251,25 @@ module Yast
     # @return	the number of the region that contains the timezone
     #
     def Set(zone, really)
-      zmap = get_zonemap
+      # Do not update the timezone if it's forced and it was already set
+      if (Mode.installation || Mode.update) && readonly && !@timezone.empty?
+        log.info "Timezone is read-only and cannot be changed during installation"
+      else
+        # Set the new timezone internally
+        @timezone = zone
+      end
 
-      # Set the new timezone internally
-      @timezone = zone
+      zmap = get_zonemap
 
       sel = 0
       while Ops.less_than(sel, Builtins.size(zmap)) &&
-          !Builtins.haskey(Ops.get_map(zmap, [sel, "entries"], {}), zone)
+          !Builtins.haskey(Ops.get_map(zmap, [sel, "entries"], {}), @timezone)
         sel = Ops.add(sel, 1)
       end
 
       @name = Ops.add(
         Ops.add(Ops.get_string(zmap, [sel, "name"], ""), " / "),
-        Ops.get_string(zmap, [sel, "entries", zone], zone)
+        Ops.get_string(zmap, [sel, "entries", @timezone], @timezone)
       )
 
       # Adjust system to the new timezone.
@@ -431,9 +442,14 @@ module Yast
       @hwclock = "-u"
       if Stage.initial && !Mode.live_installation
         # language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
-        lang2tz = get_lang2tz
+        new_timezone =
+          if readonly
+            product_default_timezone
+          else
+            lang2tz = get_lang2tz
+            Ops.get(lang2tz, Language.language, "")
+          end
 
-        new_timezone = Ops.get(lang2tz, Language.language, "")
         Builtins.y2milestone("Timezone new_timezone %1", new_timezone)
 
         Set(new_timezone, true) if new_timezone != ""
@@ -982,6 +998,26 @@ module Yast
         clock_setting
       ]
       HTML.List(ret)
+    end
+
+    # Determines whether timezone is read-only for the current product
+    #
+    # @return [Boolean] true if it's read-only; false otherwise.
+    def readonly
+      @readonly ||= ProductFeatures.GetBooleanFeature("globals", "readonly_timezone")
+    end
+
+    # Product's default timezone when it's not defined in the control file.
+    FALLBACK_PRODUCT_DEFAULT_TIMEZONE = "UTC"
+
+    # Determines the default timezone for the current product
+    #
+    # If not timezone is set, "UTC" will be used.
+    #
+    # @return [String] timezone
+    def product_default_timezone
+      product_timezone = ProductFeatures.GetStringFeature("globals", "timezone")
+      product_timezone.empty? ? FALLBACK_PRODUCT_DEFAULT_TIMEZONE : product_timezone
     end
 
     publish :variable => :timezone, :type => "string"
