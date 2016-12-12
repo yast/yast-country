@@ -254,23 +254,22 @@ module Yast
       # Do not update the timezone if it's forced and it was already set
       if (Mode.installation || Mode.update) && readonly && !@timezone.empty?
         log.info "Timezone is read-only and cannot be changed during installation"
-        return -1
+      else
+        # Set the new timezone internally
+        @timezone = zone
       end
 
       zmap = get_zonemap
 
-      # Set the new timezone internally
-      @timezone = zone
-
       sel = 0
       while Ops.less_than(sel, Builtins.size(zmap)) &&
-          !Builtins.haskey(Ops.get_map(zmap, [sel, "entries"], {}), zone)
+          !Builtins.haskey(Ops.get_map(zmap, [sel, "entries"], {}), @timezone)
         sel = Ops.add(sel, 1)
       end
 
       @name = Ops.add(
         Ops.add(Ops.get_string(zmap, [sel, "name"], ""), " / "),
-        Ops.get_string(zmap, [sel, "entries", zone], zone)
+        Ops.get_string(zmap, [sel, "entries", @timezone], @timezone)
       )
 
       # Adjust system to the new timezone.

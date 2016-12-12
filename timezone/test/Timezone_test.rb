@@ -87,7 +87,7 @@ describe Yast::Timezone do
       allow(Yast::FileUtils).to receive(:IsLink).with("/etc/localtime").and_return(false)
     end
 
-    it "returns the timezone index" do
+    it "returns the region number" do
       expect(subject.Set("Atlantic/Canary", false)).to eq(3)
     end
 
@@ -105,8 +105,8 @@ describe Yast::Timezone do
         allow(Yast::Mode).to receive(:installation).and_return(true)
       end
 
-      it "returns -1" do
-        expect(subject.Set("Atlantic/Canary", false)).to eq(-1)
+      it "returns the region number" do
+        expect(subject.Set("Atlantic/Canary", false)).to eq(10) # UTC
       end
 
       it "does not modify the timezone" do
@@ -118,8 +118,8 @@ describe Yast::Timezone do
     context "when timezone is read-only in a running system" do
       let(:readonly_timezone) { true }
 
-      it "returns the timezone index" do
-        expect(subject.Set("Atlantic/Canary", false)).to eq(3)
+      it "returns the region number" do
+        expect(subject.Set("Atlantic/Canary", false)).to eq(3) # Atlantic
       end
 
       it "modifies the timezone" do
