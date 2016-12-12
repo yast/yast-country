@@ -54,10 +54,8 @@ module Y2Country
 
     def items
       # a bit tricky as method return incompatible data
-      res = Yast::Keyboard.GetKeyboardItems
-      res.map! do |item|
-        values = item.params
-        id, name, *_ = values
+      Yast::Keyboard.GetKeyboardItems.map do |item|
+        id, name, _enabled = item.params
         id = id.params.first
         [id, name]
       end
