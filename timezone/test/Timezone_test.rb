@@ -61,7 +61,6 @@ describe Yast::Timezone do
   end
 
   describe "#timezone" do
-
     context "when timezone is read-only during installation" do
       let(:readonly_timezone) { true }
       let(:initial) { true }
@@ -81,17 +80,51 @@ describe Yast::Timezone do
   end
 
   describe "#Set" do
+    before do
+      allow(Yast::Misc).to receive(:SysconfigRead).with(Yast::Path.new(".sysconfig.clock.TIMEZONE"))
+        .and_return("Europe/Berlin")
+      allow(Yast::Misc).to receive(:SysconfigRead).and_call_original
+      allow(Yast::FileUtils).to receive(:IsLink).with("/etc/localtime").and_return(false)
+    end
+
+    it "returns the timezone index" do
+      expect(subject.Set("Atlantic/Canary", false)).to eq(3)
+    end
+
+    it "modifies the timezone" do
+      subject.Set("Atlantic/Canary", false)
+      expect(subject.timezone).to eq("Atlantic/Canary")
+    end
+
     context "when timezone is read-only during installation" do
       let(:readonly_timezone) { true }
+      let(:installation) { true }
       let(:initial) { true }
 
+      before do
+        allow(Yast::Mode).to receive(:installation).and_return(true)
+      end
+
       it "returns -1" do
-        expect(subject.Set("Atlantic/Canary", true)).to eq(-1)
+        expect(subject.Set("Atlantic/Canary", false)).to eq(-1)
       end
 
       it "does not modify the timezone" do
-        subject.Set("Atlantic/Canary", true)
+        subject.Set("Atlantic/Canary", false)
         expect(subject.timezone).to eq("UTC")
+      end
+    end
+
+    context "when timezone is read-only in a running system" do
+      let(:readonly_timezone) { true }
+
+      it "returns the timezone index" do
+        expect(subject.Set("Atlantic/Canary", false)).to eq(3)
+      end
+
+      it "modifies the timezone" do
+        subject.Set("Atlantic/Canary", false)
+        expect(subject.timezone).to eq("Atlantic/Canary")
       end
     end
   end

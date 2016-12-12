@@ -252,8 +252,8 @@ module Yast
     #
     def Set(zone, really)
       # Do not update the timezone if it's forced and it was already set
-      if readonly && !@timezone.empty?
-        log.info "Timezone is read-only and cannot be changed"
+      if (Mode.installation || Mode.update) && readonly && !@timezone.empty?
+        log.info "Timezone is read-only and cannot be changed during installation"
         return -1
       end
 
