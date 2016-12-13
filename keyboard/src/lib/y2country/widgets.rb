@@ -25,50 +25,55 @@ require "cwm/widget"
 Yast.import "Keyboard"
 
 module Y2Country
-  class KeyboardSelectionWidget < CWM::SelectionBox
-    def initialize
-      textdomain "country"
-    end
+  module Widgets
+    class KeyboardSelectionWidget < CWM::SelectionBox
+      # param default [String] ID for default keyboard layout if not selected.
+      # Allowed values are defined in /usr/share/YaST2/data/keyboard_raw.ycp
+      def initialize(default)
+        textdomain "country"
+        @default = default
+      end
 
-    def label
-      # widget label
-      _("&Keyboard Layout")
-    end
+      def label
+        # widget label
+        _("&Keyboard Layout")
+      end
 
-    def init
-      if Yast::Keyboard.user_decision
-        self.value = Yast::Keyboard.current_kbd
-      else
-        self.value = "english-us"
+      def init
+        if Yast::Keyboard.user_decision
+          self.value = Yast::Keyboard.current_kbd
+        else
+          self.value = @default
+          Yast::Keyboard.Set(value)
+        end
+      end
+
+      def handle
         Yast::Keyboard.Set(value)
       end
-    end
 
-    def handle
-      Yast::Keyboard.Set(value)
-    end
-
-    def store
-      handle
-    end
-
-    def items
-      # a bit tricky as method return incompatible data
-      Yast::Keyboard.GetKeyboardItems.map do |item|
-        id, name, _enabled = item.params
-        id = id.params.first
-        [id, name]
+      def store
+        handle
       end
-    end
 
-    def help
-      # help text for keyboard selection widget
-      _(
-        "<p>\n" \
-          "Choose the <b>Keyboard layout</b> to be used during\n" \
-          "installation and on the installed system.\n" \
-          "</p>\n"
-      )
+      def items
+        # a bit tricky as method return incompatible data
+        Yast::Keyboard.GetKeyboardItems.map do |item|
+          id, name, _enabled = item.params
+          id = id.params.first
+          [id, name]
+        end
+      end
+
+      def help
+        # help text for keyboard selection widget
+        _(
+          "<p>\n" \
+            "Choose the <b>Keyboard layout</b> to be used during\n" \
+            "installation and on the installed system.\n" \
+            "</p>\n"
+        )
+      end
     end
   end
 end

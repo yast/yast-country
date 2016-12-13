@@ -3,7 +3,8 @@
 require_relative 'test_helper'
 require "y2country/widgets"
 
-describe Y2Country::KeyboardSelectionWidget do
+describe Y2Country::Widgets::KeyboardSelectionWidget do
+  subject { described_class.new("english-us") }
   it "has label" do
     expect(subject.label).to be_a(::String)
   end
