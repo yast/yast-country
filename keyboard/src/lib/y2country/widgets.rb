@@ -26,7 +26,7 @@ Yast.import "Keyboard"
 
 module Y2Country
   module Widgets
-    class KeyboardSelectionWidget < CWM::SelectionBox
+    class KeyboardSelection < CWM::SelectionBox
       # param default [String] ID for default keyboard layout if not selected.
       # Allowed values are defined in /usr/share/YaST2/data/keyboard_raw.ycp
       def initialize(default)
