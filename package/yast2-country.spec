@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        3.1.33
+Version:        3.1.33.1
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -94,6 +94,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %{yast_moduledir}/YaPI/TIME.pm
 %{yast_moduledir}/YaPI/LANGUAGE.pm
 %{yast_clientdir}/*.rb
+%{yast_libdir}/y2country
 %{yast_ydatadir}/*.ycp
 %{yast_yncludedir}/keyboard/
 %{yast_yncludedir}/timezone/
