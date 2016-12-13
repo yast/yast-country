@@ -40,7 +40,7 @@ module Yast
       if Timezone.readonly
         # Do not run if timezone is readonly
         log.info "Timezone is read-only for this product so the inst_timezone client is skipped"
-        return GetInstArgs.going_back ? :back : :next
+        return :auto
       end
 
       if Stage.initial &&

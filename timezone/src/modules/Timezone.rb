@@ -1004,7 +1004,8 @@ module Yast
     #
     # @return [Boolean] true if it's read-only; false otherwise.
     def readonly
-      @readonly ||= ProductFeatures.GetBooleanFeature("globals", "readonly_timezone")
+      return @readonly unless @readonly.nil?
+      @readonly = ProductFeatures.GetBooleanFeature("globals", "readonly_timezone")
     end
 
     # Product's default timezone when it's not defined in the control file.
@@ -1012,7 +1013,9 @@ module Yast
 
     # Determines the default timezone for the current product
     #
-    # If not timezone is set, "UTC" will be used.
+    # If not timezone is set, FALLBACK_PRODUCT_DEFAULT_TIMEZONE will be used.
+    # More information can be found on FATE#321754 and
+    # https://github.com/yast/yast-installation/blob/master/doc/control-file.md#installation-and-product-variables
     #
     # @return [String] timezone
     def product_default_timezone
