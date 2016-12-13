@@ -1,4 +1,17 @@
 -------------------------------------------------------------------
+Tue Dec 13 09:03:47 UTC 2016 - igonzalezsosa@suse.com
+
+- Improve code/documentation regarding FATE#321754
+- 3.1.33
+
+-------------------------------------------------------------------
+Fri Dec  9 10:09:53 UTC 2016 - igonzalezsosa@suse.com
+
+- Add support to set the timezone as read-only in the product's
+  control file (FATE#321754)
+- 3.1.32
+
+-------------------------------------------------------------------
 Wed Nov 23 13:41:41 CET 2016 - schubi@suse.de
 
 - Language has not been set. Taking language from zypp.
