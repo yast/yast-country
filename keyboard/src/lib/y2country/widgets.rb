@@ -39,6 +39,11 @@ module Y2Country
         _("&Keyboard Layout")
       end
 
+      # forces widget to report immediatelly after value changed.
+      def opt
+        [:notify]
+      end
+
       def init
         if Yast::Keyboard.user_decision
           self.value = Yast::Keyboard.current_kbd

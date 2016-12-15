@@ -23,6 +23,10 @@ describe Y2Country::Widgets::KeyboardSelection do
     subject.handle
   end
 
+  it "passes notify option to widget" do
+    expect(subject.opt).to eq [:notify]
+  end
+
   it "stores keyboard layout" do
     expect(Yast::Keyboard).to receive(:Set)
 
