@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Dec 19 13:03:21 UTC 2016 - igonzalezsosa@suse.com
+
+- Read keyboard and console fonts from different files depending
+  on the product (bsc#1016004)
+- 3.1.34
+
+-------------------------------------------------------------------
 Tue Dec 13 09:03:47 UTC 2016 - igonzalezsosa@suse.com
 
 - Improve code/documentation regarding FATE#321754
