@@ -58,6 +58,7 @@ module Yast
       Yast.import "Linuxrc"
       Yast.import "Encoding"
       Yast.import "Stage"
+      Yast.import "Product"
 
       # current base language, used in Check
       @language = "en_US"
@@ -71,6 +72,10 @@ module Yast
       # -> S0:12345:respawn:/sbin/agetty -L 9600<n8> ttyS0
       # something like "ttyS0,9600" from /etc/install.inf
       @serial = ""
+
+      # Console fonts map (used as cache for #consolefonts)
+      @consolefonts = nil
+
       Console()
     end
 
@@ -80,9 +85,6 @@ module Yast
     # @return	[String]	encoding	encoding for console i/o
 
     def SelectFont(lang)
-      consolefonts = Convert.to_map(
-        WFM.Read(path(".local.yast2"), "consolefonts.ycp")
-      )
       fqlanguage = Language.GetLocaleString(lang)
 
       consolefont = consolefonts[fqlanguage] || consolefonts[lang]
@@ -238,6 +240,27 @@ module Yast
       end
 
       nil
+    end
+
+    # Console fonts map
+    #
+    # The map can be read from two different files:
+    #
+    # * `consolefonts_PRODUCT.ycp` where PRODUCT is the downcased product's
+    #   short name. For example, `consolefonts_sles.ycp`.
+    # * `consolefonts.ycp` as a fallback.
+    #
+    # @return [Hash] Console fonts map
+    def consolefonts
+      return @consolefonts if @consolefonts
+
+      # Read the file for this product
+      suffix = Product.short_name.downcase.sub(" ", "_")
+      product_filename = "consolefonts_#{suffix}.ycp"
+      @consolefonts = WFM.Read(path(".local.yast2"), product_filename)
+
+      # Fallback
+      @consolefonts ||= WFM.Read(path(".local.yast2"), "consolefonts.ycp")
     end
 
     publish :function => :SelectFont, :type => "string (string)"

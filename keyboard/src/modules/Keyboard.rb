@@ -117,6 +117,7 @@ module Yast
       Yast.import "Misc"
       Yast.import "Mode"
       Yast.import "Package"
+      Yast.import "Product"
       Yast.import "ProductFeatures"
       Yast.import "Stage"
       Yast.import "XVersion"
@@ -238,6 +239,10 @@ module Yast
 
       # running in XEN?
       @xen_is_running = nil
+
+      # keyboards map (used as cache for #yast_keyboards)
+      @all_keyboards = nil
+
       Keyboard()
     end
 
@@ -307,15 +312,6 @@ module Yast
       #
       # Load the keyboard DB.
       # Do not hold this database in a permanent module variable (it's very large).
-
-      # eval is necessary for translating the texts needed to be translated
-      all_keyboards = Convert.convert(
-        Builtins.eval(SCR.Read(path(".target.yast2"), "keyboard_raw.ycp")),
-        :from => "any",
-        :to   => "map <string, list>"
-      )
-
-      all_keyboards = {} if all_keyboards == nil
 
       # The new reduced map of keyboard data.
       #
@@ -1520,6 +1516,24 @@ module Yast
     cmd = "xset r on"
     log.info "calling xset to fix autorepeat problem: #{cmd}"
     SCR.Execute(path(".target.bash"), cmd)
+  end
+
+  # Keyboards map
+  #
+  # The map can be read from two different files:
+  #
+  # * `keyboard_raw_PRODUCT.ycp` where PRODUCT is the downcased product's
+  #   short name. For example, `keyboard_raw_sles.ycp`.
+  # * `keyboard_raw.ycp` as a fallback.
+  #
+  # @return [Hash] Keyboards map
+  def all_keyboards
+    suffix = Product.short_name.downcase.sub(" ", "_")
+    content = SCR.Read(path(".target.yast2"), "keyboard_raw_#{suffix}.ycp")
+    content ||= SCR.Read(path(".target.yast2"), "keyboard_raw.ycp")
+
+    # eval is necessary for translating the texts needed to be translated
+    content ? Builtins.eval(content) : {}
   end
 
   Keyboard = KeyboardClass.new

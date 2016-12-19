@@ -12,6 +12,7 @@ module Yast
   import "AsciiFile"
   import "XVersion"
   import "Report"
+  import "Product"
 
   ::RSpec.configure do |c|
     c.include SCRStub
@@ -19,8 +20,10 @@ module Yast
 
   describe "Keyboard" do
     let(:udev_file) { "/usr/lib/udev/rules.d/70-installation-keyboard.rules" }
+    let(:product_short_name) { "openSUSE" }
 
     before(:each) do
+      allow(Product).to receive(:short_name).and_return(product_short_name)
       allow(Stage).to receive(:stage).and_return stage
       allow(Mode).to receive(:mode).and_return mode
       allow(Linuxrc).to receive(:text).and_return false
@@ -359,6 +362,41 @@ module Yast
           expect(Keyboard).to receive(:Set).with("spanish")
           Keyboard.Import(map, :language)
           expect(discaps).to eq(false)
+        end
+      end
+    end
+
+    describe "#get_reduced_keyboard_db" do
+      let(:chroot) { "spanish" }
+      let(:mode) { "normal" }
+      let(:stage) { "normal" }
+      let(:product_short_name) { "SLES" }
+      let(:kb_model) { "macintosh" }
+
+      before do
+        allow(Yast::Product).to receive(:short_name).and_return(product_short_name)
+      end
+
+      around do |example|
+        old_kb_model = Keyboard.kb_model
+        Keyboard.kb_model = kb_model
+        example.run
+        Keyboard.kb_model = old_kb_model
+      end
+
+      it "returns generic version of the keyboard map" do
+        reduced_db = Keyboard.get_reduced_keyboard_db
+        expect(reduced_db["russian"].last["ncurses"])
+          .to eq("mac-us.map.gz")
+      end
+
+      context "when using a product with an specific keyboard map" do
+        let(:product_short_name) { "openSUSE" }
+
+        it "returns the specific version of the keyboard map" do
+          reduced_db = Keyboard.get_reduced_keyboard_db
+          expect(reduced_db["russian"].last["ncurses"])
+            .to eq("us-mac.map.gz")
         end
       end
     end
