@@ -14,7 +14,7 @@ module Yast
   import "AsciiFile"
   import "XVersion"
   import "Report"
-  import "Product"
+  import "OSRelease"
 
   ::RSpec.configure do |c|
     c.include SCRStub
@@ -23,13 +23,13 @@ module Yast
 
   describe "Keyboard" do
     let(:udev_file) { "/usr/lib/udev/rules.d/70-installation-keyboard.rules" }
-    let(:product_short_name) { "openSUSE" }
+    let(:os_release_id) { "opensuse" }
     let(:mode) { "normal" }
     let(:stage) { "normal" }
 
     before(:each) do
       textdomain "country"
-      allow(Product).to receive(:short_name).and_return(product_short_name)
+      allow(OSRelease).to receive(:id).and_return(os_release_id)
       allow(Stage).to receive(:stage).and_return stage
       allow(Mode).to receive(:mode).and_return mode
       allow(Linuxrc).to receive(:text).and_return false
@@ -610,11 +610,11 @@ module Yast
       let(:chroot) { "spanish" }
       let(:mode) { "normal" }
       let(:stage) { "normal" }
-      let(:product_short_name) { "SLES" }
+      let(:os_release_id) { "sles" }
       let(:kb_model) { "macintosh" }
 
       before do
-        allow(Yast::Product).to receive(:short_name).and_return(product_short_name)
+        allow(Yast::OSRelease).to receive(:id).and_return(os_release_id)
       end
 
       around do |example|
@@ -631,7 +631,7 @@ module Yast
       end
 
       context "when using a product with an specific keyboard map" do
-        let(:product_short_name) { "openSUSE" }
+        let(:os_release_id) { "opensuse" }
 
         it "returns the specific version of the keyboard map" do
           reduced_db = Keyboard.get_reduced_keyboard_db
@@ -640,6 +640,5 @@ module Yast
         end
       end
     end
-
   end
 end

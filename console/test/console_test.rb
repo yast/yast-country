@@ -13,11 +13,11 @@ describe Yast::Console do
     let(:braille) { false }
     let(:full_language) { "es_ES.UTF-8" }
     let(:language) { "es" }
-    let(:product_short_name) { "SLES" }
+    let(:os_release_id) { "sles" }
 
     before do
       allow(Yast::Linuxrc).to receive(:braille).and_return(braille)
-      allow(Yast::Product).to receive(:short_name).and_return(product_short_name)
+      allow(Yast::OSRelease).to receive(:id).and_return(os_release_id)
     end
 
     it "sets console fonts for the given language" do
@@ -42,7 +42,7 @@ describe Yast::Console do
     end
 
     context "when using a product with a decidated console map" do
-      let(:product_short_name) { "openSUSE" }
+      let(:os_release_id) { "opensuse" }
 
       it "sets console fonts for the given language" do
         expect(Yast::UI).to receive(:SetConsoleFont)

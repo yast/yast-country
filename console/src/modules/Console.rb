@@ -58,7 +58,6 @@ module Yast
       Yast.import "Linuxrc"
       Yast.import "Encoding"
       Yast.import "Stage"
-      Yast.import "Product"
 
       # current base language, used in Check
       @language = "en_US"
@@ -255,8 +254,7 @@ module Yast
       return @consolefonts if @consolefonts
 
       # Read the file for this product
-      suffix = Product.short_name.downcase.sub(" ", "_")
-      product_filename = "consolefonts_#{suffix}.ycp"
+      product_filename = "consolefonts_#{OSRelease.id}.ycp"
       @consolefonts = WFM.Read(path(".local.yast2"), product_filename)
 
       # Fallback

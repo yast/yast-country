@@ -28,7 +28,7 @@ License:        GPL-2.0
 #policy files for YaPI dbus interface
 Source1:        org.opensuse.yast.modules.yapi.time.policy
 Source2:        org.opensuse.yast.modules.yapi.language.policy
-BuildRequires:	perl-XML-Writer update-desktop-files yast2-testsuite yast2 yast2-perl-bindings
+BuildRequires:	perl-XML-Writer update-desktop-files yast2-testsuite yast2-perl-bindings
 BuildRequires:  yast2-devtools >= 3.1.10
 BuildRequires:  polkit-devel
 # For tests
@@ -37,11 +37,12 @@ BuildRequires:  rubygem(rspec)
 BuildRequires:  yast2-core >= 3.1.12
 # RSpec extensions for YaST
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
+# OSRelease.id
+BuildRequires:	yast2 >= 3.1.211
 
 Requires:	yast2-trans-stats yast2-perl-bindings timezone
-# XVersion.ycp
-# Message.updating_configuration, Message.takes_a_while
-Requires:	yast2 >= 3.1.94
+# OSRelease.id
+Requires:	yast2 >= 3.1.211
 # Pkg::SetPackageLocale, Pkg::GetTextLocale
 Requires:       yast2-pkg-bindings >= 2.15.3
 # IconPath support for MultiSelectionBox

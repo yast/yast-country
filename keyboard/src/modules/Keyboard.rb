@@ -117,7 +117,7 @@ module Yast
       Yast.import "Misc"
       Yast.import "Mode"
       Yast.import "Package"
-      Yast.import "Product"
+      Yast.import "OSRelease"
       Yast.import "ProductFeatures"
       Yast.import "Stage"
       Yast.import "XVersion"
@@ -1528,8 +1528,7 @@ module Yast
   #
   # @return [Hash] Keyboards map
   def all_keyboards
-    suffix = Product.short_name.downcase.sub(" ", "_")
-    content = SCR.Read(path(".target.yast2"), "keyboard_raw_#{suffix}.ycp")
+    content = SCR.Read(path(".target.yast2"), "keyboard_raw_#{OSRelease.id}.ycp")
     content ||= SCR.Read(path(".target.yast2"), "keyboard_raw.ycp")
 
     # eval is necessary for translating the texts needed to be translated
