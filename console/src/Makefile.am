@@ -8,7 +8,7 @@ scrconf_DATA = \
 
 ydata_DATA = \
   data/consolefonts.ycp \
-	data/consolefonts_opensuse.ycp
+  data/consolefonts_opensuse.ycp
 
 EXTRA_DIST = $(module_DATA) $(scrconf_DATA) $(ydata_DATA)
 

@@ -3,6 +3,8 @@
 require_relative 'test_helper'
 require_relative 'SCRStub'
 
+require "yaml"
+
 module Yast
   import "Stage"
   import "Mode"
@@ -16,13 +18,17 @@ module Yast
 
   ::RSpec.configure do |c|
     c.include SCRStub
+    c.include I18n
   end
 
   describe "Keyboard" do
     let(:udev_file) { "/usr/lib/udev/rules.d/70-installation-keyboard.rules" }
     let(:product_short_name) { "openSUSE" }
+    let(:mode) { "normal" }
+    let(:stage) { "normal" }
 
     before(:each) do
+      textdomain "country"
       allow(Product).to receive(:short_name).and_return(product_short_name)
       allow(Stage).to receive(:stage).and_return stage
       allow(Mode).to receive(:mode).and_return mode
@@ -30,11 +36,11 @@ module Yast
       allow(SCR).to receive(:Execute).with(path(".target.remove"), udev_file)
       allow(SCR).to receive(:Write).with(anything, udev_file, anything)
 
-      init_root_path(chroot)
+      init_root_path(chroot) if defined?(chroot)
     end
 
     after(:each) do
-      cleanup_root_path(chroot)
+      cleanup_root_path(chroot) if defined?(chroot)
     end
 
     describe "#Save" do
@@ -366,6 +372,240 @@ module Yast
       end
     end
 
+    describe "#Export" do
+      let(:mode) { "normal" }
+      let(:stage) { "normal" }
+      let(:chroot) { "spanish" }
+
+      it "exports configuration" do
+        Keyboard.main
+        expect(Keyboard.Export).to eq(
+          {
+            "keyboard_values" => {
+              "delay" => "", "discaps" => false, "numlock" => "bios", "rate" => "" },
+              "keymap" => "spanish"
+          }
+        )
+      end
+    end
+
+    describe "#GetKeyboardForLanguage" do
+      it "returns the keyboard for the given language" do
+        expect(Keyboard.GetKeyboardForLanguage("cs_CZ", "en_US")).to eq("czech")
+        expect(Keyboard.GetKeyboardForLanguage("en_US", "en_US")).to eq("english-us")
+      end
+
+      context "when the language does not exist" do
+        it "returns the default keyboard" do
+          expect(Keyboard.GetKeyboardForLanguage("other_OTHER", "english-us")).to eq("english-us")
+        end
+      end
+    end
+
+    describe "#MakeProposal" do
+      let(:default_kbd) { "english-us" }
+      let(:user_decision) { false }
+      let(:current_kbd) { "czech" }
+
+      before do
+        Keyboard.user_decision = user_decision
+        Keyboard.default_kbd = default_kbd
+        Keyboard.current_kbd = current_kbd
+      end
+
+      it "returns the proposed keyboard name" do
+        expect(Keyboard.MakeProposal(true, false)).to eq(_("English (US)"))
+      end
+
+      context "when reset is forced and a default keyboard is available" do
+        it "sets the keyboard to the default value" do
+          expect(Keyboard).to receive(:Set).with(default_kbd)
+          Keyboard.MakeProposal(true, false)
+        end
+
+        it "sets user decision to false" do
+          Keyboard.MakeProposal(true, false)
+          expect(Keyboard.user_decision).to eq(false)
+        end
+      end
+
+      context "when user made a decision and language changed" do
+        let(:user_decision) { true }
+
+        it "proposes the current keyboard" do
+          expect(Keyboard).to receive(:Set).with(current_kbd)
+          Keyboard.MakeProposal(false, true)
+        end
+      end
+
+      context "when user did not make a decision" do
+        it "sets the keyboard for the current language" do
+          allow(Language).to receive("en_US").and_return("en_US")
+          expect(Keyboard).to receive(:Set).with("english-us")
+          Keyboard.MakeProposal(false, false)
+        end
+
+        context "and a keyboard for the current language was not found" do
+          before do
+            allow(Keyboard).to receive(:GetKeyboardForLanguage)
+              .and_return("")
+          end
+
+          it "sets the keyboard to the current value if language changed" do
+            expect(Keyboard).to receive(:Set).with(current_kbd)
+            Keyboard.MakeProposal(false, true)
+          end
+
+          it "does nothing if language did not changed" do
+            expect(Keyboard).to_not receive(:Set)
+            Keyboard.MakeProposal(false, false)
+          end
+        end
+      end
+    end
+
+    describe "#Probe" do
+      let(:chroot) { "spanish" }
+      let(:probed_data) do
+        YAML.load_file(File.join(DATA_PATH, "probe-keyboard.yml"))
+      end
+
+      before do
+        allow(SCR).to receive(:Read).with(path(".probe.keyboard"))
+          .and_return(probed_data)
+        allow(Keyboard).to receive(:SetKeyboard)
+      end
+
+      context "when layout can be determined" do
+        it "sets keyboard data" do
+          Keyboard.Probe
+          expect(Keyboard.unique_key).to eq("nLyy.+49ps10DtUF")
+          expect(Keyboard.kb_model).to eq("pc104")
+        end
+
+        it "sets the keyboard which matches the layout" do
+          expect(Keyboard).to receive(:SetKeyboard).with("spanish")
+          Keyboard.Probe
+        end
+      end
+
+      context "when layout cannot be determined" do
+        let(:probed_data) { nil }
+
+        before do
+          allow(Language).to receive(:language).and_return("es_ES")
+        end
+
+        it "uses the keyboard for the current language" do
+          expect(Keyboard).to receive(:SetKeyboard).with("spanish")
+          Keyboard.Probe
+        end
+      end
+
+      context "during first stage" do
+        let(:stage) { "initial" }
+
+        before do
+          allow(Linuxrc).to receive(:InstallInf).with("Keytable").and_return(keytable)
+        end
+
+        context "when Linuxrc Keytable setting exist" do
+          let(:keytable) { "de-nodeadkeys" }
+
+          it "uses the keyboard that matches that keytable" do
+            expect(Keyboard).to receive(:Set).with("german").and_call_original
+            Keyboard.Probe
+          end
+
+          it "sets the user decision to true" do
+            Keyboard.Probe
+            expect(Keyboard.user_decision).to eq(true)
+          end
+        end
+
+        context "when Linuxrc Keytable is not present but a language is preselected" do
+          let(:keytable) { nil }
+
+          it "uses the default keyboard" do
+            allow(Language).to receive(:preselected).and_return("es_ES")
+            expect(Keyboard).to receive(:Set).with("spanish").and_call_original
+            Keyboard.Probe
+          end
+
+          it "does not set the keyboard if preselected language is en_US" do
+            allow(Language).to receive(:preselected).and_return("en_US")
+            expect(Keyboard).to_not receive(:Set)
+            Keyboard.Probe
+          end
+        end
+      end
+    end
+
+    describe "#Summary" do
+      it "retuns an HTML containing the current layout" do
+        Keyboard.SetKeyboard("spanish")
+        expect(Keyboard.Summary)
+          .to match /<li.*#{_("Spanish")}.*li>/
+      end
+    end
+
+    describe "#Restore" do
+      let(:chroot) { "spanish" }
+
+      before do
+        Keyboard.kb_model = "type4"
+        Keyboard.current_kbd = "english-us"
+      end
+
+      it "restores settings from system configuration" do
+        expect(Keyboard).to receive(:SetKeyboard)
+          .with("spanish")
+        expect(Keyboard.Restore).to eq(true)
+        expect(Keyboard.kb_model).to eq("pc104")
+        expect(Keyboard.current_kbd).to eq("spanish")
+      end
+
+      context "when data is wrong" do
+        before do
+          allow(Misc).to receive(:SysconfigRead).and_call_original
+          allow(Misc).to receive(:SysconfigRead)
+            .with(Path.new(".sysconfig.keyboard.YAST_KEYBOARD"), "")
+            .and_return("")
+        end
+
+        it "restores to default values" do
+          expect(Keyboard.Restore).to eq(false)
+          expect(Keyboard.kb_model).to eq("pc104")
+          expect(Keyboard.current_kbd).to eq("english-us")
+        end
+      end
+
+      context "when running in config mode" do
+        before { allow(Mode).to receive(:config).and_return(true) }
+
+        it "does not set the keyboard" do
+          expect(Keyboard).to_not receive(:SetKeyboard)
+          expect(Keyboard.Restore).to eq(true)
+        end
+      end
+
+      context "during 1st stage" do
+        let(:stage) { "initial" }
+
+        it "does not update model or current keyboard" do
+          expect(Keyboard.Restore).to eq(true)
+          expect(Keyboard.kb_model).to eq("type4")
+          expect(Keyboard.current_kbd).to eq("english-us")
+        end
+      end
+    end
+
+    describe "#GetKeyboardName" do
+      it "returns the keyboard name" do
+        expect(Keyboard.GetKeyboardName("english-us")).to eq(_("English (US)"))
+      end
+    end
+
     describe "#get_reduced_keyboard_db" do
       let(:chroot) { "spanish" }
       let(:mode) { "normal" }
@@ -400,5 +640,6 @@ module Yast
         end
       end
     end
+
   end
 end

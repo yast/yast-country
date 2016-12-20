@@ -1,0 +1,24 @@
+---
+- bus: PS/2
+  bus_hwcfg: ps2
+  class_id: 264
+  dev_name: "/dev/input/event0"
+  dev_names:
+  - "/dev/input/event0"
+  - "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
+  dev_num:
+    major: 13
+    minor: 64
+    range: 1
+    type: c
+  device: AT Translated Set 2 keyboard
+  device_id: 1
+  keyboard:
+  - xkbmodel: pc104
+    xkbrules: xfree86
+    xkblayout: es
+  model: AT Translated Set 2 keyboard
+  old_unique_key: smia.L3kUKz8fo98
+  sub_class_id: 0
+  unique_key: nLyy.+49ps10DtUF
+  vendor_id: 1
