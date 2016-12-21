@@ -242,6 +242,15 @@ module Yast
       nil
     end
 
+    publish :function => :SelectFont, :type => "string (string)"
+    publish :function => :Save, :type => "void ()"
+    publish :function => :Restore, :type => "string ()"
+    publish :function => :Init, :type => "void ()"
+    publish :function => :Check, :type => "boolean ()"
+    publish :function => :Console, :type => "void ()"
+
+  private
+
     # Console fonts map
     #
     # The map can be read from two different files:
@@ -270,13 +279,6 @@ module Yast
       # Fallback
       @consolefonts ||= WFM.Read(path(".local.yast2"), "consolefonts.ycp")
     end
-
-    publish :function => :SelectFont, :type => "string (string)"
-    publish :function => :Save, :type => "void ()"
-    publish :function => :Restore, :type => "string ()"
-    publish :function => :Init, :type => "void ()"
-    publish :function => :Check, :type => "boolean ()"
-    publish :function => :Console, :type => "void ()"
   end
 
   Console = ConsoleClass.new
