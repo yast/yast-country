@@ -262,6 +262,7 @@ module Yast
     # Associates languages with the following set of properties: font, unicode map,
     # screen map and magic initialization.
     #
+    # @example Console fonts format
     #   consolefonts #=>
     #     "bg"=>["UniCyr_8x16.psf", "", "trivial", "(K"],
     #     "bg_BG"=>["UniCyr_8x16.psf", "", "trivial", "(K"],
