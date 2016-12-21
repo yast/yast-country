@@ -15,6 +15,7 @@ module Yast
   import "XVersion"
   import "Report"
   import "OSRelease"
+  import "Keyboard"
 
   ::RSpec.configure do |c|
     c.include SCRStub
@@ -438,9 +439,8 @@ module Yast
         end
       end
 
-      context "when user did not make a decision" do
+      context "when user did not make any decision" do
         it "sets the keyboard for the current language" do
-          allow(Language).to receive("en_US").and_return("en_US")
           expect(Keyboard).to receive(:Set).with("english-us")
           Keyboard.MakeProposal(false, false)
         end
@@ -456,7 +456,7 @@ module Yast
             Keyboard.MakeProposal(false, true)
           end
 
-          it "does nothing if language did not changed" do
+          it "does nothing if language did not change" do
             expect(Keyboard).to_not receive(:Set)
             Keyboard.MakeProposal(false, false)
           end
@@ -466,9 +466,7 @@ module Yast
 
     describe "#Probe" do
       let(:chroot) { "spanish" }
-      let(:probed_data) do
-        YAML.load_file(File.join(DATA_PATH, "probe-keyboard.yml"))
-      end
+      let(:probed_data) { YAML.load_file(File.join(DATA_PATH, "probe-keyboard.yml")) }
 
       before do
         allow(SCR).to receive(:Read).with(path(".probe.keyboard"))
@@ -477,7 +475,7 @@ module Yast
       end
 
       context "when layout can be determined" do
-        it "sets keyboard data" do
+        it "sets keyboard data from hardware" do
           Keyboard.Probe
           expect(Keyboard.unique_key).to eq("nLyy.+49ps10DtUF")
           expect(Keyboard.kb_model).to eq("pc104")
@@ -492,9 +490,7 @@ module Yast
       context "when layout cannot be determined" do
         let(:probed_data) { nil }
 
-        before do
-          allow(Language).to receive(:language).and_return("es_ES")
-        end
+        before { allow(Language).to receive(:language).and_return("es_ES") }
 
         it "uses the keyboard for the current language" do
           expect(Keyboard).to receive(:SetKeyboard).with("spanish")
@@ -506,13 +502,14 @@ module Yast
         let(:stage) { "initial" }
 
         before do
+          allow(AsciiFile).to receive(:RewriteFile)
           allow(Linuxrc).to receive(:InstallInf).with("Keytable").and_return(keytable)
         end
 
-        context "when Linuxrc Keytable setting exist" do
+        context "when Linuxrc Keytable setting exists" do
           let(:keytable) { "de-nodeadkeys" }
 
-          it "uses the keyboard that matches that keytable" do
+          it "uses the keyboard that matches the Keytable value" do
             expect(Keyboard).to receive(:Set).with("german").and_call_original
             Keyboard.Probe
           end
@@ -532,7 +529,7 @@ module Yast
             Keyboard.Probe
           end
 
-          it "does not set the keyboard if preselected language is en_US" do
+          it "does not set the keyboard if preselected language is 'en_US'" do
             allow(Language).to receive(:preselected).and_return("en_US")
             expect(Keyboard).to_not receive(:Set)
             Keyboard.Probe
@@ -565,7 +562,7 @@ module Yast
         expect(Keyboard.current_kbd).to eq("spanish")
       end
 
-      context "when data is wrong" do
+      context "when value for keyboard is missing" do
         before do
           allow(Misc).to receive(:SysconfigRead).and_call_original
           allow(Misc).to receive(:SysconfigRead)
@@ -613,9 +610,7 @@ module Yast
       let(:os_release_id) { "sles" }
       let(:kb_model) { "macintosh" }
 
-      before do
-        allow(Yast::OSRelease).to receive(:id).and_return(os_release_id)
-      end
+      before { allow(Yast::OSRelease).to receive(:id).and_return(os_release_id) }
 
       around do |example|
         old_kb_model = Keyboard.kb_model
