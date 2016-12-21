@@ -117,6 +117,7 @@ module Yast
       Yast.import "Misc"
       Yast.import "Mode"
       Yast.import "Package"
+      Yast.import "OSRelease"
       Yast.import "ProductFeatures"
       Yast.import "Stage"
       Yast.import "XVersion"
@@ -238,6 +239,10 @@ module Yast
 
       # running in XEN?
       @xen_is_running = nil
+
+      # keyboards map (used as cache for #yast_keyboards)
+      @all_keyboards = nil
+
       Keyboard()
     end
 
@@ -307,15 +312,6 @@ module Yast
       #
       # Load the keyboard DB.
       # Do not hold this database in a permanent module variable (it's very large).
-
-      # eval is necessary for translating the texts needed to be translated
-      all_keyboards = Convert.convert(
-        Builtins.eval(SCR.Read(path(".target.yast2"), "keyboard_raw.ycp")),
-        :from => "any",
-        :to   => "map <string, list>"
-      )
-
-      all_keyboards = {} if all_keyboards == nil
 
       # The new reduced map of keyboard data.
       #
@@ -1485,41 +1481,76 @@ module Yast
         SCR.Write(path(".target.string"), UDEV_FILE, nil)
       end
     end
-  end
 
-  # Checks if the graphical environment is being executed remotely using
-  # "ssh -X"
-  def x11_over_ssh?
-    display = ENV["DISPLAY"] || ""
-    display.split(":")[1].to_i >= 10
-  end
-
-  # Checks if it's running in text mode (no X11)
-  def textmode?
-    if !Stage.initial || Mode.live_installation
-      UI.TextMode
-    else
-      Linuxrc.text
+    # Checks if the graphical environment is being executed remotely using
+    # "ssh -X"
+    def x11_over_ssh?
+      display = ENV["DISPLAY"] || ""
+      display.split(":")[1].to_i >= 10
     end
-  end
 
-  # Executes the command to set the keyboard in X11, reporting
-  # any error to the user
-  def execute_xkb_cmd
-    log.info "Setting X11 keyboard to: <#{@current_kbd}>"
-    log.info "Setting X11 keyboard: #{@xkb_cmd}"
-    if SCR.Execute(path(".target.bash"), @xkb_cmd) != 0
-      log.error "Failed to execute the command"
-      Report::Error(_("Failed to set X11 keyboard to '%s'") % @current_kbd)
+    # Checks if it's running in text mode (no X11)
+    def textmode?
+      if !Stage.initial || Mode.live_installation
+        UI.TextMode
+      else
+        Linuxrc.text
+      end
     end
-  end
 
-  # Enables autorepeat if needed
-  def enable_autorepeat
-    return nil unless Stage.initial && !Mode.live_installation && !xen_running
-    cmd = "xset r on"
-    log.info "calling xset to fix autorepeat problem: #{cmd}"
-    SCR.Execute(path(".target.bash"), cmd)
+    # Executes the command to set the keyboard in X11, reporting
+    # any error to the user
+    def execute_xkb_cmd
+      log.info "Setting X11 keyboard to: <#{@current_kbd}>"
+      log.info "Setting X11 keyboard: #{@xkb_cmd}"
+      if SCR.Execute(path(".target.bash"), @xkb_cmd) != 0
+        log.error "Failed to execute the command"
+        Report::Error(_("Failed to set X11 keyboard to '%s'") % @current_kbd)
+      end
+    end
+
+    # Enables autorepeat if needed
+    def enable_autorepeat
+      return nil unless Stage.initial && !Mode.live_installation && !xen_running
+      cmd = "xset r on"
+      log.info "calling xset to fix autorepeat problem: #{cmd}"
+      SCR.Execute(path(".target.bash"), cmd)
+    end
+
+    # Keyboards map
+    #
+    # The map can be read from two different files:
+    #
+    # * `keyboard_raw_ID.ycp` where ID is the distribution identifier (as
+    #   specified in /etc/os-release). For example, `keyboard_raw_opensuse.ycp`.
+    # * `keyboard_raw.ycp` as a fallback.
+    #
+    # @example Keyboards map format
+    #   all_keyboards #=>
+    #     {"arabic"=>
+    #       ["Arabic",
+    #         {"macintosh"=>{"ncurses"=>"us-mac.map.gz"},
+    #          "pc104"=>{"ncurses"=>"arabic.map.gz"},
+    #          "type4"=>{"ncurses"=>"us.map.gz"},
+    #          "type5"=>{"ncurses"=>"us.map.gz"},
+    #          "type5_euro"=>{"ncurses"=>"us.map.gz"}}],
+    #      "belgian"=>
+    #       ["Belgian",
+    #         {"macintosh"=>{"ncurses"=>"us-mac.map.gz"},
+    #          "pc104"=>{"ncurses"=>"be.map.gz"},
+    #          "type4"=>{"ncurses"=>"us.map.gz"},
+    #          "type5"=>{"ncurses"=>"be-sundeadkeys.map.gz"},
+    #          "type5_euro"=>{"ncurses"=>"be-sundeadkeys.map.gz"}}],
+    #   ...
+    #
+    # @return [Hash] Keyboards map. See the example for content details.
+    def all_keyboards
+      content = SCR.Read(path(".target.yast2"), "keyboard_raw_#{OSRelease.id}.ycp")
+      content ||= SCR.Read(path(".target.yast2"), "keyboard_raw.ycp")
+
+      # eval is necessary for translating the texts needed to be translated
+      content ? Builtins.eval(content) : {}
+    end
   end
 
   Keyboard = KeyboardClass.new
