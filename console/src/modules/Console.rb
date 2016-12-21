@@ -58,6 +58,7 @@ module Yast
       Yast.import "Linuxrc"
       Yast.import "Encoding"
       Yast.import "Stage"
+      Yast.import "OSRelease"
 
       # current base language, used in Check
       @language = "en_US"
@@ -245,17 +246,26 @@ module Yast
     #
     # The map can be read from two different files:
     #
-    # * `consolefonts_PRODUCT.ycp` where PRODUCT is the downcased product's
-    #   short name. For example, `consolefonts_sles.ycp`.
+    # * `consolefonts_ID.ycp` where ID is the distribution identifier (as
+    #   specified in /etc/os-release). For example, `consolefonts_opensuse.ycp`.
     # * `consolefonts.ycp` as a fallback.
     #
-    # @return [Hash] Console fonts map
+    # Associates languages with the following set of properties: font, unicode map,
+    # screen map and magic initialization.
+    #
+    #   consolefonts #=>
+    #     "bg"=>["UniCyr_8x16.psf", "", "trivial", "(K"],
+    #     "bg_BG"=>["UniCyr_8x16.psf", "", "trivial", "(K"],
+    #     "bg_BG.UTF-8"=>["UniCyr_8x16.psf", "", "none", "(K"],
+    #     "br"=>["lat1-16.psfu", "", "none", "(B"],
+    #     ...
+    #
+    # @return [Hash] Console fonts map. See the example for content details.
     def consolefonts
       return @consolefonts if @consolefonts
 
       # Read the file for this product
-      product_filename = "consolefonts_#{OSRelease.id}.ycp"
-      @consolefonts = WFM.Read(path(".local.yast2"), product_filename)
+      @consolefonts = WFM.Read(path(".local.yast2"), "consolefonts_#{OSRelease.id}.ycp")
 
       # Fallback
       @consolefonts ||= WFM.Read(path(".local.yast2"), "consolefonts.ycp")

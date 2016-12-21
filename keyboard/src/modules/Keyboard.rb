@@ -1522,11 +1522,29 @@ module Yast
   #
   # The map can be read from two different files:
   #
-  # * `keyboard_raw_PRODUCT.ycp` where PRODUCT is the downcased product's
-  #   short name. For example, `keyboard_raw_sles.ycp`.
+  # * `keyboard_raw_ID.ycp` where ID is the distribution identifier (as
+  #   specified in /etc/os-release). For example, `keyboard_raw_opensuse.ycp`.
   # * `keyboard_raw.ycp` as a fallback.
   #
-  # @return [Hash] Keyboards map
+  # @example Keyboards map format
+  #   all_keyboards #=>
+  #     {"arabic"=>
+  #       ["Arabic",
+  #         {"macintosh"=>{"ncurses"=>"us-mac.map.gz"},
+  #          "pc104"=>{"ncurses"=>"arabic.map.gz"},
+  #          "type4"=>{"ncurses"=>"us.map.gz"},
+  #          "type5"=>{"ncurses"=>"us.map.gz"},
+  #          "type5_euro"=>{"ncurses"=>"us.map.gz"}}],
+  #      "belgian"=>
+  #       ["Belgian",
+  #         {"macintosh"=>{"ncurses"=>"us-mac.map.gz"},
+  #          "pc104"=>{"ncurses"=>"be.map.gz"},
+  #          "type4"=>{"ncurses"=>"us.map.gz"},
+  #          "type5"=>{"ncurses"=>"be-sundeadkeys.map.gz"},
+  #          "type5_euro"=>{"ncurses"=>"be-sundeadkeys.map.gz"}}],
+  #   ...
+  #
+  # @return [Hash] Keyboards map. See the example for content details.
   def all_keyboards
     content = SCR.Read(path(".target.yast2"), "keyboard_raw_#{OSRelease.id}.ycp")
     content ||= SCR.Read(path(".target.yast2"), "keyboard_raw.ycp")
