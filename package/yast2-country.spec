@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        3.2.5
+Version:        3.2.6
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -29,7 +29,6 @@ Source2:        org.opensuse.yast.modules.yapi.language.policy
 BuildRequires:  perl-XML-Writer
 BuildRequires:  polkit-devel
 BuildRequires:  update-desktop-files
-BuildRequires:  yast2
 BuildRequires:  yast2-devtools >= 3.1.10
 BuildRequires:  yast2-perl-bindings
 BuildRequires:  yast2-testsuite
@@ -39,13 +38,14 @@ BuildRequires:  rubygem(rspec)
 BuildRequires:  yast2-core >= 3.1.12
 # RSpec extensions for YaST
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
+# OSRelease.id
+BuildRequires:  yast2 >= 3.2.9
 
 Requires:       timezone
 Requires:       yast2-perl-bindings
 Requires:       yast2-trans-stats
-# XVersion.ycp
-# Message.updating_configuration, Message.takes_a_while
-Requires:       yast2 >= 3.1.94
+# OSRelease.id
+Requires:       yast2 >= 3.2.9
 # Pkg::SetPackageLocale, Pkg::GetTextLocale
 Requires:       yast2-pkg-bindings >= 2.15.3
 # IconPath support for MultiSelectionBox
