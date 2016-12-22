@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Dec 19 13:03:21 UTC 2016 - igonzalezsosa@suse.com
+
+- Read keyboard and console fonts from different files depending
+  on the product (bsc#1016004)
+- 3.1.33.3
+
+-------------------------------------------------------------------
 Thu Dec 15 10:15:51 UTC 2016 - jreidinger@suse.com
 
 - fix notification on new keyboard widget, so keyboard layout is
