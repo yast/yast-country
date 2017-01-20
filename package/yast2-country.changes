@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jan 20 16:17:01 UTC 2017 - mvidner@suse.com
+
+- Added Y2Country::Widgets::KeyboardSelectionCombo (FATE#322328)
+- 3.1.33.4
+
+-------------------------------------------------------------------
 Mon Dec 19 13:03:21 UTC 2016 - igonzalezsosa@suse.com
 
 - Read keyboard and console fonts from different files depending
