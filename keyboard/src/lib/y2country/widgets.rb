@@ -26,7 +26,8 @@ Yast.import "Keyboard"
 
 module Y2Country
   module Widgets
-    class KeyboardSelection < CWM::SelectionBox
+    # Common parts for {KeyboardSelection} and {KeyboardSelectionCombo}.
+    module KeyboardSelectionBase
       # param default [String] ID for default keyboard layout if not selected.
       # Allowed values are defined in /usr/share/YaST2/data/keyboard_raw.ycp
       def initialize(default)
@@ -78,6 +79,18 @@ module Y2Country
             "installation and on the installed system.\n" \
             "</p>\n"
         )
+      end
+    end
+
+    class KeyboardSelection < CWM::SelectionBox
+      include KeyboardSelectionBase
+    end
+
+    class KeyboardSelectionCombo < CWM::ComboBox
+      include KeyboardSelectionBase
+
+      def opt
+        [:notify, :hstretch]
       end
     end
   end
