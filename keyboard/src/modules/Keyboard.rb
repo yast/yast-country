@@ -526,7 +526,7 @@ module Yast
 
         @XkbModel = Ops.get_string(x11data, "XkbModel", "pc104")
         @XkbLayout = Ops.get_string(x11data, "XkbLayout", "")
-        @XkbVariant = Ops.get_string(x11data, "XkbVariant", "basic")
+        @XkbVariant = Ops.get_string(x11data, "XkbVariant", "")
         @XkbOptions = Ops.get_string(x11data, "XkbOptions", "")
         @LeftAlt = Ops.get_string(x11data, "LeftAlt", "")
         @RightAlt = Ops.get_string(x11data, "RightAlt", "")
@@ -889,19 +889,7 @@ module Yast
       SCR.Write(path(".etc.vconsole_conf"), nil) # flush
 
       # Write systemd settings for X11
-      if x11_setup_needed
-        # According to localectl syntax, if one option is empty then skip
-        # the following ones
-        args = [@XkbLayout, @XkbModel, @XkbVariant, @XkbOptions]
-        blank = args.find_index("")
-        args = args[0, blank] if blank
-        if !args.empty?
-          cmd = "/usr/bin/localectl --no-convert set-x11-keymap #{args.join(' ')}"
-          if SCR.Execute(path(".target.bash"), cmd) != 0
-            log.error "X11 configuration not written. Failed to execute '#{cmd}'"
-          end
-        end
-      end
+      call_set_x11_keymap if x11_setup_needed
 
       # As a preliminary step mark all keyboards except the one to be configured
       # as configured = no and needed = no. Afterwards this one keyboard will be
@@ -1550,6 +1538,23 @@ module Yast
 
       # eval is necessary for translating the texts needed to be translated
       content ? Builtins.eval(content) : {}
+    end
+
+    def call_set_x11_keymap
+      args = [@XkbLayout, @XkbModel, @XkbVariant, @XkbOptions]
+      return if args.all?(&:empty?)
+      
+      # According to localectl syntax, empty options must be entered as "" if
+      # there are more non-empty options afterwards and skipped otherwise
+      last_idx = args.rindex { |a| !a.empty? }
+      args = args[0..last_idx]
+      args.map! { |a| a.empty? ? "\"\"" : a }
+
+      cmd = "/usr/bin/localectl --no-convert set-x11-keymap #{args.join(' ')}"
+      log.info "Making X11 keyboard persistent: #{cmd}"
+      if SCR.Execute(path(".target.bash"), cmd) != 0
+        log.error "X11 configuration not written. Failed to execute '#{cmd}'"
+      end
     end
   end
 
