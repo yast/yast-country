@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Jan 30 16:44:12 UTC 2017 - ancor@suse.com
+
+- If the X11Variant for a given keyboard layout is not specified by
+  systemd, leave it blank instead of enforcing "basic"
+  (bsc#1020082, bsc#1022094).
+- 3.1.35
+
+-------------------------------------------------------------------
 Mon Dec 19 13:03:21 UTC 2016 - igonzalezsosa@suse.com
 
 - Read keyboard and console fonts from different files depending
