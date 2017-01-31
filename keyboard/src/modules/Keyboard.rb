@@ -1544,8 +1544,9 @@ module Yast
       args = [@XkbLayout, @XkbModel, @XkbVariant, @XkbOptions]
       return if args.all?(&:empty?)
       
-      # According to localectl syntax, empty options must be entered as "" if
-      # there are more non-empty options afterwards and skipped otherwise
+      # The localectl syntax enforces a fixed order for the X11 options.
+      # Empty options at the end of the command can (must) be skipped.
+      # Other empty options must be specified as "".
       last_idx = args.rindex { |a| !a.empty? }
       args = args[0..last_idx]
       args.map! { |a| a.empty? ? "\"\"" : a }
