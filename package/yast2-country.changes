@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Feb 17 13:58:28 UTC 2017 - jreidinger@suse.com
+
+- fix keyboard layout widget initialization to old value
+  (bsc#1022546)
+- 3.1.33.6
+
+-------------------------------------------------------------------
 Mon Jan 30 16:44:12 UTC 2017 - ancor@suse.com
 
 - If the X11Variant for a given keyboard layout is not specified by

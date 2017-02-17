@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        3.1.33.5
+Version:        3.1.33.6
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
