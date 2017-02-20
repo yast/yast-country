@@ -56,6 +56,8 @@ module Y2Country
 
       def handle
         Yast::Keyboard.Set(value)
+        # mark that user approve selection
+        Yast::Keyboard.user_decision = true
       end
 
       def store
