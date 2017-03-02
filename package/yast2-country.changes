@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Thu Mar  2 12:24:03 UTC 2017 - kanderssen@suse.com
+
+merge CASP changes:
+
+- Fixed value returned by the KeyboardSelection widget, avoiding
+  to trigger other widgets events (bsc#1027171).
+- 3.2.10
+
+-------------------------------------------------------------------
 Fri Feb 17 13:58:28 UTC 2017 - jreidinger@suse.com
 
 - fix keyboard layout widget initialization to old value
