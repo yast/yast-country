@@ -20,7 +20,7 @@ describe Y2Country::Widgets::KeyboardSelection do
   it "changes keyboard layout when value changed" do
     expect(Yast::Keyboard).to receive(:Set)
 
-    subject.handle
+    expect(subject.handle).to eql(nil)
   end
 
   it "passes notify option to widget" do
