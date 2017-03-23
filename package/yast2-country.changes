@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Mar 23 11:11:32 UTC 2017 - ancor@suse.com
+
+- Version temporarily bumped to 3.3.x to prioritize the
+  storage-ng branch
+- 3.3.0
+
+-------------------------------------------------------------------
 Thu Mar  2 12:24:03 UTC 2017 - kanderssen@suse.com
 
 merge CASP changes:
