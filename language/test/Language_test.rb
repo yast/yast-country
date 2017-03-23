@@ -1,4 +1,5 @@
 #!/usr/bin/env rspec
+# coding: utf-8
 
 require_relative "test_helper"
 
@@ -160,4 +161,17 @@ describe "Language" do
     end
   end
 
+  describe "#GetLocaleString" do
+    context "when the language is defined" do
+      it "returns the full language identifier" do
+        expect(subject.GetLocaleString("de_ZU")).to eq("de_ZU.UTF-8")
+      end
+    end
+
+    context "when the language is not defined" do
+      it "returns the full language identifier" do
+        expect(subject.GetLocaleString("ma_MA")).to eq("ma_MA.UTF-8")
+      end
+    end
+  end
 end
