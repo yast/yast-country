@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Mar 23 18:45:42 UTC 2017 - igonzalezsosa@suse.com
+
+- Fix GetLocaleString to use the given locale instead of
+  Language.language
+- Fix build problems (bsc#1030745) 
+- 3.2.11
+
+-------------------------------------------------------------------
 Thu Mar  2 12:24:03 UTC 2017 - kanderssen@suse.com
 
 merge CASP changes:
