@@ -31,6 +31,10 @@ require "yast"
 
 module Yast
   class LanguageClass < Module
+    DEFAULT_FALLBACK_LANGUAGE = "en_US".freeze
+
+    include Yast::Logger
+
     def main
       Yast.import "Pkg"
       Yast.import "UI"
@@ -49,18 +53,22 @@ module Yast
       Yast.import "PackageSystem"
       Yast.import "Popup"
       Yast.import "ProductFeatures"
+      Yast.import "Report"
       Yast.import "SlideShow"
       Yast.import "Stage"
 
+      # directory where all the language definitions are stored
+      # it's a constant, but depends on a dynamic content (Directory)
+      @languages_directory = "#{Directory.datadir}/languages"
 
       # currently selected language
-      @language = "en_US"
+      @language = DEFAULT_FALLBACK_LANGUAGE
 
       # original language
-      @language_on_entry = "en_US"
+      @language_on_entry = DEFAULT_FALLBACK_LANGUAGE
 
       # language preselected in /etc/install.inf
-      @preselected = "en_US"
+      @preselected = DEFAULT_FALLBACK_LANGUAGE
 
       # user readable description of language
       @name = "English (US)"
@@ -68,12 +76,11 @@ module Yast
       @linuxrc_language_set = false
 
       # Default language to be restored with MakeProposal.
-      @default_language = "en_US"
+      @default_language = DEFAULT_FALLBACK_LANGUAGE
 
 
       # Default settings for ROOT_USES_LANG in /etc/sysconfig/language
       @rootlang = "ctype"
-
 
       # Default settings for INSTALLED_LANGUAGES in /etc/sysconfig/language
       @languages = ""
@@ -108,10 +115,8 @@ module Yast
       # mapping of language to its default (proposed) kbd layout
       @lang2keyboard = {}
 
-      # directory with languages descriptions
-      @languages_directory = nil
-
       # languages that cannot be correctly shown in text mode
+      # if the system (Linuxrc) does not start with them from the beginning
       @cjk_languages = [
         "ja",
         "ko",
@@ -163,9 +168,6 @@ module Yast
 
     # Read language DB: translatable strings will be translated to current language
     def read_languages_map
-      if @languages_directory == nil
-        @languages_directory = Ops.add(Directory.datadir, "/languages")
-      end
       Builtins.foreach(
         Convert.convert(
           SCR.Read(path(".target.dir"), @languages_directory, []),
@@ -204,7 +206,7 @@ module Yast
           Ops.set(
             @lang2keyboard,
             code,
-            Ops.get_string(language_map, "keyboard", "en_US")
+            Ops.get_string(language_map, "keyboard", DEFAULT_FALLBACK_LANGUAGE)
           )
         end
       end
@@ -219,9 +221,6 @@ module Yast
     def ReadLanguageMap(lang)
       ret = {}
 
-      if @languages_directory == nil
-        @languages_directory = Ops.add(Directory.datadir, "/languages")
-      end
       file = Builtins.sformat("language_%1.ycp", lang)
       if FileUtils.Exists(Ops.add(Ops.add(@languages_directory, "/"), file))
         ret = Convert.to_map(
@@ -245,7 +244,7 @@ module Yast
     # Return English translation of given language (Fate 301789)
     def EnglishName(code, backup)
       if Ops.get_string(@english_names, code, "") == ""
-        if @language == "en_US"
+        if @language == DEFAULT_FALLBACK_LANGUAGE
           Ops.set(@english_names, code, backup)
         else
           Builtins.y2warning("nothing in english_names...")
@@ -256,11 +255,11 @@ module Yast
 
     # Fill the map with English names of languages
     def FillEnglishNames(lang)
-      return if lang == "en_US" # will be filled in on first start
+      return if lang == DEFAULT_FALLBACK_LANGUAGE # will be filled in on first start
       if @use_utf8
-        WFM.SetLanguage("en_US", "UTF-8")
+        WFM.SetLanguage(DEFAULT_FALLBACK_LANGUAGE, "UTF-8")
       else
-        WFM.SetLanguage("en_US")
+        WFM.SetLanguage(DEFAULT_FALLBACK_LANGUAGE)
       end
       Builtins.foreach(GetLanguagesMap(true)) do |code, info|
         Ops.set(@english_names, code, Ops.get_string(info, 4, ""))
@@ -363,70 +362,129 @@ module Yast
       filename
     end
 
+    # Downloads inst-sys extension for a given language
+    # including giving a UI feedback to the user
+    #
+    # @param [String] language, e.g. 'de_DE'
+    def integrate_inst_sys_extension(language)
+      log.info "integrating translation extension..."
+
+      # busy message
+      Popup.ShowFeedback(
+        "",
+        _("Downloading installation system language extension...")
+      )
+
+      InstExtensionImage.DownloadAndIntegrateExtension(
+        GetLanguageExtensionFilename(language)
+      )
+
+      Popup.ClearFeedback
+      log.info "integrating translation extension... done"
+    end
+
+    # Returns whether the given language string is supported by this library.
+    #
+    # @param [String] language
+    # @see @languages_directory
+    def valid_language?(language)
+      GetLanguagesMap(false).key?(language)
+    end
+
+    # Checks whether given language is supported by the installer
+    # and changes it to the default language en_US if it isn't.
+    #
+    # @param language [String] reference to the new language
+    # @param error_report [Boolean] showing an error popup
+    # @return [String] new (corrected) language
+    def correct_language(language, error_report: true)
+      # No correction needed, this is already a correct language definition
+      return language if valid_language?(language)
+
+      # TRANSLATORS: Error message. Strings marked %{...} will be replaced
+      # with variable content - do not translate them, please.
+      Report.Error(
+        _("Language '%{language}' was not found within the list of supported languages\n" +
+          "available at %{directory}.\n\nFallback language %{fallback} will be used."
+        ) % {
+          :language => language,
+          :directory => @languages_directory,
+          :fallback => DEFAULT_FALLBACK_LANGUAGE
+        }
+      ) if error_report
+
+      return DEFAULT_FALLBACK_LANGUAGE
+    end
+
+    # Changes the install.inf in inst-sys according to newly selected language
+    #
+    # FIXME: code just moved, refactoring needed
+    def adapt_install_inf
+      yinf = {}
+      yinf_ref = arg_ref(yinf)
+      AsciiFile.SetDelimiter(yinf_ref, " ")
+      yinf = yinf_ref.value
+      yinf_ref = arg_ref(yinf)
+      AsciiFile.ReadFile(yinf_ref, "/etc/yast.inf")
+      yinf = yinf_ref.value
+      lines = AsciiFile.FindLineField(yinf, 0, "Language:")
+
+      if Ops.greater_than(Builtins.size(lines), 0)
+        yinf_ref = arg_ref(yinf)
+        AsciiFile.ChangeLineField(
+          yinf_ref,
+          Ops.get_integer(lines, 0, -1),
+          1,
+          @language
+        )
+        yinf = yinf_ref.value
+      else
+        yinf_ref = arg_ref(yinf)
+        AsciiFile.AppendLine(yinf_ref, ["Language:", @language])
+        yinf = yinf_ref.value
+      end
+
+      yinf_ref = arg_ref(yinf)
+      AsciiFile.RewriteFile(yinf_ref, "/etc/yast.inf")
+      yinf = yinf_ref.value
+    end
 
     # Set module to selected language.
+    #
     # @param [String] lang language string ISO code of language
     def Set(lang)
+      lang = deep_copy(lang)
+
       Builtins.y2milestone(
         "original language: %1; setting to lang:%2",
         @language,
         lang
       )
 
-      if @language != lang # Do it only if different
+      if @language != lang
+        lang = correct_language(lang)
+
         if Stage.initial && !Mode.test && !Mode.live_installation
-          Builtins.y2milestone("integrating translation extension...")
-          # busy message
-          Popup.ShowFeedback(
-            "",
-            _("Downloading installation system language extension...")
-          )
-          InstExtensionImage.DownloadAndIntegrateExtension(
-            GetLanguageExtensionFilename(lang)
-          )
-          Popup.ClearFeedback
-          Builtins.y2milestone("integrating translation extension... done")
+          integrate_inst_sys_extension(lang)
         end
-        read_languages_map if Builtins.size(@languages_map) == 0
 
         GetLocales() if Builtins.size(@locales) == 0
 
-        @name = Ops.get_string(@languages_map, [lang, 0], lang)
-        @name = Ops.get_string(@languages_map, [lang, 4], lang) if Mode.config
+        language_def = GetLanguagesMap(false).fetch(lang, [])
+        # In config mode, use language name translated into the current language
+        # othewrwise use the language name translated into that selected language
+        # because the whole UI will get translated later too
+        @name = (Mode.config ? language_def[4] : language_def[0]) || lang
         @language = lang
         Encoding.SetEncLang(@language)
       end
 
       if Stage.initial && !Mode.test
-        yinf = {}
-        yinf_ref = arg_ref(yinf)
-        AsciiFile.SetDelimiter(yinf_ref, " ")
-        yinf = yinf_ref.value
-        yinf_ref = arg_ref(yinf)
-        AsciiFile.ReadFile(yinf_ref, "/etc/yast.inf")
-        yinf = yinf_ref.value
-        lines = AsciiFile.FindLineField(yinf, 0, "Language:")
-        if Ops.greater_than(Builtins.size(lines), 0)
-          yinf_ref = arg_ref(yinf)
-          AsciiFile.ChangeLineField(
-            yinf_ref,
-            Ops.get_integer(lines, 0, -1),
-            1,
-            @language
-          )
-          yinf = yinf_ref.value
-        else
-          yinf_ref = arg_ref(yinf)
-          AsciiFile.AppendLine(yinf_ref, ["Language:", @language])
-          yinf = yinf_ref.value
-        end
-        yinf_ref = arg_ref(yinf)
-        AsciiFile.RewriteFile(yinf_ref, "/etc/yast.inf")
-        yinf = yinf_ref.value
+        adapt_install_inf
 
         # update "name" for proposal when it cannot be shown correctly
         if GetTextMode() && CJKLanguage(lang) && !CJKLanguage(@preselected)
-          @name = Ops.get_string(@languages_map, [lang, 1], lang)
+          @name = GetLanguagesMap(false).fetch(lang, [])[1] || lang
         end
       end
 
@@ -552,15 +610,19 @@ module Yast
         Builtins.y2milestone("install_inf Locale %1", @preselected)
         if @preselected != nil && @preselected != ""
           lang = @preselected
-          @linuxrc_language_set = true if lang != "en_US"
+          @linuxrc_language_set = true if lang != DEFAULT_FALLBACK_LANGUAGE
         else
-          @preselected = "en_US"
+          @preselected = DEFAULT_FALLBACK_LANGUAGE
         end
 
-        lang = "" if lang == nil
+        lang ||= ""
         Builtins.y2milestone("lang after checking /etc/install.inf: %1", lang)
         if lang == ""
-          lang = Pkg.GetTextLocale
+          # As language has not been set we are trying to ask libzypp.
+          # But libzypp can also returns languages which we do not support
+          # (e.g. default "en"). So we are checking and changing it to default
+          # if needed (without showing an error (bnc#1009508))
+          lang = correct_language(Pkg.GetTextLocale, error_report: false)
           Builtins.y2milestone("setting lang to default language: %1", lang)
         end
         # Ignore any previous settings and take language from control file.
@@ -745,7 +807,7 @@ module Yast
       Builtins.foreach(Pkg.GetAdditionalLocales) do |additional|
         # add the language for both kind of values ("cs" vs. "pt_PT")
         if !Builtins.contains(langs, additional)
-          additional = "en_US" if additional == "en"
+          additional = DEFAULT_FALLBACK_LANGUAGE if additional == "en"
           additional = "pt_PT" if additional == "pt"
           if Builtins.haskey(@languages_map, additional)
             missing = Builtins.add(missing, additional)
@@ -1286,7 +1348,7 @@ module Yast
         Popup.Message(
           _(
             "Only minimal support for the selected language is included on this media.\n" +
-              "Add the Language add-on CD as an additional repository in order to get the appropriate support\n" +
+              "Enable online repositories later in order to get the appropriate support\n" +
               "for this language.\n"
           )
         )
@@ -1318,7 +1380,7 @@ module Yast
             )
           )
         end
-        WfmSetGivenLanguage("en_US")
+        WfmSetGivenLanguage(DEFAULT_FALLBACK_LANGUAGE)
         return true
       end
       false

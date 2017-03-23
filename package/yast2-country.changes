@@ -1,8 +1,129 @@
 -------------------------------------------------------------------
+Thu Mar 23 11:11:32 UTC 2017 - ancor@suse.com
+
+- Version temporarily bumped to 3.3.x to prioritize the
+  storage-ng branch
+- 3.3.0
+
+-------------------------------------------------------------------
+Thu Mar  2 12:24:03 UTC 2017 - kanderssen@suse.com
+
+merge CASP changes:
+
+- Fixed value returned by the KeyboardSelection widget, avoiding
+  to trigger other widgets events (bsc#1027171).
+
+-------------------------------------------------------------------
+Fri Feb 17 13:58:28 UTC 2017 - jreidinger@suse.com
+
+- fix keyboard layout widget initialization to old value
+  (bsc#1022546)
+
+-------------------------------------------------------------------
+Mon Jan 30 16:44:12 UTC 2017 - ancor@suse.com
+
+- If the X11Variant for a given keyboard layout is not specified by
+  systemd, leave it blank instead of enforcing "basic"
+  (bsc#1020082, bsc#1022094).
+
+-------------------------------------------------------------------
+Fri Jan 20 16:17:01 UTC 2017 - mvidner@suse.com
+
+- Added Y2Country::Widgets::KeyboardSelectionCombo (FATE#322328)
+
+-------------------------------------------------------------------
+Mon Dec 19 13:03:21 UTC 2016 - igonzalezsosa@suse.com
+
+- Read keyboard and console fonts from different files depending
+  on the product (bsc#1016004)
+
+-------------------------------------------------------------------
+Thu Dec 15 10:15:51 UTC 2016 - jreidinger@suse.com
+
+merge CASP changes:
+
+- fix notification on new keyboard widget, so keyboard layout is
+  immediatelly changed (FATE#321754)
+- Add reusable keyboard widget
+  (FATE#321754)
+
+-------------------------------------------------------------------
+Tue Dec 13 09:03:47 UTC 2016 - igonzalezsosa@suse.com
+
+- Improve code/documentation regarding FATE#321754
+
+-------------------------------------------------------------------
+Fri Dec  9 10:09:53 UTC 2016 - igonzalezsosa@suse.com
+
+- Add support to set the timezone as read-only in the product's
+  control file (FATE#321754)
+
+-------------------------------------------------------------------
+Thu Nov 24 15:23:29 CET 2016 - schubi@suse.de
+
+- Keyboard: Chinese and Taiwanese are using US keyboard layout for
+  a default. That's why e.g. Chinese will be shown for keyboard
+  settings although US will be taken. So we have to set the
+  connection manually (like we have already for DK an DE).
+  (bnc#1009914)
+
+-------------------------------------------------------------------
+Wed Nov 23 13:41:41 CET 2016 - schubi@suse.de
+
+- Language has not been set. Taking language from zypp.
+  But libzypp can also returns languages which we do not support
+  (e.g. default "en"). So we are checking and changing it to
+  default if needed (without showing an error (bnc#1009508))
+
+-------------------------------------------------------------------
+Mon Nov 21 15:50:47 UTC 2016 - igonzalezsosa@suse.com
+
+- Set keyboard layout properly on installation system (bsc#1010938)
+
+-------------------------------------------------------------------
+Thu Nov  3 11:43:42 UTC 2016 - jreidinger@suse.com
+
+- language add-on no longer exists, so suggest to enable online
+  repositories for languages only partially available on media
+  (bsc#1008082)
+
+-------------------------------------------------------------------
 Fri Sep 23 10:04:52 CEST 2016 - aschnell@suse.com
 
 - readded check for Windows based on storage-ng
 - 3.2.2
+
+-------------------------------------------------------------------
+Tue Sep 13 07:19:30 UTC 2016 - opensuse.lietuviu.kalba@gmail.com
+
+- Use the eurlatgr font for Turkish (bsc#942896)
+
+-------------------------------------------------------------------
+Mon Sep 12 11:51:12 UTC 2016 - opensuse.lietuviu.kalba@gmail.com
+
+- Corrected console keyboard mapping for Portuguese(Brazil),
+  Czech, Slovak and Dvorak (fate#318426, fate#318355, bug#942896)
+- Correct value for PT(BR) contributed by marceloatie@gmail.com
+
+-------------------------------------------------------------------
+Fri Aug 19 14:47:20 CEST 2016 - locilka@suse.com
+
+- Fixed downloading language extensions in the installation
+  (bsc#994577)
+
+-------------------------------------------------------------------
+Wed Aug 10 14:27:49 CEST 2016 - locilka@suse.com
+
+- Added check for correct <language /> coming from an AutoYast
+  profile. When erroneous language is detected, then it's reported
+  and corrected to the default 'en_US' (bnc#991001).
+
+-------------------------------------------------------------------
+Mon Jul 25 14:55:00 UTC 2016 - ancor@suse.com
+
+- Added support for Asturian variant of Spanish keyboard
+  (bsc#981008)
+- Asturian variant is now the default layout for Asturian language
 
 -------------------------------------------------------------------
 Wed Jul 13 11:10:48 UTC 2016 - ancor@suse.com
@@ -11,6 +132,12 @@ Wed Jul 13 11:10:48 UTC 2016 - ancor@suse.com
   old yast2-storage
 - Version temporarily bumped to 3.2.x to prioritize this branch
 - 3.2.1
+
+-------------------------------------------------------------------
+Mon Jun 20 11:55:00 UTC 2016 - ancor@suse.com
+
+- Use the eurlatgr font for all languages with latin alphabet
+  and simplify language<->font mapping (bsc#942899, bsc#942896).
 
 -------------------------------------------------------------------
 Tue Jun  7 10:21:35 UTC 2016 - igonzalezsosa@suse.com
