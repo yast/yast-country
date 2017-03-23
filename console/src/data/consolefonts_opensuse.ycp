@@ -1,0 +1,68 @@
+/* ------------------------------------------------------------------------------
+ * Copyright (c) 2016 SUSE LLC
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of version 2 of the GNU General Public License as published by the
+ * Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * ------------------------------------------------------------------------------
+ */
+
+/*
+ * Maintainer:  Thomas Fehr <fehr@suse.de>
+ *
+ * consolefonts map for openSUSE distributions
+ */
+
+$[
+      // LANG		font		    unicode map	screen map,	console magic
+      "en"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+// The two-letters language is used as a fallback, so additional entries like
+// the ones displayed below are not needed as long as they use the same values.
+//      "en_GB@euro"	: [ "eurlatgr.psfu",	"",	"none",	"" ],
+//      "en_GB"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+//      "en_US"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+//      "en_US.UTF-8"   : [ "eurlatgr.psfu",	"",	"none",	"" ],
+//      "en_GB.UTF-8"   : [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "de"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "fr"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "it"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "es"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "nl"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "pt"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "ca"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "gl"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "br"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "pl"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "cs"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "sk"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "hu"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "lt"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "ja"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+      "tr"		: [ "eurlatgr.psfu",	"",	"none",	"" ],
+
+      "el_GR"		: [ "iso07u-16.psfu",	"",	"trivial",	"(K" ],
+      "el"		: [ "iso07u-16.psfu",	"",	"trivial",	"(K" ],
+      "el_GR.UTF-8"	: [ "iso07u-16.psfu",	"",	"trivial",	"(K" ],
+
+      "ru_RU.KOI8-R"	: [ "UniCyr_8x16.psf",	"",	"koi2alt",	"(K" ],
+      "ru"		: [ "UniCyr_8x16.psf",	"",	"koi2alt",	"(K" ],
+      "ru_RU.UTF-8"     : [ "UniCyr_8x16.psf",	"",	"none",		"(K" ],
+
+      "sr_RS@latin"	: [ "eurlatgr.psfu",	"",	"trivial",	"" ],
+      "sr"		: [ "UniCyr_8x16.psf",	"",	"trivial",	"(K" ],
+      "sr_RS.UTF-8"     : [ "UniCyr_8x16.psf",	"",	"none",		"(K" ],
+
+      "uk"		: [ "UniCyr_8x16.psf",	"",	"trivial",	"(K" ],
+      "uk_UA.UTF-8"     : [ "UniCyr_8x16.psf",	"",	"none",		"(K" ],
+
+      "tg"		: [ "UniCyr_8x16.psf",	"",	"trivial",	"(K" ],
+      "tg_TJ.UTF-8"     : [ "UniCyr_8x16.psf",	"",	"none",		"(K" ],
+
+      "bg_BG"		: [ "UniCyr_8x16.psf",	"",	"trivial",	"(K" ],
+      "bg"		: [ "UniCyr_8x16.psf",	"",	"trivial",	"(K" ],
+      "bg_BG.UTF-8"     : [ "UniCyr_8x16.psf",	"",	"none",		"(K" ]
+  ]

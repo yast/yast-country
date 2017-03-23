@@ -23,12 +23,18 @@ schemafiles_DATA = \
 
 ydata_DATA = \
   data/keyboard_raw.ycp \
+  data/keyboard_raw_opensuse.ycp \
   data/xkblayout2keyboard.ycp \
   data/lang2keyboard.ycp
 
 desktop_DATA = \
   desktop/keyboard.desktop
 
-EXTRA_DIST = $(module_DATA) $(client_DATA) $(ynclude_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA)
+ylibdir = @ylibdir@/y2country
+ylib_DATA = \
+  lib/y2country/widgets.rb
+
+EXTRA_DIST = $(module_DATA) $(client_DATA) $(ynclude_DATA) $(scrconf_DATA) \
+  $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ylib_DATA)
 
 include $(top_srcdir)/Makefile.am.common

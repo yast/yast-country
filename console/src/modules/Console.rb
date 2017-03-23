@@ -58,6 +58,7 @@ module Yast
       Yast.import "Linuxrc"
       Yast.import "Encoding"
       Yast.import "Stage"
+      Yast.import "OSRelease"
 
       # current base language, used in Check
       @language = "en_US"
@@ -71,6 +72,10 @@ module Yast
       # -> S0:12345:respawn:/sbin/agetty -L 9600<n8> ttyS0
       # something like "ttyS0,9600" from /etc/install.inf
       @serial = ""
+
+      # Console fonts map (used as cache for #consolefonts)
+      @consolefonts = nil
+
       Console()
     end
 
@@ -80,9 +85,6 @@ module Yast
     # @return	[String]	encoding	encoding for console i/o
 
     def SelectFont(lang)
-      consolefonts = Convert.to_map(
-        WFM.Read(path(".local.yast2"), "consolefonts.ycp")
-      )
       fqlanguage = Language.GetLocaleString(lang)
 
       consolefont = consolefonts[fqlanguage] || consolefonts[lang]
@@ -246,6 +248,38 @@ module Yast
     publish :function => :Init, :type => "void ()"
     publish :function => :Check, :type => "boolean ()"
     publish :function => :Console, :type => "void ()"
+
+  private
+
+    # Console fonts map
+    #
+    # The map can be read from two different files:
+    #
+    # * `consolefonts_ID.ycp` where ID is the distribution identifier (as
+    #   specified in /etc/os-release). For example, `consolefonts_opensuse.ycp`.
+    # * `consolefonts.ycp` as a fallback.
+    #
+    # Associates languages with the following set of properties: font, unicode map,
+    # screen map and magic initialization.
+    #
+    # @example Console fonts format
+    #   consolefonts #=>
+    #     "bg"=>["UniCyr_8x16.psf", "", "trivial", "(K"],
+    #     "bg_BG"=>["UniCyr_8x16.psf", "", "trivial", "(K"],
+    #     "bg_BG.UTF-8"=>["UniCyr_8x16.psf", "", "none", "(K"],
+    #     "br"=>["lat1-16.psfu", "", "none", "(B"],
+    #     ...
+    #
+    # @return [Hash] Console fonts map. See the example for content details.
+    def consolefonts
+      return @consolefonts if @consolefonts
+
+      # Read the file for this product
+      @consolefonts = WFM.Read(path(".local.yast2"), "consolefonts_#{OSRelease.id}.ycp")
+
+      # Fallback
+      @consolefonts ||= WFM.Read(path(".local.yast2"), "consolefonts.ycp")
+    end
   end
 
   Console = ConsoleClass.new
