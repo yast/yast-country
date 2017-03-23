@@ -38,15 +38,8 @@ BuildRequires:  rubygem(rspec)
 BuildRequires:  yast2-core >= 3.1.12
 # RSpec extensions for YaST
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
-<<<<<<< HEAD
 # New API of Y2Storage::DiskAnalyzer
 BuildRequires:  yast2-storage-ng >= 0.1.2
-
-Requires:	yast2-trans-stats yast2-perl-bindings timezone
-# XVersion.ycp
-# Message.updating_configuration, Message.takes_a_while
-Requires:	yast2 >= 3.1.94
-=======
 # OSRelease.id
 BuildRequires:  yast2 >= 3.2.9
 
@@ -55,7 +48,6 @@ Requires:       yast2-perl-bindings
 Requires:       yast2-trans-stats
 # OSRelease.id
 Requires:       yast2 >= 3.2.9
->>>>>>> master
 # Pkg::SetPackageLocale, Pkg::GetTextLocale
 Requires:       yast2-pkg-bindings >= 2.15.3
 # IconPath support for MultiSelectionBox
