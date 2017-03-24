@@ -530,12 +530,8 @@ module Yast
       end
 
       # full language code
-      val = @language
-      if @use_utf8
-        val = Ops.add(val, Ops.get_string(language_info, 2, ""))
-      else
-        val = Ops.add(val, Ops.get_string(language_info, 3, ""))
-      end
+      idx = @use_utf8 ? 2 : 3
+      val = lang + (language_info[idx] || "")
 
       Builtins.y2milestone("locale %1", val)
       val
