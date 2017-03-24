@@ -162,15 +162,33 @@ describe "Language" do
   end
 
   describe "#GetLocaleString" do
-    context "when the language is defined" do
-      it "returns the full language identifier" do
+    context "when using UTF-8" do
+      it "returns the full locale" do
         expect(subject.GetLocaleString("de_ZU")).to eq("de_ZU.UTF-8")
+      end
+
+      context "and the language is not found in the database" do
+        it "returns the full locale" do
+          expect(subject.GetLocaleString("ma_MA")).to eq("ma_MA.UTF-8")
+        end
       end
     end
 
-    context "when the language is not defined" do
-      it "returns the full language identifier" do
-        expect(subject.GetLocaleString("ma_MA")).to eq("ma_MA.UTF-8")
+    context "and the suffix '@' is already include in the given locale" do
+      it "returns the same locale" do
+        expect(subject.GetLocaleString("es_ES@euro")).to eq("es_ES@euro")
+      end
+    end
+
+    context "when UTF-8 is not being used" do
+      around do |example|
+        subject.SetExpertValues("use_utf8" => false) # disable UTF-8
+        example.run
+        subject.SetExpertValues("use_utf8" => true) # restore to the default value
+      end
+
+      it "returns the full language identifier with no encoding" do
+        expect(subject.GetLocaleString("ma_MA")).to eq("ma_MA")
       end
     end
   end
