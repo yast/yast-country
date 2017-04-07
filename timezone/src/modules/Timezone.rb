@@ -1002,7 +1002,7 @@ module Yast
 
     # Checks whether the system has Windows installed
     def system_has_windows?
-      win_partitions = disk_analyzer.windows_partitions.values.flatten
+      win_partitions = disk_analyzer.windows_partitions
       !win_partitions.empty?
     end
 
