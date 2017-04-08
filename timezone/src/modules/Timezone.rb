@@ -1076,7 +1076,7 @@ module Yast
 
     def disk_analyzer
       @disk_analyzer ||= begin
-        devicegraph = Y2Storage::StorageManager.instance.probed
+        devicegraph = Y2Storage::StorageManager.instance.y2storage_probed
         Y2Storage::DiskAnalyzer.new(devicegraph)
       end
     end
