@@ -35,7 +35,7 @@ module Yast
               "name"    => "Europe",
               "entries" => {
                 "Europe/Berlin" => "Germany",
-                "Europe/Prague" => "Czech Republic"
+                "Europe/Prague" => "Czechia"
               }
             }
           ]
