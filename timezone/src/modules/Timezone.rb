@@ -1075,10 +1075,7 @@ module Yast
   protected
 
     def disk_analyzer
-      @disk_analyzer ||= begin
-        devicegraph = Y2Storage::StorageManager.instance.y2storage_probed
-        Y2Storage::DiskAnalyzer.new(devicegraph)
-      end
+      Y2Storage::StorageManager.instance.probed_disk_analyzer
     end
   end
 
