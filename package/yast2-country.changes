@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed May 17 12:54:05 UTC 2017 - snwint@suse.com
+
+- remove last remaining old storage reference
+- 3.3.1
+
+-------------------------------------------------------------------
 Thu Mar 23 11:11:32 UTC 2017 - ancor@suse.com
 
 - Version temporarily bumped to 3.3.x to prioritize the
