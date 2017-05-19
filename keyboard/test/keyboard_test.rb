@@ -541,8 +541,12 @@ module Yast
     describe "#Summary" do
       it "retuns an HTML containing the current layout" do
         Keyboard.SetKeyboard("spanish")
+        # do not place translations to regexps or string interpolations
+        # see bsc#1038077 for details, make sure the translation does
+        # not contain special chars by accident
+        label = Regexp.escape(_("Spanish"))
         expect(Keyboard.Summary)
-          .to match /<li.*#{_("Spanish")}.*li>/
+          .to match /<li.*#{label}.*li>/
       end
     end
 
