@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jun 19 14:45:17 UTC 2017 - gsouza@suse.com
+
+- Alterations in vconsole.conf performed by localectl and not 
+  directly by YaST (bsc#1023774).
+- 3.2.12
+
+-------------------------------------------------------------------
 Thu Mar 23 18:45:42 UTC 2017 - igonzalezsosa@suse.com
 
 - Fix GetLocaleString to use the given locale instead of
