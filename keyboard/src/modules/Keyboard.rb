@@ -885,9 +885,11 @@ module Yast
       )
       SCR.Write(path(".sysconfig.keyboard"), nil) # flush
 
-      # Write systemd settings for console
-      SCR.Write(path(".etc.vconsole_conf.KEYMAP"), @keymap.gsub(/(.*)\.map\.gz/, '\1'))
-      SCR.Write(path(".etc.vconsole_conf"), nil) # flush
+      cmd = "/usr/bin/localectl set-keymap  #{@keymap.gsub(/(.*)\.map\.gz/, '\1')}"
+      log.info "Making console keyboard persistent: #{cmd}"
+      if SCR.Execute(path(".target.bash"), cmd) != 0
+        log.error "Console keyboard configuration not written. Failed to execute '#{cmd}'"
+      end
 
       # Write systemd settings for X11
       call_set_x11_keymap if x11_setup_needed
