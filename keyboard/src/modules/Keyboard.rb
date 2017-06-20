@@ -885,7 +885,7 @@ module Yast
       )
       SCR.Write(path(".sysconfig.keyboard"), nil) # flush
 
-      cmd = "/usr/bin/localectl set-keymap #{@keymap.gsub(/(.*)\.map\.gz/, '\1')}"
+      cmd = "/usr/bin/localectl --no-convert set-keymap #{@keymap.gsub(/(.*)\.map\.gz/, '\1')}"
       log.info "Making console keyboard persistent: #{cmd}"
       if SCR.Execute(path(".target.bash"), cmd) != 0
         log.error "Console keyboard configuration not written. Failed to execute '#{cmd}'"
