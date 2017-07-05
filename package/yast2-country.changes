@@ -1,15 +1,32 @@
 -------------------------------------------------------------------
+Wed Jul  5 14:39:15 CEST 2017 - shundhammer@suse.de
+
+- Merged master to storage-ng branch 
+- 3.4.0
+
+-------------------------------------------------------------------
+Mon Jun 19 14:45:17 UTC 2017 - gsouza@suse.com
+
+- Alterations in vconsole.conf performed by localectl and not 
+  directly by YaST (bsc#1023774).
+
+-------------------------------------------------------------------
 Wed May 17 12:54:05 UTC 2017 - snwint@suse.com
 
 - remove last remaining old storage reference
-- 3.3.1
+
+-------------------------------------------------------------------
+Thu Mar 23 18:45:42 UTC 2017 - igonzalezsosa@suse.com
+
+- Fix GetLocaleString to use the given locale instead of
+  Language.language
+- Fix build problems (bsc#1030745) 
 
 -------------------------------------------------------------------
 Thu Mar 23 11:11:32 UTC 2017 - ancor@suse.com
 
 - Version temporarily bumped to 3.3.x to prioritize the
   storage-ng branch
-- 3.3.0
 
 -------------------------------------------------------------------
 Thu Mar  2 12:24:03 UTC 2017 - kanderssen@suse.com
