@@ -74,6 +74,9 @@ module Yast
           expect(SCR).to execute_bash(
             /localectl --no-convert set-x11-keymap es microsoftpro$/
           )
+          expect(SCR).to execute_bash(
+            /localectl --no-convert set-keymap es$/
+          )
           expect(AsciiFile).to receive(:AppendLine).with(anything, ["Keytable:", "es.map.gz"])
 
           Keyboard.Set("spanish")
@@ -81,8 +84,6 @@ module Yast
 
           expect(written_value_for(".sysconfig.keyboard.YAST_KEYBOARD")).to eq("spanish,pc104")
           expect(written_value_for(".sysconfig.keyboard")).to be_nil
-          expect(written_value_for(".etc.vconsole_conf.KEYMAP")).to eq("es")
-          expect(written_value_for(".etc.vconsole_conf")).to be_nil
         end
 
         it "doesn't regenerate initrd" do
@@ -104,14 +105,15 @@ module Yast
           expect(SCR).to execute_bash(
             /localectl --no-convert set-x11-keymap us,ru microsoftpro ,winkeys grp:ctrl_shift_toggle,grp_led:scroll$/
           )
+          expect(SCR).to execute_bash(
+            /localectl --no-convert set-keymap ruwin_alt-UTF-8$/
+          )
 
           Keyboard.Set("russian")
           Keyboard.Save
 
           expect(written_value_for(".sysconfig.keyboard.YAST_KEYBOARD")).to eq("russian,pc104")
           expect(written_value_for(".sysconfig.keyboard")).to be_nil
-          expect(written_value_for(".etc.vconsole_conf.KEYMAP")).to eq("ruwin_alt-UTF-8")
-          expect(written_value_for(".etc.vconsole_conf")).to be_nil
         end
 
         it "does regenerate initrd" do
@@ -541,8 +543,12 @@ module Yast
     describe "#Summary" do
       it "retuns an HTML containing the current layout" do
         Keyboard.SetKeyboard("spanish")
+        # do not place translations to regexps or string interpolations
+        # see bsc#1038077 for details, make sure the translation does
+        # not contain special chars by accident
+        label = Regexp.escape(_("Spanish"))
         expect(Keyboard.Summary)
-          .to match /<li.*#{_("Spanish")}.*li>/
+          .to match /<li.*#{label}.*li>/
       end
     end
 

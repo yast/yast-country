@@ -12,7 +12,7 @@ describe Yast::Console do
   describe "#SelectFont" do
     let(:braille) { false }
     let(:full_language) { "es_ES.UTF-8" }
-    let(:language) { "es" }
+    let(:language) { "es_ES" }
     let(:os_release_id) { "sles" }
 
     before do
@@ -22,12 +22,12 @@ describe Yast::Console do
 
     it "sets console fonts for the given language" do
       expect(Yast::UI).to receive(:SetConsoleFont)
-        .with("(K", "lat9w-16.psfu", "trivial", "", "es")
+        .with("(K", "lat9w-16.psfu", "trivial", "", "es_ES")
       console.SelectFont(language)
     end
 
     it "returns the encoding" do
-      expect(console.SelectFont(language)).to eq("UTF-8")
+      expect(console.SelectFont(language)).to eq("ISO-8859-1")
     end
 
     context "when no console font is available" do
@@ -37,7 +37,7 @@ describe Yast::Console do
       end
 
       it "returns the encoding" do
-        expect(console.SelectFont(language)).to eq("UTF-8")
+        expect(console.SelectFont(language)).to eq("ISO-8859-1")
       end
     end
 
@@ -46,7 +46,7 @@ describe Yast::Console do
 
       it "sets console fonts for the given language" do
         expect(Yast::UI).to receive(:SetConsoleFont)
-          .with("", "eurlatgr.psfu", "none", "", "es")
+          .with("", "eurlatgr.psfu", "none", "", "es_ES")
         console.SelectFont(language)
       end
     end
