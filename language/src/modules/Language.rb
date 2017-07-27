@@ -1318,9 +1318,9 @@ module Yast
 
     # check if selected language has support on media (F301238)
     # show a warning when not
-    # @deprecated do nothing
+    # @deprecated does nothing
     def CheckLanguagesSupport(_selected_language)
-      log.warn "Called check for language support, but it do nothing"
+      log.warn "Called check for language support, but it does nothing"
       return
     end
 
