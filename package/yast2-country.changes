@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jul 27 11:19:13 UTC 2017 - jreidinger@suse.com
+
+- No longer read /content file from media (FATE#322386)
+- 3.3.0
+
+-------------------------------------------------------------------
 Mon Jun 19 14:45:17 UTC 2017 - gsouza@suse.com
 
 - Alterations in vconsole.conf performed by localectl and not 
