@@ -599,8 +599,8 @@ module Yast
       end
 
       if Stage.initial && !Mode.live_installation
-        lang = Convert.to_string(SCR.Read(path(".content.LANGUAGE")))
-        Builtins.y2milestone("content LANGUAGE %1", lang)
+        lang = ProductFeatures.GetStringFeature("globals", "language")
+        Builtins.y2milestone("product LANGUAGE %1", lang)
 
         @preselected = Linuxrc.InstallInf("Locale")
         Builtins.y2milestone("install_inf Locale %1", @preselected)
@@ -1318,39 +1318,10 @@ module Yast
 
     # check if selected language has support on media (F301238)
     # show a warning when not
-    def CheckLanguagesSupport(selected_language)
-      linguas = Convert.to_string(SCR.Read(path(".content.LINGUAS")))
-
-      if linguas == nil
-        Builtins.y2warning("No LINGUAS tag defined in content file")
-        return
-      end
-
-      Builtins.y2milestone("content LINGUAS %1", linguas)
-      all_linguas = Builtins.splitstring(linguas, " ")
-      language_short = Ops.get(
-        Builtins.splitstring(selected_language, "_"),
-        0,
-        ""
-      )
-
-      if !Builtins.contains(all_linguas, selected_language) &&
-          !Builtins.contains(all_linguas, language_short)
-        Builtins.y2milestone(
-          "Language %1 is not fully supported",
-          selected_language
-        )
-        # popup message
-        Popup.Message(
-          _(
-            "Only minimal support for the selected language is included on this media.\n" +
-              "Enable online repositories later in order to get the appropriate support\n" +
-              "for this language.\n"
-          )
-        )
-      end
-
-      nil
+    # @deprecated does nothing
+    def CheckLanguagesSupport(_selected_language)
+      log.warn "Called check for language support, but it does nothing"
+      return
     end
 
     # Set current YaST language to English if method for showing text in
