@@ -1177,6 +1177,7 @@ module Yast
     end
 
     # Return item list of keyboard items, sorted according to current language
+    # @return [Array<Term>] Item(Id(...), String name, Boolean selected)
     def GetKeyboardItems
       ret = Builtins.maplist(Selection()) do |code, name|
         Item(Id(code), name, @current_kbd == code)
