@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        3.1.35
+Version:        3.1.36
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -39,13 +39,13 @@ BuildRequires:  yast2-core >= 3.1.12
 # RSpec extensions for YaST
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
 # OSRelease.id
-BuildRequires:  yast2 >= 3.1.211
+BuildRequires:  yast2 >= 3.1.210.2
 
 Requires:       timezone
 Requires:       yast2-perl-bindings
 Requires:       yast2-trans-stats
 # OSRelease.id
-Requires:       yast2 >= 3.1.211
+Requires:       yast2 >= 3.1.210.2
 # Pkg::SetPackageLocale, Pkg::GetTextLocale
 Requires:       yast2-pkg-bindings >= 2.15.3
 # IconPath support for MultiSelectionBox
@@ -99,6 +99,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %{yast_moduledir}/YaPI/TIME.pm
 %{yast_moduledir}/YaPI/LANGUAGE.pm
 %{yast_clientdir}/*.rb
+%{yast_libdir}/y2country
 %{yast_ydatadir}/*.ycp
 %{yast_yncludedir}/keyboard/
 %{yast_yncludedir}/timezone/
