@@ -33,9 +33,5 @@ tmp.*
 /nbproject/private/
 test-driver
 # YARD
-/doc/*.html
-/doc/css/
-/doc/js/
-/doc/Yast/
-/doc/Y2Country/
-/.yardoc/
+/.yardoc
+/doc
