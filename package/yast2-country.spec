@@ -1,7 +1,7 @@
 #
 # spec file for package yast2-country
 #
-# Copyright (c) 2013 SUSE LINUX Products GmbH, Nuernberg, Germany.
+# Copyright (c) 2016 SUSE LINUX GmbH, Nuernberg, Germany.
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -17,47 +17,53 @@
 
 
 Name:           yast2-country
-Version:        3.1.30
+Version:        3.1.36
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source0:        %{name}-%{version}.tar.bz2
 
-Group:          System/YaST
-License:        GPL-2.0
 #policy files for YaPI dbus interface
 Source1:        org.opensuse.yast.modules.yapi.time.policy
 Source2:        org.opensuse.yast.modules.yapi.language.policy
-BuildRequires:	perl-XML-Writer update-desktop-files yast2-testsuite yast2 yast2-perl-bindings
-BuildRequires:  yast2-devtools >= 3.1.10
+BuildRequires:  perl-XML-Writer
 BuildRequires:  polkit-devel
+BuildRequires:  update-desktop-files
+BuildRequires:  yast2-devtools >= 3.1.10
+BuildRequires:  yast2-perl-bindings
+BuildRequires:  yast2-testsuite
 # For tests
 BuildRequires:  rubygem(rspec)
 # Fix to bnc#891053 (proper reading of ".target.yast2" on chroots)
 BuildRequires:  yast2-core >= 3.1.12
 # RSpec extensions for YaST
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
+# OSRelease.id
+BuildRequires:  yast2 >= 3.1.210.2
 
-Requires:	yast2-trans-stats yast2-perl-bindings timezone
-# XVersion.ycp
-# Message.updating_configuration, Message.takes_a_while
-Requires:	yast2 >= 3.1.94
+Requires:       timezone
+Requires:       yast2-perl-bindings
+Requires:       yast2-trans-stats
+# OSRelease.id
+Requires:       yast2 >= 3.1.210.2
 # Pkg::SetPackageLocale, Pkg::GetTextLocale
 Requires:       yast2-pkg-bindings >= 2.15.3
 # IconPath support for MultiSelectionBox
-Requires:	yast2-core >= 2.16.28
+Requires:       yast2-core >= 2.16.28
 # new API of ntp-client_proposal.ycp
-Conflicts:	yast2-ntp-client < 2.18.0
+Conflicts:      yast2-ntp-client < 2.18.0
 # wrapper_storage.ycp
 Requires:       yast2-packager >= 2.23.3
 # VMware detection (.probe.is_vmware)
 Requires:       yast2-hardware-detection >= 3.1.6
 
-Requires:	yast2-country-data
+Requires:       yast2-country-data
 
 Requires:       yast2-ruby-bindings >= 1.0.0
 
-Summary:	YaST2 - Country Settings (Language, Keyboard, and Timezone)
+Summary:        YaST2 - Country Settings (Language, Keyboard, and Timezone)
+License:        GPL-2.0
+Group:          System/YaST
 
 %description
 Country specific data and configuration modules (language, keyboard,
@@ -81,7 +87,6 @@ mkdir -p $RPM_BUILD_ROOT/usr/share/polkit-1/actions
 install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 
-
 # common
 %files
 %defattr(-,root,root)
@@ -94,6 +99,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %{yast_moduledir}/YaPI/TIME.pm
 %{yast_moduledir}/YaPI/LANGUAGE.pm
 %{yast_clientdir}/*.rb
+%{yast_libdir}/y2country
 %{yast_ydatadir}/*.ycp
 %{yast_yncludedir}/keyboard/
 %{yast_yncludedir}/timezone/
@@ -111,7 +117,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %package data
 Requires:       yast2-ruby-bindings >= 1.0.0
 
-Summary:	YaST2 - Data files for Country settings
+Summary:        YaST2 - Data files for Country settings
 Group:          System/YaST
 
 %description data
@@ -124,3 +130,4 @@ functions (Language module)
 %{yast_ydatadir}/languages/*.ycp
 %{yast_moduledir}/Language.rb
 
+%changelog

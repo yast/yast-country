@@ -1,3 +1,74 @@
+----------------------------------------------------------------
+Thu Mar  2 12:24:03 UTC 2017 - kanderssen@suse.com
+
+- Fixed value returned by the KeyboardSelection widget, avoiding
+  to trigger other widgets events (bsc#1027171).
+- 3.1.36
+
+-------------------------------------------------------------------
+Fri Feb 17 13:58:28 UTC 2017 - jreidinger@suse.com
+
+- fix keyboard layout widget initialization to old value
+  (bsc#1022546)
+- 3.1.33.6
+
+-------------------------------------------------------------------
+Mon Jan 30 16:44:12 UTC 2017 - ancor@suse.com
+
+- If the X11Variant for a given keyboard layout is not specified by
+  systemd, leave it blank instead of enforcing "basic"
+  (bsc#1020082, bsc#1022094).
+- 3.1.33.5
+
+-------------------------------------------------------------------
+Fri Jan 20 16:17:01 UTC 2017 - mvidner@suse.com
+
+- Added Y2Country::Widgets::KeyboardSelectionCombo (FATE#322328)
+- 3.1.33.4
+
+-------------------------------------------------------------------
+Mon Dec 19 13:03:21 UTC 2016 - igonzalezsosa@suse.com
+
+- Read keyboard and console fonts from different files depending
+  on the product (bsc#1016004)
+- 3.1.33.3
+
+-------------------------------------------------------------------
+Thu Dec 15 10:15:51 UTC 2016 - jreidinger@suse.com
+
+- fix notification on new keyboard widget, so keyboard layout is
+  immediatelly changed (FATE#321754)
+- 3.1.33.2
+
+-------------------------------------------------------------------
+Tue Dec 13 13:41:10 UTC 2016 - jreidinger@suse.com
+
+- Add reusable keyboard widget
+  (FATE#321754)
+- 3.1.33.1
+
+-------------------------------------------------------------------
+Tue Dec 13 09:03:47 UTC 2016 - igonzalezsosa@suse.com
+
+- Improve code/documentation regarding FATE#321754
+- 3.1.33
+
+-------------------------------------------------------------------
+Fri Dec  9 10:09:53 UTC 2016 - igonzalezsosa@suse.com
+
+- Add support to set the timezone as read-only in the product's
+  control file (FATE#321754)
+- 3.1.32
+
+-------------------------------------------------------------------
+Wed Nov 23 13:41:41 CET 2016 - schubi@suse.de
+
+- Language has not been set. Taking language from zypp.
+  But libzypp can also returns languages which we do not support
+  (e.g. default "en"). So we are checking and changing it to
+  default if needed (without showing an error (bnc#1009508))
+- 3.1.31
+
 -------------------------------------------------------------------
 Fri Aug 19 14:47:20 CEST 2016 - locilka@suse.com
 
