@@ -20,7 +20,7 @@
 # ------------------------------------------------------------------------------
 # Client for initial timezone setting (part of installation sequence)
 # Author:	Jiri Suchomel <jsuchome@suse.cz>
-# $Id$
+
 module Yast
   class InstTimezoneClient < Client
     include Yast::Logger
@@ -29,8 +29,8 @@ module Yast
       Yast.import "UI"
       Yast.import "GetInstArgs"
       Yast.import "Stage"
-      Yast.import "Storage"
       Yast.import "Wizard"
+      Yast.import "Timezone"
 
       Yast.include self, "timezone/dialogs.rb"
 
@@ -43,11 +43,7 @@ module Yast
         return :auto
       end
 
-      if Stage.initial &&
-          Ops.greater_than(
-            Builtins.size(Storage.GetWinPrimPartitions(Storage.GetTargetMap)),
-            0
-          )
+      if Stage.initial && Timezone.system_has_windows?
         Timezone.windows_partition = true
         Builtins.y2milestone("windows partition found: assuming local time")
       end

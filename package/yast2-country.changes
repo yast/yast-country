@@ -1,4 +1,39 @@
 -------------------------------------------------------------------
+Mon Aug 14 09:44:58 UTC 2017 - snwint@suse.com
+
+- merge storage-ng branch to master
+- note: all changes below with this date belong to the merge
+- 3.3.1
+
+-------------------------------------------------------------------
+Mon Aug 14 09:44:58 UTC 2017 - shundhammer@suse.de
+
+- Merged master to storage-ng branch 
+
+-------------------------------------------------------------------
+Mon Aug 14 09:44:58 UTC 2017 - snwint@suse.com
+
+- remove last remaining old storage reference
+
+-------------------------------------------------------------------
+Mon Aug 14 09:44:58 UTC 2017 - ancor@suse.com
+
+- Version temporarily bumped to 3.3.x to prioritize the
+  storage-ng branch
+
+-------------------------------------------------------------------
+Mon Aug 14 09:44:58 UTC 2017 - aschnell@suse.com
+
+- readded check for Windows based on storage-ng
+
+-------------------------------------------------------------------
+Mon Aug 14 09:44:58 UTC 2017 - ancor@suse.com
+
+- storage-ng: commented installation-related code relying on the
+  old yast2-storage
+- Version temporarily bumped to 3.2.x to prioritize this branch
+
+-------------------------------------------------------------------
 Thu Jul 27 11:19:13 UTC 2017 - jreidinger@suse.com
 
 - No longer read /content file from media, instead language from
