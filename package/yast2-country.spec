@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        3.3.0
+Version:        3.3.1
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -38,6 +38,7 @@ BuildRequires:  rubygem(rspec)
 BuildRequires:  yast2-core >= 3.1.12
 # RSpec extensions for YaST
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
+BuildRequires:  yast2-storage-ng
 # OSRelease.id
 BuildRequires:  yast2 >= 3.2.9
 
@@ -60,6 +61,7 @@ Requires:       yast2-hardware-detection >= 3.1.6
 Requires:       yast2-country-data
 
 Requires:       yast2-ruby-bindings >= 1.0.0
+Requires:       yast2-storage-ng
 
 Summary:        YaST2 - Country Settings (Language, Keyboard, and Timezone)
 License:        GPL-2.0
