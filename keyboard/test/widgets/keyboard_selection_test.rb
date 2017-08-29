@@ -1,7 +1,7 @@
 #!/usr/bin/env rspec
 
-require_relative 'test_helper'
-require "y2country/widgets"
+require_relative "../test_helper"
+require "y2country/widgets/keyboard_selection"
 
 describe Y2Country::Widgets::KeyboardSelection do
   subject { described_class.new("english-us") }
