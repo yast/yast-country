@@ -85,9 +85,17 @@ ydata_DATA = \
   data/languages/language_th_TH.ycp \
   data/languages/language_en_GB.ycp
 
+# ylibdir = @ylibdir@/y2country
+# ylib_DATA = \
+#   lib/y2country/widgets/language_selection.rb
+
+ywidgetsdir = @ylibdir@/y2country/widgets
+ywidgets_DATA = \
+	lib/y2country/widgets/language_selection.rb
+
 desktop_DATA = \
   desktop/yast-language.desktop
 
-EXTRA_DIST = $(module_DATA) $(module1_DATA) $(client_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA)
+EXTRA_DIST = $(module_DATA) $(module1_DATA) $(client_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ylib_DATA) $(ywidgets_DATA)
 
 include $(top_srcdir)/Makefile.am.common
