@@ -2,26 +2,15 @@
 
 require_relative "../test_helper"
 require "y2country/widgets/keyboard_selection"
+require "cwm/rspec"
 
 describe Y2Country::Widgets::KeyboardSelection do
   subject { described_class.new("english-us") }
 
-  it "has label" do
-    expect(subject.label).to be_a(::String)
-  end
-
-  it "has help" do
-    expect(subject.help).to be_a(::String)
-  end
+  include_examples "CWM::AbstractWidget"
 
   it "enlists all available keyboard layoout" do
     expect(subject.items).to include(["english-us", "English (US)"])
-  end
-
-  it "changes keyboard layout when value changed" do
-    expect(Yast::Keyboard).to receive(:Set)
-
-    expect(subject.handle).to eql(nil)
   end
 
   it "passes notify option to widget" do
