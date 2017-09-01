@@ -28,7 +28,7 @@ describe Y2Country::Widgets::KeyboardSelection do
       allow(Yast::Keyboard).to receive(:user_decision).and_return(true)
     end
 
-    it "initizalizes widget to previous selection" do
+    it "initializes widget to previous selection" do
       allow(Yast::Keyboard).to receive(:current_kbd).and_return("english-uk")
 
       expect(subject).to receive(:value=).with("english-uk")
@@ -42,7 +42,7 @@ describe Y2Country::Widgets::KeyboardSelection do
       allow(Yast::Keyboard).to receive(:user_decision).and_return(false)
     end
 
-    it "initizalizes widget to english us layout" do
+    it "initializes widget to english us layout" do
       expect(subject).to receive(:value=).with("english-us")
 
       subject.init
