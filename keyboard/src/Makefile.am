@@ -30,11 +30,11 @@ ydata_DATA = \
 desktop_DATA = \
   desktop/keyboard.desktop
 
-ylibdir = @ylibdir@/y2country
-ylib_DATA = \
-  lib/y2country/widgets.rb
+ywidgetsdir = @ylibdir@/y2country/widgets
+ywidgets_DATA = \
+  lib/y2country/widgets/keyboard_selection.rb
 
 EXTRA_DIST = $(module_DATA) $(client_DATA) $(ynclude_DATA) $(scrconf_DATA) \
-  $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ylib_DATA)
+  $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ywidgets_DATA)
 
 include $(top_srcdir)/Makefile.am.common

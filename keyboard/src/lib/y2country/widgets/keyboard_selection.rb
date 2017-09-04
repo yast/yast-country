@@ -55,6 +55,7 @@ module Y2Country
       end
 
       def handle
+        return if Yast::Keyboard.current_kbd == value
         Yast::Keyboard.Set(value)
         # mark that user approve selection
         Yast::Keyboard.user_decision = true

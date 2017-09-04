@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Aug 30 10:24:33 UTC 2017 - igonzalezsosa@suse.com
+
+- Add a widget for language selection (fate#322276)
+- Move keyboard selection widget to lib/y2country/widgets
+  directory
+- 3.3.2
+
+-------------------------------------------------------------------
 Mon Aug 14 09:44:58 UTC 2017 - snwint@suse.com
 
 - merge storage-ng branch to master (fate#318196)
