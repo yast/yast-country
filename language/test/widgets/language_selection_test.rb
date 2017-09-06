@@ -1,11 +1,9 @@
 #!/usr/bin/env rspec
 
 require_relative "../test_helper"
-require "cwm/rspec"
 require "y2country/widgets/language_selection"
 
 describe Y2Country::Widgets::LanguageSelection do
-  include_examples "CWM::ComboBox"
 
   subject(:widget) { described_class.new }
   let(:default_language) { "en_US" }
