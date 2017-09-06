@@ -23,13 +23,15 @@ require "yast"
 require "cwm/widget"
 
 Yast.import "Keyboard"
+Yast.import "Language"
 
 module Y2Country
   module Widgets
     # Common parts for {KeyboardSelection} and {KeyboardSelectionCombo}.
     module KeyboardSelectionBase
-      # param default [String] ID for default keyboard layout if not selected.
-      # Allowed values are defined in /usr/share/YaST2/data/keyboard_raw.ycp
+      # param default [String] ID for default keyboard layout if not selected
+      #   and no proposal for current language is found.
+      #   Allowed values are defined in /usr/share/YaST2/data/keyboard_raw.ycp
       def initialize(default)
         textdomain "country"
         @default = default
@@ -49,7 +51,8 @@ module Y2Country
         if Yast::Keyboard.user_decision
           self.value = Yast::Keyboard.current_kbd
         else
-          self.value = @default
+          initial_value = Yast::Keyboard.GetKeyboardForLanguage(Yast::Language.language, @default)
+          self.value = initial_value
           Yast::Keyboard.Set(value)
         end
       end
