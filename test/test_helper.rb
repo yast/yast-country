@@ -14,7 +14,7 @@ if ENV["COVERAGE"]
   end
 
   # for correct coverage report we need to load all ruby files
-  SimpleCov.track_files("#{root_locaiton}/**/src/**/*.rb")
+  SimpleCov.track_files("#{root_location}/**/src/**/*.rb")
 
   # use coveralls for on-line code coverage reporting at Travis CI
   if ENV["TRAVIS"]
