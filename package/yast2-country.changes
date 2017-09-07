@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep  7 11:25:21 UTC 2017 - jreidinger@suse.com
+
+- improve language selection to support also CaaSP needs
+  (FATE#323837)
+- 4.0.0
+
+-------------------------------------------------------------------
 Wed Aug 30 10:24:33 UTC 2017 - igonzalezsosa@suse.com
 
 - Add a widget for language selection (fate#322276)
@@ -52,7 +59,7 @@ Thu Jul 27 11:19:13 UTC 2017 - jreidinger@suse.com
 -------------------------------------------------------------------
 Mon Jun 19 14:45:17 UTC 2017 - gsouza@suse.com
 
-- Alterations in vconsole.conf performed by localectl and not 
+- Alterations in vconsole.conf performed by localectl and not
   directly by YaST (bsc#1023774).
 - 3.2.12
 

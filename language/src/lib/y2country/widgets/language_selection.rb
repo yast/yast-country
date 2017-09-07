@@ -20,9 +20,11 @@
 require "yast"
 require "cwm/widget"
 
+Yast.import "Console"
 Yast.import "Language"
 Yast.import "Timezone"
 Yast.import "UI"
+Yast.import "Mode"
 
 module Y2Country
   module Widgets
@@ -31,10 +33,12 @@ module Y2Country
 
       attr_reader :default
 
-      # @param default [String] Default language
-      def initialize(default = nil)
+      # @param emit_event [Boolean] flag if handle of widget emit `:redraw` event
+      #   when language changed or not
+      def initialize(emit_event: false)
         textdomain "country"
-        @default = default || Yast::Language.language
+        @default = Yast::Language.language
+        @emit_event = emit_event
       end
 
       # Widget label
@@ -74,12 +78,20 @@ module Y2Country
         Yast::Timezone.ResetZonemap
         Yast::Language.Set(value)
         Yast::Language.languages = Yast::Language.RemoveSuffix(value)
-        nil
+        @default = value
+        return nil if !@emit_event || Yast::Mode.config
+
+        switch_language
+        :redraw
       end
 
       # Store widget value
       def store
         handle
+
+        switch_language if !@emit_event && !Yast::Mode.config
+
+        nil
       end
 
       # Return the options to be shown in the combobox
@@ -90,6 +102,24 @@ module Y2Country
           id, description = item.to_a
           code = id.first
           [code, description]
+        end
+      end
+
+    private
+
+      def switch_language
+        if Yast::Language.SwitchToEnglishIfNeeded(true)
+          log.debug "UI switched to en_US"
+        else
+          Yast::Console.SelectFont(Yast::Language.language)
+          # no yast translation for nn_NO, use nb_NO as a backup
+          # FIXME: remove the hack, please
+          if Yast::Language.language == "nn_NO"
+            log.info "Nynorsk not translated, using Bokm\u00E5l"
+            Yast::Language.WfmSetGivenLanguage("nb_NO")
+          else
+            Yast::Language.WfmSetLanguage
+          end
         end
       end
     end
