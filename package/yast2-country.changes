@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Sep  7 11:25:21 UTC 2017 - jreidinger@suse.com
+
+- backport language selection widget to allow language selection
+  in CaaSP2 (FATE#323837)
+- 3.2.12
+
+-------------------------------------------------------------------
 Thu Mar 23 18:45:42 UTC 2017 - igonzalezsosa@suse.com
 
 - Fix GetLocaleString to use the given locale instead of

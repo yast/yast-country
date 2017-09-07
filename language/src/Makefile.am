@@ -88,6 +88,12 @@ ydata_DATA = \
 desktop_DATA = \
   desktop/yast-language.desktop
 
-EXTRA_DIST = $(module_DATA) $(module1_DATA) $(client_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA)
+
+ywidgetsdir = @ylibdir@/y2country/widgets
+ywidgets_DATA = \
+  lib/y2country/widgets/language_selection.rb
+
+EXTRA_DIST = $(module_DATA) $(module1_DATA) $(client_DATA) $(scrconf_DATA) \
+  $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ywidgets_DATA)
 
 include $(top_srcdir)/Makefile.am.common
