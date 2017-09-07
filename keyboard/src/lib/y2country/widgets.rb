@@ -32,7 +32,7 @@ module Y2Country
       # param default [String] ID for default keyboard layout if not selected
       #   and no proposal for current language is found.
       #   Allowed values are defined in /usr/share/YaST2/data/keyboard_raw.ycp
-      def initialize(default)
+      def initialize(default = "english-us")
         textdomain "country"
         @default = default
       end
