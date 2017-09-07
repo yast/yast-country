@@ -79,8 +79,7 @@ module Y2Country
         Yast::Language.Set(value)
         Yast::Language.languages = Yast::Language.RemoveSuffix(value)
         @default = value
-        return nil unless @emit_event
-        return nil if Yast::Mode.config
+        return nil if !@emit_event || Yast::Mode.config
 
         switch_language
         :redraw
