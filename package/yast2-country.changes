@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Sep 18 12:06:47 UTC 2017 - knut.anderssen@suse.com
+
+- Augment "Uzhgorod" (Europe/Uzhgorod) with "Ukraine ..." to
+  prevent an unknown country from being offered (bsc#1054917)
+- 4.0.1
+
+-------------------------------------------------------------------
 Thu Sep  7 11:25:21 UTC 2017 - jreidinger@suse.com
 
 - improve language selection to support also CaaSP needs
