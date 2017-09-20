@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        4.0.1
+Version:        4.0.2
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -38,7 +38,6 @@ BuildRequires:  rubygem(rspec)
 BuildRequires:  yast2-core >= 3.1.12
 # RSpec extensions for YaST
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
-BuildRequires:  yast2-storage-ng
 # OSRelease.id
 BuildRequires:  yast2 >= 3.2.9
 
@@ -53,15 +52,13 @@ Requires:       yast2-pkg-bindings >= 2.15.3
 Requires:       yast2-core >= 2.16.28
 # new API of ntp-client_proposal.ycp
 Conflicts:      yast2-ntp-client < 2.18.0
-# wrapper_storage.ycp
+
 Requires:       yast2-packager >= 2.23.3
 # VMware detection (.probe.is_vmware)
 Requires:       yast2-hardware-detection >= 3.1.6
 
 Requires:       yast2-country-data
-
 Requires:       yast2-ruby-bindings >= 1.0.0
-Requires:       yast2-storage-ng
 
 Summary:        YaST2 - Country Settings (Language, Keyboard, and Timezone)
 License:        GPL-2.0

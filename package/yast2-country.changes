@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Sep 20 15:22:55 CEST 2017 - shundhammer@suse.de
+
+- Removed dependency on yast-storage (bsc#1058869):
+  Assume hardware clock running on UTC if no check for windows
+  partition possible because yast-storage is not available 
+- 4.0.2
+
+-------------------------------------------------------------------
 Mon Sep 18 12:06:47 UTC 2017 - knut.anderssen@suse.com
 
 - Augment "Uzhgorod" (Europe/Uzhgorod) with "Ukraine ..." to
