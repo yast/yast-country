@@ -25,7 +25,12 @@
 #		Thomas Roelz <tom@suse.de>
 
 require "yast"
-require "y2storage"
+
+begin
+  require "y2storage"
+rescue LoadError
+  # Ignore y2storage not being available (bsc#1058869)
+end
 
 module Yast
   class TimezoneClass < Module
@@ -1002,8 +1007,16 @@ module Yast
 
     # Checks whether the system has Windows installed
     def system_has_windows?
-      win_partitions = disk_analyzer.windows_partitions
-      !win_partitions.empty?
+      begin
+        win_partitions = disk_analyzer.windows_partitions
+        !win_partitions.empty?
+      rescue NameError => ex
+        # bsc#1058869: Don't enforce y2storage being available
+        log.warn("Caught #{ex}")
+        log.warn("No storage-ng support - not checking for a windows partition")
+        log.warn("Assuming UTC for the hardware clock")
+        false # No windows partition found
+      end
     end
 
     # Determines whether timezone is read-only for the current product
