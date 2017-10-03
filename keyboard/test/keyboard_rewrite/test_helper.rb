@@ -23,3 +23,9 @@ if ENV["COVERAGE"]
     ]
   end
 end
+
+def given_layouts(layouts_to_return)
+  allow(Cheetah).to receive(:run).with(
+    "localectl", "list-x11-keymap-layouts", stdout: :capture
+  ).and_return(layouts_to_return.join("\n"))
+end
