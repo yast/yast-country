@@ -1,7 +1,5 @@
-require_relative "../test_helper"
+require_relative "./test_helper"
 require "y2_keyboard/keyboard_layout_repository"
-require "yast"
-require "yast/rspec"
 
 describe Y2Keyboard::KeyboardLayoutRepository do
   describe 'load keyboard layouts' do
