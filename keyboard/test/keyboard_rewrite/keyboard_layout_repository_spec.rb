@@ -9,7 +9,10 @@ describe Y2Keyboard::KeyboardLayoutRepository do
       expected_layouts = ["es", "fr", "us"]
       given_layouts(expected_layouts)
 
-      expect(load_keyboard_layouts).to eq(expected_layouts)
+      expect(load_keyboard_layouts).to be_an(Array)
+      expect(load_keyboard_layouts).to all(be_an(Y2Keyboard::KeyboardLayout))
+      layout_codes_loaded = load_keyboard_layouts.map { |layout| layout.code }
+      expect(layout_codes_loaded).to eq(expected_layouts)
     end
   end
 end
