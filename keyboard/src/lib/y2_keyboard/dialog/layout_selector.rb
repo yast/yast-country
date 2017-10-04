@@ -1,5 +1,6 @@
 require "yast"
 require "ui/dialog"
+require "y2_keyboard/keyboard_layout_repository"
 
 Yast.import "UI"
 Yast.import "Popup"
@@ -14,7 +15,7 @@ module Y2Keyboard
 
       def dialog_content
         VBox(
-          SelectionBox(_("&Keyboard Layout"), ["Spanish", "English", "French"]),
+          SelectionBox(_("&Keyboard Layout"), Y2Keyboard::KeyboardLayoutRepository.load),
           footer
         )
       end
