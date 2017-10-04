@@ -29,3 +29,7 @@ def given_layouts(layouts_to_return)
     "localectl", "list-x11-keymap-layouts", stdout: :capture
   ).and_return(layouts_to_return.join("\n"))
 end
+
+def mock_ui_events(*events)
+  allow(Yast::UI).to receive(:UserInput).and_return(*events)
+end
