@@ -14,5 +14,12 @@ describe Y2Keyboard::KeyboardLayoutRepository do
       layout_codes_loaded = load_keyboard_layouts.map { |layout| layout.code }
       expect(layout_codes_loaded).to eq(expected_layouts)
     end
+
+    it 'initialize the layout description' do
+      layout_list = ["es"]
+      given_layouts(layout_list)
+
+      expect(load_keyboard_layouts.first.description).to eq("Spanish")
+    end
   end
 end
