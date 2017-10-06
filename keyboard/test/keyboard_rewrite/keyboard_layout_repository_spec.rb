@@ -22,7 +22,7 @@ describe Y2Keyboard::KeyboardLayoutRepository do
       expect(load_keyboard_layouts.first.description).to eq("Spanish")
     end
 
-    it 'does not return layouts without description' do
+    it 'does not return layouts that not have description' do
       layout_list = ["zz", "es", "aa"]
       given_layouts(layout_list)
 
