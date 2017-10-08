@@ -1,4 +1,4 @@
-SRC_PATH = File.expand_path("../../../src", __FILE__)
+SRC_PATH = File.expand_path("../../src", __FILE__)
 DATA_PATH = File.join(File.expand_path(File.dirname(__FILE__)), "data")
 ENV["Y2DIR"] = SRC_PATH
 

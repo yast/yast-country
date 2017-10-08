@@ -1,5 +1,5 @@
 require "cheetah"
-require "y2_keyboard/keyboard_layout"
+require_relative "keyboard_layout"
 
 module Y2Keyboard
   class KeyboardLayoutRepository

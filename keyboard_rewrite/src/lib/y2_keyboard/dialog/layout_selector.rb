@@ -1,6 +1,6 @@
 require "yast"
 require "ui/dialog"
-require "y2_keyboard/keyboard_layout_repository"
+require_relative "../keyboard_layout_repository"
 
 Yast.import "UI"
 Yast.import "Popup"
