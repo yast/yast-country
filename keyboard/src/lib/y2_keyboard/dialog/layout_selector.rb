@@ -15,7 +15,10 @@ module Y2Keyboard
 
       def dialog_content
         VBox(
-          SelectionBox(_("&Keyboard Layout"), Y2Keyboard::KeyboardLayoutRepository.load),
+          SelectionBox(
+            _("&Keyboard Layout"), 
+            Y2Keyboard::KeyboardLayoutRepository.load.map { |layout| layout.description }
+            ),
           footer
         )
       end
