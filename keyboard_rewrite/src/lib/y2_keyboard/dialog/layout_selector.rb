@@ -1,6 +1,6 @@
 require "yast"
 require "ui/dialog"
-require_relative "../keyboard_layout_repository"
+require_relative "../keyboard_layout"
 
 Yast.import "UI"
 Yast.import "Popup"
@@ -16,7 +16,7 @@ module Y2Keyboard
         VBox(
           SelectionBox(
             _("&Keyboard Layout"),
-            Y2Keyboard::KeyboardLayoutRepository.load.map(&:description)
+            Y2Keyboard::KeyboardLayout.load.map(&:description)
             ),
           footer
         )

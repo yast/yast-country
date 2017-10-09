@@ -1,5 +1,5 @@
 require_relative "test_helper"
-require "y2_keyboard/keyboard_layout_repository"
+require "y2_keyboard/keyboard_layout"
 require "y2_keyboard/dialog/layout_selector"
 
 describe Y2Keyboard::Dialog::LayoutSelector do
@@ -16,7 +16,7 @@ describe Y2Keyboard::Dialog::LayoutSelector do
     end
 
     it "load keyboard layouts" do
-      expect(Y2Keyboard::KeyboardLayoutRepository).to receive(:load)
+      expect(Y2Keyboard::KeyboardLayout).to receive(:load)
         .and_return([Y2Keyboard::KeyboardLayout.new("en", "English")])
       layout_selector.run
     end
