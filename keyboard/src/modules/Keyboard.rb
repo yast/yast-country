@@ -886,7 +886,7 @@ module Yast
       )
       SCR.Write(path(".sysconfig.keyboard"), nil) # flush
 
-      keymap = @keymap.gsub(/(.*)\.map\.gz/, '\1')
+      keymap = @keymap.chomp(".map.gz")
       cmd = if Stage.initial
         "/usr/bin/systemd-firstboot --root #{Installation.destdir} --keymap '#{keymap}'"
       else
