@@ -886,11 +886,11 @@ module Yast
       )
       SCR.Write(path(".sysconfig.keyboard"), nil) # flush
 
-      keymap = @keymap.chomp(".map.gz")
+      chomped_keymap = @keymap.chomp(".map.gz")
       cmd = if Stage.initial
-        "/usr/bin/systemd-firstboot --root #{Installation.destdir} --keymap '#{keymap}'"
+        "/usr/bin/systemd-firstboot --root #{Installation.destdir} --keymap '#{chomped_keymap}'"
       else
-        "/usr/bin/localectl --no-convert set-keymap #{keymap}"
+        "/usr/bin/localectl --no-convert set-keymap #{chomped_keymap}"
       end
       log.info "Making console keyboard persistent: #{cmd}"
       result = SCR.Execute(path(".target.bash_output"), cmd)
