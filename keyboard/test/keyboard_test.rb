@@ -72,10 +72,7 @@ module Yast
 
         it "writes the configuration" do
           expect(SCR).to execute_bash(
-            /localectl --no-convert set-x11-keymap es microsoftpro$/
-          )
-          expect(SCR).to execute_bash(
-            /localectl --no-convert set-keymap es$/
+            /systemd-firstboot --root \/mnt --keymap 'es'$/
           )
           expect(AsciiFile).to receive(:AppendLine).with(anything, ["Keytable:", "es.map.gz"])
 

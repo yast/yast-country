@@ -885,10 +885,18 @@ module Yast
       )
       SCR.Write(path(".sysconfig.keyboard"), nil) # flush
 
-      cmd = "/usr/bin/localectl --no-convert set-keymap #{@keymap.gsub(/(.*)\.map\.gz/, '\1')}"
+      cmd = if Stage.initial
+        # lets hardcode /mnt there as we do not want to add dependency on yast2-installation
+        # and its Yast::Installation.destdir
+        "/usr/bin/systemd-firstboot --root /mnt --keymap '#{@keymap.gsub(/(.*)\.map\.gz/, '\1')}'"
+      else
+        "/usr/bin/localectl --no-convert set-keymap #{@keymap.gsub(/(.*)\.map\.gz/, '\1')}"
+      end
       log.info "Making console keyboard persistent: #{cmd}"
-      if SCR.Execute(path(".target.bash"), cmd) != 0
+      result = SCR.Execute(path(".target.bash_output"), cmd)
+      if result["exit"] != 0
         log.error "Console keyboard configuration not written. Failed to execute '#{cmd}'"
+        log.error "output: #{result.inspect}"
       end
 
       # Write systemd settings for X11
@@ -1545,9 +1553,15 @@ module Yast
     end
 
     def call_set_x11_keymap
+      if Stage.initial
+        # see https://bugzilla.opensuse.org/show_bug.cgi?id=1046436#c57 for reasoning
+        log.info "Skipping setting of x11 keymap in installation"
+        return
+      end
+
       args = [@XkbLayout, @XkbModel, @XkbVariant, @XkbOptions]
       return if args.all?(&:empty?)
-      
+
       # The localectl syntax enforces a fixed order for the X11 options.
       # Empty options at the end of the command can (must) be skipped.
       # Other empty options must be specified as "".
