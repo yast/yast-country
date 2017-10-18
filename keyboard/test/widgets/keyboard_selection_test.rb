@@ -40,6 +40,7 @@ describe Y2Country::Widgets::KeyboardSelection do
   context "when keyboard layout not yet set" do
     before do
       allow(Yast::Keyboard).to receive(:user_decision).and_return(false)
+      allow(Yast::Language).to receive(:language).and_return("english-us")
     end
 
     it "initializes widget to english us layout" do

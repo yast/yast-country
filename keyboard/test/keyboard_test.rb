@@ -441,6 +441,7 @@ module Yast
 
       context "when user did not make any decision" do
         it "sets the keyboard for the current language" do
+          allow(Yast::Language).to receive(:language).and_return("english-us")
           expect(Keyboard).to receive(:Set).with("english-us")
           Keyboard.MakeProposal(false, false)
         end
