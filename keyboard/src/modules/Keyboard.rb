@@ -111,6 +111,7 @@ module Yast
       Yast.import "Directory"
       Yast.import "FileUtils"
       Yast.import "Initrd"
+      Yast.import "Installation"
       Yast.import "Label"
       Yast.import "Language"
       Yast.import "Linuxrc"
@@ -885,12 +886,11 @@ module Yast
       )
       SCR.Write(path(".sysconfig.keyboard"), nil) # flush
 
+      keymap = @keymap.gsub(/(.*)\.map\.gz/, '\1')
       cmd = if Stage.initial
-        # lets hardcode /mnt there as we do not want to add dependency on yast2-installation
-        # and its Yast::Installation.destdir
-        "/usr/bin/systemd-firstboot --root /mnt --keymap '#{@keymap.gsub(/(.*)\.map\.gz/, '\1')}'"
+        "/usr/bin/systemd-firstboot --root #{Installation.destdir} --keymap '#{keymap}'"
       else
-        "/usr/bin/localectl --no-convert set-keymap #{@keymap.gsub(/(.*)\.map\.gz/, '\1')}"
+        "/usr/bin/localectl --no-convert set-keymap #{keymap}"
       end
       log.info "Making console keyboard persistent: #{cmd}"
       result = SCR.Execute(path(".target.bash_output"), cmd)
