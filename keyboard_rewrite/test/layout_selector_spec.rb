@@ -21,4 +21,15 @@ describe Y2Keyboard::Dialog::LayoutSelector do
       layout_selector.run
     end
   end
+
+  describe "#accept_handler" do
+    before do
+      mock_ui_events(:accept)      
+    end
+
+    it "closes the dialog" do
+      expect(layout_selector).to receive(:finish_dialog).and_call_original
+      layout_selector.run
+    end
+  end
 end

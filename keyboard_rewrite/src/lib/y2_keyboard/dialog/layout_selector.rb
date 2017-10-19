@@ -22,6 +22,10 @@ module Y2Keyboard
         )
       end
 
+      def accept_handler
+        finish_dialog
+      end
+
       def footer
         HBox(
           HSpacing(),
