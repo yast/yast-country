@@ -27,6 +27,16 @@ describe Y2Keyboard::Dialog::LayoutSelector do
       mock_ui_events(:accept)      
     end
 
+    it "change the keymap to the selected layout" do
+      allow(Yast::UI).to receive(:QueryWidget)
+        .with(:layout_list, :current_item)
+        .and_return("es")
+      
+      expect(Y2Keyboard::KeyboardLayout).to receive(:set_layout).with("es")
+      
+      layout_selector.run
+    end
+
     it "closes the dialog" do
       expect(layout_selector).to receive(:finish_dialog).and_call_original
       layout_selector.run
