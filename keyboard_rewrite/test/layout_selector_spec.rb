@@ -38,7 +38,13 @@ describe Y2Keyboard::Dialog::LayoutSelector do
     end
 
     it "closes the dialog" do
+      allow(Yast::UI).to receive(:QueryWidget)
+        .with(:layout_list, :current_item)
+        .and_return("es")
+      allow(Y2Keyboard::KeyboardLayout).to receive(:set_layout).with("es")
+      
       expect(layout_selector).to receive(:finish_dialog).and_call_original
+      
       layout_selector.run
     end
   end
