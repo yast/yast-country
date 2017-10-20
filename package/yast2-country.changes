@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Oct 20 11:32:05 UTC 2017 - lslezak@suse.cz
+
+- Use `systemd-firstboot` call for setting the keyboard in the
+  first stage (bsc#1046436)
+- 4.0.3
+
+-------------------------------------------------------------------
 Wed Sep 20 15:22:55 CEST 2017 - shundhammer@suse.de
 
 - Removed dependency on yast-storage (bsc#1058869):
