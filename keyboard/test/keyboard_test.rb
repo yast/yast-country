@@ -36,6 +36,7 @@ module Yast
       allow(Linuxrc).to receive(:text).and_return false
       allow(SCR).to receive(:Execute).with(path(".target.remove"), udev_file)
       allow(SCR).to receive(:Write).with(anything, udev_file, anything)
+      allow(Installation).to receive(:destdir).and_return("/mnt")
 
       init_root_path(chroot) if defined?(chroot)
     end
@@ -71,11 +72,8 @@ module Yast
         let(:new_lang) { "spanish" }
 
         it "writes the configuration" do
-          expect(SCR).to execute_bash(
-            /localectl --no-convert set-x11-keymap es microsoftpro$/
-          )
-          expect(SCR).to execute_bash(
-            /localectl --no-convert set-keymap es$/
+          expect(SCR).to execute_bash_output(
+            /systemd-firstboot --root \/mnt --keymap 'es'$/
           )
           expect(AsciiFile).to receive(:AppendLine).with(anything, ["Keytable:", "es.map.gz"])
 
@@ -105,7 +103,7 @@ module Yast
           expect(SCR).to execute_bash(
             /localectl --no-convert set-x11-keymap us,ru microsoftpro ,winkeys grp:ctrl_shift_toggle,grp_led:scroll$/
           )
-          expect(SCR).to execute_bash(
+          expect(SCR).to execute_bash_output(
             /localectl --no-convert set-keymap ruwin_alt-UTF-8$/
           )
 
@@ -443,6 +441,7 @@ module Yast
 
       context "when user did not make any decision" do
         it "sets the keyboard for the current language" do
+          allow(Yast::Language).to receive(:language).and_return("english-us")
           expect(Keyboard).to receive(:Set).with("english-us")
           Keyboard.MakeProposal(false, false)
         end
