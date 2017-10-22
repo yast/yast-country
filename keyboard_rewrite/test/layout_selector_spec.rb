@@ -1,9 +1,9 @@
 require_relative "test_helper"
 require "y2_keyboard/keyboard_layout"
-require "y2_keyboard/dialog/layout_selector"
+require "y2_keyboard/dialogs/layout_selector"
 
-describe Y2Keyboard::Dialog::LayoutSelector do
-  subject(:layout_selector) { Y2Keyboard::Dialog::LayoutSelector.new }
+describe Y2Keyboard::Dialogs::LayoutSelector do
+  subject(:layout_selector) { Y2Keyboard::Dialogs::LayoutSelector.new }
 
   before do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)

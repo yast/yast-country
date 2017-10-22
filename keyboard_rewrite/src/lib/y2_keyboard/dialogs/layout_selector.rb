@@ -6,7 +6,7 @@ Yast.import "UI"
 Yast.import "Popup"
 
 module Y2Keyboard
-  module Dialog
+  module Dialogs
     class LayoutSelector < UI::Dialog
       def dialog_options
         Opt(:decorated, :defaultsize)
