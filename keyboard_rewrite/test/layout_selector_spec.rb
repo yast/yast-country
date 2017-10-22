@@ -16,7 +16,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
     end
 
     it "load keyboard layouts" do
-      expect(Y2Keyboard::KeyboardLayout).to receive(:load)
+      expect(Y2Keyboard::KeyboardLayout).to receive(:all)
         .and_return([Y2Keyboard::KeyboardLayout.new("en", "English")])
       layout_selector.run
     end

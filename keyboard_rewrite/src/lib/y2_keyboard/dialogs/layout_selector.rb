@@ -16,7 +16,7 @@ module Y2Keyboard
         VBox(
           SelectionBox(
             _("&Keyboard Layout"),
-            Y2Keyboard::KeyboardLayout.load.map(&:description)
+            Y2Keyboard::KeyboardLayout.all.map(&:description)
             ),
           footer
         )

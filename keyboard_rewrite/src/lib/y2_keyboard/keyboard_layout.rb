@@ -16,7 +16,7 @@ module Y2Keyboard
       @description = description
     end
 
-    def self.load
+    def self.all
       raw_layouts = Cheetah.run("localectl", "list-keymaps", stdout: :capture)
       layout_codes = raw_layouts.lines.map { |string| string.split.first }
       codes_with_description = layout_codes.select { |code| LAYOUT_CODE_DESCRIPTIONS.key?(code) }
