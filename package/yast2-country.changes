@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Oct 23 14:18:29 UTC 2017 - lslezak@suse.cz
+
+- Do not use `--root` option for the `systemd-firstboot` call,
+  SCR already runs it in the target chroot (bsc#1046436)
+- 4.0.4
+
+-------------------------------------------------------------------
 Fri Oct 20 11:32:05 UTC 2017 - lslezak@suse.cz
 
 - Use `systemd-firstboot` call for setting the keyboard in the

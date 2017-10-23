@@ -73,7 +73,7 @@ module Yast
 
         it "writes the configuration" do
           expect(SCR).to execute_bash_output(
-            /systemd-firstboot --root \/mnt --keymap 'es'$/
+            /systemd-firstboot --keymap 'es'$/
           )
           expect(AsciiFile).to receive(:AppendLine).with(anything, ["Keytable:", "es.map.gz"])
 
