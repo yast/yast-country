@@ -111,7 +111,6 @@ module Yast
       Yast.import "Directory"
       Yast.import "FileUtils"
       Yast.import "Initrd"
-      Yast.import "Installation"
       Yast.import "Label"
       Yast.import "Language"
       Yast.import "Linuxrc"
@@ -888,7 +887,8 @@ module Yast
 
       chomped_keymap = @keymap.chomp(".map.gz")
       cmd = if Stage.initial
-        "/usr/bin/systemd-firstboot --root #{Installation.destdir} --keymap '#{chomped_keymap}'"
+        # do not use --root option, SCR.Execute(".target...") already runs in chroot
+        "/usr/bin/systemd-firstboot --keymap '#{chomped_keymap}'"
       else
         "/usr/bin/localectl --no-convert set-keymap #{chomped_keymap}"
       end
