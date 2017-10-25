@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Oct 25 08:43:25 UTC 2017 - lslezak@suse.cz
+
+- Display an error popup when saving the keyboard config fails
+  (related to bsc#1046436)
+- 4.0.5
+
+-------------------------------------------------------------------
 Mon Oct 23 14:18:29 UTC 2017 - lslezak@suse.cz
 
 - Do not use `--root` option for the `systemd-firstboot` call,
