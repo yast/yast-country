@@ -895,6 +895,8 @@ module Yast
       log.info "Making console keyboard persistent: #{cmd}"
       result = SCR.Execute(path(".target.bash_output"), cmd)
       if result["exit"] != 0
+        # TRANSLATORS: the "%s" is replaced by the executed command
+        Report.Error(_("Could not save the keyboard setting, the command\n%s\nfailed.") % cmd)
         log.error "Console keyboard configuration not written. Failed to execute '#{cmd}'"
         log.error "output: #{result.inspect}"
       end
