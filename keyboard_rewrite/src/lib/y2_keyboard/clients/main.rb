@@ -4,7 +4,8 @@ module Y2Keyboard
   module Clients
     class Main
       def self.run
-        Y2Keyboard::Dialogs::LayoutSelector.run
+        layouts = Y2Keyboard::KeyboardLayout.all
+        Y2Keyboard::Dialogs::LayoutSelector.new(layouts).run
       end
     end
   end
