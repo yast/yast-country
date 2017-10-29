@@ -8,6 +8,11 @@ Yast.import "Popup"
 module Y2Keyboard
   module Dialogs
     class LayoutSelector < UI::Dialog
+
+      def initialize(keyboard_layouts)
+        @keyboard_layouts = keyboard_layouts
+      end
+
       def dialog_options
         Opt(:decorated, :defaultsize)
       end
@@ -16,7 +21,7 @@ module Y2Keyboard
         VBox(
           SelectionBox(
             _("&Keyboard Layout"),
-            Y2Keyboard::KeyboardLayout.all.map(&:description)
+            @keyboard_layouts.map(&:description)
             ),
           footer
         )
