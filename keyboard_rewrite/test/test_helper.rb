@@ -1,10 +1,10 @@
-require "yast"
-require "yast/rspec"
-require_relative "helpers"
-
 SRC_PATH = File.expand_path("../../src", __FILE__)
 DATA_PATH = File.join(File.expand_path(File.dirname(__FILE__)), "data")
 ENV["Y2DIR"] = SRC_PATH
+
+require "yast"
+require "yast/rspec"
+require_relative "helpers"
 
 if ENV["COVERAGE"]
   require "simplecov"
