@@ -100,11 +100,8 @@ module Yast
         let(:new_lang) { "russian" }
 
         it "writes the configuration" do
-          expect(SCR).to execute_bash(
-            /localectl --no-convert set-x11-keymap us,ru microsoftpro ,winkeys grp:ctrl_shift_toggle,grp_led:scroll$/
-          )
           expect(SCR).to execute_bash_output(
-            /localectl --no-convert set-keymap ruwin_alt-UTF-8$/
+            /localectl set-keymap ruwin_alt-UTF-8$/
           )
 
           Keyboard.Set("russian")

@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 31 14:41:28 UTC 2017 - lslezak@suse.cz
+
+- Let the "localectl" to tool create the X11 keyboard configuration
+  (bsc#1065264)
+- 4.0.6
+
+-------------------------------------------------------------------
 Wed Oct 25 08:43:25 UTC 2017 - lslezak@suse.cz
 
 - Display an error popup when saving the keyboard config fails
