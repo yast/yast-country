@@ -890,19 +890,17 @@ module Yast
         # do not use --root option, SCR.Execute(".target...") already runs in chroot
         "/usr/bin/systemd-firstboot --keymap '#{chomped_keymap}'"
       else
-        "/usr/bin/localectl --no-convert set-keymap #{chomped_keymap}"
+        # this sets both the console and the X11 keyboard (see "man localectl")
+        "/usr/bin/localectl set-keymap #{chomped_keymap}"
       end
-      log.info "Making console keyboard persistent: #{cmd}"
+      log.info "Making keyboard setting persistent: #{cmd}"
       result = SCR.Execute(path(".target.bash_output"), cmd)
       if result["exit"] != 0
         # TRANSLATORS: the "%s" is replaced by the executed command
         Report.Error(_("Could not save the keyboard setting, the command\n%s\nfailed.") % cmd)
-        log.error "Console keyboard configuration not written. Failed to execute '#{cmd}'"
+        log.error "Keyboard configuration not written. Failed to execute '#{cmd}'"
         log.error "output: #{result.inspect}"
       end
-
-      # Write systemd settings for X11
-      call_set_x11_keymap if x11_setup_needed
 
       # As a preliminary step mark all keyboards except the one to be configured
       # as configured = no and needed = no. Afterwards this one keyboard will be
@@ -1552,30 +1550,6 @@ module Yast
 
       # eval is necessary for translating the texts needed to be translated
       content ? Builtins.eval(content) : {}
-    end
-
-    def call_set_x11_keymap
-      if Stage.initial
-        # see https://bugzilla.opensuse.org/show_bug.cgi?id=1046436#c57 for reasoning
-        log.info "Skipping setting of x11 keymap in installation"
-        return
-      end
-
-      args = [@XkbLayout, @XkbModel, @XkbVariant, @XkbOptions]
-      return if args.all?(&:empty?)
-
-      # The localectl syntax enforces a fixed order for the X11 options.
-      # Empty options at the end of the command can (must) be skipped.
-      # Other empty options must be specified as "".
-      last_idx = args.rindex { |a| !a.empty? }
-      args = args[0..last_idx]
-      args.map! { |a| a.empty? ? "\"\"" : a }
-
-      cmd = "/usr/bin/localectl --no-convert set-x11-keymap #{args.join(' ')}"
-      log.info "Making X11 keyboard persistent: #{cmd}"
-      if SCR.Execute(path(".target.bash"), cmd) != 0
-        log.error "X11 configuration not written. Failed to execute '#{cmd}'"
-      end
     end
   end
 
