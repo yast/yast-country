@@ -1,3 +1,3 @@
-require_relative "../lib/y2_keyboard/dialog/layout_selector"
+require_relative "../lib/y2_keyboard/clients/main"
 
-Y2Keyboard::Dialog::LayoutSelector.run
+Y2Keyboard::Clients::Main.run

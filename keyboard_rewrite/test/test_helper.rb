@@ -4,6 +4,7 @@ ENV["Y2DIR"] = SRC_PATH
 
 require "yast"
 require "yast/rspec"
+require_relative "helpers"
 
 if ENV["COVERAGE"]
   require "simplecov"
@@ -24,12 +25,7 @@ if ENV["COVERAGE"]
   end
 end
 
-def given_layouts(layouts_to_return)
-  allow(Cheetah).to receive(:run).with(
-    "localectl", "list-keymaps", stdout: :capture
-  ).and_return(layouts_to_return.join("\n"))
+RSpec.configure do |config|
+  config.include Helpers    # custom helpers
 end
 
-def mock_ui_events(*events)
-  allow(Yast::UI).to receive(:UserInput).and_return(*events)
-end

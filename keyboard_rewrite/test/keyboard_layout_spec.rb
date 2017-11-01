@@ -2,8 +2,8 @@ require_relative "./test_helper"
 require "y2_keyboard/keyboard_layout"
 
 describe Y2Keyboard::KeyboardLayout do
-  describe ".load" do
-    subject(:load_keyboard_layouts) { Y2Keyboard::KeyboardLayout.load }
+  describe ".all" do
+    subject(:load_keyboard_layouts) { Y2Keyboard::KeyboardLayout.all }
 
     it "returns a lists of keyboard layouts" do
       expected_layouts = ["es", "fr", "us"]
@@ -22,7 +22,7 @@ describe Y2Keyboard::KeyboardLayout do
       expect(load_keyboard_layouts.first.description).to eq("Spanish")
     end
 
-    it "does not returns layouts that not have description" do
+    it "does not return layouts that does not have description" do
       layout_list = ["zz", "es", "aa"]
       given_layouts(layout_list)
 
