@@ -3,7 +3,10 @@ require "y2_keyboard/keyboard_layout"
 require "y2_keyboard/dialogs/layout_selector"
 
 describe Y2Keyboard::Dialogs::LayoutSelector do
-  subject(:layout_selector) { Y2Keyboard::Dialogs::LayoutSelector }
+  english = Y2Keyboard::KeyboardLayout.new("en", "English")
+  spanish = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
+  layouts = [english, spanish]
+  subject(:layout_selector) { Y2Keyboard::Dialogs::LayoutSelector.new(layouts) }
 
   before do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)
@@ -16,13 +19,10 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
     end
 
     it "lists the keyboard layouts" do
-      english = Y2Keyboard::KeyboardLayout.new("en", "English")
-      spanish = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
-      layouts = [english, spanish]
       expect(english).to receive(:description)
       expect(spanish).to receive(:description)
 
-      layout_selector.new(layouts).run
+      layout_selector.run
     end
   end
 
