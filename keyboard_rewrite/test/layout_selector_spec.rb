@@ -36,7 +36,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
         .with(:layout_lists, :CurrentItem)
         .and_return("es")
       
-      expect(Y2Keyboard::KeyboardLayout).to receive(:set_layout).with("es")
+      expect(Y2Keyboard::KeyboardLayout).to receive(:set_layout).with(spanish)
       
       layout_selector.run
     end
@@ -45,7 +45,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
       allow(Yast::UI).to receive(:QueryWidget)
         .with(:layout_lists, :CurrentItem)
         .and_return("es")
-      allow(Y2Keyboard::KeyboardLayout).to receive(:set_layout).with("es")
+      allow(Y2Keyboard::KeyboardLayout).to receive(:set_layout)
       
       expect(layout_selector).to receive(:finish_dialog).and_call_original
       
