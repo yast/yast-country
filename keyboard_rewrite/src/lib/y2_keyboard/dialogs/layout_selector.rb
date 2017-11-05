@@ -31,7 +31,7 @@ module Y2Keyboard
 
       def accept_handler
         selected_layout = Yast::UI.QueryWidget(:layout_lists, :CurrentItem)
-        layout = @keyboard_layouts.find { |x| x.code == selected_layout }
+        layout = @keyboard_layouts.find { |x| x.description == selected_layout }
         Y2Keyboard::KeyboardLayout.set_layout(layout)
         finish_dialog
       end
