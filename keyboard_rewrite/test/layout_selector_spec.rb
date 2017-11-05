@@ -33,7 +33,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
 
     it "change the keymap to the selected layout" do
       allow(Yast::UI).to receive(:QueryWidget)
-        .with(:layout_list, :current_item)
+        .with(:layout_lists, :CurrentItem)
         .and_return("es")
       
       expect(Y2Keyboard::KeyboardLayout).to receive(:set_layout).with("es")
@@ -43,7 +43,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
 
     it "closes the dialog" do
       allow(Yast::UI).to receive(:QueryWidget)
-        .with(:layout_list, :current_item)
+        .with(:layout_lists, :CurrentItem)
         .and_return("es")
       allow(Y2Keyboard::KeyboardLayout).to receive(:set_layout).with("es")
       

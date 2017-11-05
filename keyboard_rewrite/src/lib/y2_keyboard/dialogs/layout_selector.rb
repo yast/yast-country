@@ -1,4 +1,5 @@
 require "yast"
+require "byebug"
 require "ui/dialog"
 require_relative "../keyboard_layout"
 
@@ -29,7 +30,7 @@ module Y2Keyboard
       end
 
       def accept_handler
-        selected_layout = Yast::UI.QueryWidget(:layout_list, :current_item)
+        selected_layout = Yast::UI.QueryWidget(:layout_lists, :CurrentItem)
         Y2Keyboard::KeyboardLayout.set_layout(selected_layout)
         finish_dialog
       end
