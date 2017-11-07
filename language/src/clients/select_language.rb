@@ -579,24 +579,7 @@ module Yast
 
       # help text for langauge expert screen
       help_text = Ops.add(
-        Ops.add(
-          Ops.add(
-            help_text,
-            _(
-              "<p>\n" +
-                "<b>Locale Settings for User root</b>\n" +
-                "determines how the locale variables (LC_*) are set for the root user.</p>"
-            )
-          ),
-          # help text for langauge expert screen
-          _(
-            "<p><b>ctype Only</b>: root has the same LC_CTYPE as a normal user. Other values\n" +
-              "are unset.<br>\n" +
-              "<b>Yes</b>: root has the same locale settings as normal user.<br>\n" +
-              "<b>No</b>: root has all locale variables unset.\n" +
-              "</p>\n"
-          )
-        ),
+        help_text,
         # help text for langauge expert screen
         _(
           "<p>Use <b>Detailed Locale Setting</b> to set a locale for the primary language that is not offered in the list in the main dialog. Translation may not be available for the selected locale.</p>"
