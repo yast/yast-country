@@ -5,7 +5,7 @@ require "cwm/rspec"
 require "y2country/language_dbus"
 
 describe "Y2Country::Widgets::KeyboardSelection" do
-  subject { described_class.new("english-us") }
+  subject { Y2Country::Widgets::KeyboardSelection.new("english-us") }
 
   include_examples "CWM::AbstractWidget"
 
