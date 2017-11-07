@@ -2,6 +2,7 @@
 
 require_relative "../test_helper"
 require "cwm/rspec"
+require "y2country/language_dbus"
 
 describe "Y2Country::Widgets::KeyboardSelection" do
   subject { described_class.new("english-us") }
@@ -9,7 +10,7 @@ describe "Y2Country::Widgets::KeyboardSelection" do
   include_examples "CWM::AbstractWidget"
 
   before do
-    allow(Y2Country).to receive(:ReadLocaleConf).and_return({})
+    allow(Y2Country).to receive(:read_locale_conf).and_return({})
     require "y2country/widgets/keyboard_selection"
   end
 
