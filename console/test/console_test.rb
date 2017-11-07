@@ -2,12 +2,15 @@
 
 require_relative "test_helper"
 
-Yast.import "Console"
 
-describe Yast::Console do
-  subject(:console) { Yast::Console }
+describe "Yast::Console" do
+  subject(:console) { "Yast::Console" }
 
-  before { console.main }
+  before do
+    allow(Y2Country).to receive(:ReadLocaleConf).and_return({})
+    Yast.import "Console"
+    console.main
+  end
 
   describe "#SelectFont" do
     let(:braille) { false }

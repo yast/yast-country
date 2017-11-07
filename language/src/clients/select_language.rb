@@ -634,20 +634,6 @@ module Yast
               Heading(_("Language Details")),
               VSpacing(Opt(:vstretch), 2),
               Left(
-                # combo box label
-                ComboBox(
-                  Id(:rootlang),
-                  _("Locale Settings for User &root"),
-                  [
-                    # do not translate "ctype"
-                    Item(Id("ctype"), _("ctype Only")),
-                    Item(Id("yes"), _("Yes")),
-                    Item(Id("no"), _("No"))
-                  ]
-                )
-              ),
-              VSpacing(Opt(:vstretch), 1),
-              Left(
                 # checkbox label
                 CheckBox(
                   Id(:use_utf8),
@@ -675,11 +661,6 @@ module Yast
         )
       )
 
-      UI.ChangeWidget(
-        Id(:rootlang),
-        :Value,
-        Ops.get_string(val, "rootlang", "ctype")
-      )
       UI.ChangeWidget(Id(:locales), :Value, @language)
 
       ret = :none
@@ -688,7 +669,6 @@ module Yast
         ret = Convert.to_symbol(UI.UserInput)
         if ret == :ok
           val = {}
-          Ops.set(val, "rootlang", UI.QueryWidget(Id(:rootlang), :Value))
           Ops.set(val, "use_utf8", UI.QueryWidget(Id(:use_utf8), :Value))
           if val != val_on_entry
             Builtins.y2milestone("expert settings changed to %1", val)

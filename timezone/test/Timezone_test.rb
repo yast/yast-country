@@ -2,15 +2,16 @@
 
 require_relative "test_helper"
 
-Yast.import "Timezone"
 Yast.import "ProductFeatures"
 
-describe Yast::Timezone do
+describe "Yast::Timezone" do
   let(:readonly_timezone) { false }
   let(:default_timezone) { "" }
   let(:initial) { false }
 
   before do
+    allow(Y2Country).to receive(:ReadLocaleConf).and_return({})
+    Yast.import "Timezone"
     allow(Yast::ProductFeatures).to receive(:GetBooleanFeature)
       .with("globals", "readonly_timezone").and_return(readonly_timezone)
     allow(Yast::ProductFeatures).to receive(:GetStringFeature)

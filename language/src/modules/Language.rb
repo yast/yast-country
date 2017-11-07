@@ -28,12 +28,15 @@
 #
 # $Id$
 require "yast"
+require "dbus"
 
 module Yast
   class LanguageClass < Module
     DEFAULT_FALLBACK_LANGUAGE = "en_US".freeze
 
     include Yast::Logger
+
+    require "y2country/language_dbus"
 
     def main
       Yast.import "Pkg"
@@ -79,9 +82,6 @@ module Yast
       @default_language = DEFAULT_FALLBACK_LANGUAGE
 
 
-      # Default settings for ROOT_USES_LANG in /etc/sysconfig/language
-      @rootlang = "ctype"
-
       # Default settings for INSTALLED_LANGUAGES in /etc/sysconfig/language
       @languages = ""
 
@@ -114,6 +114,9 @@ module Yast
 
       # mapping of language to its default (proposed) kbd layout
       @lang2keyboard = {}
+
+      # setting read from localed
+      @localed_conf = {}
 
       # languages that cannot be correctly shown in text mode
       # if the system (Linuxrc) does not start with them from the beginning
@@ -545,6 +548,21 @@ module Yast
       nil
     end
 
+    def ReadLocaleConfLanguage
+      return nil if Mode.testsuite
+      @localed_conf  = read_locale_conf()
+      return nil if @localed_conf.nil?
+      local_lang = @localed_conf["LANG"]
+      pos = Builtins.findfirstof(local_lang, ".@")
+
+      if pos != nil && Ops.greater_or_equal(pos, 0)
+        local_lang = Builtins.substring(local_lang, 0, pos)
+      end
+
+      log.info("language from sysconfig: %{local_lang}")
+      local_lang
+    end
+
     # Read the RC_LANG value from sysconfig and exctract language from it
     # @return language
     def ReadSysconfigLanguage
@@ -565,10 +583,6 @@ module Yast
 
     # Read the rest of language values from sysconfig
     def ReadSysconfigValues
-      @rootlang = Misc.SysconfigRead(
-        path(".sysconfig.language.ROOT_USES_LANG"),
-        @rootlang
-      )
       # during live installation, we have sysconfig.language.RC_LANG available
       if !Stage.initial || Mode.live_installation
         val = Builtins.toupper(
@@ -584,6 +598,20 @@ module Yast
       )
 
       nil
+    end
+
+    def ReadUtf8Setting
+      return nil if Mode.testsuite
+      # during live installation, we have sysconfig.language.RC_LANG available
+      if !Stage.initial || Mode.live_installation
+        @localed_conf  = read_locale_conf()
+        return nil if @localed_conf.nil?
+        local_lang = @localed_conf["LANG"]
+        @use_utf8 = Builtins.search(local_lang, ".UTF-8") != nil unless local_lang.empty?
+      else
+        @use_utf8 = true
+      end
+      log.info("Use UTF-8: #{@use_utf8}")
     end
 
     # Constructor
@@ -634,7 +662,7 @@ module Yast
         Set(lang) # coming from /etc/install.inf
         SetDefault() # also default
       else
-        local_lang = ReadSysconfigLanguage()
+        local_lang = ReadLocaleConfLanguage() || ReadSysconfigLanguage()
         QuickSet(local_lang)
         SetDefault() # also default
         if Mode.live_installation || Stage.firstboot
@@ -646,6 +674,7 @@ module Yast
           0
         )
         ReadSysconfigValues()
+        ReadUtf8Setting()
       end
       Encoding.SetUtf8Lang(@use_utf8)
 
@@ -656,8 +685,9 @@ module Yast
     # @param [Boolean] really: also read the values from the system
     def Read(really)
       if really
-        Set(ReadSysconfigLanguage())
+        Set(ReadLocaleConfLanguage() || ReadSysconfigLanguage())
         ReadSysconfigValues()
+        ReadUtf8Setting()
       end
 
       @language_on_entry = @language
@@ -705,7 +735,7 @@ module Yast
     # @return  [Hash] with values filled in
     #
     def GetExpertValues
-      { "rootlang" => @rootlang, "use_utf8" => @use_utf8 }
+      { "use_utf8" => @use_utf8 }
     end
 
     # SetExpertValues()
@@ -718,13 +748,6 @@ module Yast
     #
     def SetExpertValues(val)
       val = deep_copy(val)
-      if Builtins.haskey(val, "rootlang") &&
-          Ops.greater_than(
-            Builtins.size(Ops.get_string(val, "rootlang", "")),
-            0
-          )
-        @rootlang = Ops.get_string(val, "rootlang", "")
-      end
       if Builtins.haskey(val, "use_utf8")
         @use_utf8 = Ops.get_boolean(val, "use_utf8", false)
         Encoding.SetUtf8Lang(@use_utf8)
@@ -923,26 +946,43 @@ module Yast
     def Save
       loc = GetLocaleString(@language)
 
-      SCR.Write(path(".sysconfig.language.RC_LANG"), loc)
+      SCR.Write(path(".sysconfig.language.RC_LANG"), nil) # wipe the variable
 
       if Builtins.find(loc, "zh_HK") == 0
-        SCR.Write(
-          path(".sysconfig.language.RC_LC_MESSAGES"),
-          Ops.add("zh_TW", Builtins.substring(loc, 5))
-        )
-      else
+        @localed_conf["LC_MESSAGES"] = "zh_TW"
+      elsif @localed_conf["LC_MESSAGES"] == "zh_TW"
         # FIXME ugly hack: see bug #47711
-        lc_mess = Convert.to_string(
-          SCR.Read(path(".sysconfig.language.RC_LC_MESSAGES"))
-        )
-        if Builtins.find(lc_mess, "zh_TW") == 0
-          SCR.Write(path(".sysconfig.language.RC_LC_MESSAGES"), "")
-        end
+        @localed_conf.delete("LC_MESSAGES")
       end
 
-      SCR.Write(path(".sysconfig.language.ROOT_USES_LANG"), @rootlang)
+      SCR.Write(path(".sysconfig.language.ROOT_USES_LANG"), nil) # wipe the variable
       SCR.Write(path(".sysconfig.language.INSTALLED_LANGUAGES"), @languages)
       SCR.Write(path(".sysconfig.language"), nil)
+
+      @localed_conf["LANG"] = loc
+      log.info("Locale: #{@localed_conf}")
+      locale_out1 = @localed_conf.map do | key, val |
+        "#{key}=#{val}"
+      end
+      log.info("Locale: #{locale_out1}")
+      locale_out=locale_out1.join(",")
+      log.info("Locale: #{locale_out}")
+
+      cmd = if Stage.initial
+        # do not use --root option, SCR.Execute(".target...") already runs in chroot
+        "/usr/bin/systemd-firstboot --locale '#{locale_out}'"
+      else
+        # this sets both the console and the X11 keyboard (see "man localectl")
+        "/usr/bin/localectl set-locale #{locale_out}"
+      end
+      log.info "Making language setting persistent: #{cmd}"
+      result = SCR.Execute(path(".target.bash_output"), cmd)
+      if result["exit"] != 0
+        # TRANSLATORS: the "%s" is replaced by the executed command
+        Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % cmd)
+        log.error "Language configuration not written. Failed to execute '#{cmd}'"
+        log.error "output: #{result.inspect}"
+      end
 
       Builtins.y2milestone("Saved data for language: <%1>", loc)
 
@@ -1166,7 +1206,6 @@ module Yast
     # @return [Hash] with the settings
     def Export
       ret = { "language" => @language, "languages" => @languages }
-      Ops.set(ret, "rootlang", @rootlang) if @rootlang != "ctype"
       Ops.set(ret, "use_utf8", @use_utf8) if !@use_utf8
       deep_copy(ret)
     end
