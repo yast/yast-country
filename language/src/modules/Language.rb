@@ -547,6 +547,7 @@ module Yast
       nil
     end
 
+    # read the localed.conf language
     def ReadLocaleConfLanguage
       return nil if Mode.testsuite
       @localed_conf  = Y2Country.read_locale_conf
@@ -599,9 +600,10 @@ module Yast
       nil
     end
 
+    # read UTF-8 status from localed.conf
     def ReadUtf8Setting
       return nil if Mode.testsuite
-      # during live installation, we have sysconfig.language.RC_LANG available
+      # during live installation, we have local configuration
       if !Stage.initial || Mode.live_installation
         @localed_conf  = Y2Country.read_locale_conf
         return nil if @localed_conf.nil?
@@ -968,10 +970,10 @@ module Yast
       log.info("Locale: #{locale_out}")
 
       cmd = if Stage.initial
-        # do not use --root option, SCR.Execute(".target...") already runs in chroot
+        # do use --root option, running in chroot does not work
         "/usr/bin/systemd-firstboot --root '#{Installation.destdir}' --locale '#{loc}'"
       else
-        # this sets both the console and the X11 keyboard (see "man localectl")
+        # this sets both the locale (see "man localectl")
         "/usr/bin/localectl set-locale #{locale_out}"
       end
       log.info "Making language setting persistent: #{cmd}"

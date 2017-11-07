@@ -21,7 +21,7 @@
 
 # File:	modules/Language.ycp
 # Module:	Language
-# Summary:	This module does all language related stuff:
+# Summary:	DBus interface for localed.conf
 # Authors:	Klaus Kaempf <kkaempf@suse.de>
 #		Thomas Roelz <tom@suse.de>
 # Maintainer:  Jiri Suchomel <jsuchome@suse.cz>
@@ -32,10 +32,14 @@ require "yast"
 module Y2Country
     extend Yast::Logger
 
+    # Read via DBus the locale settings
+    # @return hash of locale variables
     def read_locale_conf
       begin
         require "dbus"
       rescue
+        # inst-sys (because of constructor)
+        log.info("DBus module not available")
         return nil
       end
       localed_conf = {}
