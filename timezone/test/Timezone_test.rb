@@ -1,6 +1,7 @@
 #!/usr/bin/env rspec
 
 require_relative "test_helper"
+require "y2country/language_dbus"
 
 Yast.import "ProductFeatures"
 
@@ -10,7 +11,7 @@ describe "Yast::Timezone" do
   let(:initial) { false }
 
   before do
-    allow(Y2Country).to receive(:ReadLocaleConf).and_return({})
+    allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
     Yast.import "Timezone"
     allow(Yast::ProductFeatures).to receive(:GetBooleanFeature)
       .with("globals", "readonly_timezone").and_return(readonly_timezone)

@@ -550,7 +550,7 @@ module Yast
 
     def ReadLocaleConfLanguage
       return nil if Mode.testsuite
-      @localed_conf  = read_locale_conf()
+      @localed_conf  = Y2Country.read_locale_conf
       return nil if @localed_conf.nil?
       local_lang = @localed_conf["LANG"]
       pos = Builtins.findfirstof(local_lang, ".@")
@@ -604,7 +604,7 @@ module Yast
       return nil if Mode.testsuite
       # during live installation, we have sysconfig.language.RC_LANG available
       if !Stage.initial || Mode.live_installation
-        @localed_conf  = read_locale_conf()
+        @localed_conf  = Y2Country.read_locale_conf
         return nil if @localed_conf.nil?
         local_lang = @localed_conf["LANG"]
         @use_utf8 = Builtins.search(local_lang, ".UTF-8") != nil unless local_lang.empty?
