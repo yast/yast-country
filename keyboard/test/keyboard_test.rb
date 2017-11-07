@@ -30,7 +30,7 @@ module Yast
 
     before(:each) do
       textdomain "country"
-      allow(Y2Country).to receive(:read_locale_conf).and_return({})
+      allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
       Yast.import "Keyboard"
       allow(OSRelease).to receive(:id).and_return(os_release_id)
       allow(Stage).to receive(:stage).and_return stage

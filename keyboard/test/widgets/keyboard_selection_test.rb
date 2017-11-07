@@ -10,7 +10,7 @@ describe "Y2Country::Widgets::KeyboardSelection" do
   include_examples "CWM::AbstractWidget"
 
   before do
-    allow(Y2Country).to receive(:read_locale_conf).and_return({})
+    allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
     require "y2country/widgets/keyboard_selection"
   end
 
