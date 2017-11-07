@@ -28,12 +28,16 @@
 #
 # $Id$
 require "yast"
-require "dbus"
 
 module Y2Country
     extend Yast::Logger
 
     def read_locale_conf
+      begin
+        require "dbus"
+      rescue
+        return nil
+      end
       localed_conf = {}
       # https://www.freedesktop.org/wiki/Software/systemd/localed/
       sysbus = DBus.system_bus

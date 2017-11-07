@@ -28,7 +28,6 @@
 #
 # $Id$
 require "yast"
-require "dbus"
 
 module Yast
   class LanguageClass < Module
@@ -970,18 +969,24 @@ module Yast
 
       cmd = if Stage.initial
         # do not use --root option, SCR.Execute(".target...") already runs in chroot
-        "/usr/bin/systemd-firstboot --locale '#{locale_out}'"
+        "/usr/bin/systemd-firstboot --root '#{Installation.destdir}' --locale '#{loc}'"
       else
         # this sets both the console and the X11 keyboard (see "man localectl")
         "/usr/bin/localectl set-locale #{locale_out}"
       end
       log.info "Making language setting persistent: #{cmd}"
-      result = SCR.Execute(path(".target.bash_output"), cmd)
+      result = if Stage.initial
+        WFM.Execute(path(".local.bash_output"), cmd)
+      else
+        SCR.Execute(path(".target.bash_output"), cmd)
+      end
       if result["exit"] != 0
         # TRANSLATORS: the "%s" is replaced by the executed command
         Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % cmd)
         log.error "Language configuration not written. Failed to execute '#{cmd}'"
         log.error "output: #{result.inspect}"
+      else
+        log.info "output: #{result.inspect}"
       end
 
       Builtins.y2milestone("Saved data for language: <%1>", loc)
