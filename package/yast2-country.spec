@@ -40,7 +40,7 @@ BuildRequires:  yast2-core >= 3.1.12
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
 # OSRelease.id
 BuildRequires:  yast2 >= 3.2.9
-BuildRequires:  rubygem(%{rb_default_ruby_abi}:ruby-dbus)
+# BuildRequires:  rubygem(%{rb_default_ruby_abi}:ruby-dbus)
 
 Requires:       timezone
 Requires:       yast2-perl-bindings

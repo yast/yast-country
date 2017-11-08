@@ -19,12 +19,10 @@
 # current contact information at www.novell.com.
 # ------------------------------------------------------------------------------
 
-# File:	modules/Language.ycp
+# File:	lib/y2country/language_dbus.rb
 # Module:	Language
 # Summary:	DBus interface for localed.conf
-# Authors:	Klaus Kaempf <kkaempf@suse.de>
-#		Thomas Roelz <tom@suse.de>
-# Maintainer:  Jiri Suchomel <jsuchome@suse.cz>
+# Authors:	Jiri Srain <jsrain@suse.de>
 #
 # $Id$
 require "yast"
@@ -33,11 +31,11 @@ module Y2Country
     extend Yast::Logger
 
     # Read via DBus the locale settings
-    # @return hash of locale variables
+    # @return [Hash] locale variables
     def read_locale_conf
       begin
         require "dbus"
-      rescue
+      rescue LoadError
         # inst-sys (because of constructor)
         log.info("DBus module not available")
         return nil
@@ -51,7 +49,7 @@ module Y2Country
       locale_interface = locale_object["org.freedesktop.locale1"]
       locales          = locale_interface["Locale"]
       locales[0].split(',').each do | locale |
-        parsed = locale.split('=')
+        parsed = locale.split('=', 2)
         key = parsed[0]
         localed_conf[key] = parsed[1]
       end

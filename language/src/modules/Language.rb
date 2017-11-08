@@ -553,12 +553,7 @@ module Yast
       @localed_conf  = Y2Country.read_locale_conf
       return nil if @localed_conf.nil?
       local_lang = @localed_conf["LANG"]
-      pos = Builtins.findfirstof(local_lang, ".@")
-
-      if pos != nil && Ops.greater_or_equal(pos, 0)
-        local_lang = Builtins.substring(local_lang, 0, pos)
-      end
-
+      local_lang.sub!(/[.@].*$/, "")
       log.info("language from sysconfig: %{local_lang}")
       local_lang
     end
@@ -608,7 +603,7 @@ module Yast
         @localed_conf  = Y2Country.read_locale_conf
         return nil if @localed_conf.nil?
         local_lang = @localed_conf["LANG"]
-        @use_utf8 = Builtins.search(local_lang, ".UTF-8") != nil unless local_lang.empty?
+        @use_utf8 = local_lang.include?(".UTF-8") unless (local_lang.nil? || local_lang.empty?)
       else
         @use_utf8 = true
       end
