@@ -4,6 +4,7 @@ require_relative 'test_helper'
 require_relative 'SCRStub'
 
 require "yaml"
+require "y2country/language_dbus"
 
 module Yast
   import "Stage"
@@ -15,7 +16,6 @@ module Yast
   import "XVersion"
   import "Report"
   import "OSRelease"
-  import "Keyboard"
 
   ::RSpec.configure do |c|
     c.include SCRStub
@@ -30,6 +30,8 @@ module Yast
 
     before(:each) do
       textdomain "country"
+      allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
+      Yast.import "Keyboard"
       allow(OSRelease).to receive(:id).and_return(os_release_id)
       allow(Stage).to receive(:stage).and_return stage
       allow(Mode).to receive(:mode).and_return mode

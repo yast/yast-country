@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        4.0.6
+Version:        4.0.7
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -59,6 +59,7 @@ Requires:       yast2-hardware-detection >= 3.1.6
 
 Requires:       yast2-country-data
 Requires:       yast2-ruby-bindings >= 1.0.0
+Requires:       rubygem(%{rb_default_ruby_abi}:ruby-dbus)
 
 Summary:        YaST2 - Country Settings (Language, Keyboard, and Timezone)
 License:        GPL-2.0

@@ -1,13 +1,17 @@
 #!/usr/bin/env rspec
 
 require_relative "test_helper"
+require "y2country/language_dbus"
 
-Yast.import "Console"
 
-describe Yast::Console do
-  subject(:console) { Yast::Console }
+describe "Yast::Console" do
+  subject(:console) { "Yast::Console" }
 
-  before { console.main }
+  before do
+    allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
+    Yast.import "Console"
+    Yast::Console.main
+  end
 
   describe "#SelectFont" do
     let(:braille) { false }
@@ -23,21 +27,21 @@ describe Yast::Console do
     it "sets console fonts for the given language" do
       expect(Yast::UI).to receive(:SetConsoleFont)
         .with("(K", "lat9w-16.psfu", "trivial", "", "es_ES")
-      console.SelectFont(language)
+      Yast::Console.SelectFont(language)
     end
 
     it "returns the encoding" do
-      expect(console.SelectFont(language)).to eq("ISO-8859-1")
+      expect(Yast::Console.SelectFont(language)).to eq("ISO-8859-1")
     end
 
     context "when no console font is available" do
       it "does not set the console font" do
         expect(Yast::UI).to_not receive(:SetConsole)
-        console.SelectFont("martian")
+        Yast::Console.SelectFont("martian")
       end
 
       it "returns the encoding" do
-        expect(console.SelectFont(language)).to eq("ISO-8859-1")
+        expect(Yast::Console.SelectFont(language)).to eq("ISO-8859-1")
       end
     end
 
@@ -47,7 +51,7 @@ describe Yast::Console do
       it "sets console fonts for the given language" do
         expect(Yast::UI).to receive(:SetConsoleFont)
           .with("", "eurlatgr.psfu", "none", "", "es_ES")
-        console.SelectFont(language)
+        Yast::Console.SelectFont(language)
       end
     end
 
@@ -57,7 +61,7 @@ describe Yast::Console do
       it "runs /usr/bin/setfont" do
         expect(Yast::SCR).to receive(:Execute)
           .with(Yast::Path.new(".target.bash"), "/usr/bin/setfont")
-        console.SelectFont(language)
+        Yast::Console.SelectFont(language)
       end
     end
   end

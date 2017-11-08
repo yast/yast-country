@@ -15,7 +15,7 @@ module Yast
           "language" => { "RC_LANG" => "en_US.UTF-8", "RC_LC_MESSAGES" => "" }
         },
         "target"    => {
-          "bash_output" => {},
+          "bash_output" => {"exit" => 0},
           "size"        => 1,
           "yast2"       => {},
           "dir"         => []
@@ -28,7 +28,7 @@ module Yast
 
       Language.languages = "en_US"
 
-      TEST(lambda { Language.Save }, [@READ, {}, {}], nil)
+      TEST(lambda { Language.Save }, [@READ, {}, @READ], nil)
 
       nil
     end

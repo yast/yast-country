@@ -54,9 +54,6 @@ sub Read {
   if (($values->{"utf8"} || "false") eq "true"){
     $ret->{"utf8"} = $expr->{"use_utf8"}?"true":"false";
   }
-  if (($values->{"rootlang"} || "false") eq "true"){
-    $ret->{"rootlang"} = $expr->{"rootlang"};
-  }
   return $ret;
 }
 
@@ -72,9 +69,6 @@ sub Write {
   my $expr = {};
   if (defined $values->{"utf8"}){
     $expr->{"use_utf8"} = YaST::YCP::Boolean($values->{"utf8"} eq "true");
-  }
-  if (defined $values->{"rootlang"}){
-    $expr->{"rootlang"} = $values->{"rootlang"};
   }
   Language->SetExpertValues($expr);
   Language->Save();

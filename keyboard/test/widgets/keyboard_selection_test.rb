@@ -1,13 +1,18 @@
 #!/usr/bin/env rspec
 
 require_relative "../test_helper"
-require "y2country/widgets/keyboard_selection"
 require "cwm/rspec"
+require "y2country/language_dbus"
 
-describe Y2Country::Widgets::KeyboardSelection do
-  subject { described_class.new("english-us") }
+describe "Y2Country::Widgets::KeyboardSelection" do
+  subject { Y2Country::Widgets::KeyboardSelection.new("english-us") }
 
   include_examples "CWM::AbstractWidget"
+
+  before do
+    allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
+    require "y2country/widgets/keyboard_selection"
+  end
 
   it "enlists all available keyboard layoout" do
     expect(subject.items).to include(["english-us", "English (US)"])

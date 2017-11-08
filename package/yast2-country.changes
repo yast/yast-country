@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Nov  7 11:21:34 UTC 2017 - jsrain@suse.cz
+
+- adapted the locale handling (fate#319454)
+- removed root-specific locale setting
+- 4.0.7
+
+-------------------------------------------------------------------
 Tue Oct 31 14:41:28 UTC 2017 - lslezak@suse.cz
 
 - Let the "localectl" tool to create the X11 keyboard configuration
