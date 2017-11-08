@@ -45,7 +45,7 @@ module Y2Country
       sysbus = DBus.system_bus
       locale_service   = sysbus["org.freedesktop.locale1"]
       locale_object    = locale_service.object "/org/freedesktop/locale1"
-      locale_object.introspect # needed, ask mvidner for explanation
+      locale_object.introspect # needed, https://github.com/mvidner/ruby-dbus/issues/28
       locale_interface = locale_object["org.freedesktop.locale1"]
       locales          = locale_interface["Locale"]
       locales[0].split(',').each do | locale |
