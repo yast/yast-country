@@ -33,6 +33,9 @@ module Y2Country
     # Read via DBus the locale settings
     # @return [Hash] locale variables
     def read_locale_conf
+      # dbus not available
+      return nil unless File.exists?("/var/run/dbus/system_bus_socket")
+
       begin
         require "dbus"
       rescue LoadError
@@ -54,7 +57,7 @@ module Y2Country
         key = parsed[0]
         localed_conf[key] = parsed[1]
       end
-      log.info("Locale settings read from system: #{localed_conf}")      
+      log.info("Locale settings read from system: #{localed_conf}")
       localed_conf
     end
 

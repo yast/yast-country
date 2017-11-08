@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Nov  8 12:29:10 UTC 2017 - jreidinger@suse.com
+
+- fix building depending packages after adaptation of locale
+  handling (fix for previous change for fate#319454)
+- 4.0.8
+
+-------------------------------------------------------------------
 Tue Nov  7 11:21:34 UTC 2017 - jsrain@suse.cz
 
 - adapted the locale handling (fate#319454)
