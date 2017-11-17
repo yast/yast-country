@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Nov 17 14:40:52 CET 2017 - schubi@suse.de
+
+- Fixed testcase dependencies. (Fix for previous change
+  for fate#319454).
+- 4.0.9
+
+-------------------------------------------------------------------
 Wed Nov  8 12:29:10 UTC 2017 - jreidinger@suse.com
 
 - fix building depending packages after adaptation of locale
