@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        4.0.8
+Version:        4.0.9
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -33,7 +33,8 @@ BuildRequires:  yast2-devtools >= 3.1.10
 BuildRequires:  yast2-perl-bindings
 BuildRequires:  yast2-testsuite
 # For tests
-BuildRequires:  rubygem(rspec)
+BuildRequires:  rubygem(%rb_default_ruby_abi:rspec)
+BuildRequires:  rubygem(%rb_default_ruby_abi:yast-rake)
 # Fix to bnc#891053 (proper reading of ".target.yast2" on chroots)
 BuildRequires:  yast2-core >= 3.1.12
 # RSpec extensions for YaST
