@@ -553,7 +553,7 @@ module Yast
       @localed_conf  = Y2Country.read_locale_conf
       return nil if @localed_conf.nil?
       local_lang = @localed_conf["LANG"]
-      local_lang.sub!(/[.@].*$/, "")
+      local_lang.sub!(/[.@].*$/, "") if local_lang
       log.info("language from sysconfig: %{local_lang}")
       local_lang
     end
