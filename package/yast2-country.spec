@@ -100,7 +100,8 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %{yast_moduledir}/YaPI/TIME.pm
 %{yast_moduledir}/YaPI/LANGUAGE.pm
 %{yast_clientdir}/*.rb
-%{yast_libdir}/y2country
+%dir %{yast_libdir}/y2country
+%{yast_libdir}/y2country/widgets
 %{yast_ydatadir}/*.ycp
 %{yast_yncludedir}/keyboard/
 %{yast_yncludedir}/timezone/
@@ -130,5 +131,7 @@ functions (Language module)
 %dir %{yast_ydatadir}/languages
 %{yast_ydatadir}/languages/*.ycp
 %{yast_moduledir}/Language.rb
+%dir %{yast_libdir}/y2country
+%{yast_libdir}/y2country/language_dbus.rb
 
 %changelog
