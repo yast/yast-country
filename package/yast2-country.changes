@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Nov 24 08:01:20 UTC 2017 - lslezak@suse.cz
+
+- Move the y2country/language_dbus.rb file to the
+  yast2-country-data subpackage where it is needed by Language.rb
+  (bsc#1069119)
+- 4.0.10
+
+-------------------------------------------------------------------
 Fri Nov 17 14:40:52 CET 2017 - schubi@suse.de
 
 - Fixed testcase dependencies. (Fix for previous change
