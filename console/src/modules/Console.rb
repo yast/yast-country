@@ -196,9 +196,7 @@ module Yast
       @magic = Convert.to_string(
         SCR.Read(path(".sysconfig.console.CONSOLE_MAGIC"))
       )
-      @language = Convert.to_string(
-        SCR.Read(path(".sysconfig.language.RC_LANG"))
-      )
+      @language = Language.GetCurrentLocaleString
       Builtins.y2milestone("encoding %1", Encoding.console)
       Encoding.console
     end

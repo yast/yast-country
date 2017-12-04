@@ -554,39 +554,12 @@ module Yast
       return nil if @localed_conf.nil?
       local_lang = @localed_conf["LANG"]
       local_lang.sub!(/[.@].*$/, "") if local_lang
-      log.info("language from sysconfig: %{local_lang}")
-      local_lang
-    end
-
-    # Read the RC_LANG value from sysconfig and exctract language from it
-    # @return language
-    def ReadSysconfigLanguage
-      local_lang = Misc.SysconfigRead(
-        path(".sysconfig.language.RC_LANG"),
-        @language
-      )
-
-      pos = Builtins.findfirstof(local_lang, ".@")
-
-      if pos != nil && Ops.greater_or_equal(pos, 0)
-        local_lang = Builtins.substring(local_lang, 0, pos)
-      end
-
-      Builtins.y2milestone("language from sysconfig: %1", local_lang)
+      log.info("language from locale.conf: %{local_lang}")
       local_lang
     end
 
     # Read the rest of language values from sysconfig
     def ReadSysconfigValues
-      # during live installation, we have sysconfig.language.RC_LANG available
-      if !Stage.initial || Mode.live_installation
-        val = Builtins.toupper(
-          Misc.SysconfigRead(path(".sysconfig.language.RC_LANG"), "")
-        )
-        @use_utf8 = Builtins.search(val, ".UTF-8") != nil if val != ""
-      else
-        @use_utf8 = true
-      end
       @languages = Misc.SysconfigRead(
         path(".sysconfig.language.INSTALLED_LANGUAGES"),
         ""
@@ -597,7 +570,10 @@ module Yast
 
     # read UTF-8 status from localed.conf
     def ReadUtf8Setting
-      return nil if Mode.testsuite
+      if Mode.testsuite
+        @use_utf8 = true
+	return nil
+      end
       # during live installation, we have local configuration
       if !Stage.initial || Mode.live_installation
         @localed_conf  = Y2Country.read_locale_conf
@@ -658,7 +634,7 @@ module Yast
         Set(lang) # coming from /etc/install.inf
         SetDefault() # also default
       else
-        local_lang = ReadLocaleConfLanguage() || ReadSysconfigLanguage()
+        local_lang = ReadLocaleConfLanguage() || @language
         QuickSet(local_lang)
         SetDefault() # also default
         if Mode.live_installation || Stage.firstboot
@@ -681,7 +657,7 @@ module Yast
     # @param [Boolean] really: also read the values from the system
     def Read(really)
       if really
-        Set(ReadLocaleConfLanguage() || ReadSysconfigLanguage())
+        Set(ReadLocaleConfLanguage() || @language)
         ReadSysconfigValues()
         ReadUtf8Setting()
       end
@@ -942,8 +918,6 @@ module Yast
     def Save
       loc = GetLocaleString(@language)
 
-      SCR.Write(path(".sysconfig.language.RC_LANG"), nil) # wipe the variable
-
       if Builtins.find(loc, "zh_HK") == 0
         @localed_conf["LC_MESSAGES"] = "zh_TW"
       elsif @localed_conf["LC_MESSAGES"] == "zh_TW"
@@ -951,7 +925,6 @@ module Yast
         @localed_conf.delete("LC_MESSAGES")
       end
 
-      SCR.Write(path(".sysconfig.language.ROOT_USES_LANG"), nil) # wipe the variable
       SCR.Write(path(".sysconfig.language.INSTALLED_LANGUAGES"), @languages)
       SCR.Write(path(".sysconfig.language"), nil)
 
@@ -978,10 +951,10 @@ module Yast
         SCR.Execute(path(".target.bash_output"), cmd)
       end
       if result["exit"] != 0
-        # TRANSLATORS: the "%s" is replaced by the executed command
-        Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % cmd)
         log.error "Language configuration not written. Failed to execute '#{cmd}'"
         log.error "output: #{result.inspect}"
+        # TRANSLATORS: the "%s" is replaced by the executed command
+        Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % cmd)
       else
         log.info "output: #{result.inspect}"
       end
@@ -1394,6 +1367,11 @@ module Yast
       false
     end
 
+    def GetCurrentLocaleString
+      GetLocaleString @language
+    end
+
+
     publish :variable => :language, :type => "string"
     publish :variable => :language_on_entry, :type => "string"
     publish :variable => :preselected, :type => "string"
@@ -1413,8 +1391,8 @@ module Yast
     publish :function => :QuickSet, :type => "void (string)"
     publish :function => :LinuxrcLangSet, :type => "boolean ()"
     publish :function => :GetLocaleString, :type => "string (string)"
+    publish :function => :GetCurrentLocaleString, :type => "string ()"
     publish :function => :SetDefault, :type => "void ()"
-    publish :function => :ReadSysconfigLanguage, :type => "string ()"
     publish :function => :ReadSysconfigValues, :type => "void ()"
     publish :function => :Language, :type => "void ()"
     publish :function => :Read, :type => "boolean (boolean)"
