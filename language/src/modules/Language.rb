@@ -1367,6 +1367,11 @@ module Yast
       false
     end
 
+    def GetCurrentLocaleString
+      GetLocaleString @language
+    end
+
+
     publish :variable => :language, :type => "string"
     publish :variable => :language_on_entry, :type => "string"
     publish :variable => :preselected, :type => "string"
@@ -1386,6 +1391,7 @@ module Yast
     publish :function => :QuickSet, :type => "void (string)"
     publish :function => :LinuxrcLangSet, :type => "boolean ()"
     publish :function => :GetLocaleString, :type => "string (string)"
+    publish :function => :GetCurrentLocaleString, :type => "string ()"
     publish :function => :SetDefault, :type => "void ()"
     publish :function => :ReadSysconfigValues, :type => "void ()"
     publish :function => :Language, :type => "void ()"
