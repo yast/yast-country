@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Dec  4 11:30:50 UTC 2017 - jsrain@suse.cz
+
+- do not touch RC_* variables in sysconfig/language (they still
+  keep in use, limiting the meaning to default shell (fate#319454)
+- 4.0.11
+
+-------------------------------------------------------------------
 Fri Nov 24 08:01:20 UTC 2017 - lslezak@suse.cz
 
 - Move the y2country/language_dbus.rb file to the
