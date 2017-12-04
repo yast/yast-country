@@ -1,8 +1,8 @@
 -------------------------------------------------------------------
 Mon Dec  4 11:30:50 UTC 2017 - jsrain@suse.cz
 
-- do not touch RC_* variables in sysconfig/language (they still
-  keep in use, limiting the meaning to default shell (fate#319454)
+- do not touch variables in sysconfig/language, which are used for
+  default console settings (not system locale) (fate#319454)
 - 4.0.11
 
 -------------------------------------------------------------------
