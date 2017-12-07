@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Dec  7 13:02:00 UTC 2017 - jsrain@suse.cz
+
+- adapt handling of console and time zone settings (fate#319454)
+- 4.0.12
+
+-------------------------------------------------------------------
 Mon Dec  4 11:30:50 UTC 2017 - jsrain@suse.cz
 
 - do not touch variables in sysconfig/language, which are used for
