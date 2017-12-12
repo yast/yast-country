@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Dec 12 10:04:09 UTC 2017 - jreidinger@suse.com
+
+- install chrony instead of ntp when ntp is enabled (fate#323432)
+- 4.0.12
+
+-------------------------------------------------------------------
 Mon Dec  4 11:30:50 UTC 2017 - jsrain@suse.cz
 
 - do not touch variables in sysconfig/language, which are used for
