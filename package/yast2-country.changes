@@ -1,3 +1,10 @@
+----------------------------------------------------------------
+Wed Dec 13 13:48:06 CET 2017 - schubi@suse.de
+
+- AutoYaST upgrade fix: Writing keyboard settings defined in the
+  AutoYaST configuration file (bnc1070305).
+- 4.0.13
+
 -------------------------------------------------------------------
 Tue Dec 12 10:04:09 UTC 2017 - jreidinger@suse.com
 
