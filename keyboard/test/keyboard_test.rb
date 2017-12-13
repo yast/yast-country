@@ -16,6 +16,7 @@ module Yast
   import "Report"
   import "OSRelease"
   import "Keyboard"
+  import "Mode"
 
   ::RSpec.configure do |c|
     c.include SCRStub
@@ -120,6 +121,28 @@ module Yast
           expect(Initrd).to receive(:Write)
 
           Keyboard.Save
+        end
+      end
+
+      context "during autoupgrade with german keyboard" do
+        let(:mode) { "autoupgrade" }
+        let(:stage) { "initial" }
+        let(:chroot) { "installing" }
+        let(:new_lang) { "german" }
+
+        it "writes the configuration" do
+          expect(SCR).to execute_bash(/loadkeys/)
+          expect(SCR).to execute_bash(/xkbctrl/)
+          expect(AsciiFile).to receive(:AppendLine).with(anything,
+           ["Keytable:", "de-nodeadkeys.map.gz"])
+
+          Keyboard.Set("german")
+          Keyboard.Save
+
+          expect(written_value_for(".sysconfig.keyboard.YAST_KEYBOARD")).to eq("german,pc104")
+          expect(written_value_for(".sysconfig.keyboard")).to be_nil
+          expect(written_value_for(".etc.vconsole_conf.KEYMAP")).to eq("de-nodeadkeys")
+          expect(written_value_for(".etc.vconsole_conf")).to be_nil
         end
       end
     end
@@ -460,6 +483,14 @@ module Yast
             expect(Keyboard).to_not receive(:Set)
             Keyboard.MakeProposal(false, false)
           end
+        end
+      end
+
+      context "AutoYaST upgrade mode" do
+        it "does not make a new proposal" do
+          expect(Mode).to receive(:autoupgrade).and_return true
+          expect(Keyboard).to_not receive(:Set)
+          Keyboard.MakeProposal(false, false)
         end
       end
     end
