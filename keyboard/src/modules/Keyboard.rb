@@ -836,7 +836,7 @@ module Yast
     # Save the current data into a file to be read after a reboot.
     #
     def Save
-      if Mode.update
+      if Mode.update && !Mode.autoupgrade
         kbd = Misc.SysconfigRead(path(".sysconfig.keyboard.YAST_KEYBOARD"), "")
         if kbd.empty?
           kmap = Misc.SysconfigRead(path(".etc.vconsole_conf.KEYMAP"), "")
@@ -1120,7 +1120,7 @@ module Yast
         # Only follow the language if the user has never actively chosen
         # a keyboard. The indicator for this is user_decision which is
         # set from outside the module.
-        if @user_decision || Mode.update && !Stage.initial || Mode.autoinst ||
+        if @user_decision || Mode.update && !Stage.initial || Mode.auto ||
             Mode.live_installation ||
             ProductFeatures.GetStringFeature("globals", "keyboard") != ""
           if language_changed
