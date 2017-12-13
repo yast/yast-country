@@ -487,7 +487,7 @@ module Yast
       end
 
       context "AutoYaST upgrade mode" do
-        it "do not make a new proposal" do
+        it "does not make a new proposal" do
           expect(Mode).to receive(:autoupgrade).and_return true
           expect(Keyboard).to_not receive(:Set)
           Keyboard.MakeProposal(false, false)
