@@ -141,8 +141,6 @@ module Yast
 
           expect(written_value_for(".sysconfig.keyboard.YAST_KEYBOARD")).to eq("german,pc104")
           expect(written_value_for(".sysconfig.keyboard")).to be_nil
-          expect(written_value_for(".etc.vconsole_conf.KEYMAP")).to eq("de-nodeadkeys")
-          expect(written_value_for(".etc.vconsole_conf")).to be_nil
         end
       end
     end
