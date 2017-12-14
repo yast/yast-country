@@ -130,6 +130,7 @@ module Yast
     # save data to system (rc.config agent)
 
     def Save
+      # writing vconsole.conf directly, no other API available ATM
       SCR.Write(path(".etc.vconsole_conf.FONT"), @font)
       SCR.Write(path(".etc.vconsole_conf.FONT_MAP"), @screenMap)
       SCR.Write(path(".etc.vconsole_conf.FONT_UNIMAP"), @unicodeMap)
