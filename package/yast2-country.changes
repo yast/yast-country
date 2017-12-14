@@ -1,7 +1,20 @@
 -------------------------------------------------------------------
-Thu Dec  7 13:02:00 UTC 2017 - jsrain@suse.cz
+Thu Dec 14 08:34:41 UTC 2017 - jsrain@suse.cz
 
 - adapt handling of console and time zone settings (fate#319454)
+- 4.0.14
+
+----------------------------------------------------------------
+Wed Dec 13 13:48:06 CET 2017 - schubi@suse.de
+
+- AutoYaST upgrade fix: Writing keyboard settings defined in the
+  AutoYaST configuration file (bnc1070305).
+- 4.0.13
+
+-------------------------------------------------------------------
+Tue Dec 12 10:04:09 UTC 2017 - jreidinger@suse.com
+
+- install chrony instead of ntp when ntp is enabled (fate#323432)
 - 4.0.12
 
 -------------------------------------------------------------------
