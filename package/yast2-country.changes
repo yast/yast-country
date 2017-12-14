@@ -1,3 +1,9 @@
+-------------------------------------------------------------------
+Thu Dec 14 08:34:41 UTC 2017 - jsrain@suse.cz
+
+- adapt handling of console and time zone settings (fate#319454)
+- 4.0.14
+
 ----------------------------------------------------------------
 Wed Dec 13 13:48:06 CET 2017 - schubi@suse.de
 
