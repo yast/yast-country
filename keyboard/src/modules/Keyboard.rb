@@ -887,19 +887,26 @@ module Yast
 
       chomped_keymap = @keymap.chomp(".map.gz")
       cmd = if Stage.initial
-        # do not use --root option, SCR.Execute(".target...") already runs in chroot
-        "/usr/bin/systemd-firstboot --keymap '#{chomped_keymap}'"
+        # do use --root option, running in chroot does not work (bsc#1074481)
+        "/usr/bin/systemd-firstboot --root '#{Installation.destdir}' --keymap '#{chomped_keymap}'"
       else
         # this sets both the console and the X11 keyboard (see "man localectl")
         "/usr/bin/localectl set-keymap #{chomped_keymap}"
       end
       log.info "Making keyboard setting persistent: #{cmd}"
-      result = SCR.Execute(path(".target.bash_output"), cmd)
+      result = if Stage.initial
+        WFM.Execute(path(".local.bash_output"), cmd)
+      else
+        SCR.Execute(path(".target.bash_output"), cmd)
+      end
+
       if result["exit"] != 0
-        # TRANSLATORS: the "%s" is replaced by the executed command
-        Report.Error(_("Could not save the keyboard setting, the command\n%s\nfailed.") % cmd)
         log.error "Keyboard configuration not written. Failed to execute '#{cmd}'"
         log.error "output: #{result.inspect}"
+        # TRANSLATORS: the "%s" is replaced by the executed command
+        Report.Error(_("Could not save the keyboard setting, the command\n%s\nfailed.") % cmd)
+      else
+        log.info "output: #{result.inspect}"
       end
 
       # As a preliminary step mark all keyboards except the one to be configured
