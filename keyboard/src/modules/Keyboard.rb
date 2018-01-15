@@ -817,7 +817,7 @@ module Yast
     # Save the current data into a file to be read after a reboot.
     #
     def Save
-      if Mode.Update
+      if Mode.update
         log.info "skipping country changes in update"
         return
       end
