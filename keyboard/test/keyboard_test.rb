@@ -122,26 +122,6 @@ module Yast
           Keyboard.Save
         end
       end
-
-      context "during autoupgrade with german keyboard" do
-        let(:mode) { "autoupgrade" }
-        let(:stage) { "initial" }
-        let(:chroot) { "installing" }
-        let(:new_lang) { "german" }
-
-        it "writes the configuration" do
-          expect(SCR).to execute_bash(/loadkeys/)
-          expect(SCR).to execute_bash(/xkbctrl/)
-          expect(AsciiFile).to receive(:AppendLine).with(anything,
-           ["Keytable:", "de-nodeadkeys.map.gz"])
-
-          Keyboard.Set("german")
-          Keyboard.Save
-
-          expect(written_value_for(".sysconfig.keyboard.YAST_KEYBOARD")).to eq("german,pc104")
-          expect(written_value_for(".sysconfig.keyboard")).to be_nil
-        end
-      end
     end
 
     describe "#Set" do
