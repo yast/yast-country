@@ -822,6 +822,19 @@ module Yast
         return
       end
 
+      # Write some sysconfig variables.
+      #
+      SCR.Write(
+        path(".sysconfig.keyboard.YAST_KEYBOARD"),
+        "#{@current_kbd},#{@kb_model}"
+      )
+      SCR.Write(
+        path(".sysconfig.keyboard.YAST_KEYBOARD.comment"),
+        "\n" +
+          "# The YaST-internal identifier of the attached keyboard.\n" +
+          "#\n"
+      )
+
       SCR.Write(path(".sysconfig.keyboard.KBD_RATE"), @kbd_rate)
       SCR.Write(path(".sysconfig.keyboard.KBD_DELAY"), @kbd_delay)
       SCR.Write(path(".sysconfig.keyboard.KBD_NUMLOCK"), @kbd_numlock)
