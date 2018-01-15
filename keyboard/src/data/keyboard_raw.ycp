@@ -30,9 +30,6 @@
  *
  *  description of i.g.$[ "pc104": $[	 "ncurses": "us.map.gz" ]
  *
- * Added "compose" tag for COMPOSETABLE flag in rc.config
- * non-latin1 keyboards need this, see bug #7023
- *
  */
 {
 textdomain "country";

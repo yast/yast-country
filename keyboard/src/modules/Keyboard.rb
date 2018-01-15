@@ -58,7 +58,6 @@
 #	RightCtl
 #	Apply
 #	keymap
-#	compose_table
 #	current_kbd
 #	ckb_cmd
 #	xkb_cmd
@@ -147,10 +146,6 @@ module Yast
       # keymap string for ncurses
       #
       @keymap = "us.map.gz"
-
-      # compose_table entry
-      #
-      @compose_table = "clear winkeys shiftctrl latin1.add"
 
       # X11 Options string
       #
@@ -533,21 +528,6 @@ module Yast
         @ScrollLock = Ops.get_string(x11data, "ScrollLock", "")
         @RightCtl = Ops.get_string(x11data, "RightCtl", "")
         @Apply = Ops.get_string(x11data, "Apply", "")
-
-        # Build the compose table entry.
-        #
-        @compose_table = "clear "
-
-        if @XkbModel == "pc104" || @XkbModel == "pc105"
-          @compose_table = Ops.add(@compose_table, "winkeys shiftctrl ")
-        end
-
-        # Check for "compose" entry in keytable, might define
-        # a different encoding (i.e. "latin2").
-        #
-        compose = Ops.get_string(@kbd_descr, [1, "compose"], "latin1.add")
-
-        @compose_table = Ops.add(@compose_table, compose) # Language not found.
       else
         return false # Error
       end
@@ -837,32 +817,12 @@ module Yast
     # Save the current data into a file to be read after a reboot.
     #
     def Save
-      if Mode.update && !Mode.autoupgrade
-        kbd = Misc.SysconfigRead(path(".sysconfig.keyboard.YAST_KEYBOARD"), "")
-        if kbd.empty?
-          kmap = Misc.SysconfigRead(path(".etc.vconsole_conf.KEYMAP"), "")
-          # if still nothing found, lets check the obsolete config option:
-          kmap = Misc.SysconfigRead(path(".sysconfig.keyboard.KEYTABLE"), "") if kmap.empty?
-          if !kmap.empty?
-            data = GetX11KeyData(kmap)
-            if (data["XkbLayout"] || "").size > 0
-              kbd = XkblayoutToKeyboard(data["XkbLayout"]) + "," + (data["XkbModel"] || "pc104")
-              SCR.Write(path(".sysconfig.keyboard.YAST_KEYBOARD"), kbd)
-              SCR.Write(
-                path(".sysconfig.keyboard.YAST_KEYBOARD.comment"),
-                "\n" +
-                  "# The YaST-internal identifier of the attached keyboard.\n" +
-                  "#\n"
-              )
-              SCR.Write(path(".sysconfig.keyboard"), nil) # flush
-            end
-          end
-        end
+      if Mode.update
+        log.info "skipping country changes in update"
         return
       end
 
       # Write some sysconfig variables.
-      # Set keytable, compose_table and tty list.
       #
       SCR.Write(
         path(".sysconfig.keyboard.YAST_KEYBOARD"),
@@ -875,7 +835,6 @@ module Yast
           "#\n"
       )
 
-      SCR.Write(path(".sysconfig.keyboard.COMPOSETABLE"), @compose_table)
       SCR.Write(path(".sysconfig.keyboard.KBD_RATE"), @kbd_rate)
       SCR.Write(path(".sysconfig.keyboard.KBD_DELAY"), @kbd_delay)
       SCR.Write(path(".sysconfig.keyboard.KBD_NUMLOCK"), @kbd_numlock)
@@ -1068,7 +1027,6 @@ module Yast
     def Set(keyboard)
       Builtins.y2milestone("set to %1", keyboard)
       if Mode.config
-        @current_kbd = keyboard
         @name = GetKeyboardName(@current_kbd)
         return
       end
@@ -1263,90 +1221,6 @@ module Yast
       nil
     end
 
-
-    # Special function for update mode only.
-    # Checks for the keyboard layout on the system which should be updated and if it
-    # differs from current one, opens a popup with the offer to change the layout.
-    # See discussion in bug #71069
-    # @param [String] destdir path to the mounted system to update (e.g. "/mnt")
-    def CheckKeyboardDuringUpdate(destdir)
-      # autoupgrade is not interactive, therefore skip this check and use data
-      # from profile directly
-      return if Mode.autoupgrade
-
-      target_kbd = Misc.CustomSysconfigRead(
-        "YAST_KEYBOARD",
-        @current_kbd,
-        Ops.add(destdir, "/etc/sysconfig/keyboard")
-      )
-      pos = Builtins.find(target_kbd, ",")
-      if pos != nil && Ops.greater_than(pos, 0)
-        target_kbd = Builtins.substring(target_kbd, 0, pos)
-      end
-
-      keyboards = get_reduced_keyboard_db
-
-      if target_kbd != @current_kbd &&
-          Ops.get_list(keyboards, target_kbd, []) != []
-        Builtins.y2milestone(
-          "current_kbd: %1, target_kbd: %2",
-          @current_kbd,
-          target_kbd
-        )
-
-        target_name = GetKeyboardName(target_kbd)
-
-        UI.OpenDialog(
-          Opt(:decorated),
-          HBox(
-            HSpacing(1.5),
-            VBox(
-              HSpacing(40),
-              VSpacing(0.5),
-              # label text: user can choose the keyboard from the updated system
-              # or continue with the one defined by his language.
-              # 2 radio-buttons follow this label.
-              # Such keyboard layout is used only for the time of the update,
-              # it is not saved to the system.
-              Left(
-                Label(
-                  _(
-                    "You are currently using a keyboard layout\n" +
-                      "different from the one in the system to update.\n" +
-                      "Select the layout to use during update:"
-                  )
-                )
-              ),
-              VSpacing(0.5),
-              RadioButtonGroup(
-                VBox(
-                  Left(RadioButton(Id(:current), @name)),
-                  Left(RadioButton(Id(:target), target_name, true))
-                )
-              ),
-              VSpacing(0.5),
-              ButtonBox(
-                PushButton(Id(:ok), Opt(:default, :key_F10), Label.OKButton),
-                PushButton(Id(:cancel), Opt(:key_F9), Label.CancelButton)
-              ),
-              VSpacing(0.5)
-            ),
-            HSpacing(1.5)
-          )
-        )
-        ret = UI.UserInput
-
-        if ret == :ok && Convert.to_boolean(UI.QueryWidget(Id(:target), :Value))
-          Set(target_kbd)
-          @user_decision = true
-        end
-
-        UI.CloseDialog
-      end
-
-      nil
-    end
-
     # AutoYaST interface function: Get the Keyboard configuration from a map.
     #
     # @param settings [Hash] imported map with the content of either the
@@ -1409,7 +1283,6 @@ module Yast
     publish :variable => :XkbLayout, :type => "string"
     publish :variable => :XkbVariant, :type => "string"
     publish :variable => :keymap, :type => "string"
-    publish :variable => :compose_table, :type => "string"
     publish :variable => :XkbOptions, :type => "string"
     publish :variable => :LeftAlt, :type => "string"
     publish :variable => :RightAlt, :type => "string"
@@ -1449,7 +1322,6 @@ module Yast
     publish :function => :SetKeyboardForLanguage, :type => "void (string)"
     publish :function => :SetKeyboardForLang, :type => "void (string)"
     publish :function => :SetKeyboardDefault, :type => "void ()"
-    publish :function => :CheckKeyboardDuringUpdate, :type => "void (string)"
     publish :function => :Import, :type => "boolean (map, ...)"
     publish :function => :Export, :type => "map ()"
     publish :function => :Summary, :type => "string ()"
