@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Wed Jan 24 13:39:34 UTC 2018 - igonzalezsosa@suse.com
 
-- Use eurlatgr font instead of lat9w-16 (bsc#1068814).
+- Unify openSUSE and SLE console fonts maps (bsc#1068814).
 - 4.0.17
 
 -------------------------------------------------------------------
