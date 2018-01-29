@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jan 29 12:00:29 UTC 2018 - lslezak@suse.cz
+
+- Reimplemented package reset to require less memory
+  (related to bsc#1076768)
+- 4.0.18
+
+-------------------------------------------------------------------
 Wed Jan 24 13:39:34 UTC 2018 - igonzalezsosa@suse.com
 
 - Unify openSUSE and SLE console fonts maps (bsc#1068814).

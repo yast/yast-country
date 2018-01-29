@@ -977,21 +977,12 @@ module Yast
 
       Pkg.PkgSolve(true)
 
-      selected_packages = Pkg.ResolvableProperties("", :package, "")
+      # package names only, without version
+      names_only = true
+      selected_packages = Pkg.GetPackages(:selected, names_only)
 
-      Builtins.y2milestone("Unselecting already recommended packages")
-
-      # unselect them
-      Builtins.foreach(selected_packages) do |package|
-        if Ops.get_symbol(package, "status", :unknown) == :selected
-          Builtins.y2milestone(
-            "Unselecting package: %1",
-            Ops.get_string(package, "name", "")
-          )
-          Pkg.PkgNeutral(Ops.get_string(package, "name", ""))
-        end
-      end 
-
+      log.info("Unselecting already recommended packages: #{selected_packages.inspect}")
+      selected_packages.each { |p| Yast::Pkg.PkgNeutral(p) }
 
       @reset_recommended = false
 
