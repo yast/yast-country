@@ -194,4 +194,12 @@ describe "Language" do
       end
     end
   end
+  describe "#ResetRecommendedPackages" do
+    it "resets the recommended packages" do
+      allow(Yast::Pkg).to receive(:PkgSolve)
+      expect(Yast::Pkg).to receive(:GetPackages).with(:selected, true).and_return(["foo"])
+      expect(Yast::Pkg).to receive(:PkgNeutral).with("foo")
+      subject.ResetRecommendedPackages
+    end
+  end
 end
