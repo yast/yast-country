@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Tue Jan 30 12:50:29 UTC 2018 - jreidinger@suse.com
+
+- Lnaguage: nicer handling of dbus timeout (bsc#1076804)
+- 4.0.19
+
+-------------------------------------------------------------------
 Mon Jan 29 12:00:29 UTC 2018 - lslezak@suse.cz
 
 - Reimplemented package reset to require less memory
