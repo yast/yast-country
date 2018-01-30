@@ -44,18 +44,23 @@ module Y2Country
         return nil
       end
       localed_conf = {}
-      # https://www.freedesktop.org/wiki/Software/systemd/localed/
-      sysbus = DBus.system_bus
-      locale_service   = sysbus["org.freedesktop.locale1"]
-      locale_object    = locale_service.object "/org/freedesktop/locale1"
-      # following line not necessary with ruby-dbus >= 0.13.0
-      locale_object.introspect # needed, https://github.com/mvidner/ruby-dbus/issues/28
-      locale_interface = locale_object["org.freedesktop.locale1"]
-      locales          = locale_interface["Locale"]
-      locales[0].split(',').each do | locale |
-        parsed = locale.split('=', 2)
-        key = parsed[0]
-        localed_conf[key] = parsed[1]
+      begin
+        # https://www.freedesktop.org/wiki/Software/systemd/localed/
+        sysbus = DBus.system_bus
+        locale_service   = sysbus["org.freedesktop.locale1"]
+        locale_object    = locale_service.object "/org/freedesktop/locale1"
+        # following line not necessary with ruby-dbus >= 0.13.0
+        locale_object.introspect # needed, https://github.com/mvidner/ruby-dbus/issues/28
+        locale_interface = locale_object["org.freedesktop.locale1"]
+        locales          = locale_interface["Locale"]
+        locales[0].split(',').each do | locale |
+          parsed = locale.split('=', 2)
+          key = parsed[0]
+          localed_conf[key] = parsed[1]
+        end
+      rescue => e
+        log.error "Dbus reading failed with #{e.message}"
+        return nil
       end
       log.info("Locale settings read from system: #{localed_conf}")
       localed_conf
