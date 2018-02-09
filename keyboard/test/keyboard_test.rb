@@ -159,6 +159,24 @@ module Yast
 
         Keyboard.Set("russian")
       end
+
+      context "if there are AMBA devices in the system" do
+        before do
+          allow(Dir).to receive(:[]).and_return(
+            ["/dev/tty1", "/dev/ttyAMA0", "/dev/ttyS0"]
+          )
+        end
+
+        it "does not try to set the keymap for /dev/ttyAMA devices" do
+          expect(SCR).to receive(:Execute) do |path, command|
+            expect(path).to eq path(".target.bash")
+            expect(command).to include "loadkeys -C /dev/tty1 -C /dev/ttyS0 ruwin_alt-UTF-8"
+            expect(command).to_not include "/dev/ttyAMA0"
+          end
+
+          Keyboard.Set("russian")
+        end
+      end
     end
 
     describe "#SetX11" do
