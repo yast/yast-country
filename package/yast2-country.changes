@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Feb  9 16:41:49 UTC 2018 - ancor@suse.com
+
+- Keyboard: don't try to set the keyboard map for AMBA devices,
+  e.g. /dev/ttyAMA0 (bug#1080222).
+- 4.0.20
+
+-------------------------------------------------------------------
 Tue Jan 30 12:50:29 UTC 2018 - jreidinger@suse.com
 
 - Lnaguage: nicer handling of dbus timeout (bsc#1076804)
