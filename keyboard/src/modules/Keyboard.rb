@@ -532,9 +532,7 @@ module Yast
         return false # Error
       end
 
-      # Console command. It specifies all tty devices (bsc#1010938)
-      @tty_devices ||= Dir["/dev/tty*"].map { |d| "-C #{d}" }.join(" ")
-      @ckb_cmd = "/bin/loadkeys #{@tty_devices} #{keymap}"
+      @ckb_cmd = "/bin/loadkeys #{loadkeys_devices} #{keymap}"
 
       # X11 command...
       # do not try to run this with remote X display
@@ -1426,6 +1424,17 @@ module Yast
 
       # eval is necessary for translating the texts needed to be translated
       content ? Builtins.eval(content) : {}
+    end
+
+    # String to specify all the relevant devices in a loadkeys command
+    #
+    # It includes all tty devices (bsc#1010938) except those representing
+    # AMBA devices (bsc#1080222).
+    #
+    # @return [String] ready to be passed to the loadkeys command
+    def loadkeys_devices
+      tty_dev_names = Dir["/dev/tty*"].grep_v(/ttyAMA/)
+      tty_dev_names.map { |d| "-C #{d}" }.join(" ")
     end
   end
 
