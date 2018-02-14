@@ -91,7 +91,8 @@ ylib_DATA = \
 
 ywidgetsdir = @ylibdir@/y2country/widgets
 ywidgets_DATA = \
-	lib/y2country/widgets/language_selection.rb
+	lib/y2country/widgets/language_selection.rb \
+	lib/y2country/widgets/simple_language_selection.rb
 
 desktop_DATA = \
   desktop/yast-language.desktop
