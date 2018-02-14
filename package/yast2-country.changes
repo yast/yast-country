@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Feb 14 12:26:10 UTC 2018 - igonzalezsosa@suse.com
+
+- Add a simple widget to choose a language from a given list
+  (related to FATE#322276).
+- 4.0.21
+
+-------------------------------------------------------------------
 Fri Feb  9 16:41:49 UTC 2018 - ancor@suse.com
 
 - Keyboard: don't try to set the keyboard map for AMBA devices,
@@ -8,7 +15,7 @@ Fri Feb  9 16:41:49 UTC 2018 - ancor@suse.com
 -------------------------------------------------------------------
 Tue Jan 30 12:50:29 UTC 2018 - jreidinger@suse.com
 
-- Lnaguage: nicer handling of dbus timeout (bsc#1076804)
+- Language: nicer handling of dbus timeout (bsc#1076804)
 - 4.0.19
 
 -------------------------------------------------------------------
