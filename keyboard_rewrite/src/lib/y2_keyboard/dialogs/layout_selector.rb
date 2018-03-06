@@ -1,5 +1,4 @@
 require "yast"
-require "byebug"
 require "ui/dialog"
 require_relative "../keyboard_layout"
 
