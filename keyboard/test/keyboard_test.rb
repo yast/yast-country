@@ -4,6 +4,7 @@ require_relative 'test_helper'
 require_relative 'SCRStub'
 
 require "yaml"
+require "y2country/language_dbus"
 
 module Yast
   import "Stage"
@@ -16,6 +17,7 @@ module Yast
   import "Report"
   import "OSRelease"
   import "Keyboard"
+  import "Mode"
 
   ::RSpec.configure do |c|
     c.include SCRStub
@@ -30,12 +32,15 @@ module Yast
 
     before(:each) do
       textdomain "country"
+      allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
+      Yast.import "Keyboard"
       allow(OSRelease).to receive(:id).and_return(os_release_id)
       allow(Stage).to receive(:stage).and_return stage
       allow(Mode).to receive(:mode).and_return mode
       allow(Linuxrc).to receive(:text).and_return false
       allow(SCR).to receive(:Execute).with(path(".target.remove"), udev_file)
       allow(SCR).to receive(:Write).with(anything, udev_file, anything)
+      allow(Installation).to receive(:destdir).and_return("/mnt")
 
       init_root_path(chroot) if defined?(chroot)
     end
@@ -71,12 +76,8 @@ module Yast
         let(:new_lang) { "spanish" }
 
         it "writes the configuration" do
-          expect(SCR).to execute_bash(
-            /localectl --no-convert set-x11-keymap es microsoftpro$/
-          )
-          expect(SCR).to execute_bash(
-            /localectl --no-convert set-keymap es$/
-          )
+          expect(WFM).to receive(:Execute).with(path(".local.bash_output"), 
+            "/usr/bin/systemd-firstboot --root '/mnt' --keymap 'es'").and_return("exit" => 0)
           expect(AsciiFile).to receive(:AppendLine).with(anything, ["Keytable:", "es.map.gz"])
 
           Keyboard.Set("spanish")
@@ -102,11 +103,8 @@ module Yast
         let(:new_lang) { "russian" }
 
         it "writes the configuration" do
-          expect(SCR).to execute_bash(
-            /localectl --no-convert set-x11-keymap us,ru microsoftpro ,winkeys grp:ctrl_shift_toggle,grp_led:scroll$/
-          )
-          expect(SCR).to execute_bash(
-            /localectl --no-convert set-keymap ruwin_alt-UTF-8$/
+          expect(SCR).to execute_bash_output(
+            /localectl set-keymap ruwin_alt-UTF-8$/
           )
 
           Keyboard.Set("russian")
@@ -160,6 +158,24 @@ module Yast
         expect(SCR).to execute_bash(/setxkbmap/).never
 
         Keyboard.Set("russian")
+      end
+
+      context "if there are AMBA devices in the system" do
+        before do
+          allow(Dir).to receive(:[]).and_return(
+            ["/dev/tty1", "/dev/ttyAMA0", "/dev/ttyS0"]
+          )
+        end
+
+        it "does not try to set the keymap for /dev/ttyAMA devices" do
+          expect(SCR).to receive(:Execute) do |path, command|
+            expect(path).to eq path(".target.bash")
+            expect(command).to include "loadkeys -C /dev/tty1 -C /dev/ttyS0 ruwin_alt-UTF-8"
+            expect(command).to_not include "/dev/ttyAMA0"
+          end
+
+          Keyboard.Set("russian")
+        end
       end
     end
 
@@ -443,6 +459,7 @@ module Yast
 
       context "when user did not make any decision" do
         it "sets the keyboard for the current language" do
+          allow(Yast::Language).to receive(:language).and_return("english-us")
           expect(Keyboard).to receive(:Set).with("english-us")
           Keyboard.MakeProposal(false, false)
         end
@@ -462,6 +479,14 @@ module Yast
             expect(Keyboard).to_not receive(:Set)
             Keyboard.MakeProposal(false, false)
           end
+        end
+      end
+
+      context "AutoYaST upgrade mode" do
+        it "does not make a new proposal" do
+          expect(Mode).to receive(:autoupgrade).and_return true
+          expect(Keyboard).to_not receive(:Set)
+          Keyboard.MakeProposal(false, false)
         end
       end
     end

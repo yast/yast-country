@@ -13,7 +13,7 @@ module Yast
 
       @READ = {
         "sysconfig" => {
-          "clock" => { "TIMEZONE" => "Europe/Prague", "HWCLOCK" => "-u" }
+          "clock" => { "DEFAULT_TIMEZONE" => "Europe/Prague", "HWCLOCK" => "-u" }
         },
         "target"    => { "size" => 1, "yast2" => {} },
         "etc"       => { "adjtime" => ["0", "0", "UTC"] }

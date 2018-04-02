@@ -2,8 +2,8 @@
 # coding: utf-8
 
 require_relative "test_helper"
+require "y2country/language_dbus"
 
-Yast.import "Language"
 
 describe "Language" do
   subject { Yast::Language }
@@ -41,6 +41,8 @@ describe "Language" do
   }}
 
   before do
+    allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
+    Yast.import "Language"
     allow(subject).to receive(:languages_map).and_return(languages_map)
     allow(subject).to receive(:GetLanguagesMap).and_return(languages_map)
   end
@@ -190,6 +192,14 @@ describe "Language" do
       it "returns the full language identifier with no encoding" do
         expect(subject.GetLocaleString("ma_MA")).to eq("ma_MA")
       end
+    end
+  end
+  describe "#ResetRecommendedPackages" do
+    it "resets the recommended packages" do
+      allow(Yast::Pkg).to receive(:PkgSolve)
+      expect(Yast::Pkg).to receive(:GetPackages).with(:selected, true).and_return(["foo"])
+      expect(Yast::Pkg).to receive(:PkgNeutral).with("foo")
+      subject.ResetRecommendedPackages
     end
   end
 end

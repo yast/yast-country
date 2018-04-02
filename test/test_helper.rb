@@ -2,6 +2,9 @@ root_location = File.expand_path("../../", __FILE__)
 inc_dirs = Dir.glob("#{root_location}/*/src")
 ENV["Y2DIR"] = inc_dirs.join(":")
 
+ENV["LANG"] = "en_US.UTF-8"
+ENV["LC_ALL"] = "en_US.UTF-8"
+
 require "yast"
 require "rspec"
 require "yast/rspec"
