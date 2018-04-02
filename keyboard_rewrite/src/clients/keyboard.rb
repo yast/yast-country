@@ -1,3 +1,3 @@
-require_relative "../lib/y2_keyboard/clients/main"
+require_relative "../lib/y2keyboard/clients/main"
 
 Y2Keyboard::Clients::Main.run
