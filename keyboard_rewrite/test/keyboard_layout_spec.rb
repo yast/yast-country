@@ -1,4 +1,4 @@
-require_relative "./test_helper"
+require_relative "test_helper"
 require "y2_keyboard/keyboard_layout"
 
 describe Y2Keyboard::KeyboardLayout do
