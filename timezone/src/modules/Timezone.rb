@@ -375,14 +375,11 @@ module Yast
 
     # Read timezone settings from sysconfig
     def Read
-      @timezone = Misc.SysconfigRead(
-        path(".sysconfig.clock.TIMEZONE"),
-        @timezone
-      )
       @default_timezone = Misc.SysconfigRead(
         path(".sysconfig.clock.DEFAULT_TIMEZONE"),
         @default_timezone
       )
+      @timezone = @default_timezone
 
       # /etc/localtime has priority over sysconfig value of timezone
       if FileUtils.IsLink("/etc/localtime")
@@ -833,7 +830,28 @@ module Yast
         return
       end
 
-      SCR.Write(path(".sysconfig.clock.TIMEZONE"), @timezone)
+      cmd = if Stage.initial
+        # do use --root option, running in chroot does not work
+        "/usr/bin/systemd-firstboot --root '#{Installation.destdir}' --timezone '#{@timezone}'"
+      else
+        # this sets both the locale (see "man localectl")
+        "/usr/bin/timedatectl set-timezone #{@timezone}"
+      end
+      log.info "Making timezone setting persistent: #{cmd}"
+      result = if Stage.initial
+        WFM.Execute(path(".local.bash_output"), cmd)
+      else
+        SCR.Execute(path(".target.bash_output"), cmd)
+      end
+      if result["exit"] != 0
+        log.error "Timezone configuration not written. Failed to execute '#{cmd}'"
+        log.error "output: #{result.inspect}"
+        # TRANSLATORS: the "%s" is replaced by the executed command
+        Report.Error(_("Could not save the timezone setting, the command\n%s\nfailed.") % cmd)
+      else
+        log.info "output: #{result.inspect}"
+      end
+
       SCR.Write(path(".sysconfig.clock.DEFAULT_TIMEZONE"), @default_timezone)
 
       SCR.Write(path(".sysconfig.clock"), nil) # flush

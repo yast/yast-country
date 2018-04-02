@@ -359,7 +359,6 @@ module Yast
 
       show_current_time.call
 
-      ntp_rb = false
       ntp_rb = Convert.to_boolean(
         ntp_call(
           "ui_init",
@@ -396,7 +395,7 @@ module Yast
           ntp_rb = ret == :ntp
           # need to install it first?
           if ntp_rb && !Stage.initial && !@ntp_installed
-            @ntp_installed = Package.InstallAll(["yast2-ntp-client", "ntp"])
+            @ntp_installed = Package.InstallAll(["yast2-ntp-client", "chrony"])
             # succeeded? create UI, otherwise revert the click
             if !@ntp_installed
               ntp_rb = false

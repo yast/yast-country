@@ -21,7 +21,8 @@ module Yast
           "size"  => 1,
           "dir"   => ["language_de_DE.ycp"],
           "yast2" => {
-            "de_DE" => ["Deutsch", "Deutsch", ".UTF-8", "@euro", "German"]
+            "de_DE" => ["Deutsch", "Deutsch", ".UTF-8", "@euro", "German"],
+            "en_US" => ["English", "English", ".UTF-8", "@euro", "English"]
           }
         }
       }

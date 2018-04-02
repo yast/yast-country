@@ -35,6 +35,8 @@ module Yast
 
     include Yast::Logger
 
+    require "y2country/language_dbus"
+
     def main
       Yast.import "Pkg"
       Yast.import "UI"
@@ -79,9 +81,6 @@ module Yast
       @default_language = DEFAULT_FALLBACK_LANGUAGE
 
 
-      # Default settings for ROOT_USES_LANG in /etc/sysconfig/language
-      @rootlang = "ctype"
-
       # Default settings for INSTALLED_LANGUAGES in /etc/sysconfig/language
       @languages = ""
 
@@ -114,6 +113,9 @@ module Yast
 
       # mapping of language to its default (proposed) kbd layout
       @lang2keyboard = {}
+
+      # setting read from localed
+      @localed_conf = {}
 
       # languages that cannot be correctly shown in text mode
       # if the system (Linuxrc) does not start with them from the beginning
@@ -545,45 +547,43 @@ module Yast
       nil
     end
 
-    # Read the RC_LANG value from sysconfig and exctract language from it
-    # @return language
-    def ReadSysconfigLanguage
-      local_lang = Misc.SysconfigRead(
-        path(".sysconfig.language.RC_LANG"),
-        @language
-      )
-
-      pos = Builtins.findfirstof(local_lang, ".@")
-
-      if pos != nil && Ops.greater_or_equal(pos, 0)
-        local_lang = Builtins.substring(local_lang, 0, pos)
-      end
-
-      Builtins.y2milestone("language from sysconfig: %1", local_lang)
+    # read the localed.conf language
+    def ReadLocaleConfLanguage
+      return nil if Mode.testsuite
+      @localed_conf  = Y2Country.read_locale_conf
+      return nil if @localed_conf.nil?
+      local_lang = @localed_conf["LANG"]
+      local_lang.sub!(/[.@].*$/, "") if local_lang
+      log.info("language from locale.conf: %{local_lang}")
       local_lang
     end
 
     # Read the rest of language values from sysconfig
     def ReadSysconfigValues
-      @rootlang = Misc.SysconfigRead(
-        path(".sysconfig.language.ROOT_USES_LANG"),
-        @rootlang
-      )
-      # during live installation, we have sysconfig.language.RC_LANG available
-      if !Stage.initial || Mode.live_installation
-        val = Builtins.toupper(
-          Misc.SysconfigRead(path(".sysconfig.language.RC_LANG"), "")
-        )
-        @use_utf8 = Builtins.search(val, ".UTF-8") != nil if val != ""
-      else
-        @use_utf8 = true
-      end
       @languages = Misc.SysconfigRead(
         path(".sysconfig.language.INSTALLED_LANGUAGES"),
         ""
       )
 
       nil
+    end
+
+    # read UTF-8 status from localed.conf
+    def ReadUtf8Setting
+      if Mode.testsuite
+        @use_utf8 = true
+	return nil
+      end
+      # during live installation, we have local configuration
+      if !Stage.initial || Mode.live_installation
+        @localed_conf  = Y2Country.read_locale_conf
+        return nil if @localed_conf.nil?
+        local_lang = @localed_conf["LANG"]
+        @use_utf8 = local_lang.include?(".UTF-8") unless (local_lang.nil? || local_lang.empty?)
+      else
+        @use_utf8 = true
+      end
+      log.info("Use UTF-8: #{@use_utf8}")
     end
 
     # Constructor
@@ -634,7 +634,7 @@ module Yast
         Set(lang) # coming from /etc/install.inf
         SetDefault() # also default
       else
-        local_lang = ReadSysconfigLanguage()
+        local_lang = ReadLocaleConfLanguage() || @language
         QuickSet(local_lang)
         SetDefault() # also default
         if Mode.live_installation || Stage.firstboot
@@ -646,6 +646,7 @@ module Yast
           0
         )
         ReadSysconfigValues()
+        ReadUtf8Setting()
       end
       Encoding.SetUtf8Lang(@use_utf8)
 
@@ -656,8 +657,9 @@ module Yast
     # @param [Boolean] really: also read the values from the system
     def Read(really)
       if really
-        Set(ReadSysconfigLanguage())
+        Set(ReadLocaleConfLanguage() || @language)
         ReadSysconfigValues()
+        ReadUtf8Setting()
       end
 
       @language_on_entry = @language
@@ -705,7 +707,7 @@ module Yast
     # @return  [Hash] with values filled in
     #
     def GetExpertValues
-      { "rootlang" => @rootlang, "use_utf8" => @use_utf8 }
+      { "use_utf8" => @use_utf8 }
     end
 
     # SetExpertValues()
@@ -718,13 +720,6 @@ module Yast
     #
     def SetExpertValues(val)
       val = deep_copy(val)
-      if Builtins.haskey(val, "rootlang") &&
-          Ops.greater_than(
-            Builtins.size(Ops.get_string(val, "rootlang", "")),
-            0
-          )
-        @rootlang = Ops.get_string(val, "rootlang", "")
-      end
       if Builtins.haskey(val, "use_utf8")
         @use_utf8 = Ops.get_boolean(val, "use_utf8", false)
         Encoding.SetUtf8Lang(@use_utf8)
@@ -923,26 +918,46 @@ module Yast
     def Save
       loc = GetLocaleString(@language)
 
-      SCR.Write(path(".sysconfig.language.RC_LANG"), loc)
-
       if Builtins.find(loc, "zh_HK") == 0
-        SCR.Write(
-          path(".sysconfig.language.RC_LC_MESSAGES"),
-          Ops.add("zh_TW", Builtins.substring(loc, 5))
-        )
-      else
+        @localed_conf["LC_MESSAGES"] = "zh_TW"
+      elsif @localed_conf["LC_MESSAGES"] == "zh_TW"
         # FIXME ugly hack: see bug #47711
-        lc_mess = Convert.to_string(
-          SCR.Read(path(".sysconfig.language.RC_LC_MESSAGES"))
-        )
-        if Builtins.find(lc_mess, "zh_TW") == 0
-          SCR.Write(path(".sysconfig.language.RC_LC_MESSAGES"), "")
-        end
+        @localed_conf.delete("LC_MESSAGES")
       end
 
-      SCR.Write(path(".sysconfig.language.ROOT_USES_LANG"), @rootlang)
       SCR.Write(path(".sysconfig.language.INSTALLED_LANGUAGES"), @languages)
       SCR.Write(path(".sysconfig.language"), nil)
+
+      @localed_conf["LANG"] = loc
+      log.info("Locale: #{@localed_conf}")
+      locale_out1 = @localed_conf.map do | key, val |
+        "#{key}=#{val}"
+      end
+      log.info("Locale: #{locale_out1}")
+      locale_out=locale_out1.join(",")
+      log.info("Locale: #{locale_out}")
+
+      cmd = if Stage.initial
+        # do use --root option, running in chroot does not work
+        "/usr/bin/systemd-firstboot --root '#{Installation.destdir}' --locale '#{loc}'"
+      else
+        # this sets both the locale (see "man localectl")
+        "/usr/bin/localectl set-locale #{locale_out}"
+      end
+      log.info "Making language setting persistent: #{cmd}"
+      result = if Stage.initial
+        WFM.Execute(path(".local.bash_output"), cmd)
+      else
+        SCR.Execute(path(".target.bash_output"), cmd)
+      end
+      if result["exit"] != 0
+        log.error "Language configuration not written. Failed to execute '#{cmd}'"
+        log.error "output: #{result.inspect}"
+        # TRANSLATORS: the "%s" is replaced by the executed command
+        Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % cmd)
+      else
+        log.info "output: #{result.inspect}"
+      end
 
       Builtins.y2milestone("Saved data for language: <%1>", loc)
 
@@ -962,21 +977,12 @@ module Yast
 
       Pkg.PkgSolve(true)
 
-      selected_packages = Pkg.ResolvableProperties("", :package, "")
+      # package names only, without version
+      names_only = true
+      selected_packages = Pkg.GetPackages(:selected, names_only)
 
-      Builtins.y2milestone("Unselecting already recommended packages")
-
-      # unselect them
-      Builtins.foreach(selected_packages) do |package|
-        if Ops.get_symbol(package, "status", :unknown) == :selected
-          Builtins.y2milestone(
-            "Unselecting package: %1",
-            Ops.get_string(package, "name", "")
-          )
-          Pkg.PkgNeutral(Ops.get_string(package, "name", ""))
-        end
-      end 
-
+      log.info("Unselecting already recommended packages: #{selected_packages.inspect}")
+      selected_packages.each { |p| Yast::Pkg.PkgNeutral(p) }
 
       @reset_recommended = false
 
@@ -1166,7 +1172,6 @@ module Yast
     # @return [Hash] with the settings
     def Export
       ret = { "language" => @language, "languages" => @languages }
-      Ops.set(ret, "rootlang", @rootlang) if @rootlang != "ctype"
       Ops.set(ret, "use_utf8", @use_utf8) if !@use_utf8
       deep_copy(ret)
     end
@@ -1353,6 +1358,11 @@ module Yast
       false
     end
 
+    def GetCurrentLocaleString
+      GetLocaleString @language
+    end
+
+
     publish :variable => :language, :type => "string"
     publish :variable => :language_on_entry, :type => "string"
     publish :variable => :preselected, :type => "string"
@@ -1372,8 +1382,8 @@ module Yast
     publish :function => :QuickSet, :type => "void (string)"
     publish :function => :LinuxrcLangSet, :type => "boolean ()"
     publish :function => :GetLocaleString, :type => "string (string)"
+    publish :function => :GetCurrentLocaleString, :type => "string ()"
     publish :function => :SetDefault, :type => "void ()"
-    publish :function => :ReadSysconfigLanguage, :type => "string ()"
     publish :function => :ReadSysconfigValues, :type => "void ()"
     publish :function => :Language, :type => "void ()"
     publish :function => :Read, :type => "boolean (boolean)"
