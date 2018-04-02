@@ -2,12 +2,12 @@
 
 require_relative "../test_helper"
 require "cwm/rspec"
-require "y2country/widgets/language_selection"
+require "y2country/language_dbus"
 
-describe Y2Country::Widgets::LanguageSelection do
+describe "Y2Country::Widgets::LanguageSelection" do
   include_examples "CWM::ComboBox"
 
-  subject(:widget) { described_class.new }
+  subject(:widget) { Y2Country::Widgets::LanguageSelection.new }
   let(:default_language) { "en_US" }
 
   LANGUAGES = [["af_ZA", "Afrikaans - Afrikaans"], ["en_US", "English (US)"]].freeze
@@ -17,6 +17,9 @@ describe Y2Country::Widgets::LanguageSelection do
   end.freeze
 
   before do
+    allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
+    Yast.import "Language"
+    require "y2country/widgets/language_selection"
     allow(Yast::Language).to receive(:GetLanguageItems)
     allow(Yast::Language).to receive(:GetLanguageItems)
       .with(:first_screen).and_return(LANGUAGE_ITEMS)
@@ -108,7 +111,7 @@ describe Y2Country::Widgets::LanguageSelection do
     end
 
     context "when emit_event is set to true and Yast::Mode is not config" do
-      subject(:widget) { described_class.new(emit_event: true) }
+      subject(:widget) { Y2Country::Widgets::LanguageSelection.new(emit_event: true) }
 
       include_examples "switch language", :handle
 
@@ -125,7 +128,7 @@ describe Y2Country::Widgets::LanguageSelection do
     end
 
     context "when emit_event is set to false and Yast::Mode is not config" do
-      subject(:widget) { described_class.new(emit_event: false) }
+      subject(:widget) { Y2Country::Widgets::LanguageSelection.new(emit_event: false) }
 
       include_examples "switch language", :store
     end

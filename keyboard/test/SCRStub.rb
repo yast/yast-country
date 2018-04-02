@@ -42,6 +42,14 @@ module SCRStub
     receive(:Execute).with(path(".target.bash"), command)
   end
 
+  # Matcher for executing commands using SCR.Execute and .target.bash_output
+  #
+  # @return [RSpec::Mocks::Matchers::Receive]
+  def execute_bash_output(command)
+    receive(:Execute).with(path(".target.bash_output"), command).and_return("exit" => 0)
+  end
+
+
   # Stub all calls to SCR.Write storing the value for future comparison
   def stub_scr_write
     @written_values = {}

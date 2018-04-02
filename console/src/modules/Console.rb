@@ -130,9 +130,12 @@ module Yast
     # save data to system (rc.config agent)
 
     def Save
-      SCR.Write(path(".sysconfig.console.CONSOLE_FONT"), @font)
-      SCR.Write(path(".sysconfig.console.CONSOLE_SCREENMAP"), @screenMap)
-      SCR.Write(path(".sysconfig.console.CONSOLE_UNICODEMAP"), @unicodeMap)
+      # writing vconsole.conf directly, no other API available ATM
+      SCR.Write(path(".etc.vconsole_conf.FONT"), @font)
+      SCR.Write(path(".etc.vconsole_conf.FONT_MAP"), @screenMap)
+      SCR.Write(path(".etc.vconsole_conf.FONT_UNIMAP"), @unicodeMap)
+      SCR.Write(path(".etc.vconsole_conf"), nil)
+
       SCR.Write(path(".sysconfig.console.CONSOLE_MAGIC"), @magic)
 
       SCR.Write(path(".sysconfig.console.CONSOLE_ENCODING"), WFM.GetEncoding)
@@ -184,21 +187,15 @@ module Yast
     # restore data to system (rc.config agent)
     # returns encoding
     def Restore
-      @font = Convert.to_string(
-        SCR.Read(path(".sysconfig.console.CONSOLE_FONT"))
-      )
-      @screenMap = Convert.to_string(
-        SCR.Read(path(".sysconfig.console.CONSOLE_SCREENMAP"))
-      )
-      @unicodeMap = Convert.to_string(
-        SCR.Read(path(".sysconfig.console.CONSOLE_UNICODEMAP"))
-      )
+      @font = Misc.SysconfigRead(path(".etc.vconsole_conf.FONT"), "")
+      @screenMap = Misc.SysconfigRead(path(".etc.vconsole_conf.FONT_MAP"), "")
+      @unicodeMap = Misc.SysconfigRead(path(".etc.vconsole_conf.FONT_UNIMAP"), "")
+      Builtins.y2milestone("vconsole.conf: FONT: %1, FONT_MAP: %2, FONT_UNIMAP: %3", @font, @screenMap, @unicodeMap)
+
       @magic = Convert.to_string(
         SCR.Read(path(".sysconfig.console.CONSOLE_MAGIC"))
       )
-      @language = Convert.to_string(
-        SCR.Read(path(".sysconfig.language.RC_LANG"))
-      )
+      @language = Language.GetCurrentLocaleString
       Builtins.y2milestone("encoding %1", Encoding.console)
       Encoding.console
     end

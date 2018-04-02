@@ -4,7 +4,7 @@ ENV["Y2DIR"] = SRC_PATH
 
 require "yast"
 require "yast/rspec"
-require_relative "helpers"
+require_relative "keyboard_spec_helper"
 
 if ENV["COVERAGE"]
   require "simplecov"
@@ -26,6 +26,6 @@ if ENV["COVERAGE"]
 end
 
 RSpec.configure do |config|
-  config.include Helpers    # custom helpers
+  config.include KeyboardSpecHelper    # custom helpers
 end
 

@@ -1,6 +1,6 @@
 require_relative "test_helper"
-require "y2_keyboard/keyboard_layout"
-require "y2_keyboard/dialogs/layout_selector"
+require "y2keyboard/keyboard_layout"
+require "y2keyboard/dialogs/layout_selector"
 
 describe Y2Keyboard::Dialogs::LayoutSelector do
   english = Y2Keyboard::KeyboardLayout.new("en", "English")
