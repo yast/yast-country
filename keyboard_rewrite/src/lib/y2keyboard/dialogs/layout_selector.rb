@@ -10,6 +10,7 @@ module Y2Keyboard
     class LayoutSelector < UI::Dialog
 
       def initialize(keyboard_layouts)
+        textdomain "country"
         @keyboard_layouts = keyboard_layouts
       end
 
