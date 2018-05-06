@@ -30,4 +30,17 @@ describe Y2Keyboard::KeyboardLayout do
       expect(load_keyboard_layouts.first.code).to eq("es")
     end
   end
+
+  describe ".set_layout" do
+    subject(:keyboard_layout) { Y2Keyboard::KeyboardLayout }
+    
+    it "changes the keyboard layout" do
+      new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
+      expect(Cheetah).to receive(:run).with(
+        "localectl", "set-keymap", new_layout.code
+      )
+
+      keyboard_layout.set_layout(new_layout)
+    end    
+  end  
 end

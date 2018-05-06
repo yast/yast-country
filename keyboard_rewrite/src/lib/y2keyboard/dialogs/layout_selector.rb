@@ -21,11 +21,19 @@ module Y2Keyboard
       def dialog_content
         VBox(
           SelectionBox(
+            Id(:layout_lists),
             _("&Keyboard Layout"),
             @keyboard_layouts.map(&:description)
             ),
           footer
         )
+      end
+
+      def accept_handler
+        selected_layout = Yast::UI.QueryWidget(:layout_lists, :CurrentItem)
+        layout = @keyboard_layouts.find { |x| x.description == selected_layout }
+        Y2Keyboard::KeyboardLayout.set_layout(layout)
+        finish_dialog
       end
 
       def footer
