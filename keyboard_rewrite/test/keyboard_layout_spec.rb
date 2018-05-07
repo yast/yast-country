@@ -41,6 +41,17 @@ describe Y2Keyboard::KeyboardLayout do
       )
 
       keyboard_layout.set_layout(new_layout)
-    end    
-  end  
+    end
+  end
+
+  describe ".set_current_layout" do
+    subject(:keyboard_layout) { Y2Keyboard::KeyboardLayout }
+
+    it "changes the current keyboard layout used in xorg" do
+      new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
+      expect(Cheetah).to receive(:run).with("setxkbmap", new_layout.code)
+
+      keyboard_layout.set_current_layout(new_layout)
+    end
+  end
 end
