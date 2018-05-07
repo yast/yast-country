@@ -6,6 +6,7 @@ module Y2Keyboard
     attr_reader :description
 
     LAYOUT_CODE_DESCRIPTIONS = {
+      "gb" => "English (UK)",
       "es" => "Spanish",
       "fr" => "French",
       "us" => "English (US)"
