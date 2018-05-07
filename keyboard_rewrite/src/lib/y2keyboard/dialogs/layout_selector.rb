@@ -36,6 +36,12 @@ module Y2Keyboard
         finish_dialog
       end
 
+      def layout_lists_handler
+        selected_layout = Yast::UI.QueryWidget(:layout_lists, :CurrentItem)
+        layout = @keyboard_layouts.find { |x| x.description == selected_layout }
+        Y2Keyboard::KeyboardLayout.set_current_layout(layout)
+      end
+
       def footer
         HBox(
           HSpacing(),

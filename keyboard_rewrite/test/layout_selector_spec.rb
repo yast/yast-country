@@ -28,7 +28,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
 
   describe "#accept_handler" do
     before do
-      mock_ui_events(:accept)      
+      mock_ui_events(:accept)
     end
 
     it "change the keymap to the selected layout" do
@@ -48,6 +48,22 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
       allow(Y2Keyboard::KeyboardLayout).to receive(:set_layout)
       
       expect(layout_selector).to receive(:finish_dialog).and_call_original
+      
+      layout_selector.run
+    end
+  end
+
+  describe "#layout_lists_handler" do
+    before do
+      mock_ui_events(:layout_lists, :cancel)
+    end
+
+    it "change the keymap to the selected layout" do
+      allow(Yast::UI).to receive(:QueryWidget)
+        .with(:layout_lists, :CurrentItem)
+        .and_return(spanish.description)
+      
+      expect(Y2Keyboard::KeyboardLayout).to receive(:set_current_layout).with(spanish)
       
       layout_selector.run
     end
