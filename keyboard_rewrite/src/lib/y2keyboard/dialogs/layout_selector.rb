@@ -21,7 +21,7 @@ module Y2Keyboard
       def dialog_content
         VBox(
           SelectionBox(
-            Id(:layout_lists),
+            Id(:layout_list),
             Opt(:notify),
             _("&Keyboard Layout"),
             @keyboard_layouts.map(&:description)
@@ -35,13 +35,13 @@ module Y2Keyboard
         finish_dialog
       end
 
-      def layout_lists_handler
+      def layout_list_handler
         Y2Keyboard::KeyboardLayout.set_current_layout(selected_layout)
       end
 
       def selected_layout
-        selected_layout = Yast::UI.QueryWidget(:layout_lists, :CurrentItem)
-        @keyboard_layouts.find { |x| x.description == selected_layout }
+        selected = Yast::UI.QueryWidget(:layout_list, :CurrentItem)
+        @keyboard_layouts.find { |x| x.description == selected }
       end
 
       def footer
