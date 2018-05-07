@@ -31,16 +31,19 @@ module Y2Keyboard
       end
 
       def accept_handler
-        selected_layout = Yast::UI.QueryWidget(:layout_lists, :CurrentItem)
-        layout = @keyboard_layouts.find { |x| x.description == selected_layout }
+        layout = get_selected_layout
         Y2Keyboard::KeyboardLayout.set_layout(layout)
         finish_dialog
       end
 
       def layout_lists_handler
-        selected_layout = Yast::UI.QueryWidget(:layout_lists, :CurrentItem)
-        layout = @keyboard_layouts.find { |x| x.description == selected_layout }
+        layout = get_selected_layout
         Y2Keyboard::KeyboardLayout.set_current_layout(layout)
+      end
+
+      def get_selected_layout
+        selected_layout = Yast::UI.QueryWidget(:layout_lists, :CurrentItem)
+        @keyboard_layouts.find { |x| x.description == selected_layout }
       end
 
       def footer
