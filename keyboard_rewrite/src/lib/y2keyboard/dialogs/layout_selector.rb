@@ -22,6 +22,7 @@ module Y2Keyboard
         VBox(
           SelectionBox(
             Id(:layout_lists),
+            Opt(:notify),
             _("&Keyboard Layout"),
             @keyboard_layouts.map(&:description)
             ),
