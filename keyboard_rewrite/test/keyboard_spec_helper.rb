@@ -1,4 +1,8 @@
 module KeyboardSpecHelper
+  def mock_ui_events(*events)
+    allow(Yast::UI).to receive(:UserInput).and_return(*events)
+  end
+
   def given_layouts(layouts_to_return)
     allow(Cheetah).to receive(:run).with(
       "localectl", "list-keymaps", stdout: :capture
@@ -16,8 +20,10 @@ module KeyboardSpecHelper
         "       X11 Options: terminate:ctrl_alt_bksp\n")
   end
 
-  def mock_ui_events(*events)
-    allow(Yast::UI).to receive(:UserInput).and_return(*events)
+  def selecting_layout_from_list(layout)
+    allow(Yast::UI).to receive(:QueryWidget)
+        .with(:layout_list, :CurrentItem)
+        .and_return(layout.description)
   end
 end
 
