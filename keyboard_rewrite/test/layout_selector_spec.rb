@@ -11,7 +11,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
   before do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
-    allow(Y2Keyboard::KeyboardLayout).to receive(:set_current_layout)
+    allow(Y2Keyboard::KeyboardLayout).to receive(:load_layout)
   end
 
   describe "#run" do
@@ -64,7 +64,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
         .with(:layout_list, :CurrentItem)
         .and_return(spanish.description)
       
-      expect(Y2Keyboard::KeyboardLayout).to receive(:set_current_layout).with(spanish)
+      expect(Y2Keyboard::KeyboardLayout).to receive(:load_layout).with(spanish)
       
       layout_selector.run
     end
@@ -84,7 +84,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
     it "restores the keyboard layout to the previous selected" do
       allow(Y2Keyboard::KeyboardLayout).to receive(:get_current_layout).and_return(english)
       
-      expect(Y2Keyboard::KeyboardLayout).to receive(:set_current_layout).with(english)
+      expect(Y2Keyboard::KeyboardLayout).to receive(:load_layout).with(english)
 
       layout_selector.run
     end

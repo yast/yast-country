@@ -28,7 +28,7 @@ module Y2Keyboard
       Cheetah.run("localectl", "set-keymap", keyboard_layout.code)
     end
 
-    def self.set_current_layout(keyboard_layout)
+    def self.load_layout(keyboard_layout)
       Cheetah.run("setxkbmap", keyboard_layout.code)
     end
 

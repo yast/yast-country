@@ -37,12 +37,12 @@ module Y2Keyboard
       end
 
       def cancel_handler
-        Y2Keyboard::KeyboardLayout.set_current_layout(@previous_selected_layout)
+        Y2Keyboard::KeyboardLayout.load_layout(@previous_selected_layout)
         finish_dialog
       end
 
       def layout_list_handler
-        Y2Keyboard::KeyboardLayout.set_current_layout(selected_layout)
+        Y2Keyboard::KeyboardLayout.load_layout(selected_layout)
       end
 
       def selected_layout
