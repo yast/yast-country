@@ -12,6 +12,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
     allow(Y2Keyboard::KeyboardLayout).to receive(:load_layout)
+    allow(Y2Keyboard::KeyboardLayout).to receive(:get_current_layout).and_return(english)
   end
 
   describe "#run" do
