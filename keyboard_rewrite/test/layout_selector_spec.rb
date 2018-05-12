@@ -68,4 +68,16 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
       layout_selector.run
     end
   end
+
+  describe "#cancel_handler" do
+    before do
+      mock_ui_events( :cancel)
+    end
+
+    it "closes the dialog" do
+      expect(layout_selector).to receive(:finish_dialog).and_call_original
+      
+      layout_selector.run
+    end
+  end
 end

@@ -35,6 +35,10 @@ module Y2Keyboard
         finish_dialog
       end
 
+      def cancel_handler
+        finish_dialog
+      end
+
       def layout_list_handler
         Y2Keyboard::KeyboardLayout.set_current_layout(selected_layout)
       end
