@@ -12,6 +12,7 @@ module Y2Keyboard
       def initialize(keyboard_layouts)
         textdomain "country"
         @keyboard_layouts = keyboard_layouts
+        @previous_selected_layout = Y2Keyboard::KeyboardLayout.get_current_layout()
       end
 
       def dialog_options
@@ -36,6 +37,7 @@ module Y2Keyboard
       end
 
       def cancel_handler
+        Y2Keyboard::KeyboardLayout.set_current_layout(@previous_selected_layout)
         finish_dialog
       end
 

@@ -11,6 +11,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
   before do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
+    allow(Y2Keyboard::KeyboardLayout).to receive(:set_current_layout)
   end
 
   describe "#run" do
@@ -71,12 +72,20 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
 
   describe "#cancel_handler" do
     before do
-      mock_ui_events( :cancel)
+      mock_ui_events(:cancel)
     end
 
     it "closes the dialog" do
       expect(layout_selector).to receive(:finish_dialog).and_call_original
       
+      layout_selector.run
+    end
+
+    it "restores the keyboard layout to the previous selected" do
+      allow(Y2Keyboard::KeyboardLayout).to receive(:get_current_layout).and_return(english)
+      
+      expect(Y2Keyboard::KeyboardLayout).to receive(:set_current_layout).with(english)
+
       layout_selector.run
     end
   end
