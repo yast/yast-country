@@ -34,7 +34,7 @@ module Y2Keyboard
 
     def self.get_current_layout()
       output = Cheetah.run("localectl", "status", stdout: :capture)
-      current_layout_code = output.lines.find { |x| x.start_with?("VC Keymap:") }.split.last
+      current_layout_code = output.lines.map { |x| x.strip }.find { |x| x.start_with?("VC Keymap:") }.split.last
       all().find { |x| x.code == current_layout_code }
     end
   end

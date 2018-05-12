@@ -60,11 +60,11 @@ describe Y2Keyboard::KeyboardLayout do
     
     it "returns the current used keyboard layout" do
       allow(Cheetah).to receive(:run).with("localectl", "status", stdout: :capture).and_return(
-        "System Locale: LANG=en_US.UTF-8\n" \
-        "VC Keymap: gb\n" \
-        "X11 Layout: gb\n" \
-        "X11 Model: microsoftpro\n" \
-        "X11 Options: terminate:ctrl_alt_bksp\n")
+        "   System Locale: LANG=en_US.UTF-8\n" \
+        "       VC Keymap: gb\n" \
+        "       X11 Layout: gb\n" \
+        "       X11 Model: microsoftpro\n" \
+        "       X11 Options: terminate:ctrl_alt_bksp\n")
        expected_layouts = ["es", "gb", "us"]
       given_layouts(expected_layouts)
 
