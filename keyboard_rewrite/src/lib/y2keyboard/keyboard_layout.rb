@@ -1,5 +1,7 @@
 require "cheetah"
 
+Yast.import "UI"
+
 module Y2Keyboard
   class KeyboardLayout
     attr_reader :code
@@ -29,7 +31,7 @@ module Y2Keyboard
     end
 
     def self.load_layout(keyboard_layout)
-      Cheetah.run("setxkbmap", keyboard_layout.code)
+      Cheetah.run("setxkbmap", keyboard_layout.code) if !Yast::UI.TextMode
     end
 
     def self.get_current_layout()

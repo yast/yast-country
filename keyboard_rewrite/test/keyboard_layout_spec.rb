@@ -51,6 +51,19 @@ describe Y2Keyboard::KeyboardLayout do
 
       keyboard_layout.load_layout(new_layout)
     end
+
+    describe "in text mode" do
+      before do 
+        allow(Yast::UI).to receive(:TextMode).and_return(true)
+      end
+      
+      it "do not try to changes the current keyboard layout in xorg" do
+        new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
+        expect(Cheetah).not_to receive(:run).with("setxkbmap", new_layout.code)
+  
+        keyboard_layout.load_layout(new_layout)
+      end
+    end
   end
 
   describe ".get_current_layout" do
