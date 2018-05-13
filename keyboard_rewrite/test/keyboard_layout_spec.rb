@@ -45,18 +45,24 @@ describe Y2Keyboard::KeyboardLayout do
   end
 
   describe ".load_layout" do
-    it "changes the current keyboard layout used in xorg" do
-      new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
-      expect(Cheetah).to receive(:run).with("setxkbmap", new_layout.code)
+    describe "in X server" do
+      before do 
+        allow(Yast::UI).to receive(:TextMode).and_return(false)
+      end
 
-      keyboard_layout.load_layout(new_layout)
+      it "changes the current keyboard layout used in xorg" do
+        new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
+        expect(Cheetah).to receive(:run).with("setxkbmap", new_layout.code)
+  
+        keyboard_layout.load_layout(new_layout)
+      end
     end
 
     describe "in text mode" do
       before do 
         allow(Yast::UI).to receive(:TextMode).and_return(true)
       end
-      
+
       it "do not try to changes the current keyboard layout in xorg" do
         new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
         expect(Cheetah).not_to receive(:run).with("setxkbmap", new_layout.code)
