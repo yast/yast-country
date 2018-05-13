@@ -27,6 +27,7 @@ module Y2Keyboard
             _("&Keyboard Layout"),
             @keyboard_layouts.map(&:description)
             ),
+            InputField(Opt(:hstretch), _("&Test")),
           footer
         )
       end
