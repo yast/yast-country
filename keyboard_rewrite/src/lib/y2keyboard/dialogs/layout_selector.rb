@@ -21,14 +21,24 @@ module Y2Keyboard
 
       def dialog_content
         VBox(
+          HBox(
+            HWeight(20, HStretch()),
+            HWeight(50, layout_selection_box),
+            HWeight(20, HStretch()),
+          ),
+          footer
+        )
+      end
+
+      def layout_selection_box
+        VBox(
           SelectionBox(
             Id(:layout_list),
             Opt(:notify),
             _("&Keyboard Layout"),
             @keyboard_layouts.map(&:description)
-            ),
-            InputField(Opt(:hstretch), _("&Test")),
-          footer
+          ),
+          InputField(Opt(:hstretch), _("&Test"))
         )
       end
 
