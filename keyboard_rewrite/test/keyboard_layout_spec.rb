@@ -69,6 +69,13 @@ describe Y2Keyboard::KeyboardLayout do
   
         keyboard_layout.load_layout(new_layout)
       end
+
+      it "changes the current keyboard layout in console" do
+        new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
+        expect(Cheetah).to receive(:run).with("loadkeys", new_layout.code)
+  
+        keyboard_layout.load_layout(new_layout)
+      end
     end
   end
 
