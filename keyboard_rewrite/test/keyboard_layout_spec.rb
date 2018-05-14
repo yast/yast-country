@@ -82,6 +82,25 @@ describe Y2Keyboard::KeyboardLayout do
         keyboard_layout.load_layout(new_layout)
       end
     end
+
+    describe "using ncurses inside X server" do
+      before do
+        allow(Yast::UI).to receive(:TextMode).and_return(true)
+      end
+
+      describe "when setting current keyboard layout in console" do
+        it "do not raise error" do
+          allow(Cheetah).to receive(:run)
+            .with("loadkeys", new_layout.code)
+            .and_raise(Cheetah::ExecutionFailed.new("loadkeys #{new_layout.code}", 
+              "Execution of \"loadkeys #{new_layout.code}\" failed with status 1: Couldn't get a file descriptor referring to the console.",
+              "",
+              "Couldn't get a file descriptor referring to the console"))
+  
+          expect { keyboard_layout.load_layout(new_layout) }.not_to raise_error
+        end
+      end
+    end
   end
 
   describe ".get_current_layout" do

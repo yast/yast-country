@@ -32,7 +32,10 @@ module Y2Keyboard
 
     def self.load_layout(keyboard_layout)
       Cheetah.run("setxkbmap", keyboard_layout.code) if !Yast::UI.TextMode
-      Cheetah.run("loadkeys", keyboard_layout.code) if Yast::UI.TextMode
+      begin 
+        Cheetah.run("loadkeys", keyboard_layout.code) if Yast::UI.TextMode
+      rescue Cheetah::ExecutionFailed => e
+      end
     end
 
     def self.get_current_layout()
