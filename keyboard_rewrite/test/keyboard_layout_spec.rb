@@ -92,10 +92,7 @@ describe Y2Keyboard::KeyboardLayout do
         it "do not raise error" do
           allow(Cheetah).to receive(:run)
             .with("loadkeys", new_layout.code)
-            .and_raise(Cheetah::ExecutionFailed.new("loadkeys #{new_layout.code}", 
-              "Execution of \"loadkeys #{new_layout.code}\" failed with status 1: Couldn't get a file descriptor referring to the console.",
-              "",
-              "Couldn't get a file descriptor referring to the console"))
+            .and_raise(loadkeys_error)
   
           expect { keyboard_layout.load_layout(new_layout) }.not_to raise_error
         end
