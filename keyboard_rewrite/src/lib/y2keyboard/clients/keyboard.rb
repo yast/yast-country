@@ -2,6 +2,7 @@ require_relative "../dialogs/layout_selector"
 
 module Y2Keyboard
   module Clients
+    # Simple client to run LayoutSelector.
     class Keyboard
       def self.run
         layouts = Y2Keyboard::KeyboardLayout.all
