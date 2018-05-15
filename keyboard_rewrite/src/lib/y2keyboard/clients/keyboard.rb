@@ -10,6 +10,3 @@ module Y2Keyboard
     end
   end
 end
-
-
-

@@ -8,11 +8,10 @@ Yast.import "Popup"
 module Y2Keyboard
   module Dialogs
     class LayoutSelector < UI::Dialog
-
       def initialize(keyboard_layouts)
         textdomain "country"
         @keyboard_layouts = keyboard_layouts
-        @previous_selected_layout = Y2Keyboard::KeyboardLayout.get_current_layout()
+        @previous_selected_layout = Y2Keyboard::KeyboardLayout.get_current_layout
       end
 
       def dialog_options
@@ -24,7 +23,7 @@ module Y2Keyboard
           HBox(
             HWeight(20, HStretch()),
             HWeight(50, layout_selection_box),
-            HWeight(20, HStretch()),
+            HWeight(20, HStretch())
           ),
           footer
         )

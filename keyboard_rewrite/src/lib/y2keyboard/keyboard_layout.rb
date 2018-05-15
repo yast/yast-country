@@ -14,7 +14,7 @@ module Y2Keyboard
       "es" => "Spanish",
       "fr" => "French",
       "us" => "English (US)"
-    }
+    }.freeze
 
     def initialize(code, description)
       @code = code
@@ -34,7 +34,7 @@ module Y2Keyboard
 
     def self.load_layout(keyboard_layout)
       Cheetah.run("setxkbmap", keyboard_layout.code) if !Yast::UI.TextMode
-      begin 
+      begin
         Cheetah.run("loadkeys", keyboard_layout.code) if Yast::UI.TextMode
       rescue Cheetah::ExecutionFailed => e
         log.info(e.message)
@@ -43,7 +43,7 @@ module Y2Keyboard
     end
 
     def self.get_current_layout
-      get_layout(get_current_layout_code())
+      get_layout(get_current_layout_code)
     end
 
     def self.get_layout(code)
