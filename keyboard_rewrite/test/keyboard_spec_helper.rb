@@ -17,21 +17,23 @@ module KeyboardSpecHelper
         "       VC Keymap: #{code}\n" \
         "       X11 Layout: #{code}\n" \
         "       X11 Model: microsoftpro\n" \
-        "       X11 Options: terminate:ctrl_alt_bksp\n")
+        "       X11 Options: terminate:ctrl_alt_bksp\n"
+      )
   end
 
   def selecting_layout_from_list(layout)
     allow(Yast::UI).to receive(:QueryWidget)
-        .with(:layout_list, :CurrentItem)
-        .and_return(layout.description)
+      .with(:layout_list, :CurrentItem)
+      .and_return(layout.description)
   end
 
   def loadkeys_error
     Cheetah::ExecutionFailed.new(
-      "loadkeys es", 
-      "Execution of \"loadkeys es\" failed with status 1: Couldn't get a file descriptor referring to the console.",
+      "loadkeys es",
+      "Execution of \"loadkeys es\" failed with status 1: " \
+      "Couldn't get a file descriptor referring to the console.",
       "",
-      "Couldn't get a file descriptor referring to the console")
+      "Couldn't get a file descriptor referring to the console"
+    )
   end
 end
-
