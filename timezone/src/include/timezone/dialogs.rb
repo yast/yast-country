@@ -47,6 +47,7 @@ module Yast
       Yast.import "NetworkService"
       Yast.import "Package"
       Yast.import "Popup"
+      Yast.import "Product"
       Yast.import "ProductFeatures"
       Yast.import "Service"
       Yast.import "Stage"
@@ -572,22 +573,21 @@ module Yast
         # true by default (fate#303520)
         @ntp_used = true
         # configure NTP client
-        Builtins.srandom
-        @ntp_server = Builtins.sformat(
-          "%1.opensuse.pool.ntp.org",
-          Builtins.random(4)
-        )
+        # to prevent misusage of ntp.org we need to distinguish opensuse and SLE usage
+        base_products = Product.FindBaseProducts
+        if base_products.any? { |p| p["name"] =~ /openSUSE/i }
+          servers = (0..3).map { |i| "#{i}.opensuse.pool.ntp.org" }
+        else
+          servers = (0..3).map { |i| "#{i}.novell.pool.ntp.org" }
+        end
+        @ntp_server = servers.sample
         argmap = {
           "server"       => @ntp_server,
           # FIXME ntp-client_proposal doesn't understand 'servers' yet
-          "servers"      => [
-            "0.opensuse.pool.ntp.org",
-            "1.opensuse.pool.ntp.org",
-            "2.opensuse.pool.ntp.org",
-            "3.opensuse.pool.ntp.org"
-          ],
+          "servers"      => servers,
           "ntpdate_only" => true
         }
+
         rv = Convert.to_symbol(ntp_call("Write", argmap))
         if rv == :invalid_hostname
           Builtins.y2warning("Invalid NTP server hostname %1", @ntp_server)
