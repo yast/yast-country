@@ -54,13 +54,13 @@ describe Y2Keyboard::KeyboardLayout do
 
       it "changes the current keyboard layout used in xorg" do
         expect(Cheetah).to receive(:run).with("setxkbmap", new_layout.code)
-  
+
         keyboard_layout.load_layout(new_layout)
       end
 
       it "do not try to change the current keyboard layout in console" do
         expect(Cheetah).not_to receive(:run).with("loadkeys", new_layout.code)
-  
+
         keyboard_layout.load_layout(new_layout)
       end
     end
@@ -72,13 +72,13 @@ describe Y2Keyboard::KeyboardLayout do
 
       it "do not try to change the current keyboard layout in xorg" do
         expect(Cheetah).not_to receive(:run).with("setxkbmap", new_layout.code)
-  
+
         keyboard_layout.load_layout(new_layout)
       end
 
       it "changes the current keyboard layout in console" do
         expect(Cheetah).to receive(:run).with("loadkeys", new_layout.code)
-  
+
         keyboard_layout.load_layout(new_layout)
       end
     end
@@ -90,13 +90,13 @@ describe Y2Keyboard::KeyboardLayout do
 
       describe "when setting current keyboard layout in console" do
         # This tests describes the case when running the module in text mode inside a X server.
-        # In that case, when trying to execute 'loadkeys' it will fail due to it should't 
+        # In that case, when trying to execute 'loadkeys' it will fail due to it should't
         # be execute from X server.
         it "do not raise error" do
           allow(Cheetah).to receive(:run)
             .with("loadkeys", new_layout.code)
             .and_raise(loadkeys_error)
-  
+
           expect { keyboard_layout.load_layout(new_layout) }.not_to raise_error
         end
 
@@ -105,9 +105,11 @@ describe Y2Keyboard::KeyboardLayout do
           allow(Cheetah).to receive(:run)
             .with("loadkeys", new_layout.code)
             .and_raise(error)
-  
-          expect(Y2Keyboard::KeyboardLayout.log).to receive(:info).with(error.message)
-          expect(Y2Keyboard::KeyboardLayout.log).to receive(:info).with("Error output:    #{error.stderr}")
+
+          expect(Y2Keyboard::KeyboardLayout.log).to receive(:info)
+            .with(error.message)
+          expect(Y2Keyboard::KeyboardLayout.log).to receive(:info)
+            .with("Error output:    #{error.stderr}")
 
           keyboard_layout.load_layout(new_layout)
         end
@@ -121,8 +123,8 @@ describe Y2Keyboard::KeyboardLayout do
       given_layouts(["es", current_selected_layout_code, "us"])
       given_a_current_layout(current_selected_layout_code)
 
-      expect(keyboard_layout.get_current_layout()).to be_an(Y2Keyboard::KeyboardLayout)
-      expect(keyboard_layout.get_current_layout().code).to eq(current_selected_layout_code)
+      expect(keyboard_layout.get_current_layout).to be_an(Y2Keyboard::KeyboardLayout)
+      expect(keyboard_layout.get_current_layout.code).to eq(current_selected_layout_code)
     end
   end
 end
