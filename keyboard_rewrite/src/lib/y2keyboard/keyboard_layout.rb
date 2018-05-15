@@ -4,6 +4,8 @@ Yast.import "UI"
 
 module Y2Keyboard
   class KeyboardLayout
+    include Yast::Logger
+
     attr_reader :code
     attr_reader :description
 
@@ -35,6 +37,8 @@ module Y2Keyboard
       begin 
         Cheetah.run("loadkeys", keyboard_layout.code) if Yast::UI.TextMode
       rescue Cheetah::ExecutionFailed => e
+        log.info(e.message)
+        log.info("Error output:    #{e.stderr}")
       end
     end
 

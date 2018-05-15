@@ -89,7 +89,7 @@ describe Y2Keyboard::KeyboardLayout do
       end
 
       describe "when setting current keyboard layout in console" do
-        # This test describe the case when running the module in text mode inside a X server.
+        # This tests describes the case when running the module in text mode inside a X server.
         # In that case, when trying to execute 'loadkeys' it will fail due to it should't 
         # be execute from X server.
         it "do not raise error" do
@@ -98,6 +98,18 @@ describe Y2Keyboard::KeyboardLayout do
             .and_raise(loadkeys_error)
   
           expect { keyboard_layout.load_layout(new_layout) }.not_to raise_error
+        end
+
+        it "log error information" do
+          error = loadkeys_error
+          allow(Cheetah).to receive(:run)
+            .with("loadkeys", new_layout.code)
+            .and_raise(error)
+  
+          expect(Y2Keyboard::KeyboardLayout.log).to receive(:info).with(error.message)
+          expect(Y2Keyboard::KeyboardLayout.log).to receive(:info).with("Error output:    #{error.stderr}")
+
+          keyboard_layout.load_layout(new_layout)
         end
       end
     end
