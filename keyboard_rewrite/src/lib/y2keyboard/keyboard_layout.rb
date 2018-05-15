@@ -28,7 +28,7 @@ module Y2Keyboard
       codes_with_description.map { |code| KeyboardLayout.new(code, LAYOUT_CODE_DESCRIPTIONS[code]) }
     end
 
-    def self.set_layout(keyboard_layout)
+    def self.apply_layout(keyboard_layout)
       Cheetah.run("localectl", "set-keymap", keyboard_layout.code)
     end
 
@@ -42,19 +42,19 @@ module Y2Keyboard
       end
     end
 
-    def self.get_current_layout
-      get_layout(get_current_layout_code)
+    def self.current_layout
+      find_layout_with(current_layout_code)
     end
 
-    def self.get_layout(code)
+    def self.find_layout_with(code)
       all.find { |x| x.code == code }
     end
 
-    def self.get_current_layout_code
+    def self.current_layout_code
       output = Cheetah.run("localectl", "status", stdout: :capture)
       output.lines.map(&:strip).find { |x| x.start_with?("VC Keymap:") }.split.last
     end
 
-    private_class_method :get_current_layout_code, :get_layout
+    private_class_method :current_layout_code, :find_layout_with
   end
 end

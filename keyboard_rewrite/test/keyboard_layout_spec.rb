@@ -33,14 +33,14 @@ describe Y2Keyboard::KeyboardLayout do
     end
   end
 
-  describe ".set_layout" do
+  describe ".apply_layout" do
     it "changes the keyboard layout" do
       new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
       expect(Cheetah).to receive(:run).with(
         "localectl", "set-keymap", new_layout.code
       )
 
-      keyboard_layout.set_layout(new_layout)
+      keyboard_layout.apply_layout(new_layout)
     end
   end
 
@@ -117,14 +117,14 @@ describe Y2Keyboard::KeyboardLayout do
     end
   end
 
-  describe ".get_current_layout" do
+  describe ".current_layout" do
     it "returns the current used keyboard layout" do
       current_selected_layout_code = "gb"
       given_layouts(["es", current_selected_layout_code, "us"])
       given_a_current_layout(current_selected_layout_code)
 
-      expect(keyboard_layout.get_current_layout).to be_an(Y2Keyboard::KeyboardLayout)
-      expect(keyboard_layout.get_current_layout.code).to eq(current_selected_layout_code)
+      expect(keyboard_layout.current_layout).to be_an(Y2Keyboard::KeyboardLayout)
+      expect(keyboard_layout.current_layout.code).to eq(current_selected_layout_code)
     end
   end
 end
