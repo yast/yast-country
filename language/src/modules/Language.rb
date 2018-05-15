@@ -918,6 +918,8 @@ module Yast
     def Save
       loc = GetLocaleString(@language)
 
+      @localed_conf = {} if @localed_conf.nil?
+
       if Builtins.find(loc, "zh_HK") == 0
         @localed_conf["LC_MESSAGES"] = "zh_TW"
       elsif @localed_conf["LC_MESSAGES"] == "zh_TW"
