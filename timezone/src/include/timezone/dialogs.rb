@@ -575,7 +575,7 @@ module Yast
         # configure NTP client
         # to prevent misusage of ntp.org we need to distinguish opensuse and SLE usage
         base_products = Product.FindBaseProducts
-        if base_products.any? { |p| p["shortname"] == "openSUSE" }
+        if base_products.any? { |p| p["name"] =~ /openSUSE/i }
           servers = (0..3).map { |i| "#{i}.opensuse.pool.ntp.org" }
         else
           servers = (0..3).map { |i| "#{i}.novell.pool.ntp.org" }
