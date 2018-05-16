@@ -1,3 +1,4 @@
+# Spec helper for keyboard module tests
 module KeyboardSpecHelper
   def mock_ui_events(*events)
     allow(Yast::UI).to receive(:UserInput).and_return(*events)
