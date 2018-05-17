@@ -8,13 +8,14 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
   spanish = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
   layouts = [english, spanish]
   strategy = Y2Keyboard::Strategies::SystemdStrategy.new
-  subject(:layout_selector) { Y2Keyboard::Dialogs::LayoutSelector.new(layouts, strategy) }
+  subject(:layout_selector) { Y2Keyboard::Dialogs::LayoutSelector.new(strategy) }
 
   before do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
     allow(strategy).to receive(:load_layout)
     allow(strategy).to receive(:current_layout).and_return(english)
+    allow(strategy).to receive(:all).and_return(layouts)
   end
 
   describe "#run" do
@@ -29,6 +30,8 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
     end
 
     it "lists the keyboard layouts" do
+      allow(strategy).to receive(:all).and_return([english, spanish])
+
       expect(english).to receive(:description)
       expect(spanish).to receive(:description)
 
