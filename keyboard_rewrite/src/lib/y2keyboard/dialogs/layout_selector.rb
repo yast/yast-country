@@ -9,10 +9,11 @@ module Y2Keyboard
   module Dialogs
     # Main dialog where the layouts are listed and can change the keyboard layout
     class LayoutSelector < UI::Dialog
-      def initialize(keyboard_layouts)
+      def initialize(keyboard_layouts, strategy)
         textdomain "country"
         @keyboard_layouts = keyboard_layouts
-        @previous_selected_layout = Y2Keyboard::Strategies::SystemdStrategy.current_layout
+        @previous_selected_layout = strategy.current_layout
+        @strategy = strategy
       end
 
       def dialog_options
@@ -43,17 +44,17 @@ module Y2Keyboard
       end
 
       def accept_handler
-        Y2Keyboard::Strategies::SystemdStrategy.apply_layout(selected_layout)
+        @strategy.apply_layout(selected_layout)
         finish_dialog
       end
 
       def cancel_handler
-        Y2Keyboard::Strategies::SystemdStrategy.load_layout(@previous_selected_layout)
+        @strategy.load_layout(@previous_selected_layout)
         finish_dialog
       end
 
       def layout_list_handler
-        Y2Keyboard::Strategies::SystemdStrategy.load_layout(selected_layout)
+        @strategy.load_layout(selected_layout)
       end
 
       def selected_layout

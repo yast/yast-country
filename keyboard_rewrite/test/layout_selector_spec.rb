@@ -7,13 +7,14 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
   english = Y2Keyboard::KeyboardLayout.new("en", "English")
   spanish = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
   layouts = [english, spanish]
-  subject(:layout_selector) { Y2Keyboard::Dialogs::LayoutSelector.new(layouts) }
+  strategy = Y2Keyboard::Strategies::SystemdStrategy.new
+  subject(:layout_selector) { Y2Keyboard::Dialogs::LayoutSelector.new(layouts, strategy) }
 
   before do
     allow(Yast::UI).to receive(:OpenDialog).and_return(true)
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
-    allow(Y2Keyboard::Strategies::SystemdStrategy).to receive(:load_layout)
-    allow(Y2Keyboard::Strategies::SystemdStrategy).to receive(:current_layout).and_return(english)
+    allow(strategy).to receive(:load_layout)
+    allow(strategy).to receive(:current_layout).and_return(english)
   end
 
   describe "#run" do
@@ -37,14 +38,14 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
     it "change the keymap to the selected layout" do
       selecting_layout_from_list(spanish)
 
-      expect(Y2Keyboard::Strategies::SystemdStrategy).to receive(:apply_layout).with(spanish)
+      expect(strategy).to receive(:apply_layout).with(spanish)
 
       layout_selector.run
     end
 
     it "closes the dialog" do
       selecting_layout_from_list(spanish)
-      allow(Y2Keyboard::Strategies::SystemdStrategy).to receive(:apply_layout)
+      allow(strategy).to receive(:apply_layout)
 
       expect(layout_selector).to receive(:finish_dialog).and_call_original
 
@@ -60,7 +61,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
     it "change the keymap to the selected layout" do
       selecting_layout_from_list(spanish)
 
-      expect(Y2Keyboard::Strategies::SystemdStrategy).to receive(:load_layout).with(spanish)
+      expect(strategy).to receive(:load_layout).with(spanish)
 
       layout_selector.run
     end
@@ -78,9 +79,9 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
     end
 
     it "restores the keyboard layout to the previous selected" do
-      allow(Y2Keyboard::Strategies::SystemdStrategy).to receive(:current_layout).and_return(english)
+      allow(strategy).to receive(:current_layout).and_return(english)
 
-      expect(Y2Keyboard::Strategies::SystemdStrategy).to receive(:load_layout).with(english)
+      expect(strategy).to receive(:load_layout).with(english)
 
       layout_selector.run
     end
