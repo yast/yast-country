@@ -7,8 +7,7 @@ module Y2Keyboard
     class Keyboard
       def self.run
         systemdStrategy = Y2Keyboard::Strategies::SystemdStrategy.new
-        layouts = systemdStrategy.all
-        Y2Keyboard::Dialogs::LayoutSelector.new(layouts, systemdStrategy).run
+        Y2Keyboard::Dialogs::LayoutSelector.new(systemdStrategy).run
       end
     end
   end
