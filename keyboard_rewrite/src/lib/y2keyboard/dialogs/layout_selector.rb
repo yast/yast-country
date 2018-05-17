@@ -1,6 +1,5 @@
 require "yast"
 require "ui/dialog"
-require_relative "../keyboard_layout"
 
 Yast.import "UI"
 Yast.import "Popup"

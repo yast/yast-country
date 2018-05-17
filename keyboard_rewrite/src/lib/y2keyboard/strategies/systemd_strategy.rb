@@ -1,4 +1,5 @@
 require "cheetah"
+require_relative "../keyboard_layout"
 
 module Y2Keyboard
   module Strategies
