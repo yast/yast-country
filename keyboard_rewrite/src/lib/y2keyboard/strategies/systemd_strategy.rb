@@ -1,6 +1,6 @@
 module Y2Keyboard
   module Strategies
-    class SystemdKeyboardRepository
+    class SystemdStrategy
       include Yast::Logger
 
       LAYOUT_CODE_DESCRIPTIONS = {
