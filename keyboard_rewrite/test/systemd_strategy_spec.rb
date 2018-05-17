@@ -5,7 +5,7 @@ require "y2keyboard/strategies/systemd_strategy"
 describe Y2Keyboard::Strategies::SystemdStrategy do
   subject(:systemd_strategy) { Y2Keyboard::Strategies::SystemdStrategy.new }
 
-  describe ".all" do
+  describe "#all" do
     subject(:load_keyboard_layouts) { Y2Keyboard::Strategies::SystemdStrategy.new.all }
 
     it "returns a lists of keyboard layouts" do
@@ -34,7 +34,7 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
     end
   end
 
-  describe ".apply_layout" do
+  describe "#apply_layout" do
     it "changes the keyboard layout" do
       new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
       expect(Cheetah).to receive(:run).with(
@@ -45,7 +45,7 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
     end
   end
 
-  describe ".load_layout" do
+  describe "#load_layout" do
     new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
 
     describe "in X server" do
@@ -118,7 +118,7 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
     end
   end
 
-  describe ".current_layout" do
+  describe "#current_layout" do
     it "returns the current used keyboard layout" do
       current_selected_layout_code = "gb"
       given_layouts(["es", current_selected_layout_code, "us"])
