@@ -1,3 +1,5 @@
+require "cheetah"
+
 module Y2Keyboard
   module Strategies
     class SystemdStrategy

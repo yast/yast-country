@@ -1,5 +1,3 @@
-require "cheetah"
-
 module Y2Keyboard
   # This class represents a keyboard layout. Also have methods to interact with the system.
   class KeyboardLayout
