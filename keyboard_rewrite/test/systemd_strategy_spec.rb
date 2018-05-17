@@ -3,10 +3,10 @@ require "y2keyboard/keyboard_layout"
 require "y2keyboard/strategies/systemd_strategy"
 
 describe Y2Keyboard::Strategies::SystemdStrategy do
-  subject(:systemd_strategy) { Y2Keyboard::Strategies::SystemdStrategy }
+  subject(:systemd_strategy) { Y2Keyboard::Strategies::SystemdStrategy.new }
 
   describe ".all" do
-    subject(:load_keyboard_layouts) { Y2Keyboard::Strategies::SystemdStrategy.all }
+    subject(:load_keyboard_layouts) { Y2Keyboard::Strategies::SystemdStrategy.new.all }
 
     it "returns a lists of keyboard layouts" do
       expected_layouts = ["es", "fr", "us"]
