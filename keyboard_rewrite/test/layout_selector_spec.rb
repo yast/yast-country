@@ -22,6 +22,12 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
       mock_ui_events(:cancel)
     end
 
+    it "retrieve keyboard layouts from strategy" do
+      expect(strategy).to receive(:all)
+
+      layout_selector.run
+    end
+
     it "lists the keyboard layouts" do
       expect(english).to receive(:description)
       expect(spanish).to receive(:description)

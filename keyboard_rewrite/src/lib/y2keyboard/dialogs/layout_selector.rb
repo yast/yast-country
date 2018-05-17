@@ -13,6 +13,7 @@ module Y2Keyboard
         @keyboard_layouts = keyboard_layouts
         @previous_selected_layout = strategy.current_layout
         @strategy = strategy
+        strategy.all
       end
 
       def dialog_options
