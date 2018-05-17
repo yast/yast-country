@@ -107,9 +107,9 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
             .with("loadkeys", new_layout.code)
             .and_raise(error)
 
-          expect(Y2Keyboard::KeyboardLayout.log).to receive(:info)
+          expect(Y2Keyboard::Strategies::SystemdStrategy.log).to receive(:info)
             .with(error.message)
-          expect(Y2Keyboard::KeyboardLayout.log).to receive(:info)
+          expect(Y2Keyboard::Strategies::SystemdStrategy.log).to receive(:info)
             .with("Error output:    #{error.stderr}")
 
           systemd_strategy.load_layout(new_layout)
