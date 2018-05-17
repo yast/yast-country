@@ -1,11 +1,12 @@
 require_relative "test_helper"
 require "y2keyboard/keyboard_layout"
+require "y2keyboard/strategies/systemd_strategy"
 
-describe Y2Keyboard::KeyboardLayout do
-  subject(:keyboard_layout) { Y2Keyboard::KeyboardLayout }
+describe Y2Keyboard::Strategies::SystemdStrategy do
+  subject(:systemd_strategy) { Y2Keyboard::Strategies::SystemdStrategy }
 
   describe ".all" do
-    subject(:load_keyboard_layouts) { Y2Keyboard::KeyboardLayout.all }
+    subject(:load_keyboard_layouts) { Y2Keyboard::Strategies::SystemdStrategy.all }
 
     it "returns a lists of keyboard layouts" do
       expected_layouts = ["es", "fr", "us"]
@@ -40,7 +41,7 @@ describe Y2Keyboard::KeyboardLayout do
         "localectl", "set-keymap", new_layout.code
       )
 
-      keyboard_layout.apply_layout(new_layout)
+      systemd_strategy.apply_layout(new_layout)
     end
   end
 
@@ -55,13 +56,13 @@ describe Y2Keyboard::KeyboardLayout do
       it "changes the current keyboard layout used in xorg" do
         expect(Cheetah).to receive(:run).with("setxkbmap", new_layout.code)
 
-        keyboard_layout.load_layout(new_layout)
+        systemd_strategy.load_layout(new_layout)
       end
 
       it "do not try to change the current keyboard layout in console" do
         expect(Cheetah).not_to receive(:run).with("loadkeys", new_layout.code)
 
-        keyboard_layout.load_layout(new_layout)
+        systemd_strategy.load_layout(new_layout)
       end
     end
 
@@ -73,13 +74,13 @@ describe Y2Keyboard::KeyboardLayout do
       it "do not try to change the current keyboard layout in xorg" do
         expect(Cheetah).not_to receive(:run).with("setxkbmap", new_layout.code)
 
-        keyboard_layout.load_layout(new_layout)
+        systemd_strategy.load_layout(new_layout)
       end
 
       it "changes the current keyboard layout in console" do
         expect(Cheetah).to receive(:run).with("loadkeys", new_layout.code)
 
-        keyboard_layout.load_layout(new_layout)
+        systemd_strategy.load_layout(new_layout)
       end
     end
 
@@ -97,7 +98,7 @@ describe Y2Keyboard::KeyboardLayout do
             .with("loadkeys", new_layout.code)
             .and_raise(loadkeys_error)
 
-          expect { keyboard_layout.load_layout(new_layout) }.not_to raise_error
+          expect { systemd_strategy.load_layout(new_layout) }.not_to raise_error
         end
 
         it "log error information" do
@@ -111,7 +112,7 @@ describe Y2Keyboard::KeyboardLayout do
           expect(Y2Keyboard::KeyboardLayout.log).to receive(:info)
             .with("Error output:    #{error.stderr}")
 
-          keyboard_layout.load_layout(new_layout)
+          systemd_strategy.load_layout(new_layout)
         end
       end
     end
@@ -123,8 +124,8 @@ describe Y2Keyboard::KeyboardLayout do
       given_layouts(["es", current_selected_layout_code, "us"])
       given_a_current_layout(current_selected_layout_code)
 
-      expect(keyboard_layout.current_layout).to be_an(Y2Keyboard::KeyboardLayout)
-      expect(keyboard_layout.current_layout.code).to eq(current_selected_layout_code)
+      expect(systemd_strategy.current_layout).to be_an(Y2Keyboard::KeyboardLayout)
+      expect(systemd_strategy.current_layout.code).to eq(current_selected_layout_code)
     end
   end
 end
