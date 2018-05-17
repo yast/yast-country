@@ -11,21 +11,5 @@ module Y2Keyboard
       @code = code
       @description = description
     end
-
-    def self.all
-      Y2Keyboard::Strategies::SystemdStrategy.all
-    end
-
-    def self.apply_layout(keyboard_layout)
-      Y2Keyboard::Strategies::SystemdStrategy.apply_layout(keyboard_layout)
-    end
-
-    def self.load_layout(keyboard_layout)
-      Y2Keyboard::Strategies::SystemdStrategy.load_layout(keyboard_layout)
-    end
-
-    def self.current_layout
-      Y2Keyboard::Strategies::SystemdStrategy.current_layout
-    end
   end
 end
