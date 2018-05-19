@@ -40,12 +40,13 @@ module KeyboardSpecHelper
 
   def expect_display_layouts(layouts)
     allow(Yast::Term).to receive(:new).and_call_original
-    expect(Yast::Term).to receive(:new).with(
-      :SelectionBox,
-      Id(:layout_list),
-      Opt(:notify),
-      "&Keyboard Layout",
-      layouts.map(&:description)
-    )
+    layouts.each do |layout|
+      expect(Yast::Term).to receive(:new).with(
+        :item,
+        Id(layout.description),
+        layout.description,
+        false
+      )
+    end
   end
 end

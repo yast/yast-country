@@ -36,10 +36,20 @@ module Y2Keyboard
             Id(:layout_list),
             Opt(:notify),
             _("&Keyboard Layout"),
-            @keyboard_layouts.map(&:description)
+            get_layout_items
           ),
           InputField(Opt(:hstretch), _("&Test"))
         )
+      end
+
+      def get_layout_items
+        @keyboard_layouts.map do |layout|
+          Item(
+            Id(layout.description),
+            layout.description,
+            false
+          )
+        end
       end
 
       def accept_handler
