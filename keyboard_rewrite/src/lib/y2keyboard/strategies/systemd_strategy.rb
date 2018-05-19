@@ -3,6 +3,7 @@ require_relative "../keyboard_layout"
 
 module Y2Keyboard
   module Strategies
+    # Class to deal with systemd keyboard configuration
     class SystemdStrategy
       include Yast::Logger
 
