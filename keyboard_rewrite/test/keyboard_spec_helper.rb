@@ -37,4 +37,15 @@ module KeyboardSpecHelper
       "Couldn't get a file descriptor referring to the console"
     )
   end
+
+  def expect_display_layouts(layouts)
+    allow(Yast::Term).to receive(:new).and_call_original
+    expect(Yast::Term).to receive(:new).with(
+      :SelectionBox,
+      Id(:layout_list),
+      Opt(:notify),
+      "&Keyboard Layout",
+      layouts.map(&:description)
+    )
+  end
 end

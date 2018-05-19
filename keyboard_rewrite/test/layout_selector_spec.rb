@@ -30,10 +30,9 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
     end
 
     it "lists the keyboard layouts" do
-      allow(strategy).to receive(:all).and_return([english, spanish])
+      allow(strategy).to receive(:all).and_return(layouts)
 
-      expect(english).to receive(:description)
-      expect(spanish).to receive(:description)
+      expect_display_layouts(layouts)
 
       layout_selector.run
     end
