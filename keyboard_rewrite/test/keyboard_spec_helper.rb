@@ -45,8 +45,18 @@ module KeyboardSpecHelper
         :item,
         Id(layout.description),
         layout.description,
-        false
+        boolean
       )
     end
+  end
+
+  def expect_create_list_with_current_layout(layout)
+    allow(Yast::Term).to receive(:new).and_call_original
+    expect(Yast::Term).to receive(:new).with(
+      :item,
+      Id(layout.description),
+      layout.description,
+      true
+    )
   end
 end

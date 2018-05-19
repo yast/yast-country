@@ -36,6 +36,15 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
 
       layout_selector.run
     end
+
+    it "select the current layout in the list" do
+      allow(strategy).to receive(:all).and_return(layouts)
+      allow(strategy).to receive(:current_layout).and_return(english)
+
+      expect_create_list_with_current_layout(english)
+
+      layout_selector.run
+    end
   end
 
   describe "#accept_handler" do

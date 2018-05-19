@@ -47,7 +47,7 @@ module Y2Keyboard
           Item(
             Id(layout.description),
             layout.description,
-            false
+            layout.code == @previous_selected_layout.code
           )
         end
       end
