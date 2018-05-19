@@ -36,13 +36,13 @@ module Y2Keyboard
             Id(:layout_list),
             Opt(:notify),
             _("&Keyboard Layout"),
-            get_layout_items
+            map_layout_items
           ),
           InputField(Opt(:hstretch), _("&Test"))
         )
       end
 
-      def get_layout_items
+      def map_layout_items
         @keyboard_layouts.map do |layout|
           Item(
             Id(layout.description),
