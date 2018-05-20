@@ -1,4 +1,5 @@
 module Y2Keyboard
+  # This module contains a map to link a layout code with an human readable description.
   module Data
     LAYOUT_CODE_DESCRIPTIONS = {
       "gb" => "English (UK)",
