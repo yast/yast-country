@@ -5,6 +5,14 @@ require "y2keyboard/strategies/systemd_strategy"
 describe Y2Keyboard::Strategies::SystemdStrategy do
   subject(:systemd_strategy) { Y2Keyboard::Strategies::SystemdStrategy.new }
 
+  describe "#run" do
+    it "load map of code and descriptions" do
+      expect(Y2Keyboard::Data).to receive(:code_description_map)
+
+      systemd_strategy
+    end
+  end
+
   describe "#all" do
     subject(:load_keyboard_layouts) { Y2Keyboard::Strategies::SystemdStrategy.new.all }
 

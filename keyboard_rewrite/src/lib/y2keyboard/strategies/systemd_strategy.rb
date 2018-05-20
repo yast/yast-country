@@ -1,5 +1,6 @@
 require "cheetah"
 require_relative "../keyboard_layout"
+require_relative "../data/code_description_map"
 
 module Y2Keyboard
   module Strategies
@@ -7,18 +8,15 @@ module Y2Keyboard
     class SystemdStrategy
       include Yast::Logger
 
-      LAYOUT_CODE_DESCRIPTIONS = {
-        "gb" => "English (UK)",
-        "es" => "Spanish",
-        "fr" => "French",
-        "us" => "English (US)"
-      }.freeze
+      def initialize
+        @layout_code_description_map = Data.code_description_map
+      end
 
       def all
         raw_layouts = Cheetah.run("localectl", "list-keymaps", stdout: :capture)
         codes = raw_layouts.lines.map(&:strip)
-        codes_with_description = codes.select { |code| LAYOUT_CODE_DESCRIPTIONS.key?(code) }
-        codes_with_description.map { |x| KeyboardLayout.new(x, LAYOUT_CODE_DESCRIPTIONS[x]) }
+        codes_with_description = codes.select { |code| @layout_code_description_map.key?(code) }
+        codes_with_description.map { |x| KeyboardLayout.new(x, @layout_code_description_map[x]) }
       end
 
       def apply_layout(keyboard_layout)
