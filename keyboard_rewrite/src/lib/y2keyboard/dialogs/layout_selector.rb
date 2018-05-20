@@ -45,7 +45,7 @@ module Y2Keyboard
       def map_layout_items
         @keyboard_layouts.map do |layout|
           Item(
-            Id(layout.description),
+            Id(layout.code),
             layout.description,
             layout.code == @previous_selected_layout.code
           )

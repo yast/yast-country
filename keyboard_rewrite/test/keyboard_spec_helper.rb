@@ -43,7 +43,7 @@ module KeyboardSpecHelper
     layouts.each do |layout|
       expect(Yast::Term).to receive(:new).with(
         :item,
-        Id(layout.description),
+        Id(layout.code),
         layout.description,
         boolean
       )
@@ -54,7 +54,7 @@ module KeyboardSpecHelper
     allow(Yast::Term).to receive(:new).and_call_original
     expect(Yast::Term).to receive(:new).with(
       :item,
-      Id(layout.description),
+      Id(layout.code),
       layout.description,
       true
     )
