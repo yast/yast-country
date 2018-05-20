@@ -68,7 +68,7 @@ module Y2Keyboard
 
       def selected_layout
         selected = Yast::UI.QueryWidget(:layout_list, :CurrentItem)
-        @keyboard_layouts.find { |x| x.description == selected }
+        @keyboard_layouts.find { |x| x.code == selected }
       end
 
       def footer

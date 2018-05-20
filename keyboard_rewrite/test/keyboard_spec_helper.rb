@@ -25,7 +25,7 @@ module KeyboardSpecHelper
   def selecting_layout_from_list(layout)
     allow(Yast::UI).to receive(:QueryWidget)
       .with(:layout_list, :CurrentItem)
-      .and_return(layout.description)
+      .and_return(layout.code)
   end
 
   def loadkeys_error
