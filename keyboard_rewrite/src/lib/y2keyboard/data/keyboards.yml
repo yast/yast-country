@@ -22,8 +22,122 @@ fr_CH-latin1:
 cf:
   description: "French (Canada)"
 
+cn-latin1:
+  description: "Canadian (Multilingual)"
+
 es:
   description: "Spanish"
 
-fr:
-  description: "French"
+la-latin1:
+  description: "Spanish (Latin America)"
+
+es-cp850:
+  description: "Spanish (CP 850)"
+
+it:
+  description: "Italian"
+
+pt-latin1:
+  description: "Portuguese"
+
+br-abnt2:
+  description: "Portuguese (Brazil)"
+
+us-acentos:
+  description: "Portuguese (Brazil -- US accents)"
+
+gr:
+  description: "Greek"
+
+nl:
+  description: "Dutch"
+
+dk-latin1:
+  description: "Danish"
+
+no-latin1:
+  description: "norwegian"
+
+sv-latin1:
+  description: "Swedish"
+
+fi:
+  description: "Finnish"
+
+cz-us-qwertz:
+  description: "Czech"
+
+cz-lat2-us:
+  description: "Czech (qwerty)"
+
+sk-qwertz:
+  description: "Slovak"
+
+sk-qwerty:
+  description: "Slovak (qwerty)"
+
+slovene:
+  description: "Slovene"
+
+hu:
+  description: "Hungarian"
+
+Pl02:
+  description: "Polish"
+
+ruwin_alt-UTF-8:
+  description: "Russian"
+
+sr-cy:
+  description: "Serbian"
+
+et:
+  description: "Estonian"
+
+lt.baltic:
+  description: "Lithuanian"
+
+trq:
+  description: "Turkish"
+
+croat:
+  description: "Croatian"
+
+jp106:
+  description: "Japanese"
+
+be-latin1:
+  description: "Belgian"
+
+dvorak:
+  description: "Dvorak"
+
+is-latin1:
+  description: "Icelandic"
+
+ua:
+  description: "Ukrainian"
+
+khmer:
+  description: "Khmer"
+
+korean:
+  description: "Korean"
+
+arabic:
+  description: "Arabic"
+
+tj_alt-UTF8:
+  description: "Tajik"
+
+taiwanese:
+  description: "Traditional Chinese"
+
+chinese:
+  description: "Simplified Chinese"
+
+ro:
+  description: "Romanian"
+
+us-acentos:
+  description: "US International"
