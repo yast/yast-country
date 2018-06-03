@@ -20,7 +20,7 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
     subject(:load_keyboard_layouts) { Y2Keyboard::Strategies::SystemdStrategy.new.all }
 
     it "returns a lists of keyboard layouts" do
-      expected_layouts = ["es", "fr", "us"]
+      expected_layouts = ["es", "fr-latin1", "us"]
       given_layouts(expected_layouts)
 
       expect(load_keyboard_layouts).to be_an(Array)
