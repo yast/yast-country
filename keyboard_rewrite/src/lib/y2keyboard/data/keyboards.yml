@@ -1,26 +1,26 @@
-- code: "us"
+us:
   description: "English (US)"
 
-- code: "uk"
+uk:
   description: "English (UK)"
 
-- code: "de-latin1-nodeadkeys"
+de-latin1-nodeadkeys:
   description: "German"
 
-- code: "de-latin1"
+de-latin1:
   description: "German (with deadkeys)"
 
-- code: "sg-latin1"
+sg-latin1:
   description: "German (Switzerland)"
 
-- code: "fr-latin1"
+fr-latin1:
   description: "French"
 
-- code: "fr_CH-latin1"
+fr_CH-latin1:
   description: "French (Switzerland)"
 
-- code: "cf"
+cf:
   description: "French (Canada)"
 
-- code: "es"
+es:
   description: "Spanish"
