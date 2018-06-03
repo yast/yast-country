@@ -7,7 +7,10 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
 
   describe "#run" do
     it "load map of code and descriptions" do
-      expect(Y2Keyboard::Data).to receive(:code_description_map)
+      expected_path = "path/to/keyboard.yml"
+      allow(File).to receive(:join).and_return(expected_path)
+
+      expect(YAML).to receive(:load_file).with(expected_path)
 
       systemd_strategy
     end
@@ -128,7 +131,7 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
 
   describe "#current_layout" do
     it "returns the current used keyboard layout" do
-      current_selected_layout_code = "gb"
+      current_selected_layout_code = "uk"
       given_layouts(["es", current_selected_layout_code, "us"])
       given_a_current_layout(current_selected_layout_code)
 
