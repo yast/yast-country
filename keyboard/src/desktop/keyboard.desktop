@@ -15,7 +15,7 @@ X-SuSE-YaST-SortKey=
 X-SuSE-YaST-AutoInstResource=keyboard
 X-SuSE-YaST-AutoInstClonable=true
 X-SuSE-YaST-AutoInstSchema=keyboard.rnc
-X-SuSE-YaST-Keywords=keyboard
+X-SuSE-YaST-Keywords=keyboard,language,locale,country
 
 Icon=yast-keyboard
 Exec=xdg-su -c "/sbin/yast2 keyboard"
