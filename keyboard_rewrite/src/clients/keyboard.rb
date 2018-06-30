@@ -1,3 +1,3 @@
-require_relative "../lib/y2keyboard/clients/keyboard"
+require_relative "../lib/y2keyboard/clients/systemd_keyboard"
 
-Y2Keyboard::Clients::Keyboard.run
+Y2Keyboard::Clients::SystemdKeyboard.run
