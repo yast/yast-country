@@ -1,6 +1,6 @@
 require "cheetah"
 require_relative "../keyboard_layout"
-require 'yaml'
+require "yaml"
 
 module Y2Keyboard
   module Strategies
@@ -21,7 +21,9 @@ module Y2Keyboard
         raw_layouts = Cheetah.run("localectl", "list-keymaps", stdout: :capture)
         codes = raw_layouts.lines.map(&:strip)
         codes_with_description = codes.select { |code| @layout_code_description_map.key?(code) }
-        codes_with_description.map { |x| KeyboardLayout.new(x, @layout_code_description_map[x]["description"]) }
+        codes_with_description.map do |x|
+          KeyboardLayout.new(x, @layout_code_description_map[x]["description"])
+        end
       end
 
       def apply_layout(keyboard_layout)
