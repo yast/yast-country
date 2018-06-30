@@ -1,6 +1,5 @@
 require "cheetah"
 require_relative "../keyboard_layout"
-require_relative "../data/code_description_map"
 require 'yaml'
 
 module Y2Keyboard
