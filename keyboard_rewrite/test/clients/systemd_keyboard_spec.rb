@@ -5,13 +5,19 @@ require "y2keyboard/strategies/systemd_strategy"
 
 describe Y2Keyboard::Clients::SystemdKeyboard do
   describe ".run" do
-    it "starts a dialog with systemd implementation" do
-      dialog = spy(Y2Keyboard::Dialogs::LayoutSelector)
-      strategy = spy(Y2Keyboard::Strategies::SystemdStrategy)
+    let(:dialog) { spy(Y2Keyboard::Dialogs::LayoutSelector) }
+    let(:strategy) { spy(Y2Keyboard::Strategies::SystemdStrategy) }
+    subject(:client) { Y2Keyboard::Clients::SystemdKeyboard }
+
+    before do
       allow(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).and_return(strategy)
+      allow(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).with(strategy).and_return(dialog)
+    end
+
+    it "starts a dialog with systemd implementation" do
       expect(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).with(strategy).and_return(dialog)
 
-      Y2Keyboard::Clients::SystemdKeyboard.run
+      client.run
     end
   end
 end
