@@ -28,6 +28,16 @@ describe Y2Keyboard::KeyboardLayout do
       expect(layout_codes_loaded).to match_array(available_layout_codes)
     end
 
+    it "only returns layouts that exists in layout definition list" do
+      available_layout_codes = ["es", "at-sundeadkeys"]
+      strategy = double(Y2Keyboard::Strategies::SystemdStrategy, :codes => available_layout_codes)
+      keyboard_layout.use(strategy)
+      keyboard_layout.layout_definitions(layout_definitions)
+
+      expect(all_layouts.length).to be(1)
+      expect(all_layouts.map(&:code)).not_to include("at-sundeadkeys")
+    end
+
     it "use layout definitions to create keyboard layout with description" do
       available_layout_codes = ["es", "fr-latin1", "us", "uk"]
       strategy = double(Y2Keyboard::Strategies::SystemdStrategy, :codes => available_layout_codes)
