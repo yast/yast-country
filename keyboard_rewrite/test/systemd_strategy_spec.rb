@@ -34,6 +34,19 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
     end
   end
 
+  describe "#codes" do
+    subject(:layout_codes) { systemd_strategy.codes }
+
+    it "returns a lists of available layout codes" do
+      expected_layouts = ["es", "fr-latin1", "us"]
+      given_layouts(expected_layouts)
+
+      expect(layout_codes).to be_an(Array)
+      expect(layout_codes).to all(be_an(String))
+      expect(layout_codes).to match_array(expected_layouts)
+    end
+  end
+
   describe "#apply_layout" do
     it "changes the keyboard layout" do
       new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
