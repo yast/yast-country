@@ -12,7 +12,9 @@ module Y2Keyboard
     end
 
     def self.all
-      @@layout_definitions.map { |x| KeyboardLayout.new(x["code"], x["description"]) }
+      available_layouts_codes = @@strategy.codes
+      layouts = @@layout_definitions.select { |x| available_layouts_codes.include?(x["code"]) }
+      layouts.map { |x| KeyboardLayout.new(x["code"], x["description"]) }
     end
 
     def self.use(strategy)
