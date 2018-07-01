@@ -8,16 +8,16 @@ module Y2Keyboard
     class SystemdStrategy
       include Yast::Logger
 
-      def initialize(layout_code_description_map)
-        @layout_code_description_map = layout_code_description_map
+      def initialize(layout_definitions)
+        @layout_definitions = layout_definitions
       end
 
       def all
         raw_layouts = Cheetah.run("localectl", "list-keymaps", stdout: :capture)
         codes = raw_layouts.lines.map(&:strip)
-        codes_with_description = codes.select { |code| @layout_code_description_map.key?(code) }
+        codes_with_description = codes.select { |code| @layout_definitions.key?(code) }
         codes_with_description.map do |x|
-          KeyboardLayout.new(x, @layout_code_description_map[x]["description"])
+          KeyboardLayout.new(x, @layout_definitions[x]["description"])
         end
       end
 
