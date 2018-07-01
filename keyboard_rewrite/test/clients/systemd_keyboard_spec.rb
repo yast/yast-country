@@ -14,6 +14,17 @@ describe Y2Keyboard::Clients::SystemdKeyboard do
       allow(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).with(strategy).and_return(dialog)
     end
 
+    it "load keyboard layouts file settings" do
+      expected_path = "path/to/keyboard.yml"
+      layouts_data = {"us"=>{"description"=>"English (US)"}, "uk"=>{"description"=>"English (UK)"}}
+      allow(File).to receive(:join).with(anything, "../data/keyboards.yml").and_return(expected_path)
+
+      expect(YAML).to receive(:load_file).with(expected_path).and_return(layouts_data)
+      expect(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).with(layouts_data).and_return(strategy)
+
+      client.run
+    end
+
     it "starts a dialog with systemd implementation" do
       expect(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).with(strategy).and_return(dialog)
 

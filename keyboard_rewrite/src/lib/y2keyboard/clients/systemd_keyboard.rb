@@ -6,7 +6,9 @@ module Y2Keyboard
     # Simple client to run LayoutSelector.
     class SystemdKeyboard
       def self.run
-        systemd_strategy = Y2Keyboard::Strategies::SystemdStrategy.new
+        path = File.join(__dir__, "../data/keyboards.yml")
+        layouts_data = YAML.load_file(path)
+        systemd_strategy = Y2Keyboard::Strategies::SystemdStrategy.new(layouts_data)
         Y2Keyboard::Dialogs::LayoutSelector.new(systemd_strategy).run
       end
     end
