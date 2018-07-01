@@ -31,6 +31,10 @@ module KeyboardSpecHelper
     ]
   end
 
+  def layout_and_definition_matchs(layout, definition)
+    layout.code == definition["code"] && layout.description == definition["description"]
+  end
+
   def selecting_layout_from_list(layout)
     allow(Yast::UI).to receive(:QueryWidget)
       .with(:layout_list, :CurrentItem)

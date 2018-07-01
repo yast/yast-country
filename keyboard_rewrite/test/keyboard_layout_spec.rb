@@ -35,7 +35,7 @@ describe Y2Keyboard::KeyboardLayout do
       keyboard_layout.layout_definitions(layout_definitions)
 
       layout_definitions.each do |definition|
-        expect(all_layouts.any? { |x| x.code == definition["code"] && x.description == definition["description"] }).to be_truthy
+        expect(all_layouts.any? { |x| layout_and_definition_matchs(x, definition) }).to be_truthy
       end
     end
   end
