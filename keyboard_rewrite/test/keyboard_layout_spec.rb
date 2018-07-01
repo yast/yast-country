@@ -38,5 +38,20 @@ describe Y2Keyboard::KeyboardLayout do
         expect(all_layouts.any? { |x| layout_and_definition_matchs(x, definition) }).to be_truthy
       end
     end
+
+    it "can return diferent layouts with same code" do
+      definitions = [
+        {"description"=>"Portuguese (Brazil -- US accents)", "code"=>"us-acentos"},
+        {"description"=>"US International", "code"=>"us-acentos"}
+      ]
+      available_layout_codes = ["us-acentos"]
+      strategy = double(Y2Keyboard::Strategies::SystemdStrategy, :codes => available_layout_codes)
+      keyboard_layout.use(strategy)
+      keyboard_layout.layout_definitions(definitions)
+
+      expect(all_layouts.length).to be(2)
+      expect(all_layouts.any? { |x| x.code == "us-acentos" && x.description == "Portuguese (Brazil -- US accents)" })
+      expect(all_layouts.any? { |x| x.code == "us-acentos" && x.description == "US International" })
+    end
   end
 end

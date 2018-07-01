@@ -27,7 +27,7 @@ module KeyboardSpecHelper
       {"description"=>"English (US)", "code"=>"us"},
       {"description"=>"English (UK)", "code"=>"uk"},
       {"description"=>"French", "code"=>"fr-latin1"},
-      {"description"=>"Spanish", "code"=>"es"}
+      {"description"=>"Spanish", "code"=>"es"},
     ]
   end
 
