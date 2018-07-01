@@ -22,6 +22,10 @@ module KeyboardSpecHelper
       )
   end
 
+  def layout_definitions
+    {"us"=>{"description"=>"English (US)"}, "uk"=>{"description"=>"English (UK)"}}
+  end
+
   def selecting_layout_from_list(layout)
     allow(Yast::UI).to receive(:QueryWidget)
       .with(:layout_list, :CurrentItem)
