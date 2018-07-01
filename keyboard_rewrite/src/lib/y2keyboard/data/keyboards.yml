@@ -1,143 +1,143 @@
-us:
-  description: "English (US)"
+- description: "English (US)"
+  code: "us"
 
-uk:
-  description: "English (UK)"
+- description: "English (UK)"
+  code: "uk"
 
-de-latin1-nodeadkeys:
-  description: "German"
+- description: "German"
+  code: "de-latin1-nodeadkeys"
 
-de-latin1:
-  description: "German (with deadkeys)"
+- description: "German (with deadkeys)"
+  code: "de-latin1"
 
-sg-latin1:
-  description: "German (Switzerland)"
+- description: "German (Switzerland)"
+  code: "sg-latin1"
 
-fr-latin1:
-  description: "French"
+- description: "French"
+  code: "fr-latin1"
 
-fr_CH-latin1:
-  description: "French (Switzerland)"
+- description: "French (Switzerland)"
+  code: "fr_CH-latin1"
 
-cf:
-  description: "French (Canada)"
+- description: "French (Canada)"
+  code: "cf"
 
-cn-latin1:
-  description: "Canadian (Multilingual)"
+- description: "Canadian (Multilingual)"
+  code: "cn-latin1"
 
-es:
-  description: "Spanish"
+- description: "Spanish"
+  code: "es"
 
-la-latin1:
-  description: "Spanish (Latin America)"
+- description: "Spanish (Latin America)"
+  code: "la-latin1"
 
-es-cp850:
-  description: "Spanish (CP 850)"
+- description: "Spanish (CP 850)"
+  code: "es-cp850"
 
-it:
-  description: "Italian"
+- description: "Italian"
+  code: "it"
 
-pt-latin1:
-  description: "Portuguese"
+- description: "Portuguese"
+  code: "pt-latin1"
 
-br-abnt2:
-  description: "Portuguese (Brazil)"
+- description: "Portuguese (Brazil)"
+  code: "br-abnt2"
 
-us-acentos:
-  description: "Portuguese (Brazil -- US accents)"
+- description: "Portuguese (Brazil -- US accents)"
+  code: "us-acentos"
 
-gr:
-  description: "Greek"
+- description: "Greek"
+  code: "gr"
 
-nl:
-  description: "Dutch"
+- description: "Dutch"
+  code: "nl"
 
-dk-latin1:
-  description: "Danish"
+- description: "Danish"
+  code: "dk-latin1"
 
-no-latin1:
-  description: "norwegian"
+- description: "norwegian"
+  code: "no-latin1"
 
-sv-latin1:
-  description: "Swedish"
+- description: "Swedish"
+  code: "sv-latin1"
 
-fi:
-  description: "Finnish"
+- description: "Finnish"
+  code: "fi"
 
-cz-us-qwertz:
-  description: "Czech"
+- description: "Czech"
+  code: "cz-us-qwertz"
 
-cz-lat2-us:
-  description: "Czech (qwerty)"
+- description: "Czech (qwerty)"
+  code: "cz-lat2-us"
 
-sk-qwertz:
-  description: "Slovak"
+- description: "Slovak"
+  code: "sk-qwertz"
 
-sk-qwerty:
-  description: "Slovak (qwerty)"
+- description: "Slovak (qwerty)"
+  code: "sk-qwerty"
 
-slovene:
-  description: "Slovene"
+- description: "Slovene"
+  code: "slovene"
 
-hu:
-  description: "Hungarian"
+- description: "Hungarian"
+  code: "hu"
 
-Pl02:
-  description: "Polish"
+- description: "Polish"
+  code: "Pl02"
 
-ruwin_alt-UTF-8:
-  description: "Russian"
+- description: "Russian"
+  code: "ruwin_alt-UTF-8"
 
-sr-cy:
-  description: "Serbian"
+- description: "Serbian"
+  code: "sr-cy"
 
-et:
-  description: "Estonian"
+- description: "Estonian"
+  code: "et"
 
-lt.baltic:
-  description: "Lithuanian"
+- description: "Lithuanian"
+  code: "lt.baltic"
 
-trq:
-  description: "Turkish"
+- description: "Turkish"
+  code: "trq"
 
-croat:
-  description: "Croatian"
+- description: "Croatian"
+  code: "croat"
 
-jp106:
-  description: "Japanese"
+- description: "Japanese"
+  code: "jp106"
 
-be-latin1:
-  description: "Belgian"
+- description: "Belgian"
+  code: "be-latin1"
 
-dvorak:
-  description: "Dvorak"
+- description: "Dvorak"
+  code: "dvorak"
 
-is-latin1:
-  description: "Icelandic"
+- description: "Icelandic"
+  code: "is-latin1"
 
-ua:
-  description: "Ukrainian"
+- description: "Ukrainian"
+  code: "ua"
 
-khmer:
-  description: "Khmer"
+- description: "Khmer"
+  code: "khmer"
 
-korean:
-  description: "Korean"
+- description: "Korean"
+  code: "korean"
 
-arabic:
-  description: "Arabic"
+- description: "Arabic"
+  code: "arabic"
 
-tj_alt-UTF8:
-  description: "Tajik"
+- description: "Tajik"
+  code: "tj_alt-UTF8"
 
-taiwanese:
-  description: "Traditional Chinese"
+- description: "Traditional Chinese"
+  code: "taiwanese"
 
-chinese:
-  description: "Simplified Chinese"
+- description: "Simplified Chinese"
+  code: "chinese"
 
-ro:
-  description: "Romanian"
+- description: "Romanian"
+  code: "ro"
 
-us-acentos:
-  description: "US International"
+- description: "US International"
+  code: "us-acentos"

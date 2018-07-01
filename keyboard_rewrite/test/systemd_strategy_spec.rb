@@ -15,7 +15,7 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
       expect(load_keyboard_layouts).to be_an(Array)
       expect(load_keyboard_layouts).to all(be_an(Y2Keyboard::KeyboardLayout))
       layout_codes_loaded = load_keyboard_layouts.map(&:code)
-      expect(layout_codes_loaded).to eq(expected_layouts)
+      expect(layout_codes_loaded).to match_array(expected_layouts)
     end
 
     it "initialize the layout description" do
