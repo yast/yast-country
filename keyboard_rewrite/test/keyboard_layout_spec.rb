@@ -27,5 +27,16 @@ describe Y2Keyboard::KeyboardLayout do
       layout_codes_loaded = all_layouts.map(&:code)
       expect(layout_codes_loaded).to match_array(available_layout_codes)
     end
+
+    it "use layout definitions to create keyboard layout with description" do
+      available_layout_codes = ["es", "fr-latin1", "us", "uk"]
+      strategy = double(Y2Keyboard::Strategies::SystemdStrategy, :codes => available_layout_codes)
+      keyboard_layout.use(strategy)
+      keyboard_layout.layout_definitions(layout_definitions)
+
+      layout_definitions.each do |definition|
+        expect(all_layouts.any? { |x| x.code == definition["code"] && x.description == definition["description"] }).to be_truthy
+      end
+    end
   end
 end
