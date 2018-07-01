@@ -3,21 +3,10 @@ require "y2keyboard/keyboard_layout"
 require "y2keyboard/strategies/systemd_strategy"
 
 describe Y2Keyboard::Strategies::SystemdStrategy do
-  subject(:systemd_strategy) { Y2Keyboard::Strategies::SystemdStrategy.new }
-
-  describe "#run" do
-    it "load map of code and descriptions" do
-      expected_path = "path/to/keyboard.yml"
-      allow(File).to receive(:join).and_return(expected_path)
-
-      expect(YAML).to receive(:load_file).with(expected_path)
-
-      systemd_strategy
-    end
-  end
+  subject(:systemd_strategy) { Y2Keyboard::Strategies::SystemdStrategy.new(layout_definitions) }
 
   describe "#all" do
-    subject(:load_keyboard_layouts) { Y2Keyboard::Strategies::SystemdStrategy.new.all }
+    subject(:load_keyboard_layouts) { systemd_strategy.all }
 
     it "returns a lists of keyboard layouts" do
       expected_layouts = ["es", "fr-latin1", "us"]

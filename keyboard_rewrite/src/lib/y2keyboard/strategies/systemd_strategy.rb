@@ -8,13 +8,8 @@ module Y2Keyboard
     class SystemdStrategy
       include Yast::Logger
 
-      def initialize
-        @layout_code_description_map = load_code_description_map
-      end
-
-      def load_code_description_map
-        path = File.join(__dir__, "../data/keyboards.yml")
-        YAML.load_file(path)
+      def initialize(layout_code_description_map)
+        @layout_code_description_map = layout_code_description_map
       end
 
       def all

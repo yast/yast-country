@@ -7,7 +7,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
   english = Y2Keyboard::KeyboardLayout.new("en", "English")
   spanish = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
   layouts = [english, spanish]
-  strategy = Y2Keyboard::Strategies::SystemdStrategy.new
+  let(:strategy) {Y2Keyboard::Strategies::SystemdStrategy.new(layout_definitions)}
   subject(:layout_selector) { Y2Keyboard::Dialogs::LayoutSelector.new(strategy) }
 
   before do

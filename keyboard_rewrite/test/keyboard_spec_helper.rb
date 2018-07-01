@@ -23,7 +23,12 @@ module KeyboardSpecHelper
   end
 
   def layout_definitions
-    {"us"=>{"description"=>"English (US)"}, "uk"=>{"description"=>"English (UK)"}}
+    {
+      "us"=>{"description"=>"English (US)"},
+      "uk"=>{"description"=>"English (UK)"},
+      "es"=>{"description"=>"Spanish"},
+      "fr-latin1"=>{"description"=>"French"}
+    }
   end
 
   def selecting_layout_from_list(layout)
