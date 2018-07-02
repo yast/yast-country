@@ -10,9 +10,7 @@ describe Y2Keyboard::KeyboardLayout do
 
     it "returns a lists of keyboard layouts" do
       layout_codes = ["es", "fr-latin1", "us", "uk"]
-      strategy = double(Y2Keyboard::Strategies::SystemdStrategy, :codes => layout_codes)
-      keyboard_layout.use(strategy)
-      keyboard_layout.layout_definitions(layout_definitions)
+      set_up_keyboard_layout_with(layout_codes, layout_definitions)
 
       expect(all_layouts).to be_an(Array)
       expect(all_layouts).to all(be_an(Y2Keyboard::KeyboardLayout))
@@ -20,9 +18,7 @@ describe Y2Keyboard::KeyboardLayout do
 
     it "only returns layouts that are available" do
       available_layout_codes = ["es", "fr-latin1", "us"]
-      strategy = double(Y2Keyboard::Strategies::SystemdStrategy, :codes => available_layout_codes)
-      keyboard_layout.use(strategy)
-      keyboard_layout.layout_definitions(layout_definitions)
+      set_up_keyboard_layout_with(available_layout_codes, layout_definitions)
 
       layout_codes_loaded = all_layouts.map(&:code)
       expect(layout_codes_loaded).to match_array(available_layout_codes)
@@ -30,9 +26,7 @@ describe Y2Keyboard::KeyboardLayout do
 
     it "only returns layouts that exists in layout definition list" do
       available_layout_codes = ["es", "at-sundeadkeys"]
-      strategy = double(Y2Keyboard::Strategies::SystemdStrategy, :codes => available_layout_codes)
-      keyboard_layout.use(strategy)
-      keyboard_layout.layout_definitions(layout_definitions)
+      set_up_keyboard_layout_with(available_layout_codes, layout_definitions)
 
       expect(all_layouts.length).to be(1)
       expect(all_layouts.map(&:code)).not_to include("at-sundeadkeys")
@@ -40,9 +34,7 @@ describe Y2Keyboard::KeyboardLayout do
 
     it "use layout definitions to create keyboard layout with description" do
       available_layout_codes = ["es", "fr-latin1", "us", "uk"]
-      strategy = double(Y2Keyboard::Strategies::SystemdStrategy, :codes => available_layout_codes)
-      keyboard_layout.use(strategy)
-      keyboard_layout.layout_definitions(layout_definitions)
+      set_up_keyboard_layout_with(available_layout_codes, layout_definitions)
 
       layout_definitions.each do |definition|
         expect(all_layouts.any? { |x| layout_and_definition_matchs(x, definition) }).to be_truthy
@@ -55,9 +47,7 @@ describe Y2Keyboard::KeyboardLayout do
         {"description"=>"US International", "code"=>"us-acentos"}
       ]
       available_layout_codes = ["us-acentos"]
-      strategy = double(Y2Keyboard::Strategies::SystemdStrategy, :codes => available_layout_codes)
-      keyboard_layout.use(strategy)
-      keyboard_layout.layout_definitions(definitions)
+      set_up_keyboard_layout_with(available_layout_codes, definitions)
 
       expect(all_layouts.length).to be(2)
       expect(all_layouts.any? { |x| x.code == "us-acentos" && x.description == "Portuguese (Brazil -- US accents)" })
@@ -66,17 +56,19 @@ describe Y2Keyboard::KeyboardLayout do
   end
 
   describe ".apply_layout" do
-
     it "call to apply layout" do
-      definitions = ["es", "fr-latin1", "us", "uk"]
       layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
       strategy = spy(Y2Keyboard::Strategies::SystemdStrategy)
       keyboard_layout.use(strategy)
-      keyboard_layout.layout_definitions(definitions)
 
       expect(strategy).to receive(:apply_layout)
 
       keyboard_layout.apply_layout(layout)
     end
+  end
+
+  def set_up_keyboard_layout_with(available_layout_codes, layout_definitions)
+    keyboard_layout.use(given_a_strategy_with_codes(available_layout_codes))
+    keyboard_layout.layout_definitions(layout_definitions)
   end
 end
