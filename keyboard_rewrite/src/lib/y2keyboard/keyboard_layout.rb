@@ -24,5 +24,9 @@ module Y2Keyboard
     def self.layout_definitions(layout_definitions)
       @@layout_definitions = layout_definitions
     end
+
+    def self.apply_layout(keyboard_layout)
+      @@strategy.apply_layout(keyboard_layout)
+    end
   end
 end

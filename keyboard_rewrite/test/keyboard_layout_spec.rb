@@ -64,4 +64,19 @@ describe Y2Keyboard::KeyboardLayout do
       expect(all_layouts.any? { |x| x.code == "us-acentos" && x.description == "US International" })
     end
   end
+
+  describe ".apply_layout" do
+
+    it "call to apply layout" do
+      definitions = ["es", "fr-latin1", "us", "uk"]
+      layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
+      strategy = spy(Y2Keyboard::Strategies::SystemdStrategy)
+      keyboard_layout.use(strategy)
+      keyboard_layout.layout_definitions(definitions)
+
+      expect(strategy).to receive(:apply_layout)
+
+      keyboard_layout.apply_layout(layout)
+    end
+  end
 end
