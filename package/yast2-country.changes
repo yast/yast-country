@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Tue Jul 24 15:26:47 UTC 2018 - lslezak@suse.cz
+
+- Pass absolute paths to "yard", relative paths do not work anymore
+  because of a security update (bsc#1070263, CVE-2017-17042)
+- This is a yast2-country specific fix because it uses a different
+  directory layout than the other YaST packages.
+- 3.1.22.2
+
+-------------------------------------------------------------------
 Thu Oct  1 14:59:57 CEST 2015 - locilka@suse.com
 
 - Allocate space for "Other Settings" button proportionally to its
