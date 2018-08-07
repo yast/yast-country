@@ -545,7 +545,7 @@ module Yast
       nil
     end
 
-    # Read the RC_LANG value from sysconfig and exctract language from it
+    # Read the RC_LANG value from sysconfig and extract language from it
     # @return language
     def ReadSysconfigLanguage
       local_lang = Misc.SysconfigRead(
@@ -635,6 +635,10 @@ module Yast
         SetDefault() # also default
       else
         local_lang = ReadSysconfigLanguage()
+        # Fallback to the default if not defined one (bsc#1103397)
+        if Stage.firstboot && local_lang.empty?
+          local_lang = DEFAULT_FALLBACK_LANGUAGE
+        end
         QuickSet(local_lang)
         SetDefault() # also default
         if Mode.live_installation || Stage.firstboot
