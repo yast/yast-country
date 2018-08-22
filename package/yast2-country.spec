@@ -63,7 +63,7 @@ Requires:       yast2-ruby-bindings >= 1.0.0
 Requires:       rubygem(%{rb_default_ruby_abi}:ruby-dbus)
 
 Summary:        YaST2 - Country Settings (Language, Keyboard, and Timezone)
-License:        GPL-2.0
+License:        GPL-2.0-only
 Group:          System/YaST
 
 %description
@@ -92,7 +92,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %files
 %defattr(-,root,root)
 %doc %{yast_docdir}
-%doc COPYING
+%license COPYING
 %{yast_moduledir}/Console.rb
 %{yast_moduledir}/Keyboard.rb
 %{yast_moduledir}/Timezone.rb
