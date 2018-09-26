@@ -472,51 +472,70 @@ module Yast
 
     # Set the new time and date given by user
     def SetTime(year, month, day, hour, minute, second)
-      if !Arch.s390
-        date = Builtins.sformat(
-          " --date=\"%1/%2/%3 %4:%5:%6\" ",
-          month,
-          day,
-          year,
-          hour,
-          minute,
-          second
-        )
-        cmd = ""
-        if Ops.greater_than(Builtins.size(@timezone), 0) &&
-            @hwclock != "--localtime"
-          cmd = Ops.add(Ops.add("TZ=", @timezone), " ")
-        end
-        cmd = Ops.add(
-          Ops.add(Ops.add(cmd, "/sbin/hwclock --set "), @hwclock),
-          date
-        )
-        Builtins.y2milestone("SetTime cmd %1", cmd)
-        SCR.Execute(path(".target.bash"), cmd)
-        cmd = Ops.add("/sbin/hwclock --hctosys ", @hwclock)
-        Builtins.y2milestone("SetTime cmd %1", cmd)
-        SCR.Execute(path(".target.bash"), cmd)
-        # actually, it was probably not called, but do not let it change the time again after manual change
-        @systz_called = true
-      end
+      return nil if Arch.s390
 
+      timedate = "#{month}/#{day}/#{year} #{hour}:#{minute}:#{second}"
+
+      if set_hwclock(timedate)
+        sync_hwclock_to_system_time
+      else
+        # No hardware clock available (bsc#1103744)
+        log.info("Fallback: Leaving HW clock untouched, setting only system time")
+        set_system_time(timedate)
+      end
       nil
     end
 
     # Set the Hardware Clock to the current System Time.
     def SystemTime2HWClock
-      if !Arch.s390
-        cmd = ""
-        if Ops.greater_than(Builtins.size(@timezone), 0) &&
-            @hwclock != "--localtime"
-          cmd = Ops.add(Ops.add("TZ=", @timezone), " ")
-        end
-        cmd = Ops.add("/sbin/hwclock --systohc ", @hwclock)
-        Builtins.y2milestone("cmd %1", cmd)
-        SCR.Execute(path(".target.bash"), cmd)
-      end
+      return nil if Arch.s390
 
+      cmd = tz_prefix + "/sbin/hwclock --systohc #{@hwclock}"
+      log.info("cmd #{cmd}")
+      SCR.Execute(path(".target.bash"), cmd)
       nil
+    end
+
+    # Set the hardware clock with the given date.
+    # @param timedate [String]
+    # @return [Bool] true if success, false if error
+    #
+    def set_hwclock(date)
+      cmd = tz_prefix + "/sbin/hwclock --set #{@hwclock} --date=\"#{date}\""
+      log.info("set_hwclock: #{cmd}")
+      SCR.Execute(path(".target.bash"), cmd) == 0
+    end
+
+    # Synchronize the hardware clock to the system time
+    #
+    def sync_hwclock_to_system_time
+      cmd = "/sbin/hwclock --hctosys #{@hwclock}"
+      log.info("sync_hwclock_to_system_time: #{cmd}")
+      SCR.Execute(path(".target.bash"), cmd)
+      @systz_called = true
+    end
+
+    # Set only the system time (leaving the hardware clock untouched)
+    # @param timedate [String]
+    #
+    def set_system_time(timedate)
+      cmd = "/usr/bin/date --set=\"#{timedate}\""
+      log.info("set_system_time: #{cmd}")
+      SCR.Execute(path(".target.bash"), cmd)
+    end
+
+    # Return a "TZ=... " prefix for commands such as "hwclock" or "date" to set
+    # the time zone environment variable temporarily for the duration of one
+    # command.
+    #
+    # If nonempty, this will append a blank as a separator.
+    #
+    # @return [String]
+    #
+    def tz_prefix
+      return "" if @hwclock == "--localtime"
+      return "" if @timezone.empty?
+      "TZ=#{@timezone} "
     end
 
 
@@ -637,16 +656,12 @@ module Yast
             Builtins.y2milestone("GetDateTime ds %1 diff %2", ds, @diff)
           end
         end
-        cmd = ""
-        cmd = Builtins.sformat("TZ=%1 ", @timezone) if @hwclock != "--localtime"
-        cmd = Ops.add(
-          cmd,
+        cmd = tz_prefix +
           Builtins.sformat(
             "/bin/date \"%1\" \"--date=now %2sec\"",
             date_format,
             Ops.multiply(ds, @diff)
           )
-        )
       else
         cmd = Builtins.sformat("/bin/date \"%1\"", date_format)
       end
