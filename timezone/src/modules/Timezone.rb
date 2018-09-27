@@ -519,7 +519,7 @@ module Yast
     # @param timedate [String]
     #
     def set_system_time(timedate)
-      cmd = "/usr/bin/date --set=\"#{timedate}\""
+      cmd = tz_prefix + "/usr/bin/date --set=\"#{timedate}\""
       log.info("set_system_time: #{cmd}")
       SCR.Execute(path(".target.bash"), cmd)
     end
