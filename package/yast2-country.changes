@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep 27 10:37:48 UTC 2018 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Set only system time if no hardware clock available (bsc#1103744)
+- 3.2.16
+
+-------------------------------------------------------------------
 Tue Aug  7 12:00:24 UTC 2018 - knut.anderssen@suse.com
 
 - Fallback to the default language during the firstboot if the
