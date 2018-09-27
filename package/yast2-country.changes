@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Sep 27 10:37:48 UTC 2018 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Set only system time if no hardware clock available (bsc#1103744)
+- 4.0.24
+
+-------------------------------------------------------------------
 Mon Aug 20 10:11:59 CEST 2018 - schubi@suse.de
 
 - Changed dir of COPYING file.
