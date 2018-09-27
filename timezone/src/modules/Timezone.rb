@@ -632,11 +632,7 @@ module Yast
         "+%c" :
         "+%Y-%m-%d - %H:%M:%S"
 
-      Builtins.y2milestone(
-        "GetDateTime hwclock %1 real:%2",
-        @hwclock,
-        real_time
-      )
+      log.info("GetDateTime hwclock: #{@hwclock} real: #{real_time}")
       if !real_time && !Mode.config
         ds = 0
         if @diff != 0
@@ -644,7 +640,7 @@ module Yast
             SCR.Execute(path(".target.bash_output"), "date +%z")
           )
           tzd = Ops.get_string(out2, "stdout", "")
-          Builtins.y2milestone("GetDateTime tcd=%1", tzd)
+          log.info("GetDateTime tzd: #{tzd}")
           t = Builtins.tointeger(String.CutZeros(Builtins.substring(tzd, 1, 2)))
           if t != nil
             ds = Ops.add(ds, Ops.multiply(t, 3600))
@@ -653,7 +649,7 @@ module Yast
             )
             ds = Ops.add(ds, Ops.multiply(t, 60))
             ds = Ops.unary_minus(ds) if Builtins.substring(tzd, 0, 1) == "-"
-            Builtins.y2milestone("GetDateTime ds %1 diff %2", ds, @diff)
+            log.info("GetDateTime ds: #{ds} diff: #{@diff}")
           end
         end
         cmd = tz_prefix +
@@ -665,11 +661,11 @@ module Yast
       else
         cmd = Builtins.sformat("/bin/date \"%1\"", date_format)
       end
-      Builtins.y2milestone("GetDateTime cmd=%1", cmd)
+      log.info("GetDateTime cmd: #{cmd}")
       out = Convert.to_map(SCR.Execute(path(".target.bash_output"), cmd))
       local_date = Builtins.deletechars(Ops.get_string(out, "stdout", ""), "\n")
 
-      Builtins.y2milestone("GetDateTime local_date='%1'", local_date)
+      log.info("GetDateTime local_date: '#{local_date}'")
 
       local_date
     end
