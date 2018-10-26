@@ -1,0 +1,200 @@
+{
+  "bg": {
+    "font": "UniCyr_8x16.psf",
+    "unicodeMap": "",
+    "screenMap": "trivial",
+    "magic": "(K"
+  },
+  "bg_BG": {
+    "font": "UniCyr_8x16.psf",
+    "unicodeMap": "",
+    "screenMap": "trivial",
+    "magic": "(K"
+  },
+  "bg_BG.UTF-8": {
+    "font": "UniCyr_8x16.psf",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": "(K"
+  },
+  "br": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "ca": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "cs": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "de": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "el": {
+    "font": "iso07u-16.psfu",
+    "unicodeMap": "",
+    "screenMap": "trivial",
+    "magic": "(K"
+  },
+  "el_GR": {
+    "font": "iso07u-16.psfu",
+    "unicodeMap": "",
+    "screenMap": "trivial",
+    "magic": "(K"
+  },
+  "el_GR.UTF-8": {
+    "font": "iso07u-16.psfu",
+    "unicodeMap": "",
+    "screenMap": "trivial",
+    "magic": "(K"
+  },
+  "en": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "es": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "fr": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "gl": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "hu": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "it": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "ja": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "lt": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "nl": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "pl": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "pt": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "ru": {
+    "font": "UniCyr_8x16.psf",
+    "unicodeMap": "",
+    "screenMap": "koi2alt",
+    "magic": "(K"
+  },
+  "ru_RU.KOI8-R": {
+    "font": "UniCyr_8x16.psf",
+    "unicodeMap": "",
+    "screenMap": "koi2alt",
+    "magic": "(K"
+  },
+  "ru_RU.UTF-8": {
+    "font": "UniCyr_8x16.psf",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": "(K"
+  },
+  "sk": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "sr": {
+    "font": "UniCyr_8x16.psf",
+    "unicodeMap": "",
+    "screenMap": "trivial",
+    "magic": "(K"
+  },
+  "sr_RS.UTF-8": {
+    "font": "UniCyr_8x16.psf",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": "(K"
+  },
+  "sr_RS@latin": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "trivial",
+    "magic": ""
+  },
+  "tg": {
+    "font": "UniCyr_8x16.psf",
+    "unicodeMap": "",
+    "screenMap": "trivial",
+    "magic": "(K"
+  },
+  "tg_TJ.UTF-8": {
+    "font": "UniCyr_8x16.psf",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": "(K"
+  },
+  "tr": {
+    "font": "eurlatgr.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
+  "uk": {
+    "font": "UniCyr_8x16.psf",
+    "unicodeMap": "",
+    "screenMap": "trivial",
+    "magic": "(K"
+  },
+  "uk_UA.UTF-8": {
+    "font": "UniCyr_8x16.psf",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": "(K"
+  }
+}

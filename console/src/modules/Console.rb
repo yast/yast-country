@@ -46,6 +46,8 @@
 #	Klaus Kaempf <kkaempf@suse.de>
 #
 require "yast"
+require "json"
+Yast.import "Directory"
 
 module Yast
   class ConsoleClass < Module
@@ -96,10 +98,10 @@ module Yast
       if !consolefont.empty?
         @language = lang
 
-        @font = consolefont[0] || ""
-        @unicodeMap = consolefont[1] || ""
-        @screenMap = consolefont[2] || ""
-        @magic = consolefont[3] || ""
+        @font = consolefont["font"]
+        @unicodeMap = consolefont["unicodeMap"]
+        @screenMap = consolefont["screenMap"]
+        @magic = consolefont["magic"]
 
         currentLanguage = WFM.GetLanguage
 
@@ -250,32 +252,30 @@ module Yast
 
     # Console fonts map
     #
-    # The map can be read from two different files:
-    #
-    # * `consolefonts_ID.ycp` where ID is the distribution identifier (as
-    #   specified in /etc/os-release). For example, `consolefonts_opensuse.ycp`.
-    # * `consolefonts.ycp` as a fallback.
-    #
     # Associates languages with the following set of properties: font, unicode map,
     # screen map and magic initialization.
     #
     # @example Console fonts format
-    #   consolefonts #=>
-    #     "bg"=>["UniCyr_8x16.psf", "", "trivial", "(K"],
-    #     "bg_BG"=>["UniCyr_8x16.psf", "", "trivial", "(K"],
-    #     "bg_BG.UTF-8"=>["UniCyr_8x16.psf", "", "none", "(K"],
-    #     "br"=>["lat1-16.psfu", "", "none", "(B"],
-    #     ...
+    #   {
+    #     "bg" => {
+    #       "font"=>"UniCyr_8x16.psf",
+    #       "unicodeMap"=>"",
+    #       "screenMap"=>"trivial",
+    #       "magic"=>"(K"
+    #     },
+    #     "bg_BG" => {
+    #       "font"=>"UniCyr_8x16.psf",
+    #       "unicodeMap"=>"",
+    #       "screenMap"=>"trivial",
+    #       "magic"=>"(K"
+    #     }
+    #   }
     #
     # @return [Hash] Console fonts map. See the example for content details.
     def consolefonts
       return @consolefonts if @consolefonts
 
-      # Read the file for this product
-      @consolefonts = WFM.Read(path(".local.yast2"), "consolefonts_#{OSRelease.id}.ycp")
-
-      # Fallback
-      @consolefonts ||= WFM.Read(path(".local.yast2"), "consolefonts.ycp")
+      @consolefonts = JSON.load(File.read(Directory.find_data_file("consolefonts.json")))
     end
   end
 
