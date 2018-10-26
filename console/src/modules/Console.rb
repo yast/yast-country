@@ -65,7 +65,7 @@ module Yast
 
       @font = "lat1-16.psfu"
       @unicodeMap = ""
-      @screenMap = "none"
+      @screenMap = ""
       @magic = "(B"
 
       # non-empty if serial console (written /etc/inittab)
