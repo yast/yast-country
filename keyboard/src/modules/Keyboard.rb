@@ -436,7 +436,7 @@ module Yast
 
     # Get the default key map for selected language
     #
-    # @param   the locale, e.g. cs_CZ
+    # @param sys_language [String] the locale, e.g. cs_CZ
     #
     # @return the expected key map, e.g. cz-us-qwertz.map.gz
     #
