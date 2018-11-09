@@ -434,8 +434,27 @@ module Yast
       Builtins.union(base_lang2keyboard, Language.GetLang2KeyboardMap(true))
     end
 
+    # Get the default key map for selected language
+    #
+    # @param   the locale, e.g. cs_CZ
+    #
+    # @return the expected key map, e.g. cz-us-qwertz.map.gz
+    #
+    def GetKeymapForLanguage(sys_language)
+      keyboard = GetKeyboardForLanguage(sys_language, "us")
+      keyboards = get_reduced_keyboard_db
 
+      Builtins.y2debug("reduced kbd db %1", keyboards)
+      # Get the entry from the reduced local map for the given language.
+      #
+      kbd_descr = Ops.get_list(keyboards, keyboard, [])
+      Builtins.y2milestone( "Description for keyboard <%1>: <%2>", keyboard, kbd_descr)
 
+      if kbd_descr != [] # keyboard found
+        return Ops.get_string(kbd_descr, [1, "ncurses"], "us.map.gz")
+      end
+      return "us.map.gz"
+    end
 
     # GetKeyboardForLanguage()
     #
@@ -1320,6 +1339,7 @@ module Yast
     publish :function => :SetKeyboardForLanguage, :type => "void (string)"
     publish :function => :SetKeyboardForLang, :type => "void (string)"
     publish :function => :SetKeyboardDefault, :type => "void ()"
+    publish :function => :GetKeymapForLanguage, :type => "string(string)"
     publish :function => :Import, :type => "boolean (map, ...)"
     publish :function => :Export, :type => "map ()"
     publish :function => :Summary, :type => "string ()"
