@@ -444,7 +444,7 @@ module Yast
       keyboard = GetKeyboardForLanguage(sys_language, "us")
       keyboards = get_reduced_keyboard_db
 
-      Builtins.y2debug("reduced kbd db %1", keyboards)
+      log.debug("reduced kbd db: #{keyboards}")
       # Get the entry from the reduced local map for the given language.
       #
       kbd_descr = Ops.get_list(keyboards, keyboard, [])
