@@ -453,7 +453,7 @@ module Yast
       if kbd_descr != [] # keyboard found
         return Ops.get_string(kbd_descr, [1, "ncurses"], "us.map.gz")
       end
-      return "us.map.gz"
+      "us.map.gz"
     end
 
     # GetKeyboardForLanguage()
