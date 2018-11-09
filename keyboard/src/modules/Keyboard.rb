@@ -448,7 +448,7 @@ module Yast
       # Get the entry from the reduced local map for the given language.
       #
       kbd_descr = keyboards[keyboard] || []
-      Builtins.y2milestone( "Description for keyboard <%1>: <%2>", keyboard, kbd_descr)
+      log.info( "Description for keyboard #{keyboard.inspect}: #{kbd_descr.inspect}")
 
       if !kbd_descr.empty? # keyboard found
         return Ops.get_string(kbd_descr, [1, "ncurses"], "us.map.gz")
