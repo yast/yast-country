@@ -450,7 +450,7 @@ module Yast
       kbd_descr = Ops.get_list(keyboards, keyboard, [])
       Builtins.y2milestone( "Description for keyboard <%1>: <%2>", keyboard, kbd_descr)
 
-      if kbd_descr != [] # keyboard found
+      if !kbd_descr.empty? # keyboard found
         return Ops.get_string(kbd_descr, [1, "ncurses"], "us.map.gz")
       end
       "us.map.gz"
