@@ -2,6 +2,7 @@
 Fri Nov  9 07:52:29 UTC 2018 - jsrain@suse.cz
 
 - provide better API for getting keyboard map info (fate#325748)
+- 4.1.1
 
 -------------------------------------------------------------------
 Fri Oct 26 13:21:47 UTC 2018 - jreidinger@suse.com
