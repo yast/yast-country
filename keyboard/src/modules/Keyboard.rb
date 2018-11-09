@@ -438,7 +438,7 @@ module Yast
     #
     # @param sys_language [String] the locale, e.g. cs_CZ
     #
-    # @return the expected key map, e.g. cz-us-qwertz.map.gz
+    # @return [String] the expected key map, e.g. cz-us-qwertz.map.gz
     #
     def GetKeymapForLanguage(sys_language)
       keyboard = GetKeyboardForLanguage(sys_language, "us")
