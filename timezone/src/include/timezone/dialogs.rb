@@ -586,7 +586,6 @@ module Yast
           "server"       => @ntp_server,
           # FIXME ntp-client_proposal doesn't understand 'servers' yet
           "servers"      => servers,
-          "ntpdate_only" => true
         }
 
         rv = Convert.to_symbol(ntp_call("Write", argmap))
