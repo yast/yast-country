@@ -1,4 +1,18 @@
 -------------------------------------------------------------------
+Sat Nov 10 08:31:44 UTC 2018 - knut.anderssen@suse.com
+
+- Timezone: Since ntp-client does not write the config anymore when
+  called for syncing only, we need to remove the 'ntpdate_only'
+  parameter in order to continue proposing a default when it is
+  enabled in the control file (bsc#1108497).
+- 4.0.24
+
+-------------------------------------------------------------------
+Thu Sep 27 10:37:48 UTC 2018 - shundhammer@suse.de
+
+- Set only system time if no hardware clock available (bsc#1103744)
+
+-------------------------------------------------------------------
 Wed Jun 27 15:16:47 CEST 2018 - schubi@suse.de
 
 - Added additional searchkeys to desktop file (fate#321043).
