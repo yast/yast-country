@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Sat Nov 10 08:31:44 UTC 2018 - knut.anderssen@suse.com
+
+- Timezone: Since ntp-client does not write the config anymore when
+  called for syncing only, we need to remove the 'ntpdate_only'
+  parameter in order to continue proposing a default when it is
+  enabled in the control file (bsc#1108497).
+- 3.2.15
+
+-------------------------------------------------------------------
 Tue May 15 12:36:33 UTC 2018 - jreidinger@suse.com
 
 - Do not use opensuse ntp pool servers for SLE (bsc#1090168)
