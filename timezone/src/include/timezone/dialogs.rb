@@ -581,6 +581,9 @@ module Yast
           servers = (0..3).map { |i| "#{i}.novell.pool.ntp.org" }
         end
         @ntp_server = servers.sample
+        # Dot not select a dhcp ntp server by default but add it to the offered
+        # list (fate#323454)
+        servers = ntp_call("dhcp_ntp_servers", {}).concat(servers).uniq
         argmap = {
           "server"       => @ntp_server,
           # FIXME ntp-client_proposal doesn't understand 'servers' yet
