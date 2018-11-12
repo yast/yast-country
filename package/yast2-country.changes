@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Nov 12 14:32:16 UTC 2018 - knut.anderssen@suse.com
+
+- Timezone: When ntp is configured to be used by default, offer
+  also ntp servers proposed by DHCP but do not choose them if the
+  user does not select one explicitly (fate#323454)
+- 4.0.25
+
+-------------------------------------------------------------------
 Sat Nov 10 08:31:44 UTC 2018 - knut.anderssen@suse.com
 
 - Timezone: Since ntp-client does not write the config anymore when
