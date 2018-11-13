@@ -1331,6 +1331,16 @@ module Yast
       return
     end
 
+    UNSUPPORTED_FBITERM_LANGS = ["ar_EG"]
+    def supported_by_fbiterm?(lang)
+      code, _ = lang.split(".")
+      !UNSUPPORTED_FBITERM_LANGS.include?(code)
+    end
+
+    def fbiterm?
+      Builtins.getenv["TERM"] == "iterm"
+    end
+
     # Set current YaST language to English if method for showing text in
     # current language is not supported (usually for CJK languages)
     # See http://bugzilla.novell.com/show_bug.cgi?id=479529 for discussion
@@ -1342,12 +1352,9 @@ module Yast
         return false
       end
       if GetTextMode() &&
-          # current language is CJK
-          CJKLanguage(@language) &&
-          # fbiterm is not running
-          Builtins.getenv("TERM") != "iterm"
+         ((fbiterm? && !supported_by_fbiterm(@language)) || (!fbiterm? && CJKLanguage(@language))
         if show_popup
-          # popup message (user selected CJK language in text mode)
+          # popup message an unsupported language in text mode
           Popup.Message(
             _(
               "The selected language cannot be used in text mode. English is used for\ninstallation, but the selected language will be used for the new system."
