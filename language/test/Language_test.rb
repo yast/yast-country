@@ -4,7 +4,6 @@
 require_relative "test_helper"
 require "y2country/language_dbus"
 
-
 describe "Language" do
   subject { Yast::Language }
 
@@ -200,6 +199,132 @@ describe "Language" do
       expect(Yast::Pkg).to receive(:GetPackages).with(:selected, true).and_return(["foo"])
       expect(Yast::Pkg).to receive(:PkgNeutral).with("foo")
       subject.ResetRecommendedPackages
+    end
+  end
+
+  describe "#SwitchToEnglishIfNeeded" do
+    let(:normal?) { false }
+    let(:textmode?) { true }
+    let(:term) { "xterm" }
+    let(:lang) { "de_DE" }
+
+    before do
+      allow(Yast::Stage).to receive(:normal).and_return(normal?)
+      allow(subject).to receive(:GetTextMode).and_return(textmode?)
+      allow(Yast::Builtins).to receive(:getenv).with("TERM").and_return(term)
+    end
+
+    around do |example|
+      old_lang = Yast::Language.language
+      Yast::Language.language = lang
+      example.call
+      Yast::Language.language = old_lang
+    end
+
+    context "when running on normal stage" do
+      let(:normal?) { true}
+
+      it "does not change the language" do
+        expect(subject).to_not receive(:WfmSetGivenLanguage)
+        subject.SwitchToEnglishIfNeeded(true)
+      end
+
+      it "returns false" do
+        expect(subject.SwitchToEnglishIfNeeded(true)).to eq(false)
+      end
+    end
+
+    context "when not running on textmode" do
+      it "does not change the language" do
+        expect(subject).to_not receive(:WfmSetGivenLanguage)
+        subject.SwitchToEnglishIfNeeded(true)
+      end
+    end
+
+    context "when running on fbiterm" do
+      let(:term) { "iterm" }
+
+      context "and it is using a supported language" do
+        it "does not change the language" do
+          expect(subject).to_not receive(:WfmSetGivenLanguage)
+          subject.SwitchToEnglishIfNeeded(true)
+        end
+
+        it "returns false" do
+          expect(subject.SwitchToEnglishIfNeeded(true)).to eq(false)
+        end
+      end
+
+      context "and it is using a non supported language" do
+        let(:lang) { "ar_EG" }
+
+        it "changes the language to english" do
+          expect(subject).to receive(:WfmSetGivenLanguage).with("en_US")
+          subject.SwitchToEnglishIfNeeded(true)
+        end
+
+        it "displays an error message if asked to do so" do
+          allow(Yast::Popup).to receive(:Message).with(/selected language cannot be used/)
+          subject.SwitchToEnglishIfNeeded(true)
+        end
+
+        it "does not display any error message if not asked to do so" do
+          expect(Yast::Popup).to_not receive(:Message)
+          subject.SwitchToEnglishIfNeeded(false)
+        end
+
+        it "returns true" do
+          expect(subject.SwitchToEnglishIfNeeded(true)).to eq(true)
+        end
+      end
+    end
+
+    context "when not running on fbiterm" do
+      context "and it is not using a CJK language" do
+        it "does not change the language" do
+          expect(subject).to_not receive(:WfmSetGivenLanguage)
+          subject.SwitchToEnglishIfNeeded(true)
+        end
+
+        it "returns false" do
+          expect(subject.SwitchToEnglishIfNeeded(true)).to eq(false)
+        end
+      end
+
+      context "and it is using a CJK language" do
+        let(:lang) { "ja_JP" }
+
+        it "changes the language to english" do
+          expect(subject).to receive(:WfmSetGivenLanguage).with("en_US")
+          subject.SwitchToEnglishIfNeeded(true)
+        end
+
+        it "displays an error message if asked to do so" do
+          expect(Yast::Popup).to receive(:Message).with(/selected language cannot be used/)
+          subject.SwitchToEnglishIfNeeded(true)
+        end
+
+        it "does not display any error message if not asked to do so" do
+          expect(Yast::Popup).to_not receive(:Message)
+          subject.SwitchToEnglishIfNeeded(false)
+        end
+
+        it "returns true" do
+          expect(subject.SwitchToEnglishIfNeeded(true)).to eq(true)
+        end
+      end
+    end
+  end
+
+  describe "#FillEnglishNames" do
+    before do
+      subject.main
+    end
+
+    it "does not modify the WFM language" do
+      expect(subject.EnglishName("de_DE", "missing")).to eq("missing")
+      subject.FillEnglishNames()
+      expect(subject.EnglishName("de_DE", "missing")).to eq("German")
     end
   end
 end

@@ -258,7 +258,6 @@ module Yast
     # Fill the map with English names of languages
     def FillEnglishNames
       old_lang = WFM.GetLanguage()
-      return if old_lang == DEFAULT_FALLBACK_LANGUAGE # will be filled in on first start
       if @use_utf8
         WFM.SetLanguage(DEFAULT_FALLBACK_LANGUAGE, "UTF-8")
       else
@@ -1333,38 +1332,35 @@ module Yast
     end
 
     # Set current YaST language to English if method for showing text in
-    # current language is not supported (usually for CJK languages)
-    # See http://bugzilla.novell.com/show_bug.cgi?id=479529 for discussion
+    # current language is not supported:
+    #
+    # * CJK languages when not using fbiterm
+    # * other unsupported languages when not running on fbiterm
+    #
+    # See http://bugzilla.suse.com/show_bug.cgi?id=479529 for discussion
     # @boolean show_popup if information popup about the change should be shown
     # @return true if UI language was changed
     def SwitchToEnglishIfNeeded(show_popup)
-      if Stage.normal
-        Builtins.y2milestone("no language switching in normal stage")
-        return false
-      end
-      if GetTextMode() &&
-          # current language is CJK
-          CJKLanguage(@language) &&
-          # fbiterm is not running
-          Builtins.getenv("TERM") != "iterm"
-        if show_popup
-          # popup message (user selected CJK language in text mode)
-          Popup.Message(
-            _(
-              "The selected language cannot be used in text mode. English is used for\ninstallation, but the selected language will be used for the new system."
-            )
-          )
-        end
-        WfmSetGivenLanguage(DEFAULT_FALLBACK_LANGUAGE)
-        return true
-      end
-      false
+      return false if Stage.normal || supported_language?(@language)
+
+      show_popup_early = supported_language?(WFM.GetLanguage())
+      show_fallback_to_english_warning if show_popup && show_popup_early
+      WfmSetGivenLanguage(DEFAULT_FALLBACK_LANGUAGE)
+      show_fallback_to_english_warning if show_popup && !show_popup_early
+      true
+    end
+
+    # Determines whether the language is supported or not
+    #
+    # @note To be used in instsys
+    def supported_language?(lang)
+      return true unless GetTextMode()
+      (fbiterm? && supported_by_fbiterm?(lang)) || !(fbiterm? || CJKLanguage(lang))
     end
 
     def GetCurrentLocaleString
       GetLocaleString @language
     end
-
 
     publish :variable => :language, :type => "string"
     publish :variable => :language_on_entry, :type => "string"
@@ -1414,6 +1410,36 @@ module Yast
     publish :function => :GetLanguageItems, :type => "list <term> (symbol)"
     publish :function => :CheckLanguagesSupport, :type => "void (string)"
     publish :function => :SwitchToEnglishIfNeeded, :type => "boolean (boolean)"
+
+  private
+
+    # @return [Array<String>] List of languages which are not supported by fbiterm
+    UNSUPPORTED_FBITERM_LANGS = [
+      "ar_EG", "bn_BD", "gu_IN", "hi_IN", "km_KH", "mr_IN", "pa_IN", "ta_IN", "th_TH"
+].freeze
+
+    # Determines whether the language is supported by fbiterm
+    # @param lang [String] Language code
+    # @return [Boolean]
+    def supported_by_fbiterm?(lang)
+      code, _ = lang.split(".")
+      !UNSUPPORTED_FBITERM_LANGS.include?(code)
+    end
+
+    # Determines whether the installer is running on fbiterm
+    #
+    # @return [Boolean]
+    def fbiterm?
+      Builtins.getenv("TERM") == "iterm"
+    end
+
+    def show_fallback_to_english_warning
+      Popup.Message(
+        _(
+          "The selected language cannot be used in text mode. English is used for\ninstallation, but the selected language will be used for the new system."
+        )
+      )
+    end
   end
 
   Language = LanguageClass.new
