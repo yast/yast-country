@@ -256,8 +256,9 @@ module Yast
     end
 
     # Fill the map with English names of languages
-    def FillEnglishNames(lang)
-      return if lang == DEFAULT_FALLBACK_LANGUAGE # will be filled in on first start
+    def FillEnglishNames
+      old_lang = WFM.GetLanguage()
+      return if old_lang == DEFAULT_FALLBACK_LANGUAGE # will be filled in on first start
       if @use_utf8
         WFM.SetLanguage(DEFAULT_FALLBACK_LANGUAGE, "UTF-8")
       else
@@ -267,9 +268,9 @@ module Yast
         Ops.set(@english_names, code, Ops.get_string(info, 4, ""))
       end
       if @use_utf8
-        WFM.SetLanguage(lang, "UTF-8")
+        WFM.SetLanguage(old_lang, "UTF-8")
       else
-        WFM.SetLanguage(lang)
+        WFM.SetLanguage(old_lang)
       end
 
       nil
@@ -630,7 +631,7 @@ module Yast
             lang
           )
         end
-        FillEnglishNames(lang)
+        FillEnglishNames()
         Set(lang) # coming from /etc/install.inf
         SetDefault() # also default
       else
@@ -638,7 +639,7 @@ module Yast
         QuickSet(local_lang)
         SetDefault() # also default
         if Mode.live_installation || Stage.firstboot
-          FillEnglishNames(local_lang)
+          FillEnglishNames()
         end
       end
       if Ops.greater_than(
