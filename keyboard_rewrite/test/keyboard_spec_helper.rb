@@ -22,10 +22,6 @@ module KeyboardSpecHelper
       )
   end
 
-  def given_a_strategy_with_codes(available_layout_codes)
-    double(Y2Keyboard::Strategies::SystemdStrategy, codes: available_layout_codes)
-  end
-
   def layout_definitions
     [
       { "description" => "English (US)", "code" => "us" },

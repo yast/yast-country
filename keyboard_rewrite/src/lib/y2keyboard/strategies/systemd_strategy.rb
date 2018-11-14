@@ -19,11 +19,6 @@ module Y2Keyboard
         layouts.map { |x| KeyboardLayout.new(x["code"], x["description"]) }
       end
 
-      def codes
-        raw_layouts = Cheetah.run("localectl", "list-keymaps", stdout: :capture)
-        raw_layouts.lines.map(&:strip)
-      end
-
       def apply_layout(keyboard_layout)
         Cheetah.run("localectl", "set-keymap", keyboard_layout.code)
       end
