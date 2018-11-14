@@ -20,7 +20,8 @@ describe Y2Keyboard::Clients::SystemdKeyboard do
         .and_return(expected_path)
 
       expect(YAML).to receive(:load_file).with(expected_path).and_return(layout_definitions)
-      expect(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).with(layout_definitions).and_return(strategy)
+      expect(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).with(layout_definitions)
+        .and_return(strategy)
 
       client.run
     end
