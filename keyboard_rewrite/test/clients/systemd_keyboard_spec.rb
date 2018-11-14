@@ -16,7 +16,8 @@ describe Y2Keyboard::Clients::SystemdKeyboard do
 
     it "load keyboard layouts definitions from yml file" do
       expected_path = "path/to/keyboard.yml"
-      allow(File).to receive(:join).with(anything, "../data/keyboards.yml").and_return(expected_path)
+      allow(File).to receive(:join).with(anything, "../data/keyboards.yml")
+        .and_return(expected_path)
 
       expect(YAML).to receive(:load_file).with(expected_path).and_return(layout_definitions)
       expect(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).with(layout_definitions).and_return(strategy)

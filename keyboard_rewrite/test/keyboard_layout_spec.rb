@@ -6,7 +6,7 @@ describe Y2Keyboard::KeyboardLayout do
   subject(:keyboard_layout) { Y2Keyboard::KeyboardLayout }
 
   describe ".all" do
-    subject(:all_layouts) { keyboard_layout.all}
+    subject(:all_layouts) { keyboard_layout.all }
 
     it "returns a lists of keyboard layouts" do
       layout_codes = ["es", "fr-latin1", "us", "uk"]
@@ -43,8 +43,8 @@ describe Y2Keyboard::KeyboardLayout do
 
     it "can return diferent layouts with same code" do
       definitions = [
-        {"description"=>"Portuguese (Brazil -- US accents)", "code"=>"us-acentos"},
-        {"description"=>"US International", "code"=>"us-acentos"}
+        { "description" => "Portuguese (Brazil -- US accents)", "code" => "us-acentos" },
+        { "description" => "US International", "code" => "us-acentos" }
       ]
       available_layout_codes = ["us-acentos"]
       set_up_keyboard_layout_with(available_layout_codes, definitions)
