@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        4.1.2
+Version:        4.1.3
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
@@ -51,8 +51,8 @@ Requires:       yast2 >= 3.2.9
 Requires:       yast2-pkg-bindings >= 2.15.3
 # IconPath support for MultiSelectionBox
 Requires:       yast2-core >= 2.16.28
-# new API of ntp-client_proposal.ycp
-Conflicts:      yast2-ntp-client < 2.18.0
+# new API of ntp-client_proposal.rb
+Conflicts:      yast2-ntp-client < 4.1.5
 
 Requires:       yast2-packager >= 2.23.3
 # VMware detection (.probe.is_vmware)
