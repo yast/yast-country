@@ -72,4 +72,15 @@ module KeyboardSpecHelper
       true
     )
   end
+
+  def given_keyboard_configuration(layout_code, arguments)
+    allow(Cheetah).to receive(:run).with("/usr/sbin/xkbctrl", layout_code, stdout: :capture)
+    .and_return(
+      "$[\n" \
+        "\"XkbLayout\"    : \"es\",\n" \
+        "\"XkbModel\"     : \"microsoftpro\",\n" \
+        "\"XkbOptions\"   : \"terminate:ctrl_alt_bksp\",\n" \
+        "\"Apply\"        : \"#{arguments}\"\n" \
+      "]")
+  end
 end
