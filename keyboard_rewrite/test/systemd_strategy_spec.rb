@@ -51,7 +51,15 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
   describe "#load_layout" do
     new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
     arguments_to_apply = "-layout es -model microsoftpro -option terminate:ctrl_alt_bksp"
-    expected_arguments = ["setxkbmap", "-layout", "es", "-model", "microsoftpro", "-option", "terminate:ctrl_alt_bksp"]
+    expected_arguments = [
+      "setxkbmap",
+      "-layout",
+      "es",
+      "-model",
+      "microsoftpro",
+      "-option",
+      "terminate:ctrl_alt_bksp"
+    ]
 
     describe "in X server" do
       before do
