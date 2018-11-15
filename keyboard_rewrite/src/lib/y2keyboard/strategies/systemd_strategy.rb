@@ -35,8 +35,8 @@ module Y2Keyboard
 
       def load_x11_layout(keyboard_layout)
         output = Cheetah.run("/usr/sbin/xkbctrl", keyboard_layout.code, stdout: :capture)
-        x11_arguments = output.lines.map(&:strip).find { |x| x.start_with?("\"Apply\"") }.split(":", 2).last.split("\"").last
-        Cheetah.run("setxkbmap", x11_arguments)
+        x11_arguments = output.lines.map(&:strip).find { |x| x.start_with?("\"Apply\"") }.split(":", 2).last.tr("\"", "")
+        Cheetah.run(x11_arguments.split.unshift("setxkbmap"))
       end
 
       def current_layout

@@ -50,7 +50,8 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
 
   describe "#load_layout" do
     new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
-    expected_arguments = "-layout es -model microsoftpro -option terminate:ctrl_alt_bksp"
+    arguments_to_apply = "-layout es -model microsoftpro -option terminate:ctrl_alt_bksp"
+    expected_arguments = ["setxkbmap", "-layout", "es", "-model", "microsoftpro", "-option", "terminate:ctrl_alt_bksp"]
 
     describe "in X server" do
       before do
@@ -58,8 +59,8 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
       end
 
       it "changes the current keyboard layout used in xorg" do
-        given_keyboard_configuration(new_layout.code, expected_arguments)
-        expect(Cheetah).to receive(:run).with("setxkbmap", expected_arguments)
+        given_keyboard_configuration(new_layout.code, arguments_to_apply)
+        expect(Cheetah).to receive(:run).with(expected_arguments)
 
         systemd_strategy.load_layout(new_layout)
       end
