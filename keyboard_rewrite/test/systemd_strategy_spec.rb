@@ -65,6 +65,7 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
       end
 
       it "do not try to change the current keyboard layout in console" do
+        given_keyboard_configuration(new_layout.code, expected_arguments)
         expect(Cheetah).not_to receive(:run).with("loadkeys", new_layout.code)
 
         systemd_strategy.load_layout(new_layout)
