@@ -1434,7 +1434,7 @@ module Yast
     end
 
     def show_fallback_to_english_warning
-      Popup.Message(
+      Report.Message(
         _(
           "The selected language cannot be used in text mode. English is used for\ninstallation, but the selected language will be used for the new system."
         )
