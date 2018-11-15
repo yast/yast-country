@@ -35,7 +35,7 @@ module Y2Keyboard
 
       def load_x11_layout(keyboard_layout)
         output = Cheetah.run("/usr/sbin/xkbctrl", keyboard_layout.code, stdout: :capture)
-        x11_arguments = output.lines.map(&:strip).find { |x| x.start_with?("\"Apply\"") }.split(":", 2).last.tr("\"", "")
+        x11_arguments = get_value_from_output(output, "\"Apply\"").tr("\"", "")
         Cheetah.run(x11_arguments.split.unshift("setxkbmap"))
       end
 
@@ -49,10 +49,14 @@ module Y2Keyboard
 
       def current_layout_code
         output = Cheetah.run("localectl", "status", stdout: :capture)
-        output.lines.map(&:strip).find { |x| x.start_with?("VC Keymap:") }.split.last
+        get_value_from_output(output, "VC Keymap:").strip
       end
 
-      private :current_layout_code, :find_layout_with
+      def get_value_from_output(output, property_name)
+        output.lines.map(&:strip).find { |x| x.start_with?(property_name) }.split(":", 2).last
+      end
+
+      private :current_layout_code, :find_layout_with, :get_value_from_output, :load_x11_layout
     end
   end
 end
