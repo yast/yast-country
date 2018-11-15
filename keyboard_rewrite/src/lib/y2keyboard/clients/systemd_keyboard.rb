@@ -3,7 +3,7 @@ require_relative "../strategies/systemd_strategy"
 
 module Y2Keyboard
   module Clients
-    # Simple client to run LayoutSelector.
+    # Client with systemd implementation.
     class SystemdKeyboard
       def self.run
         path = File.join(__dir__, "../data/keyboards.yml")

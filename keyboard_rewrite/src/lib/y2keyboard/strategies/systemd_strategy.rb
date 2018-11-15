@@ -4,7 +4,7 @@ require "yaml"
 
 module Y2Keyboard
   module Strategies
-    # Class to deal with systemd keyboard configuration
+    # Class to deal with systemd keyboard configuration management.
     class SystemdStrategy
       include Yast::Logger
 
@@ -12,6 +12,7 @@ module Y2Keyboard
         @layout_definitions = layout_definitions
       end
 
+      # @return [Array<KeyboardLayout>] an array with all available keyboard layouts.
       def all
         raw_layouts = Cheetah.run("localectl", "list-keymaps", stdout: :capture)
         codes = raw_layouts.lines.map(&:strip)
@@ -19,10 +20,14 @@ module Y2Keyboard
         layouts.map { |x| KeyboardLayout.new(x["code"], x["description"]) }
       end
 
+      # Apply a new keyboard layout in the system.
+      # @param keyboard_layout [KeyboardLayout] the keyboard layout to apply in the system.
       def apply_layout(keyboard_layout)
         Cheetah.run("localectl", "set-keymap", keyboard_layout.code)
       end
 
+      # Load x11 or virtual console keys on the fly.
+      # @param keyboard_layout [KeyboardLayout] the keyboard layout to load.
       def load_layout(keyboard_layout)
         load_x11_layout(keyboard_layout) if !Yast::UI.TextMode
         begin
@@ -33,6 +38,8 @@ module Y2Keyboard
         end
       end
 
+      # Load x11 keys on the fly.
+      # @param keyboard_layout [KeyboardLayout] the keyboard layout to load.
       def load_x11_layout(keyboard_layout)
         output = Cheetah.run("/usr/sbin/xkbctrl", keyboard_layout.code, stdout: :capture)
         arguments = get_value_from_output(output, "\"Apply\"").tr("\"", "")
@@ -40,6 +47,7 @@ module Y2Keyboard
         Cheetah.run(setxkbmap_array_arguments)
       end
 
+      # @return [KeyboardLayout] the current keyboard layout in the system.
       def current_layout
         find_layout_with(current_layout_code)
       end

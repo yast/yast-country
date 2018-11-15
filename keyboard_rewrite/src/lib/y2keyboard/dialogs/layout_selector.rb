@@ -6,7 +6,7 @@ Yast.import "Popup"
 
 module Y2Keyboard
   module Dialogs
-    # Main dialog where the layouts are listed and can change the keyboard layout
+    # Main dialog where the layouts are listed and can be selected.
     class LayoutSelector < UI::Dialog
       def initialize(strategy)
         textdomain "country"
