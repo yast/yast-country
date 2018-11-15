@@ -264,12 +264,12 @@ describe "Language" do
         end
 
         it "displays an error message if asked to do so" do
-          allow(Yast::Popup).to receive(:Message).with(/selected language cannot be used/)
+          allow(Yast::Report).to receive(:Message).with(/selected language cannot be used/)
           subject.SwitchToEnglishIfNeeded(true)
         end
 
         it "does not display any error message if not asked to do so" do
-          expect(Yast::Popup).to_not receive(:Message)
+          expect(Yast::Report).to_not receive(:Message)
           subject.SwitchToEnglishIfNeeded(false)
         end
 
@@ -300,12 +300,12 @@ describe "Language" do
         end
 
         it "displays an error message if asked to do so" do
-          expect(Yast::Popup).to receive(:Message).with(/selected language cannot be used/)
+          expect(Yast::Report).to receive(:Message).with(/selected language cannot be used/)
           subject.SwitchToEnglishIfNeeded(true)
         end
 
         it "does not display any error message if not asked to do so" do
-          expect(Yast::Popup).to_not receive(:Message)
+          expect(Yast::Report).to_not receive(:Message)
           subject.SwitchToEnglishIfNeeded(false)
         end
 
