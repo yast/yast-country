@@ -1,6 +1,9 @@
 require_relative "test_helper"
 require "y2keyboard/keyboard_layout"
 require "y2keyboard/strategies/systemd_strategy"
+require "yast"
+
+Yast.import "UI"
 
 describe Y2Keyboard::Strategies::SystemdStrategy do
   subject(:systemd_strategy) { Y2Keyboard::Strategies::SystemdStrategy.new(layout_definitions) }
