@@ -54,7 +54,16 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
       end
 
       it "changes the current keyboard layout used in xorg" do
-        expect(Cheetah).to receive(:run).with("setxkbmap", new_layout.code)
+        expected_arguments = "-layout es -model microsoftpro -option terminate:ctrl_alt_bksp"
+        allow(Cheetah).to receive(:run).with("/usr/sbin/xkbctrl", new_layout.code, stdout: :capture)
+          .and_return(
+            "$[\n" \
+              "\"XkbLayout\"    : \"es\",\n" \
+              "\"XkbModel\"     : \"microsoftpro\",\n" \
+              "\"XkbOptions\"   : \"terminate:ctrl_alt_bksp\",\n" \
+              "\"Apply\"        : \"-layout es -model microsoftpro -option terminate:ctrl_alt_bksp\"\n" \
+            "]")
+        expect(Cheetah).to receive(:run).with("setxkbmap", expected_arguments)
 
         systemd_strategy.load_layout(new_layout)
       end
