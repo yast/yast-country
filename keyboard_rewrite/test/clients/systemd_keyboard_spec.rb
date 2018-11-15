@@ -2,6 +2,7 @@ require_relative "../test_helper"
 require "y2keyboard/clients/systemd_keyboard"
 require "y2keyboard/dialogs/layout_selector"
 require "y2keyboard/strategies/systemd_strategy"
+require "yaml"
 
 describe Y2Keyboard::Clients::SystemdKeyboard do
   describe ".run" do
