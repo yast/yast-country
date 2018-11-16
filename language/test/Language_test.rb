@@ -258,7 +258,7 @@ describe "Language" do
       context "and it is using a non supported language" do
         let(:lang) { "ar_EG" }
 
-        it "changes the language to english" do
+        it "changes the language to English" do
           expect(subject).to receive(:WfmSetGivenLanguage).with("en_US")
           subject.SwitchToEnglishIfNeeded(true)
         end
@@ -294,7 +294,7 @@ describe "Language" do
       context "and it is using a CJK language" do
         let(:lang) { "ja_JP" }
 
-        it "changes the language to english" do
+        it "changes the language to English" do
           expect(subject).to receive(:WfmSetGivenLanguage).with("en_US")
           subject.SwitchToEnglishIfNeeded(true)
         end

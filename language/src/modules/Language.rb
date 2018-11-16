@@ -1414,16 +1414,14 @@ module Yast
   private
 
     # @return [Array<String>] List of languages which are not supported by fbiterm
-    UNSUPPORTED_FBITERM_LANGS = [
-      "ar_EG", "bn_BD", "gu_IN", "hi_IN", "km_KH", "mr_IN", "pa_IN", "ta_IN", "th_TH"
-].freeze
+    UNSUPPORTED_FBITERM_LANGS = ["ar", "bn", "gu", "hi", "km", "mr", "pa", "ta", "th"].freeze
 
     # Determines whether the language is supported by fbiterm
     # @param lang [String] Language code
     # @return [Boolean]
     def supported_by_fbiterm?(lang)
-      code, _ = lang.split(".")
-      !UNSUPPORTED_FBITERM_LANGS.include?(code)
+      code, _ = lang.split("_")
+      UNSUPPORTED_FBITERM_LANGS.none?(code)
     end
 
     # Determines whether the installer is running on fbiterm
