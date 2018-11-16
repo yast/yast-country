@@ -19,6 +19,7 @@
 
 require_relative "test_helper"
 require "y2keyboard/keyboard_layout"
+require "y2keyboard/keyboard_layout_loader"
 require "y2keyboard/dialogs/layout_selector"
 require "y2keyboard/strategies/systemd_strategy"
 
@@ -92,12 +93,13 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
   describe "#layout_list_handler" do
     before do
       mock_ui_events(:layout_list, :cancel)
+      allow(Y2Keyboard::KeyboardLayoutLoader).to receive(:load_layout).with(english)
     end
 
     it "change the keymap to the selected layout" do
       selecting_layout_from_list(spanish)
 
-      expect(strategy).to receive(:load_layout).with(spanish)
+      expect(Y2Keyboard::KeyboardLayoutLoader).to receive(:load_layout).with(spanish)
 
       layout_selector.run
     end
@@ -117,7 +119,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
     it "restores the keyboard layout to the previous selected" do
       allow(strategy).to receive(:current_layout).and_return(english)
 
-      expect(strategy).to receive(:load_layout).with(english)
+      expect(Y2Keyboard::KeyboardLayoutLoader).to receive(:load_layout).with(english)
 
       layout_selector.run
     end
