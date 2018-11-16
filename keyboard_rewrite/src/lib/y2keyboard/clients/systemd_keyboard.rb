@@ -19,6 +19,7 @@
 
 require_relative "../dialogs/layout_selector"
 require_relative "../strategies/systemd_strategy"
+require "yaml"
 
 module Y2Keyboard
   module Clients
