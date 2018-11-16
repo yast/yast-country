@@ -19,6 +19,7 @@
 
 require "yast"
 require "ui/dialog"
+require_relative "../keyboard_layout_loader"
 
 Yast.import "UI"
 Yast.import "Popup"
@@ -77,12 +78,12 @@ module Y2Keyboard
       end
 
       def cancel_handler
-        @strategy.load_layout(@previous_selected_layout)
+        KeyboardLayoutLoader.load_layout(@previous_selected_layout)
         finish_dialog
       end
 
       def layout_list_handler
-        @strategy.load_layout(selected_layout)
+        KeyboardLayoutLoader.load_layout(selected_layout)
       end
 
       def selected_layout
