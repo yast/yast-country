@@ -43,5 +43,9 @@ module Y2Keyboard
       layouts = @@layout_definitions.select { |x| codes.include?(x["code"]) }
       layouts.map { |x| KeyboardLayout.new(x["code"], x["description"]) }
     end
+
+    def apply_layout
+      @@strategy.apply_layout(self)
+    end
   end
 end
