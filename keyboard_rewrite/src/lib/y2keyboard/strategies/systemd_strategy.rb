@@ -51,10 +51,6 @@ module Y2Keyboard
 
       # @return [KeyboardLayout] the current keyboard layout in the system.
       def current_layout
-        current_layout_code
-      end
-
-      def current_layout_code
         output = Cheetah.run("localectl", "status", stdout: :capture)
         get_value_from_output(output, "VC Keymap:").strip
       end
@@ -63,7 +59,7 @@ module Y2Keyboard
         output.lines.map(&:strip).find { |x| x.start_with?(property_name) }.split(":", 2).last
       end
 
-      private :current_layout_code, :get_value_from_output
+      private :get_value_from_output
     end
   end
 end
