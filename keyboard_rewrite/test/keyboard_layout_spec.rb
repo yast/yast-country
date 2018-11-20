@@ -59,7 +59,7 @@ describe Y2Keyboard::KeyboardLayout do
     it "call to apply layout" do
       layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
       strategy = spy(Y2Keyboard::Strategies::SystemdStrategy)
-      keyboard_layout.use(strategy)
+      keyboard_layout.use(strategy, layout_definitions)
 
       expect(strategy).to receive(:apply_layout).with(layout)
 
@@ -68,7 +68,6 @@ describe Y2Keyboard::KeyboardLayout do
   end
 
   def set_up_keyboard_layout_with(available_layout_codes, layout_definitions)
-    keyboard_layout.use(given_a_strategy_with_codes(available_layout_codes))
-    keyboard_layout.layout_definitions(layout_definitions)
+    keyboard_layout.use(given_a_strategy_with_codes(available_layout_codes), layout_definitions)
   end
 end

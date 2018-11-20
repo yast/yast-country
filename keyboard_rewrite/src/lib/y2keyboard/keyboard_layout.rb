@@ -30,11 +30,8 @@ module Y2Keyboard
       @description = description
     end
 
-    def self.use(strategy)
+    def self.use(strategy, layout_definitions)
       @@strategy = strategy
-    end
-
-    def self.layout_definitions(layout_definitions)
       @@layout_definitions = layout_definitions
     end
 
