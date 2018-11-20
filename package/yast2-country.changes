@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Tue Nov 20 09:25:14 UTC 2018 - knut.anderssen@suse.com
+
+- Aligned "Synchronize Now" button and "NTP Server Address" box not
+  breaking previous fix and not hiding the manual checkbox in
+  TextMode (bnc#893065, bsc#1039985).
+- 4.1.5
+
+-------------------------------------------------------------------
 Thu Nov 15 11:28:03 UTC 2018 - igonzalezsosa@suse.com
 
 - Fallback to English when using fbiterm on those languages
