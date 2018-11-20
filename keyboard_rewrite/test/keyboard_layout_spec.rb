@@ -75,23 +75,21 @@ describe Y2Keyboard::KeyboardLayout do
   end
 
   describe ".current_layout" do
-    it "return a keyboard layout" do
-      expected_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
-      strategy = spy(Y2Keyboard::Strategies::SystemdStrategy)
+    let(:expected_layout) { Y2Keyboard::KeyboardLayout.new("es", "Spanish") }
+    let(:strategy) { spy(Y2Keyboard::Strategies::SystemdStrategy) }
+
+    before(:each) do
       keyboard_layout.use(strategy, layout_definitions)
       allow(strategy).to receive(:current_layout).and_return(expected_layout.code)
+    end
 
-      expect(Y2Keyboard::KeyboardLayout.current_layout).to be_an(Y2Keyboard::KeyboardLayout)
+    it "return a keyboard layout" do
+      expect(keyboard_layout.current_layout).to be_an(Y2Keyboard::KeyboardLayout)
     end
 
     it "return current layout being used in the system with the appropriate description" do
-      expected_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
-      strategy = spy(Y2Keyboard::Strategies::SystemdStrategy)
-      keyboard_layout.use(strategy, layout_definitions)
-      allow(strategy).to receive(:current_layout).and_return(expected_layout.code)
-
-      expect(Y2Keyboard::KeyboardLayout.current_layout.code).to eq(expected_layout.code)
-      expect(Y2Keyboard::KeyboardLayout.current_layout.description).to eq(expected_layout.description)
+      expect(keyboard_layout.current_layout.code).to eq(expected_layout.code)
+      expect(keyboard_layout.current_layout.description).to eq(expected_layout.description)
     end
   end
 
