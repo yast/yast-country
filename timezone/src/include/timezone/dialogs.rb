@@ -317,7 +317,7 @@ module Yast
                   HSpacing(3),
                   VBox(
                     Left(timeterm),
-                    UI.TextMode ? Empty() : VSpacing(),
+                    VSpacing(UI.TextMode ? 0 : 1),
                     Left(dateterm),
                     VSpacing(),
                     HBox(
@@ -334,7 +334,7 @@ module Yast
                     )
                   )
                 ),
-                VSpacing(UI.TextMode ? 0.5 : 1),
+                VSpacing(1),
                 Left(
                   RadioButton(
                     Id(:ntp),
