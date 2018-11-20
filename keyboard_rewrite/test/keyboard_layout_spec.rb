@@ -75,7 +75,16 @@ describe Y2Keyboard::KeyboardLayout do
   end
 
   describe ".current_layout" do
-    it "return current layout being used in the system" do
+    it "return a keyboard layout" do
+      expected_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
+      strategy = spy(Y2Keyboard::Strategies::SystemdStrategy)
+      keyboard_layout.use(strategy, layout_definitions)
+      allow(strategy).to receive(:current_layout).and_return(expected_layout.code)
+
+      expect(Y2Keyboard::KeyboardLayout.current_layout).to be_an(Y2Keyboard::KeyboardLayout)
+    end
+
+    xit "return current layout being used in the system" do
       expected_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
       strategy = spy(Y2Keyboard::Strategies::SystemdStrategy)
       keyboard_layout.use(strategy, layout_definitions)

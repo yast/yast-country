@@ -46,7 +46,9 @@ module Y2Keyboard
     end
 
     def self.current_layout
-      @@strategy.current_layout
+      current_layout_code = @@strategy.current_layout
+      layout_definition = @@layout_definitions.detect { |x| x["code"] == current_layout_code }
+      KeyboardLayout.new(layout_definition["code"], layout_definition["description"])
     end
 
     # Apply a new keyboard layout in the system.
