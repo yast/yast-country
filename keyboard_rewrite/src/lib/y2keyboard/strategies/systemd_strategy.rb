@@ -51,11 +51,7 @@ module Y2Keyboard
 
       # @return [KeyboardLayout] the current keyboard layout in the system.
       def current_layout
-        find_layout_with(current_layout_code)
-      end
-
-      def find_layout_with(code)
-        all.find { |x| x.code == code }
+        current_layout_code
       end
 
       def current_layout_code
@@ -67,7 +63,7 @@ module Y2Keyboard
         output.lines.map(&:strip).find { |x| x.start_with?(property_name) }.split(":", 2).last
       end
 
-      private :current_layout_code, :find_layout_with, :get_value_from_output
+      private :current_layout_code, :get_value_from_output
     end
   end
 end

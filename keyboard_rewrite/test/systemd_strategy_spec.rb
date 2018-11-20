@@ -81,13 +81,13 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
   end
 
   describe "#current_layout" do
-    it "returns the current used keyboard layout" do
+    it "returns the current used keyboard layout code" do
       current_selected_layout_code = "uk"
       given_layouts(["es", current_selected_layout_code, "us"])
       given_a_current_layout(current_selected_layout_code)
 
-      expect(systemd_strategy.current_layout).to be_an(Y2Keyboard::KeyboardLayout)
-      expect(systemd_strategy.current_layout.code).to eq(current_selected_layout_code)
+      expect(systemd_strategy.current_layout).to be_an(String)
+      expect(systemd_strategy.current_layout).to eq(current_selected_layout_code)
     end
   end
 end
