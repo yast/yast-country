@@ -25,36 +25,7 @@ require "yast"
 Yast.import "UI"
 
 describe Y2Keyboard::Strategies::SystemdStrategy do
-  subject(:systemd_strategy) { Y2Keyboard::Strategies::SystemdStrategy.new(layout_definitions) }
-
-  describe "#all" do
-    subject(:load_keyboard_layouts) { systemd_strategy.all }
-
-    it "returns a lists of keyboard layouts" do
-      expected_layouts = ["es", "fr-latin1", "us"]
-      given_layouts(expected_layouts)
-
-      expect(load_keyboard_layouts).to be_an(Array)
-      expect(load_keyboard_layouts).to all(be_an(Y2Keyboard::KeyboardLayout))
-      layout_codes_loaded = load_keyboard_layouts.map(&:code)
-      expect(layout_codes_loaded).to match_array(expected_layouts)
-    end
-
-    it "initialize the layout description" do
-      layout_list = ["es"]
-      given_layouts(layout_list)
-
-      expect(load_keyboard_layouts.first.description).to eq("Spanish")
-    end
-
-    it "does not return layouts that does not have description" do
-      layout_list = ["zz", "es", "aa"]
-      given_layouts(layout_list)
-
-      expect(load_keyboard_layouts.count).to be(1)
-      expect(load_keyboard_layouts.first.code).to eq("es")
-    end
-  end
+  subject(:systemd_strategy) { Y2Keyboard::Strategies::SystemdStrategy.new }
 
   describe "#codes" do
     subject(:layout_codes) { systemd_strategy.codes }

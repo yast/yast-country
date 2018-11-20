@@ -25,18 +25,6 @@ module Y2Keyboard
     # Class to deal with systemd keyboard configuration management.
     class SystemdStrategy
 
-      def initialize(layout_definitions)
-        @layout_definitions = layout_definitions
-      end
-
-      # @return [Array<KeyboardLayout>] an array with all available keyboard layouts.
-      def all
-        raw_layouts = Cheetah.run("localectl", "list-keymaps", stdout: :capture)
-        codes = raw_layouts.lines.map(&:strip)
-        layouts = @layout_definitions.select { |x| codes.include?(x["code"]) }
-        layouts.map { |x| KeyboardLayout.new(x["code"], x["description"]) }
-      end
-
       # @return [Array<String>] an array with all available systemd keyboard layouts codes.
       def codes
         raw_layouts = Cheetah.run("localectl", "list-keymaps", stdout: :capture)
