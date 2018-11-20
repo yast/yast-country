@@ -37,12 +37,13 @@ module Y2Keyboard
         layouts.map { |x| KeyboardLayout.new(x["code"], x["description"]) }
       end
 
+      # @return [Array<String>] an array with all available systemd keyboard layouts codes.
       def codes
         raw_layouts = Cheetah.run("localectl", "list-keymaps", stdout: :capture)
         raw_layouts.lines.map(&:strip)
       end
 
-      # Apply a new keyboard layout in the system.
+      # Use systemd-localed to apply a new keyboard layout in the system.
       # @param keyboard_layout [KeyboardLayout] the keyboard layout to apply in the system.
       def apply_layout(keyboard_layout)
         Cheetah.run("localectl", "set-keymap", keyboard_layout.code)

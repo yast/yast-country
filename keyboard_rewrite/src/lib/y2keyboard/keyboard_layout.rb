@@ -30,17 +30,22 @@ module Y2Keyboard
       @description = description
     end
 
+    # Define the strategy and layout definitions to use.
+    # @param strategy [Object] the strategy to apply the changes in the system.
+    # @param strategy [Array<Object>] codes availables to use in the application with the appropriate description
     def self.use(strategy, layout_definitions)
       @@strategy = strategy
       @@layout_definitions = layout_definitions
     end
 
+    # @return [Array<KeyboardLayout>] an array with all available keyboard layouts.
     def self.all
       codes = @@strategy.codes
       layouts = @@layout_definitions.select { |x| codes.include?(x["code"]) }
       layouts.map { |x| KeyboardLayout.new(x["code"], x["description"]) }
     end
 
+    # Apply a new keyboard layout in the system.
     def apply_layout
       @@strategy.apply_layout(self)
     end
