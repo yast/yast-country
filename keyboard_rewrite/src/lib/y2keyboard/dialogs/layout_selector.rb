@@ -20,6 +20,7 @@
 require "yast"
 require "ui/dialog"
 require_relative "../keyboard_layout_loader"
+require_relative "../keyboard_layout"
 
 Yast.import "UI"
 Yast.import "Popup"
@@ -28,11 +29,10 @@ module Y2Keyboard
   module Dialogs
     # Main dialog where the layouts are listed and can be selected.
     class LayoutSelector < UI::Dialog
-      def initialize(strategy)
+      def initialize
         textdomain "country"
-        @keyboard_layouts = strategy.all
-        @previous_selected_layout = strategy.current_layout
-        @strategy = strategy
+        @keyboard_layouts = KeyboardLayout.all
+        @previous_selected_layout = KeyboardLayout.current_layout
       end
 
       def dialog_options
@@ -73,7 +73,7 @@ module Y2Keyboard
       end
 
       def accept_handler
-        @strategy.apply_layout(selected_layout)
+        selected_layout.apply_layout
         finish_dialog
       end
 
