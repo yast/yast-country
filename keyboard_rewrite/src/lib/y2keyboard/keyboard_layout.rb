@@ -45,6 +45,10 @@ module Y2Keyboard
       layouts.map { |x| KeyboardLayout.new(x["code"], x["description"]) }
     end
 
+    def self.current_layout
+      @@strategy.current_layout
+    end
+
     # Apply a new keyboard layout in the system.
     def apply_layout
       @@strategy.apply_layout(self)
