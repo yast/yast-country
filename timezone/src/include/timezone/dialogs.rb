@@ -302,6 +302,7 @@ module Yast
 
 
       cont = VBox(
+          VSpacing(UI.TextMode ? 1 : 0),
           HBox(
           HWeight(1, VBox()),
           HWeight(
@@ -316,7 +317,7 @@ module Yast
                   HSpacing(3),
                   VBox(
                     Left(timeterm),
-                    VSpacing(),
+                    VSpacing(UI.TextMode ? 0 : 1),
                     Left(dateterm),
                     VSpacing(),
                     HBox(
@@ -349,7 +350,7 @@ module Yast
           ),
           HWeight(1, VBox())
         ),
-        VSpacing(2)
+        VSpacing(UI.TextMode ? 0 : 2),
       )
 
       Wizard.OpenAcceptDialog
