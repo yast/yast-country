@@ -29,5 +29,19 @@ module Y2Keyboard
       @code = code
       @description = description
     end
+
+    def self.use(strategy)
+      @@strategy = strategy
+    end
+
+    def self.layout_definitions(layout_definitions)
+      @@layout_definitions = layout_definitions
+    end
+
+    def self.all
+      codes = @@strategy.codes
+      layouts = @@layout_definitions.select { |x| codes.include?(x["code"]) }
+      layouts.map { |x| KeyboardLayout.new(x["code"], x["description"]) }
+    end
   end
 end
