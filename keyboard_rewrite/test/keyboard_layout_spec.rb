@@ -61,16 +61,18 @@ describe Y2Keyboard::KeyboardLayout do
     end
 
     it "can return diferent layouts with same code" do
+      brazil_us_accents = "Portuguese (Brazil -- US accents)"
+      us_international = "US International"
       definitions = [
-        { "description" => "Portuguese (Brazil -- US accents)", "code" => "us-acentos" },
-        { "description" => "US International", "code" => "us-acentos" }
+        { "description" => brazil_us_accents, "code" => "us-acentos" },
+        { "description" => us_international, "code" => "us-acentos" }
       ]
       available_layout_codes = ["us-acentos"]
       set_up_keyboard_layout_with(available_layout_codes, definitions)
 
       expect(all_layouts.length).to be(2)
-      expect(all_layouts.any? { |x| x.code == "us-acentos" && x.description == "Portuguese (Brazil -- US accents)" })
-      expect(all_layouts.any? { |x| x.code == "us-acentos" && x.description == "US International" })
+      expect(all_layouts.any? { |x| x.code == "us-acentos" && x.description == brazil_us_accents })
+      expect(all_layouts.any? { |x| x.code == "us-acentos" && x.description == us_international })
     end
   end
 

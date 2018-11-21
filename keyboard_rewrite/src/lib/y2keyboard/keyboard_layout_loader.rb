@@ -20,35 +20,35 @@
 require "cheetah"
 
 module Y2Keyboard
-    # Class to change keyboard layout on the fly.
-    class KeyboardLayoutLoader
-      include Yast::Logger
+  # Class to change keyboard layout on the fly.
+  class KeyboardLayoutLoader
+    include Yast::Logger
 
-      # Load x11 or virtual console keys on the fly.
-      # @param keyboard_layout [KeyboardLayout] the keyboard layout to load.
-      def self.load_layout(keyboard_layout)
-        load_x11_layout(keyboard_layout) if !Yast::UI.TextMode
-        begin
-          Cheetah.run("loadkeys", keyboard_layout.code) if Yast::UI.TextMode
-        rescue Cheetah::ExecutionFailed => e
-          log.info(e.message)
-          log.info("Error output:    #{e.stderr}")
-        end
+    # Load x11 or virtual console keys on the fly.
+    # @param keyboard_layout [KeyboardLayout] the keyboard layout to load.
+    def self.load_layout(keyboard_layout)
+      load_x11_layout(keyboard_layout) if !Yast::UI.TextMode
+      begin
+        Cheetah.run("loadkeys", keyboard_layout.code) if Yast::UI.TextMode
+      rescue Cheetah::ExecutionFailed => e
+        log.info(e.message)
+        log.info("Error output:    #{e.stderr}")
       end
-
-      # Load x11 keys on the fly.
-      # @param keyboard_layout [KeyboardLayout] the keyboard layout to load.
-      def self.load_x11_layout(keyboard_layout)
-        output = Cheetah.run("/usr/sbin/xkbctrl", keyboard_layout.code, stdout: :capture)
-        arguments = get_value_from_output(output, "\"Apply\"").tr("\"", "")
-        setxkbmap_array_arguments = arguments.split.unshift("setxkbmap")
-        Cheetah.run(setxkbmap_array_arguments)
-      end
-
-      def self.get_value_from_output(output, property_name)
-        output.lines.map(&:strip).find { |x| x.start_with?(property_name) }.split(":", 2).last
-      end
-
-      private_class_method :get_value_from_output, :load_x11_layout
     end
+
+    # Load x11 keys on the fly.
+    # @param keyboard_layout [KeyboardLayout] the keyboard layout to load.
+    def self.load_x11_layout(keyboard_layout)
+      output = Cheetah.run("/usr/sbin/xkbctrl", keyboard_layout.code, stdout: :capture)
+      arguments = get_value_from_output(output, "\"Apply\"").tr("\"", "")
+      setxkbmap_array_arguments = arguments.split.unshift("setxkbmap")
+      Cheetah.run(setxkbmap_array_arguments)
+    end
+
+    def self.get_value_from_output(output, property_name)
+      output.lines.map(&:strip).find { |x| x.start_with?(property_name) }.split(":", 2).last
+    end
+
+    private_class_method :get_value_from_output, :load_x11_layout
   end
+end

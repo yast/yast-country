@@ -32,7 +32,8 @@ module Y2Keyboard
 
     # Define the strategy and layout definitions to use.
     # @param strategy [Object] the strategy to apply the changes in the system.
-    # @param strategy [Array<Object>] codes availables to use in the application with the appropriate description
+    # @param strategy [Array<Object>] codes availables to use in the application
+    # with the appropriate description
     def self.use(strategy, layout_definitions)
       @@strategy = strategy
       @@layout_definitions = layout_definitions
