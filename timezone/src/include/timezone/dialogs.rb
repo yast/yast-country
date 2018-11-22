@@ -302,6 +302,7 @@ module Yast
 
 
       cont = VBox(
+          VSpacing(UI.TextMode ? 1 : 0),
           HBox(
           HWeight(1, VBox()),
           HWeight(
@@ -316,7 +317,7 @@ module Yast
                   HSpacing(3),
                   VBox(
                     Left(timeterm),
-                    VSpacing(),
+                    VSpacing(UI.TextMode ? 0 : 1),
                     Left(dateterm),
                     VSpacing(),
                     HBox(
@@ -349,7 +350,7 @@ module Yast
           ),
           HWeight(1, VBox())
         ),
-        VSpacing(2)
+        VSpacing(UI.TextMode ? 0 : 2),
       )
 
       Wizard.OpenAcceptDialog
@@ -581,11 +582,13 @@ module Yast
           servers = (0..3).map { |i| "#{i}.novell.pool.ntp.org" }
         end
         @ntp_server = servers.sample
+        # Dot not select a dhcp ntp server by default but add it to the offered
+        # list (fate#323454)
+        servers = ntp_call("dhcp_ntp_servers", {}).concat(servers).uniq
         argmap = {
           "server"       => @ntp_server,
           # FIXME ntp-client_proposal doesn't understand 'servers' yet
-          "servers"      => servers,
-          "ntpdate_only" => true
+          "servers"      => servers
         }
 
         rv = Convert.to_symbol(ntp_call("Write", argmap))
