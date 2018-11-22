@@ -26,7 +26,7 @@ describe "Yast::Console" do
 
     it "sets console fonts for the given language" do
       expect(Yast::UI).to receive(:SetConsoleFont)
-        .with("", "eurlatgr.psfu", "none", "", "es_ES")
+        .with("", "eurlatgr.psfu", "", "", "es_ES")
       Yast::Console.SelectFont(language)
     end
 
@@ -50,7 +50,7 @@ describe "Yast::Console" do
 
       it "sets console fonts for the given language" do
         expect(Yast::UI).to receive(:SetConsoleFont)
-          .with("", "eurlatgr.psfu", "none", "", "es_ES")
+          .with("", "eurlatgr.psfu", "", "", "es_ES")
         Yast::Console.SelectFont(language)
       end
     end
