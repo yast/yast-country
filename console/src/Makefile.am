@@ -7,7 +7,7 @@ scrconf_DATA = \
   scrconf/sysconfig_console.scr
 
 ydata_DATA = \
-  data/consolefonts.ycp
+  data/consolefonts.json
 
 EXTRA_DIST = $(module_DATA) $(scrconf_DATA) $(ydata_DATA)
 
