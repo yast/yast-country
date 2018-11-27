@@ -110,7 +110,7 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %{yast_schemadir}/autoyast/rnc/*.rnc
 %{yast_desktopdir}/yast-language.desktop
 %{yast_desktopdir}/timezone.desktop
-%{_datadir}/icons/*
+%{yast_icondir}
 %ifnarch s390 s390x
 %{yast_desktopdir}/keyboard.desktop
 %endif
