@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+<g transform="matrix(2,0,0,2,-2,32)">
+<rect x="7" y="-9" width="34" height="49" ry="2" fill="#c0bfbc"/>
+<rect x="7" y="-10" width="34" height="48" ry="2" fill="#f6f5f4"/>
+<path d="m15 4h16v4l-6 8 8 4v4l-10-6-6 6h-2v-2l14-16h-8l-2 2-4-2z" fill="#c0bfbc"/>
+<path d="m15 6h16v4l-6 8 8 4v4l-10-6-6 6-2-2 14-16h-8l-2 2z" fill="#333"/>
+<path d="m27 0v2h-6l-2-2v-2z" fill="#c0bfbc"/>
+<path d="m27 2v2h-6l-2-4z" fill="#333"/>
+<rect x="25" y="-6" width="34" height="48" ry="2" fill="#1a5fb4"/>
+<rect x="25" y="-8" width="34" height="48" ry="2" fill="#3584e4"/>
+<path d="m39 4-8 24 5.1016-1 1.8984-5h8l1.8984 5 5.1016 1-8-24zm2 8h2l2 4h-6z" fill="#1a5fb4"/>
+<path d="m39 6-8 22h6l2-6h6l2 6h6l-8-22zm2 6h2l2 6h-6z" fill="#fff"/>
+</g>
+</svg>

@@ -34,7 +34,14 @@ ywidgetsdir = @ylibdir@/y2country/widgets
 ywidgets_DATA = \
   lib/y2country/widgets/keyboard_selection.rb
 
+symbolicdir = @icondir@/hicolor/symbolic/apps
+symbolic_DATA = \
+  icons/hicolor/symbolic/apps/yast-keyboard-symbolic.svg
+scalabledir = @icondir@/hicolor/scalable/apps
+scalable_DATA = \
+  icons/hicolor/scalable/apps/yast-keyboard.svg
+
 EXTRA_DIST = $(module_DATA) $(client_DATA) $(ynclude_DATA) $(scrconf_DATA) \
-  $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ywidgets_DATA)
+  $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ywidgets_DATA) $(symbolic_DATA) $(scalable_DATA)
 
 include $(top_srcdir)/Makefile.am.common

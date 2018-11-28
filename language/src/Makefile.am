@@ -96,6 +96,13 @@ ywidgets_DATA = \
 desktop_DATA = \
   desktop/yast-language.desktop
 
-EXTRA_DIST = $(module_DATA) $(module1_DATA) $(client_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ylib_DATA) $(ywidgets_DATA)
+symbolicdir = @icondir@/hicolor/symbolic/apps
+symbolic_DATA = \
+  icons/hicolor/symbolic/apps/yast-language-symbolic.svg
+scalabledir = @icondir@/hicolor/scalable/apps
+scalable_DATA = \
+  icons/hicolor/scalable/apps/yast-language.svg
+
+EXTRA_DIST = $(module_DATA) $(module1_DATA) $(client_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ylib_DATA) $(ywidgets_DATA) $(symbolic_DATA) $(scalable_DATA)
 
 include $(top_srcdir)/Makefile.am.common
