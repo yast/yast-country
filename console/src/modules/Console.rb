@@ -157,7 +157,7 @@ module Yast
         # upgrade: disable old entries for serial console
         SCR.Execute(
           path(".target.bash"),
-          "sed -i '/^\\(hvc\\|hvsi\\|S[0-9]\\)/s@^.*@#&@' /etc/inittab"
+          "/usr/bin/sed -i '/^\\(hvc\\|hvsi\\|S[0-9]\\)/s@^.*@#&@' /etc/inittab"
         )
 
         # find out if the baud rate is not present on command line (bnc#602743)
@@ -173,13 +173,13 @@ module Yast
         SCR.Execute(
           path(".target.bash"),
           Builtins.sformat(
-            "grep -E '^cons:' /etc/inittab || /bin/echo 'cons:12345:respawn:/sbin/smart_agetty -L %1 console' >> /etc/inittab",
+            "/usr/bin/grep -E '^cons:' /etc/inittab || /usr/bin/echo 'cons:12345:respawn:/sbin/smart_agetty -L %1 console' >> /etc/inittab",
             rate
           )
         )
         SCR.Execute(
           path(".target.bash"),
-          "grep -Ew ^console /etc/securetty || /bin/echo console >> /etc/securetty"
+          "/usr/bin/grep -Ew ^console /etc/securetty || /usr/bin/echo console >> /etc/securetty"
         )
       end
 
