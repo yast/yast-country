@@ -23,9 +23,6 @@ Release:        0
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source0:        %{name}-%{version}.tar.bz2
 
-#policy files for YaPI dbus interface
-Source1:        org.opensuse.yast.modules.yapi.time.policy
-Source2:        org.opensuse.yast.modules.yapi.language.policy
 BuildRequires:  perl-XML-Writer
 BuildRequires:  polkit-devel
 BuildRequires:  update-desktop-files
@@ -114,9 +111,6 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %ifnarch s390 s390x
 %{yast_desktopdir}/keyboard.desktop
 %endif
-%dir /usr/share/polkit-1
-%dir /usr/share/polkit-1/actions
-%attr(644,root,root) %config /usr/share/polkit-1/actions/org.opensuse.yast.modules.yapi.*.policy
 
 %package data
 Requires:       yast2-ruby-bindings >= 1.0.0
