@@ -558,7 +558,8 @@ module Yast
       # X11 command...
       # do not try to run this with remote X display
       if Ops.greater_than(Builtins.size(@Apply), 0) && x11_setup_needed
-        @xkb_cmd = "#{File.join(XVersion.binPath, "setxkbmap")} #{@Apply.shellescape}"
+        # Apply cannot be escaped as it is already set of parameters. But it is at least our string and not user provided.
+        @xkb_cmd = "#{File.join(XVersion.binPath, "setxkbmap")} #{@Apply}"
       else
         @xkb_cmd = ""
       end
@@ -867,7 +868,7 @@ module Yast
 
       if Stage.initial
         # do use --root option, running in chroot does not work (bsc#1074481)
-        cmd = "/usr/bin/systemd-firstboot --root #{Installation.destdir.shellescape} --keymap '#{chomped_keymap.shellescape}'"
+        cmd = "/usr/bin/systemd-firstboot --root #{Installation.destdir.shellescape} --keymap #{chomped_keymap.shellescape}"
         result = WFM.Execute(path(".local.bash_output"), cmd)
       else
         # this sets both the console and the X11 keyboard (see "man localectl")
