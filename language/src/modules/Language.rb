@@ -941,7 +941,7 @@ module Yast
 
       cmd = if Stage.initial
         # do use --root option, running in chroot does not work
-        "/usr/bin/systemd-firstboot --root '#{Installation.destdir.shellescape}' --locale '#{loc.shellescape}'"
+        "/usr/bin/systemd-firstboot --root #{Installation.destdir.shellescape} --locale #{loc.shellescape}"
       else
         # this sets both the locale (see "man localectl")
         "/usr/bin/localectl set-locale #{locale_out.shellescape}"
