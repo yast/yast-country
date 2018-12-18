@@ -29,6 +29,8 @@
 # $Id$
 require "yast"
 
+require "shellwords"
+
 module Yast
   class LanguageClass < Module
     DEFAULT_FALLBACK_LANGUAGE = "en_US".freeze
@@ -293,9 +295,7 @@ module Yast
     # return the map of all supported countries and language codes
     def GetLocales
       if @locales == nil || @locales == {}
-        out = Convert.to_map(
-          SCR.Execute(path(".target.bash_output"), "/usr/bin/locale -a")
-        )
+        out = SCR.Execute(path(".target.bash_output"), "/usr/bin/locale -a")
         Builtins.foreach(
           Builtins.splitstring(Ops.get_string(out, "stdout", ""), "\n")
         ) do |l|
@@ -941,10 +941,10 @@ module Yast
 
       cmd = if Stage.initial
         # do use --root option, running in chroot does not work
-        "/usr/bin/systemd-firstboot --root '#{Installation.destdir}' --locale '#{loc}'"
+        "/usr/bin/systemd-firstboot --root #{Installation.destdir.shellescape} --locale #{loc.shellescape}"
       else
         # this sets both the locale (see "man localectl")
-        "/usr/bin/localectl set-locale #{locale_out}"
+        "/usr/bin/localectl set-locale #{locale_out.shellescape}"
       end
       log.info "Making language setting persistent: #{cmd}"
       result = if Stage.initial

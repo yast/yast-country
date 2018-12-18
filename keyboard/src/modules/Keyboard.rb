@@ -90,6 +90,8 @@
 #
 require "yast"
 
+require "shellwords"
+
 module Yast
   class KeyboardClass < Module
     include Yast::Logger
@@ -378,9 +380,8 @@ module Yast
       x11data = {}
 
       if Ops.greater_than(SCR.Read(path(".target.size"), cmd), 0)
-        file = Ops.add(Directory.tmpdir, "/xkbctrl.out")
-        cmd = Ops.add(Ops.add(cmd, " "), keymap)
-        SCR.Execute(path(".target.bash"), Ops.add(Ops.add(cmd, " > "), file))
+        file = File.join(Directory.tmpdir, "xkbctrl.out")
+        SCR.Execute(path(".target.bash"), "#{cmd} #{keymap.shellescape} > #{file.shellescape}")
         x11data = Convert.to_map(SCR.Read(path(".target.ycp"), file))
       else
         Builtins.y2warning("/usr/sbin/xkbctrl not found")
@@ -551,12 +552,14 @@ module Yast
         return false # Error
       end
 
-      @ckb_cmd = "/bin/loadkeys #{loadkeys_devices} #{keymap}"
+      # loadkeys is already escaped and it is multiple params inside, so cannot be escaped here
+      @ckb_cmd = "/usr/bin/loadkeys #{loadkeys_devices} #{keymap.shellescape}"
 
       # X11 command...
       # do not try to run this with remote X display
       if Ops.greater_than(Builtins.size(@Apply), 0) && x11_setup_needed
-        @xkb_cmd = Ops.add(Ops.add(XVersion.binPath, "/setxkbmap "), @Apply)
+        # Apply cannot be escaped as it is already set of parameters. But it is at least our string and not user provided.
+        @xkb_cmd = "#{File.join(XVersion.binPath, "setxkbmap")} #{@Apply}"
       else
         @xkb_cmd = ""
       end
@@ -865,11 +868,11 @@ module Yast
 
       if Stage.initial
         # do use --root option, running in chroot does not work (bsc#1074481)
-        cmd = "/usr/bin/systemd-firstboot --root '#{Installation.destdir}' --keymap '#{chomped_keymap}'"
+        cmd = "/usr/bin/systemd-firstboot --root #{Installation.destdir.shellescape} --keymap #{chomped_keymap.shellescape}"
         result = WFM.Execute(path(".local.bash_output"), cmd)
       else
         # this sets both the console and the X11 keyboard (see "man localectl")
-        cmd = "/usr/bin/localectl set-keymap #{chomped_keymap}"
+        cmd = "/usr/bin/localectl set-keymap #{chomped_keymap.shellescape}"
         result = SCR.Execute(path(".target.bash_output"), cmd)
       end
 
@@ -1406,7 +1409,7 @@ module Yast
     # Enables autorepeat if needed
     def enable_autorepeat
       return nil unless Stage.initial && !Mode.live_installation && !xen_running
-      cmd = "xset r on"
+      cmd = "/usr/bin/xset r on"
       log.info "calling xset to fix autorepeat problem: #{cmd}"
       SCR.Execute(path(".target.bash"), cmd)
     end
@@ -1454,7 +1457,7 @@ module Yast
     # @return [String] ready to be passed to the loadkeys command
     def loadkeys_devices
       tty_dev_names = Dir["/dev/tty*"].grep_v(/ttyAMA/)
-      tty_dev_names.map { |d| "-C #{d}" }.join(" ")
+      tty_dev_names.map { |d| "-C #{d.shellescape}" }.join(" ")
     end
   end
 

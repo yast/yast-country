@@ -17,17 +17,13 @@
 
 
 Name:           yast2-country
-Version:        4.1.6
+Version:        4.1.7
 Release:        0
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source0:        %{name}-%{version}.tar.bz2
 
-#policy files for YaPI dbus interface
-Source1:        org.opensuse.yast.modules.yapi.time.policy
-Source2:        org.opensuse.yast.modules.yapi.language.policy
 BuildRequires:  perl-XML-Writer
-BuildRequires:  polkit-devel
 BuildRequires:  update-desktop-files
 BuildRequires:  yast2-devtools >= 3.1.10
 BuildRequires:  yast2-perl-bindings
@@ -85,8 +81,6 @@ rm -f $RPM_BUILD_ROOT%{yast_desktopdir}/keyboard.desktop
 
 # Policies
 mkdir -p $RPM_BUILD_ROOT/usr/share/polkit-1/actions
-install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
-install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 
 # common
 %files
@@ -114,9 +108,6 @@ install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 %ifnarch s390 s390x
 %{yast_desktopdir}/keyboard.desktop
 %endif
-%dir /usr/share/polkit-1
-%dir /usr/share/polkit-1/actions
-%attr(644,root,root) %config /usr/share/polkit-1/actions/org.opensuse.yast.modules.yapi.*.policy
 
 %package data
 Requires:       yast2-ruby-bindings >= 1.0.0

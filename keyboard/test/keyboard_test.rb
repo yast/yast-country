@@ -77,7 +77,7 @@ module Yast
 
         it "writes the configuration" do
           expect(WFM).to receive(:Execute).with(path(".local.bash_output"), 
-            "/usr/bin/systemd-firstboot --root '/mnt' --keymap 'es'").and_return("exit" => 0)
+            "/usr/bin/systemd-firstboot --root /mnt --keymap es").and_return("exit" => 0)
           expect(AsciiFile).to receive(:AppendLine).with(anything, ["Keytable:", "es.map.gz"])
 
           Keyboard.Set("spanish")
