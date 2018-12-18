@@ -82,8 +82,6 @@ rm -f $RPM_BUILD_ROOT%{yast_desktopdir}/keyboard.desktop
 
 # Policies
 mkdir -p $RPM_BUILD_ROOT/usr/share/polkit-1/actions
-install -m 0644 %SOURCE1 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
-install -m 0644 %SOURCE2 $RPM_BUILD_ROOT/usr/share/polkit-1/actions/
 
 # common
 %files
