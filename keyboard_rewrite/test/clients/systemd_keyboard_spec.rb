@@ -31,7 +31,7 @@ describe Y2Keyboard::Clients::SystemdKeyboard do
 
     before do
       allow(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).and_return(strategy)
-      allow(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).with(strategy).and_return(dialog)
+      allow(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).and_return(dialog)
     end
 
     it "load keyboard layouts definitions from yml file" do
@@ -40,14 +40,13 @@ describe Y2Keyboard::Clients::SystemdKeyboard do
         .and_return(expected_path)
 
       expect(YAML).to receive(:load_file).with(expected_path).and_return(layout_definitions)
-      expect(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).with(layout_definitions)
-        .and_return(strategy)
+      expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(anything, layout_definitions)
 
       client.run
     end
 
-    it "starts a dialog with systemd implementation" do
-      expect(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).with(strategy).and_return(dialog)
+    it "starts a dialog" do
+      expect(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).and_return(dialog)
 
       client.run
     end
