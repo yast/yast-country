@@ -26,11 +26,11 @@ require "yaml"
 describe Y2Keyboard::Clients::SystemdKeyboard do
   describe ".run" do
     let(:dialog) { spy(Y2Keyboard::Dialogs::LayoutSelector) }
-    let(:strategy) { spy(Y2Keyboard::Strategies::SystemdStrategy) }
+    let(:systemd_strategy) { spy(Y2Keyboard::Strategies::SystemdStrategy) }
     subject(:client) { Y2Keyboard::Clients::SystemdKeyboard }
 
     before do
-      allow(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).and_return(strategy)
+      allow(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).and_return(systemd_strategy)
       allow(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).and_return(dialog)
     end
 
@@ -41,6 +41,12 @@ describe Y2Keyboard::Clients::SystemdKeyboard do
 
       expect(YAML).to receive(:load_file).with(expected_path).and_return(layout_definitions)
       expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(anything, layout_definitions)
+
+      client.run
+    end
+
+    it "use systemd strategy" do
+      expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(systemd_strategy, anything)
 
       client.run
     end
