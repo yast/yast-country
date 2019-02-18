@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Mon Feb 18 11:36:47 UTC 2019 - snwint@suse.com
+
+- fix timezone setting when switching utc/local time (bsc#1087228)
+- 4.1.8
+
+-------------------------------------------------------------------
 Tue Dec 18 14:29:34 UTC 2018 - jreidinger@suse.com
 
 - always use absolute path to binaries (bsc#1118291)
