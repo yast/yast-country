@@ -877,6 +877,20 @@ module Yast
           end
         end
 
+        if ret == :hwclock
+          # Keep internal state in sync (Timezone.hwclock <-> @hwclock_s) in
+          # case user enters SetTimeDialog() and sets the time (bsc#1087228).
+
+          @hwclock_s = UI.QueryWidget(Id(:hwclock), :Value) ? :hwclock_utc : :hwclock_localtime
+          SetTimezone(@hwclock_s, timezone, false, false)
+
+          Builtins.y2milestone("hwclock changed to: %1 (%2), diff: %3", @hwclock_s, Timezone.hwclock, Timezone.diff)
+
+          # restart input loop
+          ret = :again
+          next
+        end
+
         if ret == :region
           num = selected_region.call
           next if num == sel
@@ -904,7 +918,10 @@ module Yast
             end
           end
           if SetTimeDialog()
+            # Time has just been set in the system. Reset internal state as we're definitely in sync atm.
             Timezone.diff = 0
+            @hwclock_s_initial = @hwclock_s
+
             UI.ChangeWidget(
               Id(:date),
               :Value,
@@ -920,8 +937,7 @@ module Yast
                 _("Date and Time")
             UI.ChangeWidget(Id(:time_fr), :Label, time_frame_label)
           end
-        elsif ret == :next || ret == :timezone || ret == :timezonemap ||
-            ret == :hwclock
+        elsif ret == :next || ret == :timezone || ret == :timezonemap
           if ret == :timezonemap
             timezone = Convert.to_string(
               UI.QueryWidget(Id(:timezonemap), :Value)
@@ -954,7 +970,8 @@ module Yast
             ret = :again
             timezone = timezone_old
           end
-          Builtins.y2milestone("timezone %1 ret %2", timezone, ret)
+
+          Builtins.y2milestone("timezone %1 ret %2, hwclock %3 -> %4", timezone, ret, hwclock_s_old, @hwclock_s)
 
           if timezone != timezone_old || @hwclock_s != hwclock_s_old ||
               ret == :next
@@ -977,6 +994,9 @@ module Yast
                 @hwclock_s == :hwclock_localtime && timezone != timezone_initial
               Timezone.call_mkinitrd = true
             end
+
+            # save settings (update /etc/adjtime)
+            Timezone.Save
 
             if @ntp_used && @ntp_server != ""
               # save NTP client settings now
