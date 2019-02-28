@@ -1416,10 +1416,10 @@ module Yast
 
     # Keyboards map
     #
-    # The map can be read from two different files:
+    # The map can be read from two different files, see {#keyboard_file}:
     #
-    # * `keyboard_raw_ID.ycp` where ID is the distribution identifier (as
-    #   specified in /etc/os-release). For example, `keyboard_raw_opensuse.ycp`.
+    # * `keyboard_raw_opensuse.ycp` when it is an opensuse distribution (according
+    #   to the distribution id specified in /etc/os-release).
     # * `keyboard_raw.ycp` as a fallback.
     #
     # @example Keyboards map format
@@ -1442,11 +1442,21 @@ module Yast
     #
     # @return [Hash] Keyboards map. See the example for content details.
     def all_keyboards
-      content = SCR.Read(path(".target.yast2"), "keyboard_raw_#{OSRelease.id}.ycp")
-      content ||= SCR.Read(path(".target.yast2"), "keyboard_raw.ycp")
+      content = SCR.Read(path(".target.yast2"), keyboard_file)
 
       # eval is necessary for translating the texts needed to be translated
       content ? Builtins.eval(content) : {}
+    end
+
+    # Keyboard file to use depending on the distribution
+    #
+    # @return [String]
+    def keyboard_file
+      if OSRelease.id.match?(/opensuse/i)
+        "keyboard_raw_opensuse.ycp"
+      else
+        "keyboard_raw.ycp"
+      end
     end
 
     # String to specify all the relevant devices in a loadkeys command

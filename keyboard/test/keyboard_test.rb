@@ -26,7 +26,7 @@ module Yast
 
   describe "Keyboard" do
     let(:udev_file) { "/usr/lib/udev/rules.d/70-installation-keyboard.rules" }
-    let(:os_release_id) { "opensuse" }
+    let(:os_release_id) { "opensuse-leap" }
     let(:mode) { "normal" }
     let(:stage) { "normal" }
 
@@ -76,7 +76,7 @@ module Yast
         let(:new_lang) { "spanish" }
 
         it "writes the configuration" do
-          expect(WFM).to receive(:Execute).with(path(".local.bash_output"), 
+          expect(WFM).to receive(:Execute).with(path(".local.bash_output"),
             "/usr/bin/systemd-firstboot --root /mnt --keymap es").and_return("exit" => 0)
           expect(AsciiFile).to receive(:AppendLine).with(anything, ["Keytable:", "es.map.gz"])
 
@@ -638,7 +638,6 @@ module Yast
       let(:chroot) { "spanish" }
       let(:mode) { "normal" }
       let(:stage) { "normal" }
-      let(:os_release_id) { "sles" }
       let(:kb_model) { "macintosh" }
 
       before { allow(Yast::OSRelease).to receive(:id).and_return(os_release_id) }
@@ -650,19 +649,23 @@ module Yast
         Keyboard.kb_model = old_kb_model
       end
 
-      it "returns generic version of the keyboard map" do
-        reduced_db = Keyboard.get_reduced_keyboard_db
-        expect(reduced_db["russian"].last["ncurses"])
-          .to eq("mac-us.map.gz")
-      end
+      context "when using an opensuse product" do
+        let(:os_release_id) { "opensuse-leap" }
 
-      context "when using a product with an specific keyboard map" do
-        let(:os_release_id) { "opensuse" }
-
-        it "returns the specific version of the keyboard map" do
+        it "returns the opensuse version of the keyboard map" do
           reduced_db = Keyboard.get_reduced_keyboard_db
           expect(reduced_db["russian"].last["ncurses"])
             .to eq("us-mac.map.gz")
+        end
+      end
+
+      context "when not using an opensuse product" do
+        let(:os_release_id) { "sles" }
+
+        it "returns generic version of the keyboard map" do
+          reduced_db = Keyboard.get_reduced_keyboard_db
+          expect(reduced_db["russian"].last["ncurses"])
+            .to eq("mac-us.map.gz")
         end
       end
     end
