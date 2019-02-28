@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Thu Feb 28 09:28:43 UTC 2019 - José Iván López González <jlopez@suse.com>
+
+- Fix OS detection and use correct keyboard file for opensuse
+  (bsc#1124921).
+- Remove incompatible Lithuanian layout from opensuse file.
+- 4.1.9
+
+-------------------------------------------------------------------
 Mon Feb 18 11:36:47 UTC 2019 - snwint@suse.com
 
 - fix timezone setting when switching utc/local time (bsc#1087228)
