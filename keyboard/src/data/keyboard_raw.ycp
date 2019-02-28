@@ -452,7 +452,7 @@ return ($[
 	// keyboard layout
 	_("Lithuanian"),
 	$[
-	    "pc104"	: $[ "ncurses": "lt.baltic.map.gz"],
+	    "pc104"	: $[ "ncurses": "lt.map.gz"],
 	    "macintosh"	: $[ "ncurses": "mac-us.map.gz"],
 	    "type4"	: $[ "ncurses": "sunkeymap.map.gz"],
 	    "type5"	: $[ "ncurses": "sunkeymap.map.gz"],
