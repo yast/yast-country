@@ -121,7 +121,6 @@ module Yast
       Yast.import "OSRelease"
       Yast.import "ProductFeatures"
       Yast.import "Stage"
-      Yast.import "XVersion"
       Yast.import "Report"
 
       # ------------------------------------------------------------------------
@@ -566,7 +565,7 @@ module Yast
       # do not try to run this with remote X display
       if Ops.greater_than(Builtins.size(@Apply), 0) && x11_setup_needed
         # Apply cannot be escaped as it is already set of parameters. But it is at least our string and not user provided.
-        @xkb_cmd = "#{File.join(XVersion.binPath, "setxkbmap")} #{@Apply}"
+        @xkb_cmd = "/usr/bin/setxkbmap #{@Apply}"
       else
         @xkb_cmd = ""
       end
