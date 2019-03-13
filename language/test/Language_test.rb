@@ -165,12 +165,17 @@ describe "Yast::Language" do
   end
 
   describe "#Save" do
+    let(:readonly) { false }
     let(:language) { "es_ES" }
     let(:initial_stage) { false }
     let(:command_result) { { "exit" => 0 } }
 
     before do
         allow(Yast::Stage).to receive(:initial).and_return(initial_stage)
+
+        allow(Yast::ProductFeatures).to receive(:GetBooleanFeature)
+          .with("globals", "readonly_language")
+          .and_return(readonly)
 
         allow(Yast::WFM).to receive(:Execute).and_return(command_result)
         allow(Yast::SCR).to receive(:Execute).and_return(command_result)
@@ -217,19 +222,43 @@ describe "Yast::Language" do
       end
     end
 
-    it "sets the chosen language using localectl" do
-      expect(Yast::SCR).to receive(:Execute).with(anything, /.*localectl set-locale LANG.*=#{language}.*/)
+    context "when using the readonly_language feature" do
+      let(:readonly) { true }
 
-      subject.Save
+      it "sets the default language using localectl" do
+        expect(Yast::SCR).to receive(:Execute).with(anything, /.*localectl set-locale LANG.*=en_US.*/)
+
+        subject.Save
+      end
+    end
+
+    context "when not using the readonly_language feature" do
+      it "sets the chosen language using localectl" do
+        expect(Yast::SCR).to receive(:Execute).with(anything, /.*localectl set-locale LANG.*=#{language}.*/)
+
+        subject.Save
+      end
     end
 
     context "in the initial stage" do
       let(:initial_stage) { true }
 
-      it "sets the chosen language using systemd-firstboot" do
-        expect(Yast::WFM).to receive(:Execute).with(anything, /.*systemd-firstboot.*--locale.*#{language}.*/)
+      context "when using the readonly_language feature" do
+        let(:readonly) { true }
 
-        subject.Save
+        it "sets the default language using systemd-firstboot" do
+          expect(Yast::WFM).to receive(:Execute).with(anything, /.*systemd-firstboot.*--locale.*en_US.*/)
+
+          subject.Save
+        end
+      end
+
+      context "when not using the readonly_language feature" do
+        it "sets the chosen language using systemd-firstboot" do
+          expect(Yast::WFM).to receive(:Execute).with(anything, /.*systemd-firstboot.*--locale.*#{language}.*/)
+
+          subject.Save
+        end
       end
     end
 

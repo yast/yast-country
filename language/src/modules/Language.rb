@@ -44,7 +44,6 @@ module Yast
       Yast.import "UI"
       textdomain "country"
 
-
       Yast.import "AsciiFile"
       Yast.import "Directory"
       Yast.import "Encoding"
@@ -146,6 +145,7 @@ module Yast
       @english_names = {}
 
       @reset_recommended = true
+
       Language()
     end
 
@@ -913,10 +913,9 @@ module Yast
       end
     end
 
-
     # Save state to target.
     def Save
-      loc = GetLocaleString(@language)
+      loc = locale_to_install
 
       @localed_conf = {} if @localed_conf.nil?
 
@@ -1429,6 +1428,19 @@ module Yast
     # @return [Boolean]
     def fbiterm?
       Builtins.getenv("TERM") == "iterm"
+    end
+
+    # Determines whether language is read-only for the current product
+    #
+    # @return [Boolean] true if it's read-only; false otherwise.
+    def readonly
+      ProductFeatures.GetBooleanFeature("globals", "readonly_language")
+    end
+
+    def locale_to_install
+      language = readonly ? DEFAULT_FALLBACK_LANGUAGE : @language
+
+      GetLocaleString(language)
     end
 
     def show_fallback_to_english_warning
