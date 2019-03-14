@@ -4,7 +4,10 @@
 require_relative "test_helper"
 require "y2country/language_dbus"
 
-describe "Language" do
+Yast.import "ProductFeatures"
+Yast.import "Language"
+
+describe "Yast::Language" do
   subject { Yast::Language }
 
   let(:languages_map) {{
@@ -41,7 +44,6 @@ describe "Language" do
 
   before do
     allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
-    Yast.import "Language"
     allow(subject).to receive(:languages_map).and_return(languages_map)
     allow(subject).to receive(:GetLanguagesMap).and_return(languages_map)
   end
@@ -162,6 +164,86 @@ describe "Language" do
     end
   end
 
+  describe "#Save" do
+    let(:language) { "es_ES" }
+    let(:initial_stage) { false }
+    let(:command_result) { { "exit" => 0 } }
+
+    before do
+        allow(Yast::Stage).to receive(:initial).and_return(initial_stage)
+
+        allow(Yast::WFM).to receive(:Execute).and_return(command_result)
+        allow(Yast::SCR).to receive(:Execute).and_return(command_result)
+        allow(Yast::SCR).to receive(:Write)
+        allow(subject).to receive(:valid_language?).with(language).and_return(true)
+
+        subject.Set(language)
+        subject.SetDefault
+    end
+
+    it "writes .sysconfig.language.INSTALLED_LANGUAGES" do
+      expect(Yast::SCR).to receive(:Write).with(Yast.path(".sysconfig.language.INSTALLED_LANGUAGES"), anything)
+
+      subject.Save
+    end
+
+    it "cleans .sysconfig.language in sysconfig" do
+      expect(Yast::SCR).to receive(:Write).with(Yast.path(".sysconfig.language"), nil)
+
+      subject.Save
+    end
+
+    context "when language is zh_HK" do
+      let(:language) { "zh_HK" }
+
+      it "sets LC_MESSAGES to zh_TW" do
+        expect(Yast::SCR).to receive(:Execute).with(anything, /.*localectl set-locale.*LC_MESSAGES.*zh_TW.*/)
+
+        subject.Save
+      end
+    end
+
+    context "when LC_MESAGES is zh_TW" do
+      before do
+        allow(subject).to receive(:@localed_conf).and_return({ "LC_MESSAGES" => "zh_TW" })
+      end
+
+      context "and language is not zh_HK" do
+        it "cleans LC_MESSAGES" do
+          expect(Yast::SCR).to_not receive(:Execute).with(anything, /.*localectl.*LC_MESSAGES.*zh_TW.*/)
+
+          subject.Save
+        end
+      end
+    end
+
+    it "sets the chosen language using localectl" do
+      expect(Yast::SCR).to receive(:Execute).with(anything, /.*localectl set-locale LANG.*=#{language}.*/)
+
+      subject.Save
+    end
+
+    context "in the initial stage" do
+      let(:initial_stage) { true }
+
+      it "sets the chosen language using systemd-firstboot" do
+        expect(Yast::WFM).to receive(:Execute).with(anything, /.*systemd-firstboot.*--locale.*#{language}.*/)
+
+        subject.Save
+      end
+    end
+
+    context "when the command fails" do
+      let(:command_result) { { "exit" => 1 } }
+
+      it "reports an error" do
+        expect(Yast::Report).to receive(:Error)
+
+        subject.Save
+      end
+    end
+  end
+
   describe "#GetLocaleString" do
     context "when using UTF-8" do
       it "returns the full locale" do
@@ -193,6 +275,7 @@ describe "Language" do
       end
     end
   end
+
   describe "#ResetRecommendedPackages" do
     it "resets the recommended packages" do
       allow(Yast::Pkg).to receive(:PkgSolve)
