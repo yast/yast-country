@@ -147,6 +147,9 @@ module Yast
 
       @reset_recommended = true
 
+      # language is read-only
+      @readonly = nil
+
       Language()
     end
 
@@ -921,15 +924,16 @@ module Yast
 
       command = save_command_for(locale)
 
-      log.info("Making language settings persistent: #{command}")
+      log.info("Making language settings persistent: #{command.join(' ')}")
 
-      Yast::Execute.locally!(command.split)
+      Yast::Execute.locally!(command)
       nil
     rescue Cheetah::ExecutionFailed => e
-      log.error "Language configuration not written.\n#{e.inspect}"
+      log.error "Language configuration not written: #{e.inspect}"
+      log.error "stderr: #{e.stderr}"
 
       # TRANSLATORS: the "%s" is replaced by the executed command
-      Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % command)
+      Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % command.join(' '))
       nil
     end
 
@@ -1458,15 +1462,15 @@ module Yast
     #
     # @param locale [String]
     #
-    # @return [String] the command to be executed
+    # @return [Array] an array containing the command to be executed
     def save_command_for(locale)
       if Stage.initial
         # do use --root option, running in chroot does not work
-        "/usr/bin/systemd-firstboot --root #{Installation.destdir.shellescape} --locale #{locale.shellescape}"
+        ["/usr/bin/systemd-firstboot", "-root", Installation.destdir, "--locale", locale]
       else
         prepare_locale_settings(locale)
 
-        "/usr/bin/localectl set-locale #{localectl_args.shellescape}"
+        ["/usr/bin/localectl", "set-locale", localectl_args]
       end
     end
 

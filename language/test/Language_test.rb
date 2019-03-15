@@ -186,13 +186,13 @@ describe "Yast::Language" do
         subject.SetDefault
     end
 
-    it "writes .sysconfig.language.INSTALLED_LANGUAGES" do
+    it "updates the .sysconfig.language.INSTALLED_LANGUAGES value" do
       expect(Yast::SCR).to receive(:Write).with(Yast.path(".sysconfig.language.INSTALLED_LANGUAGES"), anything)
 
       subject.Save
     end
 
-    it "cleans .sysconfig.language in sysconfig" do
+    it "forces writting .sysconfig.language to disk" do
       expect(Yast::SCR).to receive(:Write).with(Yast.path(".sysconfig.language"), nil)
 
       subject.Save
@@ -202,20 +202,20 @@ describe "Yast::Language" do
       let(:language) { "zh_HK" }
 
       it "sets LC_MESSAGES to zh_TW" do
-        expect(Yast::Execute).to receive(:locally!).with(array_including(/LC_MESSAGES\\=zh_TW/))
+        expect(Yast::Execute).to receive(:locally!).with(array_including(/LC_MESSAGES=zh_TW/))
 
         subject.Save
       end
     end
 
-    context "when LC_MESAGES is zh_TW" do
+    context "when LC_MESSAGES is zh_TW" do
       before do
         allow(subject).to receive(:@localed_conf).and_return({ "LC_MESSAGES" => "zh_TW" })
       end
 
       context "and language is not zh_HK" do
         it "cleans LC_MESSAGES" do
-          expect(Yast::Execute).to_not receive(:locally!).with(array_including(/LC_MESSAGES\\=zh_TW/))
+          expect(Yast::Execute).to_not receive(:locally!).with(array_including(/LC_MESSAGES=zh_TW/))
 
           subject.Save
         end
@@ -227,7 +227,7 @@ describe "Yast::Language" do
 
       it "sets the default language using localectl" do
         expect(Yast::Execute).to receive(:locally!)
-          .with(array_including(/localectl/, "set-locale", /LANG\\=en_US/))
+          .with(array_including(/localectl/, "set-locale", /LANG=en_US/))
 
         subject.Save
       end
@@ -247,7 +247,7 @@ describe "Yast::Language" do
     context "when not using the readonly_language feature" do
       it "sets the chosen language using localectl" do
         expect(Yast::Execute).to receive(:locally!)
-          .with(array_including(/localectl/, "set-locale", /LANG\\=#{language}/))
+          .with(array_including(/localectl/, "set-locale", /LANG=#{language}/))
 
         subject.Save
       end
