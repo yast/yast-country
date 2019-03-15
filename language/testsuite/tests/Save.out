@@ -1,6 +1,0 @@
-Read	.target.size "/etc/sysconfig/language" 1
-Read	.target.dir "/usr/share/YaST2/data/languages" []
-Write	.sysconfig.language.INSTALLED_LANGUAGES "en_US" true
-Write	.sysconfig.language nil true
-Execute	.target.bash_output "/usr/bin/localectl set-locale LANG\\=en_US.UTF-8" $["exit":0]
-Return	nil
