@@ -1402,7 +1402,8 @@ module Yast
     #
     # @return [Boolean] true if it's read-only; false otherwise.
     def readonly
-      ProductFeatures.GetBooleanFeature("globals", "readonly_language")
+      @readonly unless @readonly.nil?
+      @readonly = ProductFeatures.GetBooleanFeature("globals", "readonly_language")
     end
 
     # Returns the locale to use, default or chosen
