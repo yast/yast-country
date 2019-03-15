@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Fri Mar 15 12:42:06 UTC 2019 - David Díaz <dgonzalez@suse.com>
+
+- Add support to set the language as read-only in the control file,
+  which allows to change it during the installation without
+  persisting it in the installed system (bsc#1121256).
+- 4.1.10
+
+-------------------------------------------------------------------
 Thu Feb 28 09:28:43 UTC 2019 - José Iván López González <jlopez@suse.com>
 
 - Fix OS detection and use correct keyboard file for opensuse
