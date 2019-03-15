@@ -168,7 +168,6 @@ describe "Yast::Language" do
     let(:readonly) { false }
     let(:language) { "es_ES" }
     let(:initial_stage) { false }
-    let(:command_result) { { "exit" => 0 } }
 
     before do
         allow(Yast::Stage).to receive(:initial).and_return(initial_stage)
@@ -177,9 +176,8 @@ describe "Yast::Language" do
           .with("globals", "readonly_language")
           .and_return(readonly)
 
-        allow(Yast::WFM).to receive(:Execute).and_return(command_result)
-        allow(Yast::SCR).to receive(:Execute).and_return(command_result)
         allow(Yast::SCR).to receive(:Write)
+        allow(Yast::Execute).to receive(:locally!)
         allow(subject).to receive(:valid_language?).with(language).and_return(true)
 
         subject.Set(language)
@@ -202,7 +200,7 @@ describe "Yast::Language" do
       let(:language) { "zh_HK" }
 
       it "sets LC_MESSAGES to zh_TW" do
-        expect(Yast::SCR).to receive(:Execute).with(anything, /.*localectl set-locale.*LC_MESSAGES.*zh_TW.*/)
+        expect(Yast::Execute).to receive(:locally!).with(array_including(/LC_MESSAGES\\=zh_TW/))
 
         subject.Save
       end
@@ -215,7 +213,7 @@ describe "Yast::Language" do
 
       context "and language is not zh_HK" do
         it "cleans LC_MESSAGES" do
-          expect(Yast::SCR).to_not receive(:Execute).with(anything, /.*localectl.*LC_MESSAGES.*zh_TW.*/)
+          expect(Yast::Execute).to_not receive(:locally!).with(array_including(/LC_MESSAGES\\=zh_TW/))
 
           subject.Save
         end
@@ -226,36 +224,38 @@ describe "Yast::Language" do
       let(:readonly) { true }
 
       it "sets the default language using localectl" do
-        expect(Yast::SCR).to receive(:Execute).with(anything, /.*localectl set-locale LANG.*=en_US.*/)
+        expect(Yast::Execute).to receive(:locally!)
+          .with(array_including(/localectl/, "set-locale", /LANG\\=en_US/))
 
         subject.Save
+      end
+
+      context "in the initial stage" do
+        let(:initial_stage) { true }
+
+        it "sets the default language using systemd-firstboot" do
+          expect(Yast::Execute).to receive(:locally!)
+            .with(array_including(/systemd-firstboot/, "--locale", /en_US/))
+
+          subject.Save
+        end
       end
     end
 
     context "when not using the readonly_language feature" do
       it "sets the chosen language using localectl" do
-        expect(Yast::SCR).to receive(:Execute).with(anything, /.*localectl set-locale LANG.*=#{language}.*/)
+        expect(Yast::Execute).to receive(:locally!)
+          .with(array_including(/localectl/, "set-locale", /LANG\\=#{language}/))
 
         subject.Save
       end
-    end
 
-    context "in the initial stage" do
-      let(:initial_stage) { true }
-
-      context "when using the readonly_language feature" do
-        let(:readonly) { true }
+      context "in the initial stage" do
+        let(:initial_stage) { true }
 
         it "sets the default language using systemd-firstboot" do
-          expect(Yast::WFM).to receive(:Execute).with(anything, /.*systemd-firstboot.*--locale.*en_US.*/)
-
-          subject.Save
-        end
-      end
-
-      context "when not using the readonly_language feature" do
-        it "sets the chosen language using systemd-firstboot" do
-          expect(Yast::WFM).to receive(:Execute).with(anything, /.*systemd-firstboot.*--locale.*#{language}.*/)
+          expect(Yast::Execute).to receive(:locally!)
+            .with(array_including(/systemd-firstboot/, "--locale", /#{language}/))
 
           subject.Save
         end
@@ -263,7 +263,13 @@ describe "Yast::Language" do
     end
 
     context "when the command fails" do
-      let(:command_result) { { "exit" => 1 } }
+      let(:exception) do
+        Cheetah::ExecutionFailed.new(["localectl"], 1, "stdout", "stderr", "Something went wrong")
+      end
+
+      before do
+        allow(Yast::Execute).to receive(:locally!).and_raise(exception)
+      end
 
       it "reports an error" do
         expect(Yast::Report).to receive(:Error)

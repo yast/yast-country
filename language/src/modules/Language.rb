@@ -28,6 +28,7 @@
 #
 # $Id$
 require "yast"
+require "yast2/execute"
 
 require "shellwords"
 
@@ -915,53 +916,20 @@ module Yast
 
     # Save state to target.
     def Save
-      loc = locale_to_install
-
-      @localed_conf = {} if @localed_conf.nil?
-
-      if Builtins.find(loc, "zh_HK") == 0
-        @localed_conf["LC_MESSAGES"] = "zh_TW"
-      elsif @localed_conf["LC_MESSAGES"] == "zh_TW"
-        # FIXME ugly hack: see bug #47711
-        @localed_conf.delete("LC_MESSAGES")
-      end
-
       SCR.Write(path(".sysconfig.language.INSTALLED_LANGUAGES"), @languages)
       SCR.Write(path(".sysconfig.language"), nil)
 
-      @localed_conf["LANG"] = loc
-      log.info("Locale: #{@localed_conf}")
-      locale_out1 = @localed_conf.map do | key, val |
-        "#{key}=#{val}"
-      end
-      log.info("Locale: #{locale_out1}")
-      locale_out=locale_out1.join(",")
-      log.info("Locale: #{locale_out}")
+      command = save_command_for(locale)
 
-      cmd = if Stage.initial
-        # do use --root option, running in chroot does not work
-        "/usr/bin/systemd-firstboot --root #{Installation.destdir.shellescape} --locale #{loc.shellescape}"
-      else
-        # this sets both the locale (see "man localectl")
-        "/usr/bin/localectl set-locale #{locale_out.shellescape}"
-      end
-      log.info "Making language setting persistent: #{cmd}"
-      result = if Stage.initial
-        WFM.Execute(path(".local.bash_output"), cmd)
-      else
-        SCR.Execute(path(".target.bash_output"), cmd)
-      end
-      if result["exit"] != 0
-        log.error "Language configuration not written. Failed to execute '#{cmd}'"
-        log.error "output: #{result.inspect}"
-        # TRANSLATORS: the "%s" is replaced by the executed command
-        Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % cmd)
-      else
-        log.info "output: #{result.inspect}"
-      end
+      log.info("Making language settings persistent: #{command}")
 
-      Builtins.y2milestone("Saved data for language: <%1>", loc)
+      Yast::Execute.locally!(command.split)
+      nil
+    rescue Cheetah::ExecutionFailed => e
+      log.error "Language configuration not written.\n#{e.inspect}"
 
+      # TRANSLATORS: the "%s" is replaced by the executed command
+      Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % command)
       nil
     end
 
@@ -1437,10 +1405,68 @@ module Yast
       ProductFeatures.GetBooleanFeature("globals", "readonly_language")
     end
 
-    def locale_to_install
+    # Returns the locale to use, default or chosen
+    #
+    # Based on the readonly_language feature
+    #
+    # @return [String] default language when language set to read-only; chosen language otherwise
+    def locale
       language = readonly ? DEFAULT_FALLBACK_LANGUAGE : @language
 
       GetLocaleString(language)
+    end
+
+    # Sets locale settings for given locale
+    #
+    # @param locale [String]
+    def prepare_locale_settings(locale)
+      @localed_conf ||= {}
+      @localed_conf["LANG"] = locale
+
+      fix_lc_messages(locale)
+
+      log.info("Locale: #{@localed_conf}")
+    end
+
+    # Fix the value of LC_MESSAGES for zh_HK locale
+    #
+    # It must be zh_TW
+    #
+    # @param locale [String]
+    def fix_lc_messages(locale)
+      @localed_conf ||= {}
+
+      if locale.start_with?("zh_HK")
+        @localed_conf["LC_MESSAGES"] = "zh_TW"
+      elsif @localed_conf["LC_MESSAGES"] == "zh_TW"
+        @localed_conf.delete("LC_MESSAGES")
+      end
+    end
+
+    # Returns the locale settings as args for localectl
+    #
+    # @return [String] a comma separated locale settings string; i.e, LANG=zh_HK,LC_MESAGES=zh_TW
+    def localectl_args
+      @localed_conf.map { |k, v| "#{k}=#{v}" }.join(",")
+    end
+
+    # Returns the command to make language settings persistent
+    #
+    # It is different depending on the stage, since for a not installed system it is needed to use
+    # the `systemd-firsrboot` tool, which does not work in a chroot
+    #
+    # @param locale [String]
+    #
+    # @return [String] the command to be executed
+    def save_command_for(locale)
+      if Stage.initial
+        # do use --root option, running in chroot does not work
+        "/usr/bin/systemd-firstboot --root #{Installation.destdir.shellescape} --locale #{locale.shellescape}"
+      else
+        prepare_locale_settings(locale)
+
+        "/usr/bin/localectl set-locale #{localectl_args.shellescape}"
+      end
     end
 
     def show_fallback_to_english_warning
