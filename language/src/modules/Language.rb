@@ -1402,6 +1402,25 @@ module Yast
       Builtins.getenv("TERM") == "iterm"
     end
 
+    # Returns the command to make language settings persistent
+    #
+    # It is different depending on the stage, since for a not installed system it is needed to use
+    # the `systemd-firsrboot` tool, which does not work in a chroot
+    #
+    # @param locale [String]
+    #
+    # @return [Array] an array containing the command to be executed
+    def save_command_for(locale)
+      if Stage.initial
+        # do use --root option, running in chroot does not work
+        ["/usr/bin/systemd-firstboot", "-root", Installation.destdir, "--locale", locale]
+      else
+        prepare_locale_settings(locale)
+
+        ["/usr/bin/localectl", "set-locale", localectl_args]
+      end
+    end
+
     # Determines whether language is read-only for the current product
     #
     # @return [Boolean] true if it's read-only; false otherwise.
@@ -1455,24 +1474,6 @@ module Yast
       @localed_conf.map { |k, v| "#{k}=#{v}" }.join(",")
     end
 
-    # Returns the command to make language settings persistent
-    #
-    # It is different depending on the stage, since for a not installed system it is needed to use
-    # the `systemd-firsrboot` tool, which does not work in a chroot
-    #
-    # @param locale [String]
-    #
-    # @return [Array] an array containing the command to be executed
-    def save_command_for(locale)
-      if Stage.initial
-        # do use --root option, running in chroot does not work
-        ["/usr/bin/systemd-firstboot", "-root", Installation.destdir, "--locale", locale]
-      else
-        prepare_locale_settings(locale)
-
-        ["/usr/bin/localectl", "set-locale", localectl_args]
-      end
-    end
 
     def show_fallback_to_english_warning
       Report.Message(
