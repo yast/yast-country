@@ -46,6 +46,8 @@ describe "Yast::Language" do
     allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
     allow(subject).to receive(:languages_map).and_return(languages_map)
     allow(subject).to receive(:GetLanguagesMap).and_return(languages_map)
+
+    Yast::Language.main
   end
 
   describe "#integrate_inst_sys_extension" do
@@ -299,10 +301,8 @@ describe "Yast::Language" do
     end
 
     context "when UTF-8 is not being used" do
-      around do |example|
+      before do
         subject.SetExpertValues("use_utf8" => false) # disable UTF-8
-        example.run
-        subject.SetExpertValues("use_utf8" => true) # restore to the default value
       end
 
       it "returns the full language identifier with no encoding" do
@@ -330,13 +330,8 @@ describe "Yast::Language" do
       allow(Yast::Stage).to receive(:normal).and_return(normal?)
       allow(subject).to receive(:GetTextMode).and_return(textmode?)
       allow(Yast::Builtins).to receive(:getenv).with("TERM").and_return(term)
-    end
 
-    around do |example|
-      old_lang = Yast::Language.language
       Yast::Language.language = lang
-      example.call
-      Yast::Language.language = old_lang
     end
 
     context "when running on normal stage" do
