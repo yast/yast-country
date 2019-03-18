@@ -922,7 +922,7 @@ module Yast
       SCR.Write(path(".sysconfig.language.INSTALLED_LANGUAGES"), @languages)
       SCR.Write(path(".sysconfig.language"), nil)
 
-      command = save_command_for(locale)
+      command = store_locale_command(locale)
 
       log.info("Making language settings persistent: #{command.join(' ')}")
 
@@ -1409,8 +1409,8 @@ module Yast
     #
     # @param locale [String]
     #
-    # @return [Array] an array containing the command to be executed
-    def save_command_for(locale)
+    # @return [Array<String>] an array containing the command to be executed
+    def store_locale_command(locale)
       if Stage.initial
         # do use --root option, running in chroot does not work
         ["/usr/bin/systemd-firstboot", "-root", Installation.destdir, "--locale", locale]
