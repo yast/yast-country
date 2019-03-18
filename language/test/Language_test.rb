@@ -4,7 +4,10 @@
 require_relative "test_helper"
 require "y2country/language_dbus"
 
-describe "Language" do
+Yast.import "ProductFeatures"
+Yast.import "Language"
+
+describe "Yast::Language" do
   subject { Yast::Language }
 
   let(:languages_map) {{
@@ -41,9 +44,10 @@ describe "Language" do
 
   before do
     allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
-    Yast.import "Language"
     allow(subject).to receive(:languages_map).and_return(languages_map)
     allow(subject).to receive(:GetLanguagesMap).and_return(languages_map)
+
+    Yast::Language.main
   end
 
   describe "#integrate_inst_sys_extension" do
@@ -162,6 +166,121 @@ describe "Language" do
     end
   end
 
+  describe "#Save" do
+    let(:readonly) { false }
+    let(:language) { "es_ES" }
+    let(:initial_stage) { false }
+
+    before do
+        allow(Yast::Stage).to receive(:initial).and_return(initial_stage)
+
+        allow(Yast::ProductFeatures).to receive(:GetBooleanFeature)
+          .with("globals", "readonly_language")
+          .and_return(readonly)
+
+        allow(Yast::SCR).to receive(:Write)
+        allow(Yast::Execute).to receive(:locally!)
+        allow(subject).to receive(:valid_language?).with(language).and_return(true)
+
+        subject.Set(language)
+        subject.SetDefault
+    end
+
+    it "updates the .sysconfig.language.INSTALLED_LANGUAGES value" do
+      expect(Yast::SCR).to receive(:Write).with(Yast.path(".sysconfig.language.INSTALLED_LANGUAGES"), anything)
+
+      subject.Save
+    end
+
+    it "forces writting .sysconfig.language to disk" do
+      expect(Yast::SCR).to receive(:Write).with(Yast.path(".sysconfig.language"), nil)
+
+      subject.Save
+    end
+
+    context "when language is zh_HK" do
+      let(:language) { "zh_HK" }
+
+      it "sets LC_MESSAGES to zh_TW" do
+        expect(Yast::Execute).to receive(:locally!).with(array_including(/LC_MESSAGES=zh_TW/))
+
+        subject.Save
+      end
+    end
+
+    context "when LC_MESSAGES is zh_TW" do
+      before do
+        allow(subject).to receive(:@localed_conf).and_return({ "LC_MESSAGES" => "zh_TW" })
+      end
+
+      context "and language is not zh_HK" do
+        it "cleans LC_MESSAGES" do
+          expect(Yast::Execute).to_not receive(:locally!).with(array_including(/LC_MESSAGES=zh_TW/))
+
+          subject.Save
+        end
+      end
+    end
+
+    context "when using the readonly_language feature" do
+      let(:readonly) { true }
+
+      it "sets the default language using localectl" do
+        expect(Yast::Execute).to receive(:locally!)
+          .with(array_including(/localectl/, "set-locale", /LANG=en_US/))
+
+        subject.Save
+      end
+
+      context "in the initial stage" do
+        let(:initial_stage) { true }
+
+        it "sets the default language using systemd-firstboot" do
+          expect(Yast::Execute).to receive(:locally!)
+            .with(array_including(/systemd-firstboot/, "--locale", /en_US/))
+
+          subject.Save
+        end
+      end
+    end
+
+    context "when not using the readonly_language feature" do
+      it "sets the chosen language using localectl" do
+        expect(Yast::Execute).to receive(:locally!)
+          .with(array_including(/localectl/, "set-locale", /LANG=#{language}/))
+
+        subject.Save
+      end
+
+      context "in the initial stage" do
+        let(:initial_stage) { true }
+
+        it "sets the default language using systemd-firstboot" do
+          expect(Yast::Execute).to receive(:locally!)
+            .with(array_including(/systemd-firstboot/, "--locale", /#{language}/))
+
+          subject.Save
+        end
+      end
+    end
+
+    context "when the command fails" do
+      let(:exception) do
+        Cheetah::ExecutionFailed.new(["localectl"], 1, "stdout", "stderr", "Something went wrong")
+      end
+
+      before do
+        allow(Yast::Execute).to receive(:locally!).and_raise(exception)
+      end
+
+      it "reports an error" do
+        expect(Yast::Report).to receive(:Error)
+
+        subject.Save
+      end
+    end
+  end
+
   describe "#GetLocaleString" do
     context "when using UTF-8" do
       it "returns the full locale" do
@@ -182,10 +301,8 @@ describe "Language" do
     end
 
     context "when UTF-8 is not being used" do
-      around do |example|
+      before do
         subject.SetExpertValues("use_utf8" => false) # disable UTF-8
-        example.run
-        subject.SetExpertValues("use_utf8" => true) # restore to the default value
       end
 
       it "returns the full language identifier with no encoding" do
@@ -193,6 +310,7 @@ describe "Language" do
       end
     end
   end
+
   describe "#ResetRecommendedPackages" do
     it "resets the recommended packages" do
       allow(Yast::Pkg).to receive(:PkgSolve)
@@ -212,13 +330,8 @@ describe "Language" do
       allow(Yast::Stage).to receive(:normal).and_return(normal?)
       allow(subject).to receive(:GetTextMode).and_return(textmode?)
       allow(Yast::Builtins).to receive(:getenv).with("TERM").and_return(term)
-    end
 
-    around do |example|
-      old_lang = Yast::Language.language
       Yast::Language.language = lang
-      example.call
-      Yast::Language.language = old_lang
     end
 
     context "when running on normal stage" do
