@@ -1413,7 +1413,7 @@ module Yast
     def store_locale_command(locale)
       if Stage.initial
         # do use --root option, running in chroot does not work
-        ["/usr/bin/systemd-firstboot", "-root", Installation.destdir, "--locale", locale]
+        ["/usr/bin/systemd-firstboot", "--root", Installation.destdir, "--locale", locale]
       else
         prepare_locale_settings(locale)
 
