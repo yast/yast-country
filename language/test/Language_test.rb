@@ -237,7 +237,7 @@ describe "Yast::Language" do
 
         it "sets the default language using systemd-firstboot" do
           expect(Yast::Execute).to receive(:locally!)
-            .with(array_including(/systemd-firstboot/, "--locale", /en_US/))
+            .with(array_including(/systemd-firstboot/, "--root", "--locale", /en_US/))
 
           subject.Save
         end
@@ -257,7 +257,7 @@ describe "Yast::Language" do
 
         it "sets the default language using systemd-firstboot" do
           expect(Yast::Execute).to receive(:locally!)
-            .with(array_including(/systemd-firstboot/, "--locale", /#{language}/))
+            .with(array_including(/systemd-firstboot/, "--root", "--locale", /#{language}/))
 
           subject.Save
         end
