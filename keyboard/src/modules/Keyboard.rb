@@ -180,7 +180,7 @@ module Yast
       #
       @ckb_cmd = ""
 
-      # The seriell console keyboard command
+      # The serial console keyboard command
       #
       @skb_cmd = ""
 
@@ -1006,7 +1006,7 @@ module Yast
         SCR.Execute(path(".target.bash"), @ckb_cmd)
 
         # It could be that for seriell tty's the keyboard cannot be set. So it will
-        # be done seperately in order to ensure that setting console keyboard
+        # be done separately in order to ensure that setting console keyboard
         # will be done successfully in the previous call.
         Builtins.y2milestone("Setting seriell console keyboard to: <%1>", @current_kbd)
         Builtins.y2milestone("loadkeys command: <%1>", @skb_cmd)
