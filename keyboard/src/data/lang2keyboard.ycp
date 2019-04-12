@@ -40,6 +40,8 @@
 
 	"es"		: "spanish",
 
+	"fa_IR"		: "persian",
+
 	"fr"		: "french",
 	"fr_BE"		: "french",
 	"fr_CA"		: "cn-latin1",

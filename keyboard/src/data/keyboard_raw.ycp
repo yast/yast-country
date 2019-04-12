@@ -199,6 +199,25 @@ return ($[
 	    "type5_euro": $[ "ncurses": "us.map.gz" ],
 	]
     ],
+  "persian":
+    [
+	// keyboard layout
+	//
+	// NOTE: "ir-ku" is a Kurdish keyboard map, with Latin letters. The kbd.rpm
+	// package also has a "ir-ku_ara" keymap which uses Arabic letters, but in a
+	// QWERTY layout. Neither corresponds to the ISRI 9147 standard for a
+	// Persian keyboard (see page 29 of the
+	// http://persian-computing.org/archives/ISIRI/ISIRI-9147.pdf
+	// document) but we don't have a better thing now.
+	_("Persian"),
+	$[
+	    "pc104"	: $[ "ncurses": "ir-ku.map.gz"],
+	    "macintosh" : $[ "ncurses": "ir-ku.map.gz"],
+	    "type4"	: $[ "ncurses": "ir-ku.map.gz" ],
+	    "type5"	: $[ "ncurses": "ir-ku.map.gz" ],
+	    "type5_euro": $[ "ncurses": "ir-ku.map.gz" ],
+	]
+    ],
   "portugese":
     [
 	// keyboard layout
