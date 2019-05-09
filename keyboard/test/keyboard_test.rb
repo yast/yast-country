@@ -129,6 +129,15 @@ module Yast
       let(:stage) { "normal" }
       let(:chroot) { "spanish" }
 
+      before do
+        allow(Dir).to receive(:[]).with("/dev/tty[0-9]*").and_return(
+          ["/dev/tty1"]
+         )
+        allow(Dir).to receive(:[]).with("/dev/ttyS[0-9]*").and_return(
+          ["/dev/ttyS0"]
+        )
+      end
+
       it "correctly sets all layout variables" do
         expect(SCR).to execute_bash(/loadkeys -C \/dev\/tty.* ruwin_alt-UTF-8\.map\.gz/)
 
@@ -142,7 +151,7 @@ module Yast
         stub_presence_of "/usr/sbin/xkbctrl"
         allow(XVersion).to receive(:binPath).and_return "/usr/bin"
 
-        expect(SCR).to execute_bash(/loadkeys -C \/dev\/tty.* tr\.map\.gz/)
+        expect(SCR).to execute_bash(/loadkeys -C \/dev\/tty.* tr\.map\.gz/).twice
         # Called twice, for SetConsole and SetX11
         expect(SCR).to execute_bash(/xkbctrl tr\.map\.gz/).twice do |p, cmd|
           dump_xkbctrl(:turkish, cmd.split("> ")[1])
@@ -161,16 +170,12 @@ module Yast
       end
 
       context "if there are AMBA devices in the system" do
-        before do
-          allow(Dir).to receive(:[]).and_return(
-            ["/dev/tty1", "/dev/ttyAMA0", "/dev/ttyS0"]
-          )
-        end
 
         it "does not try to set the keymap for /dev/ttyAMA devices" do
           expect(SCR).to receive(:Execute) do |path, command|
             expect(path).to eq path(".target.bash")
-            expect(command).to include "loadkeys -C /dev/tty1 -C /dev/ttyS0 ruwin_alt-UTF-8"
+            expect(command).to include "loadkeys -C"
+            expect(command).to include "ruwin_alt-UTF-8"
             expect(command).to_not include "/dev/ttyAMA0"
           end
 
