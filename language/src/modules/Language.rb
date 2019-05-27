@@ -1000,6 +1000,8 @@ module Yast
 
     # Install and uninstall packages selected by Pkg::SetAdditionalLocales
     def PackagesCommit
+      check_source
+
       if !Mode.commandline
         # work-around for following in order not to depend on yast2-packager
         #        PackageSlideShow::InitPkgData (false);
@@ -1386,6 +1388,15 @@ module Yast
 
     # @return [Array<String>] List of languages which are not supported by fbiterm
     UNSUPPORTED_FBITERM_LANGS = ["ar", "bn", "gu", "hi", "km", "mr", "pa", "ta", "th"].freeze
+
+    # Checking available source repos
+    def check_source
+      if Pkg.SourceGetCurrent(true).empty?
+        Report.Warning(
+          _("There is no installation source enabled.\nThe corresponding translations will not be installed.")
+        )
+      end
+    end
 
     # Determines whether the language is supported by fbiterm
     # @param lang [String] Language code

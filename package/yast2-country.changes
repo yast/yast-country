@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon May 27 09:39:20 CEST 2019 - schubi@suse.de
+
+- Language change: Warning if no repo is available for installing
+  translation packages (bsc#1133414).
+- 4.1.13
+
+-------------------------------------------------------------------
 Thu May  9 13:42:57 CEST 2019 - schubi@suse.de
 
 - Fix: Keyboard language cannot be changed in textmode
