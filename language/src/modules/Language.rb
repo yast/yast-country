@@ -1393,7 +1393,7 @@ module Yast
     def check_source
       if Pkg.SourceGetCurrent(true).empty?
         Report.Warning(
-          _("There is no installation source enabled.\nSo corresponding translations will not be installed.")
+          _("There is no installation source enabled.\nThe corresponding translations will not be installed.")
         )
       end
     end
