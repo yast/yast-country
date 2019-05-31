@@ -94,7 +94,7 @@ ywidgets_DATA = \
 	lib/y2country/widgets/language_selection.rb
 
 desktop_DATA = \
-  desktop/yast-language.desktop
+  desktop/org.openSUSE.YaST.Language.desktop
 
 symbolicdir = @icondir@/hicolor/symbolic/apps
 symbolic_DATA = \

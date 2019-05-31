@@ -357,7 +357,7 @@ module Yast
       # TODO replace help text after ntp_installed, is.
       Wizard.SetContents(_("Change Date and Time"), cont, htext, true, true)
 
-      Wizard.SetDesktopTitleAndIcon("timezone") if Mode.normal
+      Wizard.SetDesktopTitleAndIcon("org.openSUSE.YaST.Timezone") if Mode.normal
 
       show_current_time.call
 

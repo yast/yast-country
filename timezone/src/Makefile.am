@@ -30,7 +30,7 @@ ydata_DATA = \
   data/timezone_raw.ycp
 
 desktop_DATA = \
-  desktop/timezone.desktop
+  desktop/org.openSUSE.YaST.Timezone.desktop
 
 symbolicdir = @icondir@/hicolor/symbolic/apps
 symbolic_DATA = \

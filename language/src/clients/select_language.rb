@@ -330,7 +330,7 @@ module Yast
         Ops.get_boolean(@argmap, "enable_next", true)
       )
 
-      Wizard.SetDesktopTitleAndIcon("yast-language")
+      Wizard.SetDesktopTitleAndIcon("org.openSUSE.YaST.Language")
 
       if @more_languages
         if !Stage.initial && !Stage.firstboot
@@ -342,7 +342,7 @@ module Yast
       end
 
       # No .desktop files in inst-sys - use icon explicitly
-      Wizard.SetTitleIcon("yast-language") if Stage.initial || Stage.firstboot
+      Wizard.SetTitleIcon("org.openSUSE.YaST.Language") if Stage.initial || Stage.firstboot
 
       update_adapt_term if @adapt_term
 
