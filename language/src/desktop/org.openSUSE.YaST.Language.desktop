@@ -21,6 +21,7 @@ X-SuSE-YaST-Keywords=language,locale,country
 Icon=yast-language
 Exec=xdg-su -c "/sbin/yast2 language"
 
-Name=Language
-GenericName=Change the language and install additional languages
+Name=YaST Language
+GenericName=Language
+Comment=Change the language and install additional languages
 StartupNotify=true
