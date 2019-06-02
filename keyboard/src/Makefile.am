@@ -28,7 +28,7 @@ ydata_DATA = \
   data/lang2keyboard.ycp
 
 desktop_DATA = \
-  desktop/org.openSUSE.YaST.Keyboard.desktop
+  desktop/org.opensuse.yast.Keyboard.desktop
 
 ywidgetsdir = @ylibdir@/y2country/widgets
 ywidgets_DATA = \

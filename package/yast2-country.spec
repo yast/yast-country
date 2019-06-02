@@ -84,7 +84,7 @@ functions (Language module)
 %yast_install
 
 %ifarch s390 s390x
-rm -f %{buildroot}%{yast_desktopdir}/org.openSUSE.YaST.Keyboard.desktop
+rm -f %{buildroot}%{yast_desktopdir}/org.opensuse.yast.Keyboard.desktop
 %endif
 
 %yast_metainfo
