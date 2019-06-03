@@ -28,7 +28,7 @@ Source0:        %{name}-%{version}.tar.bz2
 
 BuildRequires:  perl-XML-Writer
 BuildRequires:  update-desktop-files
-BuildRequires:  yast2-devtools >= 3.1.10
+BuildRequires:  yast2-devtools >= 4.2.2
 BuildRequires:  yast2-perl-bindings
 BuildRequires:  yast2-testsuite
 # For tests
