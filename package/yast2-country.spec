@@ -12,20 +12,23 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-# Please submit bugfixes or comments via http://bugs.opensuse.org/
+# Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
 
 
 Name:           yast2-country
-Version:        4.1.13
+Version:        4.2.0
 Release:        0
+Summary:        YaST2 - Country Settings (Language, Keyboard, and Timezone)
+License:        GPL-2.0-only
+Group:          System/YaST
+Url:            https://github.com/yast/yast-country
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Source0:        %{name}-%{version}.tar.bz2
 
 BuildRequires:  perl-XML-Writer
 BuildRequires:  update-desktop-files
-BuildRequires:  yast2-devtools >= 3.1.10
+BuildRequires:  yast2-devtools >= 4.2.2
 BuildRequires:  yast2-perl-bindings
 BuildRequires:  yast2-testsuite
 # For tests
@@ -47,27 +50,32 @@ Requires:       yast2 >= 3.2.9
 Requires:       yast2-pkg-bindings >= 2.15.3
 # IconPath support for MultiSelectionBox
 Requires:       yast2-core >= 2.16.28
-# new API of ntp-client_proposal.rb
-Conflicts:      yast2-ntp-client < 4.1.5
-
 Requires:       yast2-packager >= 2.23.3
 # VMware detection (.probe.is_vmware)
 Requires:       yast2-hardware-detection >= 3.1.6
-
 Requires:       yast2-country-data
 Requires:       yast2-ruby-bindings >= 1.0.0
 Requires:       rubygem(%{rb_default_ruby_abi}:ruby-dbus)
 
-Summary:        YaST2 - Country Settings (Language, Keyboard, and Timezone)
-License:        GPL-2.0-only
-Group:          System/YaST
+# new API of ntp-client_proposal.rb
+Conflicts:      yast2-ntp-client < 4.1.5
 
 %description
 Country specific data and configuration modules (language, keyboard,
 timezone) for yast2.
 
+%package data
+Requires:       yast2-ruby-bindings >= 1.0.0
+
+Summary:        YaST2 - Data files for Country settings
+Group:          System/YaST
+
+%description data
+Data files for yast2-country together with the most often used API
+functions (Language module)
+
 %prep
-%setup -n %{name}-%{version}
+%setup -q
 
 %build
 %yast_build
@@ -76,15 +84,16 @@ timezone) for yast2.
 %yast_install
 
 %ifarch s390 s390x
-rm -f $RPM_BUILD_ROOT%{yast_desktopdir}/keyboard.desktop
+rm -f %{buildroot}%{yast_desktopdir}/org.opensuse.yast.Keyboard.desktop
 %endif
 
+%yast_metainfo
+
 # Policies
-mkdir -p $RPM_BUILD_ROOT/usr/share/polkit-1/actions
+mkdir -p %{buildroot}%{_datadir}/polkit-1/actions
 
 # common
 %files
-%defattr(-,root,root)
 %doc %{yast_docdir}
 %license COPYING
 %{yast_moduledir}/Console.rb
@@ -98,29 +107,14 @@ mkdir -p $RPM_BUILD_ROOT/usr/share/polkit-1/actions
 %{yast_libdir}/y2country/widgets
 %{yast_ydatadir}/*.ycp
 %{yast_ydatadir}/*.json
-%{yast_yncludedir}/keyboard/
-%{yast_yncludedir}/timezone/
-%{yast_scrconfdir}/*.scr
-%{yast_schemadir}/autoyast/rnc/*.rnc
-%{yast_desktopdir}/yast-language.desktop
-%{yast_desktopdir}/timezone.desktop
+%{yast_yncludedir}
+%{yast_scrconfdir}
+%{yast_schemadir}
+%{yast_desktopdir}
+%{yast_metainfodir}
 %{yast_icondir}
-%ifnarch s390 s390x
-%{yast_desktopdir}/keyboard.desktop
-%endif
-
-%package data
-Requires:       yast2-ruby-bindings >= 1.0.0
-
-Summary:        YaST2 - Data files for Country settings
-Group:          System/YaST
-
-%description data
-Data files for yast2-country together with the most often used API
-functions (Language module)
 
 %files data
-%defattr(-,root,root)
 %dir %{yast_ydatadir}/languages
 %{yast_ydatadir}/languages/*.ycp
 %{yast_moduledir}/Language.rb

@@ -357,7 +357,7 @@ module Yast
       # TODO replace help text after ntp_installed, is.
       Wizard.SetContents(_("Change Date and Time"), cont, htext, true, true)
 
-      Wizard.SetDesktopTitleAndIcon("timezone") if Mode.normal
+      Wizard.SetDesktopTitleAndIcon("org.opensuse.yast.Timezone") if Mode.normal
 
       show_current_time.call
 
@@ -835,7 +835,7 @@ module Yast
       if Stage.initial || Stage.firstboot
         Wizard.SetTitleIcon("yast-timezone")
       else
-        Wizard.SetDesktopTitleAndIcon("timezone")
+        Wizard.SetDesktopTitleAndIcon("org.opensuse.yast.Timezone")
       end
 
       show_selected_region.call(sel, timezone)

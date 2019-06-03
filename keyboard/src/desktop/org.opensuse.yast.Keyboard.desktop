@@ -20,6 +20,7 @@ X-SuSE-YaST-Keywords=keyboard,language,locale,country
 Icon=yast-keyboard
 Exec=xdg-su -c "/sbin/yast2 keyboard"
 
-Name=System Keyboard Layout
-GenericName=Select the system keyboard
+Name=YaST Keyboard
+GenericName=System Keyboard Layout
+Comment=Select the system keyboard
 StartupNotify=true

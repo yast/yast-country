@@ -20,6 +20,7 @@ X-SuSE-YaST-Keywords=time,timezone,clock
 Icon=yast-timezone
 Exec=xdg-su -c "/sbin/yast2 timezone"
 
-Name=Date and Time
-GenericName=Control time zone, date, and system time
+Name=YaST Date and Time
+GenericName=Date and Time
+Comment=Control time zone, date, and system time
 StartupNotify=true
