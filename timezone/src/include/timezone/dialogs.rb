@@ -835,7 +835,7 @@ module Yast
       if Stage.initial || Stage.firstboot
         Wizard.SetTitleIcon("yast-timezone")
       else
-        Wizard.SetDesktopTitleAndIcon("timezone")
+        Wizard.SetDesktopTitleAndIcon("org.opensuse.yast.Timezone")
       end
 
       show_selected_region.call(sel, timezone)
