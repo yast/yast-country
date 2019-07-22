@@ -92,7 +92,7 @@ module Yast
           "hwclock"  => {
             # command line help text for 'set hwclock' option
             "help"     => _(
-              "New value for hardware clock"
+              "New value for hardware clock. Can be 'local', 'utc' or 'UTC'."
             ),
             "type"     => "enum",
             "typespec" => ["local", "utc", "UTC"]
@@ -137,22 +137,9 @@ module Yast
       # create the wizard dialog
       Wizard.OpenOKDialog
 
-      # wrapper for storage calls, returns nil of yast2-storage is not installed
-      targets = Convert.convert(
-        WFM.call("wrapper_storage", ["GetTargetMap"]),
-        :from => "any",
-        :to   => "map <string, map>"
-      )
-      if targets != nil
-        partitions = Convert.convert(
-          WFM.call("wrapper_storage", ["GetWinPrimPartitions", [targets]]),
-          :from => "any",
-          :to   => "list <map>"
-        )
-        if partitions != nil && Ops.greater_than(Builtins.size(partitions), 0)
-          Timezone.windows_partition = true
-          Builtins.y2milestone("windows partition found")
-        end
+      if Timezone.system_has_windows?
+        Timezone.windows_partition = true
+        Builtins.y2milestone("windows partition found")
       end
 
       result = TimezoneDialog({})

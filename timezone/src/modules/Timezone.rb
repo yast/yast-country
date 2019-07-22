@@ -23,12 +23,19 @@
 # Summary:	Timezone related stuff
 # Authors:	Klaus Kaempf <kkaempf@suse.de>
 #		Thomas Roelz <tom@suse.de>
-#
-# $Id$
+
 require "yast"
+
+begin
+  require "y2storage"
+rescue LoadError
+  # Ignore y2storage not being available (bsc#1058869)
+end
 
 module Yast
   class TimezoneClass < Module
+    include Yast::Logger
+
     def main
       textdomain "country"
 
@@ -163,6 +170,10 @@ module Yast
 
       # remember if /sbin/hwclock --hctosys was called, it can be done only once (bnc#584484)
       @systz_called = false
+
+      # timezone is read-only
+      @readonly = nil
+
       Timezone()
     end
 
@@ -245,20 +256,25 @@ module Yast
     # @return	the number of the region that contains the timezone
     #
     def Set(zone, really)
-      zmap = get_zonemap
+      # Do not update the timezone if it's forced and it was already set
+      if (Mode.installation || Mode.update) && readonly && !@timezone.empty?
+        log.info "Timezone is read-only and cannot be changed during installation"
+      else
+        # Set the new timezone internally
+        @timezone = zone
+      end
 
-      # Set the new timezone internally
-      @timezone = zone
+      zmap = get_zonemap
 
       sel = 0
       while Ops.less_than(sel, Builtins.size(zmap)) &&
-          !Builtins.haskey(Ops.get_map(zmap, [sel, "entries"], {}), zone)
+          !Builtins.haskey(Ops.get_map(zmap, [sel, "entries"], {}), @timezone)
         sel = Ops.add(sel, 1)
       end
 
       @name = Ops.add(
         Ops.add(Ops.get_string(zmap, [sel, "name"], ""), " / "),
-        Ops.get_string(zmap, [sel, "entries", zone], zone)
+        Ops.get_string(zmap, [sel, "entries", @timezone], @timezone)
       )
 
       # Adjust system to the new timezone.
@@ -359,14 +375,11 @@ module Yast
 
     # Read timezone settings from sysconfig
     def Read
-      @timezone = Misc.SysconfigRead(
-        path(".sysconfig.clock.TIMEZONE"),
-        @timezone
-      )
       @default_timezone = Misc.SysconfigRead(
         path(".sysconfig.clock.DEFAULT_TIMEZONE"),
         @default_timezone
       )
+      @timezone = @default_timezone
 
       # /etc/localtime has priority over sysconfig value of timezone
       if FileUtils.IsLink("/etc/localtime")
@@ -431,9 +444,14 @@ module Yast
       @hwclock = "-u"
       if Stage.initial && !Mode.live_installation
         # language --> timezone database, e.g. "de_DE" : "Europe/Berlin"
-        lang2tz = get_lang2tz
+        new_timezone =
+          if readonly
+            product_default_timezone
+          else
+            lang2tz = get_lang2tz
+            Ops.get(lang2tz, Language.language, "")
+          end
 
-        new_timezone = Ops.get(lang2tz, Language.language, "")
         Builtins.y2milestone("Timezone new_timezone %1", new_timezone)
 
         Set(new_timezone, true) if new_timezone != ""
@@ -456,51 +474,70 @@ module Yast
 
     # Set the new time and date given by user
     def SetTime(year, month, day, hour, minute, second)
-      if !Arch.s390
-        date = Builtins.sformat(
-          " --date=\"%1/%2/%3 %4:%5:%6\" ",
-          month,
-          day,
-          year,
-          hour,
-          minute,
-          second
-        )
-        cmd = ""
-        if Ops.greater_than(Builtins.size(@timezone), 0) &&
-            @hwclock != "--localtime"
-          cmd = Ops.add(Ops.add("TZ=", @timezone), " ")
-        end
-        cmd = Ops.add(
-          Ops.add(Ops.add(cmd, "/sbin/hwclock --set "), @hwclock),
-          date
-        )
-        Builtins.y2milestone("SetTime cmd %1", cmd)
-        SCR.Execute(path(".target.bash"), cmd)
-        cmd = Ops.add("/sbin/hwclock --hctosys ", @hwclock)
-        Builtins.y2milestone("SetTime cmd %1", cmd)
-        SCR.Execute(path(".target.bash"), cmd)
-        # actually, it was probably not called, but do not let it change the time again after manual change
-        @systz_called = true
-      end
+      return nil if Arch.s390
 
+      timedate = "#{month}/#{day}/#{year} #{hour}:#{minute}:#{second}"
+
+      if set_hwclock(timedate)
+        sync_hwclock_to_system_time
+      else
+        # No hardware clock available (bsc#1103744)
+        log.info("Fallback: Leaving HW clock untouched, setting only system time")
+        set_system_time(timedate)
+      end
       nil
     end
 
     # Set the Hardware Clock to the current System Time.
     def SystemTime2HWClock
-      if !Arch.s390
-        cmd = ""
-        if Ops.greater_than(Builtins.size(@timezone), 0) &&
-            @hwclock != "--localtime"
-          cmd = Ops.add(Ops.add("TZ=", @timezone), " ")
-        end
-        cmd = Ops.add("/sbin/hwclock --systohc ", @hwclock)
-        Builtins.y2milestone("cmd %1", cmd)
-        SCR.Execute(path(".target.bash"), cmd)
-      end
+      return nil if Arch.s390
 
+      cmd = tz_prefix + "/sbin/hwclock --systohc #{@hwclock}"
+      log.info("cmd #{cmd}")
+      SCR.Execute(path(".target.bash"), cmd)
       nil
+    end
+
+    # Set the hardware clock with the given date.
+    # @param timedate [String]
+    # @return [Bool] true if success, false if error
+    #
+    def set_hwclock(date)
+      cmd = tz_prefix + "/sbin/hwclock --set #{@hwclock} --date=\"#{date}\""
+      log.info("set_hwclock: #{cmd}")
+      SCR.Execute(path(".target.bash"), cmd) == 0
+    end
+
+    # Synchronize the hardware clock to the system time
+    #
+    def sync_hwclock_to_system_time
+      cmd = "/sbin/hwclock --hctosys #{@hwclock}"
+      log.info("sync_hwclock_to_system_time: #{cmd}")
+      SCR.Execute(path(".target.bash"), cmd)
+      @systz_called = true
+    end
+
+    # Set only the system time (leaving the hardware clock untouched)
+    # @param timedate [String]
+    #
+    def set_system_time(timedate)
+      cmd = tz_prefix + "/usr/bin/date --set=\"#{timedate}\""
+      log.info("set_system_time: #{cmd}")
+      SCR.Execute(path(".target.bash"), cmd)
+    end
+
+    # Return a "TZ=... " prefix for commands such as "hwclock" or "date" to set
+    # the time zone environment variable temporarily for the duration of one
+    # command.
+    #
+    # If nonempty, this will append a blank as a separator.
+    #
+    # @return [String]
+    #
+    def tz_prefix
+      return "" if @hwclock == "--localtime"
+      return "" if @timezone.empty?
+      "TZ=#{@timezone} "
     end
 
 
@@ -597,11 +634,7 @@ module Yast
         "+%c" :
         "+%Y-%m-%d - %H:%M:%S"
 
-      Builtins.y2milestone(
-        "GetDateTime hwclock %1 real:%2",
-        @hwclock,
-        real_time
-      )
+      log.info("GetDateTime hwclock: #{@hwclock} real: #{real_time}")
       if !real_time && !Mode.config
         ds = 0
         if @diff != 0
@@ -609,7 +642,7 @@ module Yast
             SCR.Execute(path(".target.bash_output"), "date +%z")
           )
           tzd = Ops.get_string(out2, "stdout", "")
-          Builtins.y2milestone("GetDateTime tcd=%1", tzd)
+          log.info("GetDateTime tzd: #{tzd}")
           t = Builtins.tointeger(String.CutZeros(Builtins.substring(tzd, 1, 2)))
           if t != nil
             ds = Ops.add(ds, Ops.multiply(t, 3600))
@@ -618,27 +651,23 @@ module Yast
             )
             ds = Ops.add(ds, Ops.multiply(t, 60))
             ds = Ops.unary_minus(ds) if Builtins.substring(tzd, 0, 1) == "-"
-            Builtins.y2milestone("GetDateTime ds %1 diff %2", ds, @diff)
+            log.info("GetDateTime ds: #{ds} diff: #{@diff}")
           end
         end
-        cmd = ""
-        cmd = Builtins.sformat("TZ=%1 ", @timezone) if @hwclock != "--localtime"
-        cmd = Ops.add(
-          cmd,
+        cmd = tz_prefix +
           Builtins.sformat(
             "/bin/date \"%1\" \"--date=now %2sec\"",
             date_format,
             Ops.multiply(ds, @diff)
           )
-        )
       else
         cmd = Builtins.sformat("/bin/date \"%1\"", date_format)
       end
-      Builtins.y2milestone("GetDateTime cmd=%1", cmd)
+      log.info("GetDateTime cmd: #{cmd}")
       out = Convert.to_map(SCR.Execute(path(".target.bash_output"), cmd))
       local_date = Builtins.deletechars(Ops.get_string(out, "stdout", ""), "\n")
 
-      Builtins.y2milestone("GetDateTime local_date='%1'", local_date)
+      log.info("GetDateTime local_date: '#{local_date}'")
 
       local_date
     end
@@ -812,7 +841,28 @@ module Yast
         return
       end
 
-      SCR.Write(path(".sysconfig.clock.TIMEZONE"), @timezone)
+      cmd = if Stage.initial
+        # do use --root option, running in chroot does not work
+        "/usr/bin/systemd-firstboot --root '#{Installation.destdir}' --timezone '#{@timezone}'"
+      else
+        # this sets both the locale (see "man localectl")
+        "/usr/bin/timedatectl set-timezone #{@timezone}"
+      end
+      log.info "Making timezone setting persistent: #{cmd}"
+      result = if Stage.initial
+        WFM.Execute(path(".local.bash_output"), cmd)
+      else
+        SCR.Execute(path(".target.bash_output"), cmd)
+      end
+      if result["exit"] != 0
+        log.error "Timezone configuration not written. Failed to execute '#{cmd}'"
+        log.error "output: #{result.inspect}"
+        # TRANSLATORS: the "%s" is replaced by the executed command
+        Report.Error(_("Could not save the timezone setting, the command\n%s\nfailed.") % cmd)
+      else
+        log.info "output: #{result.inspect}"
+      end
+
       SCR.Write(path(".sysconfig.clock.DEFAULT_TIMEZONE"), @default_timezone)
 
       SCR.Write(path(".sysconfig.clock"), nil) # flush
@@ -984,6 +1034,43 @@ module Yast
       HTML.List(ret)
     end
 
+    # Checks whether the system has Windows installed
+    def system_has_windows?
+      begin
+        win_partitions = disk_analyzer.windows_partitions
+        !win_partitions.empty?
+      rescue NameError => ex
+        # bsc#1058869: Don't enforce y2storage being available
+        log.warn("Caught #{ex}")
+        log.warn("No storage-ng support - not checking for a windows partition")
+        log.warn("Assuming UTC for the hardware clock")
+        false # No windows partition found
+      end
+    end
+
+    # Determines whether timezone is read-only for the current product
+    #
+    # @return [Boolean] true if it's read-only; false otherwise.
+    def readonly
+      return @readonly unless @readonly.nil?
+      @readonly = ProductFeatures.GetBooleanFeature("globals", "readonly_timezone")
+    end
+
+    # Product's default timezone when it's not defined in the control file.
+    FALLBACK_PRODUCT_DEFAULT_TIMEZONE = "UTC"
+
+    # Determines the default timezone for the current product
+    #
+    # If not timezone is set, FALLBACK_PRODUCT_DEFAULT_TIMEZONE will be used.
+    # More information can be found on FATE#321754 and
+    # https://github.com/yast/yast-installation/blob/master/doc/control-file.md#installation-and-product-variables
+    #
+    # @return [String] timezone
+    def product_default_timezone
+      product_timezone = ProductFeatures.GetStringFeature("globals", "timezone")
+      product_timezone.empty? ? FALLBACK_PRODUCT_DEFAULT_TIMEZONE : product_timezone
+    end
+
     publish :variable => :timezone, :type => "string"
     publish :variable => :hwclock, :type => "string"
     publish :variable => :default_timezone, :type => "string"
@@ -1026,6 +1113,12 @@ module Yast
     publish :function => :Import, :type => "boolean (map)"
     publish :function => :Export, :type => "map ()"
     publish :function => :Summary, :type => "string ()"
+
+  protected
+
+    def disk_analyzer
+      Y2Storage::StorageManager.instance.probed_disk_analyzer
+    end
   end
 
   Timezone = TimezoneClass.new

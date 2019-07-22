@@ -263,7 +263,7 @@ module Yast
         Ops.get_boolean(args, "enable_next", true)
       )
 
-      Wizard.SetDesktopTitleAndIcon("keyboard")
+      Wizard.SetDesktopTitleAndIcon("org.opensuse.yast.Keyboard")
       Wizard.SetTitleIcon("yast-keyboard") if Stage.initial || Stage.firstboot
 
       # Initially set the current keyboard to establish a consistent state.

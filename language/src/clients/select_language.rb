@@ -330,7 +330,7 @@ module Yast
         Ops.get_boolean(@argmap, "enable_next", true)
       )
 
-      Wizard.SetDesktopTitleAndIcon("yast-language")
+      Wizard.SetDesktopTitleAndIcon("org.opensuse.yast.Language")
 
       if @more_languages
         if !Stage.initial && !Stage.firstboot
@@ -342,7 +342,7 @@ module Yast
       end
 
       # No .desktop files in inst-sys - use icon explicitly
-      Wizard.SetTitleIcon("yast-language") if Stage.initial || Stage.firstboot
+      Wizard.SetTitleIcon("org.opensuse.yast.Language") if Stage.initial || Stage.firstboot
 
       update_adapt_term if @adapt_term
 
@@ -579,24 +579,7 @@ module Yast
 
       # help text for langauge expert screen
       help_text = Ops.add(
-        Ops.add(
-          Ops.add(
-            help_text,
-            _(
-              "<p>\n" +
-                "<b>Locale Settings for User root</b>\n" +
-                "determines how the locale variables (LC_*) are set for the root user.</p>"
-            )
-          ),
-          # help text for langauge expert screen
-          _(
-            "<p><b>ctype Only</b>: root has the same LC_CTYPE as a normal user. Other values\n" +
-              "are unset.<br>\n" +
-              "<b>Yes</b>: root has the same locale settings as normal user.<br>\n" +
-              "<b>No</b>: root has all locale variables unset.\n" +
-              "</p>\n"
-          )
-        ),
+        help_text,
         # help text for langauge expert screen
         _(
           "<p>Use <b>Detailed Locale Setting</b> to set a locale for the primary language that is not offered in the list in the main dialog. Translation may not be available for the selected locale.</p>"
@@ -634,20 +617,6 @@ module Yast
               Heading(_("Language Details")),
               VSpacing(Opt(:vstretch), 2),
               Left(
-                # combo box label
-                ComboBox(
-                  Id(:rootlang),
-                  _("Locale Settings for User &root"),
-                  [
-                    # do not translate "ctype"
-                    Item(Id("ctype"), _("ctype Only")),
-                    Item(Id("yes"), _("Yes")),
-                    Item(Id("no"), _("No"))
-                  ]
-                )
-              ),
-              VSpacing(Opt(:vstretch), 1),
-              Left(
                 # checkbox label
                 CheckBox(
                   Id(:use_utf8),
@@ -675,11 +644,6 @@ module Yast
         )
       )
 
-      UI.ChangeWidget(
-        Id(:rootlang),
-        :Value,
-        Ops.get_string(val, "rootlang", "ctype")
-      )
       UI.ChangeWidget(Id(:locales), :Value, @language)
 
       ret = :none
@@ -688,7 +652,6 @@ module Yast
         ret = Convert.to_symbol(UI.UserInput)
         if ret == :ok
           val = {}
-          Ops.set(val, "rootlang", UI.QueryWidget(Id(:rootlang), :Value))
           Ops.set(val, "use_utf8", UI.QueryWidget(Id(:use_utf8), :Value))
           if val != val_on_entry
             Builtins.y2milestone("expert settings changed to %1", val)

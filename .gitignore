@@ -32,3 +32,6 @@ tmp.*
 *.ybc
 /nbproject/private/
 test-driver
+# YARD
+/.yardoc
+/doc

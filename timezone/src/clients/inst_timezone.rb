@@ -20,26 +20,30 @@
 # ------------------------------------------------------------------------------
 # Client for initial timezone setting (part of installation sequence)
 # Author:	Jiri Suchomel <jsuchome@suse.cz>
-# $Id$
+
 module Yast
   class InstTimezoneClient < Client
+    include Yast::Logger
+
     def main
       Yast.import "UI"
       Yast.import "GetInstArgs"
       Yast.import "Stage"
-      Yast.import "Storage"
       Yast.import "Wizard"
+      Yast.import "Timezone"
 
       Yast.include self, "timezone/dialogs.rb"
 
       @args = GetInstArgs.argmap
       @args["first_run"] = "yes" unless @args["first_run"] == "no"
 
-      if Stage.initial &&
-          Ops.greater_than(
-            Builtins.size(Storage.GetWinPrimPartitions(Storage.GetTargetMap)),
-            0
-          )
+      if Timezone.readonly
+        # Do not run if timezone is readonly
+        log.info "Timezone is read-only for this product so the inst_timezone client is skipped"
+        return :auto
+      end
+
+      if Stage.initial && Timezone.system_has_windows?
         Timezone.windows_partition = true
         Builtins.y2milestone("windows partition found: assuming local time")
       end

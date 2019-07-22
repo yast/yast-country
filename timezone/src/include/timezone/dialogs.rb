@@ -47,6 +47,7 @@ module Yast
       Yast.import "NetworkService"
       Yast.import "Package"
       Yast.import "Popup"
+      Yast.import "Product"
       Yast.import "ProductFeatures"
       Yast.import "Service"
       Yast.import "Stage"
@@ -301,6 +302,7 @@ module Yast
 
 
       cont = VBox(
+          VSpacing(UI.TextMode ? 1 : 0),
           HBox(
           HWeight(1, VBox()),
           HWeight(
@@ -315,7 +317,7 @@ module Yast
                   HSpacing(3),
                   VBox(
                     Left(timeterm),
-                    VSpacing(),
+                    VSpacing(UI.TextMode ? 0 : 1),
                     Left(dateterm),
                     VSpacing(),
                     HBox(
@@ -348,18 +350,17 @@ module Yast
           ),
           HWeight(1, VBox())
         ),
-        VSpacing(2)
+        VSpacing(UI.TextMode ? 0 : 2),
       )
 
       Wizard.OpenAcceptDialog
       # TODO replace help text after ntp_installed, is.
       Wizard.SetContents(_("Change Date and Time"), cont, htext, true, true)
 
-      Wizard.SetDesktopTitleAndIcon("timezone") if Mode.normal
+      Wizard.SetDesktopTitleAndIcon("org.opensuse.yast.Timezone") if Mode.normal
 
       show_current_time.call
 
-      ntp_rb = false
       ntp_rb = Convert.to_boolean(
         ntp_call(
           "ui_init",
@@ -396,7 +397,7 @@ module Yast
           ntp_rb = ret == :ntp
           # need to install it first?
           if ntp_rb && !Stage.initial && !@ntp_installed
-            @ntp_installed = Package.InstallAll(["yast2-ntp-client", "ntp"])
+            @ntp_installed = Package.InstallAll(["yast2-ntp-client", "chrony"])
             # succeeded? create UI, otherwise revert the click
             if !@ntp_installed
               ntp_rb = false
@@ -531,15 +532,14 @@ module Yast
 
       Timezone.PushVal
 
-
-      settime = Empty()
+      # TRANSLATORS: Button label
+      other_settings_label = _("Other &Settings...")
 
       # "On a mainframe it is impossible for the user to change the hardware clock.
-      # So you can only specify the timezone." (ihno)
-      if !Arch.s390 && !Mode.config
-        # button text
-        settime = PushButton(Id(:settime), _("Other &Settings..."))
-      end
+      # So you can only specify the timezone." (Ihno)
+      settime = ((!Arch.s390 && !Mode.config) ?
+        PushButton(Id(:settime), other_settings_label) : Empty()
+      )
 
       textmode = Language.GetTextMode
 
@@ -574,22 +574,23 @@ module Yast
         # true by default (fate#303520)
         @ntp_used = true
         # configure NTP client
-        Builtins.srandom
-        @ntp_server = Builtins.sformat(
-          "%1.opensuse.pool.ntp.org",
-          Builtins.random(4)
-        )
+        # to prevent misusage of ntp.org we need to distinguish opensuse and SLE usage
+        base_products = Product.FindBaseProducts
+        if base_products.any? { |p| p["name"] =~ /openSUSE/i }
+          servers = (0..3).map { |i| "#{i}.opensuse.pool.ntp.org" }
+        else
+          servers = (0..3).map { |i| "#{i}.novell.pool.ntp.org" }
+        end
+        @ntp_server = servers.sample
+        # Dot not select a dhcp ntp server by default but add it to the offered
+        # list (fate#323454)
+        servers = ntp_call("dhcp_ntp_servers", {}).concat(servers).uniq
         argmap = {
           "server"       => @ntp_server,
           # FIXME ntp-client_proposal doesn't understand 'servers' yet
-          "servers"      => [
-            "0.opensuse.pool.ntp.org",
-            "1.opensuse.pool.ntp.org",
-            "2.opensuse.pool.ntp.org",
-            "3.opensuse.pool.ntp.org"
-          ],
-          "ntpdate_only" => true
+          "servers"      => servers
         }
+
         rv = Convert.to_symbol(ntp_call("Write", argmap))
         if rv == :invalid_hostname
           Builtins.y2warning("Invalid NTP server hostname %1", @ntp_server)
@@ -637,12 +638,19 @@ module Yast
       if UI.HasSpecialWidget(:TimezoneSelector) == true
         timezone_selector = true
         worldmap = Ops.add(Directory.themedir, "/current/worldmap/worldmap.jpg")
+
+        # bsc#946955 Translation doesn't fit in some languages
+        # Reserved space needs to be allocated proportionally to the text length
+        other_settings_hweight = other_settings_label.size
+        free_space_hweight = 10
+        entries_hweight = 25
+
         timezoneterm = VBox(
           TimezoneSelector(Id(:timezonemap), Opt(:notify), worldmap, zones),
           HBox(
-            HWeight(1, HStretch()),
+            HWeight(free_space_hweight, HStretch()),
             HWeight(
-              2,
+              entries_hweight,
               ComboBox(
                 Id(:region),
                 Opt(:notify),
@@ -653,25 +661,25 @@ module Yast
             ),
             HSpacing(),
             HWeight(
-              2,
+              entries_hweight,
               ComboBox(Id(:timezone), Opt(:notify), _("Time &Zone"))
             ),
             HSpacing(),
-            HWeight(1, HStretch())
+            HWeight(other_settings_hweight, HStretch())
           ),
           HBox(
-            HWeight(1, HStretch()),
-            HWeight(2, Left(
+            HWeight(free_space_hweight, HStretch()),
+            HWeight(entries_hweight, Left(
               utc_only ? Label(" ") : hwclock_term
             )),
             HSpacing(),
-            HWeight(2, HBox(
+            HWeight(entries_hweight, HBox(
               Label(_("Date and Time:")),
               Label(Id(:date), date),
               HStretch()
             )),
             HSpacing(),
-            HWeight(1, Right(settime))
+            HWeight(other_settings_hweight, Right(settime))
           )
         )
       else
@@ -827,7 +835,7 @@ module Yast
       if Stage.initial || Stage.firstboot
         Wizard.SetTitleIcon("yast-timezone")
       else
-        Wizard.SetDesktopTitleAndIcon("timezone")
+        Wizard.SetDesktopTitleAndIcon("org.opensuse.yast.Timezone")
       end
 
       show_selected_region.call(sel, timezone)
@@ -869,6 +877,20 @@ module Yast
           end
         end
 
+        if ret == :hwclock
+          # Keep internal state in sync (Timezone.hwclock <-> @hwclock_s) in
+          # case user enters SetTimeDialog() and sets the time (bsc#1087228).
+
+          @hwclock_s = UI.QueryWidget(Id(:hwclock), :Value) ? :hwclock_utc : :hwclock_localtime
+          SetTimezone(@hwclock_s, timezone, false, false)
+
+          Builtins.y2milestone("hwclock changed to: %1 (%2), diff: %3", @hwclock_s, Timezone.hwclock, Timezone.diff)
+
+          # restart input loop
+          ret = :again
+          next
+        end
+
         if ret == :region
           num = selected_region.call
           next if num == sel
@@ -896,7 +918,10 @@ module Yast
             end
           end
           if SetTimeDialog()
+            # Time has just been set in the system. Reset internal state as we're definitely in sync atm.
             Timezone.diff = 0
+            @hwclock_s_initial = @hwclock_s
+
             UI.ChangeWidget(
               Id(:date),
               :Value,
@@ -912,8 +937,7 @@ module Yast
                 _("Date and Time")
             UI.ChangeWidget(Id(:time_fr), :Label, time_frame_label)
           end
-        elsif ret == :next || ret == :timezone || ret == :timezonemap ||
-            ret == :hwclock
+        elsif ret == :next || ret == :timezone || ret == :timezonemap
           if ret == :timezonemap
             timezone = Convert.to_string(
               UI.QueryWidget(Id(:timezonemap), :Value)
@@ -946,7 +970,8 @@ module Yast
             ret = :again
             timezone = timezone_old
           end
-          Builtins.y2milestone("timezone %1 ret %2", timezone, ret)
+
+          Builtins.y2milestone("timezone %1 ret %2, hwclock %3 -> %4", timezone, ret, hwclock_s_old, @hwclock_s)
 
           if timezone != timezone_old || @hwclock_s != hwclock_s_old ||
               ret == :next
@@ -969,6 +994,9 @@ module Yast
                 @hwclock_s == :hwclock_localtime && timezone != timezone_initial
               Timezone.call_mkinitrd = true
             end
+
+            # save settings (update /etc/adjtime)
+            Timezone.Save
 
             if @ntp_used && @ntp_server != ""
               # save NTP client settings now

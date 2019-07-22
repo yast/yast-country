@@ -38,6 +38,6 @@
 	// 2. what time zone propose for this language
 	"timezone"	: "Europe/Madrid",
 	// 3. which keyboard layout propose for this language
-	"keyboard"	: "spanish",
+	"keyboard"	: "spanish-ast",
     ];
 }

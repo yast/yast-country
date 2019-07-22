@@ -1,3 +1,3 @@
 #
 # Makefile.am for country/console
-SUBDIRS = src
+SUBDIRS = src test

@@ -46,6 +46,8 @@
 #	Klaus Kaempf <kkaempf@suse.de>
 #
 require "yast"
+require "json"
+Yast.import "Directory"
 
 module Yast
   class ConsoleClass < Module
@@ -58,19 +60,24 @@ module Yast
       Yast.import "Linuxrc"
       Yast.import "Encoding"
       Yast.import "Stage"
+      Yast.import "OSRelease"
 
       # current base language, used in Check
       @language = "en_US"
 
       @font = "lat1-16.psfu"
       @unicodeMap = ""
-      @screenMap = "none"
+      @screenMap = ""
       @magic = "(B"
 
       # non-empty if serial console (written /etc/inittab)
       # -> S0:12345:respawn:/sbin/agetty -L 9600<n8> ttyS0
       # something like "ttyS0,9600" from /etc/install.inf
       @serial = ""
+
+      # Console fonts map (used as cache for #consolefonts)
+      @consolefonts = nil
+
       Console()
     end
 
@@ -80,35 +87,21 @@ module Yast
     # @return	[String]	encoding	encoding for console i/o
 
     def SelectFont(lang)
-      consolefont = []
-
-      consolefonts = Convert.to_map(
-        WFM.Read(path(".local.yast2"), "consolefonts.ycp")
-      )
-
       fqlanguage = Language.GetLocaleString(lang)
-      consolefont = Ops.get_list(consolefonts, fqlanguage, [])
 
-      if Builtins.size(consolefont) == 0
-        consolefont = Ops.get_list(consolefonts, lang, [])
+      consolefont = consolefonts[fqlanguage] || consolefonts[lang]
+      if consolefont.nil? && lang.size > 2
+        consolefont = consolefonts[lang[0,2]]
       end
+      consolefont ||= []
 
-      if Builtins.size(consolefont) == 0 &&
-          Ops.greater_than(Builtins.size(lang), 2)
-        consolefont = Ops.get_list(
-          consolefonts,
-          Builtins.substring(lang, 0, 2),
-          []
-        )
-      end
-
-      if Ops.greater_than(Builtins.size(consolefont), 0)
+      if !consolefont.empty?
         @language = lang
 
-        @font = Ops.get_string(consolefont, 0, "")
-        @unicodeMap = Ops.get_string(consolefont, 1, "")
-        @screenMap = Ops.get_string(consolefont, 2, "")
-        @magic = Ops.get_string(consolefont, 3, "")
+        @font = consolefont["font"]
+        @unicodeMap = consolefont["unicodeMap"]
+        @screenMap = consolefont["screenMap"]
+        @magic = consolefont["magic"]
 
         currentLanguage = WFM.GetLanguage
 
@@ -139,9 +132,12 @@ module Yast
     # save data to system (rc.config agent)
 
     def Save
-      SCR.Write(path(".sysconfig.console.CONSOLE_FONT"), @font)
-      SCR.Write(path(".sysconfig.console.CONSOLE_SCREENMAP"), @screenMap)
-      SCR.Write(path(".sysconfig.console.CONSOLE_UNICODEMAP"), @unicodeMap)
+      # writing vconsole.conf directly, no other API available ATM
+      SCR.Write(path(".etc.vconsole_conf.FONT"), @font)
+      SCR.Write(path(".etc.vconsole_conf.FONT_MAP"), @screenMap)
+      SCR.Write(path(".etc.vconsole_conf.FONT_UNIMAP"), @unicodeMap)
+      SCR.Write(path(".etc.vconsole_conf"), nil)
+
       SCR.Write(path(".sysconfig.console.CONSOLE_MAGIC"), @magic)
 
       SCR.Write(path(".sysconfig.console.CONSOLE_ENCODING"), WFM.GetEncoding)
@@ -161,7 +157,7 @@ module Yast
         # upgrade: disable old entries for serial console
         SCR.Execute(
           path(".target.bash"),
-          "sed -i '/^\\(hvc\\|hvsi\\|S[0-9]\\)/s@^.*@#&@' /etc/inittab"
+          "/usr/bin/sed -i '/^\\(hvc\\|hvsi\\|S[0-9]\\)/s@^.*@#&@' /etc/inittab"
         )
 
         # find out if the baud rate is not present on command line (bnc#602743)
@@ -177,13 +173,13 @@ module Yast
         SCR.Execute(
           path(".target.bash"),
           Builtins.sformat(
-            "grep -E '^cons:' /etc/inittab || /bin/echo 'cons:12345:respawn:/sbin/smart_agetty -L %1 console' >> /etc/inittab",
+            "/usr/bin/grep -E '^cons:' /etc/inittab || /usr/bin/echo 'cons:12345:respawn:/sbin/smart_agetty -L %1 console' >> /etc/inittab",
             rate
           )
         )
         SCR.Execute(
           path(".target.bash"),
-          "grep -Ew ^console /etc/securetty || /bin/echo console >> /etc/securetty"
+          "/usr/bin/grep -Ew ^console /etc/securetty || /usr/bin/echo console >> /etc/securetty"
         )
       end
 
@@ -193,21 +189,15 @@ module Yast
     # restore data to system (rc.config agent)
     # returns encoding
     def Restore
-      @font = Convert.to_string(
-        SCR.Read(path(".sysconfig.console.CONSOLE_FONT"))
-      )
-      @screenMap = Convert.to_string(
-        SCR.Read(path(".sysconfig.console.CONSOLE_SCREENMAP"))
-      )
-      @unicodeMap = Convert.to_string(
-        SCR.Read(path(".sysconfig.console.CONSOLE_UNICODEMAP"))
-      )
+      @font = Misc.SysconfigRead(path(".etc.vconsole_conf.FONT"), "")
+      @screenMap = Misc.SysconfigRead(path(".etc.vconsole_conf.FONT_MAP"), "")
+      @unicodeMap = Misc.SysconfigRead(path(".etc.vconsole_conf.FONT_UNIMAP"), "")
+      Builtins.y2milestone("vconsole.conf: FONT: %1, FONT_MAP: %2, FONT_UNIMAP: %3", @font, @screenMap, @unicodeMap)
+
       @magic = Convert.to_string(
         SCR.Read(path(".sysconfig.console.CONSOLE_MAGIC"))
       )
-      @language = Convert.to_string(
-        SCR.Read(path(".sysconfig.language.RC_LANG"))
-      )
+      @language = Language.GetCurrentLocaleString
       Builtins.y2milestone("encoding %1", Encoding.console)
       Encoding.console
     end
@@ -257,6 +247,36 @@ module Yast
     publish :function => :Init, :type => "void ()"
     publish :function => :Check, :type => "boolean ()"
     publish :function => :Console, :type => "void ()"
+
+  private
+
+    # Console fonts map
+    #
+    # Associates languages with the following set of properties: font, unicode map,
+    # screen map and magic initialization.
+    #
+    # @example Console fonts format
+    #   {
+    #     "bg" => {
+    #       "font"=>"UniCyr_8x16.psf",
+    #       "unicodeMap"=>"",
+    #       "screenMap"=>"trivial",
+    #       "magic"=>"(K"
+    #     },
+    #     "bg_BG" => {
+    #       "font"=>"UniCyr_8x16.psf",
+    #       "unicodeMap"=>"",
+    #       "screenMap"=>"trivial",
+    #       "magic"=>"(K"
+    #     }
+    #   }
+    #
+    # @return [Hash] Console fonts map. See the example for content details.
+    def consolefonts
+      return @consolefonts if @consolefonts
+
+      @consolefonts = JSON.load(File.read(Directory.find_data_file("consolefonts.json")))
+    end
   end
 
   Console = ConsoleClass.new

@@ -1,4 +1,531 @@
 -------------------------------------------------------------------
+Mon Jul 22 14:09:42 UTC 2019 - Ancor Gonzalez Sosa <ancor@suse.com>
+
+- Fixed some wrong keyboard maps (follow-up of bsc#1124921)
+- 4.2.1
+
+-------------------------------------------------------------------
+Fri May 31 12:28:08 UTC 2019 - Stasiek Michalski <hellcp@mailbox.org>
+
+- Add metainfo (fate#319035)
+- Revamp spec
+- Replace GenericName with Comment
+- 4.2.0
+
+-------------------------------------------------------------------
+Mon May 27 09:39:20 CEST 2019 - schubi@suse.de
+
+- Language change: Warning if no repo is available for installing
+  translation packages (bsc#1133414).
+- 4.1.13
+
+-------------------------------------------------------------------
+Thu May  9 13:42:57 CEST 2019 - schubi@suse.de
+
+- Fix: Keyboard language cannot be changed in textmode
+  (bsc#1120957).
+- 4.1.12
+
+-------------------------------------------------------------------
+Tue Mar 19 07:06:45 UTC 2019 - Dominique Leuenberger <dimstar@opensuse.org>
+
+- Fix command line parameter to systemd-firstboot (--root instead
+  of -root) (part of bsc#1121256).
+- 4.1.11
+
+-------------------------------------------------------------------
+Fri Mar 15 12:42:06 UTC 2019 - David Díaz <dgonzalez@suse.com>
+
+- Add support to set the language as read-only in the control file,
+  which allows to change it during the installation without
+  persisting it in the installed system (bsc#1121256).
+- 4.1.10
+
+-------------------------------------------------------------------
+Thu Feb 28 09:28:43 UTC 2019 - José Iván López González <jlopez@suse.com>
+
+- Fix OS detection and use correct keyboard file for opensuse
+  (bsc#1124921).
+- Remove incompatible Lithuanian layout from opensuse file.
+- 4.1.9
+
+-------------------------------------------------------------------
+Mon Feb 18 11:36:47 UTC 2019 - snwint@suse.com
+
+- fix timezone setting when switching utc/local time (bsc#1087228)
+- 4.1.8
+
+-------------------------------------------------------------------
+Tue Dec 18 14:29:34 UTC 2018 - jreidinger@suse.com
+
+- always use absolute path to binaries (bsc#1118291)
+- properly escape shell arguments (bsc#1118291)
+- drop policy kit definitions as yast2-dbus-server is already
+  dropped
+- 4.1.7
+
+-------------------------------------------------------------------
+Sat Nov 24 16:24:01 UTC 2018 - Stasiek Michalski <hellcp@mailbox.org>
+
+- Provide icon with module (boo#1109310)
+- 4.1.6
+
+-------------------------------------------------------------------
+Tue Nov 20 09:25:14 UTC 2018 - knut.anderssen@suse.com
+
+- Aligned "Synchronize Now" button and "NTP Server Address" box not
+  breaking previous fix and not hiding the manual checkbox in
+  TextMode (bnc#893065, bsc#1039985).
+- 4.1.5
+
+-------------------------------------------------------------------
+Thu Nov 15 11:28:03 UTC 2018 - igonzalezsosa@suse.com
+
+- Fallback to English when using fbiterm on those languages
+  which are not properly supported (fate#325746).
+- 4.1.4
+
+-------------------------------------------------------------------
+Mon Nov 12 14:32:16 UTC 2018 - knut.anderssen@suse.com
+
+- Timezone: When ntp is configured to be used by default, offer
+  also ntp servers proposed by DHCP but do not choose them if the
+  user does not select one explicitly (fate#323454)
+- 4.1.3
+
+-------------------------------------------------------------------
+Sat Nov 10 08:31:44 UTC 2018 - knut.anderssen@suse.com
+
+- Timezone: Since ntp-client does not write the config anymore when
+  called for syncing only, we need to remove the 'ntpdate_only'
+  parameter in order to continue proposing a default when it is
+  enabled in the control file (bsc#1108497).
+- 4.1.2
+
+-------------------------------------------------------------------
+Fri Nov  9 07:52:29 UTC 2018 - jsrain@suse.cz
+
+- provide better API for getting keyboard map info (fate#325748)
+- 4.1.1
+
+-------------------------------------------------------------------
+Fri Oct 26 13:21:47 UTC 2018 - jreidinger@suse.com
+
+- Console: Use empty string instead of none for FONTMAP
+  (bsc#1013573)
+- 4.1.0
+
+-------------------------------------------------------------------
+Thu Sep 27 10:37:48 UTC 2018 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Set only system time if no hardware clock available (bsc#1103744)
+- 4.0.24
+
+-------------------------------------------------------------------
+Mon Aug 20 10:11:59 CEST 2018 - schubi@suse.de
+
+- Changed dir of COPYING file.
+- Switched license in spec file from SPDX2 to SPDX3 format.
+
+-------------------------------------------------------------------
+Wed Jun 27 15:16:47 CEST 2018 - schubi@suse.de
+
+- Added additional searchkeys to desktop file (fate#321043).
+- 4.0.23
+
+-------------------------------------------------------------------
+Tue May 15 12:36:33 UTC 2018 - jreidinger@suse.com
+
+- Do not use opensuse ntp pool servers for SLE (bsc#1090168)
+- 4.0.22
+
+-------------------------------------------------------------------
+Mon May 14 10:26:11 UTC 2018 - jsrain@suse.cz
+
+- handle setting locale in firstboot (bsc#1092979)
+- 4.0.21
+
+-------------------------------------------------------------------
+Fri Feb  9 16:41:49 UTC 2018 - ancor@suse.com
+
+- Keyboard: don't try to set the keyboard map for AMBA devices,
+  e.g. /dev/ttyAMA0 (bsc#1080222).
+- 4.0.20
+
+-------------------------------------------------------------------
+Tue Jan 30 12:50:29 UTC 2018 - jreidinger@suse.com
+
+- Lnaguage: nicer handling of dbus timeout (bsc#1076804)
+- 4.0.19
+
+-------------------------------------------------------------------
+Mon Jan 29 12:00:29 UTC 2018 - lslezak@suse.cz
+
+- Reimplemented package reset to require less memory
+  (related to bsc#1076768)
+- 4.0.18
+
+-------------------------------------------------------------------
+Wed Jan 24 13:39:34 UTC 2018 - igonzalezsosa@suse.com
+
+- Unify openSUSE and SLE console fonts maps (bsc#1068814).
+- 4.0.17
+
+-------------------------------------------------------------------
+Mon Jan 15 08:51:32 UTC 2018 - jreidinger@suse.com
+
+- drop writting and reading keys KEYTABLE and COMPOSETABLE in
+  /etc/sysconfig/keyboard (bsc#1075828, fate#319454)
+- 4.0.16
+
+-------------------------------------------------------------------
+Mon Jan  8 08:09:20 UTC 2018 - jsrain@suse.cz
+
+- adjust calling systemd-firstboot for keyboard setting
+  (bsc#1074481)
+- 4.0.15
+
+-------------------------------------------------------------------
+Thu Dec 14 08:34:41 UTC 2017 - jsrain@suse.cz
+
+- adapt handling of console and time zone settings (fate#319454)
+- 4.0.14
+
+----------------------------------------------------------------
+Wed Dec 13 13:48:06 CET 2017 - schubi@suse.de
+
+- AutoYaST upgrade fix: Writing keyboard settings defined in the
+  AutoYaST configuration file (bnc1070305).
+- 4.0.13
+
+-------------------------------------------------------------------
+Tue Dec 12 10:04:09 UTC 2017 - jreidinger@suse.com
+
+- install chrony instead of ntp when ntp is enabled (fate#323432)
+- 4.0.12
+
+-------------------------------------------------------------------
+Mon Dec  4 11:30:50 UTC 2017 - jsrain@suse.cz
+
+- do not touch variables in sysconfig/language, which are used for
+  default console settings (not system locale) (fate#319454)
+- 4.0.11
+
+-------------------------------------------------------------------
+Fri Nov 24 08:01:20 UTC 2017 - lslezak@suse.cz
+
+- Move the y2country/language_dbus.rb file to the
+  yast2-country-data subpackage where it is needed by Language.rb
+  (bsc#1069119)
+- 4.0.10
+
+-------------------------------------------------------------------
+Fri Nov 17 14:40:52 CET 2017 - schubi@suse.de
+
+- Fixed testcase dependencies. (Fix for previous change
+  for fate#319454).
+- 4.0.9
+
+-------------------------------------------------------------------
+Wed Nov  8 12:29:10 UTC 2017 - jreidinger@suse.com
+
+- fix building depending packages after adaptation of locale
+  handling (fix for previous change for fate#319454)
+- 4.0.8
+
+-------------------------------------------------------------------
+Tue Nov  7 11:21:34 UTC 2017 - jsrain@suse.cz
+
+- adapted the locale handling (fate#319454)
+- removed root-specific locale setting
+- 4.0.7
+
+-------------------------------------------------------------------
+Tue Oct 31 14:41:28 UTC 2017 - lslezak@suse.cz
+
+- Let the "localectl" tool to create the X11 keyboard configuration
+  (bsc#1065264)
+- 4.0.6
+
+-------------------------------------------------------------------
+Wed Oct 25 08:43:25 UTC 2017 - lslezak@suse.cz
+
+- Display an error popup when saving the keyboard config fails
+  (related to bsc#1046436)
+- 4.0.5
+
+-------------------------------------------------------------------
+Mon Oct 23 14:18:29 UTC 2017 - lslezak@suse.cz
+
+- Do not use `--root` option for the `systemd-firstboot` call,
+  SCR already runs it in the target chroot (bsc#1046436)
+- 4.0.4
+
+-------------------------------------------------------------------
+Fri Oct 20 11:32:05 UTC 2017 - lslezak@suse.cz
+
+- Use `systemd-firstboot` call for setting the keyboard in the
+  first stage (bsc#1046436)
+- 4.0.3
+
+-------------------------------------------------------------------
+Wed Sep 20 15:22:55 CEST 2017 - shundhammer@suse.de
+
+- Removed dependency on yast-storage (bsc#1058869):
+  Assume hardware clock running on UTC if no check for windows
+  partition possible because yast-storage is not available 
+- 4.0.2
+
+-------------------------------------------------------------------
+Mon Sep 18 12:06:47 UTC 2017 - knut.anderssen@suse.com
+
+- Augment "Uzhgorod" (Europe/Uzhgorod) with "Ukraine ..." to
+  prevent an unknown country from being offered (bsc#1054917)
+- 4.0.1
+
+-------------------------------------------------------------------
+Thu Sep  7 11:25:21 UTC 2017 - jreidinger@suse.com
+
+- improve language selection to support also CaaSP needs
+  (FATE#323837)
+- 4.0.0
+
+-------------------------------------------------------------------
+Wed Aug 30 10:24:33 UTC 2017 - igonzalezsosa@suse.com
+
+- Add a widget for language selection (fate#322276)
+- Move keyboard selection widget to lib/y2country/widgets
+  directory
+- 3.3.2
+
+-------------------------------------------------------------------
+Mon Aug 14 09:44:58 UTC 2017 - snwint@suse.com
+
+- merge storage-ng branch to master (fate#318196)
+- note: all changes below with this date belong to the merge
+- 3.3.1
+
+-------------------------------------------------------------------
+Mon Aug 14 09:44:58 UTC 2017 - shundhammer@suse.de
+
+- Merged master to storage-ng branch 
+
+-------------------------------------------------------------------
+Mon Aug 14 09:44:58 UTC 2017 - snwint@suse.com
+
+- remove last remaining old storage reference
+
+-------------------------------------------------------------------
+Mon Aug 14 09:44:58 UTC 2017 - ancor@suse.com
+
+- Version temporarily bumped to 3.3.x to prioritize the
+  storage-ng branch
+
+-------------------------------------------------------------------
+Mon Aug 14 09:44:58 UTC 2017 - aschnell@suse.com
+
+- readded check for Windows based on storage-ng
+
+-------------------------------------------------------------------
+Mon Aug 14 09:44:58 UTC 2017 - ancor@suse.com
+
+- storage-ng: commented installation-related code relying on the
+  old yast2-storage
+- Version temporarily bumped to 3.2.x to prioritize this branch
+
+-------------------------------------------------------------------
+Thu Jul 27 11:19:13 UTC 2017 - jreidinger@suse.com
+
+- No longer read /content file from media, instead language from
+  control.xml is used and list of supported languages is dropped
+  (FATE#322386)
+- 3.3.0
+
+-------------------------------------------------------------------
+Mon Jun 19 14:45:17 UTC 2017 - gsouza@suse.com
+
+- Alterations in vconsole.conf performed by localectl and not
+  directly by YaST (bsc#1023774).
+- 3.2.12
+
+-------------------------------------------------------------------
+Thu Mar 23 18:45:42 UTC 2017 - igonzalezsosa@suse.com
+
+- Fix GetLocaleString to use the given locale instead of
+  Language.language
+- Fix build problems (bsc#1030745) 
+- 3.2.11
+
+-------------------------------------------------------------------
+Thu Mar  2 12:24:03 UTC 2017 - kanderssen@suse.com
+
+merge CASP changes:
+
+- Fixed value returned by the KeyboardSelection widget, avoiding
+  to trigger other widgets events (bsc#1027171).
+- 3.2.10
+
+-------------------------------------------------------------------
+Fri Feb 17 13:58:28 UTC 2017 - jreidinger@suse.com
+
+- fix keyboard layout widget initialization to old value
+  (bsc#1022546)
+- 3.2.9
+
+-------------------------------------------------------------------
+Mon Jan 30 16:44:12 UTC 2017 - ancor@suse.com
+
+- If the X11Variant for a given keyboard layout is not specified by
+  systemd, leave it blank instead of enforcing "basic"
+  (bsc#1020082, bsc#1022094).
+- 3.2.8
+
+-------------------------------------------------------------------
+Fri Jan 20 16:17:01 UTC 2017 - mvidner@suse.com
+
+- Added Y2Country::Widgets::KeyboardSelectionCombo (FATE#322328)
+- 3.2.7
+
+-------------------------------------------------------------------
+Mon Dec 19 13:03:21 UTC 2016 - igonzalezsosa@suse.com
+
+- Read keyboard and console fonts from different files depending
+  on the product (bsc#1016004)
+- 3.2.6
+
+-------------------------------------------------------------------
+Thu Dec 15 10:15:51 UTC 2016 - jreidinger@suse.com
+
+merge CASP changes:
+
+- fix notification on new keyboard widget, so keyboard layout is
+  immediatelly changed (FATE#321754)
+- Add reusable keyboard widget
+  (FATE#321754)
+- 3.2.5
+
+-------------------------------------------------------------------
+Tue Dec 13 09:03:47 UTC 2016 - igonzalezsosa@suse.com
+
+- Improve code/documentation regarding FATE#321754
+- 3.2.4
+
+-------------------------------------------------------------------
+Fri Dec  9 10:09:53 UTC 2016 - igonzalezsosa@suse.com
+
+- Add support to set the timezone as read-only in the product's
+  control file (FATE#321754)
+
+-------------------------------------------------------------------
+Thu Nov 24 15:23:29 CET 2016 - schubi@suse.de
+
+- Keyboard: Chinese and Taiwanese are using US keyboard layout for
+  a default. That's why e.g. Chinese will be shown for keyboard
+  settings although US will be taken. So we have to set the
+  connection manually (like we have already for DK an DE).
+  (bnc#1009914)
+- 3.2.3
+
+-------------------------------------------------------------------
+Wed Nov 23 13:41:41 CET 2016 - schubi@suse.de
+
+- Language has not been set. Taking language from zypp.
+  But libzypp can also returns languages which we do not support
+  (e.g. default "en"). So we are checking and changing it to
+  default if needed (without showing an error (bnc#1009508))
+- 3.2.2
+
+-------------------------------------------------------------------
+Mon Nov 21 15:50:47 UTC 2016 - igonzalezsosa@suse.com
+
+- Set keyboard layout properly on installation system (bsc#1010938)
+- 3.2.1
+
+-------------------------------------------------------------------
+Thu Nov  3 11:43:42 UTC 2016 - jreidinger@suse.com
+
+- language add-on no longer exists, so suggest to enable online
+  repositories for languages only partially available on media
+  (bsc#1008082)
+- 3.2.0
+
+-------------------------------------------------------------------
+Tue Sep 13 07:19:30 UTC 2016 - opensuse.lietuviu.kalba@gmail.com
+
+- Use the eurlatgr font for Turkish (bsc#942896)
+- 3.1.32
+
+-------------------------------------------------------------------
+Mon Sep 12 11:51:12 UTC 2016 - opensuse.lietuviu.kalba@gmail.com
+
+- Corrected console keyboard mapping for Portuguese(Brazil),
+  Czech, Slovak and Dvorak (fate#318426, fate#318355, bug#942896)
+- Correct value for PT(BR) contributed by marceloatie@gmail.com
+- 3.1.31
+
+-------------------------------------------------------------------
+Fri Aug 19 14:47:20 CEST 2016 - locilka@suse.com
+
+- Fixed downloading language extensions in the installation
+  (bsc#994577)
+- 3.1.30
+
+-------------------------------------------------------------------
+Wed Aug 10 14:27:49 CEST 2016 - locilka@suse.com
+
+- Added check for correct <language /> coming from an AutoYast
+  profile. When erroneous language is detected, then it's reported
+  and corrected to the default 'en_US' (bnc#991001).
+- 3.1.29
+
+-------------------------------------------------------------------
+Mon Jul 25 14:55:00 UTC 2016 - ancor@suse.com
+
+- Added support for Asturian variant of Spanish keyboard
+  (bsc#981008)
+- Asturian variant is now the default layout for Asturian language
+- 3.1.28
+
+-------------------------------------------------------------------
+Mon Jun 20 11:55:00 UTC 2016 - ancor@suse.com
+
+- Use the eurlatgr font for all languages with latin alphabet
+  and simplify language<->font mapping (bsc#942899, bsc#942896).
+
+-------------------------------------------------------------------
+Tue Jun  7 10:21:35 UTC 2016 - igonzalezsosa@suse.com
+
+- Stop generating autodocs (fate#320356)
+- 3.1.27
+
+-------------------------------------------------------------------
+Mon Feb 29 12:46:10 UTC 2016 - sndirsch@suse.com
+
+- Improved macintosh and sun keymaps (boo#968183)
+- 3.1.26
+
+-------------------------------------------------------------------
+Wed Jan 13 10:47:09 UTC 2016 - sndirsch@suse.com
+
+- Corrected console keyboard mapping for French(Canada) and
+  Ukrainian (bsc#960307, bsc#942899)
+- 3.1.25
+
+-------------------------------------------------------------------
+Thu Oct  1 14:59:57 CEST 2015 - locilka@suse.com
+
+- Allocate space for "Other Settings" button proportionally to its
+  translation length (bnc#946955)
+- 3.1.24
+
+-------------------------------------------------------------------
+Tue Aug 18 14:18:52 UTC 2015 - sndirsch@suse.com
+
+- Use xkb converted console keymaps (better systemd support) where
+  applicable (fate#318426)
+- 3.1.23
+
+-------------------------------------------------------------------
 Fri Jul 24 14:30:50 UTC 2015 - mvidner@suse.com
 
 - Removed dependencies to packages dropped in 2002.

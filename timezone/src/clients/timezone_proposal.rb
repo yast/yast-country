@@ -7,6 +7,7 @@
 # Purpose:		Proposal function dispatcher - timezone.
 #
 #			See also file proposal-API.txt for details.
+
 module Yast
   class TimezoneProposalClient < Client
     def main
@@ -44,14 +45,7 @@ module Yast
           )
           Ops.set(@ret, "warning_level", :blocker)
         else
-          Yast.import "Storage"
-          if !Timezone.windows_partition &&
-              Ops.greater_than(
-                Builtins.size(
-                  Storage.GetWinPrimPartitions(Storage.GetTargetMap)
-                ),
-                0
-              )
+          if !Timezone.windows_partition && Timezone.system_has_windows?
             Timezone.windows_partition = true
             Builtins.y2milestone("windows partition found: assuming local time")
           end

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1.1" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<linearGradient id="c" x1="2" x2="62" y1="17" y2="17" gradientTransform="translate(0,-2)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#9a9996" offset="0"/>
+<stop stop-color="#deddda" offset=".033333"/>
+<stop stop-color="#9a9996" offset=".066667"/>
+<stop stop-color="#9a9996" offset=".93333"/>
+<stop stop-color="#deddda" offset=".96667"/>
+<stop stop-color="#9a9996" offset="1"/>
+</linearGradient>
+<linearGradient id="b" x1="4" x2="60" y1="14" y2="14" gradientUnits="userSpaceOnUse">
+<stop stop-color="#deddda" offset="0"/>
+<stop stop-color="#c0bfbc" offset="1"/>
+</linearGradient>
+</defs>
+<g transform="matrix(2,0,0,2,0,34)">
+<rect x="2" y="-1" width="60" height="34" ry="4" fill="url(#c)"/>
+<rect x="2" y="-3" width="60" height="34" ry="4" fill="url(#b)"/>
+<rect x="6" y="-1" width="4" height="5" ry="1"/>
+<rect x="6" y="-1" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="6" y="8" width="6" height="4" ry="1"/>
+<rect x="6" y="7" width="6" height="4" ry="1" fill="#241f31"/>
+<rect x="6" y="16" width="8" height="4" ry="1"/>
+<rect x="6" y="15" width="8" height="4" ry="1" fill="#241f31"/>
+<rect x="6" y="24" width="4" height="4" ry="1"/>
+<rect x="6" y="23" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="12" y="24" width="4" height="4" ry="1"/>
+<rect x="12" y="23" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="18" y="24" width="28" height="4" ry="1"/>
+<rect x="18" y="23" width="28" height="4" ry="1" fill="#241f31"/>
+<rect x="48" y="24" width="4" height="4" ry="1"/>
+<rect x="48" y="23" width="4" height="4" ry="1.0243" fill="#241f31"/>
+<rect x="54" y="24" width="4" height="4" ry="1"/>
+<rect x="54" y="23" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="14" y="8" width="4" height="4" ry="1"/>
+<rect x="14" y="7" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="20" y="8" width="4" height="4" ry="1"/>
+<rect x="20" y="7" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="26" y="8" width="4" height="4" ry="1"/>
+<rect x="26" y="7" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="32" y="8" width="4" height="4" ry="1"/>
+<rect x="32" y="7" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="38" y="8" width="4" height="4" ry="1"/>
+<rect x="38" y="7" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="44" y="8" width="4" height="4" ry="1"/>
+<rect x="44" y="7" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="16" y="16" width="4" height="4" ry="1"/>
+<rect x="16" y="15" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="22" y="16" width="4" height="4" ry="1"/>
+<rect x="22" y="15" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="28" y="16" width="4" height="4" ry="1"/>
+<rect x="28" y="15" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="34" y="16" width="4" height="4" ry="1"/>
+<rect x="34" y="15" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="40" y="16" width="4" height="4" ry="1"/>
+<rect x="40" y="15" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="46" y="16" width="4" height="4" ry="1"/>
+<rect x="46" y="15" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="50" y="8" width="8" height="4" ry="1"/>
+<rect x="50" y="7" width="8" height="4" ry="1" fill="#241f31"/>
+<rect x="52" y="16" width="6" height="4" ry="1"/>
+<rect x="52" y="15" width="6" height="4" ry="1" fill="#241f31"/>
+<rect x="12" y="-1" width="4" height="5" ry="1"/>
+<rect x="12" y="-1" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="18" y="-1" width="4" height="5" ry="1"/>
+<rect x="18" y="-1" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="24" y="-1" width="4" height="5" ry="1"/>
+<rect x="24" y="-1" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="30" y="-1" width="4" height="5" ry="1"/>
+<rect x="30" y="-1" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="36" y="-1" width="4" height="5" ry="1"/>
+<rect x="36" y="-1" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="42" y="-1" width="4" height="5" ry="1"/>
+<rect x="42" y="-1" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="48" y="-1" width="4" height="5" ry="1"/>
+<rect x="48" y="-1" width="4" height="4" ry="1" fill="#241f31"/>
+<rect x="54" y="-1" width="4" height="5" ry="1"/>
+<rect x="54" y="-1" width="4" height="4" ry="1" fill="#241f31"/>
+</g>
+</svg>

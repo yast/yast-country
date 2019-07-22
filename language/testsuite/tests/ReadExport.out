@@ -1,7 +1,6 @@
 Read	.target.dir "/usr/share/YaST2/data/languages" ["language_de_DE.ycp"]
-Read	.target.yast2 "languages/language_de_DE.ycp" $["de_DE":["Deutsch", "Deutsch", ".UTF-8", "@euro", "German"]]
-Execute	.target.bash_output "/usr/bin/locale -a" $[]
+Read	.target.yast2 "languages/language_de_DE.ycp" $["de_DE":["Deutsch", "Deutsch", ".UTF-8", "@euro", "German"], "en_US":["English", "English", ".UTF-8", "@euro", "English"]]
 Return	true
-Return	$["language":"de_DE", "languages":"en_US,de_DE"]
-Return	<ul><li>Primary Language: German</li></ul>
+Return	$["language":"en_US", "languages":"en_US,de_DE"]
+Return	<ul><li>Primary Language: English</li><li>Additional Languages: <ul><li>German</li></ul></li></ul>
 Return	false

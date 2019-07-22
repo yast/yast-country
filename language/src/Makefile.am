@@ -85,9 +85,24 @@ ydata_DATA = \
   data/languages/language_th_TH.ycp \
   data/languages/language_en_GB.ycp
 
-desktop_DATA = \
-  desktop/yast-language.desktop
+ylibdir = @ylibdir@/y2country
+ylib_DATA = \
+  lib/y2country/language_dbus.rb
 
-EXTRA_DIST = $(module_DATA) $(module1_DATA) $(client_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA)
+ywidgetsdir = @ylibdir@/y2country/widgets
+ywidgets_DATA = \
+	lib/y2country/widgets/language_selection.rb
+
+desktop_DATA = \
+  desktop/org.opensuse.yast.Language.desktop
+
+symbolicdir = @icondir@/hicolor/symbolic/apps
+symbolic_DATA = \
+  icons/hicolor/symbolic/apps/yast-language-symbolic.svg
+scalabledir = @icondir@/hicolor/scalable/apps
+scalable_DATA = \
+  icons/hicolor/scalable/apps/yast-language.svg
+
+EXTRA_DIST = $(module_DATA) $(module1_DATA) $(client_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ylib_DATA) $(ywidgets_DATA) $(symbolic_DATA) $(scalable_DATA)
 
 include $(top_srcdir)/Makefile.am.common

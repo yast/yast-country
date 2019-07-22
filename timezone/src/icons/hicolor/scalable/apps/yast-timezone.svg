@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg version="1" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<linearGradient id="a" x1="2" x2="30" y1="16" y2="16" gradientTransform="scale(4)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#9a9996" offset="0"/>
+<stop stop-color="#9a9996" offset=".14286"/>
+<stop stop-color="#deddda" offset=".25"/>
+<stop stop-color="#9a9996" offset=".39286"/>
+<stop stop-color="#9a9996" offset="1"/>
+</linearGradient>
+</defs>
+<path d="m64 8c-31.024 0-56 24.976-56 56s24.976 56 56 56 56-24.976 56-56-24.976-56-56-56z" fill="url(#a)" />
+<rect transform="matrix(0,-1,-1,0,0,0)" x="-116" y="-120" width="112" height="112" rx="56" ry="56" fill="#deddda" />
+<path d="m64 8a52 52 0 0 0 -52 52 52 52 0 0 0 52 52 52 52 0 0 0 52 -52 52 52 0 0 0 -52 -52z" fill="#241f31" />
+<path d="m64 56.268 24-24.267 4 4-24 24z" fill="#77767b" />
+<path d="m64 52a8 8 0 0 0 -8 8 8 8 0 0 0 8 8 8 8 0 0 0 8 -8 8 8 0 0 0 -8 -8z" fill="#c0bfbc" />
+<rect x="60" y="60" width="8" height="48" ry="0" fill="#f6f5f4" />
+<rect x="16" y="56" width="42" height="4" fill="#e01b24" />
+<path d="m64 48a8 8 0 0 0 -8 8 8 8 0 0 0 8 8 8 8 0 0 0 8 -8 8 8 0 0 0 -8 -8z" fill="#deddda" />
+<circle cx="64" cy="56" r="4" fill="#333" />
+</svg>

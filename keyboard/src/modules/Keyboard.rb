@@ -58,7 +58,6 @@
 #	RightCtl
 #	Apply
 #	keymap
-#	compose_table
 #	current_kbd
 #	ckb_cmd
 #	xkb_cmd
@@ -91,6 +90,8 @@
 #
 require "yast"
 
+require "shellwords"
+
 module Yast
   class KeyboardClass < Module
     include Yast::Logger
@@ -117,6 +118,7 @@ module Yast
       Yast.import "Misc"
       Yast.import "Mode"
       Yast.import "Package"
+      Yast.import "OSRelease"
       Yast.import "ProductFeatures"
       Yast.import "Stage"
       Yast.import "XVersion"
@@ -147,10 +149,6 @@ module Yast
       #
       @keymap = "us.map.gz"
 
-      # compose_table entry
-      #
-      @compose_table = "clear winkeys shiftctrl latin1.add"
-
       # X11 Options string
       #
       @XkbOptions = ""
@@ -178,6 +176,10 @@ module Yast
       # The console keyboard command
       #
       @ckb_cmd = ""
+
+      # The serial console keyboard command
+      #
+      @skb_cmd = ""
 
       # The X11 keyboard command
       #
@@ -238,6 +240,10 @@ module Yast
 
       # running in XEN?
       @xen_is_running = nil
+
+      # keyboards map (used as cache for #yast_keyboards)
+      @all_keyboards = nil
+
       Keyboard()
     end
 
@@ -307,15 +313,6 @@ module Yast
       #
       # Load the keyboard DB.
       # Do not hold this database in a permanent module variable (it's very large).
-
-      # eval is necessary for translating the texts needed to be translated
-      all_keyboards = Convert.convert(
-        Builtins.eval(SCR.Read(path(".target.yast2"), "keyboard_raw.ycp")),
-        :from => "any",
-        :to   => "map <string, list>"
-      )
-
-      all_keyboards = {} if all_keyboards == nil
 
       # The new reduced map of keyboard data.
       #
@@ -387,9 +384,8 @@ module Yast
       x11data = {}
 
       if Ops.greater_than(SCR.Read(path(".target.size"), cmd), 0)
-        file = Ops.add(Directory.tmpdir, "/xkbctrl.out")
-        cmd = Ops.add(Ops.add(cmd, " "), keymap)
-        SCR.Execute(path(".target.bash"), Ops.add(Ops.add(cmd, " > "), file))
+        file = File.join(Directory.tmpdir, "xkbctrl.out")
+        SCR.Execute(path(".target.bash"), "#{cmd} #{keymap.shellescape} > #{file.shellescape}")
         x11data = Convert.to_map(SCR.Read(path(".target.ycp"), file))
       else
         Builtins.y2warning("/usr/sbin/xkbctrl not found")
@@ -443,8 +439,27 @@ module Yast
       Builtins.union(base_lang2keyboard, Language.GetLang2KeyboardMap(true))
     end
 
+    # Get the default key map for selected language
+    #
+    # @param sys_language [String] the locale, e.g. cs_CZ
+    #
+    # @return [String] the expected key map, e.g. cz-us-qwertz.map.gz
+    #
+    def GetKeymapForLanguage(sys_language)
+      keyboard = GetKeyboardForLanguage(sys_language, "us")
+      keyboards = get_reduced_keyboard_db
 
+      log.debug("reduced kbd db: #{keyboards}")
+      # Get the entry from the reduced local map for the given language.
+      #
+      kbd_descr = keyboards[keyboard] || []
+      log.info( "Description for keyboard #{keyboard.inspect}: #{kbd_descr.inspect}")
 
+      if !kbd_descr.empty? # keyboard found
+        return Ops.get_string(kbd_descr, [1, "ncurses"], "us.map.gz")
+      end
+      "us.map.gz"
+    end
 
     # GetKeyboardForLanguage()
     #
@@ -530,39 +545,28 @@ module Yast
 
         @XkbModel = Ops.get_string(x11data, "XkbModel", "pc104")
         @XkbLayout = Ops.get_string(x11data, "XkbLayout", "")
-        @XkbVariant = Ops.get_string(x11data, "XkbVariant", "basic")
+        @XkbVariant = Ops.get_string(x11data, "XkbVariant", "")
         @XkbOptions = Ops.get_string(x11data, "XkbOptions", "")
         @LeftAlt = Ops.get_string(x11data, "LeftAlt", "")
         @RightAlt = Ops.get_string(x11data, "RightAlt", "")
         @ScrollLock = Ops.get_string(x11data, "ScrollLock", "")
         @RightCtl = Ops.get_string(x11data, "RightCtl", "")
         @Apply = Ops.get_string(x11data, "Apply", "")
-
-        # Build the compose table entry.
-        #
-        @compose_table = "clear "
-
-        if @XkbModel == "pc104" || @XkbModel == "pc105"
-          @compose_table = Ops.add(@compose_table, "winkeys shiftctrl ")
-        end
-
-        # Check for "compose" entry in keytable, might define
-        # a different encoding (i.e. "latin2").
-        #
-        compose = Ops.get_string(@kbd_descr, [1, "compose"], "latin1.add")
-
-        @compose_table = Ops.add(@compose_table, compose) # Language not found.
       else
         return false # Error
       end
 
-      # Console command...
-      @ckb_cmd = Ops.add("/bin/loadkeys ", @keymap)
+      # loadkeys is already escaped and it is multiple params inside, so cannot be escaped here
+      devices = loadkeys_devices("tty")
+      @ckb_cmd = "/usr/bin/loadkeys #{devices} #{keymap.shellescape}"
+      devices = loadkeys_devices("ttyS")
+      @skb_cmd = "/usr/bin/loadkeys #{devices} #{keymap.shellescape}"
 
       # X11 command...
       # do not try to run this with remote X display
       if Ops.greater_than(Builtins.size(@Apply), 0) && x11_setup_needed
-        @xkb_cmd = Ops.add(Ops.add(XVersion.binPath, "/setxkbmap "), @Apply)
+        # Apply cannot be escaped as it is already set of parameters. But it is at least our string and not user provided.
+        @xkb_cmd = "#{File.join(XVersion.binPath, "setxkbmap")} #{@Apply}"
       else
         @xkb_cmd = ""
       end
@@ -756,7 +760,7 @@ module Yast
           Builtins.y2milestone("linuxrc keyboard: %1", keytable)
           map2yast = Builtins.union(
             keymap2yast,
-            { "dk" => "danish", "de-lat1-nd" => "german" }
+            { "dk" => "danish", "de-lat1-nd" => "german", "us" => "english-us" }
           )
           if Builtins.issubstring(keytable, ".map.gz")
             keytable = Builtins.substring(
@@ -841,31 +845,11 @@ module Yast
     #
     def Save
       if Mode.update
-        kbd = Misc.SysconfigRead(path(".sysconfig.keyboard.YAST_KEYBOARD"), "")
-        if kbd.empty?
-          kmap = Misc.SysconfigRead(path(".etc.vconsole_conf.KEYMAP"), "")
-          # if still nothing found, lets check the obsolete config option:
-          kmap = Misc.SysconfigRead(path(".sysconfig.keyboard.KEYTABLE"), "") if kmap.empty?
-          if !kmap.empty?
-            data = GetX11KeyData(kmap)
-            if (data["XkbLayout"] || "").size > 0
-              kbd = XkblayoutToKeyboard(data["XkbLayout"]) + "," + (data["XkbModel"] || "pc104")
-              SCR.Write(path(".sysconfig.keyboard.YAST_KEYBOARD"), kbd)
-              SCR.Write(
-                path(".sysconfig.keyboard.YAST_KEYBOARD.comment"),
-                "\n" +
-                  "# The YaST-internal identifier of the attached keyboard.\n" +
-                  "#\n"
-              )
-              SCR.Write(path(".sysconfig.keyboard"), nil) # flush
-            end
-          end
-        end
+        log.info "skipping country changes in update"
         return
       end
 
       # Write some sysconfig variables.
-      # Set keytable, compose_table and tty list.
       #
       SCR.Write(
         path(".sysconfig.keyboard.YAST_KEYBOARD"),
@@ -878,7 +862,6 @@ module Yast
           "#\n"
       )
 
-      SCR.Write(path(".sysconfig.keyboard.COMPOSETABLE"), @compose_table)
       SCR.Write(path(".sysconfig.keyboard.KBD_RATE"), @kbd_rate)
       SCR.Write(path(".sysconfig.keyboard.KBD_DELAY"), @kbd_delay)
       SCR.Write(path(".sysconfig.keyboard.KBD_NUMLOCK"), @kbd_numlock)
@@ -888,23 +871,25 @@ module Yast
       )
       SCR.Write(path(".sysconfig.keyboard"), nil) # flush
 
-      # Write systemd settings for console
-      SCR.Write(path(".etc.vconsole_conf.KEYMAP"), @keymap.gsub(/(.*)\.map\.gz/, '\1'))
-      SCR.Write(path(".etc.vconsole_conf"), nil) # flush
+      chomped_keymap = @keymap.chomp(".map.gz")
 
-      # Write systemd settings for X11
-      if x11_setup_needed
-        # According to localectl syntax, if one option is empty then skip
-        # the following ones
-        args = [@XkbLayout, @XkbModel, @XkbVariant, @XkbOptions]
-        blank = args.find_index("")
-        args = args[0, blank] if blank
-        if !args.empty?
-          cmd = "/usr/bin/localectl --no-convert set-x11-keymap #{args.join(' ')}"
-          if SCR.Execute(path(".target.bash"), cmd) != 0
-            log.error "X11 configuration not written. Failed to execute '#{cmd}'"
-          end
-        end
+      if Stage.initial
+        # do use --root option, running in chroot does not work (bsc#1074481)
+        cmd = "/usr/bin/systemd-firstboot --root #{Installation.destdir.shellescape} --keymap #{chomped_keymap.shellescape}"
+        result = WFM.Execute(path(".local.bash_output"), cmd)
+      else
+        # this sets both the console and the X11 keyboard (see "man localectl")
+        cmd = "/usr/bin/localectl set-keymap #{chomped_keymap.shellescape}"
+        result = SCR.Execute(path(".target.bash_output"), cmd)
+      end
+
+      log.info "Making keyboard settings persistent: command #{cmd} end with #{result.inspect}"
+
+      if result["exit"] != 0
+        log.error "Keyboard configuration not written. Failed to execute '#{cmd}'"
+        log.error "output: #{result.inspect}"
+        # TRANSLATORS: the "%s" is replaced by the executed command
+        Report.Error(_("Could not save the keyboard setting, the command\n%s\nfailed.") % cmd)
       end
 
       # As a preliminary step mark all keyboards except the one to be configured
@@ -1002,8 +987,6 @@ module Yast
     #
     # @param	Keyboard language e.g.  "english-us"
     #
-    # @return  The loadkeys command that has been executed to do it.
-    #		(also stored in Keyboard::ckb_cmd)
     def SetConsole(keyboard)
       if Mode.test
         Builtins.y2milestone("Test mode - NOT setting keyboard")
@@ -1014,11 +997,17 @@ module Yast
 
         Builtins.y2milestone("Setting console keyboard to: <%1>", @current_kbd)
         Builtins.y2milestone("loadkeys command: <%1>", @ckb_cmd)
-
         SCR.Execute(path(".target.bash"), @ckb_cmd)
+
+        # It could be that for seriell tty's the keyboard cannot be set. So it will
+        # be done separately in order to ensure that setting console keyboard
+        # will be done successfully in the previous call.
+        Builtins.y2milestone("Setting seriell console keyboard to: <%1>", @current_kbd)
+        Builtins.y2milestone("loadkeys command: <%1>", @skb_cmd)
+        SCR.Execute(path(".target.bash"), @skb_cmd)
+
         UI.SetKeyboard
       end
-      @ckb_cmd
     end # SetConsole()
 
 
@@ -1069,7 +1058,6 @@ module Yast
     def Set(keyboard)
       Builtins.y2milestone("set to %1", keyboard)
       if Mode.config
-        @current_kbd = keyboard
         @name = GetKeyboardName(@current_kbd)
         return
       end
@@ -1136,7 +1124,7 @@ module Yast
         # Only follow the language if the user has never actively chosen
         # a keyboard. The indicator for this is user_decision which is
         # set from outside the module.
-        if @user_decision || Mode.update && !Stage.initial || Mode.autoinst ||
+        if @user_decision || Mode.update && !Stage.initial || Mode.auto ||
             Mode.live_installation ||
             ProductFeatures.GetStringFeature("globals", "keyboard") != ""
           if language_changed
@@ -1193,6 +1181,7 @@ module Yast
     end
 
     # Return item list of keyboard items, sorted according to current language
+    # @return [Array<Term>] Item(Id(...), String name, Boolean selected)
     def GetKeyboardItems
       ret = Builtins.maplist(Selection()) do |code, name|
         Item(Id(code), name, @current_kbd == code)
@@ -1263,90 +1252,6 @@ module Yast
       nil
     end
 
-
-    # Special function for update mode only.
-    # Checks for the keyboard layout on the system which should be updated and if it
-    # differs from current one, opens a popup with the offer to change the layout.
-    # See discussion in bug #71069
-    # @param [String] destdir path to the mounted system to update (e.g. "/mnt")
-    def CheckKeyboardDuringUpdate(destdir)
-      # autoupgrade is not interactive, therefore skip this check and use data
-      # from profile directly
-      return if Mode.autoupgrade
-
-      target_kbd = Misc.CustomSysconfigRead(
-        "YAST_KEYBOARD",
-        @current_kbd,
-        Ops.add(destdir, "/etc/sysconfig/keyboard")
-      )
-      pos = Builtins.find(target_kbd, ",")
-      if pos != nil && Ops.greater_than(pos, 0)
-        target_kbd = Builtins.substring(target_kbd, 0, pos)
-      end
-
-      keyboards = get_reduced_keyboard_db
-
-      if target_kbd != @current_kbd &&
-          Ops.get_list(keyboards, target_kbd, []) != []
-        Builtins.y2milestone(
-          "current_kbd: %1, target_kbd: %2",
-          @current_kbd,
-          target_kbd
-        )
-
-        target_name = GetKeyboardName(target_kbd)
-
-        UI.OpenDialog(
-          Opt(:decorated),
-          HBox(
-            HSpacing(1.5),
-            VBox(
-              HSpacing(40),
-              VSpacing(0.5),
-              # label text: user can choose the keyboard from the updated system
-              # or continue with the one defined by his language.
-              # 2 radio-buttons follow this label.
-              # Such keyboard layout is used only for the time of the update,
-              # it is not saved to the system.
-              Left(
-                Label(
-                  _(
-                    "You are currently using a keyboard layout\n" +
-                      "different from the one in the system to update.\n" +
-                      "Select the layout to use during update:"
-                  )
-                )
-              ),
-              VSpacing(0.5),
-              RadioButtonGroup(
-                VBox(
-                  Left(RadioButton(Id(:current), @name)),
-                  Left(RadioButton(Id(:target), target_name, true))
-                )
-              ),
-              VSpacing(0.5),
-              ButtonBox(
-                PushButton(Id(:ok), Opt(:default, :key_F10), Label.OKButton),
-                PushButton(Id(:cancel), Opt(:key_F9), Label.CancelButton)
-              ),
-              VSpacing(0.5)
-            ),
-            HSpacing(1.5)
-          )
-        )
-        ret = UI.UserInput
-
-        if ret == :ok && Convert.to_boolean(UI.QueryWidget(Id(:target), :Value))
-          Set(target_kbd)
-          @user_decision = true
-        end
-
-        UI.CloseDialog
-      end
-
-      nil
-    end
-
     # AutoYaST interface function: Get the Keyboard configuration from a map.
     #
     # @param settings [Hash] imported map with the content of either the
@@ -1409,7 +1314,6 @@ module Yast
     publish :variable => :XkbLayout, :type => "string"
     publish :variable => :XkbVariant, :type => "string"
     publish :variable => :keymap, :type => "string"
-    publish :variable => :compose_table, :type => "string"
     publish :variable => :XkbOptions, :type => "string"
     publish :variable => :LeftAlt, :type => "string"
     publish :variable => :RightAlt, :type => "string"
@@ -1439,7 +1343,7 @@ module Yast
     publish :function => :Modified, :type => "boolean ()"
     publish :function => :Save, :type => "void ()"
     publish :function => :Name, :type => "string ()"
-    publish :function => :SetConsole, :type => "string (string)"
+    publish :function => :SetConsole, :type => "void (string)"
     publish :function => :SetX11, :type => "string (string)"
     publish :function => :MakeProposal, :type => "string (boolean, boolean)"
     publish :function => :CalledRestore, :type => "boolean ()"
@@ -1449,7 +1353,7 @@ module Yast
     publish :function => :SetKeyboardForLanguage, :type => "void (string)"
     publish :function => :SetKeyboardForLang, :type => "void (string)"
     publish :function => :SetKeyboardDefault, :type => "void ()"
-    publish :function => :CheckKeyboardDuringUpdate, :type => "void (string)"
+    publish :function => :GetKeymapForLanguage, :type => "string(string)"
     publish :function => :Import, :type => "boolean (map, ...)"
     publish :function => :Export, :type => "map ()"
     publish :function => :Summary, :type => "string ()"
@@ -1485,41 +1389,97 @@ module Yast
         SCR.Write(path(".target.string"), UDEV_FILE, nil)
       end
     end
-  end
 
-  # Checks if the graphical environment is being executed remotely using
-  # "ssh -X"
-  def x11_over_ssh?
-    display = ENV["DISPLAY"] || ""
-    display.split(":")[1].to_i >= 10
-  end
-
-  # Checks if it's running in text mode (no X11)
-  def textmode?
-    if !Stage.initial || Mode.live_installation
-      UI.TextMode
-    else
-      Linuxrc.text
+    # Checks if the graphical environment is being executed remotely using
+    # "ssh -X"
+    def x11_over_ssh?
+      display = ENV["DISPLAY"] || ""
+      display.split(":")[1].to_i >= 10
     end
-  end
 
-  # Executes the command to set the keyboard in X11, reporting
-  # any error to the user
-  def execute_xkb_cmd
-    log.info "Setting X11 keyboard to: <#{@current_kbd}>"
-    log.info "Setting X11 keyboard: #{@xkb_cmd}"
-    if SCR.Execute(path(".target.bash"), @xkb_cmd) != 0
-      log.error "Failed to execute the command"
-      Report::Error(_("Failed to set X11 keyboard to '%s'") % @current_kbd)
+    # Checks if it's running in text mode (no X11)
+    def textmode?
+      if !Stage.initial || Mode.live_installation
+        UI.TextMode
+      else
+        Linuxrc.text
+      end
     end
-  end
 
-  # Enables autorepeat if needed
-  def enable_autorepeat
-    return nil unless Stage.initial && !Mode.live_installation && !xen_running
-    cmd = "xset r on"
-    log.info "calling xset to fix autorepeat problem: #{cmd}"
-    SCR.Execute(path(".target.bash"), cmd)
+    # Executes the command to set the keyboard in X11, reporting
+    # any error to the user
+    def execute_xkb_cmd
+      log.info "Setting X11 keyboard to: <#{@current_kbd}>"
+      log.info "Setting X11 keyboard: #{@xkb_cmd}"
+      if SCR.Execute(path(".target.bash"), @xkb_cmd) != 0
+        log.error "Failed to execute the command"
+        Report::Error(_("Failed to set X11 keyboard to '%s'") % @current_kbd)
+      end
+    end
+
+    # Enables autorepeat if needed
+    def enable_autorepeat
+      return nil unless Stage.initial && !Mode.live_installation && !xen_running
+      cmd = "/usr/bin/xset r on"
+      log.info "calling xset to fix autorepeat problem: #{cmd}"
+      SCR.Execute(path(".target.bash"), cmd)
+    end
+
+    # Keyboards map
+    #
+    # The map can be read from two different files, see {#keyboard_file}:
+    #
+    # * `keyboard_raw_opensuse.ycp` when it is an opensuse distribution (according
+    #   to the distribution id specified in /etc/os-release).
+    # * `keyboard_raw.ycp` as a fallback.
+    #
+    # @example Keyboards map format
+    #   all_keyboards #=>
+    #     {"arabic"=>
+    #       ["Arabic",
+    #         {"macintosh"=>{"ncurses"=>"us-mac.map.gz"},
+    #          "pc104"=>{"ncurses"=>"arabic.map.gz"},
+    #          "type4"=>{"ncurses"=>"us.map.gz"},
+    #          "type5"=>{"ncurses"=>"us.map.gz"},
+    #          "type5_euro"=>{"ncurses"=>"us.map.gz"}}],
+    #      "belgian"=>
+    #       ["Belgian",
+    #         {"macintosh"=>{"ncurses"=>"us-mac.map.gz"},
+    #          "pc104"=>{"ncurses"=>"be.map.gz"},
+    #          "type4"=>{"ncurses"=>"us.map.gz"},
+    #          "type5"=>{"ncurses"=>"be-sundeadkeys.map.gz"},
+    #          "type5_euro"=>{"ncurses"=>"be-sundeadkeys.map.gz"}}],
+    #   ...
+    #
+    # @return [Hash] Keyboards map. See the example for content details.
+    def all_keyboards
+      content = SCR.Read(path(".target.yast2"), keyboard_file)
+
+      # eval is necessary for translating the texts needed to be translated
+      content ? Builtins.eval(content) : {}
+    end
+
+    # Keyboard file to use depending on the distribution
+    #
+    # @return [String]
+    def keyboard_file
+      if OSRelease.id.match?(/opensuse/i)
+        "keyboard_raw_opensuse.ycp"
+      else
+        "keyboard_raw.ycp"
+      end
+    end
+
+    # String to specify all the relevant devices in a loadkeys command
+    #
+    # It includes all tty[0-9]* and ttyS[0-9]* devices (bsc#1010938).
+    #
+    # @param [String] kind of tty ("tty", "ttyS")
+    # @return [String] ready to be passed to the loadkeys command
+    def loadkeys_devices (kind)
+      tty_dev_names = Dir["/dev/#{kind}[0-9]*"]
+      tty_dev_names.map { |d| "-C #{d.shellescape}" }.join(" ")
+    end
   end
 
   Keyboard = KeyboardClass.new
