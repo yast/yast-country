@@ -23,7 +23,6 @@ schemafiles_DATA = \
 
 ydata_DATA = \
   data/keyboard_raw.ycp \
-  data/keyboard_raw_opensuse.ycp \
   data/xkblayout2keyboard.ycp \
   data/lang2keyboard.ycp
 
