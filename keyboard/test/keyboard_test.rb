@@ -26,7 +26,6 @@ module Yast
 
   describe "Keyboard" do
     let(:udev_file) { "/usr/lib/udev/rules.d/70-installation-keyboard.rules" }
-    let(:os_release_id) { "opensuse-leap" }
     let(:mode) { "normal" }
     let(:stage) { "normal" }
 
@@ -34,7 +33,6 @@ module Yast
       textdomain "country"
       allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
       Yast.import "Keyboard"
-      allow(OSRelease).to receive(:id).and_return(os_release_id)
       allow(Stage).to receive(:stage).and_return stage
       allow(Mode).to receive(:mode).and_return mode
       allow(Linuxrc).to receive(:text).and_return false
@@ -645,8 +643,6 @@ module Yast
       let(:stage) { "normal" }
       let(:kb_model) { "macintosh" }
 
-      before { allow(Yast::OSRelease).to receive(:id).and_return(os_release_id) }
-
       around do |example|
         old_kb_model = Keyboard.kb_model
         Keyboard.kb_model = kb_model
@@ -654,24 +650,10 @@ module Yast
         Keyboard.kb_model = old_kb_model
       end
 
-      context "when using an opensuse product" do
-        let(:os_release_id) { "opensuse-leap" }
-
-        it "returns the opensuse version of the keyboard map" do
-          reduced_db = Keyboard.get_reduced_keyboard_db
-          expect(reduced_db["russian"].last["ncurses"])
-            .to eq("us-mac.map.gz")
-        end
-      end
-
-      context "when not using an opensuse product" do
-        let(:os_release_id) { "sles" }
-
-        it "returns generic version of the keyboard map" do
-          reduced_db = Keyboard.get_reduced_keyboard_db
-          expect(reduced_db["russian"].last["ncurses"])
-            .to eq("mac-us.map.gz")
-        end
+      it "returns generic version of the keyboard map" do
+        reduced_db = Keyboard.get_reduced_keyboard_db
+        expect(reduced_db["russian"].last["ncurses"])
+          .to eq("us-mac.map.gz")
       end
     end
   end
