@@ -90,7 +90,7 @@ return ($[
 	// keyboard layout
 	_("German (Switzerland)"),
 	$[
-	    "pc104"	: $[ "ncurses": "ch-de_nodeadkeys.map.gz" ],
+	    "pc104"	: $[ "ncurses": "ch.map.gz" ],
 	    "macintosh" : $[ "ncurses": "ch-de_mac.map.gz" ],
 	    "type4"	: $[ "ncurses": "us.map.gz" ],
 	    "type5"	: $[ "ncurses": "ch-de_sundeadkeys.map.gz" ],
