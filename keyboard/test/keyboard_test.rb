@@ -13,7 +13,6 @@ module Yast
   import "Path"
   import "Encoding"
   import "AsciiFile"
-  import "XVersion"
   import "Report"
   import "OSRelease"
   import "Keyboard"
@@ -50,7 +49,6 @@ module Yast
     describe "#Save" do
       before(:each) do
         stub_presence_of "/usr/sbin/xkbctrl"
-        allow(XVersion).to receive(:binPath).and_return "/usr/bin"
         # Stub the configuration writing...
         stub_scr_write
         # ...but allow the dump_xkbctrl helper to use SCR.Write
@@ -147,7 +145,6 @@ module Yast
 
       it "calls setxkbmap if graphical system is installed" do
         stub_presence_of "/usr/sbin/xkbctrl"
-        allow(XVersion).to receive(:binPath).and_return "/usr/bin"
 
         expect(SCR).to execute_bash(/loadkeys -C \/dev\/tty.* tr\.map\.gz/).twice
         # Called twice, for SetConsole and SetX11
@@ -187,7 +184,6 @@ module Yast
 
       before(:each) do
         stub_presence_of "/usr/sbin/xkbctrl"
-        allow(XVersion).to receive(:binPath).and_return "/usr/bin"
 
         allow(SCR).to execute_bash(/xkbctrl/) do |p, cmd|
           dump_xkbctrl(new_lang, cmd.split("> ")[1])
