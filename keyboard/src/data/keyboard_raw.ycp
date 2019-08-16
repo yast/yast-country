@@ -527,8 +527,9 @@ return ($[
 	// keyboard layout
 	_("Khmer"),
 	$[
-	    // This used to be khmer.map.gz, but that is only a link to us.map.gz
-	    "pc104"	: $[ "ncurses"	: "us.map.gz" ],
+        // Although khmer.map.gz is only a link to us.map.gz, it's important to keep the
+        // khmer name because is used by yast2-x11 to to obtain the proper XkbLayout
+	    "pc104"	: $[ "ncurses"	: "khmer.map.gz" ],
 	    "macintosh" : $[ "ncurses"	: "us-mac.map.gz" ],
 	    "type4"	: $[ "ncurses"	: "us.map.gz" ],
 	    "type5"	: $[ "ncurses"	: "us.map.gz" ],
@@ -552,8 +553,9 @@ return ($[
 	// keyboard layout
 	_("Arabic"),
 	$[
-	    // This used to be arabic.map.gz, but that is only a link to us.map.gz
-	    "pc104"	: $[ "ncurses"	: "us.map.gz" ],
+        // Although arabic.map.gz is only a link to us.map.gz, it's important to keep the
+        // arabic name because is used by yast2-x11 to to obtain the proper XkbLayout
+	    "pc104"	: $[ "ncurses"	: "arabic.map.gz" ],
 	    "macintosh" : $[ "ncurses"	: "us-mac.map.gz" ],
 	    "type4"	: $[ "ncurses"	: "us.map.gz" ],
 	    "type5"	: $[ "ncurses"	: "us.map.gz" ],
