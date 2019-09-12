@@ -1,0 +1,143 @@
+- description: "English (US)"
+  code: "us"
+
+- description: "English (UK)"
+  code: "uk"
+
+- description: "German"
+  code: "de-latin1-nodeadkeys"
+
+- description: "German (with deadkeys)"
+  code: "de-latin1"
+
+- description: "German (Switzerland)"
+  code: "sg-latin1"
+
+- description: "French"
+  code: "fr-latin1"
+
+- description: "French (Switzerland)"
+  code: "fr_CH-latin1"
+
+- description: "French (Canada)"
+  code: "cf"
+
+- description: "Canadian (Multilingual)"
+  code: "cn-latin1"
+
+- description: "Spanish"
+  code: "es"
+
+- description: "Spanish (Latin America)"
+  code: "la-latin1"
+
+- description: "Spanish (CP 850)"
+  code: "es-cp850"
+
+- description: "Italian"
+  code: "it"
+
+- description: "Portuguese"
+  code: "pt-latin1"
+
+- description: "Portuguese (Brazil)"
+  code: "br-abnt2"
+
+- description: "Portuguese (Brazil -- US accents)"
+  code: "us-acentos"
+
+- description: "Greek"
+  code: "gr"
+
+- description: "Dutch"
+  code: "nl"
+
+- description: "Danish"
+  code: "dk-latin1"
+
+- description: "norwegian"
+  code: "no-latin1"
+
+- description: "Swedish"
+  code: "sv-latin1"
+
+- description: "Finnish"
+  code: "fi"
+
+- description: "Czech"
+  code: "cz-us-qwertz"
+
+- description: "Czech (qwerty)"
+  code: "cz-lat2-us"
+
+- description: "Slovak"
+  code: "sk-qwertz"
+
+- description: "Slovak (qwerty)"
+  code: "sk-qwerty"
+
+- description: "Slovene"
+  code: "slovene"
+
+- description: "Hungarian"
+  code: "hu"
+
+- description: "Polish"
+  code: "Pl02"
+
+- description: "Russian"
+  code: "ruwin_alt-UTF-8"
+
+- description: "Serbian"
+  code: "sr-cy"
+
+- description: "Estonian"
+  code: "et"
+
+- description: "Lithuanian"
+  code: "lt.baltic"
+
+- description: "Turkish"
+  code: "trq"
+
+- description: "Croatian"
+  code: "croat"
+
+- description: "Japanese"
+  code: "jp106"
+
+- description: "Belgian"
+  code: "be-latin1"
+
+- description: "Dvorak"
+  code: "dvorak"
+
+- description: "Icelandic"
+  code: "is-latin1"
+
+- description: "Ukrainian"
+  code: "ua"
+
+- description: "Khmer"
+  code: "khmer"
+
+- description: "Korean"
+  code: "korean"
+
+- description: "Arabic"
+  code: "arabic"
+
+- description: "Tajik"
+  code: "tj_alt-UTF8"
+
+- description: "Traditional Chinese"
+  code: "taiwanese"
+
+- description: "Simplified Chinese"
+  code: "chinese"
+
+- description: "Romanian"
+  code: "ro"
+
+- description: "US International"
+  code: "us-acentos"

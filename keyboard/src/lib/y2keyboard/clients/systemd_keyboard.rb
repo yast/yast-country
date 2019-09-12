@@ -17,11 +17,22 @@
 # To contact SUSE LLC about this file by physical or electronic mail, you may
 # find current contact information at www.suse.com.
 
-require_relative "../../test/test_helper.rb"
-require_relative "keyboard_spec_helper"
+require_relative "../dialogs/layout_selector"
+require_relative "../strategies/systemd_strategy"
+require_relative "../keyboard_layout"
+require "yaml"
 
-RSpec.configure do |config|
-  config.include KeyboardSpecHelper # custom helpers
-  config.filter_run focus: true
-  config.run_all_when_everything_filtered = true
+module Y2Keyboard
+  module Clients
+    # Client with systemd implementation.
+    class SystemdKeyboard
+      def self.run
+        path = File.join(__dir__, "../data/keyboards.yml")
+        layout_definitions = YAML.load_file(path)
+        systemd_strategy = Y2Keyboard::Strategies::SystemdStrategy.new
+        Y2Keyboard::KeyboardLayout.use(systemd_strategy, layout_definitions)
+        Y2Keyboard::Dialogs::LayoutSelector.new.run
+      end
+    end
+  end
 end
