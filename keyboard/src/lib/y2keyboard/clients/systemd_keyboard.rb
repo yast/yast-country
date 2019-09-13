@@ -27,7 +27,9 @@ module Y2Keyboard
     # Client with systemd implementation.
     class SystemdKeyboard
       def self.run
-        path = File.join(__dir__, "../data/keyboards.yml")
+        Yast.import "Directory"
+        
+        path = Directory.find_data_file("keyboards.yml")
         layout_definitions = YAML.load_file(path)
         systemd_strategy = Y2Keyboard::Strategies::SystemdStrategy.new
         Y2Keyboard::KeyboardLayout.use(systemd_strategy, layout_definitions)

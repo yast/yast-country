@@ -9,29 +9,32 @@ client_DATA = \
   clients/keyboard_simple_proposal.rb \
   clients/keyboard.rb
 
-yncludedir = @yncludedir@/keyboard
-ynclude_DATA = \
-  include/keyboard/dialogs.rb
-
-scrconf_DATA = \
-  scrconf/sysconfig_keyboard.scr \
-  scrconf/etc_vconsole_conf.scr
-
 schemafilesdir = $(schemadir)/autoyast/rnc
 schemafiles_DATA = \
   autoyast-rnc/keyboard.rnc
 
 ydata_DATA = \
-  data/keyboard_raw.ycp \
-  data/xkblayout2keyboard.ycp \
-  data/lang2keyboard.ycp
+  data/keyboards.yml
 
 desktop_DATA = \
   desktop/org.opensuse.yast.Keyboard.desktop
 
-ywidgetsdir = @ylibdir@/y2country/widgets
-ywidgets_DATA = \
-  lib/y2country/widgets/keyboard_selection.rb
+ylibdir = @ylibdir@/y2keyboard
+ylib_DATA = \
+  lib/y2keyboard/keyboard_layout_loader.rb \
+  lib/y2keyboard/keyboard_layout.rb
+
+ylibclientsdir = @ylibdir@/y2keyboard/clients
+ylibclients_DATA = \
+  lib/y2keyboard/clients/systemd_keyboard.rb
+
+ylibdialogsdir = @ylibdir@/y2keyboard/dialogs
+ylibdialogs_DATA = \
+  lib/y2keyboard/dialogs/layout_selector.rb
+
+ylibstrategiesdir = @ylibdir@/y2keyboard/strategies
+ylibstrategies_DATA = \
+  lib/y2keyboard/strategies/systemd_strategy.rb
 
 symbolicdir = @icondir@/hicolor/symbolic/apps
 symbolic_DATA = \
@@ -41,6 +44,8 @@ scalable_DATA = \
   icons/hicolor/scalable/apps/yast-keyboard.svg
 
 EXTRA_DIST = $(module_DATA) $(client_DATA) $(ynclude_DATA) $(scrconf_DATA) \
-  $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ywidgets_DATA) $(symbolic_DATA) $(scalable_DATA)
+  $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) \
+  $(ylib_DATA) $(ylibclients_DATA) $(ylibdialogs_DATA) $(ylibstrategies_DATA) \
+  $(symbolic_DATA) $(scalable_DATA)
 
 include $(top_srcdir)/Makefile.am.common
