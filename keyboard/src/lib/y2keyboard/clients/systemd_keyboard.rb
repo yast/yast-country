@@ -29,7 +29,7 @@ module Y2Keyboard
       def self.run
         Yast.import "Directory"
         
-        path = Directory.find_data_file("keyboards.yml")
+        path = Yast::Directory.find_data_file("keyboards.yml")
         layout_definitions = YAML.load_file(path)
         systemd_strategy = Y2Keyboard::Strategies::SystemdStrategy.new
         Y2Keyboard::KeyboardLayout.use(systemd_strategy, layout_definitions)
