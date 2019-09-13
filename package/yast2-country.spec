@@ -118,6 +118,7 @@ mkdir -p %{buildroot}%{_datadir}/polkit-1/actions
 %files data
 %dir %{yast_ydatadir}/languages
 %{yast_ydatadir}/languages/*.ycp
+%{yast_ydatadir}/keyboards.yml
 %{yast_moduledir}/Language.rb
 %dir %{yast_libdir}/y2country
 %{yast_libdir}/y2country/language_dbus.rb
