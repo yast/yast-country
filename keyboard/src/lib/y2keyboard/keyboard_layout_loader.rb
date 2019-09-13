@@ -39,7 +39,13 @@ module Y2Keyboard
     # Load x11 keys on the fly.
     # @param keyboard_layout [KeyboardLayout] the keyboard layout to load.
     def self.load_x11_layout(keyboard_layout)
-      output = Cheetah.run("/usr/sbin/xkbctrl", keyboard_layout.code, stdout: :capture)
+      xkbctrl_cmd = "/usr/sbin/xkbctrl"
+      if !File.executable?(xkbctrl_cmd)
+        log.warn("#{xkbctrl_cmd} not found on system.")
+        return
+      end
+
+      output = Cheetah.run(xkbctrl_cmd, keyboard_layout.code, stdout: :capture)
       arguments = get_value_from_output(output, "\"Apply\"").tr("\"", "")
       setxkbmap_array_arguments = arguments.split.unshift("setxkbmap")
       Cheetah.run(setxkbmap_array_arguments)

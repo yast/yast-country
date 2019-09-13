@@ -22,6 +22,7 @@ require "y2keyboard/clients/systemd_keyboard"
 require "y2keyboard/dialogs/layout_selector"
 require "y2keyboard/strategies/systemd_strategy"
 require "yaml"
+Yast.import "Directory"
 
 describe Y2Keyboard::Clients::SystemdKeyboard do
   describe ".run" do
@@ -35,9 +36,7 @@ describe Y2Keyboard::Clients::SystemdKeyboard do
     end
 
     it "load keyboard layouts definitions from yml file" do
-      expected_path = "path/to/keyboard.yml"
-      allow(File).to receive(:join).with(anything, "../data/keyboards.yml")
-        .and_return(expected_path)
+      expected_path = Yast::Directory.find_data_file("keyboards.yml")
 
       expect(YAML).to receive(:load_file).with(expected_path).and_return(layout_definitions)
       expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(anything, layout_definitions)
