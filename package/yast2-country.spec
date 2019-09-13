@@ -106,7 +106,6 @@ mkdir -p %{buildroot}%{_datadir}/polkit-1/actions
 %dir %{yast_libdir}/y2country
 %{yast_libdir}/y2country/widgets
 %dir %{yast_libdir}/y2keyboard/
-%{yast_libdir}/y2keyboard
 %{yast_ydatadir}/*.ycp
 %{yast_ydatadir}/*.json
 %{yast_yncludedir}
