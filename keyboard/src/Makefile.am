@@ -6,7 +6,6 @@ module_DATA = \
 client_DATA = \
   clients/keyboard_auto.rb \
   clients/keyboard_proposal.rb \
-  clients/keyboard_simple_proposal.rb \
   clients/keyboard.rb
 
 schemafilesdir = $(schemadir)/autoyast/rnc
