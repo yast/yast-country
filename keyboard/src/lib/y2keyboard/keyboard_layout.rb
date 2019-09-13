@@ -47,8 +47,8 @@ module Y2Keyboard
     end
 
     def self.current_layout
-      current_layout_code = @@strategy.current_layout
-      layout_definition = @@layout_definitions.detect { |x| x["code"] == current_layout_code }
+      layout_definition = @@layout_definitions.detect { |x| x["code"] == @@strategy.current_layout } ||
+        @@layout_definitions.detect { |x| x["code"] == "uk" } # default
       KeyboardLayout.new(layout_definition["code"], layout_definition["description"])
     end
 
