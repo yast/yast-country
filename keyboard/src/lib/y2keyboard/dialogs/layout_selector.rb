@@ -52,6 +52,7 @@ module Y2Keyboard
 
       def layout_selection_box
         VBox(
+          Left(Heading(_("System Keyboard Configuration"))),
           SelectionBox(
             Id(:layout_list),
             Opt(:notify),
@@ -91,9 +92,30 @@ module Y2Keyboard
         @keyboard_layouts.find { |x| x.code == selected }
       end
 
+      def help_handler
+        Yast::Popup.LongText(
+          _("Help"),
+          RichText(help_text),
+          40,
+          20
+        )
+      end
+
+      # Text to display when the help button is pressed
+      #
+      # @return [String]
+      def help_text
+        # TRANSLATORS: help text
+        _("\n<p><big><b>Keyboard Configuration</b></big></p>" \
+          "<p>\nChoose the <b>Keyboard Layout</b> to use for " \
+          "installation and in the installed system.<br>" \
+          "Test the layout in <b>Test</b>.</p>")
+      end
+
       def footer
         HBox(
           HSpacing(),
+          Left(PushButton(Id(:help), Opt(:key_F1, :help), Yast::Label.HelpButton)),
           PushButton(Id(:cancel), Yast::Label.CancelButton),
           PushButton(Id(:accept), Yast::Label.AcceptButton),
           HSpacing()
