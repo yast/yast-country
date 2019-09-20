@@ -41,6 +41,7 @@ ydata_DATA = \
   data/languages/language_en_US.ycp \
   data/languages/language_es_ES.ycp \
   data/languages/language_et_EE.ycp \
+  data/languages/language_fa_IR.ycp \
   data/languages/language_fi_FI.ycp \
   data/languages/language_fr_FR.ycp \
   data/languages/language_gl_ES.ycp \
