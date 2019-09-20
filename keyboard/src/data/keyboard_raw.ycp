@@ -199,6 +199,18 @@ return ($[
 	    "type5_euro": $[ "ncurses": "us.map.gz" ],
 	]
     ],
+  "persian":
+    [
+	// keyboard layout
+	_("Persian"),
+	$[
+	    "pc104"	: $[ "ncurses": "ir.map.gz"],
+	    "macintosh" : $[ "ncurses": "ir.map.gz"],
+	    "type4"	: $[ "ncurses": "ir.map.gz" ],
+	    "type5"	: $[ "ncurses": "ir.map.gz" ],
+	    "type5_euro": $[ "ncurses": "ir.map.gz" ],
+	]
+    ],
   "portugese":
     [
 	// keyboard layout
