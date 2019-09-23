@@ -47,6 +47,8 @@ $[
   "es_UY"		: "America/Montevideo",
   "es_VE"		: "America/Caracas",
 
+  "fa_IR"		: "Asia/Tehran",
+
   "fr"			: "Europe/Paris",
   "fr_BE"		: "Europe/Brussels",
   "fr_CA"		: "Canada/Eastern",

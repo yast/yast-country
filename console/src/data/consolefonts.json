@@ -71,6 +71,12 @@
     "screenMap": "",
     "magic": ""
   },
+  "fa_IR": {
+    "font": "latarcyrheb-sun16.psfu",
+    "unicodeMap": "",
+    "screenMap": "",
+    "magic": ""
+  },
   "fr": {
     "font": "eurlatgr.psfu",
     "unicodeMap": "",
