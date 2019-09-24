@@ -18,6 +18,10 @@ ydata_DATA = \
 desktop_DATA = \
   desktop/org.opensuse.yast.Keyboard.desktop
 
+ywidgetsdir = @ylibdir@/y2country/widgets
+ywidgets_DATA = \
+  lib/y2country/widgets/keyboard_selection.rb
+
 ylibdir = @ylibdir@/y2keyboard
 ylib_DATA = \
   lib/y2keyboard/keyboard_layout_loader.rb \
@@ -43,7 +47,7 @@ scalable_DATA = \
   icons/hicolor/scalable/apps/yast-keyboard.svg
 
 EXTRA_DIST = $(module_DATA) $(client_DATA) $(ynclude_DATA) $(scrconf_DATA) \
-  $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) \
+  $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ywidgets_DATA) \
   $(ylib_DATA) $(ylibclients_DATA) $(ylibdialogs_DATA) $(ylibstrategies_DATA) \
   $(symbolic_DATA) $(scalable_DATA)
 

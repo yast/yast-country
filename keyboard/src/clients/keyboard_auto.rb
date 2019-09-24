@@ -67,8 +67,7 @@ module Yast
       elsif @func == "Reset"
         Keyboard.Import(
           {
-            "keymap"          => Keyboard.keyboard_on_entry,
-            "keyboard_values" => Keyboard.expert_on_entry
+            "keymap"          => Keyboard.keyboard_on_entry
           }
         )
         Keyboard.ExpertSettingsChanged = false

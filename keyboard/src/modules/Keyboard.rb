@@ -20,20 +20,10 @@
 # ------------------------------------------------------------------------------
 
 # File:
-#   Keyboard.ycp
+#   Keyboard.rb
 #
 # Module:
 #   Keyboard
-#
-# Summary:
-#   Provide information regarding the keyboard.
-#
-# Authors:
-#   Thomas Roelz <tom@suse.de>
-#
-# Maintainer:	Jiri Suchomel <jsuchome@suse.cz>
-#
-# $Id$
 #
 # Usage:
 # ------
@@ -43,20 +33,10 @@
 #
 # Set in the constructor after the first import (only after probing):
 #
-#	kb_model
-#	XkbLayout
 #	unique_key
 #
 # Set after having called SetKeyboard( keyboard ).
 #
-#	XkbModel
-#	XkbVariant
-#	XkbOptions
-#	LeftAlt
-#	RightAlt
-#	ScrollLock
-#	RightCtl
-#	Apply
 #	keymap
 #	current_kbd
 #	ckb_cmd
@@ -127,22 +107,6 @@ module Yast
       # START: Globally defined data to be accessed via Keyboard::<variable>
       # ------------------------------------------------------------------------
 
-      # kb_model string
-      #
-      @kb_model = "pc104"
-
-      # XkbModel string
-      #
-      @XkbModel = ""
-
-      # XkbLayout string
-      # Only some keyboards do report this information (e.g. sparc).
-      #
-      @XkbLayout = ""
-
-      # XkbVariant string
-      #
-      @XkbVariant = ""
 
       # keymap string for ncurses
       #
@@ -151,26 +115,6 @@ module Yast
       # X11 Options string
       #
       @XkbOptions = ""
-
-      # X11 LeftAlt
-      #
-      @LeftAlt = ""
-
-      # X11 RightAlt
-      #
-      @RightAlt = ""
-
-      # X11 RightCtl
-      #
-      @RightCtl = ""
-
-      # X11 ScrollLock
-      #
-      @ScrollLock = ""
-
-      # Apply string fuer xbcmd
-      #
-      @Apply = ""
 
       # The console keyboard command
       #
@@ -191,9 +135,6 @@ module Yast
       # keyboard set on start
       @keyboard_on_entry = ""
 
-      # expert values on start
-      @expert_on_entry = {}
-
       # The default keyboard if set.
       #
       @default_kbd = ""
@@ -202,13 +143,6 @@ module Yast
       # To be set from outside.
       #
       @user_decision = false
-
-      # unique key
-      #
-      @unique_key = ""
-
-      # state of Expert settings
-      @ExpertSettingsChanged = false
 
       # --------------------------------------------------------------
       # END: Globally defined data to be accessed via Keyboard::<variable>
@@ -351,47 +285,6 @@ module Yast
       deep_copy(keyboards)
     end # get_reduced_keyboard_db()
 
-    # Return a map for conversion from keymap to YaST2 keyboard code()
-    # Get the map of translated keyboard names.
-    # @param   -
-    # @return  [Hash] of $[ keyboard_code : keyboard_name, ...] for all known
-    #      keyboards. 'keyboard_code' is used internally in Set and Get
-    #      functions. 'keyboard_name' is a user-readable string.
-    #      Uses Language::language for translation.
-    #
-    def keymap2yast
-      Builtins.mapmap(get_reduced_keyboard_db) do |code, kbd_value|
-        code_map = Ops.get_map(kbd_value, 1, {})
-        codel = Builtins.splitstring(
-          Ops.get_string(code_map, "ncurses", ""),
-          "."
-        )
-        { Ops.get_string(codel, 0, "") => code }
-      end
-    end
-
-    # GetX11KeyData()
-    #
-    # Get the keyboard info for X11 for the given keymap
-    #
-    # @param	name of the keymap
-    #
-    # @return  [Hash] containing the x11 config data
-    #
-    def GetX11KeyData(keymap)
-      cmd = "/usr/sbin/xkbctrl"
-      x11data = {}
-
-      if Ops.greater_than(SCR.Read(path(".target.size"), cmd), 0)
-        file = File.join(Directory.tmpdir, "xkbctrl.out")
-        SCR.Execute(path(".target.bash"), "#{cmd} #{keymap.shellescape} > #{file.shellescape}")
-        x11data = Convert.to_map(SCR.Read(path(".target.ycp"), file))
-      else
-        Builtins.y2warning("/usr/sbin/xkbctrl not found")
-      end
-      deep_copy(x11data)
-    end
-
     # Return human readable (and translated) name of the given keyboard map
     # @param [String] kbd keyboard map
     # @return [String]
@@ -407,21 +300,6 @@ module Yast
       ret
     end
 
-    # GetExpertValues()
-    #
-    # Return the values for the various expert settings in a map
-    #
-    # @return  [Hash] with values filled in
-    #
-    def GetExpertValues
-      ret = {
-        "rate"     => @kbd_rate,
-        "delay"    => @kbd_delay,
-        "numlock"  => @kbd_numlock,
-        "discaps"  => @kbd_disable_capslock == "yes" ? true : false
-      }
-      deep_copy(ret)
-    end
 
     # Get the system_language --> keyboard_language conversion map.
     #
@@ -539,18 +417,6 @@ module Yast
         translate = Ops.get_string(@kbd_descr, 0, keyboard)
         @name = Builtins.eval(translate)
 
-        x11data = GetX11KeyData(@keymap)
-        Builtins.y2milestone("x11data=%1", x11data)
-
-        @XkbModel = Ops.get_string(x11data, "XkbModel", "pc104")
-        @XkbLayout = Ops.get_string(x11data, "XkbLayout", "")
-        @XkbVariant = Ops.get_string(x11data, "XkbVariant", "")
-        @XkbOptions = Ops.get_string(x11data, "XkbOptions", "")
-        @LeftAlt = Ops.get_string(x11data, "LeftAlt", "")
-        @RightAlt = Ops.get_string(x11data, "RightAlt", "")
-        @ScrollLock = Ops.get_string(x11data, "ScrollLock", "")
-        @RightCtl = Ops.get_string(x11data, "RightCtl", "")
-        @Apply = Ops.get_string(x11data, "Apply", "")
       else
         return false # Error
       end
@@ -561,14 +427,6 @@ module Yast
       devices = loadkeys_devices("ttyS")
       @skb_cmd = "/usr/bin/loadkeys #{devices} #{keymap.shellescape}"
 
-      # X11 command...
-      # do not try to run this with remote X display
-      if Ops.greater_than(Builtins.size(@Apply), 0) && x11_setup_needed
-        # Apply cannot be escaped as it is already set of parameters. But it is at least our string and not user provided.
-        @xkb_cmd = "/usr/bin/setxkbmap #{@Apply}"
-      else
-        @xkb_cmd = ""
-      end
 
       # Store keyboard just set.
       #
@@ -677,117 +535,6 @@ module Yast
       ret
     end
 
-    # Probe keyboard and set local module data.
-
-    def probe_settings
-      # First assign the kb_model. This is e.g. "pc104".
-      # Aside from being used directly for writing the XF86Config file this is later on
-      # used to search the YaST2 keyboards database (it's a key in a map).
-
-      # Probe the keyboard.
-      #
-      if !Mode.config
-        @keyboardprobelist = Convert.to_list(SCR.Read(path(".probe.keyboard")))
-
-        Builtins.y2milestone("Probed keyboard: <%1>", @keyboardprobelist)
-
-        # Get the first keyboard from the list (it should exist).
-        #
-        keyboardmap1 = Ops.get_map(@keyboardprobelist, 0, {})
-
-        # Get the unique_key
-        #
-        @unique_key = Ops.get_string(keyboardmap1, "unique_key", "")
-
-        # Get the keyboard data for this first keyboard.
-        #
-        keyboardmap2 = Ops.get_map(keyboardmap1, ["keyboard", 0], {})
-
-        # Assign the XkbModel.
-        #
-        @kb_model = Ops.get_string(keyboardmap2, "xkbmodel", "pc104")
-
-        Builtins.y2milestone("kb_model: <%1>", @kb_model)
-
-        # Assign the XkbLayout.
-        # Only some keyboards do report this information (e.g. sparc).
-        #
-        @XkbLayout = Ops.get_string(keyboardmap2, "xkblayout", "")
-
-        Builtins.y2milestone("Xkblayout: <%1>", @XkbLayout)
-      else
-        @kb_model = "pc104"
-      end
-
-      nil
-    end # probe_settings()
-
-    # Probe()
-    #
-    # Allow for intentional probing by applications.
-    #
-    # @see #Keyboard()
-    def Probe
-      Builtins.y2milestone("Keyboard::Probe")
-      probe_settings
-
-      # Set the module to the current system language to achieve a consistent
-      # state. This may be superfluous because a client may do it also but
-      # just in case...
-      #
-      default_keyboard = ""
-
-      # Some keyboards (i.e. sparc) report their layout, try to use this information here
-      #
-      if @XkbLayout != "" # we do have hardware info
-        default_keyboard = GetKeyboardForLanguage(@XkbLayout, default_keyboard) # no hardware info ==> select default keyboard dependent on system language
-      else
-        default_keyboard = GetKeyboardForLanguage(
-          Language.language,
-          "english-us"
-        )
-      end
-
-      # Set the module state.
-      #
-      SetKeyboard(default_keyboard)
-
-      if Stage.initial
-        keytable = Linuxrc.InstallInf("Keytable")
-        # set the keyboard from linuxrc
-        if keytable != nil
-          Builtins.y2milestone("linuxrc keyboard: %1", keytable)
-          map2yast = Builtins.union(
-            keymap2yast,
-            { "dk" => "danish", "de-lat1-nd" => "german", "us" => "english-us" }
-          )
-          if Builtins.issubstring(keytable, ".map.gz")
-            keytable = Builtins.substring(
-              keytable,
-              0,
-              Builtins.find(keytable, ".map.gz")
-            )
-          end
-          if Ops.get_string(map2yast, keytable, "") != ""
-            Set(Ops.get_string(map2yast, keytable, ""))
-            # do not reset it in proposal
-            @user_decision = true
-          end
-        # set keyboard now (before proposal - see bug #113664)
-        elsif Language.preselected != "en_US"
-          Builtins.y2milestone(
-            "language (%1) was preselected -> setting keyboard to %2",
-            Language.preselected,
-            default_keyboard
-          )
-          Set(default_keyboard)
-        end
-      end
-      Builtins.y2milestone("End Probe %1", default_keyboard)
-
-      nil
-    end # Probe()
-
 
     # Keyboard()
     #
@@ -828,15 +575,13 @@ module Yast
     # Just store inital values - read was done in constructor
     def Read
       @keyboard_on_entry = @current_kbd
-      @expert_on_entry = GetExpertValues()
-      @ExpertSettingsChanged = false
       Builtins.y2debug("keyboard_on_entry: %1", @keyboard_on_entry)
       true
     end
 
     # was anything modified?
     def Modified
-      @current_kbd != @keyboard_on_entry || @ExpertSettingsChanged
+      @current_kbd != @keyboard_on_entry
     end
 
 
@@ -905,12 +650,6 @@ module Yast
       # keyboards which in turn would not allow to "unmark" all keyboards that may
       # have been removed.
       #
-      # Do *NOT* use probe_settings() here because this would newly assign the global
-      # "unique_key" which is not what we want here. It may have been cleared
-      # intentionally due to the users selection of a keyboard from the YaST database.
-      # Furthermore this would assign a unique_key even if there is no keyboard attached
-      # (if there _was_ a keyboard attached).
-      #
       # Manual probing
       @keyboardprobelist = Convert.to_list(
         SCR.Read(path(".probe.keyboard.manual"))
@@ -918,48 +657,6 @@ module Yast
 
       log.info "No probed keyboards. Not unconfiguring any keyboards" if @keyboardprobelist.empty?
 
-      @keyboardprobelist.each do |keyboard|
-        key = keyboard["unique_key"] || ""
-        next if key.empty?
-        # OK, there is a key to mark...
-        #
-        if key != @unique_key
-          # OK, this key is _not_ the key of the keyboard to be configured.
-          # If the user selected a keyboard from the database Keyboard::unique_key
-          # has been set to "" there which also applies here.
-          # ==> Mark with "no".
-          #
-          SCR.Write(path(".probe.status.configured"), key, :no)
-          log.info "Marked keyboard <#{key}> as configured = no"
-          SCR.Write(path(".probe.status.needed"), key, :no)
-          log.info "Marked keyboard <#{key}> as needed = no"
-        else
-          log.info "Skipping active key <#{key}> --> to be configured"
-        end
-      end
-
-      # Only if the keyboard has been probed in this run the unique_key
-      # is not empty. Only in this case mark the device as "configured".
-      # In any other case the device should already be configured and
-      # the marking can't be done because the unique_key is missing.
-      # ==> Only mark after probing!
-      #
-      if @unique_key != ""
-        SCR.Write(path(".probe.status.configured"), @unique_key, :yes)
-        log.info "Marked keyboard <#{@unique_key}> as configured"
-
-        if !Linuxrc.serial_console
-          SCR.Write(path(".probe.status.needed"), @unique_key, :yes)
-          log.info "Marked keyboard <#{@unique_key}> as needed"
-        end
-      else
-        log.info "NOT marking keyboard as configured (no unique_key)"
-      end
-
-      log.info "Saved data for keyboard: <#{@current_kbd}>"
-
-      # Let's force the generation right away if needed
-      regenerate_initrd if needs_new_initrd?
 
       nil
     end # Save()
@@ -1036,8 +733,6 @@ module Yast
           execute_xkb_cmd
           # bnc#371756: enable autorepeat if needed
           enable_autorepeat
-          # bnc#885271: set udev rule to handle incoming attached keyboards
-          write_udev_rule if Stage.initial
         end
       end
       @xkb_cmd
@@ -1147,16 +842,6 @@ module Yast
       @name
     end # MakeProposal()
 
-
-    # CalledRestore()
-    #
-    # Return if the kbd values have already been read from
-    # /etc/sysconfig/keyboard
-    #
-    def CalledRestore
-      @restore_called
-    end
-
     # Selection()
     #
     # Get the map of translated keyboard names.
@@ -1200,37 +885,6 @@ module Yast
     end
 
 
-    # SetExpertValues()
-    #
-    # Set the values of the various expert setting
-    #
-    # @param [Hash] val     map with new values of expert settings
-    def SetExpertValues(val)
-      val = deep_copy(val)
-      orig_values = GetExpertValues()
-
-      if Builtins.haskey(val, "rate") &&
-          Ops.greater_than(Builtins.size(Ops.get_string(val, "rate", "")), 0)
-        @kbd_rate = Ops.get_string(val, "rate", "")
-      end
-      if Builtins.haskey(val, "delay") &&
-          Ops.greater_than(Builtins.size(Ops.get_string(val, "delay", "")), 0)
-        @kbd_delay = Ops.get_string(val, "delay", "")
-      end
-      if Builtins.haskey(val, "numlock")
-        @kbd_numlock = Ops.get_string(val, "numlock", "")
-      end
-      if Builtins.haskey(val, "discaps")
-        @kbd_disable_capslock = Ops.get_boolean(val, "discaps", false) ? "yes" : "no"
-      end
-
-      if !@ExpertSettingsChanged && orig_values != GetExpertValues()
-        @ExpertSettingsChanged = true
-      end
-
-      nil
-    end
-
     # set the keayboard layout according to given language
     def SetKeyboardForLanguage(lang)
       lkbd = GetKeyboardForLanguage(lang, "english-us")
@@ -1261,7 +915,7 @@ module Yast
     def Import(settings, syntax = :keyboard)
       settings = deep_copy(settings)
       # Read was not called -> do the init
-      Read() if @expert_on_entry == {}
+      Read() 
 
       keyboard = @current_kbd
       expert_values = {}
@@ -1274,23 +928,13 @@ module Yast
         keyboard = GetKeyboardForLanguage(settings["language"], keyboard)
       end
       Set(keyboard)
-      SetExpertValues(expert_values)
       true
     end
 
     # AutoYaST interface function: Return the Keyboard configuration as a map.
     # @return [Hash] with the settings
     def Export
-      diff_values = {}
-      Builtins.foreach(
-        Convert.convert(
-          GetExpertValues(),
-          :from => "map",
-          :to   => "map <string, any>"
-        )
-      ) do |key, val|
-        Ops.set(diff_values, key, val) if Ops.get(@expert_on_entry, key) != val
-      end
+
       ret = { "keymap" => @current_kbd }
       Ops.set(ret, "keyboard_values", diff_values) if diff_values != {}
       deep_copy(ret)
@@ -1308,35 +952,17 @@ module Yast
       HTML.List(ret)
     end
 
-    publish :variable => :kb_model, :type => "string"
-    publish :variable => :XkbModel, :type => "string"
-    publish :variable => :XkbLayout, :type => "string"
-    publish :variable => :XkbVariant, :type => "string"
     publish :variable => :keymap, :type => "string"
     publish :variable => :XkbOptions, :type => "string"
-    publish :variable => :LeftAlt, :type => "string"
-    publish :variable => :RightAlt, :type => "string"
-    publish :variable => :RightCtl, :type => "string"
-    publish :variable => :ScrollLock, :type => "string"
-    publish :variable => :Apply, :type => "string"
-    publish :variable => :ckb_cmd, :type => "string"
-    publish :variable => :xkb_cmd, :type => "string"
     publish :variable => :current_kbd, :type => "string"
     publish :variable => :keyboard_on_entry, :type => "string"
-    publish :variable => :expert_on_entry, :type => "map"
     publish :variable => :default_kbd, :type => "string"
     publish :variable => :user_decision, :type => "boolean"
-    publish :variable => :unique_key, :type => "string"
-    publish :variable => :ExpertSettingsChanged, :type => "boolean"
     publish :function => :Set, :type => "void (string)"
-    publish :function => :keymap2yast, :type => "map <string, string> ()"
-    publish :function => :GetX11KeyData, :type => "map (string)"
-    publish :function => :GetExpertValues, :type => "map ()"
     publish :function => :get_lang2keyboard, :type => "map ()"
     publish :function => :GetKeyboardForLanguage, :type => "string (string, string)"
     publish :function => :SetKeyboard, :type => "boolean (string)"
     publish :function => :Restore, :type => "boolean ()"
-    publish :function => :Probe, :type => "void ()"
     publish :function => :Keyboard, :type => "void ()"
     publish :function => :Read, :type => "boolean ()"
     publish :function => :Modified, :type => "boolean ()"
@@ -1345,10 +971,8 @@ module Yast
     publish :function => :SetConsole, :type => "void (string)"
     publish :function => :SetX11, :type => "string (string)"
     publish :function => :MakeProposal, :type => "string (boolean, boolean)"
-    publish :function => :CalledRestore, :type => "boolean ()"
     publish :function => :Selection, :type => "map <string, string> ()"
     publish :function => :GetKeyboardItems, :type => "list <term> ()"
-    publish :function => :SetExpertValues, :type => "void (map)"
     publish :function => :SetKeyboardForLanguage, :type => "void (string)"
     publish :function => :SetKeyboardForLang, :type => "void (string)"
     publish :function => :SetKeyboardDefault, :type => "void ()"
@@ -1368,26 +992,6 @@ module Yast
       Initrd.Write
     end
 
-    # Creates an udev rule to manage the layout for keyboards that are
-    # hotplugged during the installation process
-    def write_udev_rule
-      # Remove the file if present (needed to make udev aware of changes)
-      SCR.Execute(path(".target.remove"), UDEV_FILE)
-
-      # Using an array of arrays instead of a hash to get a predictable and
-      # ordered rule (even if it's not required by udev itself)
-      udev_env = [["XKBLAYOUT", @XkbLayout],
-                  ["XKBMODEL", @XkbModel],
-                  ["XKBVARIANT", @XkbVariant],
-                  ["XKBOPTIONS", @XkbOptions]]
-      udev_env.delete_if {|key,value| value.nil? || value.empty? }
-      if !udev_env.empty?
-        rule = 'ENV{ID_INPUT_KEYBOARD}=="1", '
-        rule << udev_env.map {|key,value| "ENV{#{key}}=\"#{value}\"" }.join(", ")
-        SCR.Write(path(".target.string"), UDEV_FILE, UDEV_COMMENT + rule + "\n")
-        SCR.Write(path(".target.string"), UDEV_FILE, nil)
-      end
-    end
 
     # Checks if the graphical environment is being executed remotely using
     # "ssh -X"
