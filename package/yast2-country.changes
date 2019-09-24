@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Sep 24 10:48:23 UTC 2019 - Josef Reidinger <jreidinger@suse.com>
+
+- Backport locale fix for serial console during installation
+  (bsc#1150148)
+- 3.2.18
+
+-------------------------------------------------------------------
 Sat Nov 10 08:31:44 UTC 2018 - knut.anderssen@suse.com
 
 - Timezone: Since ntp-client does not write the config anymore when
