@@ -54,7 +54,7 @@ module Y2Keyboard
 
     # Apply a new keyboard layout in the system.
     def apply_layout
-      @@strategy.apply_layout(self)
+      @@strategy.apply_layout(@code)
     end
   end
 end

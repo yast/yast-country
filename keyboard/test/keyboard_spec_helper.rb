@@ -24,13 +24,13 @@ module KeyboardSpecHelper
   end
 
   def given_layouts(layouts_to_return)
-    allow(Cheetah).to receive(:run).with(
+    allow(Yast::Execute).to receive(:on_target!).with(
       "localectl", "list-keymaps", stdout: :capture
     ).and_return(layouts_to_return.join("\n"))
   end
 
   def given_a_current_layout(code)
-    allow(Cheetah).to receive(:run)
+    allow(Yast::Execute).to receive(:on_target!)
       .with("localectl", "status", stdout: :capture)
       .and_return(
         "   System Locale: LANG=en_US.UTF-8\n" \
@@ -99,7 +99,7 @@ module KeyboardSpecHelper
   def given_keyboard_configuration(layout_code, arguments)
     allow(File).to receive(:executable?).with("/usr/sbin/xkbctrl")
       .and_return(true)
-    allow(Cheetah).to receive(:run).with("/usr/sbin/xkbctrl", layout_code, stdout: :capture)
+    allow(Yast::Execute).to receive(:on_target!).with("/usr/sbin/xkbctrl", layout_code, stdout: :capture)
       .and_return(
         "$[\n" \
           "\"XkbLayout\"    : \"es\",\n" \

@@ -43,11 +43,11 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
   describe "#apply_layout" do
     it "changes the keyboard layout" do
       new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
-      expect(Cheetah).to receive(:run).with(
+      expect(Yast::Execute).to receive(:on_target!).with(
         "localectl", "set-keymap", new_layout.code
       )
 
-      systemd_strategy.apply_layout(new_layout)
+      systemd_strategy.apply_layout(new_layout.code)
     end
   end
 

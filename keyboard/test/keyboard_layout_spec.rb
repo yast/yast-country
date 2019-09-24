@@ -101,7 +101,7 @@ describe Y2Keyboard::KeyboardLayout do
       strategy = spy(Y2Keyboard::Strategies::SystemdStrategy)
       keyboard_layout.use(strategy, layout_definitions)
 
-      expect(strategy).to receive(:apply_layout).with(layout)
+      expect(strategy).to receive(:apply_layout).with(layout.code)
 
       layout.apply_layout
     end

@@ -17,8 +17,7 @@
 # To contact SUSE LLC about this file by physical or electronic mail, you may
 # find current contact information at www.suse.com.
 
-require "cheetah"
-require_relative "../keyboard_layout"
+require "yast2/execute"
 
 module Y2Keyboard
   module Strategies
@@ -26,27 +25,27 @@ module Y2Keyboard
     class SystemdStrategy
       # @return [Array<String>] an array with all available systemd keyboard layouts codes.
       def codes
-        raw_layouts = Cheetah.run("localectl", "list-keymaps", stdout: :capture)
+        raw_layouts = Yast::Execute.on_target!("localectl", "list-keymaps", stdout: :capture)
         raw_layouts.lines.map(&:strip)
       end
 
       # Use systemd-localed to apply a new keyboard layout in the system.
-      # @param keyboard_layout [KeyboardLayout] the keyboard layout to apply in the system.
-      def apply_layout(keyboard_layout)
-        Cheetah.run("localectl", "set-keymap", keyboard_layout.code)
+      # @param keyboard_code [String] the keyboard layout to apply in the system.
+      def apply_layout(keyboard_code)
+        Yast::Execute.on_target!("localectl", "set-keymap", keyboard_code)
       end
 
       # @return [KeyboardLayout] the current keyboard layout in the system.
       def current_layout
-        output = Cheetah.run("localectl", "status", stdout: :capture)
+        output = Yast::Execute.on_target!("localectl", "status", stdout: :capture)
         get_value_from_output(output, "VC Keymap:").strip
       end
+
+    private
 
       def get_value_from_output(output, property_name)
         output.lines.map(&:strip).find { |x| x.start_with?(property_name) }.split(":", 2).last
       end
-
-      private :get_value_from_output
     end
   end
 end

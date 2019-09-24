@@ -17,7 +17,7 @@
 # To contact SUSE LLC about this file by physical or electronic mail, you may
 # find current contact information at www.suse.com.
 
-require "cheetah"
+require "yast2/execute"
 
 module Y2Keyboard
   # Class to change keyboard layout on the fly.
@@ -29,7 +29,7 @@ module Y2Keyboard
     def self.load_layout(keyboard_layout)
       load_x11_layout(keyboard_layout) if !Yast::UI.TextMode
       begin
-        Cheetah.run("loadkeys", keyboard_layout.code) if Yast::UI.TextMode
+        Yast::Execute.on_target!("loadkeys", keyboard_layout.code) if Yast::UI.TextMode
       rescue Cheetah::ExecutionFailed => e
         log.info(e.message)
         log.info("Error output:    #{e.stderr}")
@@ -45,10 +45,11 @@ module Y2Keyboard
         return
       end
 
-      output = Cheetah.run(xkbctrl_cmd, keyboard_layout.code, stdout: :capture)
+      output = Yast::Execute.on_target!(xkbctrl_cmd,
+        keyboard_layout.code, stdout: :capture)
       arguments = get_value_from_output(output, "\"Apply\"").tr("\"", "")
       setxkbmap_array_arguments = arguments.split.unshift("setxkbmap")
-      Cheetah.run(setxkbmap_array_arguments)
+      Yast::Execute.on_target!(setxkbmap_array_arguments)
     end
 
     def self.get_value_from_output(output, property_name)

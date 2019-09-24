@@ -48,14 +48,14 @@ describe Y2Keyboard::KeyboardLayoutLoader do
 
       it "changes the current keyboard layout used in xorg" do
         given_keyboard_configuration(new_layout.code, arguments_to_apply)
-        expect(Cheetah).to receive(:run).with(expected_arguments)
+        expect(Yast::Execute).to receive(:on_target!).with(expected_arguments)
 
         systemd_strategy.load_layout(new_layout)
       end
 
       it "do not try to change the current keyboard layout in console" do
         given_keyboard_configuration(new_layout.code, expected_arguments)
-        expect(Cheetah).not_to receive(:run).with("loadkeys", new_layout.code)
+        expect(Yast::Execute).not_to receive(:on_target!).with("loadkeys", new_layout.code)
 
         systemd_strategy.load_layout(new_layout)
       end
@@ -67,13 +67,13 @@ describe Y2Keyboard::KeyboardLayoutLoader do
       end
 
       it "do not try to change the current keyboard layout in xorg" do
-        expect(Cheetah).not_to receive(:run).with("setxkbmap", new_layout.code)
+        expect(Yast::Execute).not_to receive(:on_target!).with("setxkbmap", new_layout.code)
 
         systemd_strategy.load_layout(new_layout)
       end
 
       it "changes the current keyboard layout in console" do
-        expect(Cheetah).to receive(:run).with("loadkeys", new_layout.code)
+        expect(Yast::Execute).to receive(:on_target!).with("loadkeys", new_layout.code)
 
         systemd_strategy.load_layout(new_layout)
       end
@@ -89,7 +89,7 @@ describe Y2Keyboard::KeyboardLayoutLoader do
         # In that case, when trying to execute 'loadkeys' it will fail due to it should't
         # be execute from X server.
         it "do not raise error" do
-          allow(Cheetah).to receive(:run)
+          allow(Yast::Execute).to receive(:on_target!)
             .with("loadkeys", new_layout.code)
             .and_raise(loadkeys_error)
 
@@ -98,7 +98,7 @@ describe Y2Keyboard::KeyboardLayoutLoader do
 
         it "log error information" do
           error = loadkeys_error
-          allow(Cheetah).to receive(:run)
+          allow(Yast::Execute).to receive(:on_target!)
             .with("loadkeys", new_layout.code)
             .and_raise(error)
 
