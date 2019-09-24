@@ -180,6 +180,10 @@ module Yast
       #
       @ckb_cmd = ""
 
+      # The serial console keyboard command
+      #
+      @skb_cmd = ""
+
       # The X11 keyboard command
       #
       @xkb_cmd = ""
@@ -552,9 +556,11 @@ module Yast
         return false # Error
       end
 
-      # Console command. It specifies all tty devices (bsc#1010938)
-      @tty_devices ||= Dir["/dev/tty*"].map { |d| "-C #{d}" }.join(" ")
-      @ckb_cmd = "/bin/loadkeys #{@tty_devices} #{keymap}"
+      # loadkeys is already escaped and it is multiple params inside, so cannot be escaped here
+      devices = loadkeys_devices("tty")
+      @ckb_cmd = "/usr/bin/loadkeys #{devices} #{keymap.shellescape}"
+      devices = loadkeys_devices("ttyS")
+      @skb_cmd = "/usr/bin/loadkeys #{devices} #{keymap.shellescape}"
 
       # X11 command...
       # do not try to run this with remote X display
@@ -987,8 +993,6 @@ module Yast
     #
     # @param	Keyboard language e.g.  "english-us"
     #
-    # @return  The loadkeys command that has been executed to do it.
-    #		(also stored in Keyboard::ckb_cmd)
     def SetConsole(keyboard)
       if Mode.test
         Builtins.y2milestone("Test mode - NOT setting keyboard")
@@ -999,11 +1003,17 @@ module Yast
 
         Builtins.y2milestone("Setting console keyboard to: <%1>", @current_kbd)
         Builtins.y2milestone("loadkeys command: <%1>", @ckb_cmd)
-
         SCR.Execute(path(".target.bash"), @ckb_cmd)
+
+        # It could be that for seriell tty's the keyboard cannot be set. So it will
+        # be done separately in order to ensure that setting console keyboard
+        # will be done successfully in the previous call.
+        Builtins.y2milestone("Setting seriell console keyboard to: <%1>", @current_kbd)
+        Builtins.y2milestone("loadkeys command: <%1>", @skb_cmd)
+        SCR.Execute(path(".target.bash"), @skb_cmd)
+
         UI.SetKeyboard
       end
-      @ckb_cmd
     end # SetConsole()
 
 
@@ -1425,7 +1435,7 @@ module Yast
     publish :function => :Modified, :type => "boolean ()"
     publish :function => :Save, :type => "void ()"
     publish :function => :Name, :type => "string ()"
-    publish :function => :SetConsole, :type => "string (string)"
+    publish :function => :SetConsole, :type => "void (string)"
     publish :function => :SetX11, :type => "string (string)"
     publish :function => :MakeProposal, :type => "string (boolean, boolean)"
     publish :function => :CalledRestore, :type => "boolean ()"
@@ -1558,6 +1568,17 @@ module Yast
       if SCR.Execute(path(".target.bash"), cmd) != 0
         log.error "X11 configuration not written. Failed to execute '#{cmd}'"
       end
+    end
+
+    # String to specify all the relevant devices in a loadkeys command
+    #
+    # It includes all tty[0-9]* and ttyS[0-9]* devices (bsc#1010938).
+    #
+    # @param [String] kind of tty ("tty", "ttyS")
+    # @return [String] ready to be passed to the loadkeys command
+    def loadkeys_devices (kind)
+      tty_dev_names = Dir["/dev/#{kind}[0-9]*"]
+      tty_dev_names.map { |d| "-C #{d.shellescape}" }.join(" ")
     end
   end
 
