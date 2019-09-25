@@ -37,7 +37,8 @@ ylibdialogs_DATA = \
 
 ylibstrategiesdir = @ylibdir@/y2keyboard/strategies
 ylibstrategies_DATA = \
-  lib/y2keyboard/strategies/systemd_strategy.rb
+  lib/y2keyboard/strategies/systemd_strategy.rb \
+  lib/y2keyboard/strategies/kb_strategy.rb
 
 symbolicdir = @icondir@/hicolor/symbolic/apps
 symbolic_DATA = \
