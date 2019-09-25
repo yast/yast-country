@@ -35,13 +35,21 @@ module Y2Keyboard
       # @param keyboard_code [String] the keyboard layout to set
       # in the running the system (mostly temporary).
       def set_layout(keyboard_code)
-        set_x11_layout(keyboard_code) if !Yast::UI.TextMode
-        begin
-          Yast::Execute.on_target!("loadkeys", keyboard_code) if Yast::UI.TextMode
-        rescue Cheetah::ExecutionFailed => e
-          log.info(e.message)
-          log.info("Error output:    #{e.stderr}")
-        end        
+        if Yast::UI.TextMode
+          begin
+            Yast::Execute.on_target!("loadkeys", loadkeys_devices("tty"), keyboard_code)
+            # It could be that for seriell tty's the keyboard cannot be set. So it will
+            # be done separately in order to ensure that setting console keyboard
+            # will be done successfully in the previous call.
+            Yast::Execute.on_target!("loadkeys", loadkeys_devices("ttyS"), keyboard_code)
+          rescue Cheetah::ExecutionFailed => e
+            log.info(e.message)
+            log.info("Error output:    #{e.stderr}")
+          end
+        else
+          # X11 mode
+          set_x11_layout(keyboard_code)
+        end
       end
 
 
@@ -62,6 +70,17 @@ module Y2Keyboard
         arguments = arguments.split(":", 2).last.tr("\"", "")
         setxkbmap_array_arguments = arguments.split.unshift("setxkbmap")
         Yast::Execute.on_target!(setxkbmap_array_arguments)
+      end
+
+      # String to specify all the relevant devices in a loadkeys command
+      #
+      # It includes all tty[0-9]* and ttyS[0-9]* devices (bsc#1010938).
+      #
+      # @param [String] kind of tty ("tty", "ttyS")
+      # @return [String] ready to be passed to the loadkeys command
+      def loadkeys_devices (kind)
+        tty_dev_names = Dir["/dev/#{kind}[0-9]*"]
+        tty_dev_names.map { |d| "-C #{d.shellescape}" }.join(" ")
       end
 
     end

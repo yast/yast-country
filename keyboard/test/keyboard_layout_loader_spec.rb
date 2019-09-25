@@ -55,7 +55,7 @@ describe Y2Keyboard::KeyboardLayoutLoader do
 
       it "do not try to change the current keyboard layout in console" do
         given_keyboard_configuration(new_layout.code, expected_arguments)
-        expect(Yast::Execute).not_to receive(:on_target!).with("loadkeys", new_layout.code)
+        expect(Yast::Execute).not_to receive(:on_target!).with("loadkeys", anything, new_layout.code)
 
         systemd_strategy.load_layout(new_layout)
       end
@@ -73,7 +73,7 @@ describe Y2Keyboard::KeyboardLayoutLoader do
       end
 
       it "changes the current keyboard layout in console" do
-        expect(Yast::Execute).to receive(:on_target!).with("loadkeys", new_layout.code)
+        expect(Yast::Execute).to receive(:on_target!).twice.with("loadkeys", anything, new_layout.code)
 
         systemd_strategy.load_layout(new_layout)
       end
@@ -90,7 +90,7 @@ describe Y2Keyboard::KeyboardLayoutLoader do
         # be execute from X server.
         it "do not raise error" do
           allow(Yast::Execute).to receive(:on_target!)
-            .with("loadkeys", new_layout.code)
+            .with("loadkeys", anything, new_layout.code)
             .and_raise(loadkeys_error)
 
           expect { systemd_strategy.load_layout(new_layout) }.not_to raise_error
