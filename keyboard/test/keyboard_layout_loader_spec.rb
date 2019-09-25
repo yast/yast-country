@@ -96,19 +96,6 @@ describe Y2Keyboard::KeyboardLayoutLoader do
           expect { systemd_strategy.load_layout(new_layout) }.not_to raise_error
         end
 
-        it "log error information" do
-          error = loadkeys_error
-          allow(Yast::Execute).to receive(:on_target!)
-            .with("loadkeys", new_layout.code)
-            .and_raise(error)
-
-          expect(Y2Keyboard::KeyboardLayoutLoader.log).to receive(:info)
-            .with(error.message)
-          expect(Y2Keyboard::KeyboardLayoutLoader.log).to receive(:info)
-            .with("Error output:    #{error.stderr}")
-
-          systemd_strategy.load_layout(new_layout)
-        end
       end
     end
   end

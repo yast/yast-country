@@ -18,44 +18,17 @@
 # find current contact information at www.suse.com.
 
 require "yast2/execute"
+require_relative "strategies/kb_strategy"
 
 module Y2Keyboard
   # Class to change keyboard layout on the fly.
   class KeyboardLayoutLoader
-    include Yast::Logger
 
     # Load x11 or virtual console keys on the fly.
     # @param keyboard_layout [KeyboardLayout] the keyboard layout to load.
     def self.load_layout(keyboard_layout)
-      load_x11_layout(keyboard_layout) if !Yast::UI.TextMode
-      begin
-        Yast::Execute.on_target!("loadkeys", keyboard_layout.code) if Yast::UI.TextMode
-      rescue Cheetah::ExecutionFailed => e
-        log.info(e.message)
-        log.info("Error output:    #{e.stderr}")
-      end
+      kb_strategy = Y2Keyboard::Strategies::KbStrategy.new
+      kb_strategy.set_layout(keyboard_layout.code)
     end
-
-    # Load x11 keys on the fly.
-    # @param keyboard_layout [KeyboardLayout] the keyboard layout to load.
-    def self.load_x11_layout(keyboard_layout)
-      xkbctrl_cmd = "/usr/sbin/xkbctrl"
-      if !File.executable?(xkbctrl_cmd)
-        log.warn("#{xkbctrl_cmd} not found on system.")
-        return
-      end
-
-      output = Yast::Execute.on_target!(xkbctrl_cmd,
-        keyboard_layout.code, stdout: :capture)
-      arguments = get_value_from_output(output, "\"Apply\"").tr("\"", "")
-      setxkbmap_array_arguments = arguments.split.unshift("setxkbmap")
-      Yast::Execute.on_target!(setxkbmap_array_arguments)
-    end
-
-    def self.get_value_from_output(output, property_name)
-      output.lines.map(&:strip).find { |x| x.start_with?(property_name) }.split(":", 2).last
-    end
-
-    private_class_method :get_value_from_output, :load_x11_layout
   end
 end
