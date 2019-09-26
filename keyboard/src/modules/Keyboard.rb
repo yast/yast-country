@@ -90,6 +90,7 @@
 #	Selection()			- Get map of translated keyboards to be displayed in the GUI.
 #
 require "yast"
+require "shellwords"
 
 module Yast
   class KeyboardClass < Module
