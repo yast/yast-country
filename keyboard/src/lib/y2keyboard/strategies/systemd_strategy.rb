@@ -29,10 +29,16 @@ module Y2Keyboard
         raw_layouts.lines.map(&:strip)
       end
 
-      # Use systemd-localed to apply a new keyboard layout in the system.
+      # Use systemd to apply a new keyboard layout in the system.
       # @param keyboard_code [String] the keyboard layout to apply in the system.
       def apply_layout(keyboard_code)
-        Yast::Execute.on_target!("localectl", "set-keymap", keyboard_code)
+        if Yast::Stage.initial
+          # systemd is not available here (inst-sys).
+          # do use --root option, running in chroot does not work (bsc#1074481)
+          Yast::Execute.locally!("systemd-firstboot", "--root", Installation.destdir, "--keymap", keyboard_code)
+        else
+          Yast::Execute.on_target!("localectl", "set-keymap", keyboard_code)
+        end
       end
 
       # @return [KeyboardLayout] the current keyboard layout in the system.
