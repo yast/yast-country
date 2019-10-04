@@ -73,8 +73,6 @@ module Yast
         Keyboard.ExpertSettingsChanged = false
         @ret = {}
       elsif @func == "Read"
-        # If we would need reading from system in Mode::config, Restore is necessary
-        Keyboard.Restore if Mode.config
         @ret = Keyboard.Read
       elsif @func == "Export"
         @ret = Keyboard.Export
@@ -87,7 +85,7 @@ module Yast
       # Set all modified flags
       # return boolean
       elsif @func == "SetModified"
-        Keyboard.ExpertSettingsChanged = true # hook (no general 'modified' variable)
+        Keyboard.SetModified
         @ret = true
       end
 

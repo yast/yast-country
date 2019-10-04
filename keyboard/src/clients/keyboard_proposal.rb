@@ -66,8 +66,6 @@ module Yast
           return deep_copy(@ret)
         end
 
-        Keyboard.Restore if !Keyboard.CalledRestore
-
         Keyboard.Read # save the inital values
 
         @argmap = {

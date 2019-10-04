@@ -1,5 +1,25 @@
+# Copyright (c) [2019] SUSE LLC
+#
+# All Rights Reserved.
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of version 2 of the GNU General Public License as published
+# by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+# more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, contact SUSE LLC.
+#
+# To contact SUSE LLC about this file by physical or electronic mail, you may
+# find current contact information at www.suse.com.
+
+
 class Keyboards
-  @@keyboards = [
+  @keyboards = [
     { description: _("English (US)"),
       alias: "english-us",
       code: "us",
@@ -217,9 +237,53 @@ class Keyboards
   ]
 
   def self.all_keyboards
-    @@keyboards
+    @keyboards
   end
 
+  # Evaluate the proposed keyboard for a given language
+  #
+  # @param [String] language e.g. "de_DE"
+  #
+  # @return [String] keyboard alias e.g. "german" or nil
+  #
   def self.suggested_keyboard(language)
+    keyboard = @keyboards.detect do |kb|
+      kb[:suggested_for_lang] &&
+      kb[:suggested_for_lang].include(language)
+    end
+    keyboard ? keyboard["alias"] : nil
+  end
+
+  # Evaluate alias name for a given keymap
+  #
+  # @param [String] keymap e.g. "de-latin1-nodeadkeys"
+  #
+  # @return [String] keyboard alias e.g. "german" or nil
+  #
+  def self.alias(keymap)
+    keyboard = @keyboards.detect {|kb| kb[:code] == keymap }
+    keyboard ? keyboard[:alias] : nil
+  end
+
+  # Evaluate description for an given alias name
+  #
+  # @param [String] alias e.g. "english-us"
+  #
+  # @return [String] translated description or nil
+  #
+  def self.description(alias)
+    keyboard = @keyboards.detect {|kb| kb[:alias] == alias }
+    keyboard ? keyboard[:description] : nil
+  end
+
+  # Evaluate kemap for an given alias name
+  #
+  # @param [String] alias e.g. "english-us"
+  #
+  # @return [String] keymap (e.g. "de_DE") or nil
+  #
+  def self.code(alias)
+    keyboard = @keyboards.detect {|kb| kb[:alias] == alias }
+    keyboard ? keyboard[:code] : nil
   end
 end
