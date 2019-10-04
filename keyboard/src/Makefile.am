@@ -13,7 +13,7 @@ schemafiles_DATA = \
   autoyast-rnc/keyboard.rnc
 
 ydata_DATA = \
-  data/keyboards.yml
+  data/keyboards.rb
 
 desktop_DATA = \
   desktop/org.opensuse.yast.Keyboard.desktop
