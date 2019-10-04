@@ -42,14 +42,14 @@ module Y2Keyboard
     # @return [Array<KeyboardLayout>] an array with all available keyboard layouts.
     def self.all
       codes = @@strategy.codes
-      layouts = @@layout_definitions.select { |x| codes.include?(x[:code]) }
-      layouts.map { |x| KeyboardLayout.new(x[:code], x[:description]) }
+      layouts = @@layout_definitions.select { |x| codes.include?(x["code"]) }
+      layouts.map { |x| KeyboardLayout.new(x["code"], x["description"]) }
     end
 
     def self.current_layout
-      layout_definition = @@layout_definitions.detect { |x| x[:code] == @@strategy.current_layout } ||
-        @@layout_definitions.detect { |x| x[:code] == "uk" } # default
-      KeyboardLayout.new(layout_definition[:code], layout_definition[description])
+      layout_definition = @@layout_definitions.detect { |x| x["code"] == @@strategy.current_layout } ||
+        @@layout_definitions.detect { |x| x["code"] == "uk" } # default
+      KeyboardLayout.new(layout_definition["code"], layout_definition["description"])
     end
 
     # Apply a new keyboard layout in the system.

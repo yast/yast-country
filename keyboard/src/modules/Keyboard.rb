@@ -220,7 +220,7 @@ module Yast
     #           e.g. {"arabic"=>"Arabic", "belgian"=>"Belgian",....}
     #
     def Selection
-      lang = Keyboards.all_keyboards map { |k| {k[:alias] => k[:description]} }
+      lang = Keyboards.all_keyboards map { |k| {k["alias"] => k["description"]} }
       Hash[*lang.collect{|h| h.to_a}.flatten]
     end
 
