@@ -20,7 +20,7 @@
 require_relative "../dialogs/layout_selector"
 require_relative "../strategies/systemd_strategy"
 require_relative "../keyboard_layout"
-require_relative "../data/Keyboards.rb"
+require_relative "../../../data/keyboards"
 require "yaml"
 
 module Y2Keyboard

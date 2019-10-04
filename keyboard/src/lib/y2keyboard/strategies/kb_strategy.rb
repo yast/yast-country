@@ -104,7 +104,7 @@ module Y2Keyboard
         else
           log.warn("#{cmd} not found on system.")
         end
-        deep_copy(x11data)
+        x11data
       end
 
       # Creates an udev rule to manage the layout for keyboards that are

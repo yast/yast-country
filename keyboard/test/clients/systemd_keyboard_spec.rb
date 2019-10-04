@@ -35,11 +35,8 @@ describe Y2Keyboard::Clients::SystemdKeyboard do
       allow(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).and_return(dialog)
     end
 
-    it "load keyboard layouts definitions from yml file" do
-      expected_path = Yast::Directory.find_data_file("keyboards.yml")
-
-      expect(YAML).to receive(:load_file).with(expected_path).and_return(layout_definitions)
-      expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(anything, layout_definitions)
+    it "load keyboard layouts definitions from data directory" do
+      expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(anything, Keyboards.all_keyboards)
 
       client.run
     end
