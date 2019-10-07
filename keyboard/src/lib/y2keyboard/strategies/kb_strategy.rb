@@ -97,7 +97,7 @@ module Y2Keyboard
         cmd = "/usr/sbin/xkbctrl"
         x11data = {}
 
-        if !File.executable?(cmd)
+        if File.executable?(cmd)
           file = File.join(Yast::Directory.tmpdir, "xkbctrl.out")
           Yast::Execute.on_target!(cmd, keymap.shellescape, ">",  file)
           x11data = Convert.to_map(SCR.Read(path(".target.ycp"), file))
