@@ -17,6 +17,7 @@
 # To contact SUSE LLC about this file by physical or electronic mail, you may
 # find current contact information at www.suse.com.
 
+require "yast"
 require "yast2/execute"
 
 module Y2Keyboard
@@ -64,10 +65,12 @@ module Y2Keyboard
       # set x11 keys on the fly.
       # @param keyboard_code [String] the keyboard to set.
       def set_x11_layout(keyboard_code)
+        Yast.import "Stage"
+
         x11data = get_x11_data(keyboard_code)
         return if x11data.empty?
 
-        Yast::Execute.on_target!("setxkbmap", x11data["Apply"] || "")
+        system("/usr/bin/setxkbmap " + x11data["Apply"])
 
         # bnc#885271: set udev rule to handle incoming attached keyboards
         # While installation/update only.
@@ -99,8 +102,8 @@ module Y2Keyboard
 
         if File.executable?(cmd)
           file = File.join(Yast::Directory.tmpdir, "xkbctrl.out")
-          Yast::Execute.on_target!(cmd, keymap.shellescape, ">",  file)
-          x11data = Convert.to_map(SCR.Read(path(".target.ycp"), file))
+          system("#{cmd} #{keymap.shellescape} >#{file}")
+          x11data = Yast::SCR.Read(Yast::path(".target.ycp"), file)
         else
           log.warn("#{cmd} not found on system.")
         end
@@ -125,8 +128,8 @@ module Y2Keyboard
         if !udev_env.empty?
           rule = 'ENV{ID_INPUT_KEYBOARD}=="1", '
           rule << udev_env.map {|key,value| "ENV{#{key}}=\"#{value}\"" }.join(", ")
-          SCR.Write(path(".target.string"), UDEV_FILE, UDEV_COMMENT + rule + "\n")
-          SCR.Write(path(".target.string"), UDEV_FILE, nil)
+          Yast::SCR.Write(Yast::path(".target.string"), UDEV_FILE, UDEV_COMMENT + rule + "\n")
+          Yast::SCR.Write(Yast::path(".target.string"), UDEV_FILE, nil)
         end
       end
 
