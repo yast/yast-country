@@ -242,6 +242,10 @@ class Keyboards
     ]
   end
 
+  def initialize
+    textdomain "country"
+  end
+
   # Evaluate the proposed keyboard for a given language
   #
   # @param [String] language e.g. "de_DE"
