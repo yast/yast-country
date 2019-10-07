@@ -21,12 +21,10 @@ require "yast"
 require "yast/i18n"
 
 class Keyboards
-  include Yast::I18n
+  extend Yast::I18n
 
-  def initialize
-    textdomain "country"
-
-    @keyboards = [
+  def self.all_keyboards
+    [
       { "description" => _("English (US)"),
         "alias" => "english-us",
         "code" => "us",
@@ -242,11 +240,6 @@ class Keyboards
         "code" => "us-acentos"
       }
     ]
-
-  end
-
-  def self.all_keyboards
-    @keyboards
   end
 
   # Evaluate the proposed keyboard for a given language
@@ -256,7 +249,7 @@ class Keyboards
   # @return [String] keyboard alias e.g. "german" or nil
   #
   def self.suggested_keyboard(language)
-    keyboard = @keyboards.detect do |kb|
+    keyboard = all_keyboards.detect do |kb|
       kb["suggested_for_lang"] &&
       kb["suggested_for_lang"].include(language)
     end
@@ -270,7 +263,7 @@ class Keyboards
   # @return [String] keyboard alias e.g. "german" or nil
   #
   def self.alias(keymap)
-    keyboard = @keyboards.detect {|kb| kb["code"] == keymap }
+    keyboard = all_keyboards.detect {|kb| kb["code"] == keymap }
     keyboard ? keyboard["alias"] : nil
   end
 
@@ -281,7 +274,7 @@ class Keyboards
   # @return [String] translated description or nil
   #
   def self.description(key_alias)
-    keyboard = @keyboards.detect {|kb| kb["alias"] == key_alias }
+    keyboard = all_keyboards.detect {|kb| kb["alias"] == key_alias }
     keyboard ? keyboard["description"] : nil
   end
 
@@ -292,7 +285,7 @@ class Keyboards
   # @return [String] keymap (e.g. "de_DE") or nil
   #
   def self.code(key_alias)
-    keyboard = @keyboards.detect {|kb| kb["alias"] == key_alias }
+    keyboard = all_keyboards.detect {|kb| kb["alias"] == key_alias }
     keyboard ? keyboard["code"] : nil
   end
 end
