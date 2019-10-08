@@ -40,21 +40,12 @@ module Yast
     include Yast::Logger
 
     def main
-      Yast.import "UI"
       textdomain "country"
 
-      Yast.import "Arch"
-      Yast.import "AsciiFile"
-      Yast.import "Directory"
-      Yast.import "Initrd"
-      Yast.import "Label"
       Yast.import "Language"
-      Yast.import "Linuxrc"
       Yast.import "Mode"
-      Yast.import "Package"
       Yast.import "ProductFeatures"
       Yast.import "Stage"
-      Yast.import "Report"
 
       # general kb strategy which is used for temporary changes only.
       @kb_strategy = Y2Keyboard::Strategies::KbStrategy.new
