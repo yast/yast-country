@@ -255,7 +255,7 @@ class Keyboards
   def self.suggested_keyboard(language)
     keyboard = all_keyboards.detect do |kb|
       kb["suggested_for_lang"] &&
-      kb["suggested_for_lang"].include(language)
+      kb["suggested_for_lang"].include?(language)
     end
     keyboard ? keyboard["alias"] : nil
   end
