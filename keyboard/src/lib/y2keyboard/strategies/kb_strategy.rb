@@ -117,7 +117,7 @@ module Y2Keyboard
 
       def write_udev_rule(x11data)
         # Remove the file if present (needed to make udev aware of changes)
-        File.delete(UDEV_FILE)
+        File.delete(UDEV_FILE) if File.file?(UDEV_FILE)
 
         # Using an array of arrays instead of a hash to get a predictable and
         # ordered rule (even if it's not required by udev itself)
