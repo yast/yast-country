@@ -122,8 +122,9 @@ module Yast
         log.info "skipping country changes in update"
         return
       end
-      log.info("Saving keyboard #{@current_kbd} to system")
-      @systemd_strategy.apply_layout(@current_kbd)
+      key_code = Keyboards.code(@current_kbd)
+      log.info("Saving keyboard #{@current_kbd}/#{key_code} to system")
+      @systemd_strategy.apply_layout(key_code)
       @keyboard_on_entry = @current_kbd
       nil
     end

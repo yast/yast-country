@@ -35,11 +35,11 @@ class Keyboards
         "code" => "uk"
       },
       { "description" => _("German"),
-        "alias" => "german-deadkey",
+        "alias" => "german",
         "code" => "de-latin1-nodeadkeys"
       },
       { "description" => _("German (with deadkeys)"),
-        "alias" => "german",
+        "alias" => "german-deadkey",
         "code" => "de-latin1",
         "suggested_for_lang" => ["de"]
       },
