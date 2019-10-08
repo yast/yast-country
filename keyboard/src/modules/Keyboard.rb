@@ -33,7 +33,7 @@ require "yast"
 require "shellwords"
 require "y2keyboard/strategies/kb_strategy"
 require "y2keyboard/strategies/systemd_strategy"
-require_relative "../data/Keyboards.rb"
+require_relative "../data/keyboards"
 
 module Yast
   class KeyboardClass < Module
