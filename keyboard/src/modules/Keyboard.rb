@@ -86,9 +86,11 @@ module Yast
     #		or the default value if nothing found.
     #
     def GetKeyboardForLanguage(sys_language, default_keyboard)
-      Keyboards.suggested_keyboard(sys_language) ||
-      Language.GetLang2KeyboardMap(true) || # The language module has also suggestions
-      default_keyboard
+      ret = Keyboards.suggested_keyboard(sys_language) ||
+        Language.GetLang2KeyboardMap(true)[sys_language] || # The language module has also suggestions
+        default_keyboard
+      log.info("Suggest keyboard #{ret} for language #{sys_language}")
+      ret
     end
 
 
