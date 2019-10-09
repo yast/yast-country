@@ -300,14 +300,14 @@ module Yast
     # Returning current keyboard
     # @return [String] keyboard name e.g. "english-us"
     def current_kbd
-      Read if @curr_kbd.empty?
+      self.Read if @curr_kbd.empty?
       @curr_kbd
     end
 
-    publish :variable => :current_kbd, :type => "string"
     publish :variable => :keyboard_on_entry, :type => "string"
     publish :variable => :default_kbd, :type => "string"
     publish :variable => :user_decision, :type => "boolean"
+    publish :function => :current_kbd, :type => "string ()"
     publish :function => :Set, :type => "void (string)"
     publish :function => :GetKeyboardForLanguage, :type => "string (string, string)"
     publish :function => :Read, :type => "boolean ()"
