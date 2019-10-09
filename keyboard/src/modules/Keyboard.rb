@@ -55,7 +55,7 @@ module Yast
 
       # The keyboard currently set. E.g. "english-us"
       #
-      @current_kbd = ""
+      @curr_kbd = ""
 
       # keyboard set on start. E.g. "english-us"
       #
@@ -96,8 +96,8 @@ module Yast
     def Read
       # If not in initial mode
       if !Stage.initial || Mode.live_installation
-        @current_kbd = Keyboards.alias(@systemd_strategy.current_layout())
-        @keyboard_on_entry = @current_kbd
+        @curr_kbd = Keyboards.alias(@systemd_strategy.current_layout())
+        @keyboard_on_entry = @curr_kbd
       end
 
       log.info("keyboard_on_entry: #{@keyboard_on_entry}")
@@ -106,7 +106,7 @@ module Yast
 
     # was anything modified?
     def Modified
-      @current_kbd != @keyboard_on_entry || @modified
+      @curr_kbd != @keyboard_on_entry || @modified
     end
 
     # Set to modified
@@ -121,10 +121,10 @@ module Yast
         log.info "skipping country changes in update"
         return
       end
-      key_code = Keyboards.code(@current_kbd)
-      log.info("Saving keyboard #{@current_kbd}/#{key_code} to system")
+      key_code = Keyboards.code(@curr_kbd)
+      log.info("Saving keyboard #{@curr_kbd}/#{key_code} to system")
       @systemd_strategy.apply_layout(key_code)
-      @keyboard_on_entry = @current_kbd
+      @keyboard_on_entry = @curr_kbd
       nil
     end
 
@@ -142,11 +142,11 @@ module Yast
 
       # Store keyboard just set.
       #
-      @current_kbd = keyboard
+      @curr_kbd = keyboard
 
       # On first assignment store default keyboard.
       #
-      @default_kbd = @current_kbd if @default_kbd == "" # not yet assigned
+      @default_kbd = @curr_kbd if @default_kbd == "" # not yet assigned
 
       @kb_strategy.set_layout(Keyboards.code(keyboard))
 
@@ -196,11 +196,11 @@ module Yast
             Set(local_kbd)
           elsif language_changed
             log.error("Can't follow language - only retranslation")
-            Set(@current_kbd)
+            Set(@curr_kbd)
           end
         end
       end
-      Keyboards.description(@current_kbd)
+      Keyboards.description(@curr_kbd)
     end
 
     # Selection()
@@ -221,7 +221,7 @@ module Yast
     # @return [Array<Term>] Item(Id(...), String name, Boolean selected)
     def GetKeyboardItems
       ret = Builtins.maplist(Selection()) do |code, name|
-        Item(Id(code), name, @current_kbd == code)
+        Item(Id(code), name, @curr_kbd == code)
       end
       Builtins.sort(ret) do |a, b|
         # bnc#385172: must use < instead of <=, the following means:
@@ -248,8 +248,8 @@ module Yast
     end
 
     def SetKeyboardDefault
-      log.info("SetKeyboardDefault to %1", @current_kbd)
-      @default_kbd = @current_kbd
+      log.info("SetKeyboardDefault to %1", @curr_kbd)
+      @default_kbd = @curr_kbd
 
       nil
     end
@@ -266,7 +266,7 @@ module Yast
       # Read was not called -> do the init
       Read() 
 
-      keyboard = @current_kbd
+      keyboard = @curr_kbd
 
       case syntax
       when :keyboard
@@ -281,7 +281,7 @@ module Yast
     # AutoYaST interface function: Return the Keyboard configuration as a map.
     # @return [Hash] with the settings
     def Export
-      ret = { "keymap" => @current_kbd }
+      ret = { "keymap" => @curr_kbd }
       deep_copy(ret)
     end
 
@@ -292,9 +292,16 @@ module Yast
 
       ret = [
         # summary label
-        _("Current Keyboard Layout: %s" % Keyboards.description(@current_kbd))
+        _("Current Keyboard Layout: %s" % Keyboards.description(@curr_kbd))
       ]
       HTML.List(ret)
+    end
+
+    # Returning current keyboard
+    # @return [String] keyboard name e.g. "english-us"
+    def current_kbd
+      Read if @curr_kbd.empty?
+      @curr_kbd
     end
 
     publish :variable => :current_kbd, :type => "string"
