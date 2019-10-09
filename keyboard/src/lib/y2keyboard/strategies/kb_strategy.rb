@@ -83,7 +83,7 @@ module Y2Keyboard
       #
       # @param [String] kind of tty ("tty", "ttyS")
       # @return [String] ready to be passed to the loadkeys command
-      def loadkeys_devices (kind)
+      def loadkeys_devices(kind)
         tty_dev_names = Dir["/dev/#{kind}[0-9]*"]
         tty_dev_names.map { |d| "-C #{d.shellescape}" }.join(" ")
       end
