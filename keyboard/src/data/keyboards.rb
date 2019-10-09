@@ -23,6 +23,8 @@ require "yast/i18n"
 class Keyboards
   extend Yast::I18n
 
+  textdomain "country"
+
   def self.all_keyboards
     [
       { "description" => _("English (US)"),
@@ -240,10 +242,6 @@ class Keyboards
         "code" => "us-acentos"
       }
     ]
-  end
-
-  def initialize
-    textdomain "country"
   end
 
   # Evaluate the proposed keyboard for a given language
