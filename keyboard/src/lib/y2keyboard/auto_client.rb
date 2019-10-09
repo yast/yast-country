@@ -8,14 +8,13 @@ Yast.import "Arch"
 
 module Keyboard
   class AutoClient < ::Installation::AutoClient
-    Yast.include self, "keyboard/dialogs.rb"
     
     def change
       ret = true
       if !Arch.s390
         Wizard.CreateDialog
         Wizard.HideAbortButton
-        ret = KeyboardDialog({})
+        ret = WFM.CallFunction("keyboard")
         Wizard.CloseDialog
       end
       ret
