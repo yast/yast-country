@@ -93,7 +93,6 @@ module Yast
       ret
     end
 
-
     def Read
       # If not in initial mode
       if !Stage.initial || Mode.live_installation
