@@ -73,9 +73,12 @@ module Yast
           "enable_next" => Ops.get_boolean(@param, "has_next", false)
         }
 
-        Wizard.OpenAcceptDialog
-        @result = KeyboardDialog(@argmap)
-        Wizard.CloseDialog
+        begin
+          Yast::Wizard.OpenAcceptDialog
+          @result = WFM.CallFunction("keyboard", [@argmap])
+        ensure
+          Yast::Wizard.CloseDialog
+        end
 
         # Fill return map
         @ret = { "workflow_sequence" => @result, "language_changed" => false }
