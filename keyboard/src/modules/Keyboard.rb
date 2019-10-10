@@ -207,13 +207,24 @@ module Yast
     #
     # Get the map of translated keyboard names.
     #
-    # @return	[Hash] of $[ keyboard_code : keyboard_name, ...] for all known
-    #		keyboards. 'keyboard_code' is used internally in Set and Get
-    #		functions. 'keyboard_name' is a user-readable string.
+    # @return	[Hash] of $[ keyboard_alias : keyboard_description, ...] for all known
+    #		keyboards. 'keyboard_alias' is used internally in Set and Get
+    #		functions. 'keyboard_description' is a user-readable string.
     #           e.g. {"arabic"=>"Arabic", "belgian"=>"Belgian",....}
     #
     def Selection
-      lang = Keyboards.all_keyboards.map { |k| {k["alias"] => k["description"]} }
+      lang = Keyboards.all_keyboards.map {|k| {k["alias"] => k["description"]} }
+      Hash[*lang.collect{|h| h.to_a}.flatten]
+    end
+
+    # Returns all defined codes and the regarding aliases.
+    #
+    # @return	[Hash] of $[ keyboard_code : keyboard_alias, ...] for all known
+    #		keyboards. 'keyboard_code' is the system key map
+    #		functions. 'keyboard_alias' is used internally in Set and Get
+    #           e.g. {"jp106"=>"japanese", "us"=>"english-us",....}
+    def Codes
+      lang = Keyboards.all_keyboards.map {|k| {k["code"] => k["alias"]} }
       Hash[*lang.collect{|h| h.to_a}.flatten]
     end
 
@@ -316,6 +327,7 @@ module Yast
     publish :function => :Save, :type => "void ()"
     publish :function => :MakeProposal, :type => "string (boolean, boolean)"
     publish :function => :Selection, :type => "map <string, string> ()"
+    publish :function => :codes, type: "map <string,string> ()"
     publish :function => :GetKeyboardItems, :type => "list <term> ()"
     publish :function => :SetKeyboardForLanguage, :type => "void (string)"
     publish :function => :SetKeyboardDefault, :type => "void ()"

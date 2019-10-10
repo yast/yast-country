@@ -41,7 +41,7 @@ module Y2Keyboard
         end
       end
 
-      # @return [KeyboardLayout] the current keyboard layout in the system.
+      # @return [String] the current keyboard layout in the system.
       def current_layout
         output = Yast::Execute.on_target!("localectl", "status", stdout: :capture)
         get_value_from_output(output, "VC Keymap:").strip

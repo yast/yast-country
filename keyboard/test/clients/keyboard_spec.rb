@@ -18,21 +18,22 @@
 # find current contact information at www.suse.com.
 
 require_relative "../test_helper"
-require "y2keyboard/clients/systemd_keyboard"
+require "y2keyboard/clients/keyboard"
 require "y2keyboard/dialogs/layout_selector"
 require "y2keyboard/strategies/systemd_strategy"
 require "yaml"
 Yast.import "Directory"
 
-describe Y2Keyboard::Clients::SystemdKeyboard do
+describe Y2Keyboard::Clients::Keyboard do
   describe ".run" do
     let(:dialog) { spy(Y2Keyboard::Dialogs::LayoutSelector) }
     let(:systemd_strategy) { spy(Y2Keyboard::Strategies::SystemdStrategy) }
-    subject(:client) { Y2Keyboard::Clients::SystemdKeyboard }
+    subject(:client) { Y2Keyboard::Clients::Keyboard }
 
     before do
       allow(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).and_return(systemd_strategy)
       allow(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).and_return(dialog)
+      allow(Yast::Stage).to receive(:initial).and_return false
     end
 
     it "load keyboard layouts definitions from data directory" do

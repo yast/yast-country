@@ -19,19 +19,26 @@
 
 require_relative "../dialogs/layout_selector"
 require_relative "../strategies/systemd_strategy"
+require_relative "../strategies/yast_proposal_strategy"
 require_relative "../keyboard_layout"
 require_relative "../../../data/keyboards"
-require "yaml"
+
 
 module Y2Keyboard
   module Clients
     # Client with systemd implementation.
-    class SystemdKeyboard
+    class Keyboard
       def self.run
-        Yast.import "Directory"
-        
-        systemd_strategy = Y2Keyboard::Strategies::SystemdStrategy.new
-        Y2Keyboard::KeyboardLayout.use(systemd_strategy, Keyboards.all_keyboards)
+        Yast.import "Stage"
+
+        if Yast::Stage.initial
+          # In installation mode
+          strategy = Y2Keyboard::Strategies::YastProposalStrategy.new
+        else
+          # running system --> using systemd
+          strategy = Y2Keyboard::Strategies::SystemdStrategy.new
+        end
+        Y2Keyboard::KeyboardLayout.use(strategy, Keyboards.all_keyboards)
         Y2Keyboard::Dialogs::LayoutSelector.new.run
       end
     end
