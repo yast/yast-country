@@ -29,18 +29,18 @@ module Y2Keyboard
       #
       # @return [Array<String>] an array with all available keyboard layouts codes.
       def codes
-        Keyboard.codes.keys
+        Yast::Keyboard.Codes.keys
       end
 
       # Apply a new keyboard layout.
       # @param keyboard_code [String] the keyboard layout to apply in the system. E.g. "de-latin1"
       def apply_layout(keyboard_code)
-        Keyboard.set(Keyboard.codes[keyboard_code])
+        Yast::Keyboard.Set(Yast::Keyboard.Codes[keyboard_code])
       end
 
       # @return [String] the current key map which has been defined. E.g. "de-latin1"
       def current_layout
-        Keyboard.codes.key(Keyboard.current_kbd)
+        Yast::Keyboard.Codes.key(Yast::Keyboard.current_kbd)
       end
     end
   end
