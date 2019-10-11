@@ -25,12 +25,13 @@ ywidgets_DATA = \
 ylibdir = @ylibdir@/y2keyboard
 ylib_DATA = \
   lib/y2keyboard/keyboard_layout_loader.rb \
-  lib/y2keyboard/keyboard_layout.rb \
-  lib/y2keyboard/auto_client.rb
+  lib/y2keyboard/keyboard_layout.rb
 
 ylibclientsdir = @ylibdir@/y2keyboard/clients
 ylibclients_DATA = \
-  lib/y2keyboard/clients/keyboard.rb
+  lib/y2keyboard/clients/keyboard.rb \
+  lib/y2keyboard/clients/keyboard_proposal.rb \
+  lib/y2keyboard/clients/keyboard_auto.rb
 
 ylibdialogsdir = @ylibdir@/y2keyboard/dialogs
 ylibdialogs_DATA = \
