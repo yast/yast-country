@@ -75,15 +75,13 @@ module Yast
 
     end
 
-    # GetKeyboardForLanguage()
-    #
     # Get the keyboard language for the given system language.
     #
-    # @param	System language code, e.g. "en_US".
-    #		Default keyboard language to be returned if nothing found.
+    # @param [String] System language code, e.g. "en_US".
+    # @param [String] Default keyboard language to be returned if nothing found.
     #
     # @return  The keyboard language for this language, e.g. "english-us"
-    #		or the default value if nothing found.
+    #	       or the default value if nothing found.
     #
     def GetKeyboardForLanguage(sys_language, default_keyboard)
       ret = Keyboards.suggested_keyboard(sys_language) ||
@@ -93,6 +91,7 @@ module Yast
       ret
     end
 
+    # Read installed keyboard settings.
     def Read
       # If not in initial mode
       if !Stage.initial || Mode.live_installation
@@ -105,6 +104,8 @@ module Yast
     end
 
     # was anything modified?
+    #
+    # @return [Boolean] true if modified
     def Modified
       @curr_kbd != @keyboard_on_entry || @modified
     end
@@ -114,8 +115,7 @@ module Yast
       @modified = true
     end
 
-    # Set current data into the installed system
-    #
+    # Set current data into the installed system.
     def Save
       if Mode.update
         log.info "skipping country changes in update"
@@ -128,15 +128,10 @@ module Yast
       nil
     end
 
-    # Set()
-    #
     # Set the keyboard to the given keyboard language.
     #
-    # @param   Keyboard language e.g.  "english-us"
-    #
+    # @param   [String] Keyboard language e.g.  "english-us"
     # @return  [nil]
-    #
-
     def Set(keyboard)
       log.info "set to #{keyboard}"
 
@@ -153,18 +148,14 @@ module Yast
       nil
     end
 
-
-    # MakeProposal()
-    #
     # Return proposal string and set system keyboard.
     #
     # @param [Boolean] force_reset
-    #		boolean language_changed
+    # @param [Boolean] language_changed
     #
     # @return	[String]	user readable description.
     #		If force_reset is true reset the module to the keyboard
     #		stored in default_kbd.
-
     def MakeProposal(force_reset, language_changed)
       log.info("force_reset: #{force_reset}")
       log.info("language_changed: #{language_changed}")
@@ -203,8 +194,6 @@ module Yast
       Keyboards.description(@curr_kbd)
     end
 
-    # Selection()
-    #
     # Get the map of translated keyboard names.
     #
     # @return	[Hash] of $[ keyboard_alias : keyboard_description, ...] for all known
@@ -249,27 +238,29 @@ module Yast
     end
 
 
-    # set the keayboard layout according to given language
+    # Set the keayboard layout according to given language
+    # @param  [String] language e.g. "english-us"
+    # @return [Boolean] nil
     def SetKeyboardForLanguage(lang)
       lkbd = GetKeyboardForLanguage(lang, "english-us")
       log.info("language %1 proposed keyboard %2", lang, lkbd)
       Set(lkbd) if lkbd != ""
-
       nil
     end
 
+    # Set the current keyboard as default
+    # @return [Boolean] nil
     def SetKeyboardDefault
       log.info("SetKeyboardDefault to %1", @curr_kbd)
       @default_kbd = @curr_kbd
-
       nil
     end
 
     # AutoYaST interface function: Get the Keyboard configuration from a map.
     #
-    # @param settings [Hash] imported map with the content of either the
+    # @param [Hash] settings; imported map with the content of either the
     #       'keyboard' or the 'language' section
-    # @param syntax [:keyboard, :language] format of settings: if :language, the
+    # @param [:keyboard, :language] syntax ; format of settings: if :language, the
     #       data for Language.Import
     # @return success
     def Import(settings, syntax = :keyboard)
