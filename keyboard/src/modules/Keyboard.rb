@@ -143,7 +143,10 @@ module Yast
       #
       @default_kbd = @curr_kbd if @default_kbd == "" # not yet assigned
 
-      @kb_strategy.set_layout(Keyboards.code(keyboard))
+      if !Mode.config # not in AY configuration module
+        # Set keyboard in the running system
+        @kb_strategy.set_layout(Keyboards.code(keyboard))
+      end
 
       nil
     end
@@ -266,7 +269,7 @@ module Yast
     def Import(settings, syntax = :keyboard)
       settings = deep_copy(settings)
       # Read was not called -> do the init
-      Read() 
+      Read() unless Mode.config # not in AY configuration module
 
       keyboard = @curr_kbd
 
@@ -302,7 +305,7 @@ module Yast
     # Returning current keyboard
     # @return [String] keyboard name e.g. "english-us"
     def current_kbd
-      self.Read if @curr_kbd.empty?
+      self.Read if @curr_kbd.empty? && !Mode.config
       @curr_kbd
     end
 

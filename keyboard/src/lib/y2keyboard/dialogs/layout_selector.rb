@@ -24,6 +24,8 @@ require_relative "../keyboard_layout"
 
 Yast.import "UI"
 Yast.import "Popup"
+Yast.import "Mode"
+Yast.import "Stage"
 
 module Y2Keyboard
   module Dialogs
@@ -59,7 +61,7 @@ module Y2Keyboard
             _("&Keyboard Layout"),
             map_layout_items
           ),
-          InputField(Opt(:hstretch), _("&Test"))
+          Mode.config ? HBox() : InputField(Opt(:hstretch), _("&Test"))
         )
       end
 
@@ -79,12 +81,16 @@ module Y2Keyboard
       end
 
       def cancel_handler
-        KeyboardLayoutLoader.load_layout(@previous_selected_layout)
+        if !Mode.config # not in AY configuration module
+          KeyboardLayoutLoader.load_layout(@previous_selected_layout)
+        end
         finish_dialog
       end
 
       def layout_list_handler
-        KeyboardLayoutLoader.load_layout(selected_layout)
+        if !Mode.config # not in AY configuration module
+          KeyboardLayoutLoader.load_layout(selected_layout)
+        end
       end
 
       def selected_layout
@@ -113,13 +119,19 @@ module Y2Keyboard
       end
 
       def footer
-        HBox(
-          HSpacing(),
-          Left(PushButton(Id(:help), Opt(:key_F1, :help), Yast::Label.HelpButton)),
-          PushButton(Id(:cancel), Yast::Label.CancelButton),
-          PushButton(Id(:accept), Yast::Label.AcceptButton),
-          HSpacing()
-        )
+        # If not in initial mode
+        if !Stage.initial
+          HBox(
+            HSpacing(),
+            Left(PushButton(Id(:help), Opt(:key_F1, :help), Yast::Label.HelpButton)),
+            PushButton(Id(:cancel), Yast::Label.CancelButton),
+            PushButton(Id(:accept), Yast::Label.AcceptButton),
+            HSpacing()
+          )
+        else
+          # Footer will be displayed by the proposal wizard
+          nil
+        end
       end
     end
   end

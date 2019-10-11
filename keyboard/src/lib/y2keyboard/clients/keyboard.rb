@@ -30,9 +30,10 @@ module Y2Keyboard
     class Keyboard
       def self.run
         Yast.import "Stage"
+        Yast.import "Mode"
 
-        if Yast::Stage.initial
-          # In installation mode
+        if Yast::Stage.initial || Yast::Mode.config
+          # In installation mode or AY configuration mode
           strategy = Y2Keyboard::Strategies::YastProposalStrategy.new
         else
           # running system --> using systemd
