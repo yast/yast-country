@@ -5,6 +5,7 @@ Thu Sep 19 13:31:45 CEST 2019 - schubi@suse.de
 - Main parts have been done by -Joaquín Yeray Martín de la Nuez-
   in a GSoC project:
   https://github.com/openSUSE/mentoring/issues/79
+  Fixed also bsc#1142957
 - 4.2.6
 
 -------------------------------------------------------------------
