@@ -25,7 +25,6 @@ require_relative "../keyboard_layout"
 Yast.import "UI"
 Yast.import "Popup"
 Yast.import "Mode"
-Yast.import "Stage"
 
 module Y2Keyboard
   module Dialogs
@@ -119,19 +118,13 @@ module Y2Keyboard
       end
 
       def footer
-        # If not in initial mode
-        if !Yast::Stage.initial
-          HBox(
-            HSpacing(),
-            Left(PushButton(Id(:help), Opt(:key_F1, :help), Yast::Label.HelpButton)),
-            PushButton(Id(:cancel), Yast::Label.CancelButton),
-            PushButton(Id(:accept), Yast::Label.AcceptButton),
-            HSpacing()
-          )
-        else
-          # Footer will be displayed by the proposal wizard
-          nil
-        end
+        HBox(
+          HSpacing(),
+          Left(PushButton(Id(:help), Opt(:key_F1, :help), Yast::Label.HelpButton)),
+          PushButton(Id(:cancel), Yast::Label.CancelButton),
+          PushButton(Id(:accept), Yast::Label.AcceptButton),
+          HSpacing()
+        )
       end
     end
   end
