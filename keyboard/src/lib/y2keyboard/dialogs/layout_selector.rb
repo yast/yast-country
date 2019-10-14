@@ -61,7 +61,7 @@ module Y2Keyboard
             _("&Keyboard Layout"),
             map_layout_items
           ),
-          Mode.config ? HBox() : InputField(Opt(:hstretch), _("&Test"))
+          Yast::Mode.config ? HBox() : InputField(Opt(:hstretch), _("&Test"))
         )
       end
 
@@ -77,18 +77,18 @@ module Y2Keyboard
 
       def accept_handler
         selected_layout.apply_layout
-        finish_dialog
+        finish_dialog(:accept)
       end
 
       def cancel_handler
-        if !Mode.config # not in AY configuration module
+        if !Yast::Mode.config # not in AY configuration module
           KeyboardLayoutLoader.load_layout(@previous_selected_layout)
         end
-        finish_dialog
+        finish_dialog(:abort)
       end
 
       def layout_list_handler
-        if !Mode.config # not in AY configuration module
+        if !Yast::Mode.config # not in AY configuration module
           KeyboardLayoutLoader.load_layout(selected_layout)
         end
       end
@@ -120,7 +120,7 @@ module Y2Keyboard
 
       def footer
         # If not in initial mode
-        if !Stage.initial
+        if !Yast::Stage.initial
           HBox(
             HSpacing(),
             Left(PushButton(Id(:help), Opt(:key_F1, :help), Yast::Label.HelpButton)),
