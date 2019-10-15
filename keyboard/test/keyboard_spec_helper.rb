@@ -95,18 +95,4 @@ module KeyboardSpecHelper
       true
     )
   end
-
-  def given_keyboard_configuration(layout_code, arguments)
-    allow(File).to receive(:executable?).with("/usr/sbin/xkbctrl")
-      .and_return(true)
-    allow(Yast::Execute).to receive(:on_target!).with("/usr/sbin/xkbctrl", layout_code, stdout: :capture)
-      .and_return(
-        "$[\n" \
-          "\"XkbLayout\"    : \"es\",\n" \
-          "\"XkbModel\"     : \"microsoftpro\",\n" \
-          "\"XkbOptions\"   : \"terminate:ctrl_alt_bksp\",\n" \
-          "\"Apply\"        : \"#{arguments}\"\n" \
-        "]"
-      )
-  end
 end

@@ -43,7 +43,7 @@ module Y2Keyboard
                      "connected during installation\n"
 
       # Used to set keybaord layout in a running system.
-      # @param keyboard_code [String] the keyboard layout to set
+      # @param keyboard_code [String] the keyboard layout (e.g. "us") to set
       # in the running the system (mostly temporary).
       def set_layout(keyboard_code)
         if Yast::UI.TextMode
@@ -71,7 +71,7 @@ module Y2Keyboard
         x11data = get_x11_data(keyboard_code)
         return if x11data.empty?
 
-        system("/usr/bin/setxkbmap " + x11data["Apply"])
+        Kernel.system("/usr/bin/setxkbmap " + x11data["Apply"])
 
         # bnc#885271: set udev rule to handle incoming attached keyboards
         # While installation/update only.
@@ -103,7 +103,7 @@ module Y2Keyboard
 
         if File.executable?(cmd)
           file = File.join(Yast::Directory.tmpdir, "xkbctrl.out")
-          system("#{cmd} #{keymap.shellescape} >#{file}")
+          Kernel.system("#{cmd} #{keymap.shellescape} >#{file}")
           x11data = Yast::SCR.Read(Yast::path(".target.ycp"), file)
         else
           log.warn("#{cmd} not found on system.")
