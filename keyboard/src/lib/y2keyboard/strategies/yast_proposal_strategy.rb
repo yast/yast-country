@@ -25,7 +25,7 @@ module Y2Keyboard
     # will be handled by the module/Keyboard.rb class. So all get and set calls
     # have to be done over this class.
     class YastProposalStrategy
-      # Returns e.b. ["de-latin1-nodeadkeys", "uk", "us",]
+      # Returns e.g. ["de-latin1-nodeadkeys", "uk", "us",]
       #
       # @return [Array<String>] an array with all available keyboard layouts codes.
       def codes
