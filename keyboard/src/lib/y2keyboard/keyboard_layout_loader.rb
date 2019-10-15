@@ -24,7 +24,7 @@ module Y2Keyboard
   # Class to change keyboard layout on the fly.
   class KeyboardLayoutLoader
 
-    # Load x11 or virtual console keys on the fly.
+    # Set x11 or virtual console keys on the fly and temporarily.
     # @param keyboard_layout [KeyboardLayout] the keyboard layout to load.
     def self.load_layout(keyboard_layout)
       kb_strategy = Y2Keyboard::Strategies::KbStrategy.new

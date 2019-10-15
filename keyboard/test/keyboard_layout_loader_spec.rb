@@ -20,69 +20,21 @@
 require_relative "test_helper"
 require "y2keyboard/keyboard_layout"
 require "y2keyboard/keyboard_layout_loader"
-require "y2keyboard/strategies/systemd_strategy"
+require "y2keyboard/strategies/kb_strategy"
 require "yast"
 
 Yast.import "UI"
 
 describe Y2Keyboard::KeyboardLayoutLoader do
-  subject(:systemd_strategy) { Y2Keyboard::KeyboardLayoutLoader }
+  subject(:layout_loader) { Y2Keyboard::KeyboardLayoutLoader }
 
   describe "#load_layout" do
-=begin    
+    let(:new_layout) {Y2Keyboard::KeyboardLayout.new("es", "Spanish")}
 
-************** should move to own testcase for kb_strategy.rb
+    it "set layout temporarily" do
+      expect_any_instance_of(Y2Keyboard::Strategies::KbStrategy).to receive(:set_layout).with(new_layout.code)
 
-    new_layout = Y2Keyboard::KeyboardLayout.new("es", "Spanish")
-    arguments_to_apply = "-layout es -model microsoftpro -option terminate:ctrl_alt_bksp"
-    expected_arguments = [
-      "setxkbmap",
-      "-layout",
-      "es",
-      "-model",
-      "microsoftpro",
-      "-option",
-      "terminate:ctrl_alt_bksp"
-    ]
-
-
-    describe "in text mode" do
-      before do
-        allow(Yast::UI).to receive(:TextMode).and_return(true)
-      end
-
-      it "do not try to change the current keyboard layout in xorg" do
-        expect(Yast::Execute).not_to receive(:on_target!).with("setxkbmap", new_layout.code)
-
-        systemd_strategy.load_layout(new_layout)
-      end
-
-      it "changes the current keyboard layout in console" do
-        expect(Yast::Execute).to receive(:on_target!).twice.with("loadkeys", anything, new_layout.code)
-
-        systemd_strategy.load_layout(new_layout)
-      end
+      layout_loader.load_layout(new_layout)
     end
-
-    describe "using ncurses inside X server" do
-      before do
-        allow(Yast::UI).to receive(:TextMode).and_return(true)
-      end
-
-      describe "when setting current keyboard layout in console" do
-        # This tests describes the case when running the module in text mode inside a X server.
-        # In that case, when trying to execute 'loadkeys' it will fail due to it should't
-        # be execute from X server.
-        it "do not raise error" do
-          allow(Yast::Execute).to receive(:on_target!)
-            .with("loadkeys", anything, new_layout.code)
-            .and_raise(loadkeys_error)
-
-          expect { systemd_strategy.load_layout(new_layout) }.not_to raise_error
-        end
-
-      end
-    end
-=end    
   end
 end

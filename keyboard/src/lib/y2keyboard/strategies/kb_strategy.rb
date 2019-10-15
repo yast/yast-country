@@ -22,6 +22,9 @@ require "yast2/execute"
 
 module Y2Keyboard
   module Strategies
+    Yast.import "Directory"
+    Yast.import "Stage"
+
     # Class to deal with xkb and kbd keyboard configuration management.
     # Use this class only for temporary changes like changing keyboard
     # layout "on the fly" for example in the inst-sys.
@@ -65,8 +68,6 @@ module Y2Keyboard
       # set x11 keys on the fly.
       # @param keyboard_code [String] the keyboard to set.
       def set_x11_layout(keyboard_code)
-        Yast.import "Stage"
-
         x11data = get_x11_data(keyboard_code)
         return if x11data.empty?
 
