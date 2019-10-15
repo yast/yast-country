@@ -13,7 +13,7 @@ module Yast
       # The command line description map
       @cmdline = {
         "id"         => "keyboard",
-        # translators: command line help text for Securoty module
+        # TRANSLATORS: command line help text for Securoty module
         "help"       => _("Keyboard configuration."),
         "guihandler" => fun_ref(method(:KeyboardSequence), "any ()"),
         "initialize" => fun_ref(method(:KeyboardRead), "boolean ()"),

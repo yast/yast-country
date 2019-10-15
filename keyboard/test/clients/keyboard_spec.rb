@@ -21,19 +21,20 @@ require_relative "../test_helper"
 require "y2keyboard/clients/keyboard"
 require "y2keyboard/dialogs/layout_selector"
 require "y2keyboard/strategies/systemd_strategy"
-require "yaml"
+
 Yast.import "Directory"
 
 describe Y2Keyboard::Clients::Keyboard do
   describe ".run" do
     let(:dialog) { spy(Y2Keyboard::Dialogs::LayoutSelector) }
     let(:systemd_strategy) { spy(Y2Keyboard::Strategies::SystemdStrategy) }
+    let(:yast_proposal_strategy) { spy(Y2Keyboard::Strategies::YastProposalStrategy) }
     subject(:client) { Y2Keyboard::Clients::Keyboard }
 
     before do
       allow(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).and_return(systemd_strategy)
+      allow(Y2Keyboard::Strategies::YastProposalStrategy).to receive(:new).and_return(yast_proposal_strategy)
       allow(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).and_return(dialog)
-      allow(Yast::Stage).to receive(:initial).and_return false
     end
 
     it "load keyboard layouts definitions from data directory" do
@@ -42,8 +43,24 @@ describe Y2Keyboard::Clients::Keyboard do
       client.run
     end
 
-    it "use systemd strategy" do
+    it "use systemd strategy in a running system" do
+      allow(Yast::Stage).to receive(:initial).and_return false
       expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(systemd_strategy, anything)
+
+      client.run
+    end
+
+    it "use yast_proposal_strategy strategy while installation" do
+      allow(Yast::Stage).to receive(:initial).and_return true
+      expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(yast_proposal_strategy, anything)
+
+      client.run
+    end
+
+    it "use yast_proposal_strategy strategy in the AY configuration module" do
+      allow(Yast::Stage).to receive(:initial).and_return false
+      allow(Yast::Mode).to receive(:config).and_return true
+      expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(yast_proposal_strategy, anything)
 
       client.run
     end
