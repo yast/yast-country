@@ -79,6 +79,7 @@ module Yast
     #
     # @param [String] System language code, e.g. "en_US".
     # @param [String] Default keyboard language to be returned if nothing found.
+    #                 E.g. "english-us"
     #
     # @return  The keyboard language for this language, e.g. "english-us"
     #	       or the default value if nothing found.
