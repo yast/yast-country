@@ -244,20 +244,16 @@ module Yast
 
     # Set the keayboard layout according to given language
     # @param  [String] language e.g. "english-us"
-    # @return [Boolean] nil
     def SetKeyboardForLanguage(lang)
       lkbd = GetKeyboardForLanguage(lang, "english-us")
-      log.info("language %1 proposed keyboard %2", lang, lkbd)
+      log.info("language #{lang} proposed keyboard #{lkbd}")
       Set(lkbd) if lkbd != ""
-      nil
     end
 
     # Set the current keyboard as default
-    # @return [Boolean] nil
     def SetKeyboardDefault
-      log.info("SetKeyboardDefault to %1", @curr_kbd)
+      log.info("SetKeyboardDefault to #{@curr_kbd}")
       @default_kbd = @curr_kbd
-      nil
     end
 
     # AutoYaST interface function: Get the Keyboard configuration from a map.

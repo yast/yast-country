@@ -102,4 +102,58 @@ describe "Yast::Keyboard" do
     end
   end
 
+  describe "#MakeProposal" do
+    context "force_reset is true" do
+
+      it "resets to default keyboard if defined" do
+        # set default keyboard
+        subject.Set("german")
+        subject.SetKeyboardDefault()
+        subject.Set("english-us")
+
+        subject.MakeProposal(true, false)
+        expect(subject.current_kbd).to eq("german")
+      end
+    end
+
+    context "force_reset is false" do
+      before do
+        allow(Yast::Mode).to receive(:mode).and_return("installation")
+      end
+
+      context "User has already decided" do
+
+        it "does not make a proposal" do
+          subject.user_decision = true
+          expect(subject).not_to receive(:Set)
+          subject.MakeProposal(false, false)
+        end
+      end
+
+      context "User has not make any decision" do
+
+        it "makes a proposal" do
+          subject.user_decision = false
+          expect(subject).to receive(:Set)
+          subject.MakeProposal(false, false)
+        end
+      end
+    end
+  end
+
+  describe "#Selection" do
+    it "returns a keyboard description map" do
+      ret = subject.Selection
+      expect(ret["arabic"]).to eq("Arabic")
+    end
+  end
+
+#  describe "#GetKeyboardItems" do
+#    it "returns map of keyboard items" do
+#      ret = subject.GetKeyboardItems
+#      puts ret
+#      expect(ret["de-latin1-nodeadkeys"]).to eq("german")
+#    end
+#  end
+
 end
