@@ -165,6 +165,11 @@ describe "Yast::Keyboard" do
   end
 
   describe "#SetKeyboardDefault" do
+    before do
+      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
+        to receive(:current_layout).and_return("uk")
+    end
+
     it "sets keyboard default to current keyboard" do
       subject.Read()
       subject.SetKeyboardDefault
@@ -173,6 +178,11 @@ describe "Yast::Keyboard" do
   end
 
   describe "#Import" do
+    before do
+      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
+        to receive(:current_layout).and_return("uk")
+    end
+
     context "data comes from language settings" do
       it "sets the keyboard" do
         expect(subject).to receive(:Set).with("german")
