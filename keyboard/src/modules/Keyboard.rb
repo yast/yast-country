@@ -243,7 +243,7 @@ module Yast
 
 
     # Set the keayboard layout according to given language
-    # @param  [String] language e.g. "english-us"
+    # @param  [String] language e.g. "en"
     def SetKeyboardForLanguage(lang)
       lkbd = GetKeyboardForLanguage(lang, "english-us")
       log.info("language #{lang} proposed keyboard #{lkbd}")

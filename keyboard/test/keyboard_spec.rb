@@ -148,12 +148,30 @@ describe "Yast::Keyboard" do
     end
   end
 
-#  describe "#GetKeyboardItems" do
-#    it "returns map of keyboard items" do
-#      ret = subject.GetKeyboardItems
-#      puts ret
-#      expect(ret["de-latin1-nodeadkeys"]).to eq("german")
-#    end
-#  end
+  describe "#GetKeyboardItems" do
+    it "returns map of keyboard items" do
+      ret = subject.GetKeyboardItems
+      expect(ret.first.params[0].class).to eq(Yast::Term)
+      expect(ret.first.params[0].value).to eq(:id)
+      expect(ret.first.params[1].class).to eq(String)
+      expect(ret.first.params[2].class == FalseClass ||
+        ret.first.params[2].class == TrueClass).to eq(true)
+    end
+  end
+
+  describe "#SetKeyboardForLanguage" do
+    it "sets keyboard temporarily in the running system" do
+      expect(subject).to receive(:Set).with("english-us")
+      subject.SetKeyboardForLanguage("en")
+    end
+  end
+
+  describe "#SetKeyboardDefault" do
+    it "sets keyboard default to current keyboard" do
+      subject.Read()
+      subject.SetKeyboardDefault
+      expect(subject.default_kbd).to eq(subject.current_kbd)
+    end
+  end
 
 end
