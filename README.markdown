@@ -44,58 +44,26 @@ timezone) for YaST2.
 
     ---
 
-- keyboard/src/data/keyboard_raw.ycp
+- keyboard/src/data/keyboards.rb
 
-    Console keyboard layout
+    Array of keyboard layout
 
-    - key: yast_keyboard_id
-    - value: pair of translatable_string, more_data:
-        - key: keyboard_hardware (pc104, macintosh, type4, type5, type5_euro)
-        - value: more_data:
-            - ncurses: /usr/share/kbd/keymaps/xkb/%s
-            - compose: ? (optional)
+    - description: translatable string
+    - alias: yast keyboard id
+    - code: keymap
+    - suggested_for_lang: Languages which fits to this keyboard layout.
 
     ---
 
     ```js
-    "english-uk": [
-        _("English (UK)"),
-        $[
-            "pc104":      $[ "ncurses": "gb.map.gz"],
-            "macintosh":  $[ "ncurses": "gb-mac.map.gz" ],
-            "type4":      $[ "ncurses": "us.map.gz"],
-            "type5":      $[ "ncurses": "us.map.gz"],
-            "type5_euro": $[ "ncurses": "us.map.gz"],
-        ]
+    [
+      { "description" => _("English (US)"),
+        "alias" => "english-us",
+        "code" => "us",
+        "suggested_for_lang" => ["ar_eg", "en", "nl_BE"]
+      },
+      ...
     ]
-
-    ```
-
-    ---
-
-- keyboard/src/data/lang2keyboard.ycp (TODO convert)
-    - key: locale_id
-    - value: yast_keyboard_id
-
-    ---
-
-    ```js
-    "en_GB": "english-uk"
-    ```
-
-    ---
-
-- keyboard/src/data/xkblayout2keyboard.ycp (TODO convert)
-
-    man xkeyboard-config
-
-    - key: xkblayout_id ?
-    - value: yast_keyboard_id
-
-    ---
-
-    ```js
-    "gb": "english-uk"
     ```
 
     ---
