@@ -4,9 +4,7 @@
 require_relative "test_helper"
 require_relative "../src/data/keyboards"
 
-Yast.import "ProductFeatures"
 Yast.import "Keyboard"
-Yast.import "Language"
 
 describe "Yast::Keyboard" do
   subject { Yast::Keyboard }
@@ -151,9 +149,9 @@ describe "Yast::Keyboard" do
   describe "#GetKeyboardItems" do
     it "returns map of keyboard items" do
       ret = subject.GetKeyboardItems
-      expect(ret.first.params[0].class).to eq(Yast::Term)
+      expect(ret.first.params[0]).to be_kind_of(Yast::Term)
       expect(ret.first.params[0].value).to eq(:id)
-      expect(ret.first.params[1].class).to eq(String)
+      expect(ret.first.params[1]).to be_kind_of(String)
       expect(ret.first.params[2].class == FalseClass ||
         ret.first.params[2].class == TrueClass).to eq(true)
     end
