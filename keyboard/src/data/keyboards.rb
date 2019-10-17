@@ -246,9 +246,9 @@ class Keyboards
 
   # Evaluate the proposed keyboard for a given language
   #
-  # @param [String] language e.g. "de_DE"
+  # @param [String] language e.g. "de_CH"
   #
-  # @return [String] keyboard alias e.g. "german" or nil
+  # @return [String] keyboard alias e.g. "german-ch" or nil
   #
   def self.suggested_keyboard(language)
     keyboard = all_keyboards.detect do |kb|
