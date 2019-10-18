@@ -1057,6 +1057,7 @@ module Yast
     def Set(keyboard)
       Builtins.y2milestone("set to %1", keyboard)
       if Mode.config
+        @current_kbd = keyboard
         @name = GetKeyboardName(@current_kbd)
         return
       end
