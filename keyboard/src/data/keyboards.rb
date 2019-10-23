@@ -38,12 +38,12 @@ class Keyboards
       },
       { "description" => _("German"),
         "alias" => "german",
-        "code" => "de-latin1-nodeadkeys"
+        "code" => "de-latin1-nodeadkeys",
+        "suggested_for_lang" => ["de"]
       },
       { "description" => _("German (with deadkeys)"),
         "alias" => "german-deadkey",
-        "code" => "de-latin1",
-        "suggested_for_lang" => ["de"]
+        "code" => "de-latin1"
       },
       { "description" => _("German (Switzerland)"),
         "alias" => "german-ch",
