@@ -17,11 +17,24 @@
 # To contact SUSE LLC about this file by physical or electronic mail, you may
 # find current contact information at www.suse.com.
 
-require_relative "../../test/test_helper.rb"
-require_relative "keyboard_spec_helper"
+require_relative "test_helper"
+require "y2keyboard/keyboard_layout"
+require "y2keyboard/keyboard_layout_loader"
+require "y2keyboard/strategies/kb_strategy"
+require "yast"
 
-RSpec.configure do |config|
-  config.include KeyboardSpecHelper # custom helpers
-  config.filter_run focus: true
-  config.run_all_when_everything_filtered = true
+Yast.import "UI"
+
+describe Y2Keyboard::KeyboardLayoutLoader do
+  subject(:layout_loader) { Y2Keyboard::KeyboardLayoutLoader }
+
+  describe "#load_layout" do
+    let(:new_layout) {Y2Keyboard::KeyboardLayout.new("es", "Spanish")}
+
+    it "set layout temporarily" do
+      expect_any_instance_of(Y2Keyboard::Strategies::KbStrategy).to receive(:set_layout).with(new_layout.code)
+
+      layout_loader.load_layout(new_layout)
+    end
+  end
 end

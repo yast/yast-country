@@ -17,11 +17,18 @@
 # To contact SUSE LLC about this file by physical or electronic mail, you may
 # find current contact information at www.suse.com.
 
-require_relative "../../test/test_helper.rb"
-require_relative "keyboard_spec_helper"
+require "yast2/execute"
+require_relative "strategies/kb_strategy"
 
-RSpec.configure do |config|
-  config.include KeyboardSpecHelper # custom helpers
-  config.filter_run focus: true
-  config.run_all_when_everything_filtered = true
+module Y2Keyboard
+  # Class to change keyboard layout on the fly.
+  class KeyboardLayoutLoader
+
+    # Set x11 or virtual console keys on the fly and temporarily.
+    # @param keyboard_layout [KeyboardLayout] the keyboard layout to load.
+    def self.load_layout(keyboard_layout)
+      kb_strategy = Y2Keyboard::Strategies::KbStrategy.new
+      kb_strategy.set_layout(keyboard_layout.code)
+    end
+  end
 end
