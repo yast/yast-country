@@ -192,7 +192,7 @@ describe "Yast::Keyboard" do
 
     context "data comes from keyboard settings" do
       it "evaluates and sets the keyboard by the given language" do
-        expect(subject).to receive(:Set).with("german-deadkey")
+        expect(subject).to receive(:Set).with("german")
         subject.Import({"language" => "de"}, :language)
       end
     end
