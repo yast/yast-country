@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Nov 28 22:42:34 UTC 2019 - David Diaz <dgonzalez@suse.com>
+
+- Bring back the agent to set the console font, deleted during the
+  keyboard module refactorization (bsc#1156896).
+- 4.2.8
+
+-------------------------------------------------------------------
 Thu Oct 19 13:31:45 CEST 2019 - schubi@suse.de
 
 - Refactoring complete keyboard workflow.
