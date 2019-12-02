@@ -116,15 +116,6 @@ module Yast
       @modified = true
     end
 
-    # Reset all setting
-    def reset
-      @curr_kbd = ""
-      @keyboard_on_entry = ""
-      @default_kbd = ""
-      @user_decision = false
-      @modified = false
-    end
-
     # Set current data into the installed system.
     def Save
       if Mode.update
@@ -326,7 +317,6 @@ module Yast
     publish :function => :Modified, :type => "boolean ()"
     publish :function => :SetModified, :type => "void (boolean)"
     publish :function => :Save, :type => "void ()"
-    publish :function => :reset, :type => "void ()"
     publish :function => :MakeProposal, :type => "string (boolean, boolean)"
     publish :function => :Selection, :type => "map <string, string> ()"
     publish :function => :codes, type: "map <string,string> ()"
