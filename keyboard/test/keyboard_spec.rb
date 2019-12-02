@@ -136,6 +136,17 @@ describe "Yast::Keyboard" do
           subject.MakeProposal(false, false)
         end
       end
+
+      context "AutoYaST has not defined a keyboard" do
+        before do
+          allow(Yast::Mode).to receive(:auto).and_return true
+        end
+        it "makes a proposal" do
+          subject.reset
+          expect(subject).to receive(:Set)
+          subject.MakeProposal(false, false)
+        end
+      end
     end
   end
 
