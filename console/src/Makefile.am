@@ -4,7 +4,8 @@ module_DATA = \
   modules/Console.rb
 
 scrconf_DATA = \
-  scrconf/sysconfig_console.scr
+  scrconf/sysconfig_console.scr \
+  scrconf/etc_vconsole_conf.scr
 
 ydata_DATA = \
   data/consolefonts.json
