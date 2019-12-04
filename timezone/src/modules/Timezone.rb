@@ -1036,16 +1036,13 @@ module Yast
 
     # Checks whether the system has Windows installed
     def system_has_windows?
-      begin
-        win_partitions = disk_analyzer.windows_partitions
-        !win_partitions.empty?
-      rescue NameError => ex
-        # bsc#1058869: Don't enforce y2storage being available
-        log.warn("Caught #{ex}")
-        log.warn("No storage-ng support - not checking for a windows partition")
-        log.warn("Assuming UTC for the hardware clock")
-        false # No windows partition found
-      end
+      disk_analyzer.windows_system?
+    rescue NameError => ex
+      # bsc#1058869: Don't enforce y2storage being available
+      log.warn("Caught #{ex}")
+      log.warn("No storage-ng support - not checking for a windows partition")
+      log.warn("Assuming UTC for the hardware clock")
+      false # No windows partition found
     end
 
     # Determines whether timezone is read-only for the current product
