@@ -59,7 +59,7 @@ describe "Yast::Timezone" do
 
       expect(subject).to eq(false)
     end
-    
+
   end
 
   describe "#timezone" do
@@ -127,6 +127,67 @@ describe "Yast::Timezone" do
       it "modifies the timezone" do
         subject.Set("Atlantic/Canary", false)
         expect(subject.timezone).to eq("Atlantic/Canary")
+      end
+    end
+  end
+
+  describe "#system_has_windows?" do
+    before do
+      allow(Yast::Arch).to receive(:x86_64).and_return(supported_arch)
+      allow(Yast::Arch).to receive(:i386).and_return(supported_arch)
+    end
+
+    context "when the architecture is not supported for Windows" do
+      let(:supported_arch) { false }
+
+      it "does not probe the system" do
+        expect(subject).to_not receive(:disk_analyzer)
+
+        subject.system_has_windows?
+      end
+
+      it "returns false" do
+        expect(subject.system_has_windows?).to eq(false)
+      end
+    end
+
+    context "when the architecture is supported for Windows" do
+      let(:supported_arch) { true }
+
+      context "but the Storage stack is not available" do
+        before do
+          allow(subject).to receive(:disk_analyzer).and_raise(NameError)
+        end
+
+        it "returns false" do
+          expect(subject.system_has_windows?).to eq(false)
+        end
+      end
+
+      context "and the Storage stack is available" do
+        before do
+          allow(subject).to receive(:disk_analyzer).and_return(disk_analyzer)
+        end
+
+        let(:disk_analyzer) { double("Y2Storage::DiskAnalyzer", windows_system?: windows) }
+
+        let(:windows) { false }
+
+        context "and there is a Windows system" do
+          let(:windows) { true }
+
+          it "returns true" do
+            expect(subject.system_has_windows?).to eq(true)
+          end
+        end
+
+        context "and there is not a Windows system" do
+          let(:windows) { false }
+
+          it "returns false" do
+            expect(subject.system_has_windows?).to eq(false)
+          end
+        end
       end
     end
   end

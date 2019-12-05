@@ -1035,17 +1035,19 @@ module Yast
     end
 
     # Checks whether the system has Windows installed
+    #
+    # @return [Boolean]
     def system_has_windows?
-      begin
-        win_partitions = disk_analyzer.windows_partitions
-        !win_partitions.empty?
-      rescue NameError => ex
-        # bsc#1058869: Don't enforce y2storage being available
-        log.warn("Caught #{ex}")
-        log.warn("No storage-ng support - not checking for a windows partition")
-        log.warn("Assuming UTC for the hardware clock")
-        false # No windows partition found
-      end
+      # Avoid probing if the architecture is not supported for Windows
+      return false unless windows_architecture?
+
+      disk_analyzer.windows_system?
+    rescue NameError => ex
+      # bsc#1058869: Don't enforce y2storage being available
+      log.warn("Caught #{ex}")
+      log.warn("No storage-ng support - not checking for a windows partition")
+      log.warn("Assuming UTC for the hardware clock")
+      false # No windows partition found
     end
 
     # Determines whether timezone is read-only for the current product
@@ -1115,6 +1117,13 @@ module Yast
     publish :function => :Summary, :type => "string ()"
 
   protected
+
+    # Whether the architecture of the system is supported by MS Windows
+    #
+    # @return [Boolean]
+    def windows_architecture?
+      Arch.x86_64 || Arch.i386
+    end
 
     def disk_analyzer
       Y2Storage::StorageManager.instance.probed_disk_analyzer
