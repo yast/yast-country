@@ -1035,7 +1035,12 @@ module Yast
     end
 
     # Checks whether the system has Windows installed
+    #
+    # @return [Boolean]
     def system_has_windows?
+      # Avoid probing if the architecture is not supported for Windows
+      return false unless windows_architecture?
+
       disk_analyzer.windows_system?
     rescue NameError => ex
       # bsc#1058869: Don't enforce y2storage being available
@@ -1112,6 +1117,13 @@ module Yast
     publish :function => :Summary, :type => "string ()"
 
   protected
+
+    # Whether the architecture of the system is supported by MS Windows
+    #
+    # @return [Boolean]
+    def windows_architecture?
+      Arch.x86_64 || Arch.i386
+    end
 
     def disk_analyzer
       Y2Storage::StorageManager.instance.probed_disk_analyzer
