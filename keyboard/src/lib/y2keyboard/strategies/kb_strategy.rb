@@ -46,6 +46,11 @@ module Y2Keyboard
       # @param keyboard_code [String] the keyboard layout (e.g. "us") to set
       # in the running the system (mostly temporary).
       def set_layout(keyboard_code)
+        if keyboard_code.nil? || keyboard_code.empty?
+          log.info "Keyboard has not been defined. Do not set it."
+          return
+        end
+
         if Yast::UI.TextMode
           begin
             Yast::Execute.on_target!("loadkeys", loadkeys_devices("tty"), keyboard_code)
@@ -65,9 +70,9 @@ module Y2Keyboard
 
     private
 
-      # set x11 keys on the fly.
-      # @param keyboard_code [String] the keyboard to set.
-      def set_x11_layout(keyboard_code)
+    # set x11 keys on the fly.
+    # @param keyboard_code [String] the keyboard to set.
+    def set_x11_layout(keyboard_code)
         x11data = get_x11_data(keyboard_code)
         return if x11data.empty?
 

@@ -23,6 +23,8 @@ module Y2Keyboard
   module Strategies
     # Class to deal with systemd keyboard configuration management.
     class SystemdStrategy
+      include Yast::Logger
+
       # @return [Array<String>] an array with all available systemd keyboard layouts codes.
       def codes
         raw_layouts = Yast::Execute.on_target!("localectl", "list-keymaps", stdout: :capture)
@@ -32,6 +34,11 @@ module Y2Keyboard
       # Use systemd to apply a new keyboard layout in the system.
       # @param keyboard_code [String] the keyboard layout to apply in the system.
       def apply_layout(keyboard_code)
+        if keyboard_code.nil? || keyboard_code.empty?
+          log.info "Keyboard has not been defined. Do not set it."
+          return
+        end
+
         if Yast::Stage.initial
           # systemd is not available here (inst-sys).
           # do use --root option, running in chroot does not work (bsc#1074481)
