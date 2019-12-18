@@ -17,6 +17,7 @@
 # To contact SUSE LLC about this file by physical or electronic mail, you may
 # find current contact information at www.suse.com.
 
+require "yast"
 require "yast2/execute"
 
 module Y2Keyboard
@@ -32,6 +33,11 @@ module Y2Keyboard
       # Use systemd to apply a new keyboard layout in the system.
       # @param keyboard_code [String] the keyboard layout to apply in the system.
       def apply_layout(keyboard_code)
+        if keyboard_code.nil? || keyboard_code.empty?
+          log.info "Keyboard has not been defined. Do not set it."
+          return
+        end
+
         if Yast::Stage.initial
           # systemd is not available here (inst-sys).
           # do use --root option, running in chroot does not work (bsc#1074481)

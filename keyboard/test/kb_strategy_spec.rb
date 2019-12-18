@@ -54,8 +54,16 @@ describe Y2Keyboard::Strategies::KbStrategy do
         expect(kb_strategy).to receive(:write_udev_rule)
 
         kb_strategy.set_layout("es")
-      end      
+      end
+    end
 
-    end    
+    context "empty keyboard_code parameter" do
+      it "returns only " do
+        expect(kb_strategy).not_to receive(:set_x11_layout)
+        expect(Yast::Execute).not_to receive(:on_target!).with(
+          "loadkeys", anything, anything)
+        kb_strategy.set_layout("")
+      end
+    end
   end
 end
