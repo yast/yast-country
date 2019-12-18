@@ -58,7 +58,7 @@ describe Y2Keyboard::Strategies::KbStrategy do
     end
 
     context "empty keyboard_code parameter" do
-      it "returns only " do
+      it "does not try to set the keyboard layout" do
         expect(kb_strategy).not_to receive(:set_x11_layout)
         expect(Yast::Execute).not_to receive(:on_target!).with(
           "loadkeys", anything, anything)

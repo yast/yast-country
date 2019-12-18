@@ -53,7 +53,7 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
     end
 
     context "empty keyboard code" do
-      it "returns only " do
+      it "does not try to set the keyboard layout" do
         expect(Yast::Execute).not_to receive(:on_target!).with(
           "localectl", "set-keymap", anything)
         systemd_strategy.apply_layout("")
