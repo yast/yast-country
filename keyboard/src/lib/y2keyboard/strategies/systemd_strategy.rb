@@ -17,13 +17,14 @@
 # To contact SUSE LLC about this file by physical or electronic mail, you may
 # find current contact information at www.suse.com.
 
-require "yast"
 require "yast2/execute"
 
 module Y2Keyboard
   module Strategies
     # Class to deal with systemd keyboard configuration management.
     class SystemdStrategy
+      include Yast::Logger
+
       # @return [Array<String>] an array with all available systemd keyboard layouts codes.
       def codes
         raw_layouts = Yast::Execute.on_target!("localectl", "list-keymaps", stdout: :capture)
