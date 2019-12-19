@@ -440,4 +440,23 @@ describe "Yast::Language" do
       expect(subject.EnglishName("de_DE", "missing")).to eq("German")
     end
   end
+
+  describe "#main_language" do
+    it "returns empty string for nil" do
+      expect(subject.main_language(nil)).to eq ""
+    end
+
+    it "returns main language for variant with dialect" do
+      expect(subject.main_language("en_GB")).to eq "en"
+    end
+
+    it "returns main language for variant with dialect and encoding" do
+      expect(subject.main_language("en_GB.utf-8")).to eq "en"
+    end
+
+    # test for bsc#949591
+    it "returns main language even when it has more then two chars" do
+      expect(subject.main_language("csb_PL")).to eq "csb"
+    end
+  end
 end

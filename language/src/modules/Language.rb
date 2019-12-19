@@ -321,7 +321,7 @@ module Yast
       if @available_lang_filenames == nil
         lang_numbers = {}
         Builtins.foreach(GetLanguagesMap(false)) do |code, data|
-          short = Ops.get(Builtins.splitstring(code, "_"), 0, "")
+          short = main_language(code)
           if Ops.get(lang_numbers, short, 0) == 0
             Ops.set(lang_numbers, short, 1)
           else
@@ -333,7 +333,7 @@ module Yast
           end
         end
         @available_lang_filenames = Builtins.maplist(GetLanguagesMap(false)) do |code, data|
-          short = Ops.get(Builtins.splitstring(code, "_"), 0, "")
+          short = main_language(code)
           if Ops.greater_than(Ops.get(lang_numbers, short, 0), 1)
             next code
           else
@@ -345,12 +345,7 @@ module Yast
       check_for_languages = [language]
 
       # 'en_US' ? add also 'en'
-      if Ops.greater_than(Builtins.size(language), 2)
-        check_for_languages = Builtins.add(
-          check_for_languages,
-          Ops.get(Builtins.splitstring(language, "_"), 0, "")
-        )
-      end
+      check_for_languages << main_language(language) if language.include?("_")
 
       # Default fallback
       filename = "yast2-trans-en_US.rpm"
@@ -361,8 +356,6 @@ module Yast
           raise Break
         end
       end
-      # yast2-trans-pt.rpm doesn't fit into the algorithm above, see bnc#386298
-      return "yast2-trans-pt.rpm" if language == "pt_PT"
 
       Builtins.y2milestone("Using %1 for %2", filename, language)
       filename
@@ -1074,15 +1067,13 @@ module Yast
     # Returns true if translation for given language is not complete
     def IncompleteTranslation(lang)
       if !Builtins.haskey(@translation_status, lang)
-        file = Ops.add(Ops.add("/usr/lib/YaST2/trans/", lang), ".status")
+        file = "/usr/lib/YaST2/trans/#{lang}.status"
         if !FileUtils.Exists(file)
-          ll = Ops.get(Builtins.splitstring(lang, "_"), 0, "")
-          if ll != ""
-            file = Ops.add(Ops.add("/usr/lib/YaST2/trans/", ll), ".status")
-          end
+          ll = main_language(lang)
+          file = "/usr/lib/YaST2/trans/#{ll}.status" unless ll.empty?
         end
 
-        status = Convert.to_string(SCR.Read(path(".target.string"), file))
+        status = SCR.Read(path(".target.string"), file)
 
         if status != nil && status != ""
           to_i = Builtins.tointeger(status)
@@ -1335,6 +1326,12 @@ module Yast
       GetLocaleString @language
     end
 
+    # Returns main language from full locale. E.g. en_US.UTF-8 -> en or agr_PE -> agr
+    def main_language(lang)
+      return "" unless lang
+      lang[/^[a-z]+/]
+    end
+
     publish :variable => :language, :type => "string"
     publish :variable => :language_on_entry, :type => "string"
     publish :variable => :preselected, :type => "string"
@@ -1402,7 +1399,7 @@ module Yast
     # @param lang [String] Language code
     # @return [Boolean]
     def supported_by_fbiterm?(lang)
-      code, _ = lang.split("_")
+      code = main_language(lang)
       UNSUPPORTED_FBITERM_LANGS.none?(code)
     end
 
