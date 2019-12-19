@@ -591,11 +591,11 @@ module Yast
       Builtins.y2debug("expert values %1", val)
 
       # get the list of locales for our language
-      lang = Builtins.substring(@language, 0, 2)
+      lang = @language[/^[a-z]+/]
       locales_list = []
 
       Builtins.foreach(Language.GetLocales) do |code, i|
-        if Builtins.substring(code, 0, 2) == lang
+        if code[/^[a-z]+/] == lang
           locales_list = Builtins.add(locales_list, code)
         end
       end
