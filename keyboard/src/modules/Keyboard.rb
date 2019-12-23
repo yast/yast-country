@@ -303,7 +303,7 @@ module Yast
     # Returning current keyboard
     # @return [String] keyboard name e.g. "english-us"
     def current_kbd
-      self.Read if @curr_kbd.empty? && !Mode.config
+      self.Read if not @curr_kbd or @curr_kbd.empty? && !Mode.config
       @curr_kbd
     end
 
