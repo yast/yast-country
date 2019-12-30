@@ -7,17 +7,20 @@ Yast.import "UI"
 describe Y2Keyboard::Strategies::KbStrategy do
   subject(:kb_strategy) { Y2Keyboard::Strategies::KbStrategy.new }
   let(:arguments_to_apply) {"-layout es -model microsoftpro -option terminate:ctrl_alt_bksp"}
-  
 
   describe "#set_layout" do
     context "in text mode" do
       before do
         allow(Yast::UI).to receive(:TextMode).and_return(true)
+        allow(Dir).to receive(:[]).with("/dev/tty[0-9]*").and_return(["/dev/tty1", "/dev/tty2"])
+        allow(Dir).to receive(:[]).with("/dev/ttyS[0-9]*").and_return(["/dev/ttyS1"])
       end
 
       it "calls -loadkeys- on the target" do
-        expect(Yast::Execute).to receive(:on_target!).twice.with(
-          "loadkeys", anything, "es")
+        expect(Yast::Execute).to receive(:on_target!).with(
+          "loadkeys", "-C" ,"/dev/tty1", "-C", "/dev/tty2", "es")
+        expect(Yast::Execute).to receive(:on_target!).with(
+          "loadkeys", "-C" ,"/dev/ttyS1", "es")
 
         kb_strategy.set_layout("es")
       end
@@ -37,7 +40,7 @@ describe Y2Keyboard::Strategies::KbStrategy do
       it "does not call -loadkeys- on the target" do
         expect(Yast::Execute).not_to receive(:on_target!).with(
           "loadkeys", anything, "es")
-        expect(kb_strategy).to receive(:set_x11_layout)        
+        expect(kb_strategy).to receive(:set_x11_layout)
 
         kb_strategy.set_layout("es")
       end

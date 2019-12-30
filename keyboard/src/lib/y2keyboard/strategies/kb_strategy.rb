@@ -19,6 +19,7 @@
 
 require "yast"
 require "yast2/execute"
+require "shellwords"
 
 module Y2Keyboard
   module Strategies
@@ -31,7 +32,7 @@ module Y2Keyboard
     #
     # Use the systemd strategy for making keyboard changes permanent on
     # the installed system.
-    # 
+    #
     class KbStrategy
       include Yast::Logger
 
@@ -53,11 +54,11 @@ module Y2Keyboard
 
         if Yast::UI.TextMode
           begin
-            Yast::Execute.on_target!("loadkeys", loadkeys_devices("tty"), keyboard_code)
+            Yast::Execute.on_target!("loadkeys", *loadkeys_devices("tty"), keyboard_code)
             # It could be that for seriell tty's the keyboard cannot be set. So it will
             # be done separately in order to ensure that setting console keyboard
             # will be done successfully in the previous call.
-            Yast::Execute.on_target!("loadkeys", loadkeys_devices("ttyS"), keyboard_code)
+            Yast::Execute.on_target!("loadkeys", *loadkeys_devices("ttyS"), keyboard_code)
           rescue Cheetah::ExecutionFailed => e
             log.info(e.message)
             log.info("Error output:    #{e.stderr}")
@@ -88,10 +89,10 @@ module Y2Keyboard
       # It includes all tty[0-9]* and ttyS[0-9]* devices (bsc#1010938).
       #
       # @param [String] kind of tty ("tty", "ttyS")
-      # @return [String] ready to be passed to the loadkeys command
+      # @return [Array<String>] array with params for the loadkeys command
       def loadkeys_devices(kind)
         tty_dev_names = Dir["/dev/#{kind}[0-9]*"]
-        tty_dev_names.map { |d| "-C #{d.shellescape}" }.join(" ")
+        tty_dev_names.each_with_object([]) { |d,res| res << "-C" << d }
       end
 
       # GetX11KeyData()
