@@ -97,6 +97,10 @@ module Yast
       # If not in initial mode
       if !Stage.initial || Mode.live_installation
         @curr_kbd = Keyboards.alias(@systemd_strategy.current_layout())
+        if @curr_kbd.nil?
+          log.warn "Unsupported keymap #{@systemd_strategy.current_layout()}."
+          @curr_kbd = ""
+        end
         @keyboard_on_entry = @curr_kbd
       end
 
