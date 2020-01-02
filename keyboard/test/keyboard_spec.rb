@@ -32,17 +32,25 @@ describe "Yast::Keyboard" do
           and_return({})
         expect(subject.GetKeyboardForLanguage(search_language,
           "default_language")).to eq("default_language")
-      end      
+      end
     end
   end
 
   describe "#Read" do
-    it "returns the current keyboard" do
+    it "sets the current keyboard" do
       allow(Yast::Stage).to receive(:initial).and_return false
-      expect_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
+      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
         to receive(:current_layout).and_return("uk")
       subject.Read
       expect(subject.current_kbd).to eq("english-uk")
+    end
+
+    it "sets empty current keyboard for unsupported keyboard (bsc#1159286)" do
+      allow(Yast::Stage).to receive(:initial).and_return false
+      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
+        to receive(:current_layout).and_return("lt")
+      subject.Read
+      expect(subject.current_kbd).to eq("")
     end
   end
 
