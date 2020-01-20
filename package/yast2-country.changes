@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Mon Jan 20 16:35:45 CET 2020 - schubi@suse.de
+
+- Keyboard definition in the AY configuration file: Alias AND
+  keymap name is supported (bsc#1159541).
+- Reporting a warning if the defined keymap has not been found.
+- 4.2.15
+
+-------------------------------------------------------------------
 Thu Jan  2 15:13:06 UTC 2020 - Josef Reidinger <jreidinger@suse.com>
 
 - Do not crash when unknown keymap is set on system (bsc#1159286)
