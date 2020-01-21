@@ -216,6 +216,21 @@ describe "Yast::Keyboard" do
         subject.Import({"language" => "de"}, :language)
       end
     end
+
+    context "keymap value is given instead of an alias name" do
+      it "sets the alias name" do
+        expect(subject).to receive(:Set).with("spanish")
+        subject.Import({"keymap" => "es"}, :keyboard)
+      end
+    end
+
+    context "keymap is unknown" do
+      it "reports a warning" do
+        expect(subject).not_to receive(:Set)
+        expect(Yast::Report).to receive(:Warning).with(/Cannot find keymap/)
+        subject.Import({"keymap" => "foo"}, :keyboard)
+      end
+    end
   end
 
 end

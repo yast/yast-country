@@ -46,6 +46,7 @@ module Yast
       Yast.import "Mode"
       Yast.import "ProductFeatures"
       Yast.import "Stage"
+      Yast.import "Report"
 
       # general kb strategy which is used for temporary changes only.
       @kb_strategy = Y2Keyboard::Strategies::KbStrategy.new
@@ -281,6 +282,21 @@ module Yast
       when :language
         keyboard = GetKeyboardForLanguage(settings["language"], keyboard)
       end
+
+      # Checking if the keymap exists. Either it is the real keymap name
+      # or an alias.
+      if !Keyboards.code(keyboard)
+        # Checking if it a real keymap name
+        checked_keyboard = keyboard
+        keyboard = Keyboards.alias(checked_keyboard)
+        if !keyboard
+          # TRANSLATORS: the "%s" is the kaymap name
+          Report.Warning(_("Cannot find keymap: %s. Taking default one.") % checked_keyboard)
+          return false
+        end
+      end
+
+      # Set it with the keyboard alias name
       Set(keyboard)
       true
     end
