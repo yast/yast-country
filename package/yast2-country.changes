@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu Jan 23 13:21:01 UTC 2020 - Josef Reidinger <jreidinger@suse.com>
+
+- Fix exit codes for CLI for language, timezone and keyboard
+  (bsc#1160928)
+- 4.2.16
+
+-------------------------------------------------------------------
 Mon Jan 20 16:35:45 CET 2020 - schubi@suse.de
 
 - Keyboard definition in the AY configuration file: Alias AND
