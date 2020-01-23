@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Jan 23 12:45:13 UTC 2020 - Steffen Winterfeldt <snwint@suse.com>
+
+- don't use /bin/systemctl compat symlink (bsc#1160890)
+- 4.2.16
+
+-------------------------------------------------------------------
 Mon Jan 20 16:35:45 CET 2020 - schubi@suse.de
 
 - Keyboard definition in the AY configuration file: Alias AND

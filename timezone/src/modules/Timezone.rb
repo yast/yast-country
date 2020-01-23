@@ -295,7 +295,7 @@ module Yast
           SCR.Execute(path(".target.bash_output"), cmd)
         )
         unless Stage.initial
-          cmd = "/bin/systemctl try-restart systemd-timedated.service"
+          cmd = "/usr/bin/systemctl try-restart systemd-timedated.service"
           Builtins.y2milestone(
             "restarting timedated service: %1",
             SCR.Execute(path(".target.bash_output"), cmd)
