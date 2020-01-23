@@ -20,12 +20,13 @@ module Yast
         "finish"     => fun_ref(method(:KeyboardWrite), "boolean ()"),
         "actions"    => {
           "summary" => {
-            "handler" => fun_ref(
+            "handler"  => fun_ref(
               method(:KeyboardSummaryHandler),
               "boolean (map)"
             ),
             # command line help text for 'summary' action
-            "help"    => _("Keyboard configuration summary.")
+            "help"     => _("Keyboard configuration summary."),
+            "readonly" => true
           },
           "set"     => {
             "handler" => fun_ref(method(:KeyboardSetHandler), "boolean (map)"),
@@ -33,9 +34,10 @@ module Yast
             "help"    => _("Set new values for keyboard configuration.")
           },
           "list"    => {
-            "handler" => fun_ref(method(:KeyboardListHandler), "boolean (map)"),
+            "handler"  => fun_ref(method(:KeyboardListHandler), "boolean (map)"),
             # command line help text for 'list' action
-            "help"    => _("List all available keyboard layouts.")
+            "help"     => _("List all available keyboard layouts."),
+            "readonly" => true
           }
         },
         "options"    => {
@@ -75,7 +77,7 @@ module Yast
     def KeyboardSummaryHandler(options)
       # summary label
       CommandLine.Print(_("Current Keyboard Layout: %s" % Keyboard.current_kbd))
-      false
+      true
     end
 
     # Handler for listing keyboard layouts
@@ -83,7 +85,7 @@ module Yast
       Keyboard.Selection.each do |code, name|
         CommandLine.Print(Builtins.sformat("%1 (%2)", code, name))
       end
-      false
+      true
     end
 
     # Handler for changing keyboard settings
