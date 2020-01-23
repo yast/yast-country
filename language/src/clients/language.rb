@@ -61,14 +61,15 @@ module Yast
         "finish"     => fun_ref(method(:LanguageWrite), "boolean ()"),
         "actions"    => {
           "summary" => {
-            "handler" => fun_ref(
+            "handler"  => fun_ref(
               method(:LanguageSummaryHandler),
               "boolean (map)"
             ),
             # command line help text for 'summary' action
-            "help"    => _(
+            "help"     => _(
               "Language configuration summary"
-            )
+            ),
+            "readonly" => true
           },
           "set"     => {
             "handler" => fun_ref(method(:LanguageSetHandler), "boolean (map)"),
@@ -78,11 +79,12 @@ module Yast
             )
           },
           "list"    => {
-            "handler" => fun_ref(method(:LanguageListHandler), "boolean (map)"),
+            "handler"  => fun_ref(method(:LanguageListHandler), "boolean (map)"),
             # command line help text for 'list' action
-            "help"    => _(
+            "help"     => _(
               "List all available languages."
-            )
+            ),
+            "readonly" => true
           }
         },
         "options"    => {
@@ -115,7 +117,6 @@ module Yast
       }
 
       CommandLine.Run(@cmdline)
-      true
     end
 
     # read language settings
@@ -269,7 +270,7 @@ module Yast
           )
         end
       end
-      false
+      true
     end
 
     # Handler for listing available languages
@@ -284,9 +285,8 @@ module Yast
           )
         )
       end
-      false
+      true
     end
-
 
     # Handler for changing language settings
     def LanguageSetHandler(options)
