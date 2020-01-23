@@ -57,14 +57,15 @@ module Yast
         "finish"     => fun_ref(method(:TimezoneWrite), "boolean ()"),
         "actions"    => {
           "summary" => {
-            "handler" => fun_ref(
+            "handler"  => fun_ref(
               method(:TimezoneSummaryHandler),
               "boolean (map)"
             ),
             # command line help text for 'summary' action
-            "help"    => _(
+            "help"     => _(
               "Time zone configuration summary"
-            )
+            ),
+            "readonly" => true
           },
           "set"     => {
             "handler" => fun_ref(method(:TimezoneSetHandler), "boolean (map)"),
@@ -74,11 +75,12 @@ module Yast
             )
           },
           "list"    => {
-            "handler" => fun_ref(method(:TimezoneListHandler), "boolean (map)"),
+            "handler"  => fun_ref(method(:TimezoneListHandler), "boolean (map)"),
             # command line help text for 'list' action
-            "help"    => _(
+            "help"     => _(
               "List all available time zones"
-            )
+            ),
+            "readonly" => true
           }
         },
         "options"    => {
@@ -106,7 +108,6 @@ module Yast
       }
 
       CommandLine.Run(@cmdline)
-      true
     end
 
     # read timezone settings (store initial values)
@@ -181,7 +182,7 @@ module Yast
           Timezone.GetDateTime(true, true)
         )
       )
-      false
+      true
     end
 
     # Handler for listing timezone layouts
@@ -197,7 +198,7 @@ module Yast
           CommandLine.Print(Builtins.sformat("%1 (%2)", code, name))
         end
       end
-      false
+      true
     end
 
 
