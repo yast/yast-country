@@ -399,4 +399,86 @@ describe "Yast::Timezone" do
       expect(subject.Summary).to include("<ul>")
     end
   end
+
+  describe "#MakeProposal" do
+    context "force_reset is set to true" do
+      context "language_changed is set to true" do
+        it "resets zonemap" do
+          expect(subject).to receive(:ResetZonemap).and_call_original
+
+          subject.MakeProposal(true, true)
+        end
+      end
+
+      it "sets hwclock according to proposeLocalTime" do
+        allow(subject).to receive(:ProposeLocaltime).and_return(false)
+
+        subject.MakeProposal(true, true)
+
+        expect(subject.hwclock).to eq "-u"
+      end
+
+      it "sets timezone to default and change system clock" do
+        subject.default_timezone = "US/Pacific"
+        expect(subject).to receive(:Set).with("US/Pacific", true).and_call_original
+
+        subject.MakeProposal(true, true)
+
+        expect(subject.timezone).to eq "US/Pacific"
+      end
+
+      it "clears used decision flag" do
+        subject.user_decision = true
+
+        subject.MakeProposal(true, true)
+
+        expect(subject.user_decision).to eq false
+      end
+
+      it "returns array of strings" do
+        expect(subject.MakeProposal(true, true)).to be_a(Array)
+        expect(subject.MakeProposal(true, true)).to all(be_a(::String))
+      end
+    end
+
+    context "force_reset is set to false" do
+      context "language_changed is set to true" do
+        it "resets zonemap" do
+          expect(subject).to receive(:ResetZonemap).and_call_original
+
+          subject.MakeProposal(false, true)
+        end
+
+        # FIXME: this depends on complex condition hard to explain here
+        it "writes timezone" do
+          subject.user_decision = true
+
+          subject.timezone = "US/Pacific"
+          expect(subject).to receive(:Set).with("US/Pacific", true).and_call_original
+
+          subject.MakeProposal(false, true)
+        end
+      end
+
+      context "language_changed is set to false" do
+        # FIXME: this depends on complex condition hard to explain here
+        it "sets local timezone according to Language.language" do
+          subject.user_decision = false
+
+          allow(Yast::Language).to receive(:language).and_return("cs_CZ")
+
+          expect(subject).to receive(:Set).with("Europe/Prague", true).and_call_original
+
+          subject.MakeProposal(false, false)
+
+          expect(subject.default_timezone).to eq "Europe/Prague"
+        end
+      end
+
+      it "returns array of strings" do
+        expect(subject.MakeProposal(false, true)).to be_a(Array)
+        expect(subject.MakeProposal(false, true)).to all(be_a(::String))
+      end
+    end
+  end
 end

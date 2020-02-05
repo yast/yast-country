@@ -691,13 +691,11 @@ module Yast
 
     # Return proposal list of strings.
     #
-    # @param [Boolean] force_reset
-    #		boolean language_changed
+    # @param [Boolean] force_reset If force_reset is true reset the module
+    #   to the timezone stored in default_timezone.
+    # @param [Boolean] language_changed
     #
     # @return	[Array] user readable description.
-    #
-    # If force_reset is true reset the module to the timezone
-    # stored in default_timezone.
     def MakeProposal(force_reset, language_changed)
       Builtins.y2milestone("force_reset: %1", force_reset)
       Builtins.y2milestone(
