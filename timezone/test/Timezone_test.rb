@@ -531,4 +531,14 @@ describe "Yast::Timezone" do
       expect(subject.Selection(0)).to all(be_a(Yast::Term))
     end
   end
+
+  describe "#UpdateTimezone" do
+    it "returns its param if it is non obsolete timezone" do
+      expect(subject.UpdateTimezone("Australia/Adelaide")).to eq "Australia/Adelaide"
+    end
+
+    it "returns replacement for obsolete timezone" do
+      expect(subject.UpdateTimezone("US/Pacific")).to eq "America/Los_Angeles"
+    end
+  end
 end
