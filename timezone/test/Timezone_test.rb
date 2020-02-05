@@ -311,4 +311,15 @@ describe "Yast::Timezone" do
       )
     end
   end
+
+  describe "#GetTimezoneForLanguage" do
+    it "returns timezone for given language" do
+      expect(subject.GetTimezoneForLanguage("en_US", "default")).to eq "US/Eastern"
+      expect(subject.GetTimezoneForLanguage("cs_CZ", "default")).to eq "Europe/Prague"
+    end
+
+    it "returns default timezone if not found" do
+      expect(subject.GetTimezoneForLanguage("Klingon", "default")).to eq "default"
+    end
+  end
 end
