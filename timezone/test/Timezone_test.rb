@@ -481,4 +481,47 @@ describe "Yast::Timezone" do
       end
     end
   end
+
+  describe "#Read" do
+    before do
+      allow(Yast::SCR).to receive(:Read)
+    end
+
+    it "reads default_timezone from /etc/localtime symlink" do
+      allow(Yast::FileUtils).to receive(:IsLink).and_return true
+      expect(Yast::SCR).to receive(:Read).with(path(".target.symlink"), "/etc/localtime")
+        .and_return("/usr/share/zoneinfo/Europe/Prague")
+
+      subject.Read
+
+      expect(subject.timezone).to eq "Europe/Prague"
+    end
+
+    it "reads default_timezone from sysconfig if /etc/localtime is not link" do
+      expect(Yast::SCR).to receive(:Read).with(path(".sysconfig.clock.DEFAULT_TIMEZONE"))
+        .and_return("Europe/Prague")
+
+      subject.Read
+    end
+
+    it "sets hwclock according to /etc/adjtime if exists" do
+      expect(subject).to receive(:ReadAdjTime).and_return(["", "", "LOCAL"])
+
+      subject.Read
+
+      expect(subject.hwclock).to eq "--localtime"
+    end
+
+    it "reads hwclock sysconfig if /etc/adjtime does not exist" do
+      expect(subject).to receive(:ReadAdjTime).and_return(nil)
+      expect(Yast::SCR).to receive(:Read).with(path(".sysconfig.clock.HWCLOCK"))
+        .and_return("--localtime")
+
+      subject.Read
+
+      expect(subject.hwclock).to eq "--localtime"
+    end
+
+    # TODO: mode config specific functionality
+  end
 end
