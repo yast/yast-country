@@ -342,4 +342,21 @@ describe "Yast::Timezone" do
       expect(subject.CheckDate("1", "1", "2033")).to eq false
     end
   end
+
+  describe "#CheckTime" do
+    it "returns true if time is valid" do
+      expect(subject.CheckTime("1", "1", "1")).to eq true
+      expect(subject.CheckTime("23", "02", "02")).to eq true
+      expect(subject.CheckTime("0", "0", "0")).to eq true
+    end
+
+    it "returns false if invalid time is passed" do
+      expect(subject.CheckTime("0", "1", "2000")).to eq false
+      expect(subject.CheckTime("29", "2", "2")).to eq false
+      expect(subject.CheckTime("24", "0", "0")).to eq false
+      expect(subject.CheckTime("", "13", "20")).to eq false
+      expect(subject.CheckTime("1", "13", "string")).to eq false
+      expect(subject.CheckTime(nil, nil, "20")).to eq false
+    end
+  end
 end
