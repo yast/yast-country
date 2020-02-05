@@ -322,4 +322,24 @@ describe "Yast::Timezone" do
       expect(subject.GetTimezoneForLanguage("Klingon", "default")).to eq "default"
     end
   end
+
+  describe "#CheckDate" do
+    it "returns true if date is valid" do
+      expect(subject.CheckDate("1", "1", "2000")).to eq true
+      expect(subject.CheckDate("29", "2", "2000")).to eq true
+    end
+
+    it "returns false if invalid date is passed" do
+      expect(subject.CheckDate("0", "1", "2000")).to eq false
+      expect(subject.CheckDate("29", "2", "2001")).to eq false
+      expect(subject.CheckDate("29", "13", "2001")).to eq false
+      expect(subject.CheckDate("", "13", "2001")).to eq false
+      expect(subject.CheckDate("1", "13", "string")).to eq false
+      expect(subject.CheckDate(nil, nil, "string")).to eq false
+    end
+
+    it "returns false if date is newer then year 2032" do
+      expect(subject.CheckDate("1", "1", "2033")).to eq false
+    end
+  end
 end
