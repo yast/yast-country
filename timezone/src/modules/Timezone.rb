@@ -997,6 +997,7 @@ module Yast
         @hwclock = Ops.get_string(settings, "hwclock", "UTC") == "UTC" ? "-u" : "--localtime"
         @user_hwclock = true
       end
+      # FIXME: this set modify system which is a bit unusual for import operation
       Set(Ops.get_string(settings, "timezone", @timezone), true)
       true
     end

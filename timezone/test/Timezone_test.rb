@@ -11,6 +11,9 @@ describe "Yast::Timezone" do
   let(:initial) { false }
 
   before do
+    # Do not run any command on system
+    allow(Yast::SCR).to receive(:Execute)
+    allow(Yast::WFM).to receive(:Execute)
     allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
     Yast.import "Timezone"
     allow(Yast::ProductFeatures).to receive(:GetBooleanFeature)
@@ -357,6 +360,43 @@ describe "Yast::Timezone" do
       expect(subject.CheckTime("", "13", "20")).to eq false
       expect(subject.CheckTime("1", "13", "string")).to eq false
       expect(subject.CheckTime(nil, nil, "20")).to eq false
+    end
+  end
+
+  describe "#Import" do
+    it "sets hwclock" do
+      subject.Import("hwclock" => "UTC")
+
+      expect(subject.hwclock).to eq "-u"
+    end
+
+    it "sets and adjust system to timezone" do
+      expect(subject).to receive(:Set).with("US/Pacific", true).and_call_original
+
+      subject.Import("timezone" => "US/Pacific")
+
+      expect(subject.timezone).to eq "US/Pacific"
+    end
+  end
+
+  describe "#Export" do
+    it "returns map with timezone set to current settings" do
+      subject.timezone = "Europe/Prague"
+
+      expect(subject.Export).to include("timezone" => "Europe/Prague")
+    end
+
+    it "returns map with hwclock set to current settings" do
+      subject.hwclock = ""
+
+      expect(subject.Export).to include("hwclock"=> "localtime")
+    end
+  end
+
+  describe "#Summary" do
+    it "returns html list" do
+      expect(subject.Summary).to be_a(::String)
+      expect(subject.Summary).to include("<ul>")
     end
   end
 end
