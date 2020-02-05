@@ -524,4 +524,11 @@ describe "Yast::Timezone" do
 
     # TODO: mode config specific functionality
   end
+
+  describe "#Selection" do
+    it "returns list of Items" do
+      expect(subject.Selection(0)).to be_a(::Array)
+      expect(subject.Selection(0)).to all(be_a(Yast::Term))
+    end
+  end
 end

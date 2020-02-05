@@ -790,14 +790,12 @@ module Yast
     # for the user. The key is used later in the Set function
     # to select this timezone. The name is a translated string.
     #
-    # @param	-
+    # @param num [Integer] id of region like Africa or Europe. Region can be result of {#Set}
     #
-    # @return	[Hash]	map for timezones
-    #			'timezone_id' is used internally in Set and Probe
-    #			functions. 'timezone_name' is a user-readable string.
-    #			Uses Language::language for translation.
+    # @return [Array[Item()]	list of timezones for given region.
+    #   Item Id can be used for Set or Probe functions. Then it contain name
+    #   and false. So no item is preselected.
     # @see #Set()
-
     def Selection(num)
       zmap = get_zonemap
 
