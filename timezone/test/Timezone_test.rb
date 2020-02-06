@@ -247,9 +247,9 @@ describe "Yast::Timezone" do
           expect(Yast::SCR).to receive(:Execute).with(
             path(".target.bash_output"),
             "/bin/date \"+%c\""
-          ).and_return("stdout" => "St??5.????nor??2020,??08:18:27??CET\n")
+          ).and_return("stdout" => "Čt 6. únor 2020, 08:16:42 CET\n")
 
-          expect(subject.GetDateTime(true, true)).to eq "St??5.????nor??2020,??08:18:27??CET"
+          expect(subject.GetDateTime(true, true)).to eq "Čt 6. únor 2020, 08:16:42 CET"
         end
       end
     end
@@ -281,9 +281,9 @@ describe "Yast::Timezone" do
           expect(Yast::SCR).to receive(:Execute).with(
             path(".target.bash_output"),
             "/bin/date \"+%c\" \"--date=now 3600sec\""
-          ).and_return("stdout" => "St??5.????nor??2020,??09:18:27??CET\n")
+          ).and_return("stdout" => "Čt 6. únor 2020, 08:16:42 CET\n")
 
-          expect(subject.GetDateTime(false, true)).to eq "St??5.????nor??2020,??09:18:27??CET"
+          expect(subject.GetDateTime(false, true)).to eq "Čt 6. únor 2020, 08:16:42 CET"
         end
       end
     end
