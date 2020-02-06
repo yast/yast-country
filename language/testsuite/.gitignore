@@ -1,6 +1,0 @@
-site.*
-config
-run
-yast2-*.sum
-yast2-*.test
-raw.tmp.err.*

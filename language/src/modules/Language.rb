@@ -772,7 +772,7 @@ module Yast
 
     # Return proposal string.
     #
-    # @return	[String]	user readable description.
+    # @return	[Array<String>]	user readable description.
     #		If force_reset is true reset the module to the language
     #		stored in default_language.
     def MakeProposal(force_reset, language_changed)

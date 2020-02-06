@@ -582,4 +582,32 @@ describe "Yast::Language" do
       expect{subject.Read(false)}.to change{subject.ExpertSettingsChanged}.from(true).to(false)
     end
   end
+
+  describe "#MakeProposal" do
+    context "force_reset is set to true" do
+      it "sets default language" do
+        subject.language = "de_DE"
+        subject.SetDefault
+
+        subject.language = "cs_CZ"
+
+        expect{subject.MakeProposal(true, false)}.to change{subject.language}.from("cs_CZ").to("de_DE")
+      end
+    end
+
+    context "language changed is set to true" do
+      it "forces read of languages map" do
+        expect(subject).to receive(:read_languages_map)
+
+        subject.MakeProposal(false, true)
+      end
+    end
+
+    it "returns array of string with proposal text" do
+      expect(subject.MakeProposal(false, false)).to be_a(::Array)
+      expect(subject.MakeProposal(false, false)).to all(be_a(::String))
+    end
+
+    # TODO: also not clear magic with additional languages done in proposal
+  end
 end
