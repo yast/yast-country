@@ -529,4 +529,16 @@ describe "Yast::Language" do
       expect(subject.IncompleteTranslation("cs_CZ")).to eq false
     end
   end
+
+  describe "#GetGivenLanguageCountry" do
+    it "returns country part of passed language" do
+      expect(subject.GetGivenLanguageCountry("de_AT@UTF8")).to eq "AT"
+      expect(subject.GetGivenLanguageCountry("de_AT.UTF8")).to eq "AT"
+      expect(subject.GetGivenLanguageCountry("de_AT")).to eq "AT"
+    end
+
+    it "returns upper cased language if country part is missing" do
+      expect(subject.GetGivenLanguageCountry("de")).to eq "DE"
+    end
+  end
 end
