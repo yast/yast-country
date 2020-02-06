@@ -430,10 +430,6 @@ describe "Yast::Language" do
   end
 
   describe "#FillEnglishNames" do
-    before do
-      subject.main
-    end
-
     it "does not modify the WFM language" do
       expect(subject.EnglishName("de_DE", "missing")).to eq("missing")
       subject.FillEnglishNames()
@@ -457,6 +453,58 @@ describe "Yast::Language" do
     # test for bsc#949591
     it "returns main language even when it has more then two chars" do
       expect(subject.main_language("csb_PL")).to eq "csb"
+    end
+  end
+
+  describe "#Export" do
+    it "returns map with language" do
+      subject.language = "cs_CZ.utf8"
+      expect(subject.Export).to include("language" => "cs_CZ.utf8")
+    end
+
+    it "returns map with installed languages" do
+      subject.languages = "cs_CZ,en_US"
+      expect(subject.Export).to include("languages" => "cs_CZ,en_US")
+    end
+
+    it "returns map with use_uth8 if utf is not used" do
+      subject.SetExpertValues("use_utf8" => false)
+      expect(subject.Export).to include("use_utf8" => false)
+    end
+  end
+
+  describe "#Import" do
+    it "sets language from map" do
+      subject.Import("language" => "de_DE")
+
+      expect(subject.language).to eq "de_DE"
+    end
+
+    it "sets utf-8 encoding from map" do
+      subject.Import("use_utf8" => false)
+
+      expect(subject.GetExpertValues["use_utf8"]).to eq false
+    end
+
+    it "sets installed languages from map" do
+      subject.Import("languages" => "de_DE,cs_CZ", "language" => "de_DE")
+
+      expect(subject.languages).to eq "de_DE,cs_CZ"
+    end
+
+    it "adds to installed languages language from map" do
+      subject.Import("languages" => "cs_CZ", "language" => "de_DE")
+
+      expect(subject.languages).to eq "cs_CZ,de_DE"
+    end
+
+    # TODO: Autoinst specific behavior
+  end
+
+  describe "#Summary" do
+    it "returns string with html list" do
+      expect(subject.Summary).to be_a(::String)
+      expect(subject.Summary).to include("<ul>")
     end
   end
 end
