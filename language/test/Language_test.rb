@@ -507,4 +507,26 @@ describe "Yast::Language" do
       expect(subject.Summary).to include("<ul>")
     end
   end
+
+  describe "#IncompleteTranslation" do
+    it "returns true if language translation is lower then threshold" do
+      allow(Yast::FileUtils).to receive(:Exists).and_return(true)
+      allow(Yast::SCR).to receive(:Read).and_return("15")
+      allow(Yast::ProductFeatures).to receive(:GetStringFeature)
+        .with("globals", "incomplete_translation_treshold")
+        .and_return("90")
+
+      expect(subject.IncompleteTranslation("cs_CZ")).to eq true
+    end
+
+    it "returns false otherwise" do
+      allow(Yast::FileUtils).to receive(:Exists).and_return(true)
+      allow(Yast::SCR).to receive(:Read).and_return("95")
+      allow(Yast::ProductFeatures).to receive(:GetStringFeature)
+        .with("globals", "incomplete_translation_treshold")
+        .and_return("90")
+
+      expect(subject.IncompleteTranslation("cs_CZ")).to eq false
+    end
+  end
 end
