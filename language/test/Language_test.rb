@@ -541,4 +541,45 @@ describe "Yast::Language" do
       expect(subject.GetGivenLanguageCountry("de")).to eq "DE"
     end
   end
+
+  describe "#Read" do
+    context "really is set to true" do
+      it "reads language from localed.conf" do
+        allow(Y2Country).to receive(:read_locale_conf).and_return("LANG" => "de_DE.UTF-8")
+
+        expect{subject.Read(true)}.to change{subject.language}.to("de_DE")
+      end
+
+      it "reads languages from sysconfig" do
+        allow(Yast::Misc).to receive(:SysconfigRead).and_return("cs_CZ,de_DE")
+
+        expect{subject.Read(true)}.to change{subject.languages}.to("cs_CZ,de_DE")
+      end
+
+      it "reads utf8 settings during runtime" do
+        allow(Y2Country).to receive(:read_locale_conf).and_return("LANG" => "de_DE.UTF-8")
+        subject.SetExpertValues("use_utf8" => false)
+
+        expect{subject.Read(true)}.to change{subject.GetExpertValues["use_utf8"]}.from(false).to(true)
+      end
+    end
+
+    it "sets initial language" do
+      subject.language = "cs_CZ"
+
+      expect{subject.Read(false)}.to change{subject.language_on_entry}.to("cs_CZ")
+    end
+
+    it "sets initial languages" do
+      subject.languages = "cs_CZ,de_DE"
+
+      expect{subject.Read(false)}.to change{subject.languages_on_entry}.to("cs_CZ,de_DE")
+    end
+
+    it "clears expert settings changed flag" do
+      subject.ExpertSettingsChanged = true
+
+      expect{subject.Read(false)}.to change{subject.ExpertSettingsChanged}.from(true).to(false)
+    end
+  end
 end
