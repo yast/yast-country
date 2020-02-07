@@ -235,7 +235,7 @@ describe "Yast::Timezone" do
         it "returns stripped time output without locale format" do
           expect(Yast::SCR).to receive(:Execute).with(
             path(".target.bash_output"),
-            "/bin/date \"+%Y-%m-%d - %H:%M:%S\""
+            "/usr/bin/date \"+%Y-%m-%d - %H:%M:%S\""
           ).and_return("stdout" => "2020-02-05 - 08:13:57\n")
 
           expect(subject.GetDateTime(true, false)).to eq "2020-02-05 - 08:13:57"
@@ -246,7 +246,7 @@ describe "Yast::Timezone" do
         it "returns stripped time output with locale format" do
           expect(Yast::SCR).to receive(:Execute).with(
             path(".target.bash_output"),
-            "/bin/date \"+%c\""
+            "/usr/bin/date \"+%c\""
           ).and_return("stdout" => "Čt 6. únor 2020, 08:16:42 CET\n")
 
           expect(subject.GetDateTime(true, true)).to eq "Čt 6. únor 2020, 08:16:42 CET"
@@ -261,7 +261,7 @@ describe "Yast::Timezone" do
 
         allow(Yast::SCR).to receive(:Execute).with(
           path(".target.bash_output"),
-          "/bin/date +%z"
+          "/usr/bin/date +%z"
         ).and_return("stdout" => "+0100\n")
       end
 
@@ -269,7 +269,7 @@ describe "Yast::Timezone" do
         it "returns stripped time output without locale format including time zone diff" do
           expect(Yast::SCR).to receive(:Execute).with(
             path(".target.bash_output"),
-            "/bin/date \"+%Y-%m-%d - %H:%M:%S\" \"--date=now 3600sec\""
+            "/usr/bin/date \"+%Y-%m-%d - %H:%M:%S\" \"--date=now 3600sec\""
           ).and_return("stdout" => "2020-02-05 - 09:13:57\n")
 
           expect(subject.GetDateTime(false, false)).to eq "2020-02-05 - 09:13:57"
@@ -280,7 +280,7 @@ describe "Yast::Timezone" do
         it "returns stripped time output with locale format" do
           expect(Yast::SCR).to receive(:Execute).with(
             path(".target.bash_output"),
-            "/bin/date \"+%c\" \"--date=now 3600sec\""
+            "/usr/bin/date \"+%c\" \"--date=now 3600sec\""
           ).and_return("stdout" => "Čt 6. únor 2020, 08:16:42 CET\n")
 
           expect(subject.GetDateTime(false, true)).to eq "Čt 6. únor 2020, 08:16:42 CET"
@@ -296,12 +296,12 @@ describe "Yast::Timezone" do
 
       expect(Yast::SCR).to receive(:Execute).with(
         path(".target.bash_output"),
-        "/bin/date +%z"
+        "/usr/bin/date +%z"
       ).and_return("stdout" => "+0100\n")
 
       expect(Yast::SCR).to receive(:Execute).with(
           path(".target.bash_output"),
-          "/bin/date \"+%Y-%m-%d - %H:%M:%S\" \"--date=now 7200sec\""
+          "/usr/bin/date \"+%Y-%m-%d - %H:%M:%S\" \"--date=now 7200sec\""
         ).and_return("stdout" => "2020-02-05 - 09:13:57\n")
 
       expect(subject.GetDateTimeMap).to eq(
