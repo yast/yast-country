@@ -430,10 +430,6 @@ describe "Yast::Language" do
   end
 
   describe "#FillEnglishNames" do
-    before do
-      subject.main
-    end
-
     it "does not modify the WFM language" do
       expect(subject.EnglishName("de_DE", "missing")).to eq("missing")
       subject.FillEnglishNames()
@@ -458,5 +454,176 @@ describe "Yast::Language" do
     it "returns main language even when it has more then two chars" do
       expect(subject.main_language("csb_PL")).to eq "csb"
     end
+  end
+
+  describe "#Export" do
+    it "returns map with language" do
+      subject.language = "cs_CZ.utf8"
+      expect(subject.Export).to include("language" => "cs_CZ.utf8")
+    end
+
+    it "returns map with installed languages" do
+      subject.languages = "cs_CZ,en_US"
+      expect(subject.Export).to include("languages" => "cs_CZ,en_US")
+    end
+
+    it "returns map with use_utf8 if utf is not used" do
+      subject.SetExpertValues("use_utf8" => false)
+      expect(subject.Export).to include("use_utf8" => false)
+    end
+  end
+
+  describe "#Import" do
+    it "sets language from map" do
+      subject.Import("language" => "de_DE")
+
+      expect(subject.language).to eq "de_DE"
+    end
+
+    it "sets utf-8 encoding from map" do
+      subject.Import("use_utf8" => false)
+
+      expect(subject.GetExpertValues["use_utf8"]).to eq false
+    end
+
+    it "sets installed languages from map" do
+      subject.Import("languages" => "de_DE,cs_CZ", "language" => "de_DE")
+
+      expect(subject.languages).to eq "de_DE,cs_CZ"
+    end
+
+    it "adds to installed languages language from map" do
+      subject.Import("languages" => "cs_CZ", "language" => "de_DE")
+
+      expect(subject.languages).to eq "cs_CZ,de_DE"
+    end
+
+    context "in autoinstallation" do
+      before do
+        allow(Yast::Mode).to receive(:autoinst).and_return(true)
+      end
+
+      it "sets package locale to imported language" do
+        expect(Yast::Pkg).to receive(:SetPackageLocale).with("de_DE")
+
+        subject.Import("language" => "de_DE")
+      end
+
+      it "sets additional locales to imported languages" do
+        expect(Yast::Pkg).to receive(:SetAdditionalLocales).with(["de_DE", "cs_CZ"])
+
+        subject.Import("languages" => "de_DE,cs_CZ", "language" => "de_DE")
+      end
+    end
+  end
+
+  describe "#Summary" do
+    it "returns string with html list" do
+      expect(subject.Summary).to be_a(::String)
+      expect(subject.Summary).to include("<ul>")
+    end
+  end
+
+  describe "#IncompleteTranslation" do
+    it "returns true if language translation is lower than threshold" do
+      allow(Yast::FileUtils).to receive(:Exists).and_return(true)
+      allow(Yast::SCR).to receive(:Read).and_return("15")
+      allow(Yast::ProductFeatures).to receive(:GetStringFeature)
+        .with("globals", "incomplete_translation_treshold")
+        .and_return("90")
+
+      expect(subject.IncompleteTranslation("cs_CZ")).to eq true
+    end
+
+    it "returns false otherwise" do
+      allow(Yast::FileUtils).to receive(:Exists).and_return(true)
+      allow(Yast::SCR).to receive(:Read).and_return("95")
+      allow(Yast::ProductFeatures).to receive(:GetStringFeature)
+        .with("globals", "incomplete_translation_treshold")
+        .and_return("90")
+
+      expect(subject.IncompleteTranslation("cs_CZ")).to eq false
+    end
+  end
+
+  describe "#GetGivenLanguageCountry" do
+    it "returns country part of passed language" do
+      expect(subject.GetGivenLanguageCountry("de_AT@UTF8")).to eq "AT"
+      expect(subject.GetGivenLanguageCountry("de_AT.UTF8")).to eq "AT"
+      expect(subject.GetGivenLanguageCountry("de_AT")).to eq "AT"
+    end
+
+    it "returns upper cased language if country part is missing" do
+      expect(subject.GetGivenLanguageCountry("de")).to eq "DE"
+    end
+  end
+
+  describe "#Read" do
+    context "really is set to true" do
+      it "reads language from localed.conf" do
+        allow(Y2Country).to receive(:read_locale_conf).and_return("LANG" => "de_DE.UTF-8")
+
+        expect{subject.Read(true)}.to change{subject.language}.to("de_DE")
+      end
+
+      it "reads languages from sysconfig" do
+        allow(Yast::Misc).to receive(:SysconfigRead).and_return("cs_CZ,de_DE")
+
+        expect{subject.Read(true)}.to change{subject.languages}.to("cs_CZ,de_DE")
+      end
+
+      it "reads utf8 settings during runtime" do
+        allow(Y2Country).to receive(:read_locale_conf).and_return("LANG" => "de_DE.UTF-8")
+        subject.SetExpertValues("use_utf8" => false)
+
+        expect{subject.Read(true)}.to change{subject.GetExpertValues["use_utf8"]}.from(false).to(true)
+      end
+    end
+
+    it "sets initial language" do
+      subject.language = "cs_CZ"
+
+      expect{subject.Read(false)}.to change{subject.language_on_entry}.to("cs_CZ")
+    end
+
+    it "sets initial languages" do
+      subject.languages = "cs_CZ,de_DE"
+
+      expect{subject.Read(false)}.to change{subject.languages_on_entry}.to("cs_CZ,de_DE")
+    end
+
+    it "clears expert settings changed flag" do
+      subject.ExpertSettingsChanged = true
+
+      expect{subject.Read(false)}.to change{subject.ExpertSettingsChanged}.from(true).to(false)
+    end
+  end
+
+  describe "#MakeProposal" do
+    context "force_reset is set to true" do
+      it "sets default language" do
+        subject.language = "de_DE"
+        subject.SetDefault
+
+        subject.language = "cs_CZ"
+
+        expect{subject.MakeProposal(true, false)}.to change{subject.language}.from("cs_CZ").to("de_DE")
+      end
+    end
+
+    context "language changed is set to true" do
+      it "forces read of languages map" do
+        expect(subject).to receive(:read_languages_map)
+
+        subject.MakeProposal(false, true)
+      end
+    end
+
+    it "returns array of string with proposal text" do
+      expect(subject.MakeProposal(false, false)).to be_a(::Array)
+      expect(subject.MakeProposal(false, false)).to all(be_a(::String))
+    end
+
+    # TODO: also not clear magic with additional languages done in proposal
   end
 end

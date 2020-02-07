@@ -639,7 +639,7 @@ module Yast
         ds = 0
         if @diff != 0
           out2 = Convert.to_map(
-            SCR.Execute(path(".target.bash_output"), "date +%z")
+            SCR.Execute(path(".target.bash_output"), "/usr/bin/date +%z")
           )
           tzd = Ops.get_string(out2, "stdout", "")
           log.info("GetDateTime tzd: #{tzd}")
@@ -656,12 +656,12 @@ module Yast
         end
         cmd = tz_prefix +
           Builtins.sformat(
-            "/bin/date \"%1\" \"--date=now %2sec\"",
+            "/usr/bin/date \"%1\" \"--date=now %2sec\"",
             date_format,
             Ops.multiply(ds, @diff)
           )
       else
-        cmd = Builtins.sformat("/bin/date \"%1\"", date_format)
+        cmd = Builtins.sformat("/usr/bin/date \"%1\"", date_format)
       end
       log.info("GetDateTime cmd: #{cmd}")
       out = Convert.to_map(SCR.Execute(path(".target.bash_output"), cmd))
@@ -691,13 +691,11 @@ module Yast
 
     # Return proposal list of strings.
     #
-    # @param [Boolean] force_reset
-    #		boolean language_changed
+    # @param [Boolean] force_reset If force_reset is true reset the module
+    #   to the timezone stored in default_timezone.
+    # @param [Boolean] language_changed
     #
     # @return	[Array] user readable description.
-    #
-    # If force_reset is true reset the module to the timezone
-    # stored in default_timezone.
     def MakeProposal(force_reset, language_changed)
       Builtins.y2milestone("force_reset: %1", force_reset)
       Builtins.y2milestone(
@@ -792,14 +790,12 @@ module Yast
     # for the user. The key is used later in the Set function
     # to select this timezone. The name is a translated string.
     #
-    # @param	-
+    # @param num [Integer] id of region like Africa or Europe. Region can be result of {#Set}
     #
-    # @return	[Hash]	map for timezones
-    #			'timezone_id' is used internally in Set and Probe
-    #			functions. 'timezone_name' is a user-readable string.
-    #			Uses Language::language for translation.
+    # @return [Array[Item()]	list of timezones for given region.
+    #   Item Id can be used for Set or Probe functions. Then it contain name
+    #   and false. So no item is preselected.
     # @see #Set()
-
     def Selection(num)
       zmap = get_zonemap
 
@@ -997,6 +993,7 @@ module Yast
         @hwclock = Ops.get_string(settings, "hwclock", "UTC") == "UTC" ? "-u" : "--localtime"
         @user_hwclock = true
       end
+      # FIXME: this set modify system which is a bit unusual for import operation
       Set(Ops.get_string(settings, "timezone", @timezone), true)
       true
     end

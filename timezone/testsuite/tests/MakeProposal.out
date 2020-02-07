@@ -1,8 +1,0 @@
-Read	.etc.adjtime ["0", "0", "UTC"]
-Read	.probe.is_vmware false
-Read	.target.yast2 "timezone_raw.ycp" [$["entries":$["Europe/Berlin":"Germany", "Europe/Prague":"Czech Republic"], "name":"Europe"]]
-Execute	.target.bash_output "/usr/sbin/zic -l Europe/Prague" $[]
-Execute	.target.bash_output "/usr/bin/systemctl try-restart systemd-timedated.service" $[]
-Execute	.target.bash_output "/sbin/hwclock --hctosys -u" $[]
-Execute	.target.bash_output "/bin/date \"+%c\"" $[]
-Return	["Europe / Czech Republic - Hardware Clock Set To UTC "]

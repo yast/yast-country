@@ -550,7 +550,7 @@ module Yast
       @localed_conf  = Y2Country.read_locale_conf
       return nil if @localed_conf.nil?
       local_lang = @localed_conf["LANG"]
-      local_lang.sub!(/[.@].*$/, "") if local_lang
+      local_lang = local_lang.sub(/[.@].*$/, "") if local_lang
       log.info("language from locale.conf: %{local_lang}")
       local_lang
     end
@@ -772,7 +772,7 @@ module Yast
 
     # Return proposal string.
     #
-    # @return	[String]	user readable description.
+    # @return	[Array<String>]	user readable description.
     #		If force_reset is true reset the module to the language
     #		stored in default_language.
     def MakeProposal(force_reset, language_changed)
