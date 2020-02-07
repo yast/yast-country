@@ -639,7 +639,7 @@ module Yast
         ds = 0
         if @diff != 0
           out2 = Convert.to_map(
-            SCR.Execute(path(".target.bash_output"), "/bin/date +%z")
+            SCR.Execute(path(".target.bash_output"), "/usr/bin/date +%z")
           )
           tzd = Ops.get_string(out2, "stdout", "")
           log.info("GetDateTime tzd: #{tzd}")
@@ -656,12 +656,12 @@ module Yast
         end
         cmd = tz_prefix +
           Builtins.sformat(
-            "/bin/date \"%1\" \"--date=now %2sec\"",
+            "/usr/bin/date \"%1\" \"--date=now %2sec\"",
             date_format,
             Ops.multiply(ds, @diff)
           )
       else
-        cmd = Builtins.sformat("/bin/date \"%1\"", date_format)
+        cmd = Builtins.sformat("/usr/bin/date \"%1\"", date_format)
       end
       log.info("GetDateTime cmd: #{cmd}")
       out = Convert.to_map(SCR.Execute(path(".target.bash_output"), cmd))

@@ -467,7 +467,7 @@ describe "Yast::Language" do
       expect(subject.Export).to include("languages" => "cs_CZ,en_US")
     end
 
-    it "returns map with use_uth8 if utf is not used" do
+    it "returns map with use_utf8 if utf is not used" do
       subject.SetExpertValues("use_utf8" => false)
       expect(subject.Export).to include("use_utf8" => false)
     end
@@ -498,7 +498,23 @@ describe "Yast::Language" do
       expect(subject.languages).to eq "cs_CZ,de_DE"
     end
 
-    # TODO: Autoinst specific behavior
+    context "in autoinstallation" do
+      before do
+        allow(Yast::Mode).to receive(:autoinst).and_return(true)
+      end
+
+      it "sets package locale to imported language" do
+        expect(Yast::Pkg).to receive(:SetPackageLocale).with("de_DE")
+
+        subject.Import("language" => "de_DE")
+      end
+
+      it "sets additional locales to imported languages" do
+        expect(Yast::Pkg).to receive(:SetAdditionalLocales).with(["de_DE", "cs_CZ"])
+
+        subject.Import("languages" => "de_DE,cs_CZ", "language" => "de_DE")
+      end
+    end
   end
 
   describe "#Summary" do
@@ -509,7 +525,7 @@ describe "Yast::Language" do
   end
 
   describe "#IncompleteTranslation" do
-    it "returns true if language translation is lower then threshold" do
+    it "returns true if language translation is lower than threshold" do
       allow(Yast::FileUtils).to receive(:Exists).and_return(true)
       allow(Yast::SCR).to receive(:Read).and_return("15")
       allow(Yast::ProductFeatures).to receive(:GetStringFeature)
