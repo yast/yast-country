@@ -32,6 +32,9 @@
 #	Dialogs for timeone and time configuration.
 #
 # $Id$
+
+require "y2network/ntp_server"
+
 module Yast
   module TimezoneDialogsInclude
     def initialize_timezone_dialogs(include_target)
@@ -47,7 +50,6 @@ module Yast
       Yast.import "NetworkService"
       Yast.import "Package"
       Yast.import "Popup"
-      Yast.import "Product"
       Yast.import "ProductFeatures"
       Yast.import "Service"
       Yast.import "Stage"
@@ -575,12 +577,7 @@ module Yast
         @ntp_used = true
         # configure NTP client
         # to prevent misusage of ntp.org we need to distinguish opensuse and SLE usage
-        base_products = Product.FindBaseProducts
-        if base_products.any? { |p| p["name"] =~ /openSUSE/i }
-          servers = (0..3).map { |i| "#{i}.opensuse.pool.ntp.org" }
-        else
-          servers = (0..3).map { |i| "#{i}.novell.pool.ntp.org" }
-        end
+        servers = Y2Network::NtpServer.default_servers.map(&:hostname)
         @ntp_server = servers.sample
         # Dot not select a dhcp ntp server by default but add it to the offered
         # list (fate#323454)
