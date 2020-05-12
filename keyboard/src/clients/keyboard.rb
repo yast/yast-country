@@ -127,7 +127,6 @@ module Yast
         Popup.ShowFeedback(Message.updating_configuration, Message.takes_a_while)
       end
       Keyboard.Save
-      Service.Restart("kbd")
       Popup.ClearFeedback if Keyboard.needs_new_initrd?
       true
     end
