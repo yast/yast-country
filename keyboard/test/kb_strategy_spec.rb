@@ -14,6 +14,7 @@ describe Y2Keyboard::Strategies::KbStrategy do
         allow(Yast::UI).to receive(:TextMode).and_return(true)
         allow(Dir).to receive(:[]).with("/dev/tty[0-9]*").and_return(["/dev/tty1", "/dev/tty2"])
         allow(Dir).to receive(:[]).with("/dev/ttyS[0-9]*").and_return(["/dev/ttyS1"])
+        allow(Dir).to receive(:[]).with("/dev/ttyAMA[0-9]*").and_return(["/dev/ttyAMA0"])
       end
 
       it "calls -loadkeys- on the target" do
@@ -21,6 +22,8 @@ describe Y2Keyboard::Strategies::KbStrategy do
           "loadkeys", "-C" ,"/dev/tty1", "-C", "/dev/tty2", "es")
         expect(Yast::Execute).to receive(:on_target!).with(
           "loadkeys", "-C" ,"/dev/ttyS1", "es")
+        expect(Yast::Execute).to receive(:on_target!).with(
+          "loadkeys", "-C" ,"/dev/ttyAMA0", "es")
 
         kb_strategy.set_layout("es")
       end

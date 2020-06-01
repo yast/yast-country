@@ -59,6 +59,7 @@ module Y2Keyboard
             # be done separately in order to ensure that setting console keyboard
             # will be done successfully in the previous call.
             Yast::Execute.on_target!("loadkeys", *loadkeys_devices("ttyS"), keyboard_code)
+            Yast::Execute.on_target!("loadkeys", *loadkeys_devices("ttyAMA"), keyboard_code)
           rescue Cheetah::ExecutionFailed => e
             log.info(e.message)
             log.info("Error output:    #{e.stderr}")
