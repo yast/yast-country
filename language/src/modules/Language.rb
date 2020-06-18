@@ -1108,6 +1108,12 @@ module Yast
       true
     end
 
+    # Initial language
+    # @return default language
+    def default_language
+      DEFAULT_FALLBACK_LANGUAGE
+    end
+
     # AutoYaST interface function: Get the Language configuration from a map.
     # @param [Hash] settings imported map
     # @return success
@@ -1341,6 +1347,7 @@ module Yast
     publish :variable => :selection_skipped, :type => "boolean"
     publish :variable => :available_lang_filenames, :type => "list <string>"
     publish :function => :RemoveSuffix, :type => "string (string)"
+    publish :function => :default_language, :type => "string ()"
     publish :function => :CJKLanguage, :type => "boolean (string)"
     publish :function => :GetTextMode, :type => "boolean ()"
     publish :function => :GetLanguagesMap, :type => "map <string, list> (boolean)"
