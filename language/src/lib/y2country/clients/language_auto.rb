@@ -71,7 +71,6 @@ module Language
     
     def modified
       Language.ExpertSettingsChanged = true # hook (no general 'modified' variable)
-      true      
     end
   end
 end

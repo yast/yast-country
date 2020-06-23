@@ -141,7 +141,7 @@ describe Keyboard::AutoClient do
   end
 
   describe "#modified?" do
-    it "reads keyboard modify information" do
+    it "keyboard settings are modified ?" do
       expect(Yast::Keyboard).to receive(:Modified)
       client.modified?
     end    

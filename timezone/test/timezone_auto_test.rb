@@ -20,71 +20,73 @@
 # find current contact information at www.suse.com.
 
 require_relative "test_helper"
-require "y2country/clients/language_auto"
+require "y2country/clients/timezone_auto"
 
-describe Language::AutoClient do
-  subject(:client) { Language::AutoClient.new }
+describe Yast::TimezoneAutoClient do
+  subject(:client) { Yast::TimezoneAutoClient.new }
 
   describe "#change" do
     before do
-      allow(Yast::WFM).to receive(:CallFunction).with(
-        "select_language", [{"enable_back"=>true, "enable_next"=>true}])
+      allow(Yast::TimezoneDialogsInclude).to receive(:TimezoneDialog).with(
+        {"enable_back"=>true, "enable_next"=>true})
         .and_return(true)
     end
 
-    it "runs select_language client" do
-      expect(Yast::WFM).to receive(:CallFunction).with(
-        "select_language", [{"enable_back"=>true, "enable_next"=>true}])
+    it "runs timezone dialog" do
+      allow(Yast::TimezoneDialogsInclude).to receive(:TimezoneDialog).with(
+        {"enable_back"=>true, "enable_next"=>true})
+        .and_return(true)
       client.change
     end
 
-    it "returns the value from the select_language client" do
+    it "returns the value from the timezone dialog" do
       expect(client.change).to eq(true)
     end
   end
 
   describe "#summary" do
     before do
-      allow(Yast::Language).to receive(:Summary)
-        .and_return("Services List")
+      allow(Yast::Timezone).to receive(:Summary)
+        .and_return("Timezone Summary")
     end
 
     it "returns the AutoYaST summary" do
-      expect(client.summary).to eq("Services List")
+      expect(client.summary).to eq("Timezone Summary")
     end
   end
 
   describe "#import" do
     let(:profile) {
-       {
-          "language"  => "en_US",
-          "languages" => "fr_FR,en_US,"
-       }      
+      {
+        "hwclock" => "UTC",
+        "timezone" => "America/New_York"
+      }
     }
 
     it "imports the profile" do
-      expect(Yast::Language).to receive(:Import).with(profile)
+      expect(Yast::Timezone).to receive(:Import).with(profile)
       client.import(profile)
     end
   end
 
+
   describe "#export" do
     let(:profile) {
       {
-        "language"  => "en_US",
-        "languages" => "fr_FR,en_US,"
+        "hwclock" => "UTC",
+        "timezone" => "America/New_York"        
       }            
     }
 
     before do
-      allow(Yast::Language).to receive(:Export).and_return(profile)
+      allow(Yast::Timezone).to receive(:Export).and_return(profile)
     end
 
     context "AY configuration UI" do
       before do
         allow(Yast::Mode).to receive(:config).and_return(true)
       end
-      it "exports complete language information for the AutoYaST profile" do
+      it "exports complete timezone information for the AutoYaST profile" do
         expect(client.export).to eq(profile)
       end
     end
@@ -94,11 +96,12 @@ describe Language::AutoClient do
         allow(Yast::Mode).to receive(:config).and_return(false)
       end
 
-      context "language settings are default values" do
+      context "timezone settings are default values" do
         before do
-          allow(Yast::Language).to receive(:language).
-            and_return(Yast::Language.default_language)
-          allow(Yast::Language).to receive(:languages).and_return("")
+          allow(Yast::Timezone).to receive(:ProposeLocaltime).
+            and_return(false)
+          allow(Yast::Timezone).to receive(:GetTimezoneForLanguage).
+            and_return("America/New_York")
         end
         
         it "exports an empty hash for the AutoYaST profile" do
@@ -106,13 +109,15 @@ describe Language::AutoClient do
         end
       end
 
-      context "language settings are not default values" do
+      context "timezone settings are not default values" do
         before do
-          allow(Yast::Language).to receive(:language).and_return("foo")
-          allow(Yast::Language).to receive(:languages).and_return("fr_FR,en_US,")
+          allow(Yast::Timezone).to receive(:ProposeLocaltime).
+            and_return(true)
+          allow(Yast::Timezone).to receive(:GetTimezoneForLanguage).
+            and_return("America/Denver")
         end
         
-        it "exports language information for the AutoYaST profile" do
+        it "exports timezone information for the AutoYaST profile" do
           expect(client.export).to eq(profile)
         end
       end
@@ -120,32 +125,29 @@ describe Language::AutoClient do
   end
 
   describe "#read" do
-    it "reads language information" do
-      expect(Yast::Language).to receive(:Read)
+    it "reads timezone information" do
+      expect(Yast::Timezone).to receive(:Read)
       client.read
     end
   end
 
   describe "#write" do
-    it "writes language information" do
-      expect(Yast::Language).to receive(:Save)
-      # setting console
-      expect(Yast::Console).to receive(:SelectFont)
-      expect(Yast::Console).to receive(:Save)
+    it "writes timezone information" do
+      expect(Yast::Timezone).to receive(:Save)
       client.write
     end
     
     it "returns the value from the finish client" do
-      expect(Yast::Language).to receive(:Save).and_return(true)      
+      expect(Yast::Timezone).to receive(:Save).and_return(true)      
       expect(client.write).to eq(true)
     end
   end
 
   describe "#reset" do
-    it "resets the language setting" do
-      expect(Yast::Language).to receive(:Import)
+    it "resets the timezone setting" do
+      expect(Yast::Timezone).to receive(:PopVal)
       client.reset
-      expect(Yast::Language.ExpertSettingsChanged).to eq(false)
+      expect(Yast::Timezone.modified).to eq(false)
     end
   end
 
@@ -156,8 +158,8 @@ describe Language::AutoClient do
   end
 
   describe "#modified?" do
-    it "language information is modified ?" do
-      expect(Yast::Language).to receive(:Modified)
+    it "timezone settings are modified ?" do
+      expect(Yast::Timezone).to receive(:Modified)
       client.modified?
     end    
   end
