@@ -40,8 +40,6 @@ BuildRequires:  yast2-core >= 3.1.12
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
 # Yast2::CommandLine readonly parameter
 BuildRequires:  yast2 >= 4.2.57
-# /usr/share/YaST2/data/languages
-BuildRequires:  yast2-country-data
 
 Requires:       timezone
 Requires:       yast2-perl-bindings
