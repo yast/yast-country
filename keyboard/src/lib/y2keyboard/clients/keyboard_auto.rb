@@ -5,6 +5,8 @@ Yast.import "Keyboard"
 Yast.import "AutoInstall"
 Yast.import "Wizard"
 Yast.import "Arch"
+Yast.import "Mode"
+Yast.import "Language"
 
 module Keyboard
   class AutoClient < ::Installation::AutoClient
@@ -37,7 +39,14 @@ module Keyboard
     end
     
     def export
-      Keyboard.Export
+      ret = Keyboard.Export
+      if !Mode.config &&
+        ret["keymap"] == Keyboard.GetKeyboardForLanguage(Language.language, "english-us")
+        log.info("keymap #{ret["keymap"]} is the default of language"\
+                 "#{Language.language} --> do not export")
+        ret.delete("keymap")
+      end
+      ret
     end
     
     def write
@@ -50,6 +59,10 @@ module Keyboard
     
     def modified
       Keyboard.SetModified
+    end
+
+    def packages
+      {}
     end
   end
 end
