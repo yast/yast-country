@@ -6,9 +6,7 @@ require "y2country/language_dbus"
 Yast.import "ProductFeatures"
 
 describe "Yast::Timezone" do
-  let(:readonly_timezone) { false }
-  let(:default_timezone) { "" }
-  let(:initial) { false }
+  subject { Yast::Timezone }
 
   before do
     # Do not run any command on system
@@ -22,9 +20,20 @@ describe "Yast::Timezone" do
       .with("globals", "timezone").and_return(default_timezone)
     allow(Yast::Stage).to receive(:initial).and_return(initial)
     Yast::Timezone.main
+
+    allow(Yast::Language).to receive(:GetLang2TimezoneMap).and_return(timezones)
   end
 
-  subject { Yast::Timezone }
+  let(:readonly_timezone) { false }
+  let(:default_timezone) { "" }
+  let(:initial) { false }
+
+  let(:timezones) do
+    {
+      "en_US" => "US/Eastern",
+      "cs_CZ" => "Europe/Prague"
+    }
+  end
 
   describe "#ProposeLocaltime" do
     subject { Yast::Timezone.ProposeLocaltime }
