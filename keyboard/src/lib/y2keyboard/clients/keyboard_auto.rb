@@ -45,7 +45,7 @@ module Keyboard
       if !Mode.config &&
         ret["keymap"] == Keyboard.GetKeyboardForLanguage(Language.language, "english-us")
         log.info("keymap #{ret["keymap"]} is the default of language"\
-                 "#{Language.language} --> do not export it")
+                 "#{Language.language} --> no export")
         ret.delete("keymap")
       end
       ret

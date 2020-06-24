@@ -59,7 +59,7 @@ module Yast
         )
         if local_timezone == ret["timezone"]
           log.info("timezone <#{ret["timezone"]}> is the default value"\
-                   " --> do not export it")
+                   " --> no export")
           ret.delete("timezone")
         end
       end

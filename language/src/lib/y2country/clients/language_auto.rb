@@ -53,11 +53,11 @@ module Language
         # normal installation; NOT in AY configuration module
         if Language.language == Language.default_language
           log.info("language <#{ret["language"]}> is the default language"\
-                   " --> do not export it")
+                   " --> no export")
           ret.delete("language")
         end
         if Language.languages.empty?()
-          log.info("empty languages --> do not export it")
+          log.info("empty languages --> no export")
           ret.delete("languages")
         end
       end
