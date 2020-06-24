@@ -1,2 +1,2 @@
 require "y2country/clients/timezone_auto"
-::TimezoneAutoClient.run
+::Yast::TimezoneAutoClient.run

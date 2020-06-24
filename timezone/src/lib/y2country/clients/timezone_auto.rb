@@ -4,23 +4,17 @@ require "installation/auto_client"
 Yast.import "Mode"
 Yast.import "Timezone"
 Yast.import "UI"
+Yast.import "AutoInstall"
+Yast.import "Wizard"
 
 module Yast
-  class TimezoneAutoClient ::Installation::AutoClient
+  class TimezoneAutoClient < ::Installation::AutoClient
 
     include Yast::Logger
 
-    def run
-      textdomain "timezone"
+    def change
       Yast.include self, "timezone/dialogs.rb"
 
-      progress_orig = Progress.set(false)
-      ret = super
-      Progress.set(progress_orig)
-      ret
-    end
-    
-    def change
       Wizard.CreateDialog
       Wizard.HideAbortButton
       ret = TimezoneDialog({ "enable_back" => true, "enable_next" => true })
