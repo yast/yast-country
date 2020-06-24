@@ -7,7 +7,16 @@ Yast.import "UI"
 
 module Yast
   class TimezoneAutoClient ::Installation::AutoClient
-    Yast.include self, "timezone/dialogs.rb"
+
+    def run
+      textdomain "timezone"
+      Yast.include self, "timezone/dialogs.rb"
+
+      progress_orig = Progress.set(false)
+      ret = super
+      Progress.set(progress_orig)
+      ret
+    end
     
     def change
       Wizard.CreateDialog

@@ -27,13 +27,16 @@ describe Yast::TimezoneAutoClient do
 
   describe "#change" do
     before do
-      allow(Yast::TimezoneDialogsInclude).to receive(:TimezoneDialog).with(
+      allow(Yast::Wizard).to receive(:CreateDialog)
+      allow(Yast::Wizard).to receive(:CloseDialog)
+      allow(Yast::Wizard).to receive(:HideAbortButton)
+      allow(subject).to receive(:TimezoneDialog).with(
         {"enable_back"=>true, "enable_next"=>true})
         .and_return(true)
     end
 
     it "runs timezone dialog" do
-      allow(Yast::TimezoneDialogsInclude).to receive(:TimezoneDialog).with(
+      expect(subject).to receive(:TimezoneDialog).with(
         {"enable_back"=>true, "enable_next"=>true})
         .and_return(true)
       client.change
