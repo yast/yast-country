@@ -8,6 +8,8 @@ Yast.import "UI"
 module Yast
   class TimezoneAutoClient ::Installation::AutoClient
 
+    include Yast::Logger
+
     def run
       textdomain "timezone"
       Yast.include self, "timezone/dialogs.rb"
@@ -52,14 +54,20 @@ module Yast
            ret["hwclock"] == "localtime") ||
           (!Timezone.ProposeLocaltime() &&
            ret["hwclock"] == "UTC")
-          ret.delete("hwclock")          
+          log.info("hwclock <#{ret["hwclock"]}> is the default value"\
+                   " --> do not export it")
+          ret.delete("hwclock")
         end
         
         local_timezone = Timezone.GetTimezoneForLanguage(
           Language.language,
           "US/Eastern"
         )
-        ret.delete("timezone") if local_timezone == ret["timezone"]
+        if local_timezone == ret["timezone"]
+          log.info("timezone <#{ret["timezone"]}> is the default value"\
+                   " --> do not export it")
+          ret.delete("timezone")
+        end
       end
       ret
     end

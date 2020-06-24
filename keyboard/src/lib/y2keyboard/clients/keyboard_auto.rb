@@ -10,6 +10,8 @@ Yast.import "Language"
 
 module Keyboard
   class AutoClient < ::Installation::AutoClient
+
+    include Yast::Logger
     
     def change
       ret = true
@@ -43,7 +45,7 @@ module Keyboard
       if !Mode.config &&
         ret["keymap"] == Keyboard.GetKeyboardForLanguage(Language.language, "english-us")
         log.info("keymap #{ret["keymap"]} is the default of language"\
-                 "#{Language.language} --> do not export")
+                 "#{Language.language} --> do not export it")
         ret.delete("keymap")
       end
       ret

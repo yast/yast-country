@@ -9,6 +9,8 @@ Yast.import "Mode"
 
 module Language
   class AutoClient < ::Installation::AutoClient
+
+    include Yast::Logger
     
     def change
       Wizard.CreateDialog
@@ -49,8 +51,15 @@ module Language
       ret = Language.Export      
       if !Mode.config
         # normal installation; NOT in AY configuration module
-        ret.delete("language") if Language.language == Language.default_language
-        ret.delete("languages") if Language.languages.empty?()
+        if Language.language == Language.default_language
+          log.info("language <#{ret["language"]}> is the default language"\
+                   " --> do not export it")
+          ret.delete("language")
+        end
+        if Language.languages.empty?()
+          log.info("empty languages --> do not export it")
+          ret.delete("languages")
+        end
       end
       ret
     end
