@@ -49,17 +49,14 @@ module Language
     
     def export
       ret = Language.Export
-      if Mode.autoyast_clone_system
-        # Called by -yast clone_system; NOT in AY configuration module
-        if Language.language == Language.default_language
-          log.info("language <#{ret["language"]}> is the default language"\
-                   " --> no export")
-          ret.delete("language")
-        end
-        if Language.languages.empty?()
-          log.info("empty languages --> no export")
-          ret.delete("languages")
-        end
+      if Language.language == Language.default_language
+        log.info("language <#{ret["language"]}> is the default language"\
+                 " --> no export")
+        ret.delete("language")
+      end
+      if Language.languages.empty?()
+        log.info("empty languages --> no export")
+        ret.delete("languages")
       end
       ret
     end

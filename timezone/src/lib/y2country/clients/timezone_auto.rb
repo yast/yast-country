@@ -42,26 +42,23 @@ module Yast
 
     def export
       ret = Timezone.Export
-      if Mode.autoyast_clone_system
-        # Called by -yast clone_system; NOT in AY configuration module
-        if(Timezone.ProposeLocaltime() &&
-           ret["hwclock"] == "localtime") ||
-          (!Timezone.ProposeLocaltime() &&
-           ret["hwclock"] == "UTC")
-          log.info("hwclock <#{ret["hwclock"]}> is the default value"\
-                   " --> do not export it")
-          ret.delete("hwclock")
-        end
+      if(Timezone.ProposeLocaltime() &&
+         ret["hwclock"] == "localtime") ||
+        (!Timezone.ProposeLocaltime() &&
+         ret["hwclock"] == "UTC")
+        log.info("hwclock <#{ret["hwclock"]}> is the default value"\
+                 " --> do not export it")
+        ret.delete("hwclock")
+      end
         
-        local_timezone = Timezone.GetTimezoneForLanguage(
-          Language.language,
-          "US/Eastern"
-        )
-        if local_timezone == ret["timezone"]
-          log.info("timezone <#{ret["timezone"]}> is the default value"\
-                   " --> no export")
-          ret.delete("timezone")
-        end
+      local_timezone = Timezone.GetTimezoneForLanguage(
+        Language.language,
+        "US/Eastern"
+      )
+      if local_timezone == ret["timezone"]
+        log.info("timezone <#{ret["timezone"]}> is the default value"\
+                 " --> no export")
+        ret.delete("timezone")
       end
       ret
     end

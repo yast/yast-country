@@ -70,40 +70,25 @@ describe Keyboard::AutoClient do
       allow(Yast::Keyboard).to receive(:Export).and_return(profile)
     end
 
-    context "AY configuration UI" do
+    context "keyboard settings are default values, depending on language" do
       before do
-        allow(Yast::Mode).to receive(:autoyast_clone_system).and_return(false)
+        allow(Yast::Keyboard).to receive(:GetKeyboardForLanguage).
+          and_return("english-us")
       end
-      it "exports complete keyboard information for the AutoYaST profile" do
-        expect(client.export).to eq(profile)
+
+      it "exports an empty hash for the AutoYaST profile" do
+        expect(client.export).to eq({})
       end
     end
 
-    context "AY cloning;" do
+    context "keyboard settings are not default values" do
       before do
-        allow(Yast::Mode).to receive(:autoyast_clone_system).and_return(true)
+        allow(Yast::Keyboard).to receive(:GetKeyboardForLanguage).
+          and_return("german")
       end
-
-      context "keyboard settings are default values, depending on language" do
-        before do
-          allow(Yast::Keyboard).to receive(:GetKeyboardForLanguage).
-            and_return("english-us")
-        end
         
-        it "exports an empty hash for the AutoYaST profile" do
-          expect(client.export).to eq({})
-        end
-      end
-
-      context "keyboard settings are not default values" do
-        before do
-          allow(Yast::Keyboard).to receive(:GetKeyboardForLanguage).
-            and_return("german")
-        end
-        
-        it "exports keyboard information for the AutoYaST profile" do
-          expect(client.export).to eq(profile)
-        end
+      it "exports keyboard information for the AutoYaST profile" do
+        expect(client.export).to eq(profile)
       end
     end
   end
