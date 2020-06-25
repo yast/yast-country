@@ -42,8 +42,8 @@ module Yast
 
     def export
       ret = Timezone.Export
-      if !Mode.config
-        # normal installation; NOT in AY configuration module
+      if Mode.autoyast_clone_system
+        # Called by -yast clone_system; NOT in AY configuration module
         if(Timezone.ProposeLocaltime() &&
            ret["hwclock"] == "localtime") ||
           (!Timezone.ProposeLocaltime() &&

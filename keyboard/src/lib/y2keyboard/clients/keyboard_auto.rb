@@ -42,7 +42,7 @@ module Keyboard
     
     def export
       ret = Keyboard.Export
-      if !Mode.config &&
+      if Mode.autoyast_clone_system &&
         ret["keymap"] == Keyboard.GetKeyboardForLanguage(Language.language, "english-us")
         log.info("keymap #{ret["keymap"]} is the default of language"\
                  "#{Language.language} --> no export")

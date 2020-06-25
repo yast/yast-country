@@ -38,14 +38,14 @@ BuildRequires:  rubygem(%rb_default_ruby_abi:yast-rake)
 BuildRequires:  yast2-core >= 3.1.12
 # RSpec extensions for YaST
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
-# Yast2::CommandLine readonly parameter
-BuildRequires:  yast2 >= 4.2.57
+# Mode.autoyast_clone_system
+BuildRequires:  yast2 >= 4.3.10
 
 Requires:       timezone
 Requires:       yast2-perl-bindings
 Requires:       yast2-trans-stats
-# Yast2::CommandLine readonly parameter
-Requires:       yast2 >= 4.2.57
+# Mode.autoyast_clone_system
+Requires:       yast2 >= 4.3.10
 # Pkg::SetPackageLocale, Pkg::GetTextLocale
 Requires:       yast2-pkg-bindings >= 2.15.3
 # IconPath support for MultiSelectionBox

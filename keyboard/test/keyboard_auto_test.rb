@@ -72,16 +72,16 @@ describe Keyboard::AutoClient do
 
     context "AY configuration UI" do
       before do
-        allow(Yast::Mode).to receive(:config).and_return(true)
+        allow(Yast::Mode).to receive(:autoyast_clone_system).and_return(false)
       end
       it "exports complete keyboard information for the AutoYaST profile" do
         expect(client.export).to eq(profile)
       end
     end
 
-    context "AY installation;" do
+    context "AY cloning;" do
       before do
-        allow(Yast::Mode).to receive(:config).and_return(false)
+        allow(Yast::Mode).to receive(:autoyast_clone_system).and_return(true)
       end
 
       context "keyboard settings are default values, depending on language" do

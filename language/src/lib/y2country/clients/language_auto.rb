@@ -48,9 +48,9 @@ module Language
     end
     
     def export
-      ret = Language.Export      
-      if !Mode.config
-        # normal installation; NOT in AY configuration module
+      ret = Language.Export
+      if Mode.autoyast_clone_system
+        # Called by -yast clone_system; NOT in AY configuration module
         if Language.language == Language.default_language
           log.info("language <#{ret["language"]}> is the default language"\
                    " --> no export")
