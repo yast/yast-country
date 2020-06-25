@@ -41,26 +41,7 @@ module Yast
     end
 
     def export
-      ret = Timezone.Export
-      if(Timezone.ProposeLocaltime() &&
-         ret["hwclock"] == "localtime") ||
-        (!Timezone.ProposeLocaltime() &&
-         ret["hwclock"] == "UTC")
-        log.info("hwclock <#{ret["hwclock"]}> is the default value"\
-                 " --> do not export it")
-        ret.delete("hwclock")
-      end
-        
-      local_timezone = Timezone.GetTimezoneForLanguage(
-        Language.language,
-        "US/Eastern"
-      )
-      if local_timezone == ret["timezone"]
-        log.info("timezone <#{ret["timezone"]}> is the default value"\
-                 " --> no export")
-        ret.delete("timezone")
-      end
-      ret
+      Timezone.Export
     end
 
     def write

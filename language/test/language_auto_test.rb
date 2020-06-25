@@ -69,38 +69,9 @@ describe Language::AutoClient do
   end
 
   describe "#export" do
-    let(:profile) {
-      {
-        "language"  => "en_US",
-        "languages" => "fr_FR,en_US,"
-      }            
-    }
-
-    before do
-      allow(Yast::Language).to receive(:Export).and_return(profile)
-    end
-
-    context "language settings are default values" do
-      before do
-        allow(Yast::Language).to receive(:language).
-          and_return(Yast::Language.default_language)
-        allow(Yast::Language).to receive(:languages).and_return("")
-      end
-
-      it "exports an empty hash for the AutoYaST profile" do
-        expect(client.export).to eq({})
-      end
-    end
-
-    context "language settings are not default values" do
-      before do
-        allow(Yast::Language).to receive(:language).and_return("foo")
-        allow(Yast::Language).to receive(:languages).and_return("fr_FR,en_US,")
-      end
-
-      it "exports language information for the AutoYaST profile" do
-        expect(client.export).to eq(profile)
-      end
+    it "exports the profile" do
+      expect(Yast::Language).to receive(:Export)
+      client.export()
     end
   end
 

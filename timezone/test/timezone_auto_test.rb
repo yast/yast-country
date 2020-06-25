@@ -74,41 +74,9 @@ describe Yast::TimezoneAutoClient do
 
 
   describe "#export" do
-    let(:profile) {
-      {
-        "hwclock" => "UTC",
-        "timezone" => "America/New_York"
-      }
-    }
-
-    before do
-      allow(Yast::Timezone).to receive(:Export).and_return(profile)
-    end
-
-    context "timezone settings are default values" do
-      before do
-        allow(Yast::Timezone).to receive(:ProposeLocaltime).
-          and_return(false)
-        allow(Yast::Timezone).to receive(:GetTimezoneForLanguage).
-          and_return("America/New_York")
-      end
-
-      it "exports an empty hash for the AutoYaST profile" do
-        expect(client.export).to eq({})
-      end
-    end
-
-    context "timezone settings are not default values" do
-      before do
-        allow(Yast::Timezone).to receive(:ProposeLocaltime).
-          and_return(true)
-        allow(Yast::Timezone).to receive(:GetTimezoneForLanguage).
-          and_return("America/Denver")
-      end
-
-      it "exports timezone information for the AutoYaST profile" do
-        expect(client.export).to eq(profile)
-      end
+    it "exports the profile" do
+      expect(Yast::Timezone).to receive(:Export)
+      client.export
     end
   end
 

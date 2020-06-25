@@ -41,14 +41,7 @@ module Keyboard
     end
     
     def export
-      ret = Keyboard.Export
-      if ret["keymap"] == Keyboard.GetKeyboardForLanguage(Language.language,
-           "english-us")
-        log.info("keymap #{ret["keymap"]} is the default of language"\
-                 "#{Language.language} --> no export")
-        ret.delete("keymap")
-      end
-      ret
+      Keyboard.Export
     end
     
     def write

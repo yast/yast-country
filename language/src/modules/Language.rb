@@ -1143,8 +1143,21 @@ module Yast
     # AutoYaST interface function: Return the Language configuration as a map.
     # @return [Hash] with the settings
     def Export
-      ret = { "language" => @language, "languages" => @languages }
-      Ops.set(ret, "use_utf8", @use_utf8) if !@use_utf8
+      ret = {}
+      if @language == default_language
+        log.info("language <#{ret["language"]}> is the default language "\
+          "--> no export")
+      else
+        ret["language"] = @language
+      end
+
+      if @languages.empty?
+        log.info("empty languages --> no export")
+      else
+        ret["languages"] = @languages
+      end
+
+      ret["use_utf8"] = @use_utf8 if !@use_utf8
       deep_copy(ret)
     end
 

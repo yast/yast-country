@@ -64,32 +64,9 @@ describe Keyboard::AutoClient do
   end
 
   describe "#export" do
-    let(:profile) {{ "keymap" => "english-us" }}
-
-    before do
-      allow(Yast::Keyboard).to receive(:Export).and_return(profile)
-    end
-
-    context "keyboard settings are default values, depending on language" do
-      before do
-        allow(Yast::Keyboard).to receive(:GetKeyboardForLanguage).
-          and_return("english-us")
-      end
-
-      it "exports an empty hash for the AutoYaST profile" do
-        expect(client.export).to eq({})
-      end
-    end
-
-    context "keyboard settings are not default values" do
-      before do
-        allow(Yast::Keyboard).to receive(:GetKeyboardForLanguage).
-          and_return("german")
-      end
-        
-      it "exports keyboard information for the AutoYaST profile" do
-        expect(client.export).to eq(profile)
-      end
+    it "exports the profile" do
+      expect(Yast::Keyboard).to receive(:Export)
+      client.export
     end
   end
 

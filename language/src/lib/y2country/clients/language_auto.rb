@@ -48,17 +48,7 @@ module Language
     end
     
     def export
-      ret = Language.Export
-      if Language.language == Language.default_language
-        log.info("language <#{ret["language"]}> is the default language"\
-                 " --> no export")
-        ret.delete("language")
-      end
-      if Language.languages.empty?()
-        log.info("empty languages --> no export")
-        ret.delete("languages")
-      end
-      ret
+      Language.Export
     end
     
     def write

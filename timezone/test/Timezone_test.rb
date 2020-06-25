@@ -1,4 +1,5 @@
 #!/usr/bin/env rspec
+# coding: utf-8
 
 require_relative "test_helper"
 require "y2country/language_dbus"
@@ -399,6 +400,21 @@ describe "Yast::Timezone" do
       subject.hwclock = ""
 
       expect(subject.Export).to include("hwclock"=> "localtime")
+    end
+
+    context "timezone settings are default values" do
+      before do
+        subject.hwclock = "-u"
+        subject.timezone = "America/New_York"
+        allow(subject).to receive(:ProposeLocaltime).
+          and_return(false)
+        allow(subject).to receive(:GetTimezoneForLanguage).
+          and_return("America/New_York")
+      end
+
+      it "exports an empty hash for the AutoYaST profile" do
+        expect(subject.Export).to eq({})
+      end
     end
   end
 

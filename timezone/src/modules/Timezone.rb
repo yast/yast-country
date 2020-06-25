@@ -1001,10 +1001,27 @@ module Yast
     # AutoYaST interface function: Return the Timezone configuration as a map.
     # @return [Hash] with the settings
     def Export
-      ret = {
-        "timezone" => @timezone,
-        "hwclock"  => @hwclock == "-u" ? "UTC" : "localtime"
-      }
+      ret = {}
+
+      if(ProposeLocaltime() && @hwclock != "-u") ||
+        (!ProposeLocaltime() && @hwclock == "-u")
+        log.info("hwclock <#{ret["hwclock"]}> is the default value"\
+                 " --> do not export it")
+      else
+        ret["hwclock"] = @hwclock == "-u" ? "UTC" : "localtime"
+      end
+
+      local_timezone = Timezone.GetTimezoneForLanguage(
+        Language.language,
+        "US/Eastern"
+      )
+      if local_timezone == @timezone
+        log.info("timezone <#{@timezone}> is the default value"\
+                 " --> no export")
+      else
+        ret["timezone"] = @timezone
+      end
+
       deep_copy(ret)
     end
 
