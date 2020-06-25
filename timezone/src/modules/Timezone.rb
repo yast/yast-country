@@ -1005,8 +1005,8 @@ module Yast
 
       if(ProposeLocaltime() && @hwclock != "-u") ||
         (!ProposeLocaltime() && @hwclock == "-u")
-        log.info("hwclock <#{ret["hwclock"]}> is the default value"\
-                 " --> do not export it")
+        log.info("hwclock <#{@hwclock}> is the default value"\
+                 " --> no export")
       else
         ret["hwclock"] = @hwclock == "-u" ? "UTC" : "localtime"
       end

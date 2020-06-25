@@ -1145,7 +1145,7 @@ module Yast
     def Export
       ret = {}
       if @language == default_language
-        log.info("language <#{ret["language"]}> is the default language "\
+        log.info("language <#{@language}> is the default language "\
           "--> no export")
       else
         ret["language"] = @language
