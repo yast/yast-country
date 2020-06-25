@@ -197,6 +197,36 @@ describe "Yast::Keyboard" do
     end
   end
 
+  describe "#Export" do
+    let(:profile) {{ "keymap" => "english-us" }}
+
+    before do
+      subject.Set("english-us")
+    end
+
+    context "keyboard settings are default values, depending on language" do
+      before do
+        allow(subject).to receive(:GetKeyboardForLanguage).
+          and_return("english-us")
+      end
+
+      it "exports an empty hash for the AutoYaST profile" do
+        expect(subject.Export).to eq({})
+      end
+    end
+
+    context "keyboard settings are not default values" do
+      before do
+        allow(subject).to receive(:GetKeyboardForLanguage).
+          and_return("german")
+      end
+
+      it "exports keyboard information for the AutoYaST profile" do
+        expect(subject.Export).to eq(profile)
+      end
+    end
+  end
+
   describe "#Import" do
     before do
       allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).

@@ -5,9 +5,13 @@ Yast.import "Keyboard"
 Yast.import "AutoInstall"
 Yast.import "Wizard"
 Yast.import "Arch"
+Yast.import "Mode"
+Yast.import "Language"
 
 module Keyboard
   class AutoClient < ::Installation::AutoClient
+
+    include Yast::Logger
     
     def change
       ret = true
@@ -50,6 +54,10 @@ module Keyboard
     
     def modified
       Keyboard.SetModified
+    end
+
+    def packages
+      {}
     end
   end
 end

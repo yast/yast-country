@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jun 23 11:04:37 UTC 2020 - Stefan Schubert <schubi@suse.com>
+
+- Generating AY file: Generate only values which are not default
+  values (bsc#1172749).
+- 4.3.3  
+
+-------------------------------------------------------------------
 Tue Jun 23 10:04:37 UTC 2020 - José Iván López González <jlopez@suse.com>
 
 - Avoid build-require of yast2-country-data subpackage

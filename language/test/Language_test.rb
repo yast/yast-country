@@ -471,6 +471,18 @@ describe "Yast::Language" do
       subject.SetExpertValues("use_utf8" => false)
       expect(subject.Export).to include("use_utf8" => false)
     end
+
+    context "language settings are default values" do
+      before do
+        subject.language = subject.default_language
+        subject.languages = []
+        subject.SetExpertValues("use_utf8" => true)
+      end
+
+      it "exports an empty hash for the AutoYaST profile" do
+        expect(subject.Export).to eq({})
+      end
+    end
   end
 
   describe "#Import" do

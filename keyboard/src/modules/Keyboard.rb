@@ -304,7 +304,15 @@ module Yast
     # AutoYaST interface function: Return the Keyboard configuration as a map.
     # @return [Hash] with the settings
     def Export
-      ret = { "keymap" => @curr_kbd }
+      ret = {}
+
+      if @curr_kbd == Keyboard.GetKeyboardForLanguage(Language.language,
+           "english-us")
+        log.info("keymap #{@curr_kbd} is the default of language "\
+                 "#{Language.language} --> no export")
+      else
+        ret["keymap"] = @curr_kbd
+      end
       deep_copy(ret)
     end
 
