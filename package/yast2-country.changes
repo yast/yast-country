@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Fri Jun 26 13:00:19 UTC 2020 - Josef Reidinger <jreidinger@suse.com>
+
+- package properly new client created in previous change
+  (bsc#1172749) 
+- 4.3.4
+
+-------------------------------------------------------------------
 Tue Jun 23 11:04:37 UTC 2020 - Stefan Schubert <schubi@suse.com>
 
 - Generating AY file: Generate only values which are not default
