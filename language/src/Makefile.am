@@ -94,6 +94,10 @@ ywidgetsdir = @ylibdir@/y2country/widgets
 ywidgets_DATA = \
 	lib/y2country/widgets/language_selection.rb
 
+yclientsdir = @ylibdir@/y2country/clients
+yclients_DATA = \
+	lib/y2country/clients/language_auto.rb
+
 desktop_DATA = \
   desktop/org.opensuse.yast.Language.desktop
 
@@ -104,6 +108,6 @@ scalabledir = @icondir@/hicolor/scalable/apps
 scalable_DATA = \
   icons/hicolor/scalable/apps/yast-language.svg
 
-EXTRA_DIST = $(module_DATA) $(module1_DATA) $(client_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ylib_DATA) $(ywidgets_DATA) $(symbolic_DATA) $(scalable_DATA)
+EXTRA_DIST = $(module_DATA) $(module1_DATA) $(client_DATA) $(scrconf_DATA) $(schemafiles_DATA) $(ydata_DATA) $(desktop_DATA) $(ylib_DATA) $(ywidgets_DATA) $(yclients_DATA) $(symbolic_DATA) $(scalable_DATA)
 
 include $(top_srcdir)/Makefile.am.common
