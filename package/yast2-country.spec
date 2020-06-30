@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        4.3.4
+Version:        4.3.5
 Release:        0
 Summary:        YaST2 - Country Settings (Language, Keyboard, and Timezone)
 License:        GPL-2.0-only
@@ -26,11 +26,10 @@ Url:            https://github.com/yast/yast-country
 
 Source0:        %{name}-%{version}.tar.bz2
 
-BuildRequires:  perl-XML-Writer
 BuildRequires:  update-desktop-files
 BuildRequires:  yast2-devtools >= 4.2.2
 BuildRequires:  yast2-perl-bindings
-BuildRequires:  yast2-testsuite
+BuildRequires:  yast2-network
 # For tests
 BuildRequires:  rubygem(%rb_default_ruby_abi:rspec)
 BuildRequires:  rubygem(%rb_default_ruby_abi:yast-rake)
@@ -77,11 +76,13 @@ functions (Language module)
 %prep
 %setup -q
 
+%check
+rake test:unit
+
 %build
-%yast_build
 
 %install
-%yast_install
+rake install DESTDIR="%{buildroot}"
 
 %ifarch s390 s390x
 rm -f %{buildroot}%{yast_desktopdir}/org.opensuse.yast.Keyboard.desktop
