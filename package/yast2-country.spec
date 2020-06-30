@@ -77,11 +77,13 @@ functions (Language module)
 %prep
 %setup -q
 
+%check
+rake test:unit
+
 %build
-%yast_build
 
 %install
-%yast_install
+rake install DESTDIR="%{buildroot}"
 
 %ifarch s390 s390x
 rm -f %{buildroot}%{yast_desktopdir}/org.opensuse.yast.Keyboard.desktop
