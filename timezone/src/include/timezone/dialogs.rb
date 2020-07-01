@@ -181,8 +181,6 @@ module Yast
     def SetTimeDialog
       ntp_help_text = Convert.to_string(ntp_call("ui_help_text", {}))
 
-      textmode = Language.GetTextMode
-
       # help text for set time dialog
       htext = Ops.add(
         _(
@@ -715,7 +713,6 @@ module Yast
         timezoneterm
       )
       # cache for lists with timezone items
-      timezones_for_region = {}
       get_timezones_for_region = lambda do |region, zone|
         if !Builtins.haskey(sorted_zonemap, region)
           reg_list = Builtins.maplist(
