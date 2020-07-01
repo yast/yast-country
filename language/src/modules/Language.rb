@@ -40,6 +40,8 @@ module Yast
 
     require "y2country/language_dbus"
 
+    attr_reader :default_language
+
     def main
       Yast.import "Pkg"
       Yast.import "UI"
