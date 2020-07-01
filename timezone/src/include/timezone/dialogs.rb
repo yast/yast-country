@@ -33,8 +33,6 @@
 #
 # $Id$
 
-require "y2network/ntp_server"
-
 module Yast
   module TimezoneDialogsInclude
     def initialize_timezone_dialogs(include_target)
@@ -577,6 +575,7 @@ module Yast
         @ntp_used = true
         # configure NTP client
         # to prevent misusage of ntp.org we need to distinguish opensuse and SLE usage
+        require "y2network/ntp_server"
         servers = Y2Network::NtpServer.default_servers.map(&:hostname)
         @ntp_server = servers.sample
         # Dot not select a dhcp ntp server by default but add it to the offered
