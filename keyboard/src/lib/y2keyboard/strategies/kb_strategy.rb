@@ -72,9 +72,9 @@ module Y2Keyboard
 
     private
 
-    # set x11 keys on the fly.
-    # @param keyboard_code [String] the keyboard to set.
-    def set_x11_layout(keyboard_code)
+      # set x11 keys on the fly.
+      # @param keyboard_code [String] the keyboard to set.
+      def set_x11_layout(keyboard_code)
         x11data = get_x11_data(keyboard_code)
         return if x11data.empty?
 
@@ -122,7 +122,6 @@ module Y2Keyboard
       # hotplugged during the installation process
       #
       # @param	[Hash] X11 settings
-
       def write_udev_rule(x11data)
         # Remove the file if present (needed to make udev aware of changes)
         File.delete(UDEV_FILE) if File.file?(UDEV_FILE)
@@ -140,7 +139,6 @@ module Y2Keyboard
           Yast::SCR.Write(Yast::path(".target.string"), UDEV_FILE, nil)
         end
       end
-
     end
   end
 end

@@ -33,8 +33,6 @@
 #
 # $Id$
 
-require "y2network/ntp_server"
-
 module Yast
   module TimezoneDialogsInclude
     def initialize_timezone_dialogs(include_target)
@@ -182,8 +180,6 @@ module Yast
     # @return true if user changed the time (dialog accepted)
     def SetTimeDialog
       ntp_help_text = Convert.to_string(ntp_call("ui_help_text", {}))
-
-      textmode = Language.GetTextMode
 
       # help text for set time dialog
       htext = Ops.add(
@@ -577,6 +573,7 @@ module Yast
         @ntp_used = true
         # configure NTP client
         # to prevent misusage of ntp.org we need to distinguish opensuse and SLE usage
+        require "y2network/ntp_server"
         servers = Y2Network::NtpServer.default_servers.map(&:hostname)
         @ntp_server = servers.sample
         # Dot not select a dhcp ntp server by default but add it to the offered
@@ -716,7 +713,6 @@ module Yast
         timezoneterm
       )
       # cache for lists with timezone items
-      timezones_for_region = {}
       get_timezones_for_region = lambda do |region, zone|
         if !Builtins.haskey(sorted_zonemap, region)
           reg_list = Builtins.maplist(

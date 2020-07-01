@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Jul  1 11:09:54 UTC 2020 - Josef Reidinger <jreidinger@suse.com>
+
+- avoid build dependency on yast2-network to break build loop
+  (bsc#1172749)
+- 4.3.6
+
+-------------------------------------------------------------------
 Tue Jun 30 13:43:43 UTC 2020 - Josef Reidinger <jreidinger@suse.com>
 
 - drop autotools to fix more forgotten clients (bsc#1172749)

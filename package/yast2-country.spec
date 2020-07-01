@@ -17,7 +17,7 @@
 
 
 Name:           yast2-country
-Version:        4.3.5
+Version:        4.3.6
 Release:        0
 Summary:        YaST2 - Country Settings (Language, Keyboard, and Timezone)
 License:        GPL-2.0-only
@@ -29,7 +29,6 @@ Source0:        %{name}-%{version}.tar.bz2
 BuildRequires:  update-desktop-files
 BuildRequires:  yast2-devtools >= 4.2.2
 BuildRequires:  yast2-perl-bindings
-BuildRequires:  yast2-network
 # For tests
 BuildRequires:  rubygem(%rb_default_ruby_abi:rspec)
 BuildRequires:  rubygem(%rb_default_ruby_abi:yast-rake)
