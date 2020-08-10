@@ -1,4 +1,13 @@
 -------------------------------------------------------------------
+Mon Aug 10 16:41:21 CEST 2020 - schubi@suse.de
+
+- AutoYaST: Added supplements: autoyast(language,keyboard,timezone)
+  into the spec file in order to install this packages if the
+  section has been defined in the AY configuration file
+  (bsc#1146494).
+- 4.3.7
+
+-------------------------------------------------------------------
 Wed Jul  1 11:09:54 UTC 2020 - Josef Reidinger <jreidinger@suse.com>
 
 - avoid build dependency on yast2-network to break build loop
