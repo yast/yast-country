@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Aug 12 08:18:47 UTC 2020 - Ladislav Slezák <lslezak@suse.cz>
+
+- Fixed failing unit test on S390 (related to bsc#1172749)
+- 4.3.7
+
+-------------------------------------------------------------------
 Wed Jul  1 11:09:54 UTC 2020 - Josef Reidinger <jreidinger@suse.com>
 
 - avoid build dependency on yast2-network to break build loop

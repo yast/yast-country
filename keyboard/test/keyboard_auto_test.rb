@@ -32,9 +32,17 @@ describe Keyboard::AutoClient do
         .and_return(true)
     end
 
-    it "runs keyboard client" do
+    it "runs keyboard client on non s390" do
       expect(Yast::WFM).to receive(:CallFunction).with(
         "keyboard")
+      expect(Yast::Arch).to receive(:s390).and_return(false)
+      client.change
+    end
+
+    it "does not run keyboard client on s390" do
+      expect(Yast::WFM).to_not receive(:CallFunction).with(
+        "keyboard")
+      expect(Yast::Arch).to receive(:s390).and_return(true)
       client.change
     end
 
