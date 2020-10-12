@@ -96,7 +96,9 @@ module Y2Keyboard
         finish_dialog(:abort)
       end
 
-      alias_method :abort_handler, :cancel_handler
+      def abort_handler
+        cancel_handler if Yast::Popup.ConfirmAbort(:painless)
+      end
 
       def layout_list_handler
         if !Yast::Mode.config # not in AY configuration module
