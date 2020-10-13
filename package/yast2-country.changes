@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 13 11:21:03 UTC 2020 - Steffen Winterfeldt <snwint@suse.com>
+
+- adjust keyboard client layout to also fit the firstboot workflow
+  (bsc#1174856)
+- 4.2.19
+
+-------------------------------------------------------------------
 Wed Feb 19 12:58:47 UTC 2020 - Imobach Gonzalez Sosa <igonzalezsosa@suse.com>
 
 - Rely on the new Y2Network::NtpServer class (jsc#SLE-7188).
