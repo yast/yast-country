@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Wed Oct 14 10:34:23 UTC 2020 - Steffen Winterfeldt <snwint@suse.com>
+
+- restructure keyboard client code to allow easier reuse (bsc#1174856)
+- 4.2.20
+
+-------------------------------------------------------------------
 Tue Oct 13 11:21:03 UTC 2020 - Steffen Winterfeldt <snwint@suse.com>
 
 - adjust keyboard client layout to also fit the firstboot workflow
