@@ -24,12 +24,12 @@ require "y2keyboard/strategies/systemd_strategy"
 
 Yast.import "Directory"
 
-describe Y2Keyboard::Clients::Keyboard do
-  describe ".run" do
+describe Yast::KeyboardClient do
+  describe ".setup" do
     let(:dialog) { spy(Y2Keyboard::Dialogs::LayoutSelector) }
     let(:systemd_strategy) { spy(Y2Keyboard::Strategies::SystemdStrategy) }
     let(:yast_proposal_strategy) { spy(Y2Keyboard::Strategies::YastProposalStrategy) }
-    subject(:client) { Y2Keyboard::Clients::Keyboard }
+    subject(:client) { Yast::KeyboardClient }
 
     before do
       allow(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).and_return(systemd_strategy)
@@ -40,21 +40,21 @@ describe Y2Keyboard::Clients::Keyboard do
     it "load keyboard layouts definitions from data directory" do
       expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(anything, Keyboards.all_keyboards)
 
-      client.run
+      client.setup
     end
 
     it "use systemd strategy in a running system" do
       allow(Yast::Stage).to receive(:initial).and_return false
       expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(systemd_strategy, anything)
 
-      client.run
+      client.setup
     end
 
     it "use yast_proposal_strategy strategy while installation" do
       allow(Yast::Stage).to receive(:initial).and_return true
       expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(yast_proposal_strategy, anything)
 
-      client.run
+      client.setup
     end
 
     it "use yast_proposal_strategy strategy in the AY configuration module" do
@@ -62,13 +62,13 @@ describe Y2Keyboard::Clients::Keyboard do
       allow(Yast::Mode).to receive(:config).and_return true
       expect(Y2Keyboard::KeyboardLayout).to receive(:use).with(yast_proposal_strategy, anything)
 
-      client.run
+      client.setup
     end
 
     it "starts a dialog" do
       expect(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).and_return(dialog)
 
-      client.run
+      client.setup
     end
   end
 end
