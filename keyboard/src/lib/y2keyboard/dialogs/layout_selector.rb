@@ -25,6 +25,7 @@ require_relative "../keyboard_layout"
 Yast.import "UI"
 Yast.import "Popup"
 Yast.import "Mode"
+Yast.import "Stage"
 
 module Y2Keyboard
   module Dialogs
@@ -47,7 +48,7 @@ module Y2Keyboard
             HWeight(50, layout_selection_box),
             HWeight(20, HStretch())
           ),
-          footer
+          Yast::Stage.firstboot ? footer_firstboot : footer
         )
       end
 
@@ -79,11 +80,24 @@ module Y2Keyboard
         finish_dialog(:accept)
       end
 
+      def next_handler
+        selected_layout.apply_layout
+        finish_dialog(:next)
+      end
+
+      def back_handler
+        finish_dialog(:back)
+      end
+
       def cancel_handler
         if !Yast::Mode.config # not in AY configuration module
           KeyboardLayoutLoader.load_layout(@previous_selected_layout)
         end
         finish_dialog(:abort)
+      end
+
+      def abort_handler
+        cancel_handler if Yast::Popup.ConfirmAbort(:painless)
       end
 
       def layout_list_handler
@@ -123,6 +137,17 @@ module Y2Keyboard
           Left(PushButton(Id(:help), Opt(:key_F1, :help), Yast::Label.HelpButton)),
           PushButton(Id(:cancel), Yast::Label.CancelButton),
           PushButton(Id(:accept), Yast::Label.AcceptButton),
+          HSpacing()
+        )
+      end
+
+      def footer_firstboot
+        HBox(
+          HSpacing(),
+          Left(PushButton(Id(:help), Opt(:key_F1, :help), Yast::Label.HelpButton)),
+          PushButton(Id(:abort), Yast::Label.AbortButton),
+          PushButton(Id(:back), Yast::Label.BackButton),
+          PushButton(Id(:next), Yast::Label.NextButton),
           HSpacing()
         )
       end
