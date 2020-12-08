@@ -36,7 +36,7 @@ describe "Yast::Console" do
 
     context "when no console font is available" do
       it "does not set the console font" do
-        expect(Yast::UI).to_not receive(:SetConsole)
+        expect(Yast::UI).to_not receive(:SetConsoleFont)
         Yast::Console.SelectFont("martian")
       end
 
