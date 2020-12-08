@@ -1,7 +1,9 @@
 # YaST - The Basic Libraries #
 
-[![Travis Build](https://travis-ci.org/yast/yast-country.svg?branch=master)](https://travis-ci.org/yast/yast-country)
-[![Jenkins Build](http://img.shields.io/jenkins/s/https/ci.opensuse.org/yast-country-master.svg)](https://ci.opensuse.org/view/Yast/job/yast-country-master/)
+[![Workflow Status](https://github.com/yast/yast-country/workflows/CI/badge.svg?branch=master)](
+https://github.com/yast/yast-country/actions?query=branch%3Amaster)
+[![Jenkins Status](https://ci.opensuse.org/buildStatus/icon?job=yast-yast-country-master)](
+https://ci.opensuse.org/view/Yast/job/yast-yast-country-master/)
 [![Coverage Status](https://coveralls.io/repos/yast/yast-country/badge.svg)](https://coveralls.io/r/yast/yast-country)
 
 Country specific data and configuration modules (language, keyboard,
