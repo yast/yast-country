@@ -12,9 +12,12 @@ module Yast
 
     include Yast::Logger
 
-    def change
+    def initialize
       Yast.include self, "timezone/dialogs.rb"
+      super
+    end
 
+    def change
       Wizard.CreateDialog
       Wizard.HideAbortButton
       ret = TimezoneDialog({ "enable_back" => true, "enable_next" => true })

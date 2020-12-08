@@ -44,7 +44,6 @@ describe "Yast::Language" do
 
   before do
     allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
-    allow(subject).to receive(:languages_map).and_return(languages_map)
     allow(subject).to receive(:GetLanguagesMap).and_return(languages_map)
 
     Yast::Language.main
@@ -209,8 +208,11 @@ describe "Yast::Language" do
     end
 
     context "when LC_MESSAGES is zh_TW" do
-      before do
-        allow(subject).to receive(:@localed_conf).and_return({ "LC_MESSAGES" => "zh_TW" })
+      around do |example|
+        original = subject.instance_variable_get(:@localed_conf)
+        subject.instance_variable_set(:@localed_conf, { "LC_MESSAGES" => "zh_TW" })
+        example.run
+        subject.instance_variable_set(:@localed_conf, original)
       end
 
       context "and language is not zh_HK" do

@@ -96,7 +96,7 @@ describe "Yast::Timezone" do
 
   describe "#Set" do
     before do
-      allow(Yast::Misc).to receive(:SysconfigRead).with(Yast::Path.new(".sysconfig.clock.TIMEZONE"))
+      allow(Yast::Misc).to receive(:SysconfigRead).with(Yast::Path.new(".sysconfig.clock.TIMEZONE"), anything)
         .and_return("Europe/Berlin")
       allow(Yast::Misc).to receive(:SysconfigRead).and_call_original
       allow(Yast::FileUtils).to receive(:IsLink).with("/etc/localtime").and_return(false)

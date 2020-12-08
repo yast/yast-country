@@ -21,6 +21,7 @@
 
 require_relative "test_helper"
 require "y2country/clients/timezone_auto"
+require_relative "../src/include/timezone/dialogs.rb"
 
 describe Yast::TimezoneAutoClient do
   subject(:client) { Yast::TimezoneAutoClient.new }
@@ -30,13 +31,13 @@ describe Yast::TimezoneAutoClient do
       allow(Yast::Wizard).to receive(:CreateDialog)
       allow(Yast::Wizard).to receive(:CloseDialog)
       allow(Yast::Wizard).to receive(:HideAbortButton)
-      allow(subject).to receive(:TimezoneDialog).with(
+      allow(client).to receive(:TimezoneDialog).with(
         {"enable_back"=>true, "enable_next"=>true})
         .and_return(true)
     end
 
     it "runs timezone dialog" do
-      expect(subject).to receive(:TimezoneDialog).with(
+      expect(client).to receive(:TimezoneDialog).with(
         {"enable_back"=>true, "enable_next"=>true})
         .and_return(true)
       client.change
