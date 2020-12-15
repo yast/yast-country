@@ -70,8 +70,7 @@ module Yast
       @screenMap = ""
       @magic = "(B"
 
-      # non-empty if serial console (written /etc/inittab)
-      # -> S0:12345:respawn:/sbin/agetty -L 9600<n8> ttyS0
+      # non-empty if serial console
       # something like "ttyS0,9600" from /etc/install.inf
       @serial = ""
 
@@ -150,33 +149,7 @@ module Yast
       SCR.Write(path(".sysconfig.console"), nil)
 
       if @serial != ""
-        # during a fresh install, provide the autoconsole feature
-        # it detects wether the kernel console is VGA/framebuffer or serial
-        # it also starts agetty with the correct speed (#41623)
-        # fresh install, all is easy: just add the getty to /dev/console
-        # upgrade: disable old entries for serial console
-        SCR.Execute(
-          path(".target.bash"),
-          "/usr/bin/sed -i '/^\\(hvc\\|hvsi\\|S[0-9]\\)/s@^.*@#&@' /etc/inittab"
-        )
-
-        # find out if the baud rate is not present on command line (bnc#602743)
-        rate = 42
-        Builtins.foreach(Builtins.splitstring(Kernel.GetCmdLine, "\t ")) do |part|
-          if Builtins.substring(part, 0, 11) == "console=tty" &&
-              Builtins.issubstring(part, ",")
-            srate = Ops.get(Builtins.splitstring(part, ","), 1, "42")
-            rate = Builtins.tointeger(srate) # "bbbbpnf" -> bbbb, where 'b' is number and 'p' character
-          end
-        end
-        rate = 42 if rate == nil
-        SCR.Execute(
-          path(".target.bash"),
-          Builtins.sformat(
-            "/usr/bin/grep -E '^cons:' /etc/inittab || /usr/bin/echo 'cons:12345:respawn:/sbin/smart_agetty -L %1 console' >> /etc/inittab",
-            rate
-          )
-        )
+        # Root can login via console. See securetty(5)
         SCR.Execute(
           path(".target.bash"),
           "/usr/bin/grep -Ew ^console /etc/securetty || /usr/bin/echo console >> /etc/securetty"
