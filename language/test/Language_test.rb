@@ -374,12 +374,13 @@ describe "Yast::Language" do
         let(:lang) { "ar_EG" }
 
         it "changes the language to English" do
+          allow(Yast::Report).to receive(:Message)
           expect(subject).to receive(:WfmSetGivenLanguage).with("en_US")
           subject.SwitchToEnglishIfNeeded(true)
         end
 
         it "displays an error message if asked to do so" do
-          allow(Yast::Report).to receive(:Message).with(/selected language cannot be used/)
+          expect(Yast::Report).to receive(:Message).with(/selected language cannot be used/)
           subject.SwitchToEnglishIfNeeded(true)
         end
 
@@ -389,6 +390,7 @@ describe "Yast::Language" do
         end
 
         it "returns true" do
+          allow(Yast::Report).to receive(:Message)
           expect(subject.SwitchToEnglishIfNeeded(true)).to eq(true)
         end
       end
@@ -410,6 +412,7 @@ describe "Yast::Language" do
         let(:lang) { "ja_JP" }
 
         it "changes the language to English" do
+          allow(Yast::Report).to receive(:Message)
           expect(subject).to receive(:WfmSetGivenLanguage).with("en_US")
           subject.SwitchToEnglishIfNeeded(true)
         end
@@ -425,6 +428,7 @@ describe "Yast::Language" do
         end
 
         it "returns true" do
+          allow(Yast::Report).to receive(:Message)
           expect(subject.SwitchToEnglishIfNeeded(true)).to eq(true)
         end
       end
