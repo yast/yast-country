@@ -78,7 +78,7 @@ module Y2Keyboard
         x11data = get_x11_data(keyboard_code)
         return if x11data.empty?
 
-        Kernel.system("/usr/bin/setxkbmap " + x11data["Apply"])
+        Yast::Execute.locally("/usr/bin/setxkbmap", *x11data["Apply"].split(" "))
 
         # bnc#885271: set udev rule to handle incoming attached keyboards
         # While installation/update only.
@@ -109,9 +109,8 @@ module Y2Keyboard
         x11data = {}
 
         if File.executable?(cmd)
-          file = File.join(Yast::Directory.tmpdir, "xkbctrl.out")
-          Kernel.system("#{cmd} #{keymap.shellescape} >#{file}")
-          x11data = Yast::SCR.Read(Yast::path(".target.ycp"), file)
+          xkbctrl = Yast::Execute.locally(cmd, keymap, stdout: :capture)
+          x11data = read_ycp_string(xkbctrl)
         else
           log.warn("#{cmd} not found on system.")
         end
@@ -138,6 +137,16 @@ module Y2Keyboard
           Yast::SCR.Write(Yast::path(".target.string"), UDEV_FILE, UDEV_COMMENT + rule + "\n")
           Yast::SCR.Write(Yast::path(".target.string"), UDEV_FILE, nil)
         end
+      end
+
+      # Parses the given YCP data structure
+      #
+      # @param str [String] string containing a YCP data structure
+      # @return [Hash]
+      def read_ycp_string(str)
+        file = File.join(Yast::Directory.tmpdir, "content.ycp")
+        File.write(file, str)
+        Yast::SCR.Read(Yast::path(".target.ycp"), file)
       end
     end
   end
