@@ -22,10 +22,11 @@ require "ui/dialog"
 require_relative "../keyboard_layout_loader"
 require_relative "../keyboard_layout"
 
-Yast.import "UI"
-Yast.import "Popup"
+Yast.import "GetInstArgs"
 Yast.import "Mode"
+Yast.import "Popup"
 Yast.import "Stage"
+Yast.import "UI"
 
 module Y2Keyboard
   module Dialogs
@@ -35,6 +36,26 @@ module Y2Keyboard
         textdomain "country"
         @keyboard_layouts = KeyboardLayout.all
         @previous_selected_layout = KeyboardLayout.current_layout
+      end
+
+      # First boot using Wizard, so we need here in firstboot set
+      # wizard content instead of opening dialog. bsc#1183162
+      def create_dialog
+        return super unless Yast::Stage.firstboot
+
+        args = Yast::GetInstArgs.argmap
+        Yast::Wizard.SetContents(heading, dialog_content, help_text,
+          args.fetch("enable_back", true), args.fetch("enable_next", true))
+
+        # SetContents always return nil, so return always true here
+        true
+      end
+
+      # First boot using Wizard, so do not close anything. bsc#1183162
+      def close_dialog
+        return super unless Yast::Stage.firstboot
+
+        true
       end
 
       def dialog_options
@@ -52,9 +73,13 @@ module Y2Keyboard
         )
       end
 
+      def heading
+        _("System Keyboard Configuration")
+      end
+
       def layout_selection_box
         VBox(
-          Left(Heading(_("System Keyboard Configuration"))),
+          Yast::Stage.firstboot ? Empty() : Left(Heading(heading)),
           SelectionBox(
             Id(:layout_list),
             Opt(:notify),
@@ -142,14 +167,7 @@ module Y2Keyboard
       end
 
       def footer_firstboot
-        HBox(
-          HSpacing(),
-          Left(PushButton(Id(:help), Opt(:key_F1, :help), Yast::Label.HelpButton)),
-          PushButton(Id(:abort), Yast::Label.AbortButton),
-          PushButton(Id(:back), Yast::Label.BackButton),
-          PushButton(Id(:next), Yast::Label.NextButton),
-          HSpacing()
-        )
+        Empty()
       end
     end
   end
