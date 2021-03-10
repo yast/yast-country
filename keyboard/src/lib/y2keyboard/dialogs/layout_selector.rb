@@ -27,6 +27,7 @@ Yast.import "Mode"
 Yast.import "Popup"
 Yast.import "Stage"
 Yast.import "UI"
+Yast.import "Wizard"
 
 module Y2Keyboard
   module Dialogs
@@ -69,7 +70,7 @@ module Y2Keyboard
             HWeight(50, layout_selection_box),
             HWeight(20, HStretch())
           ),
-          Yast::Stage.firstboot ? footer_firstboot : footer
+          Yast::Stage.firstboot ? Empty() : footer
         )
       end
 
@@ -164,10 +165,6 @@ module Y2Keyboard
           PushButton(Id(:accept), Yast::Label.AcceptButton),
           HSpacing()
         )
-      end
-
-      def footer_firstboot
-        Empty()
       end
     end
   end
