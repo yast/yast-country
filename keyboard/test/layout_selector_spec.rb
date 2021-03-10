@@ -41,6 +41,44 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
       mock_ui_events(:cancel)
     end
 
+    context "in firstboot" do
+      before do
+        allow(Yast::Stage).to receive(:firstboot).and_return(true)
+      end
+
+      it "sets wizard content" do
+        expect(Yast::Wizard).to receive(:SetContents)
+        expect(Yast::UI).to_not receive(:OpenDialog)
+
+        layout_selector.run
+      end
+
+      it "does not close dialog" do
+        expect(Yast::UI).to_not receive(:CloseDialog)
+
+        layout_selector.run
+      end
+    end
+
+    context "in normal mode" do
+      before do
+        allow(Yast::Stage).to receive(:firstboot).and_return(false)
+      end
+
+      it "opens dialog" do
+        expect(Yast::UI).to receive(:OpenDialog).and_return(true)
+
+        layout_selector.run
+      end
+
+      it "closes dialog" do
+        expect(Yast::UI).to receive(:CloseDialog).and_return(true)
+
+        layout_selector.run
+      end
+    end
+
+
     it "retrieve keyboard layouts" do
       expect(keyboard_layout).to receive(:all)
 
