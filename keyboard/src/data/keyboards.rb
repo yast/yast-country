@@ -207,7 +207,7 @@ class Keyboards
       },
       { "description" => _("Ukrainian"),
         "alias" => "ukrainian",
-        "code" => "ua"
+        "code" => "ua-utf"
       },
       { "description" => _("Khmer"),
         "alias" => "khmer",
@@ -227,11 +227,11 @@ class Keyboards
       },
       { "description" => _("Traditional Chinese"),
         "alias" => "taiwanese",
-        "code" => "taiwanese"
+        "code" => "tw"
       },
       { "description" => _("Simplified Chinese"),
         "alias" => "chinese",
-        "code" => "chinese"
+        "code" => "cn"
       },
       { "description" => _("Romanian"),
         "alias" => "romanian",
