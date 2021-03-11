@@ -55,8 +55,8 @@ describe Y2Keyboard::Strategies::KbStrategy do
            "XkbModel"   => "microsoftpro",
            "XkbOptions" => "terminate:ctrl_alt_bksp",
            "Apply"      => arguments_to_apply})
-        expect(Kernel).to receive(:system).with(
-          "/usr/bin/setxkbmap #{arguments_to_apply}")
+        expect(Yast::Execute).to receive(:locally).with(
+          "/usr/bin/setxkbmap", *arguments_to_apply.split)
         expect(kb_strategy).to receive(:write_udev_rule)
 
         kb_strategy.set_layout("es")
