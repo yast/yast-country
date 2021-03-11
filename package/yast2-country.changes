@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Mar 11 14:13:56 UTC 2021 - Josef Reidinger <jreidinger@suse.com>
+
+- Fix wrong xkb codes (bsc#1181952)
+- 4.3.14
+
+-------------------------------------------------------------------
 Tue Mar  9 16:42:21 UTC 2021 - Josef Reidinger <jreidinger@suse.com>
 
 - Adapt keyboard layout dialog to work in firstboot (bsc#1183162)
