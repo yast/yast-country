@@ -37,7 +37,8 @@ BuildRequires:  yast2-core >= 3.1.12
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
 # Yast2::CommandLine readonly parameter
 BuildRequires:  yast2 >= 4.2.57
-# systemd-mini does not add the xkb generated map
+# systemd-mini does not add the xkb generated map which is needed by 
+# the Keyboards.all_keyboards unit/integration test 
 BuildRequires:  systemd
 
 Requires:       timezone
