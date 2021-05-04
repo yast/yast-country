@@ -15,7 +15,6 @@
 # Please submit bugfixes or comments via https://bugs.opensuse.org/
 #
 
-
 Name:           yast2-country
 Version:        4.4.0
 Release:        0
@@ -38,6 +37,8 @@ BuildRequires:  yast2-core >= 3.1.12
 BuildRequires:  yast2-ruby-bindings >= 3.1.26
 # Yast2::CommandLine readonly parameter
 BuildRequires:  yast2 >= 4.2.57
+# systemd-mini does not add the xkb generated map
+BuildRequires:  systemd
 
 Requires:       timezone
 Requires:       yast2-perl-bindings
