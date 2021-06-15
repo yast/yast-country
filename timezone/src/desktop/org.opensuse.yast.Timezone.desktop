@@ -22,5 +22,5 @@ Exec=xdg-su -c "/sbin/yast2 timezone"
 
 Name=YaST Date and Time
 GenericName=Date and Time
-Comment=Control time zone, date, and system time
+Comment="Control time zone, date, and system time"
 StartupNotify=true
