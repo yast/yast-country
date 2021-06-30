@@ -55,6 +55,11 @@ class Keyboards
         "code" => "fr-latin1",
         "suggested_for_lang" => ["br_FR", "fr", "fr_BE"]
       },
+      { "description" => _("French (AFNOR)"),
+        "alias" => "french",
+        "code" => "fr-afnor",
+        "suggested_for_lang" => ["br_FR", "fr", "fr_BE"]
+      },
       { "description" => _("French (Switzerland)"),
         "alias" => "french-ch",
         "code" => "fr_CH-latin1",
