@@ -20,6 +20,7 @@
 require "yast"
 require "yast/i18n"
 
+# Linux console keyboard layouts
 class Keyboards
   extend Yast::I18n
 
@@ -110,6 +111,8 @@ class Keyboards
       },
       { "description" => _("Greek"),
         "alias" => "greek",
+        # Left-shift+Alt switches layouts
+        # Windows (Super) is a Greek-shift
         "code" => "gr"
       },
       { "description" => _("Dutch"),
@@ -198,6 +201,8 @@ class Keyboards
       },
       { "description" => _("Dvorak"),
         "alias" => "dvorak",
+        # Beware, Dvorak is completely different from QWERTY;
+        # see also https://en.wikipedia.org/wiki/Dvorak_keyboard_layout
         "code" => "dvorak"
       },
       { "description" => _("Icelandic"),
@@ -207,6 +212,7 @@ class Keyboards
       },
       { "description" => _("Ukrainian"),
         "alias" => "ukrainian",
+        # AltGr or Right-Ctrl switch layouts
         "code" => "ua-utf"
       },
       { "description" => _("Khmer"),
@@ -223,6 +229,7 @@ class Keyboards
       },
       { "description" => _("Tajik"),
         "alias" => "tajik",
+        # AltGr switches layouts
         "code" => "tj_alt-UTF8"
       },
       { "description" => _("Traditional Chinese"),
