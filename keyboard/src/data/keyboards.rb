@@ -56,7 +56,7 @@ class Keyboards
         "suggested_for_lang" => ["br_FR", "fr", "fr_BE"]
       },
       { "description" => _("French (AFNOR)"),
-        "alias" => "french",
+        "alias" => "french-afnor",
         "code" => "fr-afnor",
         "suggested_for_lang" => ["br_FR", "fr", "fr_BE"]
       },
