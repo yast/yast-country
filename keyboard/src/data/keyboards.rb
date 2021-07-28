@@ -25,6 +25,16 @@ class Keyboards
 
   textdomain "country"
 
+  # @return [Array<Hash{String => Object}>] keyboard descriptions
+  #
+  #   - description [String] translated name of layout
+  #   - alias [String] yast-internal keybord id, to match the "keyboard" key
+  #       in language/src/data/languages/language_*.ycp
+  #   - code [String] keyboard name used by kbd, and
+  #       present in /usr/share/systemd/kbd-model-map
+  #       (test/data/keyboard_test.rb checks this)
+  #   - suggested_for_lang [Array<String>] optional, language codes
+  #       to suggest this layout for
   def self.all_keyboards
     [
       { "description" => _("English (US)"),
