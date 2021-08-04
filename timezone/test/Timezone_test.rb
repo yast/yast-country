@@ -541,4 +541,75 @@ describe "Yast::Timezone" do
       expect(subject.UpdateTimezone("US/Pacific")).to eq "America/Los_Angeles"
     end
   end
+
+  describe "#Save" do
+    before do
+      allow(Yast::SCR).to receive(:Write)
+
+      allow(Yast::Mode).to receive(:mode).and_return(mode)
+    end
+
+    context "when the system is being updated" do
+      let(:mode) { "update" }
+
+      it "does not write the timezone" do
+        expect(Yast::WFM).to_not receive(:Execute)
+        expect(Yast::SCR).to_not receive(:Execute)
+
+        subject.Save
+      end
+    end
+
+    context "when the system is not being updated" do
+      let(:mode) { "autoinstallation" }
+
+      before do
+        allow(Yast::SCR).to receive(:Write)
+
+        allow(subject).to receive(:ReadAdjTime).and_return(nil)
+
+        allow(subject).to receive(:CallMkinitrd)
+
+        subject.Import(settings)
+      end
+
+
+      context "and no timezone value is given" do
+        let(:settings) { { "hwclock" => "UTC", "timezone" => "" } }
+
+        it "does not write the timezone" do
+          expect(Yast::WFM).to_not receive(:Execute)
+          expect(Yast::SCR).to_not receive(:Execute)
+
+          subject.Save
+        end
+      end
+
+      context "and a timezone value is given" do
+        let(:settings) { {"hwclock" => "UTC", "timezone" => "US/Pacific"} }
+
+        context "and it is running in the initial stage" do
+          let(:initial) { true }
+
+          it "uses systemd-firstboot command to set the timezone" do
+            expect(Yast::WFM).to receive(:Execute).with(anything, /systemd-firstboot/)
+              .and_return("exit" => 0)
+
+            subject.Save
+          end
+        end
+
+        context "and it is not running in the initial stage" do
+          let(:initial) { false }
+
+          it "uses timedatectl command to set the timezone" do
+            expect(Yast::SCR).to receive(:Execute).with(anything, /timedatectl/)
+              .and_return("exit" => 0)
+
+            subject.Save
+          end
+        end
+      end
+    end
+  end
 end
