@@ -837,27 +837,7 @@ module Yast
         return
       end
 
-      cmd = if Stage.initial
-        # do use --root option, running in chroot does not work
-        "/usr/bin/systemd-firstboot --root '#{Installation.destdir}' --timezone '#{@timezone}'"
-      else
-        # this sets both the locale (see "man localectl")
-        "/usr/bin/timedatectl set-timezone #{@timezone}"
-      end
-      log.info "Making timezone setting persistent: #{cmd}"
-      result = if Stage.initial
-        WFM.Execute(path(".local.bash_output"), cmd)
-      else
-        SCR.Execute(path(".target.bash_output"), cmd)
-      end
-      if result["exit"] != 0
-        log.error "Timezone configuration not written. Failed to execute '#{cmd}'"
-        log.error "output: #{result.inspect}"
-        # TRANSLATORS: the "%s" is replaced by the executed command
-        Report.Error(_("Could not save the timezone setting, the command\n%s\nfailed.") % cmd)
-      else
-        log.info "output: #{result.inspect}"
-      end
+      write_timezone
 
       SCR.Write(path(".sysconfig.clock.DEFAULT_TIMEZONE"), @default_timezone)
 
@@ -1141,6 +1121,40 @@ module Yast
 
     def disk_analyzer
       Y2Storage::StorageManager.instance.probed_disk_analyzer
+    end
+
+    # Writes the timezone configuration
+    def write_timezone
+      if @timezone.nil? || @timezone.strip.empty?
+        log.warn("Timezone configuration not written. No value was given.")
+        return
+      end
+
+      cmd = if Stage.initial
+        # do use --root option, running in chroot does not work
+        "/usr/bin/systemd-firstboot --root '#{Installation.destdir}' --timezone '#{@timezone}'"
+      else
+        # this sets both the locale (see "man localectl")
+        "/usr/bin/timedatectl set-timezone #{@timezone}"
+      end
+
+      log.info "Making timezone setting persistent: #{cmd}"
+
+      result = if Stage.initial
+        WFM.Execute(path(".local.bash_output"), cmd)
+      else
+        SCR.Execute(path(".target.bash_output"), cmd)
+      end
+
+      if result["exit"] != 0
+        log.error "Timezone configuration not written. Failed to execute '#{cmd}'"
+        log.error "output: #{result.inspect}"
+
+        # TRANSLATORS: the "%s" is replaced by the executed command
+        Report.Error(_("Could not save the timezone setting, the command\n%s\nfailed.") % cmd)
+      else
+        log.info "output: #{result.inspect}"
+      end
     end
   end
 
