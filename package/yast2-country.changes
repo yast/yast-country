@@ -1,7 +1,8 @@
 -------------------------------------------------------------------
 Tue Aug  3 16:38:40 UTC 2021 - José Iván López González <jlopez@suse.com>
 
-- Do not write an empty timezone (bsc#1188406).
+- AutoYaST: allow empty /profile/timezone/timezone setting,
+  meaning to keep the UTC default (bsc#1188406).
 - 4.2.22
 
 -------------------------------------------------------------------
@@ -3454,4 +3455,3 @@ Fri Jun 28 14:38:44 CEST 2002 - fehr@suse.de
 Mon Jun 24 10:38:11 CEST 2002 - kkaempf@suse.de
 
 - Initial version, merge console, keyboard, language, and timezone.
-
