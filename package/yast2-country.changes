@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Aug  3 16:38:40 UTC 2021 - José Iván López González <jlopez@suse.com>
+
+- AutoYaST: allow empty /profile/timezone/timezone setting,
+  meaning to keep the UTC default (bsc#1188406).
+- 4.2.22
+
+-------------------------------------------------------------------
 Tue Jun 15 09:17:24 UTC 2021 - Imobach Gonzalez Sosa <igonzalezsosa@suse.com>
 
 - Fix the Comment entry in the desktop file so the tooltip
@@ -3448,4 +3455,3 @@ Fri Jun 28 14:38:44 CEST 2002 - fehr@suse.de
 Mon Jun 24 10:38:11 CEST 2002 - kkaempf@suse.de
 
 - Initial version, merge console, keyboard, language, and timezone.
-
