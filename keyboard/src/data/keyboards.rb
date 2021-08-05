@@ -37,6 +37,11 @@ class Keyboards
   #   - suggested_for_lang [Array<String>] optional, language codes
   #       to suggest this layout for
   def self.all_keyboards
+    always_present_keyboards + optional_keyboards
+  end
+
+  # @see all_keyboards
+  def self.always_present_keyboards
     [
       { "description" => _("English (US)"),
         "alias" => "english-us",
@@ -64,11 +69,6 @@ class Keyboards
       { "description" => _("French"),
         "alias" => "french",
         "code" => "fr-latin1",
-        "suggested_for_lang" => ["br_FR", "fr", "fr_BE"]
-      },
-      { "description" => _("French (AFNOR)"),
-        "alias" => "french-afnor",
-        "code" => "fr-afnor",
         "suggested_for_lang" => ["br_FR", "fr", "fr_BE"]
       },
       { "description" => _("French (Switzerland)"),
@@ -264,6 +264,31 @@ class Keyboards
         "code" => "us-acentos"
       }
     ]
+  end
+
+  # Some keyboards are present in new openSUSE releases but not in older SLE
+  # @see all_keyboards
+  def self.optional_keyboards
+    # memoize this
+    return @optional_keyboards unless @optional_keyboards.nil?
+
+    @optional_keyboards = []
+
+    # The afnor layout was added to xkeyboard-config in 2019-06
+    # but SLE15-SP4 only has 2.23 released in 2018
+    afnor_test = lambda do
+      kmm = File.read("/usr/share/systemd/kbd-model-map") rescue ""
+      kmm.match?("^fr-afnor")
+    end
+    afnor = {
+      "description" => _("French (AFNOR)"),
+      "alias" => "french-afnor",
+      "code" => "fr-afnor",
+      "suggested_for_lang" => ["br_FR", "fr", "fr_BE"]
+    }
+    @optional_keyboards.push(afnor) if afnor_test.call
+
+    @optional_keyboards
   end
 
   # Evaluate the proposed keyboard for a given language
