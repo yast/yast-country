@@ -2,7 +2,7 @@
 # coding: utf-8
 
 require_relative "test_helper"
-require_relative "../src/data/keyboards"
+require "y2keyboard/keyboards"
 
 Yast.import "Keyboard"
 
