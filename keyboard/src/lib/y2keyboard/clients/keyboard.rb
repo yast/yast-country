@@ -4,7 +4,7 @@ require_relative "../dialogs/layout_selector"
 require_relative "../strategies/systemd_strategy"
 require_relative "../strategies/yast_proposal_strategy"
 require_relative "../keyboard_layout"
-require_relative "../../../data/keyboards"
+require "y2keyboard/keyboards"
 
 module Yast
   class KeyboardClient < Client
