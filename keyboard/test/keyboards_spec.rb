@@ -7,7 +7,7 @@ require "y2keyboard/keyboards"
 describe "Keyboards" do
   subject { Keyboards }
 
-  describe "#all_keyboards" do
+  describe ".all_keyboards" do
     it "returns map of all available keyboard descriptions" do
       ret = subject.all_keyboards
       expect(ret.first.key?("description")).to eq(true)
@@ -17,9 +17,19 @@ describe "Keyboards" do
         expect(ret.first["suggested_for_lang"].class == Array).to eq(true)
       end
     end
+
+    it "returns list with all valid models from systemd" do
+      # read valid codes from systemd as xkbctrl read it from there
+      valid_codes = File.readlines("/usr/share/systemd/kbd-model-map")
+      valid_codes.map! { |l| l.strip.sub(/^(\S+)\s+.*$/, "\\1") }
+      Keyboards.all_keyboards.each do |kb_map|
+        code = kb_map["code"]
+        expect(valid_codes).to include(code)
+      end
+    end
   end
 
-  describe "#suggested_keyboard" do
+  describe ".suggested_keyboard" do
     context "given language found" do
       it "returns the proposed keyboard for a given language" do
         expect(subject.suggested_keyboard("de_CH")).to eq("german-ch")
@@ -33,7 +43,7 @@ describe "Keyboards" do
     end    
   end
 
-  describe "#alias" do
+  describe ".alias" do
     context "given keymap found" do
       it "evaluates alias name for a given keymap" do
         expect(subject.alias("de-latin1-nodeadkeys")).to eq("german")
@@ -47,7 +57,7 @@ describe "Keyboards" do
     end
   end
 
-  describe "#description" do
+  describe ".description" do
     context "given keyboard alias found" do
       it "evaluates description for a given keyboard" do
         expect(subject.description("english-us")).not_to be_empty
@@ -61,7 +71,7 @@ describe "Keyboards" do
     end
   end
 
-  describe "#code" do
+  describe ".code" do
     context "given keyboard alias found" do
       it "evaluates keymap for a given keyboard" do
         expect(subject.code("english-us")).to eq("us")
