@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed Aug 18 10:23:48 UTC 2021 - Imobach Gonzalez Sosa <igonzalezsosa@suse.com>
+
+- Move the keyboards database to lib/ to make the module compatible
+  with the self-update mechanism (bsc#1189461).
+- 4.3.17
+
+-------------------------------------------------------------------
 Tue Aug  3 16:38:40 UTC 2021 - José Iván López González <jlopez@suse.com>
 
 - AutoYaST: allow empty /profile/timezone/timezone setting,
