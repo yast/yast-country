@@ -574,11 +574,10 @@ module Yast
         # configure NTP client
         # to prevent misusage of ntp.org we need to distinguish opensuse and SLE usage
         require "y2network/ntp_server"
-        servers = Y2Network::NtpServer.default_servers.map(&:hostname)
-        @ntp_server = servers.sample
+        @ntp_server = Y2Network::NtpServer.default_servers.map(&:hostname).sample
         # Dot not select a dhcp ntp server by default but add it to the offered
-        # list (fate#323454)
-        servers = ntp_call("dhcp_ntp_servers", {}).concat(servers).uniq
+        # list (fate#323454). Add only one server as it is added as a pool (bsc#1188980)
+        servers = ntp_call("dhcp_ntp_servers", {}).concat([@ntp_server].compact).uniq
         argmap = {
           "server"       => @ntp_server,
           # FIXME ntp-client_proposal doesn't understand 'servers' yet
