@@ -13,7 +13,6 @@ Wed Aug 18 10:23:48 UTC 2021 - Imobach Gonzalez Sosa <igonzalezsosa@suse.com>
 - 4.4.5
 
 -------------------------------------------------------------------
-Wed Aug 18 10:23:48 UTC 2021 - Imobach Gonzalez Sosa <igonzalezsosa@suse.com>
 Thu Aug  5 10:21:22 UTC 2021 - Martin Vidner <mvidner@suse.com>
 
 - Offer the fr-afnor keyboard only if it is defined (bsc#1188867)
