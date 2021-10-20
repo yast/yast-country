@@ -137,6 +137,8 @@ module Yast
         "Mexico/BajaSur"           => "America/Mazatlan",
         "Mexico/General"           => "America/Mexico_City",
         "Jamaica"                  => "America/Jamaica",
+        "Asia/Beijing"             => "Asia/Shanghai",
+        "Asia/Harbin"              => "Asia/Shanghai",
         "Asia/Macao"               => "Asia/Macau",
         "Israel"                   => "Asia/Jerusalem",
         "Asia/Tel_Aviv"            => "Asia/Jerusalem",

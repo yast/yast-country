@@ -522,8 +522,6 @@ $[
 	// time zone
 	"Asia/Gaza"		: _("Gaza"),
 	// time zone
-	"Asia/Harbin"		: _("Harbin"),	// CN
-	// time zone
 	"Asia/Hong_Kong"	: _("Hongkong"),
 	// time zone
 	"Asia/Hovd"		: _("Hovd"),	// MN
@@ -603,8 +601,6 @@ $[
 	"Asia/Tokyo"		: _("Tokyo"),
 	// time zone
 	"Asia/Shanghai"		: _("Shanghai"),
-	// time zone
-	"Asia/Beijing"		: _("Beijing"),
 	// time zone
 	"Asia/Taipei"		: _("Taipei"),
 	// time zone
