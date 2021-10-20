@@ -67,6 +67,10 @@ describe Yast::TimezoneAutoClient do
       }
     }
 
+    before do
+      allow(Yast::Timezone).to receive(:Set)
+    end
+
     it "imports the profile" do
       expect(Yast::Timezone).to receive(:Import).with(profile)
       client.import(profile)
@@ -118,13 +122,48 @@ describe Yast::TimezoneAutoClient do
     it "timezone settings are modified ?" do
       expect(Yast::Timezone).to receive(:Modified)
       client.modified?
-    end    
+    end
   end
 
   describe "#modified" do
     it "set to modified" do
       client.modified
       expect(client.modified?).to eq(true)
-    end    
+    end
+  end
+
+  describe "#fix_obsolete_timezones" do
+    context "with an obsolete timezone" do
+      let(:tz1) { "Asia/Beijing" }
+      let(:tz2) { "Asia/Shanghai" }
+
+      before do
+        allow(Yast::Timezone).to receive(:Import)
+        allow(Yast::Timezone).to receive(:timezone).and_return(tz1, tz2)
+        allow(Yast::Timezone).to receive(:Set)
+      end
+
+      it "fixes the timezone to a valid one" do
+        expect(Yast::Timezone).to receive(:Set)
+        client.import("timezone" => tz1)
+        expect(Yast::Timezone.timezone).to eq tz2
+      end
+    end
+
+    context "with a valid timezone" do
+      let(:tz1) { "Asia/Hong_Kong" }
+      let(:tz2) { tz1 }
+
+      before do
+        allow(Yast::Timezone).to receive(:Import)
+        allow(Yast::Timezone).to receive(:timezone).and_return(tz1, tz2)
+      end
+
+      it "leaves the timezone as it is" do
+        expect(Yast::Timezone).not_to receive(:Set)
+        client.import("timezone" => tz1)
+        expect(Yast::Timezone.timezone).to eq tz2
+      end
+    end
   end
 end
