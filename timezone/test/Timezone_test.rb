@@ -558,12 +558,23 @@ describe "Yast::Timezone" do
   end
 
   describe "#UpdateTimezone" do
-    it "returns its param if it is non obsolete timezone" do
+    it "returns its param if it is a non-obsolete timezone" do
       expect(subject.UpdateTimezone("Australia/Adelaide")).to eq "Australia/Adelaide"
     end
 
-    it "returns replacement for obsolete timezone" do
+    it "returns a replacement for an obsolete timezone" do
       expect(subject.UpdateTimezone("US/Pacific")).to eq "America/Los_Angeles"
+    end
+
+    it "fixes obsolete Chinese timezones (bsc#1190586)" do
+      expect(subject.UpdateTimezone("Asia/Beijing")).to eq "Asia/Shanghai"
+      expect(subject.UpdateTimezone("Asia/Harbin")).to eq "Asia/Shanghai"
+    end
+    
+    it "keeps valid Chinese timezones (bsc#1190586)" do
+      expect(subject.UpdateTimezone("Asia/Shanghai")).to eq "Asia/Shanghai"
+      expect(subject.UpdateTimezone("Asia/Hong_Kong")).to eq "Asia/Hong_Kong"
+      expect(subject.UpdateTimezone("Asia/Macau")).to eq "Asia/Macau"
     end
   end
 
