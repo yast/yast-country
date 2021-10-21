@@ -76,7 +76,7 @@ module Yast
 
       @diff = 0
 
-      # if anyuthing was modified (currently for auto client only)
+      # if anything was modified (currently for auto client only)
       @modified = false
 
       # If there is windows partition, assume that local time is used
@@ -137,6 +137,8 @@ module Yast
         "Mexico/BajaSur"           => "America/Mazatlan",
         "Mexico/General"           => "America/Mexico_City",
         "Jamaica"                  => "America/Jamaica",
+        "Asia/Beijing"             => "Asia/Shanghai",
+        "Asia/Harbin"              => "Asia/Shanghai",
         "Asia/Macao"               => "Asia/Macau",
         "Israel"                   => "Asia/Jerusalem",
         "Asia/Tel_Aviv"            => "Asia/Jerusalem",
@@ -973,7 +975,7 @@ module Yast
         @hwclock = Ops.get_string(settings, "hwclock", "UTC") == "UTC" ? "-u" : "--localtime"
         @user_hwclock = true
       end
-      # FIXME: this set modify system which is a bit unusual for import operation
+      # FIXME: this set modifies the system which is very unusual for an import operation
       Set(Ops.get_string(settings, "timezone", @timezone), true)
       true
     end
