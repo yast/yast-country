@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 21 08:45:47 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Use official China timezone Asia/Shanghai (bs#1187857)
+- 4.4.7
+
+-------------------------------------------------------------------
 Mon Sep  6 13:48:04 UTC 2021 - Knut Anderssen <kanderssen@suse.com>
 
 - Use only one server when proposing the default NTP servers to
