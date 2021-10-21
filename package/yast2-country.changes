@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Thu Oct 21 08:45:47 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
+
+- Use official China timezone Asia/Shanghai (bs#1187857)
+- 4.3.18
+
+-------------------------------------------------------------------
 Wed Aug 18 10:23:48 UTC 2021 - Imobach Gonzalez Sosa <igonzalezsosa@suse.com>
 
 - Move the keyboards database to lib/ to make the module compatible
