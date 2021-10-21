@@ -26,7 +26,9 @@ module Yast
     end
 
     def import(data)
-      Timezone.Import(data)
+      result = Timezone.Import(data)
+      fix_obsolete_timezones
+      result
     end
 
     def summary
@@ -60,7 +62,18 @@ module Yast
     end
     
     def modified
-      Timezone.modified = true      
+      Timezone.modified = true
+    end
+
+    def fix_obsolete_timezones
+      old_timezone = Timezone.timezone
+      new_timezone = Timezone.UpdateTimezone(old_timezone)
+      return if new_timezone == old_timezone
+
+      Timezone.Set(new_timezone, true)
+      Timezone.modified = true
+      log.info("Changed obsolete timezone #{old_timezone} to #{new_timezone}")
+      nil
     end
   end
 end
