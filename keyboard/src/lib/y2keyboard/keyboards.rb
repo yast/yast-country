@@ -42,6 +42,11 @@ class Keyboards
 
   # @see all_keyboards
   def self.always_present_keyboards
+    # Now (2021-12-07) using keymaps from the new kbd package
+    # from /usr/share/kbd/keymaps/xkb, no longer kbd-legacy
+    # from /usr/share/kbd/keymaps/{amiga,atari,i386,include,mac,sun}
+    #
+    # See also  man xkeyboard-config
     [
       { "description" => _("English (US)"),
         "alias" => "english-us",
@@ -51,7 +56,7 @@ class Keyboards
       },
       { "description" => _("English (UK)"),
         "alias" => "english-uk",
-        "code" => "uk", # TO DO: No uk-*, en-*, brit*
+        "code" => "gb",
         "legacy_code" => "uk"
       },
       { "description" => _("German"),
@@ -62,12 +67,12 @@ class Keyboards
       },
       { "description" => _("German (with deadkeys)"),
         "alias" => "german-deadkey",
-        "code" => "de",  # TO DO: Check
+        "code" => "de",  # TO DO: Check (the deadkeys part)
         "legacy_code" => "de-latin1"
       },
       { "description" => _("German (Switzerland)"),
         "alias" => "german-ch",
-        "code" => "ch", # TO DO: Very unsure - check
+        "code" => "ch",
         "legacy_code" => "sg-latin1",
         "suggested_for_lang" => ["de_CH"]
       },
@@ -90,7 +95,7 @@ class Keyboards
       },
       { "description" => _("Canadian (Multilingual)"),
         "alias" => "cn-latin1",
-        "code" => "ca-multi", # TO DO: Check
+        "code" => "ca-multi",
         "legacy_code" => "cn-latin1",
         "suggested_for_lang" => ["fr_CA"]
       },
@@ -125,7 +130,7 @@ class Keyboards
       },
       { "description" => _("Persian"),
         "alias" => "persian",
-        "code" => "ir_ku", # TO DO: Check (VERY unsure)
+        "code" => "ir_ku", # TO DO: Check: This is the Kurdish variant; no xkb/ir.map.gz
         "legacy_code" => "ir",
         "suggested_for_lang" => ["fa_IR"]
       },
@@ -172,7 +177,7 @@ class Keyboards
       },
       { "description" => _("Finnish"),
         "alias" => "finnish",
-        "code" => "fi-classic", # TO DO: VERY unsure; check!
+        "code" => "fi-classic", # TO DO: VERY unsure; check! No xkb/fi.map.gz
         "legacy_code" => "fi"
       },
       { "description" => _("Czech"),
@@ -202,7 +207,7 @@ class Keyboards
       },
       { "description" => _("Hungarian"),
         "alias" => "hungarian",
-        "code" => "hu" # TO DO: Check; there are many different ones
+        "code" => "hu" # TO DO: Check: Or is it hu-standard?
         # No different legacy_code
       },
       { "description" => _("Polish"),
@@ -212,14 +217,14 @@ class Keyboards
       },
       { "description" => _("Russian"),
         "alias" => "russian",
-        "code" => "ru-cv_latin", # TO DO: Check (only one for Russian?!)
+        "code" => "ru-cv_latin", # TO DO: Check; only one for Russian?! No xkb/ru.map.gz?
         "legacy_code" => "ruwin_alt-UTF-8",
         "suggested_for_lang" => ["ru", "ru_RU.KOI8-R"]
       },
       { "description" => _("Serbian"),
         "alias" => "serbian",
-        "code" => "rs-latin", # TO DO: Very unsure; check! Was sr-cy cyrillic?
-        "legacy_code" => "sr-cy",
+        "code" => "rs-latin", # TO DO: Very unsure; should it be rs-latinunicode?
+        "legacy_code" => "sr-cy", # was that cyrillic? we don't have xkb/rs-yz.map.gz
         "suggested_for_lang" => ["sr_YU"]
       },
       { "description" => _("Estonian"),
@@ -239,7 +244,7 @@ class Keyboards
       },
       { "description" => _("Croatian"),
         "alias" => "croatian",
-        "code" => "hr",
+        "code" => "hr", #
         "legacy_code" => "croat"
       },
       { "description" => _("Japanese"),
@@ -277,17 +282,18 @@ class Keyboards
       },
       { "description" => _("Korean"),
         "alias" => "korean",
-        "code" => "korean" # TO DO: No ko-* or korean or similar
+        "code" => "kr"
+        "legacy_code" => "korean"
       },
       { "description" => _("Arabic"),
         "alias" => "arabic",
-        "code" => "sy-ku", # TO DO: Check; symlink to iq-ku; but no generic arabic, no egyptian or similar
+        "code" => "iq-ku_ara", # TO DO: This is Iraqi-Kurdish + Arabic; no xkb/ara.map.gz
         "legacy_code" => "arabic"
       },
       { "description" => _("Tajik"),
         "alias" => "tajik",
         # AltGr switches layouts
-        "code" => "tj_alt-UTF8" # TO DO: No tj-* or similar
+        "code" => "tj_alt-UTF8" # TO DO: No xkb/tj* or similar
       },
       { "description" => _("Traditional Chinese"),
         "alias" => "taiwanese",
@@ -306,7 +312,7 @@ class Keyboards
       },
       { "description" => _("US International"),
         "alias" => "us-int",
-        "code" => "us-alt-intl", # TO DO: Check; or should it be us-altgr-intl?
+        "code" => "us-intl",
         "legacy_code" => "us-acentos"
       }
     ]
