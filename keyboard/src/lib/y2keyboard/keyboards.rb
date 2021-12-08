@@ -282,7 +282,7 @@ class Keyboards
       },
       { "description" => _("Korean"),
         "alias" => "korean",
-        "code" => "kr"
+        "code" => "kr",
         "legacy_code" => "korean"
       },
       { "description" => _("Arabic"),
