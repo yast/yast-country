@@ -61,13 +61,15 @@ class Keyboards
       },
       { "description" => _("German"),
         "alias" => "german",
-        "code" => "de-nodeadkeys",
+        "code" => "at-nodeadkeys",
+        # xkb/de-nodeadkeys.map.gz is a symlink to xkb/at-nodeadkeys.map.gz,
+        # but not listed with "localectl list-keymaps"
         "legacy_code" => "de-latin1-nodeadkeys",
         "suggested_for_lang" => ["de"]
       },
       { "description" => _("German (with deadkeys)"),
         "alias" => "german-deadkey",
-        "code" => "de",  # TO DO: Check (the deadkeys part)
+        "code" => "de",
         "legacy_code" => "de-latin1"
       },
       { "description" => _("German (Switzerland)"),
@@ -130,7 +132,8 @@ class Keyboards
       },
       { "description" => _("Persian"),
         "alias" => "persian",
-        "code" => "ir_ku", # TO DO: Check: This is the Kurdish variant; no xkb/ir.map.gz
+        # This does not show up in the dialog and also not in "localectl list-keymaps"
+        "code" => "ir-ku", # TO DO: Check: This is the Kurdish variant; no xkb/ir.map.gz
         "legacy_code" => "ir",
         "suggested_for_lang" => ["fa_IR"]
       },
@@ -144,7 +147,7 @@ class Keyboards
         "code" => "br", # TO DO: Check; or is it br-nativo?
         "legacy_code" => "br-abnt2"
       },
-      { "description" => _("Portuguese (Brazil-- US accents)"),
+      { "description" => _("Portuguese (Brazil -- US accents)"),
         "alias" => "portugese-br-usa",
         "code" => "br-nativo-us", # TO DO: Check; unsure
         "legacy_code" => "us-acentos"
@@ -223,7 +226,8 @@ class Keyboards
       },
       { "description" => _("Serbian"),
         "alias" => "serbian",
-        "code" => "rs-latin", # TO DO: Very unsure; should it be rs-latinunicode?
+        # "code" => "rs-latin", # TO DO: Very unsure; should it be rs-latinunicode?
+        "code" => "ba", # ba: Bosnian; xkb/rs-latin.map.gz is a symlink to xkb/ba.map.gz
         "legacy_code" => "sr-cy", # was that cyrillic? we don't have xkb/rs-yz.map.gz
         "suggested_for_lang" => ["sr_YU"]
       },
@@ -302,8 +306,10 @@ class Keyboards
       },
       { "description" => _("Simplified Chinese"),
         "alias" => "chinese",
-        "code" => "cn"
-        # No different legacy_code
+        # xkb/cn.map.gz is a symlink to xkb/cm.map.gz
+        "code" => "cm",
+        # "code" => "cn",
+        "legacy_code" => "cn"
       },
       { "description" => _("Romanian"),
         "alias" => "romanian",
