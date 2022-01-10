@@ -85,6 +85,38 @@ describe "Keyboards" do
     end
   end
 
+  describe ".legacy_code?" do
+    it "detects known legacy_codes" do
+      expect(subject.legacy_code?("de-latin1")).to eq(true)
+      expect(subject.legacy_code?("sg-latin1")).to eq(true)
+    end
+
+    it "rejects known current keymap codes" do
+      expect(subject.legacy_code?("de")).to eq(false)
+      expect(subject.legacy_code?("ch")).to eq(false)
+    end
+
+    it "survives nil" do
+      expect(subject.legacy_code?(nil)).to eq(false)
+    end
+  end
+
+  describe ".legacy_replacement" do
+    it "translates legacy keymap codes correctly" do
+      expect(subject.legacy_replacement("de-latin1")).to eq("de")
+      expect(subject.legacy_replacement("sg-latin1")).to eq("ch")
+    end
+
+    it "returns the original keymap code if it is not found as a legacy_code" do
+      expect(subject.legacy_replacement("de")).to eq("de")
+      expect(subject.legacy_replacement("fr")).to eq("fr")
+    end
+
+    it "survives nil" do
+      expect(subject.legacy_replacement(nil)).to eq("us")
+    end
+  end
+
   describe "keyboard table consistency:" do
     it "has all required hash keys" do
       subject.all_keyboards.each do |kb|

@@ -386,7 +386,7 @@ class Keyboards
     keyboard ? keyboard["description"] : nil
   end
 
-  # Evaluate kemap for an given alias name
+  # Evaluate keymap for an given alias name
   #
   # @param [String] alias e.g. "english-us"
   #
@@ -395,5 +395,28 @@ class Keyboards
   def self.code(key_alias)
     keyboard = all_keyboards.detect {|kb| kb["alias"] == key_alias }
     keyboard ? keyboard["code"] : nil
+  end
+
+  # Check if a keymap code is a legacy code.
+  #
+  # @param [String] code, e.g. "de-latin1"
+  #
+  # @return true if it is in "legacy_code" of any keymap hash, false if not
+  #
+  def self.legacy_code?(code)
+    return false if code.nil?
+
+    all_keyboards.any?{ |kb| kb["legacy_code"] == code }
+  end
+
+  # Return the new keymap code for a legacy code.
+  #
+  # @param [String] code, e.g. "de-latin1"
+  #
+  # @return [String] replacement, e.g. "de", or the original if not found.
+  #
+  def self.legacy_replacement(legacy_code)
+    keyboard = all_keyboards.detect { |kb| kb["legacy_code"] == legacy_code }
+    keyboard ? keyboard["code"] : legacy_code
   end
 end
