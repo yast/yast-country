@@ -46,7 +46,7 @@ describe "Keyboards" do
   describe ".alias" do
     context "given keymap found" do
       it "evaluates alias name for a given keymap" do
-        expect(subject.alias("de-latin1-nodeadkeys")).to eq("german")
+        expect(subject.alias("de")).to eq("german-deadkey")
       end
     end
 

@@ -40,15 +40,16 @@ describe "Yast::Keyboard" do
     it "sets the current keyboard" do
       allow(Yast::Stage).to receive(:initial).and_return false
       allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-        to receive(:current_layout).and_return("uk")
+        to receive(:current_layout).and_return("gb")
       subject.Read
       expect(subject.current_kbd).to eq("english-uk")
     end
 
     it "sets empty current keyboard for unsupported keyboard (bsc#1159286)" do
       allow(Yast::Stage).to receive(:initial).and_return false
+      # something usable for localectl but not in our data
       allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-        to receive(:current_layout).and_return("lt")
+        to receive(:current_layout).and_return("lt-lekpa")
       subject.Read
       expect(subject.current_kbd).to eq("")
     end
@@ -74,8 +75,8 @@ describe "Yast::Keyboard" do
 
       it "saves settings to current system" do
         expect_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-          to receive(:apply_layout).with("de-latin1-nodeadkeys")
-        subject.Set("german")
+          to receive(:apply_layout).with("de")
+        subject.Set("german-deadkey")
         subject.Save
       end
     end
@@ -101,9 +102,9 @@ describe "Yast::Keyboard" do
 
       it "sets keyboard" do
         expect_any_instance_of(Y2Keyboard::Strategies::KbStrategy).
-          to receive(:set_layout).with("de-latin1-nodeadkeys")
-        subject.Set("german")
-        expect(subject.current_kbd).to eq("german")
+          to receive(:set_layout).with("de")
+        subject.Set("german-deadkey")
+        expect(subject.current_kbd).to eq("german-deadkey")
       end
     end
   end
