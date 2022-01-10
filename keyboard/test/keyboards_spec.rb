@@ -8,7 +8,7 @@ describe "Keyboards" do
   subject { Keyboards }
 
   describe ".all_keyboards" do
-    it "returns map of all available keyboard descriptions" do
+    it "returns a map of all available keyboard descriptions" do
       ret = subject.all_keyboards
       expect(ret.first.key?("description")).to eq(true)
       expect(ret.first.key?("alias")).to eq(true)
@@ -18,7 +18,7 @@ describe "Keyboards" do
       end
     end
 
-    it "returns list with all valid models from systemd" do
+    it "returns a list with all valid models from systemd" do
       # read valid codes from systemd as xkbctrl read it from there
       valid_codes = File.readlines("/usr/share/systemd/kbd-model-map")
       valid_codes.map! { |l| l.strip.sub(/^(\S+)\s+.*$/, "\\1") }
@@ -40,7 +40,7 @@ describe "Keyboards" do
       it "returns nil" do
         expect(subject.suggested_keyboard("wrong_language")).to eq(nil)
       end
-    end    
+    end
   end
 
   describe ".alias" do
@@ -82,6 +82,29 @@ describe "Keyboards" do
       it "returns nil" do
         expect(subject.description("wrong_alias")).to eq(nil)
       end
+    end
+  end
+
+  describe "keyboard table consistency:" do
+    it "has all required hash keys" do
+      subject.all_keyboards.each do |kb|
+        expect(kb.keys).to include("description", "alias", "code")
+      end
+    end
+
+    it "does not have unexpected hash keys" do
+      subject.all_keyboards.each do |kb|
+        unknown_keys = kb.keys - ["description", "alias", "code", "legacy_code","suggested_for_lang"]
+        expect(unknown_keys).to be_empty, "unknown #{unknown_keys} in #{kb}"
+      end
+    end
+
+    it "no legacy_code is also a current code" do
+      current_codes = subject.all_keyboards.map { |kb| kb["code"] }
+      legacy_codes = subject.all_keyboards.map { |kb| kb["legacy_code"] }.compact
+      ambiguous = current_codes & legacy_codes
+      xx = 42
+      expect(ambiguous).to be_empty, "legacy_code cannot be a current code: #{ambiguous}"
     end
   end
 
