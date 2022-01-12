@@ -112,13 +112,6 @@ class Keyboards
         "code" => "latam",
         "legacy_code" => "la-latin1"
       },
-      # Check if we still need this; there may be no counterpart in the kbd package
-      # (is the old MS-DOS codepage 850 really still in use on Linux anywhere?)
-      { "description" => _("Spanish (CP 850)"),
-        "alias" => "spanish-lat-cp850",
-        "code" => "es-winkeys", # TO DO: VERY unsure; check!
-        "legacy_code" => "es-cp850"
-      },
       { "description" => _("Spanish (Asturian variant)"),
         "alias" => "spanish-ast",
         "code" => "es-ast"
