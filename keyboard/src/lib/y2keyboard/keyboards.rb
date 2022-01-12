@@ -61,9 +61,7 @@ class Keyboards
       },
       { "description" => _("German"),
         "alias" => "german",
-        "code" => "at-nodeadkeys",
-        # xkb/de-nodeadkeys.map.gz is a symlink to xkb/at-nodeadkeys.map.gz,
-        # but not listed with "localectl list-keymaps"
+        "code" => "de-nodeadkeys",
         "legacy_code" => "de-latin1-nodeadkeys",
         "suggested_for_lang" => ["de"]
       },
