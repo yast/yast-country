@@ -124,8 +124,7 @@ class Keyboards
       { "description" => _("Persian"),
         "alias" => "persian",
         # This does not show up in the dialog and also not in "localectl list-keymaps"
-        "code" => "ir-ku", # TO DO: Check: This is the Kurdish variant; no xkb/ir.map.gz
-        "legacy_code" => "ir",
+        "code" => "ir", # MISSING; it might also be "fa" ("Farsi" -> "Persian")
         "suggested_for_lang" => ["fa_IR"]
       },
       { "description" => _("Portuguese"),
