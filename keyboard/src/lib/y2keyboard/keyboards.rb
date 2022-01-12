@@ -297,10 +297,8 @@ class Keyboards
       },
       { "description" => _("Simplified Chinese"),
         "alias" => "chinese",
-        # xkb/cn.map.gz is a symlink to xkb/cm.map.gz
-        "code" => "cm",
-        # "code" => "cn",
-        "legacy_code" => "cn"
+        "code" => "cn"
+        # No different legacy_code
       },
       { "description" => _("Romanian"),
         "alias" => "romanian",
