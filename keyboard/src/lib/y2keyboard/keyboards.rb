@@ -281,8 +281,7 @@ class Keyboards
       },
       { "description" => _("Arabic"),
         "alias" => "arabic",
-        "code" => "iq-ku_ara", # TO DO: This is Iraqi-Kurdish + Arabic; no xkb/ara.map.gz
-        "legacy_code" => "arabic"
+        "code" => "arabic" # MISSING: no arabic or ar*
       },
       { "description" => _("Tajik"),
         "alias" => "tajik",
