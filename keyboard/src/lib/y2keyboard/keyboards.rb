@@ -134,23 +134,25 @@ class Keyboards
       },
       { "description" => _("Portuguese (Brazil)"),
         "alias" => "portugese-br",
-        "code" => "br", # TO DO: Check; or is it br-nativo?
+        "code" => "br",
         "legacy_code" => "br-abnt2"
       },
       { "description" => _("Portuguese (Brazil -- US accents)"),
         "alias" => "portugese-br-usa",
-        "code" => "br-nativo-us", # TO DO: Check; unsure
+        "code" => "br-nativo-us",
         "legacy_code" => "us-acentos"
       },
       { "description" => _("Greek"),
         "alias" => "greek",
         # Left-shift+Alt switches layouts
         # Windows (Super) is a Greek-shift
-        "code" => "gr"  # TO DO: No gr* or he* or el* found
+        "code" => "gr"  # MISSING (also no "he" ("Hellenic")
+        # No different legacy_code
       },
       { "description" => _("Dutch"),
         "alias" => "dutch",
-        "code" => "nl" # TO DO: Or is it nl-std?
+        "code" => "nl"
+        # No different legacy_code
       },
       { "description" => _("Danish"),
         "alias" => "danish",
@@ -238,7 +240,7 @@ class Keyboards
       },
       { "description" => _("Croatian"),
         "alias" => "croatian",
-        "code" => "hr", #
+        "code" => "hr",
         "legacy_code" => "croat"
       },
       { "description" => _("Japanese"),
@@ -256,7 +258,7 @@ class Keyboards
         "alias" => "dvorak",
         # Beware, Dvorak is completely different from QWERTY;
         # see also https://en.wikipedia.org/wiki/Dvorak_keyboard_layout
-        "code" => "us-dvorak", # TO DO: There are 30 ones with ??-dvorak, but no generic dvorak
+        "code" => "us-dvorak",
         "legacy_code" => "dvorak"
       },
       { "description" => _("Icelandic"),
@@ -268,11 +270,11 @@ class Keyboards
       { "description" => _("Ukrainian"),
         "alias" => "ukrainian",
         # AltGr or Right-Ctrl switch layouts
-        "code" => "ua-utf" # TO DO: no ua-* or similar
+        "code" => "ua-utf" # MISSING: no ua-* or similar
       },
       { "description" => _("Khmer"),
         "alias" => "khmer",
-        "code" => "khmer" # TO DO: No hk-* or khmer or similar
+        "code" => "khmer" # MISSING: No hk-* or khmer or similar
       },
       { "description" => _("Korean"),
         "alias" => "korean",
@@ -286,7 +288,7 @@ class Keyboards
       { "description" => _("Tajik"),
         "alias" => "tajik",
         # AltGr switches layouts
-        "code" => "tj_alt-UTF8" # TO DO: No xkb/tj* or similar
+        "code" => "tj_alt-UTF8" # MISSING: No tj* or similar
       },
       { "description" => _("Traditional Chinese"),
         "alias" => "taiwanese",
