@@ -63,7 +63,7 @@ describe Y2Keyboard::Strategies::SystemdStrategy do
 
   describe "#current_layout" do
     it "returns the current used keyboard layout code" do
-      current_selected_layout_code = "uk"
+      current_selected_layout_code = "gb"
       given_layouts(["es", current_selected_layout_code, "us"])
       given_a_current_layout(current_selected_layout_code)
 

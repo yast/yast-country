@@ -95,9 +95,9 @@ module Yast
 
     # Read installed keyboard settings.
     def Read
-      # If not in initial mode
       if !Stage.initial || Mode.live_installation
-        @curr_kbd = Keyboards.alias(@systemd_strategy.current_layout())
+        curr_code = ConvertLegacyKeymapCode(@systemd_strategy.current_layout())
+        @curr_kbd = Keyboards.alias(curr_code)
         if @curr_kbd.nil?
           log.warn "Unsupported keymap #{@systemd_strategy.current_layout()}."
           @curr_kbd = ""
@@ -119,6 +119,22 @@ module Yast
     # Set to modified
     def SetModified
       @modified = true
+    end
+
+    # Convert a legacy keymap code to the corresponding new one. Leave it
+    # unchanged if it's not a known legacy keymap.
+    #
+    # @param [String] kb_code keymap code to check and/or change
+    #
+    # @return [String] changed keymap code
+    #
+    def ConvertLegacyKeymapCode(kb_code)
+      return kb_code unless Keyboards.legacy_code?(kb_code)
+
+      new_kb_code = Keyboards.legacy_replacement(kb_code)
+      log.info("Changing obsolete legacy keymap code '#{kb_code}' to '#{new_kb_code}'")
+      Keyboard.SetModified
+      new_kb_code
     end
 
     # Set current data into the installed system.
@@ -248,12 +264,12 @@ module Yast
     end
 
 
-    # Set the keayboard layout according to given language
+    # Set the keyboard layout according to given language
     # @param  [String] language e.g. "en"
     def SetKeyboardForLanguage(lang)
-      lkbd = GetKeyboardForLanguage(lang, "english-us")
-      log.info("language #{lang} proposed keyboard #{lkbd}")
-      Set(lkbd) if lkbd != ""
+      lang_kbd = GetKeyboardForLanguage(lang, "english-us")
+      log.info("language #{lang} proposed keyboard #{lang_kbd}")
+      Set(lang_kbd) if lang_kbd != ""
     end
 
     # Set the current keyboard as default
@@ -283,6 +299,8 @@ module Yast
         keyboard = GetKeyboardForLanguage(settings["language"], keyboard)
       end
 
+      keyboard = ConvertLegacyKeymapCode(keyboard)
+
       # Checking if the keymap exists. Either it is the real keymap name
       # or an alias.
       if !Keyboards.code(keyboard)
@@ -290,7 +308,7 @@ module Yast
         checked_keyboard = keyboard
         keyboard = Keyboards.alias(checked_keyboard)
         if !keyboard
-          # TRANSLATORS: the "%s" is the kaymap name
+          # TRANSLATORS: "%s" is the keymap name
           Report.Warning(_("Cannot find keymap: %s. Taking default one.") % checked_keyboard)
           return false
         end

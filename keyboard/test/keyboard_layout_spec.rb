@@ -28,7 +28,7 @@ describe Y2Keyboard::KeyboardLayout do
     subject(:all_layouts) { keyboard_layout.all }
 
     it "returns a lists of keyboard layouts" do
-      layout_codes = ["es", "fr-latin1", "us", "uk"]
+      layout_codes = ["es", "fr-latin1", "us", "gb"]
       set_up_keyboard_layout_with(layout_codes, layout_definitions)
 
       expect(all_layouts).to be_an(Array)
@@ -52,7 +52,7 @@ describe Y2Keyboard::KeyboardLayout do
     end
 
     it "use layout definitions to create keyboard layout with description" do
-      available_layout_codes = ["es", "fr-latin1", "us", "uk"]
+      available_layout_codes = ["es", "fr-latin1", "us", "gb"]
       set_up_keyboard_layout_with(available_layout_codes, layout_definitions)
 
       layout_definitions.each do |definition|

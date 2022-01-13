@@ -37,8 +37,11 @@ describe "Yast::Keyboard" do
   end
 
   describe "#Read" do
-    it "sets the current keyboard" do
+    before do
       allow(Yast::Stage).to receive(:initial).and_return false
+    end
+
+    it "sets the current keyboard" do
       allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
         to receive(:current_layout).and_return("gb")
       subject.Read
@@ -46,12 +49,18 @@ describe "Yast::Keyboard" do
     end
 
     it "sets empty current keyboard for unsupported keyboard (bsc#1159286)" do
-      allow(Yast::Stage).to receive(:initial).and_return false
       # something usable for localectl but not in our data
       allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
         to receive(:current_layout).and_return("lt-lekpa")
       subject.Read
       expect(subject.current_kbd).to eq("")
+    end
+
+    it "converts a legacy keymap code to a current one" do
+      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
+        to receive(:current_layout).and_return("fr-latin1")
+      subject.Read
+      expect(subject.current_kbd).to eq("french")
     end
   end
 
@@ -188,7 +197,7 @@ describe "Yast::Keyboard" do
   describe "#SetKeyboardDefault" do
     before do
       allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-        to receive(:current_layout).and_return("uk")
+        to receive(:current_layout).and_return("gb")
     end
 
     it "sets keyboard default to current keyboard" do
@@ -231,7 +240,7 @@ describe "Yast::Keyboard" do
   describe "#Import" do
     before do
       allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-        to receive(:current_layout).and_return("uk")
+        to receive(:current_layout).and_return("dk")
     end
 
     context "data comes from language settings" do
@@ -252,6 +261,18 @@ describe "Yast::Keyboard" do
       it "sets the alias name" do
         expect(subject).to receive(:Set).with("spanish")
         subject.Import({"keymap" => "es"}, :keyboard)
+      end
+    end
+
+    context "keymap value is a legacy keymap" do
+      before do
+        allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
+          to receive(:current_layout).and_return("no")
+      end
+
+      it "converts the legacy keymap code to a current one" do
+        expect(subject).to receive(:Set).with("french")
+        subject.Import({"keymap" => "fr-latin1"}, :keyboard)
       end
     end
 
