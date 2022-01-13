@@ -16,7 +16,7 @@ we included a kbd-legacy subpackage, but $reasons ...
 | Dropped keyboard map | Selected replacement | Other options | Note                    |
 | -------------------- | -------------------- | ------------- | ---------               |
 | uk                   | gb                   |               |                         |
-| de-latin1-nodeadkeys | at-nodeadkeys        |               |                         |
+| de-latin1-nodeadkeys | de-nodeadkeys        |               |                         |
 | de-latin1            | de                   |               |                         |
 | sg-latin1            | ch                   |               |                         |
 | fr-latin1            | fr                   |               |                         |
@@ -24,12 +24,10 @@ we included a kbd-legacy subpackage, but $reasons ...
 | cf                   | ca-fr-legacy         |               |                         |
 | cn-latin1            | ca-multi             |               |                         |
 | la-latin1            | latam                |               |                         |
-| es-cp850             | es-winkeys           |               |                         |
-| ir                   | ir-ku                |               | was symlink to 'us'     |
+| es-cp850             | -- (DROPPED)         |               | DROPPED                 |
 | pt-latin1            | pt                   |               |                         |
 | br-abnt2             | br                   | br-nativo     |                         |
 | us-acentos           | br-nativo-us         |               |                         |
-|                      | gr                   |               | not found?              |
 | nl                   | nl                   | nl-std        |                         |
 | dk-latin1            | dk                   |               |                         |
 | no-latin1            | no                   |               |                         |
@@ -62,4 +60,25 @@ we included a kbd-legacy subpackage, but $reasons ...
 
 
 
+## Missing at This Time
 
+Right now, there are a number of keyboard maps that are not (yet) available in
+the new _kbd_ package (i.e. below `/usr/share/kbd/xkb`):
+
+
+| Missing keyboard map | Selected replacement | Other options | Note                    |
+| -------------------- | -------------------- | ------------- | ---------               |
+| ir                   |                      |               | was symlink to 'us'     |
+| gr                   |                      |               | none found              |
+| ua-utf               |                      |               | none found              |
+| khmer                |                      |               | none found              |
+| arabic               |                      |               | none found              |
+| tj_alt-UTF8          |                      |               | none found              |
+
+
+Those keyboard maps are still there in the list, but trying to use them will
+fail if the _kbd-legacy_ package is not available. The plan is that it will not
+be installed by default (and no longer be in the inst-sys) anymore.
+
+But on the installed system, a user will still be able to install it and start
+`yast keyboard` again to use those keyboard maps.
