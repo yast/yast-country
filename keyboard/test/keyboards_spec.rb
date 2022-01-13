@@ -135,7 +135,6 @@ describe "Keyboards" do
       current_codes = subject.all_keyboards.map { |kb| kb["code"] }
       legacy_codes = subject.all_keyboards.map { |kb| kb["legacy_code"] }.compact
       ambiguous = current_codes & legacy_codes
-      xx = 42
       expect(ambiguous).to be_empty, "legacy_code cannot be a current code: #{ambiguous}"
     end
   end
