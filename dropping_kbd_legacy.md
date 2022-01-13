@@ -51,10 +51,6 @@ we included a kbd-legacy subpackage, but $reasons ...
 | dvorak               | us-dvorak            |               |                         |
 | is-latin1            | is                   |               |                         |
 | ua-utf               | ua-utf               |               | no ua*                  |
-| khmer                | khmer                |               | was symlink to 'us'     |
-| korean               | kr                   |               | was symlink to 'us'     |
-| arabic               | iq-ku_ara            |               | was symlink to 'us'     |
-| tj_alt-UTF8          | tj_alt-UTF8          |               | no?                     |
 | cn                   | cm                   |               | cn symlink              |
 | us-acentos           | us-intl              |               |                         |
 
