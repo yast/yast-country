@@ -40,7 +40,7 @@ we included a kbd-legacy subpackage, but $reasons ...
 | slovene              | si                   |               |                         |
 | hu                   | hu                   | hu-standard   |                         |
 | Pl02                 | pl                   |               |                         |
-| ruwin_alt-UTF-8      | ru-cv_latin          |               | noxkb/ru, check         |
+| ruwin_alt-UTF-8      | ru-cv_latin          |               | nox kb/ru, check        |
 | sr-cy                | ba                   | rs-latin      | was symlink to sr-latin |
 | et                   | ee                   |               |                         |
 | lt.baltic            | lt                   |               |                         |
@@ -50,8 +50,6 @@ we included a kbd-legacy subpackage, but $reasons ...
 | be-latin1            | be                   |               |                         |
 | dvorak               | us-dvorak            |               |                         |
 | is-latin1            | is                   |               |                         |
-| ua-utf               | ua-utf               |               | no ua*                  |
-| cn                   | cm                   |               | cn symlink              |
 | us-acentos           | us-intl              |               |                         |
 
 
