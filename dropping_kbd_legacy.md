@@ -15,41 +15,41 @@ we included a kbd-legacy subpackage, but $reasons ...
 
 | Dropped keyboard map | Selected replacement | Other options | Note                    |
 | -------------------- | -------------------- | ------------- | ---------               |
-| uk                   | gb                   |               |                         |
-| de-latin1-nodeadkeys | de-nodeadkeys        |               |                         |
-| de-latin1            | de                   |               |                         |
-| sg-latin1            | ch                   |               |                         |
-| fr-latin1            | fr                   |               |                         |
-| fr_CH-latin1         | ch-fr                |               |                         |
+| be-latin1            | be                   |               |                         |
+| br-abnt2             | br                   | br-nativo     |                         |
 | cf                   | ca-fr-legacy         |               |                         |
 | cn-latin1            | ca-multi             |               |                         |
-| la-latin1            | latam                |               |                         |
-| es-cp850             | -- (DROPPED)         |               | DROPPED                 |
-| pt-latin1            | pt                   |               |                         |
-| br-abnt2             | br                   | br-nativo     |                         |
-| us-acentos           | br-nativo-us         |               |                         |
-| nl                   | nl                   | nl-std        |                         |
-| dk-latin1            | dk                   |               |                         |
-| no-latin1            | no                   |               |                         |
-| sv-latin1            | se                   |               |                         |
-| fi                   | fi-classic           |               | no xkb/fi, unsure       |
-| cz-us-qwertz         | cz                   |               |                         |
-| cz-lat2-us           | cz-lat2-us           |               | (qwerty, check)         |
-| sk-qwertz            | sk                   |               |                         |
-| sk-qwerty            | sk-qwerty            |               |                         |
-| slovene              | si                   |               |                         |
-| hu                   | hu                   | hu-standard   |                         |
-| Pl02                 | pl                   |               |                         |
-| ruwin_alt-UTF-8      | ru-cv_latin          |               | nox kb/ru, check        |
-| sr-cy                | ba                   | rs-latin      | was symlink to sr-latin |
-| et                   | ee                   |               |                         |
-| lt.baltic            | lt                   |               |                         |
-| trq                  | tr                   |               |                         |
 | croat                | hr                   |               |                         |
-| jp106                | jp                   |               |                         |
-| be-latin1            | be                   |               |                         |
+| cz-lat2-us           | cz-lat2-us           |               | (qwerty, check)         |
+| cz-us-qwertz         | cz                   |               |                         |
+| de-latin1            | de                   |               |                         |
+| de-latin1-nodeadkeys | de-nodeadkeys        |               |                         |
+| dk-latin1            | dk                   |               |                         |
 | dvorak               | us-dvorak            |               |                         |
+| es-cp850             | -- (DROPPED)         |               | DROPPED                 |
+| et                   | ee                   |               |                         |
+| fi                   | fi-classic           |               | no xkb/fi, unsure       |
+| fr-latin1            | fr                   |               |                         |
+| fr_CH-latin1         | ch-fr                |               |                         |
+| hu                   | hu                   | hu-standard   |                         |
 | is-latin1            | is                   |               |                         |
+| jp106                | jp                   |               |                         |
+| la-latin1            | latam                |               |                         |
+| lt.baltic            | lt                   |               |                         |
+| nl                   | nl                   | nl-std        |                         |
+| no-latin1            | no                   |               |                         |
+| Pl02                 | pl                   |               |                         |
+| pt-latin1            | pt                   |               |                         |
+| ruwin_alt-UTF-8      | ru-cv_latin          |               | nox kb/ru, check        |
+| sg-latin1            | ch                   |               |                         |
+| sk-qwerty            | sk-qwerty            |               |                         |
+| sk-qwertz            | sk                   |               |                         |
+| slovene              | si                   |               |                         |
+| sr-cy                | ba                   | rs-latin      | was symlink to sr-latin |
+| sv-latin1            | se                   |               |                         |
+| trq                  | tr                   |               |                         |
+| uk                   | gb                   |               |                         |
+| us-acentos           | br-nativo-us         |               |                         |
 | us-acentos           | us-intl              |               |                         |
 
 
@@ -62,12 +62,12 @@ the new _kbd_ package (i.e. below `/usr/share/kbd/xkb`):
 
 | Missing keyboard map | Selected replacement | Other options | Note                    |
 | -------------------- | -------------------- | ------------- | ---------               |
-| ir                   |                      |               | was symlink to 'us'     |
-| gr                   |                      |               | none found              |
-| ua-utf               |                      |               | none found              |
-| khmer                |                      |               | none found              |
 | arabic               |                      |               | none found              |
+| gr                   |                      |               | none found              |
+| ir                   |                      |               | was symlink to 'us'     |
+| khmer                |                      |               | none found              |
 | tj_alt-UTF8          |                      |               | none found              |
+| ua-utf               |                      |               | none found              |
 
 
 Those keyboard maps are still there in the list, but trying to use them will
