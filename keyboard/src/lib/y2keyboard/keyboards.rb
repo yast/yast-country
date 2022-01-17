@@ -46,6 +46,13 @@ class Keyboards
     # from /usr/share/kbd/keymaps/xkb, no longer kbd-legacy
     # from /usr/share/kbd/keymaps/{amiga,atari,i386,include,mac,sun}
     #
+    # "not_in_xkb": the xkb layout has no Latin letters and is therefore
+    # excluded from the console conversion. Dropping kbd-legacy would break
+    # these languages.
+    #
+    # "us_symlink": it has always been just a symlink to the us layout.
+    # bsc#1194609 moves the symlinks to kbd.rpm
+    #
     # See also  man xkeyboard-config
     [
       { "description" => _("English (US)"),
@@ -123,8 +130,7 @@ class Keyboards
       },
       { "description" => _("Persian"),
         "alias" => "persian",
-        # This does not show up in the dialog and also not in "localectl list-keymaps"
-        "code" => "ir", # MISSING; it might also be "fa" ("Farsi" -> "Persian")
+        "code" => "ir", # us_symlink
         "suggested_for_lang" => ["fa_IR"]
       },
       { "description" => _("Portuguese"),
@@ -146,7 +152,7 @@ class Keyboards
         "alias" => "greek",
         # Left-shift+Alt switches layouts
         # Windows (Super) is a Greek-shift
-        "code" => "gr"  # MISSING (also no "he" ("Hellenic")
+        "code" => "gr"  # not_in_xkb
         # No different legacy_code
       },
       { "description" => _("Dutch"),
@@ -202,7 +208,7 @@ class Keyboards
       },
       { "description" => _("Hungarian"),
         "alias" => "hungarian",
-        "code" => "hu" # TO DO: Check: Or is it hu-standard?
+        "code" => "hu"
         # No different legacy_code
       },
       { "description" => _("Polish"),
@@ -212,15 +218,16 @@ class Keyboards
       },
       { "description" => _("Russian"),
         "alias" => "russian",
-        "code" => "ru-cv_latin", # TO DO: Check; only one for Russian?! No xkb/ru.map.gz?
-        "legacy_code" => "ruwin_alt-UTF-8",
+        "code" => "ruwin_alt-UTF-8", # not_in_xkb
         "suggested_for_lang" => ["ru", "ru_RU.KOI8-R"]
       },
       { "description" => _("Serbian"),
         "alias" => "serbian",
-        # "code" => "rs-latin", # TO DO: Very unsure; should it be rs-latinunicode?
-        "code" => "ba", # ba: Bosnian; xkb/rs-latin.map.gz is a symlink to xkb/ba.map.gz
-        "legacy_code" => "sr-cy", # was that cyrillic? we don't have xkb/rs-yz.map.gz
+        # this is almost a case of not_in_xkb: sr-cy has a primary Latin
+        # layout and a secondary Cyrillic one. Fortunately, unlike the other
+        # Cyrillic languages, there is xkb/rs-latin
+        "code" => "rs-latin",
+        "legacy_code" => "sr-cy",
         "suggested_for_lang" => ["sr_YU"]
       },
       { "description" => _("Estonian"),
@@ -270,34 +277,34 @@ class Keyboards
       { "description" => _("Ukrainian"),
         "alias" => "ukrainian",
         # AltGr or Right-Ctrl switch layouts
-        "code" => "ua-utf" # MISSING: no ua-* or similar
+        "code" => "ua-utf" # not_in_xkb
       },
       { "description" => _("Khmer"),
         "alias" => "khmer",
-        "code" => "khmer" # MISSING: No hk-* or khmer or similar
+        "code" => "khmer" # us_symlink
       },
       { "description" => _("Korean"),
         "alias" => "korean",
-        "code" => "kr",
+        "code" => "kr", # xkb/kr includes a us layout
         "legacy_code" => "korean"
       },
       { "description" => _("Arabic"),
         "alias" => "arabic",
-        "code" => "arabic" # MISSING: no arabic or ar*
+        "code" => "arabic" # us_symlink
       },
       { "description" => _("Tajik"),
         "alias" => "tajik",
         # AltGr switches layouts
-        "code" => "tj_alt-UTF8" # MISSING: No tj* or similar
+        "code" => "tj_alt-UTF8" # not_in_xkb
       },
       { "description" => _("Traditional Chinese"),
         "alias" => "taiwanese",
-        "code" => "tw"
+        "code" => "tw" # us-based
         # No different legacy_code
       },
       { "description" => _("Simplified Chinese"),
         "alias" => "chinese",
-        "code" => "cn"
+        "code" => "cn" # us-based
         # No different legacy_code
       },
       { "description" => _("Romanian"),

@@ -39,12 +39,11 @@ legacy ones to the ones generated from xkb.
 | no-latin1            | no                   |               |                         |
 | Pl02                 | pl                   |               |                         |
 | pt-latin1            | pt                   |               |                         |
-| ruwin_alt-UTF-8      | ru-cv_latin          |               | nox kb/ru, check        |
 | sg-latin1            | ch                   |               |                         |
 | sk-qwerty            | sk-qwerty            |               |                         |
 | sk-qwertz            | sk                   |               |                         |
 | slovene              | si                   |               |                         |
-| sr-cy                | ba                   | rs-latin      | was symlink to sr-latin |
+| sr-cy                | rs-latin             |               | Serbian, Latin only     |
 | sv-latin1            | se                   |               |                         |
 | trq                  | tr                   |               |                         |
 | uk                   | gb                   |               |                         |
@@ -52,26 +51,34 @@ legacy ones to the ones generated from xkb.
 | us-acentos           | us-intl              |               | US International        |
 
 
+## Legacy being better
 
-## Missing at This Time
+Some languages have a need to switch between their native non-Latin script and
+the Latin script, and have legacy keymaps which combine these two scripts in a
+single keymap.
 
-Right now, there are a number of keyboard maps that are not (yet) available in
-the new _kbd_ package (i.e. below `/usr/share/kbd/xkb`):
+At the same time, their xkb layout contains no Latin letters, relying on being
+able to switch to another Latin layout. Their xkb layouts are not converted
+for console.
 
+We're using `localectl set-keymap` to set both the console and X11 keymaps at
+once, so removing kbd-legacy would break these languages als in X11.
 
-| Missing keyboard map | Selected replacement | Other options | Note                    |
-| -------------------- | -------------------- | ------------- | ---------               |
-| arabic               |                      |               | none found              |
-| gr                   |                      |               | none found              |
-| ir                   |                      |               | was symlink to 'us'     |
-| khmer                |                      |               | none found              |
-| tj_alt-UTF8          |                      |               | none found              |
-| ua-utf               |                      |               | none found              |
+| Legacy keyboard map  | Selected replacement | Other options | Note           |
+| -------------------- | -------------------- | ------------- | ---------      |
+| gr                   | ?                    |               | Greek          |
+| ruwin_alt-UTF-8      | ?                    |               | Russian        |
+| tj_alt-UTF8          | ?                    |               | Tajik          |
+| ua-utf               | ?                    |               | Ukrainian      |
 
+## Fallback to the US layout
 
-Those keyboard maps are still there in the list, but trying to use them will
-fail if the _kbd-legacy_ package is not available. The plan is that it will not
-be installed by default (and no longer be in the inst-sys) anymore.
+Some languages have never had a native console layout. Their console keymaps
+are simply a symlink to the `us` keymap:
 
-But on the installed system, a user will still be able to install it and start
-`yast keyboard` again to use those keyboard maps.
+- arabic
+- ir (Iran, Persian/Farsi)
+- khmer
+
+These layouts are moving from kbd-legacy.rpm to kbd.rpm;
+[bsc#1194609](https://bugzilla.suse.com/show_bug.cgi?id=1194609).
