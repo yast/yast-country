@@ -27,7 +27,7 @@ legacy ones to the ones generated from xkb.
 | dvorak               | us-dvorak            |               |                         |
 | es-cp850             | -- (DROPPED)         |               | Covered by `es` well enough |
 | et                   | ee                   |               |                         |
-| fi                   | fi-classic           |               | no xkb/fi, unsure       |
+| fi                   | fi-kotoistus         |               |                         |
 | fr-latin1            | fr                   |               |                         |
 | fr_CH-latin1         | ch-fr                |               |                         |
 | hu                   | hu                   | hu-standard   |                         |

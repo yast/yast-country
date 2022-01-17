@@ -172,7 +172,7 @@ class Keyboards
       },
       { "description" => _("Finnish"),
         "alias" => "finnish",
-        "code" => "fi-classic", # TO DO: VERY unsure; check! No xkb/fi.map.gz
+        "code" => "fi-kotoistus",
         "legacy_code" => "fi"
       },
       { "description" => _("Czech"),
