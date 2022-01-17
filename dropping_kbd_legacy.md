@@ -20,7 +20,7 @@ we included a kbd-legacy subpackage, but $reasons ...
 | cf                   | ca-fr-legacy         |               |                         |
 | cn-latin1            | ca-multi             |               |                         |
 | croat                | hr                   |               |                         |
-| cz-lat2-us           | cz-lat2-us           |               | (qwerty, check)         |
+| cz-lat2-us           | cz-qwerty            |               |                         |
 | cz-us-qwertz         | cz                   |               |                         |
 | de-latin1            | de                   |               |                         |
 | de-latin1-nodeadkeys | de-nodeadkeys        |               |                         |

@@ -182,8 +182,8 @@ class Keyboards
       },
       { "description" => _("Czech (qwerty)"),
         "alias" => "czech-qwerty",
-        "code" => "cz-lat2-us"
-        # No different legacy_code
+        "code" => "cz-qwerty",
+        "legacy_code" => "cz-lat2-us"
       },
       { "description" => _("Slovak"),
         "alias" => "slovak",
