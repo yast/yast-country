@@ -5,13 +5,12 @@ Dropping kbd-legacy.rpm
 kbd.rpm is a package including keyboard maps for the text console (not the
 graphical envirnoment like X or Wayland)
 
-since 2015 these console keyboard maps have been generated from the X keyboard
-maps pckaged in xkeyboard-config.rpm. We have also included the original
-console maps in the kbd-legacy subpackage
+Since 2015 these console keyboard maps have been generated from the X keyboard
+maps packaged in xkeyboard-config.rpm. We have also included the original
+console maps in the kbd-legacy subpackage.
 
-until 2021 (openSUSE XX.X, SLE XX SP X)
-we included a kbd-legacy subpackage, but $reasons ...
-
+Since January 2022 (SLE15-SP4)  we have switched the console keymaps from the
+legacy ones to the ones generated from xkb.
 
 | Dropped keyboard map | Selected replacement | Other options | Note                    |
 | -------------------- | -------------------- | ------------- | ---------               |
@@ -26,7 +25,7 @@ we included a kbd-legacy subpackage, but $reasons ...
 | de-latin1-nodeadkeys | de-nodeadkeys        |               |                         |
 | dk-latin1            | dk                   |               |                         |
 | dvorak               | us-dvorak            |               |                         |
-| es-cp850             | -- (DROPPED)         |               | DROPPED                 |
+| es-cp850             | -- (DROPPED)         |               | Covered by `es` well enough |
 | et                   | ee                   |               |                         |
 | fi                   | fi-classic           |               | no xkb/fi, unsure       |
 | fr-latin1            | fr                   |               |                         |
@@ -49,8 +48,8 @@ we included a kbd-legacy subpackage, but $reasons ...
 | sv-latin1            | se                   |               |                         |
 | trq                  | tr                   |               |                         |
 | uk                   | gb                   |               |                         |
-| us-acentos           | br-nativo-us         |               |                         |
-| us-acentos           | us-intl              |               |                         |
+| us-acentos           | br-nativo-us         |               | Brazilian               |
+| us-acentos           | us-intl              |               | US International        |
 
 
 
