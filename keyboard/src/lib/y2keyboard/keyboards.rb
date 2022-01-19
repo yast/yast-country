@@ -268,6 +268,12 @@ class Keyboards
         "code" => "us-dvorak",
         "legacy_code" => "dvorak"
       },
+      { "description" => _("Dvorak (programmer)"),
+        "alias" => "dvp",
+        # Beware, Dvorak is completely different from QWERTY;
+        # see also https://en.wikipedia.org/wiki/Dvorak_keyboard_layout
+        "code" => "us-dvp"
+      },
       { "description" => _("Icelandic"),
         "alias" => "icelandic",
         "code" => "is",

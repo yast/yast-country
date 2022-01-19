@@ -4,6 +4,7 @@ Wed Jan 19 09:27:28 UTC 2022 - Martin Vidner <mvidner@suse.com>
 - Switch console keyboard layouts to match the X11 ones
   (xkb, from xkeyboard-config.rpm), to prepare for
   kbd-legacy.rpm going away (jsc#SLE-21107).
+- Add programmer Dvorak keyboard layout.
 - 4.4.8
 
 -------------------------------------------------------------------
