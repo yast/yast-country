@@ -48,7 +48,7 @@ module KeyboardSpecHelper
   def layout_definitions
     [
       { "description" => "English (US)", "code" => "us" },
-      { "description" => "English (UK)", "code" => "uk" },
+      { "description" => "English (UK)", "code" => "gb" },
       { "description" => "French", "code" => "fr-latin1" },
       { "description" => "Spanish", "code" => "es" }
     ]
