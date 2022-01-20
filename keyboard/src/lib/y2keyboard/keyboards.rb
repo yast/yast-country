@@ -34,6 +34,10 @@ class Keyboards
   #   - code [String] keyboard name used by kbd, and
   #       present in /usr/share/systemd/kbd-model-map
   #       (test/data/keyboard_test.rb checks this)
+  #   - legacy_code [String] old keyboard name used by kbd-legacy,
+  #       present here so it can be automatically replaced if found
+  #       in existing configurations (upgrade and AutoYaST profiles);
+  #       see also legacy_replacement()
   #   - suggested_for_lang [Array<String>] optional, language codes
   #       to suggest this layout for
   def self.all_keyboards
