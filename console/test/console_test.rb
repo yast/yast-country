@@ -19,7 +19,7 @@ describe "Yast::Console" do
     let(:language) { "es_ES" }
     let(:os_release_id) { "sles" }
     # read it from the system, it might be different in Leap and Tumbleweed
-    let(:default_encoding) { `LC_CTYPE=#{language} locale charmap`.strip }
+    let(:default_encoding) { `LC_ALL=#{language} LC_CTYPE=#{language} locale charmap`.strip }
 
     before do
       allow(Yast::Linuxrc).to receive(:braille).and_return(braille)
