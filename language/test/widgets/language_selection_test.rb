@@ -23,6 +23,7 @@ describe "Y2Country::Widgets::LanguageSelection" do
     allow(Yast::Language).to receive(:GetLanguageItems)
     allow(Yast::Language).to receive(:GetLanguageItems)
       .with(:first_screen).and_return(LANGUAGE_ITEMS)
+    allow(Yast::WFM).to receive(:SetLanguage)
   end
 
   shared_examples "switch language" do |method|
