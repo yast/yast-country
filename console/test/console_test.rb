@@ -18,6 +18,8 @@ describe "Yast::Console" do
     let(:full_language) { "es_ES.UTF-8" }
     let(:language) { "es_ES" }
     let(:os_release_id) { "sles" }
+    # read it from the system, it might be different in Leap and Tumbleweed
+    let(:default_encoding) { `LC_CTYPE=#{language} locale charmap`.strip }
 
     before do
       allow(Yast::Linuxrc).to receive(:braille).and_return(braille)
@@ -31,7 +33,7 @@ describe "Yast::Console" do
     end
 
     it "returns the encoding" do
-      expect(Yast::Console.SelectFont(language)).to eq("ISO-8859-1")
+      expect(Yast::Console.SelectFont(language)).to eq(default_encoding)
     end
 
     context "when no console font is available" do
@@ -41,7 +43,7 @@ describe "Yast::Console" do
       end
 
       it "returns the encoding" do
-        expect(Yast::Console.SelectFont(language)).to eq("ISO-8859-1")
+        expect(Yast::Console.SelectFont(language)).to eq(default_encoding)
       end
     end
 
