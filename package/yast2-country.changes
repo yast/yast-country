@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Jan 28 07:23:35 UTC 2022 - Dirk Müller <dmueller@suse.com>
+
+- add glibc-locale dependency for testsuite
+- 4.4.9
+
+-------------------------------------------------------------------
 Wed Jan 19 09:27:28 UTC 2022 - Martin Vidner <mvidner@suse.com>
 
 - Switch console keyboard layouts to match the X11 ones
