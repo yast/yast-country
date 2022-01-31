@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Mon Jan 31 14:49:03 UTC 2022 - Ladislav Slezák <lslezak@suse.cz>
+
+- Fixed passing multiple arguments to "localectl set-locale"
+  (bsc#1177863)
+- 4.4.11
+
+-------------------------------------------------------------------
 Mon Jan 31 13:48:31 UTC 2022 - Ladislav Slezák <lslezak@suse.cz>
 
 - Unify YaST module mocking in unit tests (related to bsc#1194784)
