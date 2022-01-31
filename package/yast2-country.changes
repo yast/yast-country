@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Mar 15 08:25:06 UTC 2022 - Ladislav Slezák <lslezak@suse.cz>
+
+- Fixed passing multiple arguments to "localectl set-locale"
+  (bsc#1177863)
+- 4.3.19
+
+-------------------------------------------------------------------
 Thu Oct 21 08:45:47 UTC 2021 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Use official China timezone Asia/Shanghai (bsc#1187857)
