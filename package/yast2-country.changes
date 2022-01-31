@@ -1,7 +1,13 @@
 -------------------------------------------------------------------
-Fri Jan 21 08:27:16 UTC 2022 - Ladislav Slezák <lslezak@suse.cz>
+Mon Jan 31 13:48:31 UTC 2022 - Ladislav Slezák <lslezak@suse.cz>
 
 - Unify YaST module mocking in unit tests (related to bsc#1194784)
+- 4.4.10
+
+-------------------------------------------------------------------
+Fri Jan 28 07:23:35 UTC 2022 - Dirk Müller <dmueller@suse.com>
+
+- add glibc-locale dependency for testsuite
 - 4.4.9
 
 -------------------------------------------------------------------
