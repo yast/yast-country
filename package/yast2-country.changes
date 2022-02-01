@@ -1,7 +1,7 @@
 -------------------------------------------------------------------
 Fri Jan 28 07:23:35 UTC 2022 - Dirk Müller <dmueller@suse.com>
 
-- add glibc-locale dependency for testsuite
+- add glibc-locale dependency for testsuite (bsc#1195390)
 - 4.4.9
 
 -------------------------------------------------------------------
