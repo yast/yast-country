@@ -138,17 +138,17 @@ class Keyboards
         "suggested_for_lang" => ["fa_IR"]
       },
       { "description" => _("Portuguese"),
-        "alias" => "portugese",
+        "alias" => "portuguese",
         "code" => "pt",
         "legacy_code" => "pt-latin1"
       },
       { "description" => _("Portuguese (Brazil)"),
-        "alias" => "portugese-br",
+        "alias" => "portuguese-br",
         "code" => "br",
         "legacy_code" => "br-abnt2"
       },
       { "description" => _("Portuguese (Brazil -- US accents)"),
-        "alias" => "portugese-br-usa",
+        "alias" => "portuguese-br-usa",
         "code" => "br-nativo-us",
         "legacy_code" => "us-acentos"
       },
