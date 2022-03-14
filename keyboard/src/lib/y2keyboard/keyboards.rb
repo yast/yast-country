@@ -101,7 +101,7 @@ class Keyboards
       },
       { "description" => _("French (Canada)"),
         "alias" => "french-ca",
-        "code" => "ca-fr-legacy", # TO DO: Or just ca? Check!
+        "code" => "ca", # Not ca-fr-legacy (bsc#1196891)
         "legacy_code" => "cf"
       },
       { "description" => _("Canadian (Multilingual)"),
