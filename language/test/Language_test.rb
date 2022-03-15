@@ -205,6 +205,17 @@ describe "Yast::Language" do
 
         subject.Save
       end
+
+      it "passes the localectl settings as separate arguments" do
+        expect(Yast::Execute).to receive(:locally!) do |args|
+            expect(args[0]).to match(/localectl/)
+            expect(args[1]).to eq("set-locale")
+            # the order does not matter
+            expect(args[2..3].sort).to eq(["LANG=zh_HK.UTF-8", "LC_MESSAGES=zh_TW"])
+          end
+
+        subject.Save
+      end
     end
 
     context "when LC_MESSAGES is zh_TW" do

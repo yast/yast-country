@@ -1445,7 +1445,7 @@ module Yast
       else
         prepare_locale_settings(locale)
 
-        ["/usr/bin/localectl", "set-locale", localectl_args]
+        ["/usr/bin/localectl", "set-locale", *localectl_args]
       end
     end
 
@@ -1497,9 +1497,9 @@ module Yast
 
     # Returns the locale settings as args for localectl
     #
-    # @return [String] a comma separated locale settings string; i.e, LANG=zh_HK,LC_MESAGES=zh_TW
+    # @return [Array<String>] a list of locale settings; e.g. ["LANG=zh_HK.UTF-8", "LC_MESAGES=zh_TW"]
     def localectl_args
-      @localed_conf.map { |k, v| "#{k}=#{v}" }.join(",")
+      @localed_conf.map { |k, v| "#{k}=#{v}" }
     end
 
 
