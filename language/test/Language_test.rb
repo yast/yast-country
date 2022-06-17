@@ -179,6 +179,7 @@ describe "Yast::Language" do
 
         allow(Yast::SCR).to receive(:Write)
         allow(Yast::Execute).to receive(:locally!)
+        allow(Yast::Execute).to receive(:on_target!)
         allow(subject).to receive(:valid_language?).with(language).and_return(true)
 
         subject.Set(language)
@@ -201,13 +202,13 @@ describe "Yast::Language" do
       let(:language) { "zh_HK" }
 
       it "sets LC_MESSAGES to zh_TW" do
-        expect(Yast::Execute).to receive(:locally!).with(array_including(/LC_MESSAGES=zh_TW/))
+        expect(Yast::Execute).to receive(:on_target!).with(array_including(/LC_MESSAGES=zh_TW/))
 
         subject.Save
       end
 
       it "passes the localectl settings as separate arguments" do
-        expect(Yast::Execute).to receive(:locally!) do |args|
+        expect(Yast::Execute).to receive(:on_target!) do |args|
             expect(args[0]).to match(/localectl/)
             expect(args[1]).to eq("set-locale")
             # the order does not matter
@@ -228,7 +229,7 @@ describe "Yast::Language" do
 
       context "and language is not zh_HK" do
         it "cleans LC_MESSAGES" do
-          expect(Yast::Execute).to_not receive(:locally!).with(array_including(/LC_MESSAGES=zh_TW/))
+          expect(Yast::Execute).to_not receive(:on_target!).with(array_including(/LC_MESSAGES=zh_TW/))
 
           subject.Save
         end
@@ -239,7 +240,7 @@ describe "Yast::Language" do
       let(:readonly) { true }
 
       it "sets the default language using localectl" do
-        expect(Yast::Execute).to receive(:locally!)
+        expect(Yast::Execute).to receive(:on_target!)
           .with(array_including(/localectl/, "set-locale", /LANG=en_US/))
 
         subject.Save
@@ -259,7 +260,7 @@ describe "Yast::Language" do
 
     context "when not using the readonly_language feature" do
       it "sets the chosen language using localectl" do
-        expect(Yast::Execute).to receive(:locally!)
+        expect(Yast::Execute).to receive(:on_target!)
           .with(array_including(/localectl/, "set-locale", /LANG=#{language}/))
 
         subject.Save
@@ -279,11 +280,11 @@ describe "Yast::Language" do
 
     context "when the command fails" do
       let(:exception) do
-        Cheetah::ExecutionFailed.new(["localectl"], 1, "stdout", "stderr", "Something went wrong")
+        Cheetah::ExecutionFailed.new([["localectl"]], 1, "stdout", "stderr", "Something went wrong")
       end
 
       before do
-        allow(Yast::Execute).to receive(:locally!).and_raise(exception)
+        allow(Yast::Execute).to receive(:on_target!).and_raise(exception)
       end
 
       it "reports an error" do
