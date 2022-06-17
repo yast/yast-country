@@ -915,18 +915,14 @@ module Yast
       SCR.Write(path(".sysconfig.language.INSTALLED_LANGUAGES"), @languages)
       SCR.Write(path(".sysconfig.language"), nil)
 
-      command = store_locale_command(locale)
-
-      log.info("Making language settings persistent: #{command.join(' ')}")
-
-      Yast::Execute.locally!(command)
+      run_locale_command(locale)
       nil
     rescue Cheetah::ExecutionFailed => e
       log.error "Language configuration not written: #{e.inspect}"
       log.error "stderr: #{e.stderr}"
 
       # TRANSLATORS: the "%s" is replaced by the executed command
-      Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % command.join(' '))
+      Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % e.commands.first.join(' '))
       nil
     end
 
@@ -1430,22 +1426,31 @@ module Yast
       Builtins.getenv("TERM") == "iterm"
     end
 
-    # Returns the command to make language settings persistent
+    # Runs the command to make language settings persistent
     #
     # It is different depending on the stage, since for a not installed system it is needed to use
     # the `systemd-firsrboot` tool, which does not work in a chroot
     #
     # @param locale [String]
+    # @raises [Cheetah::ExecutionFailed] when command failed to run
     #
-    # @return [Array<String>] an array containing the command to be executed
-    def store_locale_command(locale)
+    # @return [String] command that is invoked
+    def run_locale_command(locale)
       if Stage.initial
-        # do use --root option, running in chroot does not work
-        ["/usr/bin/systemd-firstboot", "--root", Installation.destdir, "--locale", locale]
+        # use --root option locally, running in chroot does not work in insts-sys
+        command = ["/usr/bin/systemd-firstboot", "--root", Installation.destdir, "--locale", locale]
+
+        log.info("Making language settings persistent: #{command.join(' ')}")
+
+        Yast::Execute.locally!(command)
       else
         prepare_locale_settings(locale)
 
-        ["/usr/bin/localectl", "set-locale", *localectl_args]
+        command = ["/usr/bin/localectl", "set-locale", *localectl_args]
+
+        log.info("Making language settings persistent: #{command.join(' ')}")
+
+        Yast::Execute.on_target!(command)
       end
     end
 
