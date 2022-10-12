@@ -106,7 +106,7 @@ class Keyboards
       },
       { "description" => _("Canadian (Multilingual)"),
         "alias" => "cn-latin1",
-        "code" => "ca-multi",
+        "code" => "ca-multix",
         "legacy_code" => "cn-latin1",
         "suggested_for_lang" => ["fr_CA"]
       },
