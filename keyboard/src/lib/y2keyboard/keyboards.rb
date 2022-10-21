@@ -104,9 +104,13 @@ class Keyboards
         "code" => "ca", # Not ca-fr-legacy (bsc#1196891)
         "legacy_code" => "cf"
       },
-      { "description" => _("Canadian (Multilingual)"),
+      {
+        # CSA should probably not be translated;
+        # it stands for Canadian Standards Association
+        # https://en.wikipedia.org/wiki/CSA_keyboard
+        "description" => _("Canadian (CSA)"),
         "alias" => "cn-latin1",
-        "code" => "ca-multi",
+        "code" => "ca-multix",
         "legacy_code" => "cn-latin1",
         "suggested_for_lang" => ["fr_CA"]
       },

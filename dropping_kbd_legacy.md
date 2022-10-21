@@ -17,7 +17,7 @@ legacy ones to the ones generated from xkb.
 | be-latin1            | be                   |               |                         |
 | br-abnt2             | br                   | br-nativo     |                         |
 | cf                   | ca-fr-legacy         |               |                         |
-| cn-latin1            | ca-multi             |               |                         |
+| cn-latin1            | ca-multix            |               |                         |
 | croat                | hr                   |               |                         |
 | cz-lat2-us           | cz-qwerty            |               |                         |
 | cz-us-qwertz         | cz                   |               |                         |
