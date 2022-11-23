@@ -695,8 +695,6 @@ module Yast
         )
     end
 
-    # GetExpertValues()
-    #
     # Return the values for the various expert settings in a map
     #
     # @param       -
@@ -707,8 +705,6 @@ module Yast
       { "use_utf8" => @use_utf8 }
     end
 
-    # SetExpertValues()
-    #
     # Set the values of the various expert setting
     #
     # @param [Hash] val     map with new values of expert settings
@@ -725,8 +721,6 @@ module Yast
       nil
     end
 
-    # WfmSetLanguag()
-    #
     # Set the given language in WFM and UI
     #
     # @param       language (could be different from current in CJK case)
@@ -756,8 +750,6 @@ module Yast
     end
 
 
-    # WfmSetLanguag()
-    #
     # Set the current language in WFM and UI
     #
     # @param       -
