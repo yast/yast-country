@@ -176,6 +176,7 @@ module Yast
 
     # Read language DB: translatable strings will be translated to current language
     def read_languages_map
+      log.info("Reading languages map; @language: #{@language}")
       Builtins.foreach(
         Convert.convert(
           SCR.Read(path(".target.dir"), @languages_directory, []),
@@ -454,28 +455,26 @@ module Yast
     def Set(lang)
       lang = deep_copy(lang)
 
-      Builtins.y2milestone(
-        "original language: %1; setting to lang:%2",
-        @language,
-        lang
-      )
-
       if @language != lang
+        log.info("Language changed from #{@language} to #{lang}")
+
         lang = correct_language(lang)
+        @language = lang
 
         if Stage.initial && !Mode.test && !Mode.live_installation
           integrate_inst_sys_extension(lang)
         end
 
         GetLocales() if Builtins.size(@locales) == 0
-
         language_def = GetLanguagesMap(false).fetch(lang, [])
+
         # In config mode, use language name translated into the current language
         # othewrwise use the language name translated into that selected language
         # because the whole UI will get translated later too
         @name = (Mode.config ? language_def[4] : language_def[0]) || lang
-        @language = lang
         Encoding.SetEncLang(@language)
+      else
+        log.info("Language unchanged: #{@language}")
       end
 
       if Stage.initial && !Mode.test
@@ -730,13 +729,7 @@ module Yast
       return if Mode.config
 
       encoding = @use_utf8 ? "UTF-8" : Encoding.console
-
-      Builtins.y2milestone(
-        "language %1 enc %2 utf8:%3",
-        lang,
-        encoding,
-        @use_utf8
-      )
+      log.info("Language changed from #{@language} to #{lang} encoding: #{encoding} use_utf8: #{@use_utf8}")
 
       UI.SetLanguage(lang, encoding)
 
@@ -745,6 +738,9 @@ module Yast
       else
         WFM.SetLanguage(lang)
       end
+
+      # Force rebuilding the languages map to make sure the correct translations are used
+      read_languages_map
 
       nil
     end
@@ -756,6 +752,7 @@ module Yast
     #
     # @return      -
     def WfmSetLanguage
+      log.info("Setting the current language")
       WfmSetGivenLanguage(@language)
 
       nil
