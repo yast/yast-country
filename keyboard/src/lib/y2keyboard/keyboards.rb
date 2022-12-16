@@ -253,6 +253,11 @@ class Keyboards
         "code" => "tr",
         "legacy_code" => "trq"
       },
+      { "description" => _("Colemak"),
+        "alias" => "colemak",
+        "code" => "us-colemak",
+        "legacy_code" => "colemak"
+      },
       { "description" => _("Croatian"),
         "alias" => "croatian",
         "code" => "hr",
