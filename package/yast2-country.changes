@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Jan 10 09:42:21 UTC 2023 - Dominique Leuenberger <dimstar@opensuse.org>
+
+- Fix build with Ruby 3.2: File.exists has been deprecated since
+  Ruby 2.1.0 (boo#1206419)
+- 4.5.2
+
+-------------------------------------------------------------------
 Fri Jun 17 14:39:10 UTC 2022 - Josef Reidinger <jreidinger@suse.com>
 
 - Adapt language module to run properly in chroot (bsc#1199840)
