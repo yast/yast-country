@@ -34,7 +34,7 @@ module Y2Country
     # @return [Hash] locale variables
     def read_locale_conf
       # dbus not available
-      return nil unless File.exists?("/var/run/dbus/system_bus_socket")
+      return nil unless File.exist?("/var/run/dbus/system_bus_socket")
 
       begin
         require "dbus"
