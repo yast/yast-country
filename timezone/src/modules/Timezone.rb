@@ -223,7 +223,7 @@ module Yast
     def get_zonemap
       if Builtins.size(@zonemap) == 0
         zmap = Convert.convert(
-          Builtins.eval(SCR.Read(path(".target.yast2"), "timezone_raw.ycp")),
+          Builtins.eval(WFM.Read(path(".local.yast2"), "timezone_raw.ycp")),
           :from => "any",
           :to   => "list <map <string, any>>"
         )
