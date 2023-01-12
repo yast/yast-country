@@ -27,6 +27,12 @@
 # $Id$
 require "yast"
 
+begin
+    require "dbus"
+rescue LoadError
+    # Call site will check if it's there
+end
+
 module Y2Country
     extend Yast::Logger
 
@@ -36,13 +42,14 @@ module Y2Country
       # dbus not available
       return nil unless File.exists?("/var/run/dbus/system_bus_socket")
 
-      begin
-        require "dbus"
-      rescue LoadError
-        # inst-sys (because of constructor)
+      # Graceful degradation if the library is missing.
+      # But do perform the 'require' early, otherwise online_update
+      # may have updated any other gem and rubygems will get confused
+      unless Module.const_defined?(:DBus)
         log.info("DBus module not available")
         return nil
       end
+
       localed_conf = {}
       begin
         # https://www.freedesktop.org/wiki/Software/systemd/localed/
