@@ -467,7 +467,8 @@ module Yast
       Builtins.y2milestone("calling mkinitrd...")
       SCR.Execute(
         path(".target.bash"),
-        "/sbin/mkinitrd >> /var/log/YaST2/y2logmkinitrd 2>> /var/log/YaST2/y2logmkinitrd"
+        # force and regenerate all is needed to ensure that change is applied to all kernel versions
+        "/usr/bin/dracut --force --regenerate-all >> /var/log/YaST2/y2logmkinitrd 2>> /var/log/YaST2/y2logmkinitrd"
       )
       Builtins.y2milestone("... done")
       true
