@@ -304,7 +304,7 @@ class Keyboards
       },
       { "description" => _("Arabic"),
         "alias" => "arabic",
-        "code" => "arabic" # us_symlink
+        "code" => "ara" # us_symlink
       },
       { "description" => _("Tajik"),
         "alias" => "tajik",
