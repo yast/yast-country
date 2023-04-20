@@ -67,7 +67,7 @@ once, so removing kbd-legacy would break these languages als in X11.
 | Legacy keyboard map  | Selected replacement | Other options | Note           |
 | -------------------- | -------------------- | ------------- | ---------      |
 | gr                   | ?                    |               | Greek          |
-| ruwin_alt-UTF-8      | ?                    |               | Russian        |
+| ru                   | ?                    |               | Russian        |
 | tj_alt-UTF8          | ?                    |               | Tajik          |
 | ua-utf               | ?                    |               | Ukrainian      |
 

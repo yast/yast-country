@@ -226,7 +226,7 @@ class Keyboards
       },
       { "description" => _("Russian"),
         "alias" => "russian",
-        "code" => "ruwin_alt-UTF-8", # not_in_xkb
+        "code" => "ru", # not_in_xkb
         "suggested_for_lang" => ["ru", "ru_RU.KOI8-R"]
       },
       { "description" => _("Serbian"),
