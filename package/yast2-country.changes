@@ -1,4 +1,10 @@
 -------------------------------------------------------------------
+Fri Apr 28 08:37:02 UTC 2023 - Martin Vidner <mvidner@suse.com>
+
+- Arabic keyboard renamed to 'ara' in kbd.rpm (bsc#1210702)
+- 4.6.3
+
+-------------------------------------------------------------------
 Thu Apr 20 14:10:19 UTC 2023 - Martin Vidner <mvidner@suse.com>
 
 - Cleanup: use "ru" keymap for Russian, not "ruwin_alt-UTF-8"

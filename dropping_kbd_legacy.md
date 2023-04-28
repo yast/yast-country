@@ -76,7 +76,7 @@ once, so removing kbd-legacy would break these languages als in X11.
 Some languages have never had a native console layout. Their console keymaps
 are simply a symlink to the `us` keymap:
 
-- arabic
+- ara
 - ir (Iran, Persian/Farsi)
 - khmer
 
