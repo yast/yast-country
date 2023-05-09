@@ -32,8 +32,8 @@ class Keyboards
   #   - alias [String] yast-internal keybord id, to match the "keyboard" key
   #       in language/src/data/languages/language_*.ycp
   #   - code [String] keyboard name used by kbd, and
-  #       present in /usr/share/systemd/kbd-model-map
-  #       (test/data/keyboard_test.rb checks this)
+  #       present in `localectl list-keymaps`
+  #       (FIXME: t/... checks this)
   #   - legacy_code [String] old keyboard name used by kbd-legacy,
   #       present here so it can be automatically replaced if found
   #       in existing configurations (upgrade and AutoYaST profiles);
@@ -340,24 +340,23 @@ class Keyboards
     # memoize this
     return @optional_keyboards unless @optional_keyboards.nil?
 
-    @optional_keyboards = []
+    localectl_keymaps = `localectl list-keymaps`.split("\n")
 
-    # The afnor layout was added to xkeyboard-config in 2019-06
-    # but SLE15-SP4 only has 2.23 released in 2018
-    afnor_test = lambda do
-      kmm = File.read("/usr/share/systemd/kbd-model-map") rescue ""
-      kmm.match?("^fr-afnor")
+    candidates = [
+      # The afnor layout was added to xkeyboard-config in 2019-06
+      # but SLE15-SP4 only has 2.23 released in 2018
+      {
+        "description" => _("French (AFNOR)"),
+        "alias" => "french-afnor",
+        "code" => "fr-afnor",
+        # No different legacy_code
+        "suggested_for_lang" => ["br_FR", "fr", "fr_BE"]
+      }
+    ]
+
+    @optional_keyboards = candidates.find_all do |c|
+      localectl_keymaps.include? c.fetch("code")
     end
-    afnor = {
-      "description" => _("French (AFNOR)"),
-      "alias" => "french-afnor",
-      "code" => "fr-afnor",
-      # No different legacy_code
-      "suggested_for_lang" => ["br_FR", "fr", "fr_BE"]
-    }
-    @optional_keyboards.push(afnor) if afnor_test.call
-
-    @optional_keyboards
   end
 
   # Evaluate the proposed keyboard for a given language

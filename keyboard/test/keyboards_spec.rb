@@ -17,16 +17,6 @@ describe "Keyboards" do
         expect(ret.first["suggested_for_lang"].class == Array).to eq(true)
       end
     end
-
-    it "returns a list with all valid models from systemd" do
-      # read valid codes from systemd as xkbctrl read it from there
-      valid_codes = File.readlines("/usr/share/systemd/kbd-model-map")
-      valid_codes.map! { |l| l.strip.sub(/^(\S+)\s+.*$/, "\\1") }
-      Keyboards.all_keyboards.each do |kb_map|
-        code = kb_map["code"]
-        expect(valid_codes).to include(code)
-      end
-    end
   end
 
   describe ".suggested_keyboard" do
