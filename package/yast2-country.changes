@@ -2,6 +2,7 @@
 Wed May 10 07:56:45 UTC 2023 - Martin Vidner <mvidner@suse.com>
 
 - Use localectl instead of reading kbd-model-map (bsc#1211104)
+  - Move the related test to t/*.t for openQA use
 - Sort the selection box of keyboard layouts alphabetically
 - 4.6.3
 
