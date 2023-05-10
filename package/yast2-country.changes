@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Wed May 10 07:56:45 UTC 2023 - Martin Vidner <mvidner@suse.com>
+
+- Use localectl instead of reading kbd-model-map (bsc#1211104)
+- Sort the selection box of keyboard layouts alphabetically
+- 4.6.3
+
+-------------------------------------------------------------------
 Thu Apr 20 14:10:19 UTC 2023 - Martin Vidner <mvidner@suse.com>
 
 - Cleanup: use "ru" keymap for Russian, not "ruwin_alt-UTF-8"
