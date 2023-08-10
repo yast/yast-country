@@ -910,7 +910,7 @@ module Yast
       end
       ret = ret && Ops.greater_or_equal(da, 1) &&
         Ops.less_or_equal(da, Ops.get_integer(mdays, Ops.subtract(mon, 1), 0))
-      ret = ret && Ops.greater_or_equal(yea, 1970) && Ops.less_than(yea, 2032)
+      ret = ret && yea >= 1970 # bsc#1214144
       ret
     end
 
