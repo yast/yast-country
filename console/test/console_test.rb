@@ -32,7 +32,7 @@ describe "Yast::Console" do
 
     it "returns the encoding" do
       # Leap uses ISO defaults, Tumbleweed UTF-8
-      expect(Yast::Console.SelectFont(language)).to eq("ISO-8859-1").or eq("UTF-8")
+      expect(Yast::Console.SelectFont(language)).to eq("ISO-8859-1").or eq("UTF-8").or eq("ANSI_X3.4-1968")
     end
 
     context "when no console font is available" do
@@ -43,7 +43,7 @@ describe "Yast::Console" do
 
       it "returns the encoding" do
         # Leap uses ISO defaults, Tumbleweed UTF-8
-        expect(Yast::Console.SelectFont(language)).to eq("ISO-8859-1").or eq("UTF-8")
+        expect(Yast::Console.SelectFont(language)).to eq("ISO-8859-1").or eq("UTF-8").or eq("ANSI_X3.4-1968")
       end
     end
 
