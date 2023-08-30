@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Wed Aug 30 20:16:10 UTC 2023 - Josef Reidinger <jreidinger@suse.cz>
+
+- 5.0.0 (#bsc1185510)
+
+-------------------------------------------------------------------
 Thu Aug 10 10:00:35 UTC 2023 - Stefan Hundhammer <shundhammer@suse.com>
 
 - Allow changing date to a later year than 2032 (bsc#1214144)
