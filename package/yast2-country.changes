@@ -1,4 +1,12 @@
 -------------------------------------------------------------------
+Wed Sep  6 15:08:10 UTC 2023 - Josef Reidinger <jreidinger@suse.com>
+
+- Backport:
+-- Allow changing date to a later year than 2032 (bsc#1214144)
+-- Replace call to mkinitrd with dracut (bsc#1203019)
+- 4.6.4
+
+-------------------------------------------------------------------
 Fri Sep 01 19:57:03 UTC 2023 - Josef Reidinger <jreidinger@suse.com>
 
 - Branch package for SP6 (bsc#1208913)
