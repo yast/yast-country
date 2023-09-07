@@ -351,8 +351,8 @@ describe "Yast::Timezone" do
       expect(subject.CheckDate(nil, nil, "string")).to eq false
     end
 
-    it "returns false if date is newer then year 2032" do
-      expect(subject.CheckDate("1", "1", "2033")).to eq false
+    it "returns true if date is newer than year 2032" do
+      expect(subject.CheckDate("1", "1", "2033")).to eq true
     end
   end
 
