@@ -334,6 +334,21 @@ class Keyboards
     ]
   end
 
+  # @return [Array<String>]
+  def self.kbd_model_map_lines
+    filenames = [
+      "/usr/share/systemd/kbd-model-map",
+      # https://bugzilla.suse.com/show_bug.cgi?id=1211104
+      "/usr/share/systemd/kbd-model-map.xkb-generated"
+    ]
+    lines = filenames.map do |fn|
+      File.readlines(fn)
+    rescue Errno::ENOENT
+      []
+    end.flatten
+    lines
+  end
+
   # Some keyboards are present in new openSUSE releases but not in older SLE
   # @see all_keyboards
   def self.optional_keyboards
@@ -345,8 +360,7 @@ class Keyboards
     # The afnor layout was added to xkeyboard-config in 2019-06
     # but SLE15-SP4 only has 2.23 released in 2018
     afnor_test = lambda do
-      kmm = File.read("/usr/share/systemd/kbd-model-map") rescue ""
-      kmm.match?("^fr-afnor")
+      kbd_model_map_lines.any?(/^fr-afnor/)
     end
     afnor = {
       "description" => _("French (AFNOR)"),
