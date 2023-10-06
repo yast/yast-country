@@ -20,7 +20,7 @@ describe "Keyboards" do
 
     it "returns a list with all valid models from systemd" do
       # read valid codes from systemd as xkbctrl read it from there
-      valid_codes = File.readlines("/usr/share/systemd/kbd-model-map")
+      valid_codes = Keyboards.kbd_model_map_lines
       valid_codes.map! { |l| l.strip.sub(/^(\S+)\s+.*$/, "\\1") }
       Keyboards.all_keyboards.each do |kb_map|
         code = kb_map["code"]
