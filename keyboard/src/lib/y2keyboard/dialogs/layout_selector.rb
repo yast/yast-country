@@ -36,6 +36,7 @@ module Y2Keyboard
       def initialize
         textdomain "country"
         @keyboard_layouts = KeyboardLayout.all
+        @keyboard_layouts.sort! { |a, b| Yast.strcoll(a.description, b.description) }
         @previous_selected_layout = KeyboardLayout.current_layout
       end
 
