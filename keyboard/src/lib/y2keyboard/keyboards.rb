@@ -342,9 +342,7 @@ class Keyboards
       "/usr/share/systemd/kbd-model-map.xkb-generated"
     ]
     lines = filenames.map do |fn|
-      File.readlines(fn)
-    rescue Errno::ENOENT
-      []
+      File.exist?(fn) ? File.readlines(fn) : []
     end.flatten
     lines
   end
