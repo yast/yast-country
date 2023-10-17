@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Tue Oct 17 14:30:07 UTC 2023 - Martin Vidner <mvidner@suse.com>
+
+- use also kbd-model-map.xkb-generated (bsc#1211104)
+- sort the selection box of keyboard layouts alphabetically
+- 4.6.5
+
+-------------------------------------------------------------------
 Wed Sep  6 15:08:10 UTC 2023 - Josef Reidinger <jreidinger@suse.com>
 
 - Backport:
