@@ -16,7 +16,7 @@
 #
 
 Name:           yast2-country
-Version:        4.6.5
+Version:        4.6.6
 Release:        0
 Summary:        YaST2 - Country Settings (Language, Keyboard, and Timezone)
 License:        GPL-2.0-only
@@ -41,6 +41,9 @@ BuildRequires:  yast2 >= 4.2.57
 # systemd-mini does not add the xkb generated map which is needed by 
 # the Keyboards.all_keyboards unit/integration test 
 BuildRequires:  systemd
+# for kbd-model-map.xkb-generated
+# systemd systemd requires it but somehow it's missing
+BuildRequires:  kbd
 
 Requires:       timezone
 Requires:       yast2-perl-bindings
