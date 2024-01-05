@@ -571,21 +571,21 @@ module Yast
 
     # Return the language code for given timezone (by reverse searching the
     # "language -> timezone" map)
-    # @param timezone, if empty the current one is used
-    def GetLanguageForTimezone(tz)
-      tz = @timezone if ["", nil].include?(tz)
+    # @param timezone if empty the current one is used
+    def GetLanguageForTimezone(timezone)
+      timezone = @timezone if ["", nil].include?(timezone)
 
       lang = ""
       Builtins.foreach(get_lang2tz) do |code, tmz|
-        lang = code if tmz == tz && (lang == "" || !Builtins.issubstring(lang, "_"))
+        lang = code if tmz == timezone && (lang == "" || !Builtins.issubstring(lang, "_"))
       end
       lang
     end
 
     # Return the country part of language code for given timezone
     # @param timezone, if empty the current one is used
-    def GetCountryForTimezone(tz)
-      Language.GetGivenLanguageCountry(GetLanguageForTimezone(tz))
+    def GetCountryForTimezone(timezone)
+      Language.GetGivenLanguageCountry(GetLanguageForTimezone(timezone))
     end
 
     # Return translated country name of given timezone
