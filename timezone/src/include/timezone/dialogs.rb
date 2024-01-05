@@ -147,7 +147,8 @@ module Yast
       if !@ntp_installed
         # replace "replace_point" by the widgets
         case acall
-        when "ui_init"
+        # Service::Enabled. FIXME too smart?
+        when "ui_init", "GetNTPEnabled"
           return false # deselect the RB
         # the help text
         when "ui_help_text"
@@ -155,9 +156,6 @@ module Yast
         # save settings, return false if dialog should not exit
         when "ui_try_save"
           return true # success, exit loop
-        # Service::Enabled. FIXME too smart?
-        when "GetNTPEnabled"
-          return false
         end
 
         # default: do nothing
