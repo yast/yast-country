@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2012 Novell, Inc. All Rights Reserved.
 #
@@ -35,7 +33,7 @@
 
 module Yast
   module TimezoneDialogsInclude
-    def initialize_timezone_dialogs(include_target)
+    def initialize_timezone_dialogs(_include_target)
       Yast.import "UI"
       textdomain "country"
 
@@ -82,15 +80,15 @@ module Yast
       )
 
       # simulate the time change
-      if !really && hwclock != @hwclock_s_initial
-        Timezone.diff = hwclock == :hwclock_utc ? 1 : -1
+      Timezone.diff = if !really && hwclock != @hwclock_s_initial
+        (hwclock == :hwclock_utc) ? 1 : -1
       else
-        Timezone.diff = 0
+        0
       end
 
       Builtins.y2milestone("SetTimezone diff %1", Timezone.diff)
 
-      Timezone.hwclock = hwclock == :hwclock_utc ? "-u" : "--localtime"
+      Timezone.hwclock = (hwclock == :hwclock_utc) ? "-u" : "--localtime"
       Timezone.Set(timezone, really)
 
       # Redisplay date/time.
@@ -113,18 +111,17 @@ module Yast
             "If the hardware clock is set to UTC, your system can switch from standard time\n" +
             "to daylight saving time and back automatically.\n" +
             "</p>\n"
-      )
+        )
 
       # help text: extra note about localtime
-      utc_help = utc_help + _(
+      utc_help + _(
           "<p>\n" +
             "Note: The internal system clock as used by the Linux kernel must\n" +
             "always be in UTC, because this is the reference for the correct localtime\n" +
             "in user space. If you are choosing localtime for CMOS clock,\n" +
             "check the user manual for background information about side effects.\n" +
             "</p>"
-      )
-      utc_help
+        )
     end
 
     def confirm_local_time
@@ -141,8 +138,7 @@ module Yast
             "If you use UTC, Linux will adjust the time automatically.\n" +
             "\n" +
             "Do you want to continue with your selection (local time)?"
-        )
-      )
+        ))
     end
 
     # handles the complication that the package yast2-ntp-client may not be present
@@ -164,7 +160,7 @@ module Yast
         end
 
         # default: do nothing
-        return nil 
+        return nil
         #   other API for completeness:
         # // before UserInput
         # else if (acall == "ui_enable_disable_widgets")
@@ -236,8 +232,7 @@ module Yast
       enable_disable_time_widgets = lambda do |enable|
         UI.ChangeWidget(Id(:change_now), :Enabled, enable)
 
-        enable = enable &&
-          Convert.to_boolean(UI.QueryWidget(Id(:change_now), :Value))
+        enable &&= Convert.to_boolean(UI.QueryWidget(Id(:change_now), :Value))
 
         if dt_widgets
           UI.ChangeWidget(Id(:date), :Enabled, enable)
@@ -298,10 +293,9 @@ module Yast
         dt_widgets = true
       end
 
-
       cont = VBox(
-          VSpacing(UI.TextMode ? 1 : 0),
-          HBox(
+        VSpacing(UI.TextMode ? 1 : 0),
+        HBox(
           HWeight(1, VBox()),
           HWeight(
             6,
@@ -348,11 +342,11 @@ module Yast
           ),
           HWeight(1, VBox())
         ),
-        VSpacing(UI.TextMode ? 0 : 2),
+        VSpacing(UI.TextMode ? 0 : 2)
       )
 
       Wizard.OpenAcceptDialog
-      # TODO replace help text after ntp_installed, is.
+      # TODO: replace help text after ntp_installed, is.
       Wizard.SetContents(_("Change Date and Time"), cont, htext, true, true)
 
       Wizard.SetDesktopTitleAndIcon("org.opensuse.yast.Timezone") if Mode.normal
@@ -375,7 +369,7 @@ module Yast
       if !dt_widgets
         Builtins.foreach([:hour, :minute, :second, :day, :month, :year]) do |widget|
           UI.ChangeWidget(Id(widget), :ValidChars, "0123456789")
-          UI.ChangeWidget(Id(widget), :InputMaxLength, widget == :year ? 4 : 2)
+          UI.ChangeWidget(Id(widget), :InputMaxLength, (widget == :year) ? 4 : 2)
         end
       end
 
@@ -388,19 +382,16 @@ module Yast
         Builtins.y2debug("UserInput ret:%1", ret)
 
         ntp_handled = Convert.to_symbol(ntp_call("ui_handle", { "ui" => ret }))
-        ret = ntp_handled if ntp_handled != nil
+        ret = ntp_handled if !ntp_handled.nil?
         show_current_time.call if ret == :redraw
 
-        if ret == :ntp || ret == :manual
+        if [:ntp, :manual].include?(ret)
           ntp_rb = ret == :ntp
           # need to install it first?
           if ntp_rb && !Stage.initial && !@ntp_installed
             @ntp_installed = Package.InstallAll(["yast2-ntp-client", "chrony"])
             # succeeded? create UI, otherwise revert the click
-            if !@ntp_installed
-              ntp_rb = false
-              UI.ChangeWidget(Id(:rb), :CurrentButton, :manual)
-            else
+            if @ntp_installed
               # ignore retval, user clicked to use ntp
               ntp_call(
                 "ui_init",
@@ -410,6 +401,9 @@ module Yast
                   "first_time"    => false
                 }
               )
+            else
+              ntp_rb = false
+              UI.ChangeWidget(Id(:rb), :CurrentButton, :manual)
             end
           end
         end
@@ -422,15 +416,15 @@ module Yast
           )
           # true: go on, exit; false: loop on
           ntp_handled2 = Convert.to_boolean(ntp_call("ui_try_save", {}))
-          if !ntp_handled2
-            ret = :retry
-          else
+          if ntp_handled2
             # `ntp_address is constructed by ntp-client_proposal.ycp... :-(
             @ntp_server = Convert.to_string(
               UI.QueryWidget(Id(:ntp_address), :Value)
             )
             # after sync, show real time in the widget
             Timezone.diff = 0
+          else
+            ret = :retry
           end
         end
         if ret == :accept && !ntp_rb &&
@@ -486,7 +480,7 @@ module Yast
             Timezone.SetTime(year, month, day, hour, minute, second)
           end
         end
-      end until ret == :accept || ret == :cancel
+      end until [:accept, :cancel].include?(ret)
 
       if ret == :accept
         # new system time from ntpdate must be saved to hw clock
@@ -506,10 +500,7 @@ module Yast
       args = deep_copy(args)
       first_run = Ops.get_string(args, "first_run", "no") == "yes"
       # inst_timezone as a part of installation sequence
-      if first_run && Stage.initial
-        Timezone.hwclock = "--localtime" if Timezone.ProposeLocaltime
-      end
-
+      Timezone.hwclock = "--localtime" if first_run && Stage.initial && Timezone.ProposeLocaltime
 
       # get current timezone and clock setting
       changed_time = false
@@ -535,9 +526,11 @@ module Yast
 
       # "On a mainframe it is impossible for the user to change the hardware clock.
       # So you can only specify the timezone." (Ihno)
-      settime = ((!Arch.s390 && !Mode.config) ?
-        PushButton(Id(:settime), other_settings_label) : Empty()
-      )
+      settime = if !Arch.s390 && !Mode.config
+        PushButton(Id(:settime), other_settings_label)
+      else
+        Empty()
+      end
 
       textmode = Language.GetTextMode
 
@@ -564,7 +557,6 @@ module Yast
 
       @ntp_installed = Stage.initial || Package.Installed("yast2-ntp-client")
 
-
       # read NTP status
       if first_run && NetworkService.isNetworkRunning && !Mode.live_installation &&
           !GetInstArgs.going_back &&
@@ -579,9 +571,9 @@ module Yast
         # list (fate#323454). Add only one server as it is added as a pool (bsc#1188980)
         servers = ntp_call("dhcp_ntp_servers", {}).concat([@ntp_server].compact).uniq
         argmap = {
-          "server"       => @ntp_server,
-          # FIXME ntp-client_proposal doesn't understand 'servers' yet
-          "servers"      => servers
+          "server"  => @ntp_server,
+          # FIXME: ntp-client_proposal doesn't understand 'servers' yet
+          "servers" => servers
         }
 
         rv = Convert.to_symbol(ntp_call("Write", argmap))
@@ -601,17 +593,19 @@ module Yast
         @ntp_used = @ntp_used == true # nil->false, just in case of parse error
       end
 
+      # frame label
       time_frame_label =
         # frame label
-        @ntp_used ?
-          _("Date and Time (NTP is configured)") :
-          # frame label
+        if @ntp_used
+          _("Date and Time (NTP is configured)")
+        else
           _("Date and Time")
+        end
 
       # Read system date and time.
       date = Timezone.GetDateTime(true, false)
 
-      @hwclock_s = hwclock == "-u" ? :hwclock_utc : :hwclock_localtime
+      @hwclock_s = (hwclock == "-u") ? :hwclock_utc : :hwclock_localtime
       hwclock_s_old = @hwclock_s
       @hwclock_s_initial = @hwclock_s
 
@@ -719,7 +713,7 @@ module Yast
           ) { |key, name| [name, key] }
 
           reg_list = Builtins.sort(
-            Convert.convert(reg_list, :from => "list", :to => "list <list>")
+            Convert.convert(reg_list, from: "list", to: "list <list>")
           ) do |a, b|
             # bnc#385172: must use < instead of <=, the following means:
             # strcoll(x) <= strcoll(y) && strcoll(x) != strcoll(y)
@@ -760,28 +754,30 @@ module Yast
       end
       # which region is selected?
       selected_region = lambda do
-        timezone_selector ?
-          Convert.to_integer(UI.QueryWidget(Id(:region), :Value)) :
+        if timezone_selector
+          Convert.to_integer(UI.QueryWidget(Id(:region), :Value))
+        else
           Convert.to_integer(UI.QueryWidget(Id(:region), :CurrentItem))
+        end
       end
       # which timezone is selected?
       selected_timezone = lambda do
-        timezone_selector ?
-          Convert.to_string(UI.QueryWidget(Id(:timezone), :Value)) :
+        if timezone_selector
+          Convert.to_string(UI.QueryWidget(Id(:timezone), :Value))
+        else
           Convert.to_string(UI.QueryWidget(Id(:timezone), :CurrentItem))
+        end
       end
 
       # for given timezone (selected in map), find out to which region it belongs
       get_region_for_timezone = lambda do |current, zone|
         # first check if it is not in current region
-        if Builtins.haskey(Ops.get_map(zonemap, [current, "entries"], {}), zone)
-          return current
-        end
+        return current if Builtins.haskey(Ops.get_map(zonemap, [current, "entries"], {}), zone)
+
         reg = 0
         Builtins.foreach(zonemap) do |region|
-          if Builtins.haskey(Ops.get_map(region, "entries", {}), zone)
-            raise Break
-          end
+          raise Break if Builtins.haskey(Ops.get_map(region, "entries", {}), zone)
+
           reg = Ops.add(reg, 1)
         end
         reg
@@ -798,10 +794,7 @@ module Yast
             "</p>\n"
         )
 
-      if !utc_only
-        help_text = help_text + utc_helptext
-      end
-
+      help_text += utc_helptext if !utc_only
 
       if !Arch.s390 && !Mode.config
         # general help trailer
@@ -860,11 +853,9 @@ module Yast
             @hwclock_s = UI.QueryWidget(Id(:hwclock), :Value) ? :hwclock_utc : :hwclock_localtime
 
             vmware = SCR.Read(path(".probe.is_vmware"))
-            if !Timezone.windows_partition && !vmware && @hwclock_s == :hwclock_localtime
-              if ! confirm_local_time
-                ret = :not_next
-                next
-              end
+            if !Timezone.windows_partition && !vmware && @hwclock_s == :hwclock_localtime && !confirm_local_time
+              ret = :not_next
+              next
             end
           end
         end
@@ -876,7 +867,8 @@ module Yast
           @hwclock_s = UI.QueryWidget(Id(:hwclock), :Value) ? :hwclock_utc : :hwclock_localtime
           SetTimezone(@hwclock_s, timezone, false, false)
 
-          Builtins.y2milestone("hwclock changed to: %1 (%2), diff: %3", @hwclock_s, Timezone.hwclock, Timezone.diff)
+          Builtins.y2milestone("hwclock changed to: %1 (%2), diff: %3", @hwclock_s,
+            Timezone.hwclock, Timezone.diff)
 
           # restart input loop
           ret = :again
@@ -886,6 +878,7 @@ module Yast
         if ret == :region
           num = selected_region.call
           next if num == sel
+
           show_selected_region.call(num, "")
           tz = selected_timezone.call
           if tz != timezone
@@ -894,9 +887,7 @@ module Yast
             timezone_old = timezone
             SetTimezone(@hwclock_s, timezone, false, changed_time)
           end
-          if timezone_selector
-            UI.ChangeWidget(Id(:timezonemap), :CurrentItem, timezone)
-          end
+          UI.ChangeWidget(Id(:timezonemap), :CurrentItem, timezone) if timezone_selector
           sel = num
         elsif ret == :settime
           # timezone was not adapted in ncurses (bnc#617861)
@@ -921,15 +912,17 @@ module Yast
             )
             changed_time = true
             # adapt frame label, NTP status may be changed
+            # frame label
             time_frame_label =
               # frame label
-              @ntp_used ?
-                _("Date and Time (NTP is configured)") :
-                # frame label
+              if @ntp_used
+                _("Date and Time (NTP is configured)")
+              else
                 _("Date and Time")
+              end
             UI.ChangeWidget(Id(:time_fr), :Label, time_frame_label)
           end
-        elsif ret == :next || ret == :timezone || ret == :timezonemap
+        elsif [:next, :timezone, :timezonemap].include?(ret)
           if ret == :timezonemap
             timezone = Convert.to_string(
               UI.QueryWidget(Id(:timezonemap), :Value)
@@ -956,21 +949,23 @@ module Yast
             end
           end
 
-          if timezone == nil || Builtins.size(timezone) == 0
+          if timezone.nil? || Builtins.size(timezone) == 0
             # popup text
             Popup.Error(_("Select a valid time zone."))
             ret = :again
             timezone = timezone_old
           end
 
-          Builtins.y2milestone("timezone %1 ret %2, hwclock %3 -> %4", timezone, ret, hwclock_s_old, @hwclock_s)
+          Builtins.y2milestone("timezone %1 ret %2, hwclock %3 -> %4", timezone, ret,
+            hwclock_s_old, @hwclock_s)
 
           if timezone != timezone_old || @hwclock_s != hwclock_s_old ||
               ret == :next
             changed_time = true if timezone != timezone_old
             timezone_old = timezone
             hwclock_s_old = @hwclock_s
-            SetTimezone(@hwclock_s, timezone, ret == :next && (changed_time || @hwclock_s != @hwclock_s_initial), changed_time)
+            SetTimezone(@hwclock_s, timezone,
+              ret == :next && (changed_time || @hwclock_s != @hwclock_s_initial), changed_time)
           end
 
           if ret == :next
@@ -983,7 +978,7 @@ module Yast
             # See bnc#638185c5: refresh_initrd should be called if HWCLOCK is changed (--localtime <-> --utc) and/or
             # if --localtime is set and TIMEZONE will be changed.
             if @hwclock_s != @hwclock_s_initial ||
-                @hwclock_s == :hwclock_localtime && timezone != timezone_initial
+                (@hwclock_s == :hwclock_localtime && timezone != timezone_initial)
               Timezone.call_mkinitrd = true
             end
 
@@ -999,7 +994,7 @@ module Yast
             end
           end
         end
-      end until ret == :next || ret == :back || ret == :cancel
+      end until [:next, :back, :cancel].include?(ret)
 
       Timezone.PopVal if ret != :next
       ret

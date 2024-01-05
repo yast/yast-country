@@ -42,7 +42,8 @@ module Y2Keyboard
         if Yast::Stage.initial
           # systemd is not available here (inst-sys).
           # do use --root option, running in chroot does not work (bsc#1074481)
-          Yast::Execute.locally!("systemd-firstboot", "--root", Yast::Installation.destdir, "--keymap", keyboard_code)
+          Yast::Execute.locally!("systemd-firstboot", "--root", Yast::Installation.destdir,
+            "--keymap", keyboard_code)
         else
           Yast::Execute.on_target!("localectl", "set-keymap", keyboard_code)
         end

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2016 SUSE LINUX GmbH, Nuernberg, Germany.
 #
@@ -59,6 +57,7 @@ module Y2Country
 
       def handle
         return if Yast::Keyboard.current_kbd == value
+
         Yast::Keyboard.Set(value)
         # mark that user approve selection
         Yast::Keyboard.user_decision = true
@@ -83,9 +82,9 @@ module Y2Country
         # help text for keyboard selection widget
         _(
           "<p>\n" \
-            "Choose the <b>Keyboard layout</b> to be used during\n" \
-            "installation and on the installed system.\n" \
-            "</p>\n"
+          "Choose the <b>Keyboard layout</b> to be used during\n" \
+          "installation and on the installed system.\n" \
+          "</p>\n"
         )
       end
     end

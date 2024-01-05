@@ -29,7 +29,7 @@ describe Y2Keyboard::KeyboardLayoutLoader do
   subject(:layout_loader) { Y2Keyboard::KeyboardLayoutLoader }
 
   describe "#load_layout" do
-    let(:new_layout) {Y2Keyboard::KeyboardLayout.new("es", "Spanish")}
+    let(:new_layout) { Y2Keyboard::KeyboardLayout.new("es", "Spanish") }
 
     it "set layout temporarily" do
       expect_any_instance_of(Y2Keyboard::Strategies::KbStrategy).to receive(:set_layout).with(new_layout.code)

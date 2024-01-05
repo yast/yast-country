@@ -78,7 +78,6 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
       end
     end
 
-
     it "retrieve keyboard layouts" do
       expect(keyboard_layout).to receive(:all)
 

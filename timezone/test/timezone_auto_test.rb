@@ -21,7 +21,7 @@
 
 require_relative "test_helper"
 require "y2country/clients/timezone_auto"
-require_relative "../src/include/timezone/dialogs.rb"
+require_relative "../src/include/timezone/dialogs"
 
 describe Yast::TimezoneAutoClient do
   subject(:client) { Yast::TimezoneAutoClient.new }
@@ -32,13 +32,15 @@ describe Yast::TimezoneAutoClient do
       allow(Yast::Wizard).to receive(:CloseDialog)
       allow(Yast::Wizard).to receive(:HideAbortButton)
       allow(client).to receive(:TimezoneDialog).with(
-        {"enable_back"=>true, "enable_next"=>true})
+        { "enable_back" => true, "enable_next" => true }
+      )
         .and_return(true)
     end
 
     it "runs timezone dialog" do
       expect(client).to receive(:TimezoneDialog).with(
-        {"enable_back"=>true, "enable_next"=>true})
+        { "enable_back" => true, "enable_next" => true }
+      )
         .and_return(true)
       client.change
     end
@@ -60,12 +62,12 @@ describe Yast::TimezoneAutoClient do
   end
 
   describe "#import" do
-    let(:profile) {
+    let(:profile) do
       {
-        "hwclock" => "UTC",
+        "hwclock"  => "UTC",
         "timezone" => "America/New_York"
       }
-    }
+    end
 
     before do
       allow(Yast::Timezone).to receive(:Set)
@@ -76,7 +78,6 @@ describe Yast::TimezoneAutoClient do
       client.import(profile)
     end
   end
-
 
   describe "#export" do
     it "exports the profile" do
@@ -97,9 +98,9 @@ describe Yast::TimezoneAutoClient do
       expect(Yast::Timezone).to receive(:Save)
       client.write
     end
-    
+
     it "returns the value from the finish client" do
-      expect(Yast::Timezone).to receive(:Save).and_return(true)      
+      expect(Yast::Timezone).to receive(:Save).and_return(true)
       expect(client.write).to eq(true)
     end
   end

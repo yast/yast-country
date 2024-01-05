@@ -73,7 +73,6 @@ module Yast
 
       # modify flag
       @modified = false
-
     end
 
     # Get the keyboard language for the given system language.
@@ -96,10 +95,10 @@ module Yast
     # Read installed keyboard settings.
     def Read
       if !Stage.initial || Mode.live_installation
-        curr_code = ConvertLegacyKeymapCode(@systemd_strategy.current_layout())
+        curr_code = ConvertLegacyKeymapCode(@systemd_strategy.current_layout)
         @curr_kbd = Keyboards.alias(curr_code)
         if @curr_kbd.nil?
-          log.warn "Unsupported keymap #{@systemd_strategy.current_layout()}."
+          log.warn "Unsupported keymap #{@systemd_strategy.current_layout}."
           @curr_kbd = ""
         end
         @keyboard_on_entry = @curr_kbd
@@ -193,28 +192,26 @@ module Yast
 
         # Reset user_decision flag.
         @user_decision = false
-      else
+      elsif @user_decision || (Mode.update && !Stage.initial) ||
+          Mode.live_installation ||
+          (Mode.auto && !@curr_kbd.empty?) || # AY has already set keyboard
+          ProductFeatures.GetStringFeature("globals", "keyboard") != ""
         # Only follow the language if the user has never actively chosen
         # a keyboard. The indicator for this is user_decision which is
         # set from outside the module.
-        if @user_decision || Mode.update && !Stage.initial ||
-            Mode.live_installation ||
-            (Mode.auto && !@curr_kbd.empty?) || # AY has already set keyboard
-            ProductFeatures.GetStringFeature("globals", "keyboard") != ""
-          if language_changed
-            log.info(
-              "User has chosen a keyboard; not following language."
-            )
-          end
-        else
-          # User has not yet chosen a keyboard ==> follow language.
-          local_kbd = GetKeyboardForLanguage(Language.language, "english-us")
-          if local_kbd != ""
-            Set(local_kbd)
-          elsif language_changed
-            log.error("Can't follow language - only retranslation")
-            Set(@curr_kbd)
-          end
+        if language_changed
+          log.info(
+            "User has chosen a keyboard; not following language."
+          )
+        end
+      else
+        # User has not yet chosen a keyboard ==> follow language.
+        local_kbd = GetKeyboardForLanguage(Language.language, "english-us")
+        if local_kbd != ""
+          Set(local_kbd)
+        elsif language_changed
+          log.error("Can't follow language - only retranslation")
+          Set(@curr_kbd)
         end
       end
       Keyboards.description(@curr_kbd)
@@ -228,8 +225,8 @@ module Yast
     #           e.g. {"arabic"=>"Arabic", "belgian"=>"Belgian",....}
     #
     def Selection
-      lang = Keyboards.all_keyboards.map {|k| {k["alias"] => k["description"]} }
-      Hash[*lang.collect{|h| h.to_a}.flatten]
+      lang = Keyboards.all_keyboards.map { |k| { k["alias"] => k["description"] } }
+      Hash[*lang.collect { |h| h.to_a }.flatten]
     end
 
     # Returns all defined codes and the regarding aliases.
@@ -239,8 +236,8 @@ module Yast
     #		functions. 'keyboard_alias' is used internally in Set and Get
     #           e.g. {"jp106"=>"japanese", "us"=>"english-us",....}
     def Codes
-      lang = Keyboards.all_keyboards.map {|k| {k["code"] => k["alias"]} }
-      Hash[*lang.collect{|h| h.to_a}.flatten]
+      lang = Keyboards.all_keyboards.map { |k| { k["code"] => k["alias"] } }
+      Hash[*lang.collect { |h| h.to_a }.flatten]
     end
 
     # Return item list of keyboard items, sorted according to current language
@@ -262,7 +259,6 @@ module Yast
           lsorted == lsorted_r
       end
     end
-
 
     # Set the keyboard layout according to given language
     # @param  [String] language e.g. "en"
@@ -325,8 +321,8 @@ module Yast
       ret = {}
 
       if @curr_kbd == Keyboard.GetKeyboardForLanguage(Language.language,
-           "english-us")
-        log.info("keymap #{@curr_kbd} is the default of language "\
+        "english-us")
+        log.info("keymap #{@curr_kbd} is the default of language " \
                  "#{Language.language} --> no export")
       else
         ret["keymap"] = @curr_kbd
@@ -353,26 +349,25 @@ module Yast
       @curr_kbd
     end
 
-    publish :variable => :keyboard_on_entry, :type => "string"
-    publish :variable => :default_kbd, :type => "string"
-    publish :variable => :user_decision, :type => "boolean"
-    publish :function => :current_kbd, :type => "string ()"
-    publish :function => :Set, :type => "void (string)"
-    publish :function => :GetKeyboardForLanguage, :type => "string (string, string)"
-    publish :function => :Read, :type => "boolean ()"
-    publish :function => :Modified, :type => "boolean ()"
-    publish :function => :SetModified, :type => "void (boolean)"
-    publish :function => :Save, :type => "void ()"
-    publish :function => :MakeProposal, :type => "string (boolean, boolean)"
-    publish :function => :Selection, :type => "map <string, string> ()"
-    publish :function => :codes, type: "map <string,string> ()"
-    publish :function => :GetKeyboardItems, :type => "list <term> ()"
-    publish :function => :SetKeyboardForLanguage, :type => "void (string)"
-    publish :function => :SetKeyboardDefault, :type => "void ()"
-    publish :function => :Import, :type => "boolean (map, ...)"
-    publish :function => :Export, :type => "map ()"
-    publish :function => :Summary, :type => "string ()"
-
+    publish variable: :keyboard_on_entry, type: "string"
+    publish variable: :default_kbd, type: "string"
+    publish variable: :user_decision, type: "boolean"
+    publish function: :current_kbd, type: "string ()"
+    publish function: :Set, type: "void (string)"
+    publish function: :GetKeyboardForLanguage, type: "string (string, string)"
+    publish function: :Read, type: "boolean ()"
+    publish function: :Modified, type: "boolean ()"
+    publish function: :SetModified, type: "void (boolean)"
+    publish function: :Save, type: "void ()"
+    publish function: :MakeProposal, type: "string (boolean, boolean)"
+    publish function: :Selection, type: "map <string, string> ()"
+    publish function: :codes, type: "map <string,string> ()"
+    publish function: :GetKeyboardItems, type: "list <term> ()"
+    publish function: :SetKeyboardForLanguage, type: "void (string)"
+    publish function: :SetKeyboardDefault, type: "void ()"
+    publish function: :Import, type: "boolean (map, ...)"
+    publish function: :Export, type: "map ()"
+    publish function: :Summary, type: "string ()"
   end
 
   Keyboard = KeyboardClass.new

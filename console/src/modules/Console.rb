@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2012 Novell, Inc. All Rights Reserved.
 #
@@ -30,15 +28,15 @@
 #
 # Summary:
 #	provide console specific stuff (esp. font and encoding)
-#<BR>
+# <BR>
 # sysconfig /etc/sysconfig/console:<BR>
-#<UL>
-#<LI>	CONSOLE_FONT		string	console font</LI>
-#<LI>	CONSOLE_SCREENMAP	string	console screenmap</LI>
-#<LI>	CONSOLE_UNICODEMAP	string	console unicode map</LI>
-#<LI>	CONSOLE_MAGIC		string	console magic control sequence</LI>
-#<LI>	CONSOLE_ENCODING	string	console encoding</LI>
-#</UL>
+# <UL>
+# <LI>	CONSOLE_FONT		string	console font</LI>
+# <LI>	CONSOLE_SCREENMAP	string	console screenmap</LI>
+# <LI>	CONSOLE_UNICODEMAP	string	console unicode map</LI>
+# <LI>	CONSOLE_MAGIC		string	console magic control sequence</LI>
+# <LI>	CONSOLE_ENCODING	string	console encoding</LI>
+# </UL>
 #
 # $Id$
 #
@@ -89,9 +87,7 @@ module Yast
       fqlanguage = Language.GetLocaleString(lang)
 
       consolefont = consolefonts[fqlanguage] || consolefonts[lang]
-      if consolefont.nil? && lang.size > 2
-        consolefont = consolefonts[lang[0,2]]
-      end
+      consolefont = consolefonts[lang[0, 2]] if consolefont.nil? && lang.size > 2
       consolefont ||= []
 
       if !consolefont.empty?
@@ -165,7 +161,8 @@ module Yast
       @font = Misc.SysconfigRead(path(".etc.vconsole_conf.FONT"), "")
       @screenMap = Misc.SysconfigRead(path(".etc.vconsole_conf.FONT_MAP"), "")
       @unicodeMap = Misc.SysconfigRead(path(".etc.vconsole_conf.FONT_UNIMAP"), "")
-      Builtins.y2milestone("vconsole.conf: FONT: %1, FONT_MAP: %2, FONT_UNIMAP: %3", @font, @screenMap, @unicodeMap)
+      Builtins.y2milestone("vconsole.conf: FONT: %1, FONT_MAP: %2, FONT_UNIMAP: %3", @font,
+        @screenMap, @unicodeMap)
 
       @magic = Convert.to_string(
         SCR.Read(path(".sysconfig.console.CONSOLE_MAGIC"))
@@ -206,7 +203,7 @@ module Yast
     def Console
       if Stage.initial
         @serial = Linuxrc.InstallInf("Console")
-        @serial = "" if @serial == nil
+        @serial = "" if @serial.nil?
       else
         Restore()
       end
@@ -214,12 +211,12 @@ module Yast
       nil
     end
 
-    publish :function => :SelectFont, :type => "string (string)"
-    publish :function => :Save, :type => "void ()"
-    publish :function => :Restore, :type => "string ()"
-    publish :function => :Init, :type => "void ()"
-    publish :function => :Check, :type => "boolean ()"
-    publish :function => :Console, :type => "void ()"
+    publish function: :SelectFont, type: "string (string)"
+    publish function: :Save, type: "void ()"
+    publish function: :Restore, type: "string ()"
+    publish function: :Init, type: "void ()"
+    publish function: :Check, type: "boolean ()"
+    publish function: :Console, type: "void ()"
 
   private
 

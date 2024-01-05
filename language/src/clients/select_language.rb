@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2012 Novell, Inc. All Rights Reserved.
 #
@@ -18,7 +16,6 @@
 # To contact Novell about this file by physical or electronic mail, you may find
 # current contact information at www.novell.com.
 # ------------------------------------------------------------------------------
-
 
 # File:
 #	select_language.ycp
@@ -76,18 +73,16 @@ module Yast
 
       @preselected = Language.preselected
 
-      if @preselected != "en_US" && @set_default
-        if ProductFeatures.GetBooleanFeature("globals", "skip_language_dialog")
-          Builtins.y2milestone(
-            "Skipping language dialog, Language changed to %1",
-            @preselected
-          )
-          Language.CheckLanguagesSupport(@preselected)
-          Language.selection_skipped = true
-          return :auto
-        end
+      if @preselected != "en_US" && @set_default && ProductFeatures.GetBooleanFeature("globals",
+        "skip_language_dialog")
+        Builtins.y2milestone(
+          "Skipping language dialog, Language changed to %1",
+          @preselected
+        )
+        Language.CheckLanguagesSupport(@preselected)
+        Language.selection_skipped = true
+        return :auto
       end
-
 
       # when the possibility for selecting more languages should be shown
       # (this includes differet UI layout)
@@ -97,7 +92,6 @@ module Yast
 
       # filter the primary language from the list of secondary ones:
       @languages = Builtins.filter(@languages) { |l| l != @language }
-
 
       # Build the contents of the dialog.
 
@@ -374,8 +368,8 @@ module Yast
         if @ret == :changed_locale
           @primary_included = false
           if nil == Builtins.find(@primary_items) do |i|
-              Ops.get(i, [0, 0]) == @language
-            end
+                      Ops.get(i, [0, 0]) == @language
+                    end
             @primary_items = Builtins.add(
               @primary_items,
               Item(Id(@language), @language, true)
@@ -386,13 +380,15 @@ module Yast
         end
 
         if @ret == :next ||
-            (@ret == :language || @ret == :changed_locale) && !Mode.config
+            ((@ret == :language || @ret == :changed_locale) && !Mode.config)
           # Get the selected language.
           #
           if @ret != :changed_locale
-            @language = @more_languages ?
-              Convert.to_string(UI.QueryWidget(Id(:language), :Value)) :
+            @language = if @more_languages
+              Convert.to_string(UI.QueryWidget(Id(:language), :Value))
+            else
               Convert.to_string(UI.QueryWidget(Id(:language), :CurrentItem))
+            end
           end
 
           if @ret != :changed_locale && @adapt_term
@@ -408,9 +404,7 @@ module Yast
             @ret = :not_next
             next
           end
-          if @ret == :next && Stage.initial
-            Language.CheckLanguagesSupport(@language)
-          end
+          Language.CheckLanguagesSupport(@language) if @ret == :next && Stage.initial
           if @language != Language.language
             Builtins.y2milestone(
               "Language changed from %1 to %2",
@@ -420,8 +414,8 @@ module Yast
             if @more_languages
               @selected_languages = Convert.convert(
                 UI.QueryWidget(Id(:languages), :SelectedItems),
-                :from => "any",
-                :to   => "list <string>"
+                from: "any",
+                to:   "list <string>"
               )
 
               if @ret != :next
@@ -432,7 +426,6 @@ module Yast
               end
             end
 
-
             Timezone.ResetZonemap if @set_default
 
             # Set it in the Language module.
@@ -442,11 +435,11 @@ module Yast
           end
 
           if Stage.initial || Stage.firstboot
-            if (@set_default && @ret == :language ||
-                !@set_default && @ret == :next) &&
+            if ((@set_default && @ret == :language) ||
+                (!@set_default && @ret == :next)) &&
                 Language.SwitchToEnglishIfNeeded(true)
               Builtins.y2debug("UI switched to en_US")
-            elsif @ret == :next || @set_default && @ret == :language
+            elsif @ret == :next || (@set_default && @ret == :language)
               Console.SelectFont(@language)
               # no yast translation for nn_NO, use nb_NO as a backup
               if @language == "nn_NO"
@@ -500,13 +493,15 @@ module Yast
             )
 
             if @more_languages || Stage.firstboot
-              @selected_languages = Stage.firstboot ?
-                [@language] :
+              @selected_languages = if Stage.firstboot
+                [@language]
+              else
                 Convert.convert(
                   UI.QueryWidget(Id(:languages), :SelectedItems),
-                  :from => "any",
-                  :to   => "list <string>"
+                  from: "any",
+                  to:   "list <string>"
                 )
+              end
 
               if !Builtins.contains(@selected_languages, @language)
                 @selected_languages = Builtins.add(
@@ -554,9 +549,7 @@ module Yast
                   @ret = :not_next
                   next
                 end
-                if Stage.firstboot # install language packages now
-                  Language.PackagesCommit
-                end
+                Language.PackagesCommit if Stage.firstboot # install language packages now
               end
             end
           end
@@ -594,10 +587,8 @@ module Yast
       lang = Language.main_language(@language)
       locales_list = []
 
-      Builtins.foreach(Language.GetLocales) do |code, i|
-        if Language.main_language(code) == lang
-          locales_list = Builtins.add(locales_list, code)
-        end
+      Builtins.foreach(Language.GetLocales) do |code, _i|
+        locales_list = Builtins.add(locales_list, code) if Language.main_language(code) == lang
       end
       if !Builtins.contains(locales_list, @language)
         locales_list = Builtins.add(locales_list, @language)
@@ -664,7 +655,7 @@ module Yast
             retval = :changed_locale
           end
         end
-      end until ret == :cancel || ret == :ok
+      end until [:cancel, :ok].include?(ret)
       UI.CloseDialog
       retval
     end

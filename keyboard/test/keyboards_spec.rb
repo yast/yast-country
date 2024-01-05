@@ -1,6 +1,4 @@
 #!/usr/bin/env rspec
-# coding: utf-8
-
 require_relative "test_helper"
 require "y2keyboard/keyboards"
 
@@ -126,7 +124,8 @@ describe "Keyboards" do
 
     it "does not have unexpected hash keys" do
       subject.all_keyboards.each do |kb|
-        unknown_keys = kb.keys - ["description", "alias", "code", "legacy_code","suggested_for_lang"]
+        unknown_keys = kb.keys - ["description", "alias", "code", "legacy_code",
+                                  "suggested_for_lang"]
         expect(unknown_keys).to be_empty, "unknown #{unknown_keys} in #{kb}"
       end
     end

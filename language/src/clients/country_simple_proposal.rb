@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2012 Novell, Inc. All Rights Reserved.
 #
@@ -80,12 +78,12 @@ module Yast
           "id"              => "country"
         }
       elsif @func == "AskUser"
-        if Ops.get_string(@param, "chosen_id", "") == "country--keyboard"
-          @ret = Convert.to_map(
+        @ret = if Ops.get_string(@param, "chosen_id", "") == "country--keyboard"
+          Convert.to_map(
             WFM.CallFunction("keyboard_proposal", [@func, @param])
           )
         else
-          @ret = Convert.to_map(
+          Convert.to_map(
             WFM.CallFunction("language_proposal", [@func, @param])
           )
         end

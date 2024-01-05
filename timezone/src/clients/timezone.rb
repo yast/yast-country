@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2012 Novell, Inc. All Rights Reserved.
 #
@@ -43,7 +41,6 @@ module Yast
       Yast.import "Wizard"
 
       Yast.include self, "timezone/dialogs.rb"
-
 
       # -- the command line description map --------------------------------------
       @cmdline = {
@@ -132,7 +129,6 @@ module Yast
       true
     end
 
-
     # the timezone configuration sequence
     def TimezoneSequence
       # create the wizard dialog
@@ -165,15 +161,13 @@ module Yast
       if !Timezone.utc_only
         # summary label
         CommandLine.Print(
-          Builtins.sformat(
-            _("Hardware Clock Set To:\t%1"),
-            # summary text (Clock setting)
-            Timezone.hwclock == "-u" ?
-              _("UTC") :
-              # summary text (Clock setting)
-              _("Local time")
-          )
-        )
+# summary text (Clock setting)
+Builtins.sformat(
+  _("Hardware Clock Set To:\t%1"),
+  # summary text (Clock setting)
+  (Timezone.hwclock == "-u") ? _("UTC") : _("Local time")
+)
+)
       end
       # summary label
       CommandLine.Print(
@@ -201,7 +195,6 @@ module Yast
       true
     end
 
-
     # Handler for changing timezone settings
     def TimezoneSetHandler(options)
       options = deep_copy(options)
@@ -210,7 +203,7 @@ module Yast
 
       Timezone.Set(timezone, true) if timezone != ""
       if hwclock != "" && !Timezone.utc_only
-        Timezone.hwclock = Builtins.tolower(hwclock) == "utc" ? "-u" : "--localtime"
+        Timezone.hwclock = (Builtins.tolower(hwclock) == "utc") ? "-u" : "--localtime"
       end
       Timezone.Modified
     end

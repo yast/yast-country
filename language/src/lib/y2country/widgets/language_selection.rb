@@ -30,7 +30,6 @@ module Y2Country
   module Widgets
     # Language selection widget
     class LanguageSelection < CWM::ComboBox
-
       attr_reader :default
 
       # @param emit_event [Boolean] flag if handle of widget emit `:redraw` event
@@ -66,8 +65,8 @@ module Y2Country
       def help
         _(
           "<p>\n" \
-            "Choose the <b>Language</b> to be used during\n" \
-            "installation and on the installed system.\n" \
+          "Choose the <b>Language</b> to be used during\n" \
+          "installation and on the installed system.\n" \
           "</p>\n"
         )
       end
@@ -75,6 +74,7 @@ module Y2Country
       # Handle value changes
       def handle
         return if value.nil? || value == default
+
         Yast::Timezone.ResetZonemap
         Yast::Language.Set(value)
         Yast::Language.languages = Yast::Language.RemoveSuffix(value)

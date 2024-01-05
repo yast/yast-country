@@ -128,9 +128,9 @@ module Y2Keyboard
       end
 
       def layout_list_handler
-        if !Yast::Mode.config # not in AY configuration module
-          KeyboardLayoutLoader.load_layout(selected_layout)
-        end
+        return if Yast::Mode.config # not in AY configuration module
+
+        KeyboardLayoutLoader.load_layout(selected_layout)
       end
 
       def selected_layout
