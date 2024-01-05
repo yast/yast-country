@@ -35,6 +35,8 @@ module Y2Country
       # @param emit_event [Boolean] flag if handle of widget emit `:redraw` event
       #   when language changed or not
       def initialize(emit_event: false)
+        super()
+
         textdomain "country"
         @default = Yast::Language.language
         @emit_event = emit_event

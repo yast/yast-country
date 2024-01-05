@@ -7,6 +7,8 @@ module Yast
     include Yast::Logger
 
     def initialize
+      super
+
       Yast.import "UI"
       Yast.import "Arch"
       Yast.import "Keyboard"

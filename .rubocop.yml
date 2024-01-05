@@ -57,3 +57,7 @@ Style/Documentation:
 # To keep API compatible
 Naming/MethodName:
   Enabled: false
+
+# To keep API compatible as it can be used in variables accessors
+Naming/VariableName:
+  Enabled: false

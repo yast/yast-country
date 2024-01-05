@@ -34,6 +34,8 @@ module Y2Keyboard
     # Main dialog where the layouts are listed and can be selected.
     class LayoutSelector < UI::Dialog
       def initialize
+        super
+
         textdomain "country"
         @keyboard_layouts = KeyboardLayout.all
         @keyboard_layouts.sort! { |a, b| Yast.strcoll(a.description, b.description) }
