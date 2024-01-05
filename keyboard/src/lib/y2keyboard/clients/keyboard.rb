@@ -81,7 +81,7 @@ module Yast
     # Handler for keyboard summary
     def KeyboardSummaryHandler(_options)
       # summary label
-      CommandLine.Print(_("Current Keyboard Layout: %s" % Keyboard.current_kbd))
+      CommandLine.Print(format(_("Current Keyboard Layout: %s"), Keyboard.current_kbd))
       true
     end
 
@@ -100,7 +100,7 @@ module Yast
       if keyboard == "" || !Keyboard.Selection.key?(keyboard)
         # TRANSLATORS: error message (%1 is given layout); do not translate 'list'
         CommandLine.Print(
-          _("Keyboard layout '%s' is invalid. Use a 'list' command to see possible values." % keyboard)
+          format(_("Keyboard layout '%s' is invalid. Use a 'list' command to see possible values."), keyboard)
         )
         false
       else

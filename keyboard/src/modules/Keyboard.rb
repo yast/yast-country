@@ -337,7 +337,7 @@ module Yast
 
       ret = [
         # summary label
-        _("Current Keyboard Layout: %s" % Keyboards.description(@curr_kbd))
+        format(_("Current Keyboard Layout: %s"), Keyboards.description(@curr_kbd))
       ]
       HTML.List(ret)
     end
