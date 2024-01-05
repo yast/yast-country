@@ -1,0 +1,67 @@
+# use the shared YaST defaults
+inherit_from:
+  rubocop-1.59.0_yast_style.yml
+
+# this needs a lot of testing
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 238
+
+Metrics/AbcSize:
+  Max: 339
+
+Metrics/BlockLength:
+  Max: 164
+
+Metrics/BlockNesting:
+  Max: 5
+
+Metrics/ClassLength:
+  Max: 983
+
+Metrics/CyclomaticComplexity:
+  Max: 88
+
+Metrics/MethodLength:
+  Max: 397
+
+Metrics/ModuleLength:
+  Max: 755
+
+Metrics/ParameterLists:
+  Max: 6
+
+Metrics/PerceivedComplexity:
+  Max: 96
+
+# To keep API compatible
+Naming/AccessorMethodName:
+  Exclude:
+    - 'keyboard/src/lib/y2keyboard/strategies/kb_strategy.rb'
+    - 'timezone/src/modules/Timezone.rb'
+
+# To keep API compatible
+Naming/FileName:
+  Exclude:
+    - 'console/src/modules/Console.rb'
+    - 'keyboard/src/modules/Keyboard.rb'
+    - 'language/src/modules/Language.rb'
+    - 'timezone/src/modules/Timezone.rb'
+
+# TODO: do it
+Style/Documentation:
+  Enabled: false
+
+# To keep API compatible
+Naming/MethodName:
+  Enabled: false
+
+# To keep API compatible as it can be used in variables accessors
+Naming/VariableName:
+  Enabled: false
+
+# TODO: possible to fix, just test it
+Style/ClassVars:
+  Enabled: false

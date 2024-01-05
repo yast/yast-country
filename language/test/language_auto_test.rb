@@ -28,13 +28,15 @@ describe Language::AutoClient do
   describe "#change" do
     before do
       allow(Yast::WFM).to receive(:CallFunction).with(
-        "select_language", [{"enable_back"=>true, "enable_next"=>true}])
+        "select_language", [{ "enable_back" => true, "enable_next" => true }]
+      )
         .and_return(true)
     end
 
     it "runs select_language client" do
       expect(Yast::WFM).to receive(:CallFunction).with(
-        "select_language", [{"enable_back"=>true, "enable_next"=>true}])
+        "select_language", [{ "enable_back" => true, "enable_next" => true }]
+      )
       client.change
     end
 
@@ -55,12 +57,12 @@ describe Language::AutoClient do
   end
 
   describe "#import" do
-    let(:profile) {
-       {
-          "language"  => "en_US",
-          "languages" => "fr_FR,en_US,"
-       }      
-    }
+    let(:profile) do
+      {
+        "language"  => "en_US",
+        "languages" => "fr_FR,en_US,"
+      }
+    end
 
     it "imports the profile" do
       expect(Yast::Language).to receive(:Import).with(profile)
@@ -71,7 +73,7 @@ describe Language::AutoClient do
   describe "#export" do
     it "exports the profile" do
       expect(Yast::Language).to receive(:Export)
-      client.export()
+      client.export
     end
   end
 
@@ -90,9 +92,9 @@ describe Language::AutoClient do
       expect(Yast::Console).to receive(:Save)
       client.write
     end
-    
+
     it "returns the value from the finish client" do
-      expect(Yast::Language).to receive(:Save).and_return(true)      
+      expect(Yast::Language).to receive(:Save).and_return(true)
       expect(client.write).to eq(true)
     end
   end
@@ -115,13 +117,13 @@ describe Language::AutoClient do
     it "language information is modified ?" do
       expect(Yast::Language).to receive(:Modified)
       client.modified?
-    end    
+    end
   end
 
   describe "#modified" do
     it "set to modified" do
       client.modified
       expect(client.modified?).to eq(true)
-    end    
+    end
   end
 end

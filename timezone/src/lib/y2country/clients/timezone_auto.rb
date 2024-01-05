@@ -9,7 +9,6 @@ Yast.import "Wizard"
 
 module Yast
   class TimezoneAutoClient < ::Installation::AutoClient
-
     include Yast::Logger
 
     def initialize
@@ -32,17 +31,17 @@ module Yast
     end
 
     def summary
-      Timezone.Summary      
+      Timezone.Summary
     end
 
     def reset
       Timezone.PopVal
       Timezone.modified = false
-      {}      
+      {}
     end
 
     def read
-      Timezone.Read      
+      Timezone.Read
     end
 
     def export
@@ -50,9 +49,9 @@ module Yast
     end
 
     def write
-      Timezone.Save      
+      Timezone.Save
     end
-    
+
     def modified?
       Timezone.Modified
     end
@@ -60,7 +59,7 @@ module Yast
     def packages
       {}
     end
-    
+
     def modified
       Timezone.modified = true
     end

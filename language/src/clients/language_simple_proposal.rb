@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2012 Novell, Inc. All Rights Reserved.
 #
@@ -32,13 +30,13 @@ module Yast
       @param = Convert.to_map(WFM.Args(1))
       @ret = {}
 
-      if @func == "MakeProposal"
-        @ret = {
+      @ret = if @func == "MakeProposal"
+        {
           "preformatted_proposal" => Language.MakeSimpleProposal,
           "language_changed"      => false
         }
       else
-        @ret = Convert.to_map(
+        Convert.to_map(
           WFM.CallFunction("language_proposal", [@func, @param])
         )
       end

@@ -10,9 +10,8 @@ Yast.import "Language"
 
 module Keyboard
   class AutoClient < ::Installation::AutoClient
-
     include Yast::Logger
-    
+
     def change
       ret = true
       if !Arch.s390
@@ -23,35 +22,35 @@ module Keyboard
       end
       ret
     end
-    
+
     def import(data)
       Keyboard.Import(data)
     end
-    
+
     def summary
       Keyboard.Summary
     end
-    
+
     def reset
-      Keyboard.Import({"keymap" => Keyboard.keyboard_on_entry })
+      Keyboard.Import({ "keymap" => Keyboard.keyboard_on_entry })
     end
 
     def read
       Keyboard.Read
     end
-    
+
     def export
       Keyboard.Export
     end
-    
+
     def write
       Keyboard.Save
     end
-    
+
     def modified?
       Keyboard.Modified
     end
-    
+
     def modified
       Keyboard.SetModified
     end
