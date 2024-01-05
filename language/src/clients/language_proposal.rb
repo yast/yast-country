@@ -44,7 +44,8 @@ module Yast
       @language_on_entry = Language.language
       Builtins.y2milestone("language_on_entry - 1: %1", @language_on_entry)
 
-      if @func == "MakeProposal"
+      case @func
+      when "MakeProposal"
         @force_reset = Ops.get_boolean(@param, "force_reset", false)
         @language_changed = Ops.get_boolean(@param, "language_changed", false)
 
@@ -87,7 +88,7 @@ module Yast
           "raw_proposal"     => @prop,
           "language_changed" => @language_on_entry != Language.language
         }
-      elsif @func == "AskUser"
+      when "AskUser"
         Wizard.OpenAcceptDialog
         @args = {
           "enable_back" => true,
@@ -119,7 +120,7 @@ module Yast
           "Returning from proposal_language::AskUser() with: %1",
           @ret
         )
-      elsif @func == "Description"
+      when "Description"
         # Fill return map.
         #
         # Static values do just nicely here, no need to call a function.

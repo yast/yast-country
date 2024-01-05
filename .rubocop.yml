@@ -1,3 +1,8 @@
 # use the shared YaST defaults
 inherit_from:
   rubocop-1.59.0_yast_style.yml
+
+# this needs a lot of testing
+Style/FrozenStringLiteralComment:
+  Enabled: false
+

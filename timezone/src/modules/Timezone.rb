@@ -1038,7 +1038,7 @@ module Yast
     end
 
     # Product's default timezone when it's not defined in the control file.
-    FALLBACK_PRODUCT_DEFAULT_TIMEZONE = "UTC"
+    FALLBACK_PRODUCT_DEFAULT_TIMEZONE = "UTC".freeze
 
     # Determines the default timezone for the current product
     #

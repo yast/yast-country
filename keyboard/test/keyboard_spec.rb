@@ -180,8 +180,8 @@ describe "Yast::Keyboard" do
       expect(ret.first.params[0]).to be_kind_of(Yast::Term)
       expect(ret.first.params[0].value).to eq(:id)
       expect(ret.first.params[1]).to be_kind_of(String)
-      expect(ret.first.params[2].class == FalseClass ||
-        ret.first.params[2].class == TrueClass).to eq(true)
+      expect(ret.first.params[2].instance_of?(FalseClass) ||
+        ret.first.params[2].instance_of?(TrueClass)).to eq(true)
     end
   end
 

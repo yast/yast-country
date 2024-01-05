@@ -102,42 +102,42 @@ module Yast
       # help for time calculation basis:
       # hardware clock references local time or UTC?
       utc_help = _(
-          "<p>\n" +
-            "Specify whether your machine is set to local time or UTC in <b>Hardware Clock Set To</b>.\n" +
-            "Most PCs that also have other operating systems installed (such as Microsoft\n" +
-            "Windows) use local time.\n" +
-            "Machines that have only Linux installed are usually\n" +
-            "set to Universal Time Coordinated (UTC).\n" +
-            "If the hardware clock is set to UTC, your system can switch from standard time\n" +
-            "to daylight saving time and back automatically.\n" +
-            "</p>\n"
+          "<p>\n" \
+          "Specify whether your machine is set to local time or UTC in <b>Hardware Clock Set To</b>.\n" \
+          "Most PCs that also have other operating systems installed (such as Microsoft\n" \
+          "Windows) use local time.\n" \
+          "Machines that have only Linux installed are usually\n" \
+          "set to Universal Time Coordinated (UTC).\n" \
+          "If the hardware clock is set to UTC, your system can switch from standard time\n" \
+          "to daylight saving time and back automatically.\n" \
+          "</p>\n"
         )
 
       # help text: extra note about localtime
       utc_help + _(
-          "<p>\n" +
-            "Note: The internal system clock as used by the Linux kernel must\n" +
-            "always be in UTC, because this is the reference for the correct localtime\n" +
-            "in user space. If you are choosing localtime for CMOS clock,\n" +
-            "check the user manual for background information about side effects.\n" +
-            "</p>"
+          "<p>\n" \
+          "Note: The internal system clock as used by the Linux kernel must\n" \
+          "always be in UTC, because this is the reference for the correct localtime\n" \
+          "in user space. If you are choosing localtime for CMOS clock,\n" \
+          "check the user manual for background information about side effects.\n" \
+          "</p>"
         )
     end
 
     def confirm_local_time
       # warning popup, in case local time is selected (bnc#732769)
       Popup.ContinueCancel(_(
-          "\n" +
-            "You selected local time, but only Linux  seems to be installed on your system.\n" +
-            "In such case, it is strongly recommended to use UTC, and to click Cancel.\n" +
-            "\n" +
-            "If you want to keep local time, you must adjust the CMOS clock twice the year\n" +
-            "because of Day Light Saving switches. If you miss to adjust the clock, backups may fail,\n" +
-            "your mail system may drop mail messages, etc.\n" +
-            "\n" +
-            "If you use UTC, Linux will adjust the time automatically.\n" +
-            "\n" +
-            "Do you want to continue with your selection (local time)?"
+          "\n" \
+          "You selected local time, but only Linux  seems to be installed on your system.\n" \
+          "In such case, it is strongly recommended to use UTC, and to click Cancel.\n" \
+          "\n" \
+          "If you want to keep local time, you must adjust the CMOS clock twice the year\n" \
+          "because of Day Light Saving switches. If you miss to adjust the clock, backups may fail,\n" \
+          "your mail system may drop mail messages, etc.\n" \
+          "\n" \
+          "If you use UTC, Linux will adjust the time automatically.\n" \
+          "\n" \
+          "Do you want to continue with your selection (local time)?"
         ))
     end
 
@@ -146,16 +146,17 @@ module Yast
       args = deep_copy(args)
       if !@ntp_installed
         # replace "replace_point" by the widgets
-        if acall == "ui_init"
+        case acall
+        when "ui_init"
           return false # deselect the RB
         # the help text
-        elsif acall == "ui_help_text"
+        when "ui_help_text"
           return "" # or say "will install"? TODO recompute help text
         # save settings, return false if dialog should not exit
-        elsif acall == "ui_try_save"
+        when "ui_try_save"
           return true # success, exit loop
         # Service::Enabled. FIXME too smart?
-        elsif acall == "GetNTPEnabled"
+        when "GetNTPEnabled"
           return false
         end
 
@@ -374,7 +375,7 @@ module Yast
       end
 
       ret = nil
-      begin
+      loop do
         ntp_call("ui_enable_disable_widgets", { "enabled" => ntp_rb })
         enable_disable_time_widgets.call(!ntp_rb)
 
@@ -480,7 +481,8 @@ module Yast
             Timezone.SetTime(year, month, day, hour, minute, second)
           end
         end
-      end until [:accept, :cancel].include?(ret)
+        break if [:accept, :cancel].include?(ret)
+      end
 
       if ret == :accept
         # new system time from ntpdate must be saved to hw clock
@@ -594,13 +596,11 @@ module Yast
       end
 
       # frame label
-      time_frame_label =
-        # frame label
-        if @ntp_used
-          _("Date and Time (NTP is configured)")
-        else
-          _("Date and Time")
-        end
+      if @ntp_used
+        _("Date and Time (NTP is configured)")
+      else
+        _("Date and Time")
+      end
 
       # Read system date and time.
       date = Timezone.GetDateTime(true, false)
@@ -787,11 +787,11 @@ module Yast
       help_text = _("\n<p><b><big>Time Zone and Clock Settings</big></b></p>") +
         # help for timezone screen
         _(
-          "<p>\n" +
-            "To select the time zone to use in your system, first select the <b>Region</b>.\n" +
-            "In <b>Time Zone</b>, then select the appropriate time zone, country, or \n" +
-            "region from those available.\n" +
-            "</p>\n"
+          "<p>\n" \
+          "To select the time zone to use in your system, first select the <b>Region</b>.\n" \
+          "In <b>Time Zone</b>, then select the appropriate time zone, country, or \n" \
+          "region from those available.\n" \
+          "</p>\n"
         )
 
       help_text += utc_helptext if !utc_only
@@ -801,9 +801,9 @@ module Yast
         help_text = Ops.add(
           help_text,
           _(
-            "<p>\n" +
-              "If the current time is not correct, use <b>Change</b> to adjust it.\n" +
-              "</p>"
+            "<p>\n" \
+            "If the current time is not correct, use <b>Change</b> to adjust it.\n" \
+            "</p>"
           )
         )
       end
@@ -835,7 +835,7 @@ module Yast
       UI.SetFocus(Id(:region))
 
       ret = nil
-      begin
+      loop do
         ret = Convert.to_symbol(Wizard.UserInput)
 
         Builtins.y2debug("ret %1", ret)
@@ -994,7 +994,8 @@ module Yast
             end
           end
         end
-      end until [:next, :back, :cancel].include?(ret)
+        break if [:next, :back, :cancel].include?(ret)
+      end
 
       Timezone.PopVal if ret != :next
       ret

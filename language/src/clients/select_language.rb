@@ -223,27 +223,27 @@ module Yast
       @help_text = ""
       # help text (language dependent packages) - at the end of help
       @packages_help = _(
-        "<p>\n" +
-          "Additional packages with support for the selected primary and secondary languages will be installed. Packages no longer needed will be removed.\n" +
-          "</p>"
+        "<p>\n" \
+        "Additional packages with support for the selected primary and secondary languages will be installed. Packages no longer needed will be removed.\n" \
+        "</p>"
       )
 
       if Stage.initial
         # help text for initial (first time) language screen
         @help_text = _(
-          "<p>\n" +
-            "Choose the <b>Language</b> to use during installation and for\n" +
-            "the installed system.\n" +
-            "</p>\n"
+          "<p>\n" \
+          "Choose the <b>Language</b> to use during installation and for\n" \
+          "the installed system.\n" \
+          "</p>\n"
         )
 
         # help text, continued
         @help_text = Ops.add(
           @help_text,
           _(
-            "<p>\n" +
-              "Click <b>Next</b> to proceed to the next dialog.\n" +
-              "</p>\n"
+            "<p>\n" \
+            "Click <b>Next</b> to proceed to the next dialog.\n" \
+            "</p>\n"
           )
         )
 
@@ -251,10 +251,10 @@ module Yast
         @help_text = Ops.add(
           @help_text,
           _(
-            "<p>\n" +
-              "Nothing will happen to your computer until you confirm\n" +
-              "all your settings in the last installation dialog.\n" +
-              "</p>\n"
+            "<p>\n" \
+            "Nothing will happen to your computer until you confirm\n" \
+            "all your settings in the last installation dialog.\n" \
+            "</p>\n"
           )
         )
         if @set_default
@@ -262,10 +262,10 @@ module Yast
           @help_text = Ops.add(
             @help_text,
             _(
-              "<p>\n" +
-                "You can select <b>Abort</b> at any time to abort the\n" +
-                "installation process.\n" +
-                "</p>\n"
+              "<p>\n" \
+              "You can select <b>Abort</b> at any time to abort the\n" \
+              "installation process.\n" \
+              "</p>\n"
             )
           )
         end
@@ -273,18 +273,18 @@ module Yast
         # different help text when called after installation
         # in an installed system
         @help_text = _(
-          "<p>\n" +
-            "Choose the new <b>Language</b> for your system.\n" +
-            "</p>\n"
+          "<p>\n" \
+          "Choose the new <b>Language</b> for your system.\n" \
+          "</p>\n"
         )
       end
 
       if @more_languages
         # help text when "multiple languages" are suported 1/2
         @help_text = _(
-          "<p>\n" +
-            "Choose the new <b>Primary Language</b> for your system.\n" +
-            "</p>\n"
+          "<p>\n" \
+          "Choose the new <b>Primary Language</b> for your system.\n" \
+          "</p>\n"
         )
 
         if @adapt_term
@@ -292,10 +292,10 @@ module Yast
           @help_text = Ops.add(
             @help_text,
             _(
-              "<p>\n" +
-                "Check <b>Adapt Keyboard Layout</b> to change the keyboard layout to the primary language.\n" +
-                "Check <b>Adapt Time Zone</b> to change the current time zone according to the primary language. If the keyboard layout or time zone is already adapted to the default language setting, the respective option is disabled.\n" +
-                "</p>\n"
+              "<p>\n" \
+              "Check <b>Adapt Keyboard Layout</b> to change the keyboard layout to the primary language.\n" \
+              "Check <b>Adapt Time Zone</b> to change the current time zone according to the primary language. If the keyboard layout or time zone is already adapted to the default language setting, the respective option is disabled.\n" \
+              "</p>\n"
             )
           )
         end
@@ -304,10 +304,10 @@ module Yast
         @help_text = Ops.add(
           @help_text,
           _(
-            "<p>\n" +
-              "<b>Secondary Languages</b><br>\n" +
-              "In the selection box, specify additional languages to use on your system.\n" +
-              "</p>\n"
+            "<p>\n" \
+            "<b>Secondary Languages</b><br>\n" \
+            "In the selection box, specify additional languages to use on your system.\n" \
+            "</p>\n"
           )
         )
 
@@ -350,7 +350,7 @@ module Yast
       @kbd_adapt = @set_default && !Mode.config
       # adapt timezone for language?
       @tmz_adapt = @set_default && !Mode.config
-      begin
+      loop do
         @ret = Wizard.UserInput
         Builtins.y2debug("UserInput() returned %1", @ret)
 
@@ -554,7 +554,8 @@ module Yast
             end
           end
         end
-      end until @ret == :next || @ret == :back
+        break if @ret == :next || @ret == :back
+      end
 
       Convert.to_symbol(@ret)
     end
@@ -563,11 +564,11 @@ module Yast
     def LanguageExpertDialog
       # help text for langauge expert screen
       help_text = _(
-        "<p>\n" +
-          "Here, fine-tune settings for the language handling.\n" +
-          "These settings are written into the file <tt>/etc/sysconfig/language</tt>.\n" +
-          "If unsure, use the default values already selected.\n" +
-          "</p>\n"
+        "<p>\n" \
+        "Here, fine-tune settings for the language handling.\n" \
+        "These settings are written into the file <tt>/etc/sysconfig/language</tt>.\n" \
+        "If unsure, use the default values already selected.\n" \
+        "</p>\n"
       )
 
       # help text for langauge expert screen
@@ -639,7 +640,7 @@ module Yast
 
       ret = :none
       retval = :expert
-      begin
+      loop do
         ret = Convert.to_symbol(UI.UserInput)
         if ret == :ok
           val = {}
@@ -655,7 +656,8 @@ module Yast
             retval = :changed_locale
           end
         end
-      end until [:cancel, :ok].include?(ret)
+        break if [:cancel, :ok].include?(ret)
+      end
       UI.CloseDialog
       retval
     end

@@ -226,7 +226,7 @@ module Yast
     #
     def Selection
       lang = Keyboards.all_keyboards.map { |k| { k["alias"] => k["description"] } }
-      Hash[*lang.collect { |h| h.to_a }.flatten]
+      Hash[*lang.collect(&:to_a).flatten]
     end
 
     # Returns all defined codes and the regarding aliases.
@@ -237,7 +237,7 @@ module Yast
     #           e.g. {"jp106"=>"japanese", "us"=>"english-us",....}
     def Codes
       lang = Keyboards.all_keyboards.map { |k| { k["code"] => k["alias"] } }
-      Hash[*lang.collect { |h| h.to_a }.flatten]
+      Hash[*lang.collect(&:to_a).flatten]
     end
 
     # Return item list of keyboard items, sorted according to current language

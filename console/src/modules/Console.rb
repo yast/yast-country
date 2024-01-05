@@ -138,9 +138,9 @@ module Yast
       SCR.Write(path(".sysconfig.console.CONSOLE_ENCODING"), WFM.GetEncoding)
       SCR.Write(
         path(".sysconfig.console.CONSOLE_ENCODING.comment"),
-        "\n" +
-          "# Encoding used for output of non-ascii characters.\n" +
-          "#\n"
+        "\n" \
+        "# Encoding used for output of non-ascii characters.\n" \
+        "#\n"
       )
       SCR.Write(path(".sysconfig.console"), nil)
 
@@ -245,7 +245,7 @@ module Yast
     def consolefonts
       return @consolefonts if @consolefonts
 
-      @consolefonts = JSON.load(File.read(Directory.find_data_file("consolefonts.json")))
+      @consolefonts = JSON.parse(File.read(Directory.find_data_file("consolefonts.json")))
     end
   end
 

@@ -399,8 +399,8 @@ module Yast
       # with variable content - do not translate them, please.
       if error_report
         Report.Error(
-          format(_("Language '%{language}' was not found within the list of supported languages\n" +
-            "available at %{directory}.\n\nFallback language %{fallback} will be used."), language:, directory: @languages_directory, fallback: DEFAULT_FALLBACK_LANGUAGE)
+          format(_("Language '%{language}' was not found within the list of supported languages\n" \
+                   "available at %{directory}.\n\nFallback language %{fallback} will be used."), language:, directory: @languages_directory, fallback: DEFAULT_FALLBACK_LANGUAGE)
         )
       end
 
@@ -420,24 +420,22 @@ module Yast
       yinf = yinf_ref.value
       lines = AsciiFile.FindLineField(yinf, 0, "Language:")
 
+      yinf_ref = arg_ref(yinf)
       if Ops.greater_than(Builtins.size(lines), 0)
-        yinf_ref = arg_ref(yinf)
         AsciiFile.ChangeLineField(
           yinf_ref,
           Ops.get_integer(lines, 0, -1),
           1,
           @language
         )
-        yinf = yinf_ref.value
       else
-        yinf_ref = arg_ref(yinf)
         AsciiFile.AppendLine(yinf_ref, ["Language:", @language])
-        yinf = yinf_ref.value
       end
+      yinf = yinf_ref.value
 
       yinf_ref = arg_ref(yinf)
       AsciiFile.RewriteFile(yinf_ref, "/etc/yast.inf")
-      yinf = yinf_ref.value
+      yinf_ref.value
     end
 
     # Set module to selected language.

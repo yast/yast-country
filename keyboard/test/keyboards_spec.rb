@@ -12,7 +12,7 @@ describe "Keyboards" do
       expect(ret.first.key?("alias")).to eq(true)
       expect(ret.first.key?("code")).to eq(true)
       if ret.first.key?("suggested_for_lang")
-        expect(ret.first["suggested_for_lang"].class == Array).to eq(true)
+        expect(ret.first["suggested_for_lang"].instance_of?(Array)).to eq(true)
       end
     end
 

@@ -240,7 +240,7 @@ module Yast
 
     # Handler for language summary
     def LanguageSummaryHandler(options)
-      options = deep_copy(options)
+      deep_copy(options)
       selection = Language.Selection
       # summary label
       CommandLine.Print(
@@ -270,7 +270,7 @@ module Yast
 
     # Handler for listing available languages
     def LanguageListHandler(options)
-      options = deep_copy(options)
+      deep_copy(options)
       Builtins.foreach(Language.Selection) do |lang_code, lang_info|
         CommandLine.Print(
           Builtins.sformat(

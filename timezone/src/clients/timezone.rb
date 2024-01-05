@@ -152,7 +152,7 @@ module Yast
 
     # Handler for timezone summary
     def TimezoneSummaryHandler(options)
-      options = deep_copy(options)
+      deep_copy(options)
       # summary label
       CommandLine.Print(
         Builtins.sformat(_("Current Time Zone:\t%1"), Timezone.timezone)
@@ -181,7 +181,7 @@ Builtins.sformat(
 
     # Handler for listing timezone layouts
     def TimezoneListHandler(options)
-      options = deep_copy(options)
+      deep_copy(options)
       Builtins.foreach(Timezone.get_zonemap) do |zone|
         CommandLine.Print("")
         # summary label
