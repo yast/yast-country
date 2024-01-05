@@ -591,9 +591,7 @@ module Yast
       Builtins.foreach(Language.GetLocales) do |code, _i|
         locales_list = Builtins.add(locales_list, code) if Language.main_language(code) == lang
       end
-      if !Builtins.contains(locales_list, @language)
-        locales_list = Builtins.add(locales_list, @language)
-      end
+      locales_list = Builtins.add(locales_list, @language) if !Builtins.contains(locales_list, @language)
 
       UI.OpenDialog(
         Opt(:decorated),

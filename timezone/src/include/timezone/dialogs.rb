@@ -551,9 +551,7 @@ module Yast
 
       Builtins.foreach(zonemap) do |region|
         Builtins.foreach(Ops.get_map(region, "entries", {})) do |key, name|
-          if !Builtins.haskey(yast2zonetab, key)
-            Ops.set(zones, Ops.get(yast2zonetab, key, key), name)
-          end
+          Ops.set(zones, Ops.get(yast2zonetab, key, key), name) if !Builtins.haskey(yast2zonetab, key)
         end
       end
 

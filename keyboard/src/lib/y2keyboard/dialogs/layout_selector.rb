@@ -117,9 +117,7 @@ module Y2Keyboard
       end
 
       def cancel_handler
-        if !Yast::Mode.config # not in AY configuration module
-          KeyboardLayoutLoader.load_layout(@previous_selected_layout)
-        end
+        KeyboardLayoutLoader.load_layout(@previous_selected_layout) if !Yast::Mode.config # not in AY configuration module
         finish_dialog(:abort)
       end
 

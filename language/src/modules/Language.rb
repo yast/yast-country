@@ -468,9 +468,7 @@ module Yast
         adapt_install_inf
 
         # update "name" for proposal when it cannot be shown correctly
-        if GetTextMode() && CJKLanguage(lang) && !CJKLanguage(@preselected)
-          @name = GetLanguagesMap(false).fetch(lang, [])[1] || lang
-        end
+        @name = GetLanguagesMap(false).fetch(lang, [])[1] || lang if GetTextMode() && CJKLanguage(lang) && !CJKLanguage(@preselected)
       end
 
       nil
@@ -993,12 +991,8 @@ module Yast
       country = lang
 
       country = @default_language if [nil, ""].include?(country)
-      if !country.nil? && country != "" && (Builtins.find(country, "@") != -1)
-        country = Ops.get(Builtins.splitstring(country, "@"), 0, "")
-      end
-      if !country.nil? && country != "" && (Builtins.find(country, ".") != -1)
-        country = Ops.get(Builtins.splitstring(country, "."), 0, "")
-      end
+      country = Ops.get(Builtins.splitstring(country, "@"), 0, "") if !country.nil? && country != "" && (Builtins.find(country, "@") != -1)
+      country = Ops.get(Builtins.splitstring(country, "."), 0, "") if !country.nil? && country != "" && (Builtins.find(country, ".") != -1)
       if !country.nil? && country != ""
         country = if Builtins.find(country, "_") == -1
           Builtins.toupper(country)
