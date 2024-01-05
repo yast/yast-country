@@ -61,3 +61,7 @@ Naming/MethodName:
 # To keep API compatible as it can be used in variables accessors
 Naming/VariableName:
   Enabled: false
+
+# TODO: possible to fix, just test it
+Style/ClassVars:
+  Enabled: false
