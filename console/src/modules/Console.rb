@@ -82,8 +82,8 @@ module Yast
 
     # activate a language specific console font
     #
-    # @param	string	language	ISO code of language
-    # @return	[String]	encoding	encoding for console i/o
+    # @param	string	 language  ISO code of language
+    # @return	[String] encoding  encoding for console i/o
 
     def SelectFont(lang)
       fqlanguage = Language.GetLocaleString(lang)
@@ -118,6 +118,12 @@ module Yast
         elsif !Mode.commandline
           UI.SetConsoleFont(@magic, @font, @screenMap, @unicodeMap, @language)
         end
+      end
+
+      if Encoding.console.start_with?("ANSI_")
+        # Don't fall back to ancient ANSI_X3.4-1968 (bsc#1216689)
+        Builtins.y2milestone("Overriding encoding %1 with UTF-8", Encoding.console )
+        Encoding.console = "UTF-8"
       end
 
       Builtins.y2milestone(
