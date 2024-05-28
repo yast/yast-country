@@ -1,4 +1,11 @@
 -------------------------------------------------------------------
+Thu May 16 20:41:25 UTC 2024 - jjindrak@suse.com
+
+- Rename Europe/Kiev to Europe/Kyiv as per 2022b release of
+  tz code and data by ICANN (bsc#1224387)
+- 4.5.6
+
+-------------------------------------------------------------------
 Wed Jan 11 12:13:52 UTC 2023 - José Iván López González <jlopez@suse.com>
 
 - Always read local timezone database (bsc#1207000).
