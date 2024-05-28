@@ -47,7 +47,7 @@ $[
 	// time zone
 	"Europe/Kaliningrad"	: _("Russia (Kaliningrad)"),
 	// time zone
-	"Europe/Kiev"		: _("Ukraine (Kiev)"),
+	"Europe/Kyiv"		: _("Ukraine (Kyiv)"),
 	"Europe/Lisbon" : _("Portugal"),
 	"Europe/Ljubljana" : _("Slovenia"),
 	"Europe/London" : _("United Kingdom"),
