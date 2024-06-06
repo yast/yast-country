@@ -20,6 +20,10 @@ jobs:
     - name: Git Checkout
       uses: actions/checkout@v2
 
+    - name: Install Needed Packages
+      # kbd is needed for runing the unit tests
+      run:  zypper --non-interactive install --no-recommends kbd
+
     # just for easier debugging...
     - name: Inspect Installed Packages
       run: rpm -qa | sort
