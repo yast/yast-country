@@ -36,7 +36,7 @@
 		    _("Ukrainian")
 	],
 	// 2. what time zone propose for this language
-	"timezone"	: "Europe/Kiev",
+	"timezone"	: "Europe/Kyiv",
 	// 3. which keyboard layout propose for this language
 	"keyboard"	: "ukrainian",
     ];
