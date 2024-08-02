@@ -2,8 +2,7 @@
 
 [![Workflow Status](https://github.com/yast/yast-country/workflows/CI/badge.svg?branch=master)](
 https://github.com/yast/yast-country/actions?query=branch%3Amaster)
-[![Jenkins Status](https://ci.opensuse.org/buildStatus/icon?job=yast-yast-country-master)](
-https://ci.opensuse.org/view/Yast/job/yast-yast-country-master/)
+[![OBS](https://github.com/yast/yast-country/actions/workflows/submit.yml/badge.svg)](https://github.com/yast/yast-country/actions/workflows/submit.yml)
 [![Coverage Status](https://coveralls.io/repos/yast/yast-country/badge.svg)](https://coveralls.io/r/yast/yast-country)
 
 Country specific data and configuration modules (language, keyboard,
