@@ -1,4 +1,9 @@
 -------------------------------------------------------------------
+Fri Sep 13 08:04:45 UTC 2024 - Ladislav Slezák <lslezak@suse.com>
+
+- Branch package for SP7 (bsc#1230201)
+
+-------------------------------------------------------------------
 Thu May 16 20:41:25 UTC 2024 - jjindrak@suse.com
 
 - Rename Europe/Kiev to Europe/Kyiv as per 2022b release of
