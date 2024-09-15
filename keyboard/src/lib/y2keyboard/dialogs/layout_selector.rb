@@ -34,6 +34,8 @@ module Y2Keyboard
     # Main dialog where the layouts are listed and can be selected.
     class LayoutSelector < UI::Dialog
       def initialize
+        super
+
         textdomain "country"
         @keyboard_layouts = KeyboardLayout.all
         @keyboard_layouts.sort! { |a, b| Yast.strcoll(a.description, b.description) }
@@ -117,9 +119,7 @@ module Y2Keyboard
       end
 
       def cancel_handler
-        if !Yast::Mode.config # not in AY configuration module
-          KeyboardLayoutLoader.load_layout(@previous_selected_layout)
-        end
+        KeyboardLayoutLoader.load_layout(@previous_selected_layout) if !Yast::Mode.config # not in AY configuration module
         finish_dialog(:abort)
       end
 
@@ -128,9 +128,9 @@ module Y2Keyboard
       end
 
       def layout_list_handler
-        if !Yast::Mode.config # not in AY configuration module
-          KeyboardLayoutLoader.load_layout(selected_layout)
-        end
+        return if Yast::Mode.config # not in AY configuration module
+
+        KeyboardLayoutLoader.load_layout(selected_layout)
       end
 
       def selected_layout

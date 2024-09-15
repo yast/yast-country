@@ -1,6 +1,4 @@
 #!/usr/bin/env rspec
-# coding: utf-8
-
 require_relative "test_helper"
 require "y2country/language_dbus"
 
@@ -10,37 +8,39 @@ Yast.import "Language"
 describe "Yast::Language" do
   subject { Yast::Language }
 
-  let(:languages_map) {{
-    "de_DE" => [
-      "Deutsch",
-      "Deutsch",
-      ".UTF-8",
-      "@euro",
-      "German"
-    ],
-    "de_ZU" => [
-      "Zulu Deutsch",
-      "Zulu Deutsch",
-      ".UTF-8",
-      ".deZU",
-      "Zulu German"
-    ],
-    "pt_BR" => [
-      "Português brasileiro",
-      "Portugues brasileiro",
-      ".UTF-8",
-      "",
-      "Portuguese (Brazilian)"
-    ],
-    # This is a "CJK" language
-    "ja_JP" => [
-      "日本語",
-      "Japanese",
-      ".UTF-8",
-      ".eucJP",
-      "Japanese"
-    ]
-  }}
+  let(:languages_map) do
+    {
+      "de_DE" => [
+        "Deutsch",
+        "Deutsch",
+        ".UTF-8",
+        "@euro",
+        "German"
+      ],
+      "de_ZU" => [
+        "Zulu Deutsch",
+        "Zulu Deutsch",
+        ".UTF-8",
+        ".deZU",
+        "Zulu German"
+      ],
+      "pt_BR" => [
+        "Português brasileiro",
+        "Portugues brasileiro",
+        ".UTF-8",
+        "",
+        "Portuguese (Brazilian)"
+      ],
+      # This is a "CJK" language
+      "ja_JP" => [
+        "日本語",
+        "Japanese",
+        ".UTF-8",
+        ".eucJP",
+        "Japanese"
+      ]
+    }
+  end
 
   before do
     allow(Y2Country).to receive(:read_locale_conf).and_return(nil)
@@ -171,23 +171,25 @@ describe "Yast::Language" do
     let(:initial_stage) { false }
 
     before do
-        allow(Yast::Stage).to receive(:initial).and_return(initial_stage)
+      allow(Yast::Stage).to receive(:initial).and_return(initial_stage)
 
-        allow(Yast::ProductFeatures).to receive(:GetBooleanFeature)
-          .with("globals", "readonly_language")
-          .and_return(readonly)
+      allow(Yast::ProductFeatures).to receive(:GetBooleanFeature)
+        .with("globals", "readonly_language")
+        .and_return(readonly)
 
-        allow(Yast::SCR).to receive(:Write)
-        allow(Yast::Execute).to receive(:locally!)
-        allow(Yast::Execute).to receive(:on_target!)
-        allow(subject).to receive(:valid_language?).with(language).and_return(true)
+      allow(Yast::SCR).to receive(:Write)
+      allow(Yast::Execute).to receive(:locally!)
+      allow(Yast::Execute).to receive(:on_target!)
+      allow(subject).to receive(:valid_language?).with(language).and_return(true)
 
-        subject.Set(language)
-        subject.SetDefault
+      subject.Set(language)
+      subject.SetDefault
     end
 
     it "updates the .sysconfig.language.INSTALLED_LANGUAGES value" do
-      expect(Yast::SCR).to receive(:Write).with(Yast.path(".sysconfig.language.INSTALLED_LANGUAGES"), anything)
+      expect(Yast::SCR).to receive(:Write).with(
+        Yast.path(".sysconfig.language.INSTALLED_LANGUAGES"), anything
+      )
 
       subject.Save
     end
@@ -209,11 +211,11 @@ describe "Yast::Language" do
 
       it "passes the localectl settings as separate arguments" do
         expect(Yast::Execute).to receive(:on_target!) do |args|
-            expect(args[0]).to match(/localectl/)
-            expect(args[1]).to eq("set-locale")
-            # the order does not matter
-            expect(args[2..3].sort).to eq(["LANG=zh_HK.UTF-8", "LC_MESSAGES=zh_TW"])
-          end
+          expect(args[0]).to match(/localectl/)
+          expect(args[1]).to eq("set-locale")
+          # the order does not matter
+          expect(args[2..3].sort).to eq(["LANG=zh_HK.UTF-8", "LC_MESSAGES=zh_TW"])
+        end
 
         subject.Save
       end
@@ -349,7 +351,7 @@ describe "Yast::Language" do
     end
 
     context "when running on normal stage" do
-      let(:normal?) { true}
+      let(:normal?) { true }
 
       it "does not change the language" do
         expect(subject).to_not receive(:WfmSetGivenLanguage)
@@ -549,7 +551,7 @@ describe "Yast::Language" do
 
   describe "#Summary" do
     it "returns string with html list" do
-      expect(subject.Summary).to be_a(::String)
+      expect(subject.Summary).to be_a(String)
       expect(subject.Summary).to include("<ul>")
     end
   end
@@ -593,39 +595,43 @@ describe "Yast::Language" do
       it "reads language from localed.conf" do
         allow(Y2Country).to receive(:read_locale_conf).and_return("LANG" => "de_DE.UTF-8")
 
-        expect{subject.Read(true)}.to change{subject.language}.to("de_DE")
+        expect { subject.Read(true) }.to change { subject.language }.to("de_DE")
       end
 
       it "reads languages from sysconfig" do
         allow(Yast::Misc).to receive(:SysconfigRead).and_return("cs_CZ,de_DE")
 
-        expect{subject.Read(true)}.to change{subject.languages}.to("cs_CZ,de_DE")
+        expect { subject.Read(true) }.to change { subject.languages }.to("cs_CZ,de_DE")
       end
 
       it "reads utf8 settings during runtime" do
         allow(Y2Country).to receive(:read_locale_conf).and_return("LANG" => "de_DE.UTF-8")
         subject.SetExpertValues("use_utf8" => false)
 
-        expect{subject.Read(true)}.to change{subject.GetExpertValues["use_utf8"]}.from(false).to(true)
+        expect { subject.Read(true) }.to change {
+                                           subject.GetExpertValues["use_utf8"]
+                                         }.from(false).to(true)
       end
     end
 
     it "sets initial language" do
       subject.language = "cs_CZ"
 
-      expect{subject.Read(false)}.to change{subject.language_on_entry}.to("cs_CZ")
+      expect { subject.Read(false) }.to change { subject.language_on_entry }.to("cs_CZ")
     end
 
     it "sets initial languages" do
       subject.languages = "cs_CZ,de_DE"
 
-      expect{subject.Read(false)}.to change{subject.languages_on_entry}.to("cs_CZ,de_DE")
+      expect { subject.Read(false) }.to change { subject.languages_on_entry }.to("cs_CZ,de_DE")
     end
 
     it "clears expert settings changed flag" do
       subject.ExpertSettingsChanged = true
 
-      expect{subject.Read(false)}.to change{subject.ExpertSettingsChanged}.from(true).to(false)
+      expect { subject.Read(false) }.to change {
+                                          subject.ExpertSettingsChanged
+                                        }.from(true).to(false)
     end
   end
 
@@ -637,7 +643,9 @@ describe "Yast::Language" do
 
         subject.language = "cs_CZ"
 
-        expect{subject.MakeProposal(true, false)}.to change{subject.language}.from("cs_CZ").to("de_DE")
+        expect { subject.MakeProposal(true, false) }.to change {
+                                                          subject.language
+                                                        }.from("cs_CZ").to("de_DE")
       end
     end
 
@@ -650,8 +658,8 @@ describe "Yast::Language" do
     end
 
     it "returns array of string with proposal text" do
-      expect(subject.MakeProposal(false, false)).to be_a(::Array)
-      expect(subject.MakeProposal(false, false)).to all(be_a(::String))
+      expect(subject.MakeProposal(false, false)).to be_a(Array)
+      expect(subject.MakeProposal(false, false)).to all(be_a(String))
     end
 
     # TODO: also not clear magic with additional languages done in proposal

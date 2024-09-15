@@ -1,6 +1,4 @@
 #!/usr/bin/env rspec
-# coding: utf-8
-
 require_relative "test_helper"
 require "y2keyboard/keyboards"
 
@@ -10,17 +8,17 @@ describe "Yast::Keyboard" do
   subject { Yast::Keyboard }
 
   describe "#GetKeyboardForLanguage" do
-    let (:search_language) {"en_US"}
+    let(:search_language) { "en_US" }
 
     before do
-      allow(Keyboards).to receive(:suggested_keyboard).with(search_language).
-        and_return(nil)
+      allow(Keyboards).to receive(:suggested_keyboard).with(search_language)
+        .and_return(nil)
     end
 
     context "regarding keyboard has been defined" do
       it "returns regarding keyboard" do
-        expect(Yast::Language).to receive(:GetLang2KeyboardMap).with(true).
-          and_return({search_language => "english-us"})
+        expect(Yast::Language).to receive(:GetLang2KeyboardMap).with(true)
+          .and_return({ search_language => "english-us" })
         expect(subject.GetKeyboardForLanguage(search_language,
           "default_language")).to eq("english-us")
       end
@@ -28,8 +26,8 @@ describe "Yast::Keyboard" do
 
     context "regarding keyboard has not been defined" do
       it "returns default keyboard" do
-        expect(Yast::Language).to receive(:GetLang2KeyboardMap).with(true).
-          and_return({})
+        expect(Yast::Language).to receive(:GetLang2KeyboardMap).with(true)
+          .and_return({})
         expect(subject.GetKeyboardForLanguage(search_language,
           "default_language")).to eq("default_language")
       end
@@ -42,23 +40,23 @@ describe "Yast::Keyboard" do
     end
 
     it "sets the current keyboard" do
-      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-        to receive(:current_layout).and_return("gb")
+      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy)
+        .to receive(:current_layout).and_return("gb")
       subject.Read
       expect(subject.current_kbd).to eq("english-uk")
     end
 
     it "sets empty current keyboard for unsupported keyboard (bsc#1159286)" do
       # something usable for localectl but not in our data
-      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-        to receive(:current_layout).and_return("lt-lekpa")
+      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy)
+        .to receive(:current_layout).and_return("lt-lekpa")
       subject.Read
       expect(subject.current_kbd).to eq("")
     end
 
     it "converts a legacy keymap code to a current one" do
-      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-        to receive(:current_layout).and_return("fr-latin1")
+      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy)
+        .to receive(:current_layout).and_return("fr-latin1")
       subject.Read
       expect(subject.current_kbd).to eq("french")
     end
@@ -71,8 +69,8 @@ describe "Yast::Keyboard" do
       end
 
       it "does not save settings" do
-        expect_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-          not_to receive(:apply_layout)
+        expect_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy)
+          .not_to receive(:apply_layout)
         subject.Save
       end
     end
@@ -83,8 +81,8 @@ describe "Yast::Keyboard" do
       end
 
       it "saves settings to current system" do
-        expect_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-          to receive(:apply_layout).with("de")
+        expect_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy)
+          .to receive(:apply_layout).with("de")
         subject.Set("german-deadkey")
         subject.Save
       end
@@ -98,8 +96,8 @@ describe "Yast::Keyboard" do
       end
 
       it "does not set the keyboard" do
-        expect_any_instance_of(Y2Keyboard::Strategies::KbStrategy).
-          not_to receive(:set_layout)
+        expect_any_instance_of(Y2Keyboard::Strategies::KbStrategy)
+          .not_to receive(:set_layout)
         subject.Set("german")
       end
     end
@@ -110,8 +108,8 @@ describe "Yast::Keyboard" do
       end
 
       it "sets keyboard" do
-        expect_any_instance_of(Y2Keyboard::Strategies::KbStrategy).
-          to receive(:set_layout).with("de")
+        expect_any_instance_of(Y2Keyboard::Strategies::KbStrategy)
+          .to receive(:set_layout).with("de")
         subject.Set("german-deadkey")
         expect(subject.current_kbd).to eq("german-deadkey")
       end
@@ -161,7 +159,7 @@ describe "Yast::Keyboard" do
           allow(Yast::Mode).to receive(:auto).and_return true
         end
         it "makes a proposal" do
-          subject.main()
+          subject.main
           expect(subject).to receive(:Set)
           subject.MakeProposal(false, false)
         end
@@ -182,8 +180,8 @@ describe "Yast::Keyboard" do
       expect(ret.first.params[0]).to be_kind_of(Yast::Term)
       expect(ret.first.params[0].value).to eq(:id)
       expect(ret.first.params[1]).to be_kind_of(String)
-      expect(ret.first.params[2].class == FalseClass ||
-        ret.first.params[2].class == TrueClass).to eq(true)
+      expect(ret.first.params[2].instance_of?(FalseClass) ||
+        ret.first.params[2].instance_of?(TrueClass)).to eq(true)
     end
   end
 
@@ -196,8 +194,8 @@ describe "Yast::Keyboard" do
 
   describe "#SetKeyboardDefault" do
     before do
-      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-        to receive(:current_layout).and_return("gb")
+      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy)
+        .to receive(:current_layout).and_return("gb")
     end
 
     it "sets keyboard default to current keyboard" do
@@ -208,7 +206,7 @@ describe "Yast::Keyboard" do
   end
 
   describe "#Export" do
-    let(:profile) {{ "keymap" => "english-us" }}
+    let(:profile) { { "keymap" => "english-us" } }
 
     before do
       subject.Set("english-us")
@@ -216,8 +214,8 @@ describe "Yast::Keyboard" do
 
     context "keyboard settings are default values, depending on language" do
       before do
-        allow(subject).to receive(:GetKeyboardForLanguage).
-          and_return("english-us")
+        allow(subject).to receive(:GetKeyboardForLanguage)
+          .and_return("english-us")
       end
 
       it "exports an empty hash for the AutoYaST profile" do
@@ -227,8 +225,8 @@ describe "Yast::Keyboard" do
 
     context "keyboard settings are not default values" do
       before do
-        allow(subject).to receive(:GetKeyboardForLanguage).
-          and_return("german")
+        allow(subject).to receive(:GetKeyboardForLanguage)
+          .and_return("german")
       end
 
       it "exports keyboard information for the AutoYaST profile" do
@@ -239,40 +237,40 @@ describe "Yast::Keyboard" do
 
   describe "#Import" do
     before do
-      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-        to receive(:current_layout).and_return("dk")
+      allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy)
+        .to receive(:current_layout).and_return("dk")
     end
 
     context "data comes from language settings" do
       it "sets the keyboard" do
         expect(subject).to receive(:Set).with("german")
-        subject.Import({"keymap" => "german"}, :keyboard)
+        subject.Import({ "keymap" => "german" }, :keyboard)
       end
     end
 
     context "data comes from keyboard settings" do
       it "evaluates and sets the keyboard by the given language" do
         expect(subject).to receive(:Set).with("german")
-        subject.Import({"language" => "de"}, :language)
+        subject.Import({ "language" => "de" }, :language)
       end
     end
 
     context "keymap value is given instead of an alias name" do
       it "sets the alias name" do
         expect(subject).to receive(:Set).with("spanish")
-        subject.Import({"keymap" => "es"}, :keyboard)
+        subject.Import({ "keymap" => "es" }, :keyboard)
       end
     end
 
     context "keymap value is a legacy keymap" do
       before do
-        allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy).
-          to receive(:current_layout).and_return("no")
+        allow_any_instance_of(Y2Keyboard::Strategies::SystemdStrategy)
+          .to receive(:current_layout).and_return("no")
       end
 
       it "converts the legacy keymap code to a current one" do
         expect(subject).to receive(:Set).with("french")
-        subject.Import({"keymap" => "fr-latin1"}, :keyboard)
+        subject.Import({ "keymap" => "fr-latin1" }, :keyboard)
       end
     end
 
@@ -280,7 +278,7 @@ describe "Yast::Keyboard" do
       it "reports a warning" do
         expect(subject).not_to receive(:Set)
         expect(Yast::Report).to receive(:Warning).with(/Cannot find keymap/)
-        subject.Import({"keymap" => "foo"}, :keyboard)
+        subject.Import({ "keymap" => "foo" }, :keyboard)
       end
     end
   end

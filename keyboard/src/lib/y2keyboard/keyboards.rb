@@ -59,278 +59,229 @@ class Keyboards
     #
     # See also  man xkeyboard-config
     [
-      { "description" => _("English (US)"),
-        "alias" => "english-us",
-        "code" => "us",
+      { "description"        => _("English (US)"),
+        "alias"              => "english-us",
+        "code"               => "us",
         # No different legacy_code
-        "suggested_for_lang" => ["ar_eg", "en", "nl_BE"]
-      },
+        "suggested_for_lang" => ["ar_eg", "en", "nl_BE"] },
       { "description" => _("English (UK)"),
-        "alias" => "english-uk",
-        "code" => "gb",
-        "legacy_code" => "uk"
-      },
-      { "description" => _("German"),
-        "alias" => "german",
-        "code" => "de-nodeadkeys",
-        "legacy_code" => "de-latin1-nodeadkeys",
-        "suggested_for_lang" => ["de"]
-      },
+        "alias"       => "english-uk",
+        "code"        => "gb",
+        "legacy_code" => "uk" },
+      { "description"        => _("German"),
+        "alias"              => "german",
+        "code"               => "de-nodeadkeys",
+        "legacy_code"        => "de-latin1-nodeadkeys",
+        "suggested_for_lang" => ["de"] },
       { "description" => _("German (with deadkeys)"),
-        "alias" => "german-deadkey",
-        "code" => "de",
-        "legacy_code" => "de-latin1"
-      },
-      { "description" => _("German (Switzerland)"),
-        "alias" => "german-ch",
-        "code" => "ch",
-        "legacy_code" => "sg-latin1",
-        "suggested_for_lang" => ["de_CH"]
-      },
-      { "description" => _("French"),
-        "alias" => "french",
-        "code" => "fr",
-        "legacy_code" => "fr-latin1",
-        "suggested_for_lang" => ["br_FR", "fr", "fr_BE"]
-      },
-      { "description" => _("French (Switzerland)"),
-        "alias" => "french-ch",
-        "code" => "ch-fr",
-        "legacy_code" => "fr_CH-latin1",
-        "suggested_for_lang" => ["fr_CH"]
-      },
+        "alias"       => "german-deadkey",
+        "code"        => "de",
+        "legacy_code" => "de-latin1" },
+      { "description"        => _("German (Switzerland)"),
+        "alias"              => "german-ch",
+        "code"               => "ch",
+        "legacy_code"        => "sg-latin1",
+        "suggested_for_lang" => ["de_CH"] },
+      { "description"        => _("French"),
+        "alias"              => "french",
+        "code"               => "fr",
+        "legacy_code"        => "fr-latin1",
+        "suggested_for_lang" => ["br_FR", "fr", "fr_BE"] },
+      { "description"        => _("French (Switzerland)"),
+        "alias"              => "french-ch",
+        "code"               => "ch-fr",
+        "legacy_code"        => "fr_CH-latin1",
+        "suggested_for_lang" => ["fr_CH"] },
       { "description" => _("French (Canada)"),
-        "alias" => "french-ca",
-        "code" => "ca", # Not ca-fr-legacy (bsc#1196891)
-        "legacy_code" => "cf"
-      },
+        "alias"       => "french-ca",
+        "code"        => "ca", # Not ca-fr-legacy (bsc#1196891)
+        "legacy_code" => "cf" },
       {
         # CSA should probably not be translated;
         # it stands for Canadian Standards Association
         # https://en.wikipedia.org/wiki/CSA_keyboard
-        "description" => _("Canadian (CSA)"),
-        "alias" => "cn-latin1",
-        "code" => "ca-multix",
-        "legacy_code" => "cn-latin1",
+        "description"        => _("Canadian (CSA)"),
+        "alias"              => "cn-latin1",
+        "code"               => "ca-multix",
+        "legacy_code"        => "cn-latin1",
         "suggested_for_lang" => ["fr_CA"]
       },
-      { "description" => _("Spanish"),
-        "alias" => "spanish",
-        "code" => "es",
+      { "description"        => _("Spanish"),
+        "alias"              => "spanish",
+        "code"               => "es",
         # No different legacy_code
-        "suggested_for_lang" => ["es"]
-      },
+        "suggested_for_lang" => ["es"] },
       { "description" => _("Spanish (Latin America)"),
-        "alias" => "spanish-lat",
-        "code" => "latam",
-        "legacy_code" => "la-latin1"
-      },
+        "alias"       => "spanish-lat",
+        "code"        => "latam",
+        "legacy_code" => "la-latin1" },
       { "description" => _("Spanish (Asturian variant)"),
-        "alias" => "spanish-ast",
-        "code" => "es-ast"
+        "alias"       => "spanish-ast",
+        "code"        => "es-ast" },
+      # No different legacy_code
+      { "description"        => _("Italian"),
+        "alias"              => "italian",
+        "code"               => "it",
         # No different legacy_code
-      },
-      { "description" => _("Italian"),
-        "alias" => "italian",
-        "code" => "it",
-        # No different legacy_code
-        "suggested_for_lang" => ["it"]
-      },
-      { "description" => _("Persian"),
-        "alias" => "persian",
-        "code" => "ir", # us_symlink
-        "suggested_for_lang" => ["fa_IR"]
-      },
+        "suggested_for_lang" => ["it"] },
+      { "description"        => _("Persian"),
+        "alias"              => "persian",
+        "code"               => "ir", # us_symlink
+        "suggested_for_lang" => ["fa_IR"] },
       { "description" => _("Portuguese"),
-        "alias" => "portugese",
-        "code" => "pt",
-        "legacy_code" => "pt-latin1"
-      },
+        "alias"       => "portugese",
+        "code"        => "pt",
+        "legacy_code" => "pt-latin1" },
       { "description" => _("Portuguese (Brazil)"),
-        "alias" => "portugese-br",
-        "code" => "br",
-        "legacy_code" => "br-abnt2"
-      },
+        "alias"       => "portugese-br",
+        "code"        => "br",
+        "legacy_code" => "br-abnt2" },
       { "description" => _("Portuguese (Brazil -- US accents)"),
-        "alias" => "portugese-br-usa",
-        "code" => "br-nativo-us",
-        "legacy_code" => "us-acentos"
-      },
+        "alias"       => "portugese-br-usa",
+        "code"        => "br-nativo-us",
+        "legacy_code" => "us-acentos" },
       { "description" => _("Greek"),
-        "alias" => "greek",
+        "alias"       => "greek",
         # Left-shift+Alt switches layouts
         # Windows (Super) is a Greek-shift
-        "code" => "gr"  # not_in_xkb
-        # No different legacy_code
-      },
+        "code"        => "gr" }, # not_in_xkb
+      # No different legacy_code
       { "description" => _("Dutch"),
-        "alias" => "dutch",
-        "code" => "nl"
-        # No different legacy_code
-      },
+        "alias"       => "dutch",
+        "code"        => "nl" },
+      # No different legacy_code
       { "description" => _("Danish"),
-        "alias" => "danish",
-        "code" => "dk",
-        "legacy_code" => "dk-latin1"
-      },
-      { "description" => _("Norwegian"),
-        "alias" => "norwegian",
-        "code" => "no",
-        "legacy_code" => "no-latin1",
-        "suggested_for_lang" => ["no_NO", "nn_NO"]
-      },
+        "alias"       => "danish",
+        "code"        => "dk",
+        "legacy_code" => "dk-latin1" },
+      { "description"        => _("Norwegian"),
+        "alias"              => "norwegian",
+        "code"               => "no",
+        "legacy_code"        => "no-latin1",
+        "suggested_for_lang" => ["no_NO", "nn_NO"] },
       { "description" => _("Swedish"),
-        "alias" => "swedish",
-        "code" => "se",
-        "legacy_code" => "sv-latin1"
-      },
+        "alias"       => "swedish",
+        "code"        => "se",
+        "legacy_code" => "sv-latin1" },
       { "description" => _("Finnish"),
-        "alias" => "finnish",
-        "code" => "fi-kotoistus",
-        "legacy_code" => "fi"
-      },
+        "alias"       => "finnish",
+        "code"        => "fi-kotoistus",
+        "legacy_code" => "fi" },
       { "description" => _("Czech"),
-        "alias" => "czech",
-        "code" => "cz",
-        "legacy_code" => "cz-us-qwertz"
-      },
+        "alias"       => "czech",
+        "code"        => "cz",
+        "legacy_code" => "cz-us-qwertz" },
       { "description" => _("Czech (qwerty)"),
-        "alias" => "czech-qwerty",
-        "code" => "cz-qwerty",
-        "legacy_code" => "cz-lat2-us"
-      },
+        "alias"       => "czech-qwerty",
+        "code"        => "cz-qwerty",
+        "legacy_code" => "cz-lat2-us" },
       { "description" => _("Slovak"),
-        "alias" => "slovak",
-        "code" => "sk",
-        "legacy_code" => "sk-qwertz"
-      },
+        "alias"       => "slovak",
+        "code"        => "sk",
+        "legacy_code" => "sk-qwertz" },
       { "description" => _("Slovak (qwerty)"),
-        "alias" => "slovak-qwerty",
-        "code" => "sk-qwerty"
-        # No different legacy_code
-      },
+        "alias"       => "slovak-qwerty",
+        "code"        => "sk-qwerty" },
+      # No different legacy_code
       { "description" => _("Slovene"),
-        "alias" => "slovene",
-        "code" => "si",
-        "legacy_code" => "slovene"
-      },
+        "alias"       => "slovene",
+        "code"        => "si",
+        "legacy_code" => "slovene" },
       { "description" => _("Hungarian"),
-        "alias" => "hungarian",
-        "code" => "hu"
-        # No different legacy_code
-      },
+        "alias"       => "hungarian",
+        "code"        => "hu" },
+      # No different legacy_code
       { "description" => _("Polish"),
-        "alias" => "polish",
-        "code" => "pl",
-        "legacy_code" => "Pl02"
-      },
-      { "description" => _("Russian"),
-        "alias" => "russian",
-        "code" => "ru", # not_in_xkb
-        "suggested_for_lang" => ["ru", "ru_RU.KOI8-R"]
-      },
-      { "description" => _("Serbian"),
-        "alias" => "serbian",
+        "alias"       => "polish",
+        "code"        => "pl",
+        "legacy_code" => "Pl02" },
+      { "description"        => _("Russian"),
+        "alias"              => "russian",
+        "code"               => "ru", # not_in_xkb
+        "suggested_for_lang" => ["ru", "ru_RU.KOI8-R"] },
+      { "description"        => _("Serbian"),
+        "alias"              => "serbian",
         # this is almost a case of not_in_xkb: sr-cy has a primary Latin
         # layout and a secondary Cyrillic one. Fortunately, unlike the other
         # Cyrillic languages, there is xkb/rs-latin
-        "code" => "rs-latin",
-        "legacy_code" => "sr-cy",
-        "suggested_for_lang" => ["sr_YU"]
-      },
+        "code"               => "rs-latin",
+        "legacy_code"        => "sr-cy",
+        "suggested_for_lang" => ["sr_YU"] },
       { "description" => _("Estonian"),
-        "alias" => "estonian",
-        "code" => "ee",
-        "legacy_code" => "et"
-      },
+        "alias"       => "estonian",
+        "code"        => "ee",
+        "legacy_code" => "et" },
       { "description" => _("Lithuanian"),
-        "alias" => "lithuanian",
-        "code" => "lt",
-        "legacy_code" => "lt.baltic"
-      },
+        "alias"       => "lithuanian",
+        "code"        => "lt",
+        "legacy_code" => "lt.baltic" },
       { "description" => _("Turkish"),
-        "alias" => "turkish",
-        "code" => "tr",
-        "legacy_code" => "trq"
-      },
+        "alias"       => "turkish",
+        "code"        => "tr",
+        "legacy_code" => "trq" },
       { "description" => _("Croatian"),
-        "alias" => "croatian",
-        "code" => "hr",
-        "legacy_code" => "croat"
-      },
+        "alias"       => "croatian",
+        "code"        => "hr",
+        "legacy_code" => "croat" },
       { "description" => _("Japanese"),
-        "alias" => "japanese",
-        "code" => "jp",
-        "legacy_code" => "jp106"
-      },
-      { "description" => _("Belgian"),
-        "alias" => "belgian",
-        "code" => "be",
-        "legacy_code" => "be-latin1",
-        "suggested_for_lang" => ["be_BY"]
-      },
+        "alias"       => "japanese",
+        "code"        => "jp",
+        "legacy_code" => "jp106" },
+      { "description"        => _("Belgian"),
+        "alias"              => "belgian",
+        "code"               => "be",
+        "legacy_code"        => "be-latin1",
+        "suggested_for_lang" => ["be_BY"] },
       { "description" => _("Dvorak"),
-        "alias" => "dvorak",
+        "alias"       => "dvorak",
         # Beware, Dvorak is completely different from QWERTY;
         # see also https://en.wikipedia.org/wiki/Dvorak_keyboard_layout
-        "code" => "us-dvorak",
-        "legacy_code" => "dvorak"
-      },
+        "code"        => "us-dvorak",
+        "legacy_code" => "dvorak" },
       { "description" => _("Dvorak (programmer)"),
-        "alias" => "dvp",
+        "alias"       => "dvp",
         # Beware, Dvorak is completely different from QWERTY;
         # see also https://en.wikipedia.org/wiki/Dvorak_keyboard_layout
-        "code" => "us-dvp"
-      },
-      { "description" => _("Icelandic"),
-        "alias" => "icelandic",
-        "code" => "is",
-        "legacy_code" => "is-latin1",
-        "suggested_for_lang" => ["is_IS"]
-      },
+        "code"        => "us-dvp" },
+      { "description"        => _("Icelandic"),
+        "alias"              => "icelandic",
+        "code"               => "is",
+        "legacy_code"        => "is-latin1",
+        "suggested_for_lang" => ["is_IS"] },
       { "description" => _("Ukrainian"),
-        "alias" => "ukrainian",
+        "alias"       => "ukrainian",
         # AltGr or Right-Ctrl switch layouts
-        "code" => "ua-utf" # not_in_xkb
-      },
+        "code"        => "ua-utf" }, # not_in_xkb
       { "description" => _("Khmer"),
-        "alias" => "khmer",
-        "code" => "khmer" # us_symlink
-      },
+        "alias"       => "khmer",
+        "code"        => "khmer" }, # us_symlink
       { "description" => _("Korean"),
-        "alias" => "korean",
-        "code" => "kr", # xkb/kr includes a us layout
-        "legacy_code" => "korean"
-      },
+        "alias"       => "korean",
+        "code"        => "kr", # xkb/kr includes a us layout
+        "legacy_code" => "korean" },
       { "description" => _("Arabic"),
-        "alias" => "arabic",
-        "code" => "arabic" # us_symlink
-      },
+        "alias"       => "arabic",
+        "code"        => "arabic" }, # us_symlink
       { "description" => _("Tajik"),
-        "alias" => "tajik",
+        "alias"       => "tajik",
         # AltGr switches layouts
-        "code" => "tj_alt-UTF8" # not_in_xkb
-      },
+        "code"        => "tj_alt-UTF8" }, # not_in_xkb
       { "description" => _("Traditional Chinese"),
-        "alias" => "taiwanese",
-        "code" => "tw" # us-based
-        # No different legacy_code
-      },
+        "alias"       => "taiwanese",
+        "code"        => "tw" }, # us-based
+      # No different legacy_code
       { "description" => _("Simplified Chinese"),
-        "alias" => "chinese",
-        "code" => "cn" # us-based
-        # No different legacy_code
-      },
+        "alias"       => "chinese",
+        "code"        => "cn" }, # us-based
+      # No different legacy_code
       { "description" => _("Romanian"),
-        "alias" => "romanian",
-        "code" => "ro"
-        # No different legacy_code
-      },
+        "alias"       => "romanian",
+        "code"        => "ro" },
+      # No different legacy_code
       { "description" => _("US International"),
-        "alias" => "us-int",
-        "code" => "us-intl",
-        "legacy_code" => "us-acentos"
-      }
+        "alias"       => "us-int",
+        "code"        => "us-intl",
+        "legacy_code" => "us-acentos" }
     ]
   end
 
@@ -341,10 +292,9 @@ class Keyboards
       # https://bugzilla.suse.com/show_bug.cgi?id=1211104
       "/usr/share/systemd/kbd-model-map.xkb-generated"
     ]
-    lines = filenames.map do |fn|
+    filenames.map do |fn|
       File.exist?(fn) ? File.readlines(fn) : []
     end.flatten
-    lines
   end
 
   # Some keyboards are present in new openSUSE releases but not in older SLE
@@ -361,9 +311,9 @@ class Keyboards
       kbd_model_map_lines.any?(/^fr-afnor/)
     end
     afnor = {
-      "description" => _("French (AFNOR)"),
-      "alias" => "french-afnor",
-      "code" => "fr-afnor",
+      "description"        => _("French (AFNOR)"),
+      "alias"              => "french-afnor",
+      "code"               => "fr-afnor",
       # No different legacy_code
       "suggested_for_lang" => ["br_FR", "fr", "fr_BE"]
     }
@@ -380,8 +330,7 @@ class Keyboards
   #
   def self.suggested_keyboard(language)
     keyboard = all_keyboards.detect do |kb|
-      kb["suggested_for_lang"] &&
-      kb["suggested_for_lang"].include?(language)
+      kb["suggested_for_lang"]&.include?(language)
     end
     keyboard ? keyboard["alias"] : nil
   end
@@ -393,7 +342,7 @@ class Keyboards
   # @return [String] keyboard alias e.g. "german" or nil
   #
   def self.alias(keymap)
-    keyboard = all_keyboards.detect {|kb| kb["code"] == keymap }
+    keyboard = all_keyboards.detect { |kb| kb["code"] == keymap }
     keyboard ? keyboard["alias"] : nil
   end
 
@@ -404,7 +353,7 @@ class Keyboards
   # @return [String] translated description or nil
   #
   def self.description(key_alias)
-    keyboard = all_keyboards.detect {|kb| kb["alias"] == key_alias }
+    keyboard = all_keyboards.detect { |kb| kb["alias"] == key_alias }
     keyboard ? keyboard["description"] : nil
   end
 
@@ -415,7 +364,7 @@ class Keyboards
   # @return [String] keymap (e.g. "de_DE") or nil
   #
   def self.code(key_alias)
-    keyboard = all_keyboards.detect {|kb| kb["alias"] == key_alias }
+    keyboard = all_keyboards.detect { |kb| kb["alias"] == key_alias }
     keyboard ? keyboard["code"] : nil
   end
 
@@ -428,7 +377,7 @@ class Keyboards
   def self.legacy_code?(code)
     return false if code.nil?
 
-    all_keyboards.any?{ |kb| kb["legacy_code"] == code }
+    all_keyboards.any? { |kb| kb["legacy_code"] == code }
   end
 
   # Return the new keymap code for a legacy code.

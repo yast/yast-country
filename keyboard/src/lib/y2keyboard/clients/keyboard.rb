@@ -79,14 +79,14 @@ module Yast
     end
 
     # Handler for keyboard summary
-    def KeyboardSummaryHandler(options)
+    def KeyboardSummaryHandler(_options)
       # summary label
-      CommandLine.Print(_("Current Keyboard Layout: %s" % Keyboard.current_kbd))
+      CommandLine.Print(format(_("Current Keyboard Layout: %s"), Keyboard.current_kbd))
       true
     end
 
     # Handler for listing keyboard layouts
-    def KeyboardListHandler(options)
+    def KeyboardListHandler(_options)
       Keyboard.Selection.each do |code, name|
         CommandLine.Print(Builtins.sformat("%1 (%2)", code, name))
       end
@@ -100,7 +100,7 @@ module Yast
       if keyboard == "" || !Keyboard.Selection.key?(keyboard)
         # TRANSLATORS: error message (%1 is given layout); do not translate 'list'
         CommandLine.Print(
-          _("Keyboard layout '%s' is invalid. Use a 'list' command to see possible values." % keyboard)
+          format(_("Keyboard layout '%s' is invalid. Use a 'list' command to see possible values."), keyboard)
         )
         false
       else
@@ -114,12 +114,12 @@ module Yast
       Yast.import "Stage"
       Yast.import "Mode"
 
-      if Yast::Stage.initial || Yast::Mode.config
+      strategy = if Yast::Stage.initial || Yast::Mode.config
         # In installation mode or AY configuration mode
-        strategy = Y2Keyboard::Strategies::YastProposalStrategy.new
+        Y2Keyboard::Strategies::YastProposalStrategy.new
       else
         # running system --> using systemd
-        strategy = Y2Keyboard::Strategies::SystemdStrategy.new
+        Y2Keyboard::Strategies::SystemdStrategy.new
       end
       Y2Keyboard::KeyboardLayout.use(strategy, Keyboards.all_keyboards)
       Y2Keyboard::Dialogs::LayoutSelector.new.run

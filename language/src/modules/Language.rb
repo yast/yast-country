@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2012 Novell, Inc. All Rights Reserved.
 #
@@ -82,7 +80,6 @@ module Yast
       # Default language to be restored with MakeProposal.
       @default_language = DEFAULT_FALLBACK_LANGUAGE
 
-
       # Default settings for INSTALLED_LANGUAGES in /etc/sysconfig/language
       @languages = ""
 
@@ -153,9 +150,9 @@ module Yast
       Language()
     end
 
-    #remove the suffix, if there's any (en_US.UTF-8 -> en_US)
+    # remove the suffix, if there's any (en_US.UTF-8 -> en_US)
     def RemoveSuffix(lang)
-      return lang[/[a-zA-Z_]+/]
+      lang[/[a-zA-Z_]+/]
     end
 
     # Check if the language is "CJK"
@@ -167,7 +164,7 @@ module Yast
 
     # return the value of text_mode (true for ncurses)
     def GetTextMode
-      if @text_mode == nil
+      if @text_mode.nil?
         display_info = UI.GetDisplayInfo
         @text_mode = Ops.get_boolean(display_info, "TextMode", false)
       end
@@ -180,23 +177,24 @@ module Yast
       Builtins.foreach(
         Convert.convert(
           SCR.Read(path(".target.dir"), @languages_directory, []),
-          :from => "any",
-          :to   => "list <string>"
+          from: "any",
+          to:   "list <string>"
         )
       ) do |file|
         next if !Builtins.regexpmatch(file, "language_.+\\.ycp$")
+
         language_map = Convert.to_map(
           Builtins.eval(
             SCR.Read(path(".target.yast2"), Ops.add("languages/", file))
           )
         )
-        language_map = {} if language_map == nil
+        language_map = {} if language_map.nil?
         code = file
         Builtins.foreach(
           Convert.convert(
             language_map,
-            :from => "map",
-            :to   => "map <string, any>"
+            from: "map",
+            to:   "map <string, any>"
           )
         ) do |key, val|
           if Ops.is_list?(val)
@@ -220,7 +218,7 @@ module Yast
         end
       end
 
-      @languages_map = {} if @languages_map == nil
+      @languages_map = {} if @languages_map.nil?
 
       nil
     end
@@ -237,7 +235,7 @@ module Yast
             SCR.Read(path(".target.yast2"), Ops.add("languages/", file))
           )
         )
-        ret = {} if ret == nil
+        ret = {} if ret.nil?
       end
       deep_copy(ret)
     end
@@ -282,7 +280,6 @@ module Yast
       nil
     end
 
-
     # return the content of lang2timezone map
     # (mapping of languages to their default (proposed) time zones)
     def GetLang2TimezoneMap(force)
@@ -299,15 +296,13 @@ module Yast
 
     # return the map of all supported countries and language codes
     def GetLocales
-      if @locales == nil || @locales == {}
+      if @locales.nil? || @locales == {}
         out = SCR.Execute(path(".target.bash_output"), "/usr/bin/locale -a")
         Builtins.foreach(
           Builtins.splitstring(Ops.get_string(out, "stdout", ""), "\n")
         ) do |l|
           pos = Builtins.findfirstof(l, ".@")
-          if pos != nil && Ops.greater_or_equal(pos, 0)
-            l = Builtins.substring(l, 0, pos)
-          end
+          l = Builtins.substring(l, 0, pos) if !pos.nil? && Ops.greater_or_equal(pos, 0)
           Ops.set(@locales, l, 1) if l != ""
         end
       end
@@ -319,9 +314,9 @@ module Yast
     # to be downloaded to the inst-sys
     # (FATE #302955: Split translations out of installation system)
     def GetLanguageExtensionFilename(language)
-      if @available_lang_filenames == nil
+      if @available_lang_filenames.nil?
         lang_numbers = {}
-        Builtins.foreach(GetLanguagesMap(false)) do |code, data|
+        Builtins.foreach(GetLanguagesMap(false)) do |code, _data|
           short = main_language(code)
           if Ops.get(lang_numbers, short, 0) == 0
             Ops.set(lang_numbers, short, 1)
@@ -333,13 +328,12 @@ module Yast
             )
           end
         end
-        @available_lang_filenames = Builtins.maplist(GetLanguagesMap(false)) do |code, data|
+        @available_lang_filenames = Builtins.maplist(GetLanguagesMap(false)) do |code, _data|
           short = main_language(code)
-          if Ops.greater_than(Ops.get(lang_numbers, short, 0), 1)
-            next code
-          else
-            next short
-          end
+          next code if Ops.greater_than(Ops.get(lang_numbers, short, 0), 1)
+
+          next short
+
         end
       end
 
@@ -403,17 +397,14 @@ module Yast
 
       # TRANSLATORS: Error message. Strings marked %{...} will be replaced
       # with variable content - do not translate them, please.
-      Report.Error(
-        _("Language '%{language}' was not found within the list of supported languages\n" +
-          "available at %{directory}.\n\nFallback language %{fallback} will be used."
-        ) % {
-          :language => language,
-          :directory => @languages_directory,
-          :fallback => DEFAULT_FALLBACK_LANGUAGE
-        }
-      ) if error_report
+      if error_report
+        Report.Error(
+          format(_("Language '%{language}' was not found within the list of supported languages\n" \
+                   "available at %{directory}.\n\nFallback language %{fallback} will be used."), language:, directory: @languages_directory, fallback: DEFAULT_FALLBACK_LANGUAGE)
+        )
+      end
 
-      return DEFAULT_FALLBACK_LANGUAGE
+      DEFAULT_FALLBACK_LANGUAGE
     end
 
     # Changes the install.inf in inst-sys according to newly selected language
@@ -429,24 +420,22 @@ module Yast
       yinf = yinf_ref.value
       lines = AsciiFile.FindLineField(yinf, 0, "Language:")
 
+      yinf_ref = arg_ref(yinf)
       if Ops.greater_than(Builtins.size(lines), 0)
-        yinf_ref = arg_ref(yinf)
         AsciiFile.ChangeLineField(
           yinf_ref,
           Ops.get_integer(lines, 0, -1),
           1,
           @language
         )
-        yinf = yinf_ref.value
       else
-        yinf_ref = arg_ref(yinf)
         AsciiFile.AppendLine(yinf_ref, ["Language:", @language])
-        yinf = yinf_ref.value
       end
+      yinf = yinf_ref.value
 
       yinf_ref = arg_ref(yinf)
       AsciiFile.RewriteFile(yinf_ref, "/etc/yast.inf")
-      yinf = yinf_ref.value
+      yinf_ref.value
     end
 
     # Set module to selected language.
@@ -455,15 +444,15 @@ module Yast
     def Set(lang)
       lang = deep_copy(lang)
 
-      if @language != lang
+      if @language == lang
+        log.info("Language unchanged: #{@language}")
+      else
         log.info("Language changed from #{@language} to #{lang}")
 
         lang = correct_language(lang)
         @language = lang
 
-        if Stage.initial && !Mode.test && !Mode.live_installation
-          integrate_inst_sys_extension(lang)
-        end
+        integrate_inst_sys_extension(lang) if Stage.initial && !Mode.test && !Mode.live_installation
 
         GetLocales() if Builtins.size(@locales) == 0
         language_def = GetLanguagesMap(false).fetch(lang, [])
@@ -473,22 +462,17 @@ module Yast
         # because the whole UI will get translated later too
         @name = (Mode.config ? language_def[4] : language_def[0]) || lang
         Encoding.SetEncLang(@language)
-      else
-        log.info("Language unchanged: #{@language}")
       end
 
       if Stage.initial && !Mode.test
         adapt_install_inf
 
         # update "name" for proposal when it cannot be shown correctly
-        if GetTextMode() && CJKLanguage(lang) && !CJKLanguage(@preselected)
-          @name = GetLanguagesMap(false).fetch(lang, [])[1] || lang
-        end
+        @name = GetLanguagesMap(false).fetch(lang, [])[1] || lang if GetTextMode() && CJKLanguage(lang) && !CJKLanguage(@preselected)
       end
 
       nil
     end
-
 
     # Set the language that was read from sysconfig,
     # read only one needed language file
@@ -516,16 +500,13 @@ module Yast
     # generate the whole locale string for given language according to DB
     # (e.g. de_DE -> de_DE.UTF-8)
     def GetLocaleString(lang)
-
       # if the suffix is already there, do nothing
       return lang if lang.count(".@") > 0
 
       read_languages_map if Builtins.size(@languages_map) == 0
 
       language_info = Ops.get(@languages_map, lang, [])
-      if !Builtins.haskey(@languages_map, lang)
-        language_info = [lang, lang, ".UTF-8"]
-      end
+      language_info = [lang, lang, ".UTF-8"] if !Builtins.haskey(@languages_map, lang)
 
       # full language code
       idx = @use_utf8 ? 2 : 3
@@ -534,7 +515,6 @@ module Yast
       Builtins.y2milestone("locale %1", val)
       val
     end
-
 
     # Store current language as default language.
     def SetDefault
@@ -546,8 +526,10 @@ module Yast
     # read the localed.conf language
     def ReadLocaleConfLanguage
       return nil if Mode.testsuite
-      @localed_conf  = Y2Country.read_locale_conf
+
+      @localed_conf = Y2Country.read_locale_conf
       return nil if @localed_conf.nil?
+
       local_lang = @localed_conf["LANG"]
       local_lang = local_lang.sub(/[.@].*$/, "") if local_lang
       log.info("language from locale.conf: %{local_lang}")
@@ -568,14 +550,15 @@ module Yast
     def ReadUtf8Setting
       if Mode.testsuite
         @use_utf8 = true
-	return nil
+        return nil
       end
       # during live installation, we have local configuration
       if !Stage.initial || Mode.live_installation
-        @localed_conf  = Y2Country.read_locale_conf
+        @localed_conf = Y2Country.read_locale_conf
         return nil if @localed_conf.nil?
+
         local_lang = @localed_conf["LANG"]
-        @use_utf8 = local_lang.include?(".UTF-8") unless (local_lang.nil? || local_lang.empty?)
+        @use_utf8 = local_lang.include?(".UTF-8") unless local_lang.nil? || local_lang.empty?
       else
         @use_utf8 = true
       end
@@ -600,7 +583,7 @@ module Yast
 
         @preselected = Linuxrc.InstallInf("Locale")
         Builtins.y2milestone("install_inf Locale %1", @preselected)
-        if @preselected != nil && @preselected != ""
+        if !@preselected.nil? && @preselected != ""
           lang = @preselected
           @linuxrc_language_set = true if lang != DEFAULT_FALLBACK_LANGUAGE
         else
@@ -619,7 +602,7 @@ module Yast
         end
         # Ignore any previous settings and take language from control file.
         l = ProductFeatures.GetStringFeature("globals", "language")
-        if l != nil && l != ""
+        if !l.nil? && l != ""
           lang = l
           Builtins.y2milestone(
             "setting lang to ProductFeatures::language: %1",
@@ -633,14 +616,12 @@ module Yast
         local_lang = ReadLocaleConfLanguage() || @language
         QuickSet(local_lang)
         SetDefault() # also default
-        if Mode.live_installation || Stage.firstboot
-          FillEnglishNames()
-        end
+        FillEnglishNames() if Mode.live_installation || Stage.firstboot
       end
       if Ops.greater_than(
-          SCR.Read(path(".target.size"), "/etc/sysconfig/language"),
-          0
-        )
+        SCR.Read(path(".target.size"), "/etc/sysconfig/language"),
+        0
+      )
         ReadSysconfigValues()
         ReadUtf8Setting()
       end
@@ -745,7 +726,6 @@ module Yast
       nil
     end
 
-
     # Set the current language in WFM and UI
     #
     # @param       -
@@ -757,7 +737,6 @@ module Yast
 
       nil
     end
-
 
     # Return proposal string.
     #
@@ -775,9 +754,7 @@ module Yast
         # summary label
         Builtins.sformat(_("Primary Language: %1"), @name)
       ]
-      if Builtins.size(@languages_map) == 0 || language_changed
-        read_languages_map
-      end
+      read_languages_map if Builtins.size(@languages_map) == 0 || language_changed
       # maybe additional languages were selected in package selector (bnc#393007)
       langs = Builtins.splitstring(@languages, ",")
       missing = []
@@ -790,12 +767,11 @@ module Yast
             missing = Builtins.add(missing, additional)
             next
           end
-          if Builtins.contains(langs, additional) #en_US or pt_PT already installed
-            next
-          end
+          next if Builtins.contains(langs, additional) # en_US or pt_PT already installed
+
           # now, let's hope there's only one full entry for the short one
           # (e.g. cs_CZ for cs)
-          Builtins.foreach(@languages_map) do |k, dummy|
+          Builtins.foreach(@languages_map) do |k, _dummy|
             if Builtins.substring(k, 0, 2) == additional
               missing = Builtins.add(missing, k)
               raise Break
@@ -806,8 +782,8 @@ module Yast
       if Ops.greater_than(Builtins.size(missing), 0)
         langs = Convert.convert(
           Builtins.union(langs, missing),
-          :from => "list",
-          :to   => "list <string>"
+          from: "list",
+          to:   "list <string>"
         )
         @languages = Builtins.mergestring(langs, ",")
       end
@@ -911,7 +887,7 @@ module Yast
       log.error "stderr: #{e.stderr}"
 
       # TRANSLATORS: the "%s" is replaced by the executed command
-      Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % e.commands.first.join(' '))
+      Report.Error(_("Could not save the language setting, the command\n%s\nfailed.") % e.commands.first.join(" "))
       nil
     end
 
@@ -968,10 +944,8 @@ module Yast
     # @return false when there is not enough disk space for new packages
     def EnoughSpace
       ok = true
-      Builtins.foreach(Pkg.TargetGetDU) do |mountpoint, usage|
-        if Ops.greater_than(Ops.get(usage, 2, 0), Ops.get(usage, 0, 0))
-          ok = false
-        end
+      Builtins.foreach(Pkg.TargetGetDU) do |_mountpoint, usage|
+        ok = false if Ops.greater_than(Ops.get(usage, 2, 0), Ops.get(usage, 0, 0))
       end
       ok
     end
@@ -987,9 +961,7 @@ module Yast
         total_sizes_per_cd_per_src = Pkg.PkgMediaSizes
         total_size_to_install = 0
         Builtins.foreach(Builtins.flatten(total_sizes_per_cd_per_src)) do |item|
-          if item != -1
-            total_size_to_install = Ops.add(total_size_to_install, item)
-          end
+          total_size_to_install = Ops.add(total_size_to_install, item) if item != -1
         end
 
         SlideShow.Setup(
@@ -1018,22 +990,14 @@ module Yast
     def GetGivenLanguageCountry(lang)
       country = lang
 
-      country = @default_language if country == nil || country == ""
-      if country != nil && country != ""
-        if Builtins.find(country, "@") != -1
-          country = Ops.get(Builtins.splitstring(country, "@"), 0, "")
-        end
-      end
-      if country != nil && country != ""
-        if Builtins.find(country, ".") != -1
-          country = Ops.get(Builtins.splitstring(country, "."), 0, "")
-        end
-      end
-      if country != nil && country != ""
-        if Builtins.find(country, "_") != -1
-          country = Ops.get(Builtins.splitstring(country, "_"), 1, "")
+      country = @default_language if [nil, ""].include?(country)
+      country = Ops.get(Builtins.splitstring(country, "@"), 0, "") if !country.nil? && country != "" && (Builtins.find(country, "@") != -1)
+      country = Ops.get(Builtins.splitstring(country, "."), 0, "") if !country.nil? && country != "" && (Builtins.find(country, ".") != -1)
+      if !country.nil? && country != ""
+        country = if Builtins.find(country, "_") == -1
+          Builtins.toupper(country)
         else
-          country = Builtins.toupper(country)
+          Ops.get(Builtins.splitstring(country, "_"), 1, "")
         end
       end
 
@@ -1041,13 +1005,11 @@ module Yast
       country
     end
 
-
     # de_DE@UTF-8 -> "DE"
     # @return country part of language
     def GetLanguageCountry
       GetGivenLanguageCountry(@language)
     end
-
 
     # Returns true if translation for given language is not complete
     def IncompleteTranslation(lang)
@@ -1060,9 +1022,9 @@ module Yast
 
         status = SCR.Read(path(".target.string"), file)
 
-        if status != nil && status != ""
+        if !status.nil? && status != ""
           to_i = Builtins.tointeger(status)
-          Ops.set(@translation_status, lang, to_i != nil ? to_i : 0)
+          Ops.set(@translation_status, lang, to_i.nil? ? 0 : to_i)
         else
           Ops.set(@translation_status, lang, 100)
         end
@@ -1073,7 +1035,7 @@ module Yast
           "incomplete_translation_treshold"
         )
       )
-      treshold = 95 if treshold == nil
+      treshold = 95 if treshold.nil?
 
       Ops.less_than(Ops.get(@translation_status, lang, 0), treshold)
     end
@@ -1081,7 +1043,7 @@ module Yast
     # Checks if translation is complete and displays
     # Continue/Cancel popup messsage if it is not
     # return true if translation is OK or user agrees with the warning
-    def CheckIncompleteTranslation(lang)
+    def CheckIncompleteTranslation(_lang)
       if IncompleteTranslation(@language)
         # continue/cancel message
         return Popup.ContinueCancel(
@@ -1130,8 +1092,8 @@ module Yast
     def Export
       ret = {}
       if @language == default_language
-        log.info("language <#{@language}> is the default language "\
-          "--> no export")
+        log.info("language <#{@language}> is the default language " \
+                 "--> no export")
       else
         ret["language"] = @language
       end
@@ -1157,9 +1119,8 @@ module Yast
       ret = []
 
       # already generated in previous run with `primary
-      if kind == :secondary && @secondary_items != []
-        return deep_copy(@secondary_items)
-      end
+      return deep_copy(@secondary_items) if kind == :secondary && @secondary_items != []
+
       @secondary_items = []
 
       use_ascii = GetTextMode()
@@ -1173,9 +1134,11 @@ module Yast
         # English name of language (translated language).
         # e.g. German (Deutsch)
         ret = Builtins.maplist(en_name_sort) do |name, codelist|
-          label = Builtins.substring(Ops.get_string(codelist, 1, ""), 0, 2) == "en" ?
-            Ops.get_string(codelist, 0, "") :
+          label = if Builtins.substring(Ops.get_string(codelist, 1, ""), 0, 2) == "en"
+            Ops.get_string(codelist, 0, "")
+          else
             Builtins.sformat("%1 - %2", name, Ops.get_string(codelist, 0, ""))
+          end
           Item(Id(Ops.get_string(codelist, 1, "")), label)
         end
         return deep_copy(ret)
@@ -1203,7 +1166,7 @@ module Yast
       code2native = {}
       # list of language names (translated)
       lang_list = []
-      Builtins.foreach(languageselsort) do |name, codelist|
+      Builtins.foreach(languageselsort) do |_name, codelist|
         Ops.set(
           lang2code,
           Ops.get_string(codelist, 2, ""),
@@ -1217,21 +1180,22 @@ module Yast
         )
       end
 
-
       if Stage.firstboot
         # show also native forms in firstboot (bnc#492812)
         ret = Builtins.maplist(en_name_sort) do |name, codelist|
           code = Ops.get_string(codelist, 1, "")
-          label = Builtins.substring(code, 0, 2) == "en" ?
-            Ops.get_string(codelist, 0, "") :
+          label = if Builtins.substring(code, 0, 2) == "en"
+            Ops.get_string(codelist, 0, "")
+          else
             Builtins.sformat("%1 - %2", name, Ops.get_string(codelist, 0, ""))
+          end
           Item(Id(code), label, @language == code)
         end
         return deep_copy(ret)
       end
       primary_included = false
 
-      if kind == :primary || kind == :secondary
+      if [:primary, :secondary].include?(kind)
         languages_l = Builtins.splitstring(@languages, ",")
         # filter the primary language from the list of secondary ones:
         languages_l = Builtins.filter(languages_l) { |l| l != @language }
@@ -1240,16 +1204,18 @@ module Yast
         primary_items = []
         @secondary_items = Builtins.maplist(Builtins.lsort(lang_list)) do |trans_lang|
           code = Ops.get_string(lang2code, trans_lang, "")
-          show_lang = @language == code ?
-            trans_lang :
+          show_lang = if @language == code
+            trans_lang
+          else
             Builtins.sformat(
               "%1 - %2",
               trans_lang,
               Ops.get_string(code2native, code, "")
             )
+          end
           primary_items = Builtins.add(
             primary_items,
-            icons ?
+            if icons
               Item(
                 Id(code),
                 term(
@@ -1261,11 +1227,13 @@ module Yast
                 ),
                 show_lang,
                 @language == code
-              ) :
+              )
+            else
               Item(Id(code), trans_lang, @language == code)
+            end
           )
           primary_included = true if @language == code
-          icons ?
+          if icons
             Item(
               Id(code),
               term(
@@ -1277,8 +1245,10 @@ module Yast
               ),
               trans_lang,
               Builtins.contains(languages_l, code)
-            ) :
+            )
+          else
             Item(Id(code), trans_lang, Builtins.contains(languages_l, code))
+          end
         end
         if !primary_included
           primary_items = Builtins.add(
@@ -1286,7 +1256,7 @@ module Yast
             Item(Id(@language), @language, true)
           )
         end
-        ret = kind == :primary ? primary_items : @secondary_items
+        ret = (kind == :primary) ? primary_items : @secondary_items
       end
       deep_copy(ret)
     end
@@ -1296,7 +1266,7 @@ module Yast
     # @deprecated does nothing
     def CheckLanguagesSupport(_selected_language)
       log.warn "Called check for language support, but it does nothing"
-      return
+      nil
     end
 
     # Set current YaST language to English if method for showing text in
@@ -1323,6 +1293,7 @@ module Yast
     # @note To be used in instsys
     def supported_language?(lang)
       return true unless GetTextMode()
+
       (fbiterm? && supported_by_fbiterm?(lang)) || !(fbiterm? || CJKLanguage(lang))
     end
 
@@ -1333,58 +1304,59 @@ module Yast
     # Returns main language from full locale. E.g. en_US.UTF-8 -> en or agr_PE -> agr
     def main_language(lang)
       return "" unless lang
+
       lang[/^[a-z]+/]
     end
 
-    publish :variable => :language, :type => "string"
-    publish :variable => :language_on_entry, :type => "string"
-    publish :variable => :preselected, :type => "string"
-    publish :variable => :languages, :type => "string"
-    publish :variable => :languages_on_entry, :type => "string"
-    publish :variable => :ExpertSettingsChanged, :type => "boolean"
-    publish :variable => :selection_skipped, :type => "boolean"
-    publish :variable => :available_lang_filenames, :type => "list <string>"
-    publish :function => :RemoveSuffix, :type => "string (string)"
-    publish :function => :default_language, :type => "string ()"
-    publish :function => :CJKLanguage, :type => "boolean (string)"
-    publish :function => :GetTextMode, :type => "boolean ()"
-    publish :function => :GetLanguagesMap, :type => "map <string, list> (boolean)"
-    publish :function => :GetLang2TimezoneMap, :type => "map <string, string> (boolean)"
-    publish :function => :GetLang2KeyboardMap, :type => "map <string, string> (boolean)"
-    publish :function => :GetLocales, :type => "map <string, integer> ()"
-    publish :function => :Set, :type => "void (string)"
-    publish :function => :QuickSet, :type => "void (string)"
-    publish :function => :LinuxrcLangSet, :type => "boolean ()"
-    publish :function => :GetLocaleString, :type => "string (string)"
-    publish :function => :GetCurrentLocaleString, :type => "string ()"
-    publish :function => :SetDefault, :type => "void ()"
-    publish :function => :ReadSysconfigValues, :type => "void ()"
-    publish :function => :Language, :type => "void ()"
-    publish :function => :Read, :type => "boolean (boolean)"
-    publish :function => :Modified, :type => "boolean ()"
-    publish :function => :PackagesModified, :type => "boolean ()"
-    publish :function => :GetExpertValues, :type => "map ()"
-    publish :function => :SetExpertValues, :type => "void (map)"
-    publish :function => :WfmSetGivenLanguage, :type => "void (string)"
-    publish :function => :WfmSetLanguage, :type => "void ()"
-    publish :function => :MakeProposal, :type => "list <string> (boolean, boolean)"
-    publish :function => :MakeSimpleProposal, :type => "string ()"
-    publish :function => :GetName, :type => "string ()"
-    publish :function => :Selection, :type => "map <string, list> ()"
-    publish :function => :Save, :type => "void ()"
-    publish :function => :PackagesInit, :type => "boolean (list <string>)"
-    publish :function => :EnoughSpace, :type => "boolean ()"
-    publish :function => :PackagesCommit, :type => "boolean ()"
-    publish :function => :GetGivenLanguageCountry, :type => "string (string)"
-    publish :function => :GetLanguageCountry, :type => "string ()"
-    publish :function => :IncompleteTranslation, :type => "boolean (string)"
-    publish :function => :CheckIncompleteTranslation, :type => "boolean (string)"
-    publish :function => :Import, :type => "boolean (map)"
-    publish :function => :Export, :type => "map ()"
-    publish :function => :Summary, :type => "string ()"
-    publish :function => :GetLanguageItems, :type => "list <term> (symbol)"
-    publish :function => :CheckLanguagesSupport, :type => "void (string)"
-    publish :function => :SwitchToEnglishIfNeeded, :type => "boolean (boolean)"
+    publish variable: :language, type: "string"
+    publish variable: :language_on_entry, type: "string"
+    publish variable: :preselected, type: "string"
+    publish variable: :languages, type: "string"
+    publish variable: :languages_on_entry, type: "string"
+    publish variable: :ExpertSettingsChanged, type: "boolean"
+    publish variable: :selection_skipped, type: "boolean"
+    publish variable: :available_lang_filenames, type: "list <string>"
+    publish function: :RemoveSuffix, type: "string (string)"
+    publish function: :default_language, type: "string ()"
+    publish function: :CJKLanguage, type: "boolean (string)"
+    publish function: :GetTextMode, type: "boolean ()"
+    publish function: :GetLanguagesMap, type: "map <string, list> (boolean)"
+    publish function: :GetLang2TimezoneMap, type: "map <string, string> (boolean)"
+    publish function: :GetLang2KeyboardMap, type: "map <string, string> (boolean)"
+    publish function: :GetLocales, type: "map <string, integer> ()"
+    publish function: :Set, type: "void (string)"
+    publish function: :QuickSet, type: "void (string)"
+    publish function: :LinuxrcLangSet, type: "boolean ()"
+    publish function: :GetLocaleString, type: "string (string)"
+    publish function: :GetCurrentLocaleString, type: "string ()"
+    publish function: :SetDefault, type: "void ()"
+    publish function: :ReadSysconfigValues, type: "void ()"
+    publish function: :Language, type: "void ()"
+    publish function: :Read, type: "boolean (boolean)"
+    publish function: :Modified, type: "boolean ()"
+    publish function: :PackagesModified, type: "boolean ()"
+    publish function: :GetExpertValues, type: "map ()"
+    publish function: :SetExpertValues, type: "void (map)"
+    publish function: :WfmSetGivenLanguage, type: "void (string)"
+    publish function: :WfmSetLanguage, type: "void ()"
+    publish function: :MakeProposal, type: "list <string> (boolean, boolean)"
+    publish function: :MakeSimpleProposal, type: "string ()"
+    publish function: :GetName, type: "string ()"
+    publish function: :Selection, type: "map <string, list> ()"
+    publish function: :Save, type: "void ()"
+    publish function: :PackagesInit, type: "boolean (list <string>)"
+    publish function: :EnoughSpace, type: "boolean ()"
+    publish function: :PackagesCommit, type: "boolean ()"
+    publish function: :GetGivenLanguageCountry, type: "string (string)"
+    publish function: :GetLanguageCountry, type: "string ()"
+    publish function: :IncompleteTranslation, type: "boolean (string)"
+    publish function: :CheckIncompleteTranslation, type: "boolean (string)"
+    publish function: :Import, type: "boolean (map)"
+    publish function: :Export, type: "map ()"
+    publish function: :Summary, type: "string ()"
+    publish function: :GetLanguageItems, type: "list <term> (symbol)"
+    publish function: :CheckLanguagesSupport, type: "void (string)"
+    publish function: :SwitchToEnglishIfNeeded, type: "boolean (boolean)"
 
   private
 
@@ -1393,11 +1365,11 @@ module Yast
 
     # Checking available source repos
     def check_source
-      if Pkg.SourceGetCurrent(true).empty?
-        Report.Warning(
-          _("There is no installation source enabled.\nThe corresponding translations will not be installed.")
-        )
-      end
+      return unless Pkg.SourceGetCurrent(true).empty?
+
+      Report.Warning(
+        _("There is no installation source enabled.\nThe corresponding translations will not be installed.")
+      )
     end
 
     # Determines whether the language is supported by fbiterm
@@ -1429,7 +1401,7 @@ module Yast
         # use --root option locally, running in chroot does not work in insts-sys
         command = ["/usr/bin/systemd-firstboot", "--root", Installation.destdir, "--locale", locale]
 
-        log.info("Making language settings persistent: #{command.join(' ')}")
+        log.info("Making language settings persistent: #{command.join(" ")}")
 
         Yast::Execute.locally!(command)
       else
@@ -1437,7 +1409,7 @@ module Yast
 
         command = ["/usr/bin/localectl", "set-locale", *localectl_args]
 
-        log.info("Making language settings persistent: #{command.join(' ')}")
+        log.info("Making language settings persistent: #{command.join(" ")}")
 
         Yast::Execute.on_target!(command)
       end
@@ -1495,7 +1467,6 @@ module Yast
     def localectl_args
       @localed_conf.map { |k, v| "#{k}=#{v}" }
     end
-
 
     def show_fallback_to_english_warning
       Report.Message(

@@ -9,9 +9,8 @@ Yast.import "Mode"
 
 module Language
   class AutoClient < ::Installation::AutoClient
-
     include Yast::Logger
-    
+
     def change
       Wizard.CreateDialog
       Wizard.HideAbortButton
@@ -23,15 +22,15 @@ module Language
       Wizard.CloseDialog
       ret
     end
-    
+
     def import(data)
-      Language.Import(data)      
+      Language.Import(data)
     end
-    
+
     def summary
       Language.Summary
     end
-    
+
     def reset
       Language.Import(
         {
@@ -40,23 +39,23 @@ module Language
         }
       )
       Language.ExpertSettingsChanged = false
-      {}      
+      {}
     end
 
     def read
       Language.Read(true)
     end
-    
+
     def export
       Language.Export
     end
-    
+
     def write
       Console.SelectFont(Language.language)
       Console.Save
-      Language.Save      
+      Language.Save
     end
-    
+
     def modified?
       Language.Modified
     end
@@ -64,7 +63,7 @@ module Language
     def packages
       {}
     end
-    
+
     def modified
       Language.ExpertSettingsChanged = true # hook (no general 'modified' variable)
     end

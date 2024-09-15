@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2012 Novell, Inc. All Rights Reserved.
 #
@@ -47,7 +45,6 @@ module Yast
 
       # if packages should be installed after language change
       @no_packages = false
-
 
       # -- the command line description map --------------------------------------
       @cmdline = {
@@ -220,24 +217,22 @@ module Yast
 
       Builtins.y2debug("result '%1'", result)
 
-      if result == :cancel || result == :back
+      if [:cancel, :back].include?(result)
         # Back to original values...
         Builtins.y2milestone(
           "canceled -> restoring: %1",
           Language.language_on_entry
         )
         Language.Set(Language.language_on_entry)
-      else
-        if Language.Modified
-          # help for write dialog
-          Wizard.RestoreHelp(
+      elsif Language.Modified
+        Wizard.RestoreHelp(
             _("<p><b>Saving Configuration</b><br>Please wait...</p>")
           )
-          Console.SelectFont(Language.language)
-          LanguageWrite()
-        else
-          Builtins.y2milestone("Language not changed --> doing nothing")
-        end
+        Console.SelectFont(Language.language)
+        LanguageWrite()
+      # help for write dialog
+      else
+        Builtins.y2milestone("Language not changed --> doing nothing")
       end
       UI.CloseDialog
       deep_copy(result)
@@ -245,7 +240,7 @@ module Yast
 
     # Handler for language summary
     def LanguageSummaryHandler(options)
-      options = deep_copy(options)
+      deep_copy(options)
       selection = Language.Selection
       # summary label
       CommandLine.Print(
@@ -275,7 +270,7 @@ module Yast
 
     # Handler for listing available languages
     def LanguageListHandler(options)
-      options = deep_copy(options)
+      deep_copy(options)
       Builtins.foreach(Language.Selection) do |lang_code, lang_info|
         CommandLine.Print(
           Builtins.sformat(
@@ -307,9 +302,7 @@ module Yast
         return false
       end
       llanguages = Builtins.splitstring(languages, ",")
-      if !Builtins.contains(llanguages, language)
-        llanguages = Builtins.add(llanguages, language)
-      end
+      llanguages = Builtins.add(llanguages, language) if !Builtins.contains(llanguages, language)
 
       Language.languages = Builtins.mergestring(llanguages, ",")
 
