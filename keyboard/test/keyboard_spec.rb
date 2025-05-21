@@ -9,6 +9,10 @@ Yast.import "Keyboard"
 describe "Yast::Keyboard" do
   subject { Yast::Keyboard }
 
+  before do
+    allow(File).to receive(:executable?).with("/usr/sbin/xkbctrl").and_return(false)
+  end
+
   describe "#GetKeyboardForLanguage" do
     let (:search_language) {"en_US"}
 
