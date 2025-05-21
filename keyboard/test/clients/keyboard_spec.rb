@@ -23,6 +23,7 @@ require "y2keyboard/dialogs/layout_selector"
 require "y2keyboard/strategies/systemd_strategy"
 
 Yast.import "Directory"
+Yast.import "Package"
 
 describe Yast::KeyboardClient do
   describe ".setup" do
@@ -35,6 +36,7 @@ describe Yast::KeyboardClient do
       allow(Y2Keyboard::Strategies::SystemdStrategy).to receive(:new).and_return(systemd_strategy)
       allow(Y2Keyboard::Strategies::YastProposalStrategy).to receive(:new).and_return(yast_proposal_strategy)
       allow(Y2Keyboard::Dialogs::LayoutSelector).to receive(:new).and_return(dialog)
+      allow(Yast::Package).to receive(:InstallAll).with(["setxkbmap"]).and_return(true)
     end
 
     it "load keyboard layouts definitions from data directory" do

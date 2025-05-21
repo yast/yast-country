@@ -34,6 +34,7 @@ describe Y2Keyboard::Dialogs::LayoutSelector do
     allow(Yast::UI).to receive(:CloseDialog).and_return(true)
     allow(Y2Keyboard::KeyboardLayout).to receive(:current_layout).and_return(english)
     allow(Y2Keyboard::KeyboardLayout).to receive(:all).and_return(layouts)
+    allow(File).to receive(:executable?).with("/usr/sbin/xkbctrl").and_return(false)
   end
 
   describe "#run" do

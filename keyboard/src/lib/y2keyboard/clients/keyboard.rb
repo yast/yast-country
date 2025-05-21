@@ -110,14 +110,29 @@ module Yast
       end
     end
 
+    # Make sure that all needed packages are installed
+    #
+    # @return [Boolean]
+    def self.required_packages_installed
+      return true if UI.TextMode
+
+      # setxkbmap is needed in dialogs/layout_selector.rb for changing the X11
+      # keyboard layout on the fly, and for restoring the original one if the
+      # user cancels the dialog (bsc#1243088).
+      Package.InstallAll(["setxkbmap"])
+    end
+
     def self.setup
       Yast.import "Stage"
       Yast.import "Mode"
+      Yast.import "Package"
 
       if Yast::Stage.initial || Yast::Mode.config
         # In installation mode or AY configuration mode
         strategy = Y2Keyboard::Strategies::YastProposalStrategy.new
       else
+        return unless required_packages_installed
+
         # running system --> using systemd
         strategy = Y2Keyboard::Strategies::SystemdStrategy.new
       end
