@@ -28,20 +28,23 @@ describe Keyboard::AutoClient do
   describe "#change" do
     before do
       allow(Yast::WFM).to receive(:CallFunction).with(
-        "keyboard")
+        "keyboard"
+      )
         .and_return(true)
     end
 
     it "runs keyboard client on non s390" do
       expect(Yast::WFM).to receive(:CallFunction).with(
-        "keyboard")
+        "keyboard"
+      )
       expect(Yast::Arch).to receive(:s390).and_return(false)
       client.change
     end
 
     it "does not run keyboard client on s390" do
       expect(Yast::WFM).to_not receive(:CallFunction).with(
-        "keyboard")
+        "keyboard"
+      )
       expect(Yast::Arch).to receive(:s390).and_return(true)
       client.change
     end
@@ -63,7 +66,7 @@ describe Keyboard::AutoClient do
   end
 
   describe "#import" do
-    let(:profile) {{ "keymap" => "english-us" }}
+    let(:profile) { { "keymap" => "english-us" } }
 
     it "imports the profile" do
       expect(Yast::Keyboard).to receive(:Import).with(profile)
@@ -90,7 +93,7 @@ describe Keyboard::AutoClient do
       expect(Yast::Keyboard).to receive(:Save)
       client.write
     end
-    
+
     it "returns the value from the finish client" do
       expect(Yast::Keyboard).to receive(:Save).and_return(nil)
       expect(client.write).to eq(nil)
@@ -114,13 +117,13 @@ describe Keyboard::AutoClient do
     it "keyboard settings are modified ?" do
       expect(Yast::Keyboard).to receive(:Modified)
       client.modified?
-    end    
+    end
   end
 
   describe "#modified" do
     it "set to modified" do
       client.modified
       expect(client.modified?).to eq(true)
-    end    
+    end
   end
 end

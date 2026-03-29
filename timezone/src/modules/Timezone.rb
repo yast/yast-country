@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2012 Novell, Inc. All Rights Reserved.
 #
@@ -152,15 +150,12 @@ module Yast
       # END: Globally defined data to be accessed via Timezone::<variable>
       # ------------------------------------------------------------------
 
-
-
       # ------------------------------------------------------------------
       # START: Locally defined data
       # ------------------------------------------------------------------
 
       # internal map used to store initial data
       @push = {}
-
 
       @name = ""
 
@@ -183,7 +178,6 @@ module Yast
     # END: Locally defined data
     # ------------------------------------------------------------------
 
-
     # -----------------------------------------------------------------------------
     # START: Globally defined functions
     # -----------------------------------------------------------------------------
@@ -201,12 +195,12 @@ module Yast
         base_lang2tz = Convert.to_map(
           SCR.Read(path(".target.yast2"), "lang2tz.ycp")
         )
-        base_lang2tz = {} if base_lang2tz == nil
+        base_lang2tz = {} if base_lang2tz.nil?
 
         @lang2tz = Convert.convert(
           Builtins.union(base_lang2tz, Language.GetLang2TimezoneMap(true)),
-          :from => "map",
-          :to   => "map <string, string>"
+          from: "map",
+          to:   "map <string, string>"
         )
       end
       deep_copy(@lang2tz)
@@ -224,10 +218,10 @@ module Yast
       if Builtins.size(@zonemap) == 0
         zmap = Convert.convert(
           Builtins.eval(WFM.Read(path(".local.yast2"), "timezone_raw.ycp")),
-          :from => "any",
-          :to   => "list <map <string, any>>"
+          from: "any",
+          to:   "list <map <string, any>>"
         )
-        zmap = [] if zmap == nil
+        zmap = [] if zmap.nil?
 
         @zonemap = Builtins.sort(zmap) do |a, b|
           # [ "USA", "Canada" ] -> [ "Canada", "USA" ]
@@ -305,11 +299,9 @@ module Yast
         end
         if !Arch.s390
           cmd = Ops.add("/sbin/hwclock --hctosys ", @hwclock)
-          if Stage.initial && @hwclock == "--localtime"
-            if !@systz_called
-              cmd = "/sbin/hwclock --systz --localtime --noadjfile && touch /dev/shm/warpclock"
-              @systz_called = true
-            end
+          if Stage.initial && @hwclock == "--localtime" && !@systz_called
+            cmd = "/sbin/hwclock --systz --localtime --noadjfile && touch /dev/shm/warpclock"
+            @systz_called = true
           end
           Builtins.y2milestone("Set cmd %1", cmd)
           Builtins.y2milestone(
@@ -361,19 +353,16 @@ module Yast
     def ReadAdjTime
       cont = Convert.convert(
         SCR.Read(path(".etc.adjtime")),
-        :from => "any",
-        :to   => "list <string>"
+        from: "any",
+        to:   "list <string>"
       )
-      if cont == nil
-        Builtins.y2warning("/etc/adjtime not available or not readable")
-      end
+      Builtins.y2warning("/etc/adjtime not available or not readable") if cont.nil?
       if Builtins.size(cont) != 3
         Builtins.y2warning("/etc/adjtime has wrong number of lines: %1", cont)
         cont = nil
       end
       deep_copy(cont)
     end
-
 
     # Read timezone settings from sysconfig
     def Read
@@ -388,7 +377,7 @@ module Yast
         tz_file = Convert.to_string(
           SCR.Read(path(".target.symlink"), "/etc/localtime")
         )
-        if tz_file != nil &&
+        if !tz_file.nil? &&
             Builtins.substring(tz_file, 0, 20) == "/usr/share/zoneinfo/"
           @timezone = Builtins.substring(tz_file, 20)
           Builtins.y2milestone(
@@ -474,7 +463,6 @@ module Yast
       true
     end
 
-
     # Set the new time and date given by user
     def SetTime(year, month, day, hour, minute, second)
       return nil if Arch.s390
@@ -540,9 +528,9 @@ module Yast
     def tz_prefix
       return "" if @hwclock == "--localtime"
       return "" if @timezone.empty?
+
       "TZ=#{@timezone} "
     end
-
 
     # GetTimezoneForLanguage()
     #
@@ -583,23 +571,21 @@ module Yast
 
     # Return the language code for given timezone (by reverse searching the
     # "language -> timezone" map)
-    # @param timezone, if empty the current one is used
-    def GetLanguageForTimezone(tz)
-      tz = @timezone if tz == "" || tz == nil
+    # @param timezone if empty the current one is used
+    def GetLanguageForTimezone(timezone)
+      timezone = @timezone if ["", nil].include?(timezone)
 
       lang = ""
       Builtins.foreach(get_lang2tz) do |code, tmz|
-        if tmz == tz && (lang == "" || !Builtins.issubstring(lang, "_"))
-          lang = code
-        end
+        lang = code if tmz == timezone && (lang == "" || !Builtins.issubstring(lang, "_"))
       end
       lang
     end
 
     # Return the country part of language code for given timezone
     # @param timezone, if empty the current one is used
-    def GetCountryForTimezone(tz)
-      Language.GetGivenLanguageCountry(GetLanguageForTimezone(tz))
+    def GetCountryForTimezone(timezone)
+      Language.GetGivenLanguageCountry(GetLanguageForTimezone(timezone))
     end
 
     # Return translated country name of given timezone
@@ -633,9 +619,11 @@ module Yast
     def GetDateTime(real_time, locale_format)
       cmd = ""
 
-      date_format = locale_format && Mode.normal ?
-        "+%c" :
+      date_format = if locale_format && Mode.normal
+        "+%c"
+      else
         "+%Y-%m-%d - %H:%M:%S"
+      end
 
       log.info("GetDateTime hwclock: #{@hwclock} real: #{real_time}")
       if !real_time && !Mode.config
@@ -647,7 +635,7 @@ module Yast
           tzd = Ops.get_string(out2, "stdout", "")
           log.info("GetDateTime tzd: #{tzd}")
           t = Builtins.tointeger(String.CutZeros(Builtins.substring(tzd, 1, 2)))
-          if t != nil
+          if !t.nil?
             ds = Ops.add(ds, Ops.multiply(t, 3600))
             t = Builtins.tointeger(
               String.CutZeros(Builtins.substring(tzd, 3, 2))
@@ -691,7 +679,6 @@ module Yast
       @windows_partition || vmware || (Arch.board_mac && Arch.ppc32)
     end
 
-
     # Return proposal list of strings.
     #
     # @param [Boolean] force_reset If force_reset is true reset the module
@@ -724,38 +711,36 @@ module Yast
         # Reset user_decision flag.
         #
         @user_decision = false # no reset
-      else
+      elsif @user_decision || Mode.autoinst ||
+          ProductFeatures.GetStringFeature("globals", "timezone") != ""
         # Only follow the language if the user has never actively chosen
         # a timezone. The indicator for this is user_decision which is
         # set from outside the module.
         #
-        if @user_decision || Mode.autoinst ||
-            ProductFeatures.GetStringFeature("globals", "timezone") != ""
+        if language_changed
+          Builtins.y2milestone(
+            "User has chosen a timezone; not following language - only retranslation."
+          )
+
+          Set(@timezone, true)
+        end
+      else
+        # User has not yet chosen a timezone ==> follow language.
+        #
+        local_timezone = GetTimezoneForLanguage(
+          Language.language,
+          "US/Eastern"
+        )
+
+        if local_timezone == ""
           if language_changed
-            Builtins.y2milestone(
-              "User has chosen a timezone; not following language - only retranslation."
-            )
+            Builtins.y2error("Can't follow language - only retranslation")
 
             Set(@timezone, true)
           end
         else
-          # User has not yet chosen a timezone ==> follow language.
-          #
-          local_timezone = GetTimezoneForLanguage(
-            Language.language,
-            "US/Eastern"
-          )
-
-          if local_timezone != ""
-            Set(local_timezone, true)
-            @default_timezone = local_timezone
-          else
-            if language_changed
-              Builtins.y2error("Can't follow language - only retranslation")
-
-              Set(@timezone, true)
-            end
-          end
+          Set(local_timezone, true)
+          @default_timezone = local_timezone
         end
       end
 
@@ -830,7 +815,6 @@ module Yast
       end
     end
 
-
     # Save()
     #
     # Save timezone to target sysconfig.
@@ -851,7 +835,7 @@ module Yast
       adjtime = ReadAdjTime()
       if adjtime.nil? || adjtime.size == 3
         new     = adjtime.nil? ? ["0.0 0 0.0", "0"] : adjtime.dup
-        new[2]  = @hwclock == "-u" ? "UTC" : "LOCAL"
+        new[2]  = (@hwclock == "-u") ? "UTC" : "LOCAL"
         if adjtime.nil? || new[2] != adjtime[2]
           SCR.Write(path(".etc.adjtime"), new)
           Builtins.y2milestone("Saved /etc/adjtime with '%1'", new[2])
@@ -862,7 +846,6 @@ module Yast
 
       nil
     end
-
 
     # Return current date and time in the map
     def GetDateTimeMap
@@ -885,15 +868,17 @@ module Yast
     def CheckTime(hour, minute, second)
       ret = true
       tmp = Builtins.tointeger(String.CutZeros(hour))
-      return false if tmp == nil
+      return false if tmp.nil?
+
       ret = ret && Ops.greater_or_equal(tmp, 0) && Ops.less_than(tmp, 24)
       tmp = Builtins.tointeger(String.CutZeros(minute))
-      return false if tmp == nil
+      return false if tmp.nil?
+
       ret = ret && Ops.greater_or_equal(tmp, 0) && Ops.less_than(tmp, 60)
       tmp = Builtins.tointeger(String.CutZeros(second))
-      return false if tmp == nil
-      ret = ret && Ops.greater_or_equal(tmp, 0) && Ops.less_than(tmp, 60)
-      ret
+      return false if tmp.nil?
+
+      ret && Ops.greater_or_equal(tmp, 0) && Ops.less_than(tmp, 60)
     end
 
     def CheckDate(day, month, year)
@@ -902,7 +887,8 @@ module Yast
       yea = Builtins.tointeger(String.CutZeros(year))
       mon = Builtins.tointeger(String.CutZeros(month))
       da = Builtins.tointeger(String.CutZeros(day))
-      return false if yea == nil || mon == nil || da == nil
+      return false if yea.nil? || mon.nil? || da.nil?
+
       ret = ret && Ops.greater_or_equal(mon, 1) && Ops.less_or_equal(mon, 12)
       if Ops.modulo(yea, 4) == 0 &&
           (Ops.modulo(yea, 100) != 0 || Ops.modulo(yea, 400) == 0)
@@ -910,8 +896,7 @@ module Yast
       end
       ret = ret && Ops.greater_or_equal(da, 1) &&
         Ops.less_or_equal(da, Ops.get_integer(mdays, Ops.subtract(mon, 1), 0))
-      ret = ret && yea >= 1970 # bsc#1214144
-      ret
+      ret && yea >= 1970 # bsc#1214144
     end
 
     # does the hwclock run on UTC only ? -> skip asking
@@ -942,12 +927,8 @@ module Yast
         @timezone,
         @hwclock
       )
-      if Builtins.haskey(@push, "hwclock")
-        @hwclock = Ops.get_string(@push, "hwclock", @hwclock)
-      end
-      if Builtins.haskey(@push, "timezone")
-        @timezone = Ops.get_string(@push, "timezone", @timezone)
-      end
+      @hwclock = Ops.get_string(@push, "hwclock", @hwclock) if Builtins.haskey(@push, "hwclock")
+      @timezone = Ops.get_string(@push, "timezone", @timezone) if Builtins.haskey(@push, "timezone")
       @push = {}
       Builtins.y2milestone(
         "after Pop: timezone %1 hwclock %2",
@@ -973,7 +954,7 @@ module Yast
       PushVal() if @push == {}
 
       if Builtins.haskey(settings, "hwclock")
-        @hwclock = Ops.get_string(settings, "hwclock", "UTC") == "UTC" ? "-u" : "--localtime"
+        @hwclock = (Ops.get_string(settings, "hwclock", "UTC") == "UTC") ? "-u" : "--localtime"
         @user_hwclock = true
       end
       # FIXME: this set modifies the system which is very unusual for an import operation
@@ -986,12 +967,12 @@ module Yast
     def Export
       ret = {}
 
-      if(ProposeLocaltime() && @hwclock != "-u") ||
-        (!ProposeLocaltime() && @hwclock == "-u")
-        log.info("hwclock <#{@hwclock}> is the default value"\
+      if (ProposeLocaltime() && @hwclock != "-u") ||
+          (!ProposeLocaltime() && @hwclock == "-u")
+        log.info("hwclock <#{@hwclock}> is the default value" \
                  " --> no export")
       else
-        ret["hwclock"] = @hwclock == "-u" ? "UTC" : "localtime"
+        ret["hwclock"] = (@hwclock == "-u") ? "UTC" : "localtime"
       end
 
       local_timezone = Timezone.GetTimezoneForLanguage(
@@ -999,7 +980,7 @@ module Yast
         "US/Eastern"
       )
       if local_timezone == @timezone
-        log.info("timezone <#{@timezone}> is the default value"\
+        log.info("timezone <#{@timezone}> is the default value" \
                  " --> no export")
       else
         ret["timezone"] = @timezone
@@ -1039,9 +1020,9 @@ module Yast
       return false unless windows_architecture?
 
       disk_analyzer.windows_system?
-    rescue NameError => ex
+    rescue NameError => e
       # bsc#1058869: Don't enforce y2storage being available
-      log.warn("Caught #{ex}")
+      log.warn("Caught #{e}")
       log.warn("No storage-ng support - not checking for a windows partition")
       log.warn("Assuming UTC for the hardware clock")
       false # No windows partition found
@@ -1052,11 +1033,12 @@ module Yast
     # @return [Boolean] true if it's read-only; false otherwise.
     def readonly
       return @readonly unless @readonly.nil?
+
       @readonly = ProductFeatures.GetBooleanFeature("globals", "readonly_timezone")
     end
 
     # Product's default timezone when it's not defined in the control file.
-    FALLBACK_PRODUCT_DEFAULT_TIMEZONE = "UTC"
+    FALLBACK_PRODUCT_DEFAULT_TIMEZONE = "UTC".freeze
 
     # Determines the default timezone for the current product
     #
@@ -1070,48 +1052,48 @@ module Yast
       product_timezone.empty? ? FALLBACK_PRODUCT_DEFAULT_TIMEZONE : product_timezone
     end
 
-    publish :variable => :timezone, :type => "string"
-    publish :variable => :hwclock, :type => "string"
-    publish :variable => :default_timezone, :type => "string"
-    publish :variable => :user_decision, :type => "boolean"
-    publish :variable => :user_hwclock, :type => "boolean"
-    publish :variable => :ntp_used, :type => "boolean"
-    publish :variable => :diff, :type => "integer"
-    publish :variable => :modified, :type => "boolean"
-    publish :variable => :windows_partition, :type => "boolean"
-    publish :variable => :call_mkinitrd, :type => "boolean"
-    publish :variable => :yast2zonetab, :type => "map <string, string>"
-    publish :variable => :obsoleted_zones, :type => "map <string, string>"
-    publish :function => :get_zonemap, :type => "list <map <string, any>> ()"
-    publish :function => :Set, :type => "integer (string, boolean)"
-    publish :function => :UpdateTimezone, :type => "string (string)"
-    publish :function => :Read, :type => "void ()"
-    publish :function => :Timezone, :type => "void ()"
-    publish :function => :CallMkinitrd, :type => "boolean ()"
-    publish :function => :SetTime, :type => "void (string, string, string, string, string, string)"
-    publish :function => :SystemTime2HWClock, :type => "void ()"
-    publish :function => :GetTimezoneForLanguage, :type => "string (string, string)"
-    publish :function => :SetTimezoneForLanguage, :type => "void (string)"
-    publish :function => :GetLanguageForTimezone, :type => "string (string)"
-    publish :function => :GetCountryForTimezone, :type => "string (string)"
-    publish :function => :GetTimezoneCountry, :type => "string (string)"
-    publish :function => :GetDateTime, :type => "string (boolean, boolean)"
-    publish :function => :ResetZonemap, :type => "void ()"
-    publish :function => :ProposeLocaltime, :type => "boolean ()"
-    publish :function => :MakeProposal, :type => "list <string> (boolean, boolean)"
-    publish :function => :Selection, :type => "list (integer)"
-    publish :function => :Region, :type => "list ()"
-    publish :function => :Save, :type => "void ()"
-    publish :function => :GetDateTimeMap, :type => "map ()"
-    publish :function => :CheckTime, :type => "boolean (string, string, string)"
-    publish :function => :CheckDate, :type => "boolean (string, string, string)"
-    publish :function => :utc_only, :type => "boolean ()"
-    publish :function => :PushVal, :type => "void ()"
-    publish :function => :PopVal, :type => "void ()"
-    publish :function => :Modified, :type => "boolean ()"
-    publish :function => :Import, :type => "boolean (map)"
-    publish :function => :Export, :type => "map ()"
-    publish :function => :Summary, :type => "string ()"
+    publish variable: :timezone, type: "string"
+    publish variable: :hwclock, type: "string"
+    publish variable: :default_timezone, type: "string"
+    publish variable: :user_decision, type: "boolean"
+    publish variable: :user_hwclock, type: "boolean"
+    publish variable: :ntp_used, type: "boolean"
+    publish variable: :diff, type: "integer"
+    publish variable: :modified, type: "boolean"
+    publish variable: :windows_partition, type: "boolean"
+    publish variable: :call_mkinitrd, type: "boolean"
+    publish variable: :yast2zonetab, type: "map <string, string>"
+    publish variable: :obsoleted_zones, type: "map <string, string>"
+    publish function: :get_zonemap, type: "list <map <string, any>> ()"
+    publish function: :Set, type: "integer (string, boolean)"
+    publish function: :UpdateTimezone, type: "string (string)"
+    publish function: :Read, type: "void ()"
+    publish function: :Timezone, type: "void ()"
+    publish function: :CallMkinitrd, type: "boolean ()"
+    publish function: :SetTime, type: "void (string, string, string, string, string, string)"
+    publish function: :SystemTime2HWClock, type: "void ()"
+    publish function: :GetTimezoneForLanguage, type: "string (string, string)"
+    publish function: :SetTimezoneForLanguage, type: "void (string)"
+    publish function: :GetLanguageForTimezone, type: "string (string)"
+    publish function: :GetCountryForTimezone, type: "string (string)"
+    publish function: :GetTimezoneCountry, type: "string (string)"
+    publish function: :GetDateTime, type: "string (boolean, boolean)"
+    publish function: :ResetZonemap, type: "void ()"
+    publish function: :ProposeLocaltime, type: "boolean ()"
+    publish function: :MakeProposal, type: "list <string> (boolean, boolean)"
+    publish function: :Selection, type: "list (integer)"
+    publish function: :Region, type: "list ()"
+    publish function: :Save, type: "void ()"
+    publish function: :GetDateTimeMap, type: "map ()"
+    publish function: :CheckTime, type: "boolean (string, string, string)"
+    publish function: :CheckDate, type: "boolean (string, string, string)"
+    publish function: :utc_only, type: "boolean ()"
+    publish function: :PushVal, type: "void ()"
+    publish function: :PopVal, type: "void ()"
+    publish function: :Modified, type: "boolean ()"
+    publish function: :Import, type: "boolean (map)"
+    publish function: :Export, type: "map ()"
+    publish function: :Summary, type: "string ()"
 
   protected
 
@@ -1149,14 +1131,14 @@ module Yast
         SCR.Execute(path(".target.bash_output"), cmd)
       end
 
-      if result["exit"] != 0
+      if result["exit"] == 0
+        log.info "output: #{result.inspect}"
+      else
         log.error "Timezone configuration not written. Failed to execute '#{cmd}'"
         log.error "output: #{result.inspect}"
 
         # TRANSLATORS: the "%s" is replaced by the executed command
         Report.Error(_("Could not save the timezone setting, the command\n%s\nfailed.") % cmd)
-      else
-        log.info "output: #{result.inspect}"
       end
     end
   end

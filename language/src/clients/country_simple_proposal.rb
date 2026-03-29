@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2012 Novell, Inc. All Rights Reserved.
 #
@@ -37,7 +35,8 @@ module Yast
       @param = Convert.to_map(WFM.Args(1))
       @ret = {}
 
-      if @func == "MakeProposal"
+      case @func
+      when "MakeProposal"
         @force_reset = Ops.get_boolean(@param, "force_reset", false)
         @language_changed = Ops.get_boolean(@param, "language_changed", false)
         # summary label <%1>-<%2> are HTML tags, leave untouched
@@ -67,7 +66,7 @@ module Yast
           "language_changed"      => false,
           "links"                 => ["country--language", "country--keyboard"]
         }
-      elsif @func == "Description"
+      when "Description"
         @ret = {
           # rich text label
           "rich_text_title" => _("Locale Settings"),
@@ -79,13 +78,13 @@ module Yast
           ],
           "id"              => "country"
         }
-      elsif @func == "AskUser"
-        if Ops.get_string(@param, "chosen_id", "") == "country--keyboard"
-          @ret = Convert.to_map(
+      when "AskUser"
+        @ret = if Ops.get_string(@param, "chosen_id", "") == "country--keyboard"
+          Convert.to_map(
             WFM.CallFunction("keyboard_proposal", [@func, @param])
           )
         else
-          @ret = Convert.to_map(
+          Convert.to_map(
             WFM.CallFunction("language_proposal", [@func, @param])
           )
         end

@@ -3,7 +3,6 @@
 require_relative "test_helper"
 require "y2country/language_dbus"
 
-
 describe "Yast::Console" do
   subject(:console) { "Yast::Console" }
 

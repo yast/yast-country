@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2012 Novell, Inc. All Rights Reserved.
 #
@@ -29,9 +27,7 @@ module Yast
 
       @args = GetInstArgs.argmap
 
-      if Ops.get_string(@args, "first_run", "yes") != "no"
-        Ops.set(@args, "first_run", "yes")
-      end
+      Ops.set(@args, "first_run", "yes") if Ops.get_string(@args, "first_run", "yes") != "no"
 
       WFM.CallFunction("select_language", [@args])
     end

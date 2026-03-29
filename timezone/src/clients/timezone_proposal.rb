@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # File:		timezone_proposal.rb
 #
 # Author:		Klaus Kaempf <kkaempf@suse.de>
@@ -23,7 +21,8 @@ module Yast
       @param = Convert.to_map(WFM.Args(1))
       @ret = {}
 
-      if @func == "MakeProposal"
+      case @func
+      when "MakeProposal"
         @force_reset = Ops.get_boolean(@param, "force_reset", false)
         @language_changed = Ops.get_boolean(@param, "language_changed", false)
 
@@ -59,7 +58,7 @@ module Yast
             "language_changed" => false
           }
         end
-      elsif @func == "AskUser"
+      when "AskUser"
         Wizard.OpenAcceptDialog
 
         @result = TimezoneDialog(
@@ -69,7 +68,7 @@ module Yast
 
         # Fill return map
         @ret = { "workflow_sequence" => @result, "language_changed" => false }
-      elsif @func == "Description"
+      when "Description"
         # Fill return map.
         #
         # Static values do just nicely here, no need to call a function.

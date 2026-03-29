@@ -1,4 +1,4 @@
-root_location = File.expand_path("../../", __FILE__)
+root_location = File.expand_path("..", __dir__)
 inc_dirs = Dir.glob("#{root_location}/*/src")
 ENV["Y2DIR"] = inc_dirs.join(":")
 

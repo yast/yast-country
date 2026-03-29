@@ -1,6 +1,4 @@
 #!/usr/bin/env rspec
-# coding: utf-8
-
 require_relative "test_helper"
 require "y2country/language_dbus"
 
@@ -96,7 +94,9 @@ describe "Yast::Timezone" do
 
   describe "#Set" do
     before do
-      allow(Yast::Misc).to receive(:SysconfigRead).with(Yast::Path.new(".sysconfig.clock.TIMEZONE"), anything)
+      allow(Yast::Misc).to receive(:SysconfigRead).with(
+        Yast::Path.new(".sysconfig.clock.TIMEZONE"), anything
+      )
         .and_return("Europe/Berlin")
       allow(Yast::Misc).to receive(:SysconfigRead).and_call_original
       allow(Yast::FileUtils).to receive(:IsLink).with("/etc/localtime").and_return(false)
@@ -310,15 +310,15 @@ describe "Yast::Timezone" do
       ).and_return("stdout" => "+0100\n")
 
       expect(Yast::SCR).to receive(:Execute).with(
-          path(".target.bash_output"),
-          "/usr/bin/date \"+%Y-%m-%d - %H:%M:%S\" \"--date=now 7200sec\""
-        ).and_return("stdout" => "2020-02-05 - 09:13:57\n")
+        path(".target.bash_output"),
+        "/usr/bin/date \"+%Y-%m-%d - %H:%M:%S\" \"--date=now 7200sec\""
+      ).and_return("stdout" => "2020-02-05 - 09:13:57\n")
 
       expect(subject.GetDateTimeMap).to eq(
-        "year" => "2020",
-        "month" => "02",
-        "day" => "05",
-        "hour" => "09",
+        "year"   => "2020",
+        "month"  => "02",
+        "day"    => "05",
+        "hour"   => "09",
         "minute" => "13",
         "second" => "57"
       )
@@ -406,10 +406,10 @@ describe "Yast::Timezone" do
       before do
         subject.hwclock = "-u"
         subject.timezone = "America/New_York"
-        allow(subject).to receive(:ProposeLocaltime).
-          and_return(false)
-        allow(subject).to receive(:GetTimezoneForLanguage).
-          and_return("America/New_York")
+        allow(subject).to receive(:ProposeLocaltime)
+          .and_return(false)
+        allow(subject).to receive(:GetTimezoneForLanguage)
+          .and_return("America/New_York")
       end
 
       it "exports an empty hash for the AutoYaST profile" do
@@ -420,7 +420,7 @@ describe "Yast::Timezone" do
 
   describe "#Summary" do
     it "returns html list" do
-      expect(subject.Summary).to be_a(::String)
+      expect(subject.Summary).to be_a(String)
       expect(subject.Summary).to include("<ul>")
     end
   end
@@ -462,7 +462,7 @@ describe "Yast::Timezone" do
 
       it "returns array of strings" do
         expect(subject.MakeProposal(true, true)).to be_a(Array)
-        expect(subject.MakeProposal(true, true)).to all(be_a(::String))
+        expect(subject.MakeProposal(true, true)).to all(be_a(String))
       end
     end
 
@@ -502,7 +502,7 @@ describe "Yast::Timezone" do
 
       it "returns array of strings" do
         expect(subject.MakeProposal(false, true)).to be_a(Array)
-        expect(subject.MakeProposal(false, true)).to all(be_a(::String))
+        expect(subject.MakeProposal(false, true)).to all(be_a(String))
       end
     end
   end
@@ -552,7 +552,7 @@ describe "Yast::Timezone" do
 
   describe "#Selection" do
     it "returns list of Items" do
-      expect(subject.Selection(0)).to be_a(::Array)
+      expect(subject.Selection(0)).to be_a(Array)
       expect(subject.Selection(0)).to all(be_a(Yast::Term))
     end
   end
@@ -570,7 +570,7 @@ describe "Yast::Timezone" do
       expect(subject.UpdateTimezone("Asia/Beijing")).to eq "Asia/Shanghai"
       expect(subject.UpdateTimezone("Asia/Harbin")).to eq "Asia/Shanghai"
     end
-    
+
     it "keeps valid Chinese timezones (bsc#1190586)" do
       expect(subject.UpdateTimezone("Asia/Shanghai")).to eq "Asia/Shanghai"
       expect(subject.UpdateTimezone("Asia/Hong_Kong")).to eq "Asia/Hong_Kong"
@@ -609,7 +609,6 @@ describe "Yast::Timezone" do
         subject.Import(settings)
       end
 
-
       context "and no timezone value is given" do
         let(:settings) { { "hwclock" => "UTC", "timezone" => "" } }
 
@@ -622,7 +621,7 @@ describe "Yast::Timezone" do
       end
 
       context "and a timezone value is given" do
-        let(:settings) { {"hwclock" => "UTC", "timezone" => "US/Pacific"} }
+        let(:settings) { { "hwclock" => "UTC", "timezone" => "US/Pacific" } }
 
         context "and it is running in the initial stage" do
           let(:initial) { true }

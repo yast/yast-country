@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # ------------------------------------------------------------------------------
 # Copyright (c) 2012 Novell, Inc. All Rights Reserved.
 #
@@ -18,7 +16,6 @@
 # To contact Novell about this file by physical or electronic mail, you may find
 # current contact information at www.novell.com.
 # ------------------------------------------------------------------------------
-
 
 # File:
 #	select_language.ycp
@@ -76,18 +73,16 @@ module Yast
 
       @preselected = Language.preselected
 
-      if @preselected != "en_US" && @set_default
-        if ProductFeatures.GetBooleanFeature("globals", "skip_language_dialog")
-          Builtins.y2milestone(
-            "Skipping language dialog, Language changed to %1",
-            @preselected
-          )
-          Language.CheckLanguagesSupport(@preselected)
-          Language.selection_skipped = true
-          return :auto
-        end
+      if @preselected != "en_US" && @set_default && ProductFeatures.GetBooleanFeature("globals",
+        "skip_language_dialog")
+        Builtins.y2milestone(
+          "Skipping language dialog, Language changed to %1",
+          @preselected
+        )
+        Language.CheckLanguagesSupport(@preselected)
+        Language.selection_skipped = true
+        return :auto
       end
-
 
       # when the possibility for selecting more languages should be shown
       # (this includes differet UI layout)
@@ -97,7 +92,6 @@ module Yast
 
       # filter the primary language from the list of secondary ones:
       @languages = Builtins.filter(@languages) { |l| l != @language }
-
 
       # Build the contents of the dialog.
 
@@ -229,27 +223,27 @@ module Yast
       @help_text = ""
       # help text (language dependent packages) - at the end of help
       @packages_help = _(
-        "<p>\n" +
-          "Additional packages with support for the selected primary and secondary languages will be installed. Packages no longer needed will be removed.\n" +
-          "</p>"
+        "<p>\n" \
+        "Additional packages with support for the selected primary and secondary languages will be installed. Packages no longer needed will be removed.\n" \
+        "</p>"
       )
 
       if Stage.initial
         # help text for initial (first time) language screen
         @help_text = _(
-          "<p>\n" +
-            "Choose the <b>Language</b> to use during installation and for\n" +
-            "the installed system.\n" +
-            "</p>\n"
+          "<p>\n" \
+          "Choose the <b>Language</b> to use during installation and for\n" \
+          "the installed system.\n" \
+          "</p>\n"
         )
 
         # help text, continued
         @help_text = Ops.add(
           @help_text,
           _(
-            "<p>\n" +
-              "Click <b>Next</b> to proceed to the next dialog.\n" +
-              "</p>\n"
+            "<p>\n" \
+            "Click <b>Next</b> to proceed to the next dialog.\n" \
+            "</p>\n"
           )
         )
 
@@ -257,10 +251,10 @@ module Yast
         @help_text = Ops.add(
           @help_text,
           _(
-            "<p>\n" +
-              "Nothing will happen to your computer until you confirm\n" +
-              "all your settings in the last installation dialog.\n" +
-              "</p>\n"
+            "<p>\n" \
+            "Nothing will happen to your computer until you confirm\n" \
+            "all your settings in the last installation dialog.\n" \
+            "</p>\n"
           )
         )
         if @set_default
@@ -268,10 +262,10 @@ module Yast
           @help_text = Ops.add(
             @help_text,
             _(
-              "<p>\n" +
-                "You can select <b>Abort</b> at any time to abort the\n" +
-                "installation process.\n" +
-                "</p>\n"
+              "<p>\n" \
+              "You can select <b>Abort</b> at any time to abort the\n" \
+              "installation process.\n" \
+              "</p>\n"
             )
           )
         end
@@ -279,18 +273,18 @@ module Yast
         # different help text when called after installation
         # in an installed system
         @help_text = _(
-          "<p>\n" +
-            "Choose the new <b>Language</b> for your system.\n" +
-            "</p>\n"
+          "<p>\n" \
+          "Choose the new <b>Language</b> for your system.\n" \
+          "</p>\n"
         )
       end
 
       if @more_languages
         # help text when "multiple languages" are suported 1/2
         @help_text = _(
-          "<p>\n" +
-            "Choose the new <b>Primary Language</b> for your system.\n" +
-            "</p>\n"
+          "<p>\n" \
+          "Choose the new <b>Primary Language</b> for your system.\n" \
+          "</p>\n"
         )
 
         if @adapt_term
@@ -298,10 +292,10 @@ module Yast
           @help_text = Ops.add(
             @help_text,
             _(
-              "<p>\n" +
-                "Check <b>Adapt Keyboard Layout</b> to change the keyboard layout to the primary language.\n" +
-                "Check <b>Adapt Time Zone</b> to change the current time zone according to the primary language. If the keyboard layout or time zone is already adapted to the default language setting, the respective option is disabled.\n" +
-                "</p>\n"
+              "<p>\n" \
+              "Check <b>Adapt Keyboard Layout</b> to change the keyboard layout to the primary language.\n" \
+              "Check <b>Adapt Time Zone</b> to change the current time zone according to the primary language. If the keyboard layout or time zone is already adapted to the default language setting, the respective option is disabled.\n" \
+              "</p>\n"
             )
           )
         end
@@ -310,10 +304,10 @@ module Yast
         @help_text = Ops.add(
           @help_text,
           _(
-            "<p>\n" +
-              "<b>Secondary Languages</b><br>\n" +
-              "In the selection box, specify additional languages to use on your system.\n" +
-              "</p>\n"
+            "<p>\n" \
+            "<b>Secondary Languages</b><br>\n" \
+            "In the selection box, specify additional languages to use on your system.\n" \
+            "</p>\n"
           )
         )
 
@@ -356,7 +350,7 @@ module Yast
       @kbd_adapt = @set_default && !Mode.config
       # adapt timezone for language?
       @tmz_adapt = @set_default && !Mode.config
-      begin
+      loop do
         @ret = Wizard.UserInput
         Builtins.y2debug("UserInput() returned %1", @ret)
 
@@ -374,8 +368,8 @@ module Yast
         if @ret == :changed_locale
           @primary_included = false
           if nil == Builtins.find(@primary_items) do |i|
-              Ops.get(i, [0, 0]) == @language
-            end
+                      Ops.get(i, [0, 0]) == @language
+                    end
             @primary_items = Builtins.add(
               @primary_items,
               Item(Id(@language), @language, true)
@@ -386,13 +380,15 @@ module Yast
         end
 
         if @ret == :next ||
-            (@ret == :language || @ret == :changed_locale) && !Mode.config
+            ((@ret == :language || @ret == :changed_locale) && !Mode.config)
           # Get the selected language.
           #
           if @ret != :changed_locale
-            @language = @more_languages ?
-              Convert.to_string(UI.QueryWidget(Id(:language), :Value)) :
+            @language = if @more_languages
+              Convert.to_string(UI.QueryWidget(Id(:language), :Value))
+            else
               Convert.to_string(UI.QueryWidget(Id(:language), :CurrentItem))
+            end
           end
 
           if @ret != :changed_locale && @adapt_term
@@ -408,9 +404,7 @@ module Yast
             @ret = :not_next
             next
           end
-          if @ret == :next && Stage.initial
-            Language.CheckLanguagesSupport(@language)
-          end
+          Language.CheckLanguagesSupport(@language) if @ret == :next && Stage.initial
           if @language != Language.language
             Builtins.y2milestone(
               "Language changed from %1 to %2",
@@ -420,8 +414,8 @@ module Yast
             if @more_languages
               @selected_languages = Convert.convert(
                 UI.QueryWidget(Id(:languages), :SelectedItems),
-                :from => "any",
-                :to   => "list <string>"
+                from: "any",
+                to:   "list <string>"
               )
 
               if @ret != :next
@@ -432,7 +426,6 @@ module Yast
               end
             end
 
-
             Timezone.ResetZonemap if @set_default
 
             # Set it in the Language module.
@@ -442,11 +435,11 @@ module Yast
           end
 
           if Stage.initial || Stage.firstboot
-            if (@set_default && @ret == :language ||
-                !@set_default && @ret == :next) &&
+            if ((@set_default && @ret == :language) ||
+                (!@set_default && @ret == :next)) &&
                 Language.SwitchToEnglishIfNeeded(true)
               Builtins.y2debug("UI switched to en_US")
-            elsif @ret == :next || @set_default && @ret == :language
+            elsif @ret == :next || (@set_default && @ret == :language)
               Console.SelectFont(@language)
               # no yast translation for nn_NO, use nb_NO as a backup
               if @language == "nn_NO"
@@ -500,13 +493,15 @@ module Yast
             )
 
             if @more_languages || Stage.firstboot
-              @selected_languages = Stage.firstboot ?
-                [@language] :
+              @selected_languages = if Stage.firstboot
+                [@language]
+              else
                 Convert.convert(
                   UI.QueryWidget(Id(:languages), :SelectedItems),
-                  :from => "any",
-                  :to   => "list <string>"
+                  from: "any",
+                  to:   "list <string>"
                 )
+              end
 
               if !Builtins.contains(@selected_languages, @language)
                 @selected_languages = Builtins.add(
@@ -554,14 +549,13 @@ module Yast
                   @ret = :not_next
                   next
                 end
-                if Stage.firstboot # install language packages now
-                  Language.PackagesCommit
-                end
+                Language.PackagesCommit if Stage.firstboot # install language packages now
               end
             end
           end
         end
-      end until @ret == :next || @ret == :back
+        break if @ret == :next || @ret == :back
+      end
 
       Convert.to_symbol(@ret)
     end
@@ -570,11 +564,11 @@ module Yast
     def LanguageExpertDialog
       # help text for langauge expert screen
       help_text = _(
-        "<p>\n" +
-          "Here, fine-tune settings for the language handling.\n" +
-          "These settings are written into the file <tt>/etc/sysconfig/language</tt>.\n" +
-          "If unsure, use the default values already selected.\n" +
-          "</p>\n"
+        "<p>\n" \
+        "Here, fine-tune settings for the language handling.\n" \
+        "These settings are written into the file <tt>/etc/sysconfig/language</tt>.\n" \
+        "If unsure, use the default values already selected.\n" \
+        "</p>\n"
       )
 
       # help text for langauge expert screen
@@ -594,14 +588,10 @@ module Yast
       lang = Language.main_language(@language)
       locales_list = []
 
-      Builtins.foreach(Language.GetLocales) do |code, i|
-        if Language.main_language(code) == lang
-          locales_list = Builtins.add(locales_list, code)
-        end
+      Builtins.foreach(Language.GetLocales) do |code, _i|
+        locales_list = Builtins.add(locales_list, code) if Language.main_language(code) == lang
       end
-      if !Builtins.contains(locales_list, @language)
-        locales_list = Builtins.add(locales_list, @language)
-      end
+      locales_list = Builtins.add(locales_list, @language) if !Builtins.contains(locales_list, @language)
 
       UI.OpenDialog(
         Opt(:decorated),
@@ -648,7 +638,7 @@ module Yast
 
       ret = :none
       retval = :expert
-      begin
+      loop do
         ret = Convert.to_symbol(UI.UserInput)
         if ret == :ok
           val = {}
@@ -664,7 +654,8 @@ module Yast
             retval = :changed_locale
           end
         end
-      end until ret == :cancel || ret == :ok
+        break if [:cancel, :ok].include?(ret)
+      end
       UI.CloseDialog
       retval
     end

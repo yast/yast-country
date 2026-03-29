@@ -5,8 +5,10 @@ module Yast
   class KeyboardProposalClient < ::Installation::ProposalClient
     include Yast::I18n
     include Yast::Logger
-    
+
     def initialize
+      super
+
       Yast.import "UI"
       Yast.import "Arch"
       Yast.import "Keyboard"
@@ -20,14 +22,13 @@ module Yast
     def make_proposal(attrs)
       force_reset = attrs["force_reset"] || false
       language_changed = attrs["language_changed"] || false
-      { "raw_proposal"=> [Keyboard.MakeProposal(force_reset, language_changed)],
-        "language_changed" => false
-      }
+      { "raw_proposal"     => [Keyboard.MakeProposal(force_reset, language_changed)],
+        "language_changed" => false }
     end
 
-    def ask_user(param)
+    def ask_user(_param)
       if Arch.s390
-        log.info ("S390: No keyboard proposal change by the user.")
+        log.info("S390: No keyboard proposal change by the user.")
         return { "workflow_sequence" => :next, "language_changed" => false }
       end
 
@@ -43,13 +44,13 @@ module Yast
       ensure
         Yast::Wizard.CloseDialog
       end
-      log.info "Returning from keyboard ask_user with #{result}"      
+      log.info "Returning from keyboard ask_user with #{result}"
 
       # Fill return map
       { "workflow_sequence" => @result, "language_changed" => false }
     end
 
-    def description    
+    def description
       {
         # summary item
         "rich_text_title" => _("Keyboard Layout"),
